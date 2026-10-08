@@ -345,3 +345,79 @@ def test_the_env_template_lists_every_setting_and_marks_what_to_paste():
         assert f"\n{key}=" in "\n" + text, key
     assert text.count("PEGA") >= 3
     assert "nvapi-" not in text  # nunca una clave, ni de ejemplo
+
+
+# --- diagnóstico de la conexión (error real en p340: «http» sin más detalle) --------------------------------------------
+
+
+def test_teo_probar_shows_the_http_status_and_the_api_message(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+    client.TRANSPORT = httpx.MockTransport(
+        lambda r: httpx.Response(404, json={"detail": "Function not found for account"})
+    )
+    with pytest.raises(CommandError) as exc:
+        call_command("teo_probar")
+    assert "HTTP 404" in str(exc.value) and "Function not found for account" in str(exc.value)
+    assert "nvapi-X" not in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {"error": {"message": "modelo inexistente"}},
+        {"message": "modelo inexistente"},
+        {"title": "modelo inexistente"},
+    ],
+)
+def test_error_detail_understands_the_usual_shapes(settings, body):
+    settings.NIM_API_KEY = "nvapi-X"
+    client.TRANSPORT = httpx.MockTransport(lambda r: httpx.Response(400, json=body))
+    with pytest.raises(client.BotError) as exc:
+        client.chat([{"role": "user", "content": "hola"}])
+    assert exc.value.status == 400 and exc.value.detail == "modelo inexistente"
+
+
+def test_the_error_detail_is_not_stored_in_the_log(member, settings):
+    from apps.assistant import services
+    from apps.assistant.models import BotLog
+
+    settings.NIM_API_KEY = "nvapi-X"
+    client.TRANSPORT = httpx.MockTransport(lambda r: httpx.Response(404, json={"detail": "algo"}))
+    services.answer(member, "hola teo")
+    assert BotLog.objects.get().error == "http"
+    assert "algo" not in repr(list(BotLog.objects.values()))
+
+
+def test_teo_probar_lists_models_and_flags_a_missing_one(settings, capsys):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL = "meta/modelo-que-no-existe"
+    models = {
+        "data": [
+            {"id": "meta/llama-3.1-8b-instruct"},
+            {"id": "nvidia/embed-qa"},
+            {"id": "mistralai/mixtral-8x7b-instruct-v0.1"},
+        ]
+    }
+    client.TRANSPORT = httpx.MockTransport(lambda r: httpx.Response(200, json=models))
+    call_command("teo_probar", "--modelos")
+    out = capsys.readouterr().out
+    assert "meta/llama-3.1-8b-instruct" in out and "mixtral" in out and "embed-qa" not in out
+    assert "NO está en la lista" in out and "nvapi-X" not in out
+
+
+def test_teo_probar_marks_the_configured_model(settings, capsys):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL = "meta/llama-3.1-8b-instruct"
+    client.TRANSPORT = httpx.MockTransport(
+        lambda r: httpx.Response(200, json={"data": [{"id": "meta/llama-3.1-8b-instruct"}]})
+    )
+    call_command("teo_probar", "--modelos")
+    out = capsys.readouterr().out
+    assert "el configurado" in out and "NO está" not in out
+
+
+def test_listing_models_reports_auth_errors(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+    client.TRANSPORT = httpx.MockTransport(lambda r: httpx.Response(401, json={}))
+    with pytest.raises(CommandError, match="rechazada"):
+        call_command("teo_probar", "--modelos")
