@@ -3,6 +3,7 @@ from django.urls import reverse
 from apps.catalog.models import Discipline, Resource
 from apps.paths.models import LearningPath
 
+from . import dashboard
 from .modules import DISCIPLINE_VISUALS, MODULES, VALUES
 from .suite import SPONSOR_TEXT, SUITE_AERO
 
@@ -49,4 +50,7 @@ def home_context(person):
         "suite": SUITE_AERO,
         "sponsor_text": SPONSOR_TEXT,
         "first_path": paths[0] if paths else None,
+        "mission": dashboard.suggested_mission(person),
+        "board": dashboard.guild_board(person),
+        "counters": dashboard.counters(person),
     }
