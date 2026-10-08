@@ -35,11 +35,23 @@ chown "$USER_NAME:$USER_NAME" "$STATE" "$STATE/media" /var/backups/centro
 echo "==> Copiando la aplicación a $APP"
 rsync -a --delete \
   --exclude ".venv" --exclude "__pycache__" --exclude ".git" --exclude "staticfiles" \
-  --exclude "db.sqlite3*" --exclude "media" --exclude ".env" \
+  --exclude "db.sqlite3*" --exclude "media" --exclude ".env" --exclude "deploy/centro.env" \
   "$SRC"/ "$APP"/
 
 echo "==> Configuración en $ENV_FILE"
-if [ ! -f "$ENV_FILE" ]; then
+if [ ! -f "$ENV_FILE" ] && [ -f "$SRC/deploy/centro.env" ]; then
+  # La persona dejó su configuración lista (copia de deploy/centro.env.plantilla con la clave y el correo).
+  umask 077
+  cp "$SRC/deploy/centro.env" "$ENV_FILE"
+  if grep -q '^SECRET_KEY=$' "$ENV_FILE"; then
+    sed -i "s|^SECRET_KEY=\$|SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')|" "$ENV_FILE"
+  fi
+  if [ -n "$HOST" ] && grep -q '^ALLOWED_HOSTS=$' "$ENV_FILE"; then
+    sed -i "s|^ALLOWED_HOSTS=\$|ALLOWED_HOSTS=$HOST|" "$ENV_FILE"
+  fi
+  chmod 640 "$ENV_FILE"; chown root:"$USER_NAME" "$ENV_FILE"
+  echo "    creado desde deploy/centro.env"
+elif [ ! -f "$ENV_FILE" ]; then
   umask 077   # el archivo nace sin permisos para otros: lleva la SECRET_KEY
   SECRET="$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')"
   cat > "$ENV_FILE" <<EOF
@@ -96,9 +108,11 @@ install -m 644 deploy/centro-backup.service /etc/systemd/system/centro-backup.se
 install -m 644 deploy/centro-backup.timer /etc/systemd/system/centro-backup.timer
 install -m 644 deploy/centro-expiry.service /etc/systemd/system/centro-expiry.service
 install -m 644 deploy/centro-expiry.timer /etc/systemd/system/centro-expiry.timer
+install -m 644 deploy/centro-teo.service /etc/systemd/system/centro-teo.service
+install -m 644 deploy/centro-teo.timer /etc/systemd/system/centro-teo.timer
 install -m 755 deploy/backup.sh "$APP/deploy/backup.sh"
 systemctl daemon-reload
-systemctl enable --now centro.service centro-backup.timer centro-expiry.timer
+systemctl enable --now centro.service centro-backup.timer centro-expiry.timer centro-teo.timer
 systemctl restart centro.service
 
 echo "==> Comprobando el servicio"

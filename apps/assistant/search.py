@@ -60,9 +60,11 @@ def _rows():
                     f"{d.get('meaning', '')} {d.get('location', '')}".strip(),
                     reverse("paths:detail", args=[p.slug]),
                 )
-    for r in Resource.objects.all():
+    for r in Resource.objects.prefetch_related("skills", "products").all():
         url = reverse("catalog:resources") + "?q=" + quote(r.title)
-        yield ("resource", f"resource:{r.pk}", r.title, r.description, url)
+        tags = ", ".join([s.name for s in r.skills.all()] + [p.name for p in r.products.all()])
+        body = f"{r.description} {('Habilidades y productos: ' + tags) if tags else ''}".strip()
+        yield ("resource", f"resource:{r.pk}", r.title, body, url)
     visible_notes = Note.objects.filter(
         is_deleted=False, is_hidden=False, path__is_published=True
     ).exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))

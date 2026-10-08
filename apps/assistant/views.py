@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 from apps.community.models import Thread
 
 from . import context, services
+from . import search as search_module
 from .search import HELP_DIR
 
 
@@ -75,9 +76,22 @@ def help_page(request, slug):
     )
 
 
+HELP_KINDS = {"help", "path", "glossary", "resource", "article"}
+
+
 def help_index(request):
+    query = request.GET.get("q", "").strip()[:100]
+    results = (
+        [h for h in search_module.search(query, limit=12) if h["kind"] in HELP_KINDS]
+        if query
+        else []
+    )
     items = []
     for p in sorted(HELP_DIR.glob("*.md")):
         title = p.read_text(encoding="utf-8").splitlines()[0].lstrip("# ").strip()
         items.append({"slug": p.stem, "title": title})
-    return render(request, "assistant/help_index.html", {"items": items})
+    return render(
+        request,
+        "assistant/help_index.html",
+        {"items": items, "q": query, "results": results, "awake": services.enabled()},
+    )

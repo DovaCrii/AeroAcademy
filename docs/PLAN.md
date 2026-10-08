@@ -126,6 +126,10 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 - verificar una credencial de *Bentley Accredited Road Modeler* cumple su curso externo y levanta su pilar;
 - promover un curso libre crea un Resource y un ExternalCourse al final del capítulo "Cursos libres".
 
+## Salida a producción (2026-10-08)
+
+> Regla de fusiones (`docs/FUSIONES.md`), `tools/fusionar_cadena.py`, `tools/preflight.py`, `docs/PRODUCCION.md` (paso a paso para la VM), `deploy/centro.env.plantilla` (la persona pega la clave, el host y su correo) y `docs/PENDIENTES.md` (lo que queda, con foco en Teo). Teo gana seguimiento semanal, buscador de ayuda sin modelo, `teo_probar`, atuendo por mundo y expresión «celebra».
+
 ## Revisión independiente de los bloques 13 a 8 (2026-10-08)
 
 > Un revisor sin acceso a mi contexto encontró 13 puntos; todos reproducidos y corregidos con una prueba cada uno (`tests/test_revision.py`):

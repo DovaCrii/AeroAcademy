@@ -27,7 +27,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
 7. `docs/GAMIFICACION.md`: XP, niveles, títulos, insignias.
 8. `docs/BOT.md` y `docs/MODERACION.md`.
 9. `docs/PLAN.md`: bloques de trabajo con criterios de aceptación. **Trabajar un bloque a la vez.**
-10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente.
+10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente. `docs/FUSIONES.md`: cómo se fusiona (**la persona**). `docs/PRODUCCION.md` y `docs/PENDIENTES.md`: salida a producción y lo que queda.
 11. `docs/DECISIONES.md`: decisiones tomadas y abiertas. No resolver una decisión abierta por cuenta propia.
 
 ## Stack

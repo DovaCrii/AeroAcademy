@@ -82,7 +82,10 @@ Implementación:
 - El widget usa un `fetch` propio (`assistant/static/assistant/teo.js`) en vez de HTMX (D23); sin JS, `/teo/` hace un POST normal.
 - La respuesta del modelo se escapa y no se interpreta como Markdown ni como enlaces; las fuentes se listan aparte con enlaces internos.
 - Índice FTS5 `assistant_fts` (migración 0002): se reconstruye cada 5 minutos o con `manage.py reindex_assistant`, y cada resultado se revalida contra la base.
-- Teo resume hilos de 5 o más mensajes con «Resumir con Teo». Las expresiones de los sprites son *idle*, *happy*, *thinking* y *sleep*.
+- Teo resume hilos de 5 o más mensajes con «Resumir con Teo». Las expresiones de los sprites son *idle*, *happy*, *thinking*, *sleep* y *celebra* (al subir de nivel); además viste el atuendo del mundo de la ruta que se mira (`teo-<mundo>.svg`).
+- **Seguimiento:** `manage.py teo_seguimiento` (lunes 09:00, temporizador `centro-teo`) avisa en la campana a quien lleva 7 días sin avanzar con su misión sugerida y manda un resumen semanal a los responsables. Es local (sin API) y se apaga con `TEO_NUDGES=false`.
+- **Ayuda sin modelo:** `/ayuda/?q=` busca en la ayuda, rutas, glosarios, recursos y artículos con el índice local; funciona aunque Teo duerma.
+- **Probar la conexión:** `manage.py teo_probar` hace una llamada corta, muestra latencia y respuesta, o explica el fallo; nunca muestra la clave.
 
 ## Pruebas
 

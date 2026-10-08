@@ -10,3 +10,5 @@ staticfiles/
 .env
 .env.*
 !.env.example
+# Configuración de producción con claves (nunca se versiona)
+deploy/centro.env

@@ -144,4 +144,5 @@ NIM_BASE_URL = os.environ.get("NIM_BASE_URL", "https://integrate.api.nvidia.com/
 NIM_MODEL = os.environ.get("NIM_MODEL", "meta/llama-3.3-70b-instruct")
 BOT_ENABLED = env_bool("BOT_ENABLED", True)
 BOT_DAILY_LIMIT = int(os.environ.get("BOT_DAILY_LIMIT", "40"))
+TEO_NUDGES = env_bool("TEO_NUDGES", True)  # empujón semanal de Teo (local, sin API)
 BOT_TIMEOUT_S = float(os.environ.get("BOT_TIMEOUT_S", "20"))

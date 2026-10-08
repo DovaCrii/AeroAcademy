@@ -28,6 +28,10 @@ Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revis
 6. Comprueba el CI del PR (`gh pr checks`) y corrige si falla.
 7. Informa en el chat: enlace del PR, resultado del CI y qué decide la persona (fusionar, pedir cambios).
 
+## Fusiones
+
+La regla completa está en **`docs/FUSIONES.md`**: fusiona la persona, de abajo hacia arriba, solo con *merge commit* (nunca squash ni rebase) y con `tools/fusionar_cadena.py`. Después, `python tools/preflight.py` y `docs/PRODUCCION.md`.
+
 ## Qué NO hace sin que se lo pidan
 
 - Fusionar PR, cerrar issues, borrar ramas remotas o publicar *releases*.
