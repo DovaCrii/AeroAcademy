@@ -250,7 +250,14 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** las pruebas con `httpx.MockTransport` pasan (ok, timeout, 401, 429); **ningún** campo de `credentials` ni `login` aparece en el payload; con `BOT_ENABLED=False` el sitio funciona igual; el log no guarda texto.
 
-## Bloque 6 · Vencimientos y exportación de evidencia `[ ]`
+## Bloque 6 · Vencimientos y exportación de evidencia `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - Vencimientos: indicadores *por vencer* y *vencida* en listados y detalle (ya existían), página `/certificados/vencimientos/` (propias; los responsables ven además las del equipo) y `manage.py check_expirations` (tarea diaria) que avisa a la persona y a los responsables **una sola vez** por credencial y fecha (D29) y recalcula lo que depende de la vigencia: las *Alas DGAC* se apagan al vencer y el XP se conserva (D27).
+> - Exportación (solo responsables): `/certificados/exportar/` con selección por personas, plataformas, tipos y habilidades (solo verificadas o todas), vista previa y descarga de un ZIP con los archivos + `evidencia.xlsx` (fechas tipadas, columnas con ancho, celdas que empiezan con `=`, `+`, `-` o `@` neutralizadas contra inyección de fórmulas). Tope de 500 credenciales y 300 MB; nombres dentro del ZIP generados. Cada exportación queda en la bitácora de moderación.
+> - **Desviación:** el ZIP se arma al vuelo y no se guarda, así que no hay nada que limpiar a las 24 h (más seguro que dejar datos personales en disco).
+> - Dependencia nueva justificada: `openpyxl` (ya listada en ARQUITECTURA).
+> - **Pendiente:** programar `check_expirations` en systemd (Bloque 8) y vencimientos en el tablero del equipo (Bloque 7).
 - Indicadores `expires_soon` / `is_expired` en listados, tablero y hoja de personaje (las *Alas* se apagan al vencer).
 - Exportación:
   - selección por personas, plataformas, tipos o habilidades;

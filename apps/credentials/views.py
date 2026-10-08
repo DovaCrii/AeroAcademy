@@ -1,17 +1,18 @@
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_http_methods, require_POST
 
+from apps.accounts.models import Person, PersonStatus
 from apps.catalog.models import Platform, Skill
 from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
-from . import files, services
+from . import expiry, export, files, services
 from .forms import CredentialForm, RegisterCourseForm
 from .models import Credential
 
@@ -229,3 +230,70 @@ def register_course(request, slug):
         messages.success(request, "Curso registrado. Un responsable verificará el certificado.")
         return redirect("credentials:detail", pk=cred.pk)
     return render(request, "credentials/register.html", {"form": form, "path": path})
+
+
+def expirations(request):
+    """Vencimientos: las propias; los responsables ven además las del equipo."""
+    scope_team = request.user.is_lead and request.GET.get("equipo") == "1"
+    soon, gone = expiry.expiring(), expiry.expired()
+    if not scope_team:
+        soon, gone = soon.filter(owner=request.user), gone.filter(owner=request.user)
+    return render(
+        request,
+        "credentials/expirations.html",
+        {
+            "soon": soon.order_by("expires_on"),
+            "gone": gone.order_by("-expires_on"),
+            "team": scope_team,
+            "days": expiry.WARNING_DAYS,
+        },
+    )
+
+
+def _export_selection(data):
+    return export.select(
+        people=[int(x) for x in data.getlist("persona") if x.isdigit()],
+        platforms=data.getlist("plataforma"),
+        kinds=data.getlist("tipo"),
+        skills=data.getlist("habilidad"),
+        only_verified=data.get("estado", "verified") != "all",
+    )
+
+
+@require_http_methods(["GET", "POST"])
+def export_view(request):
+    """Exportar evidencia (solo responsables): vista previa por GET, descarga del ZIP por POST."""
+    if not services.can_review(request.user):
+        raise PermissionDenied
+    if request.method == "POST":
+        try:
+            data, _ = export.build_zip(request.user, _export_selection(request.POST))
+        except ValueError as exc:
+            messages.error(request, str(exc))
+            return redirect(reverse("credentials:export"))
+        response = HttpResponse(data, content_type="application/zip")
+        response["Content-Disposition"] = f'attachment; filename="{export.filename()}"'
+        response["Cache-Control"] = "no-store"
+        response["X-Content-Type-Options"] = "nosniff"
+        return response
+    selection = _export_selection(request.GET)
+    return render(
+        request,
+        "credentials/export.html",
+        {
+            "credentials": list(selection[: export.MAX_CREDENTIALS + 1]),
+            "limit": export.MAX_CREDENTIALS,
+            "people": Person.objects.filter(status=PersonStatus.APPROVED),
+            "platforms": Platform.objects.all(),
+            "skills": Skill.objects.all(),
+            "kinds": Credential.Kind.choices,
+            "q": request.GET,
+            "selected": {
+                "people": [x for x in request.GET.getlist("persona") if x.isdigit()],
+                "platforms": request.GET.getlist("plataforma"),
+                "kinds": request.GET.getlist("tipo"),
+                "skills": request.GET.getlist("habilidad"),
+                "estado": request.GET.get("estado", "verified"),
+            },
+        },
+    )
