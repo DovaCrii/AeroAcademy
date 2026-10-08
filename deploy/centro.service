@@ -1,5 +1,6 @@
 [Unit]
 Description=AeroAcademy · Academia LEV Digital 101
+OnFailure=centro-alerta@%n.service
 After=network-online.target
 Wants=network-online.target
 

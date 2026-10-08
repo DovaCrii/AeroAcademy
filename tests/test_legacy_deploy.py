@@ -417,3 +417,39 @@ def test_the_installer_issues_the_certificate_up_front():
     cert = install.index('"${TS[@]}" cert --cert-file')
     assert serve < cert < install.index('echo "    Dirección: https://$HC_HOST"\n    ;;')
     assert "HTTPS Certificates" in install and "diagnostico.sh" in install
+
+
+def test_failed_tasks_alert_the_leads():
+    """Si un respaldo o una tarea falla, alguien se entera (antes fallaba en silencio)."""
+    template = (DEPLOY / "centro-alerta@.service").read_text(encoding="utf-8")
+    assert "manage.py avisar_fallo %i" in template and "EnvironmentFile=/etc/centro/env" in template
+    for unit in (
+        "centro-backup.service",
+        "centro-expiry.service",
+        "centro-teo.service",
+        "centro.service",
+    ):
+        text = (DEPLOY / unit).read_text(encoding="utf-8")
+        unit_section = text.split("[Service]")[0]
+        assert "OnFailure=centro-alerta@%n.service" in unit_section, unit
+    assert "centro-alerta@.service" in (DEPLOY / "install.sh").read_text(encoding="utf-8")
+
+
+def test_avisar_fallo_notifies_leads_once_per_day(lead, member, capsys):
+    from django.core.management import call_command
+
+    from apps.notifications.models import Notification
+
+    call_command("avisar_fallo", "centro-backup.service")
+    call_command("avisar_fallo", "centro-backup.service")
+    notices = Notification.objects.filter(kind="task_failed")
+    assert notices.count() == 1 and notices.get().recipient == lead
+    assert (
+        "el respaldo diario" in notices.get().title
+        and "journalctl -u centro-backup.service" in notices.get().body
+    )
+    assert not Notification.objects.filter(recipient=member, kind="task_failed").exists()
+    call_command("avisar_fallo", "otra-cosa.service")
+    assert Notification.objects.filter(
+        kind="task_failed", title__contains="otra-cosa.service"
+    ).exists()
