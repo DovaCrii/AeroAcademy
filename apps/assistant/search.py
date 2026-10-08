@@ -16,6 +16,7 @@ from django.utils import timezone
 
 from apps.catalog.models import Resource
 from apps.community.models import Note, Post, Thread
+from apps.knowledge.models import Article
 from apps.paths.models import LearningPath, PathExtra
 
 from .models import IndexState
@@ -87,6 +88,14 @@ def _rows():
             p.body,
             reverse("community:thread", args=[p.thread_id]) + f"#post-{p.pk}",
         )
+    for a in Article.objects.filter(is_published=True):
+        yield (
+            "article",
+            f"article:{a.pk}",
+            a.title,
+            a.body,
+            reverse("knowledge:detail", args=[a.pk]),
+        )
     yield from _help_rows()
 
 
@@ -130,6 +139,8 @@ def _still_visible(ref):
         return Post.objects.filter(
             pk=pk, is_deleted=False, is_hidden=False, thread__is_hidden=False
         ).exists()
+    if kind == "article":
+        return Article.objects.filter(pk=pk, is_published=True).exists()
     if kind == "path":
         return LearningPath.objects.filter(pk=pk, is_published=True).exists()
     return True

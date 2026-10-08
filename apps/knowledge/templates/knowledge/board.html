@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Tablero de mejoras{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'knowledge/knowledge.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head"><h1>Tablero de mejoras</h1><p>Ideas del equipo que avanzan hasta dar resultados. <a href="{% url 'knowledge:index' %}">← Conocimiento</a></p></div>
+<div class="kn-board">
+  {% for col in columns %}
+  <section class="kn-col stage-{{ col.stage }}" aria-labelledby="col-{{ col.stage }}">
+    <h2 id="col-{{ col.stage }}">{{ col.label }} <small>({{ col.items|length }})</small></h2>
+    <ul>{% for i in col.items %}<li><a href="{% url 'knowledge:improvement' i.pk %}">{{ i.title }}</a><small>{{ i.proposed_by.name }}{% if i.owner %} · a cargo: {{ i.owner.name }}{% endif %}</small></li>{% empty %}<li class="muted">—</li>{% endfor %}</ul>
+  </section>
+  {% endfor %}
+</div>
+<form method="post" class="kn-form" aria-labelledby="propose-h">
+  {% csrf_token %}
+  <h2 id="propose-h">Proponer una mejora</h2>
+  <label>Título <input name="title" maxlength="150" value="{{ v.title }}" required></label>
+  <label>Descripción <textarea name="description" rows="4" maxlength="2000" required>{{ v.description }}</textarea></label>
+  <button class="btn primary" type="submit">Enviar propuesta</button>
+</form>
+{% endblock %}

@@ -293,7 +293,15 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** subir una versión nueva deja una sola vigente y conserva el historial; un documento restringido → 403 a miembros.
 
-## Bloque 11 · Conocimiento y mejoras `[ ]`
+## Bloque 11 · Conocimiento y mejoras `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - App `knowledge`: `Article` (lección, procedimiento o pregunta frecuente; borrador o publicado; disciplinas; consulta de origen) y `Improvement` (Idea → Plan → Ejecución → Resultado).
+> - **Markdown seguro sin dependencias** (`apps/core/markdown.py`, filtro `|md`): se escapa todo primero y solo se agregan títulos, párrafos, listas, citas, código, negrita y enlaces `https://`, `http://` o rutas locales; nada de `javascript:`, `data:`, imágenes ni HTML propio. 18 cargas de XSS en las pruebas.
+> - «Convertir en artículo» en las consultas con respuesta aceptada (solo quien abrió la consulta o un responsable; no con hilos o respuestas ocultas): precarga la pregunta y la respuesta y deja enlazada la consulta de origen.
+> - Tablero de mejoras por etapa (`/conocimiento/mejoras/`): cualquiera propone; solo un responsable mueve de etapa y asigna a quién está a cargo; *Resultado* exige contar qué se logró; la persona que propuso recibe un aviso por cada cambio de etapa.
+> - Los artículos publicados entran al índice de Teo; los borradores no, y un artículo despublicado después de indexar deja de salir (se revalida).
+> - **Pendiente:** historial de ediciones de un artículo y comentarios.
 - Artículos (Markdown sanitizado) y propuestas de mejora con etapas Idea → Plan → Ejecución → Resultado.
 - Acción "convertir consulta resuelta en artículo". Los artículos entran al índice de Teo.
 

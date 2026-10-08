@@ -32,6 +32,7 @@
   </details>
   {% endif %}
   {% if teo_awake and posts|length >= 5 %}<form class="inline" method="post" action="{% url 'assistant:summarize' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">Resumir con Teo</button></form>{% endif %}
+  {% if can_manage and thread.kind == "question" and thread.is_answered %}<a class="btn" href="{% url 'knowledge:new' %}?hilo={{ thread.pk }}">Convertir en artículo</a>{% endif %}
   {% if can_manage %}
   <form class="inline" method="post" action="{% url 'community:toggle_closed' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">{% if thread.is_closed %}Reabrir{% else %}Cerrar hilo{% endif %}</button></form>
   {% if thread.is_answered %}<form class="inline" method="post" action="{% url 'community:unaccept' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">Quitar respuesta aceptada</button></form>{% endif %}

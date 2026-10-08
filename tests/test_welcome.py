@@ -32,7 +32,7 @@ def test_welcome_lists_all_modules_and_marks_availability(member_client):
     for module in MODULES:
         assert module["title"] in html
     assert 'href="/rutas/"' in html and 'href="/catalogo/"' in html
-    assert "En construcción · Bloque 11" in html  # Conocimiento
+    assert "En construcción" not in html  # con el Bloque 11 todos los módulos están disponibles
     assert html.count("Disponible") == sum(1 for m in MODULES if m["url_name"])
 
 
