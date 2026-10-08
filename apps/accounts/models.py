@@ -75,6 +75,14 @@ class Person(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     character_class = models.CharField(
         "clase", max_length=14, choices=CharacterClass.choices, blank=True
     )
+    selected_title = models.ForeignKey(
+        "gamification.Title",
+        verbose_name="título elegido",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
     avatar_config = models.JSONField("avatar", default=dict, blank=True)
     show_game_view = models.BooleanField("vista de juego", default=True)
 

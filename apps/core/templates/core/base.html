@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{% static 'core/tokens.css' %}">
 <link rel="stylesheet" href="{% static 'core/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/components.css' %}">
+<link rel="stylesheet" href="{% static 'gamification/game.css' %}">
 <script src="{% static 'core/theme.js' %}"></script>
 {% block extra_head %}{% endblock %}
 </head>
@@ -38,6 +39,7 @@
 </header>
 
 <main id="contenido" class="wrap">
+  {% include "gamification/celebrations.html" %}
   {% if messages %}
   <ul class="msgs" role="status">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>
   {% endif %}

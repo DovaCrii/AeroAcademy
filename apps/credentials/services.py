@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from apps.catalog.models import Resource
+from apps.gamification import game
 from apps.paths.models import ExternalCourse, Level, Milestone
 from apps.progress import services as progress
 
@@ -151,6 +152,7 @@ def update_credential(cred, data, upload=None) -> bool:
         cred.skills.set(data["skills"])
     if was_verified and cred.status != Credential.Status.VERIFIED:
         _unapply(cred)
+        game.refresh(cred.owner)
     return needs_review and cred.status == Credential.Status.PENDING
 
 
@@ -194,6 +196,7 @@ def verify(cred, by, comment="", *, version=None):
         update_fields=["status", "reviewed_by", "reviewed_at", "review_comment", "updated_at"]
     )
     _apply_verified(cred)
+    game.refresh(cred.owner)
     return cred
 
 
@@ -214,6 +217,7 @@ def reject(cred, by, comment, *, version=None):
     )
     if was_verified:
         _unapply(cred)
+        game.refresh(cred.owner)
     return cred
 
 
@@ -225,6 +229,8 @@ def delete_credential(cred):
     cred.delete()  # las marcas de misiones se van en cascada
     if was_verified and resource_id:
         _reapply_others(owner, resource_id)
+    if was_verified:
+        game.refresh(owner)
 
 
 def _apply_verified(cred):
@@ -304,6 +310,10 @@ def promote_free_course(cred, by):
     cred.save(update_fields=["resource", "updated_at"])
     if cred.is_verified:
         _apply_verified(cred)
+    game.award(
+        cred.owner, f"free_course:{resource.pk}", "free_course_promoted", label=resource.title
+    )
+    game.refresh(cred.owner)
     return resource
 
 

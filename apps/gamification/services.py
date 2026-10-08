@@ -11,7 +11,7 @@ from pathlib import Path
 
 from django.conf import settings
 
-from . import avatar
+from . import avatar, game
 from .avatar import engine
 
 # categoría → (título en español, tipo de selector)
@@ -70,8 +70,7 @@ INT_KEYS = {key for key, allowed in engine.CHOICES.items() if isinstance(allowed
 
 
 def unlocked_badges(person) -> set:
-    """Slugs de insignias ganadas. Provisorio hasta el Bloque 13."""
-    return set()
+    return game.unlocked_badges(person)
 
 
 @lru_cache(maxsize=1)

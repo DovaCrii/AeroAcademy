@@ -126,7 +126,17 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 - verificar una credencial de *Bentley Accredited Road Modeler* cumple su curso externo y levanta su pilar;
 - promover un curso libre crea un Resource y un ExternalCourse al final del capítulo "Cursos libres".
 
-## Bloque 13 · Motor de juego `[ ]`
+## Bloque 13 · Motor de juego `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - Modelos `XPEvent` (único por persona+origen), `Badge`, `PersonBadge`, `Title`, `PlayerState`; `Person.selected_title`. `AvatarItem` no hizo falta: las piezas piden una insignia en `engine.UNLOCKS`.
+> - `game.py`: niveles (`50·L·(L−1)`), `award`/`revoke`, reconciliación `sync_progress` (misión 10, capítulo 25, campaña 150) y `sync_credentials` (trofeo 100, reliquia 500, habilitación 300, interna 50), quiz (5, solo la primera vez), racha semanal, títulos disponibles/mostrado y celebraciones. `rules.py`: `count`, `path_complete`, `distinct_vendors`, `streak`, `credential_kind` (+ `vendor`, `platform`, `products_all`, `requires_valid`) y `manual`.
+> - Se llama desde `progress.services` y `credentials.services` (verificar, rechazar, editar, borrar, promover), sin signals (D28).
+> - `seed_catalog` carga y valida `insignias.json` y `titulos.json` (reglas, sprites, slugs); lo que sale del archivo se retira.
+> - 19 sprites 16×16 + candado en `apps/core/static/game/badges/`, dibujados por subagente.
+> - Cabecera: nivel, barra de XP y título; aviso de insignia nueva y de subida de nivel hasta que la persona lo cierra (funciona sin JS).
+> - `unlocked_badges()` del editor de avatares ya usa las insignias reales.
+> - **Pendiente:** fuente Press Start 2P (A10) y sonido opcional; eventos `note`, `accepted_answer`, `profile_completed` los emiten los bloques 4, 10 y 14; vista de historial de XP en la hoja (Bloque 14).
 - App `gamification`: XPEvent, Badge, PersonBadge, Title, AvatarItem (MODELO_DATOS).
 - `services.award()` / `revoke()` invocados desde los services de `progress`, `credentials` y `community` (sin signals ocultos).
 - Motor de reglas de insignias: `count`, `path_complete`, `distinct_vendors`, `streak`, `credential_kind`, `manual`.

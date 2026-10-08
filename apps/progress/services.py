@@ -9,6 +9,7 @@ from collections import defaultdict
 from django.utils import timezone
 
 from apps.accounts.models import PersonStatus
+from apps.gamification import game
 from apps.paths import services as path_services
 from apps.paths.models import PathExtra
 
@@ -36,11 +37,17 @@ def set_milestone(person, milestone, checked: bool, *, credential=None) -> bool:
         _, created = MilestoneCheck.objects.get_or_create(
             person=person, milestone=milestone, defaults=defaults
         )
+        if created and credential is None:
+            game.on_milestone(
+                person, milestone
+            )  # con credencial, la sincronía la hace quien verifica
         return created
     existing = MilestoneCheck.objects.filter(person=person, milestone=milestone)
     if existing.filter(source="credential").exists():
         return False
     deleted, _ = existing.delete()
+    if deleted:
+        game.on_milestone(person, milestone)
     return bool(deleted)
 
 
@@ -55,6 +62,7 @@ def answer_question(person, question, choice: int) -> QuizAnswer:
         question=question,
         defaults={"selected_index": choice, "answered_at": timezone.now()},
     )
+    game.on_quiz(person, question, choice == question.answer_index)
     return answer
 
 

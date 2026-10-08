@@ -1,0 +1,17 @@
+{% load static %}
+{% if player and player.badges or player.level_up %}
+<form class="cheer" method="post" action="{% url 'gamification:seen' %}" role="status" aria-live="polite">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  {% if player.level_up %}
+  <div class="cheer-card levelup"><b class="px">NV {{ player.level_up }}</b> ¡Subiste de nivel!{% if player.title %} Ahora eres <em>{{ player.title.name }}</em>.{% endif %}</div>
+  {% endif %}
+  {% for pb in player.badges %}
+  <div class="cheer-card {{ pb.badge.rarity }}">
+    {% if pb.badge.sprite %}<img src="{% static 'game/badges/' %}{{ pb.badge.sprite }}" width="32" height="32" alt="" class="px-img">{% endif %}
+    <span>Nueva insignia: <b>{{ pb.badge.name }}</b> · {{ pb.badge.description }}</span>
+  </div>
+  {% endfor %}
+  <button class="btn" type="submit">Entendido</button>
+</form>
+{% endif %}

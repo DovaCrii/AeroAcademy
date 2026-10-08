@@ -68,6 +68,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.brand",
+                "apps.gamification.context_processors.player",
             ],
         },
     },

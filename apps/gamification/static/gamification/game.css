@@ -1,0 +1,11 @@
+.player{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:inherit;font-size:.8rem}
+.player .lvl{font-family:"Press Start 2P",ui-monospace,monospace;font-size:.65rem;letter-spacing:.02em}
+.player .bar{width:72px;height:8px;border:1px solid currentColor;display:inline-block;position:relative}
+.player .bar i{position:absolute;inset:0 auto 0 0;background:var(--accent,#f5a623)}
+.player .ttl{max-width:12ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:640px){.player .ttl{display:none}.player .bar{width:44px}}
+.cheer{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0;padding:.6rem .8rem;border:2px solid var(--accent,#f5a623);background:color-mix(in srgb,var(--accent,#f5a623) 10%,transparent)}
+.cheer-card{display:flex;align-items:center;gap:.5rem}
+.cheer-card.epic b{color:#8b5cf6}.cheer-card.rare b{color:#1e8cff}.cheer-card.legendary b{color:#c98f00}
+.px-img{image-rendering:pixelated}
+@media (prefers-reduced-motion:no-preference){.cheer{animation:cheer-in .35s ease-out}@keyframes cheer-in{from{transform:translateY(-6px);opacity:0}}}
