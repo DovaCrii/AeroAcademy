@@ -1,0 +1,11 @@
+{
+  "_nota": "Categorías del foro. Agregar al final; los slugs son estables y lo que sale del archivo se retira, no se borra.",
+  "categories": [
+    {"slug": "general", "name": "General", "description": "Todo lo que no cabe en otra categoría."},
+    {"slug": "autodesk", "name": "Autodesk (Revit y Forma)", "description": "Dudas y trucos de Revit, Forma y el resto de Autodesk."},
+    {"slug": "bentley", "name": "Bentley", "description": "OpenRoads, OpenBridge, MicroStation y Bentley Learn."},
+    {"slug": "topografia-captura", "name": "Topografía y captura", "description": "Nubes de puntos, GNSS, drones y LiDAR."},
+    {"slug": "mecanica", "name": "Mecánica", "description": "Modelado mecánico, planos de taller y ensambles."},
+    {"slug": "ideas-mejoras", "name": "Ideas y mejoras", "description": "Propuestas para mejorar la academia y cómo trabajamos."}
+  ]
+}

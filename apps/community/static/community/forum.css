@@ -1,0 +1,16 @@
+.threads,.posts{list-style:none;padding:0;margin:0 0 1rem;display:grid;gap:.6rem}
+.thread{padding:.7rem .9rem;border:1.5px solid var(--line,#8d9cad);border-left-width:6px;display:grid;gap:.25rem}
+.thread.answered{border-left-color:#13803c}
+.thread .title{font-weight:700;font-size:1.05rem;overflow-wrap:anywhere}
+.meta{font-size:.82rem;opacity:.85;margin:.2rem 0;display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.chip{border:1px solid currentColor;padding:0 .45rem;font-size:.75rem}.chip.ok{color:#13803c}.chip.pend{color:#d97706}
+.pager{display:flex;gap:1rem;align-items:center;justify-content:center;margin:1rem 0}
+.thread-main{padding:1rem;border:1.5px solid var(--line,#8d9cad);margin-bottom:1rem}
+.thread-main h1{margin:0 0 .3rem;overflow-wrap:anywhere}
+.body{overflow-wrap:anywhere}
+.post{padding:.7rem .9rem;border:1.5px solid var(--line,#8d9cad)}.post.accepted{border-color:#13803c;border-width:2px}
+.thread-form{display:grid;gap:.7rem;max-width:760px}.thread-form label{display:flex;flex-direction:column;gap:.2rem}
+.thread-form label.inline{flex-direction:row;display:inline-flex;gap:.3rem;margin-right:.8rem}
+.crumb{font-size:.85rem;opacity:.8}
+form.inline{display:inline}
+.path-notes{margin-top:2rem}

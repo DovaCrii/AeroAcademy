@@ -204,7 +204,14 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** pruebas de permisos (no borrar notas ajenas); texto escapado (sin HTML inyectado); el límite diario de XP se respeta.
 
-## Bloque 10 · Foro y consultas `[ ]`
+## Bloque 10 · Foro y consultas `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `Category` (semilla `seed/foro.json`, se retiran, no se borran), `Thread` (conversación o consulta) y `Post`. Lógica en `apps/community/forum.py`, vistas en `forum_views.py`.
+> - Páginas: `/foro/` (búsqueda, categoría, disciplina, tipo, estado «sin respuesta», **paginado de 20**), `/foro/nuevo/` y `/foro/<id>/` con respuestas, aceptar, cerrar/reabrir y borrar el propio mensaje. El listado enlaza las notas de cada ruta.
+> - Solo quien abrió la consulta o un responsable acepta (o quita) la respuesta; cambiarla mueve el XP. **50 XP** a quien respondió (no si se respondió a sí mismo); se revoca al quitarla o borrar el mensaje. Alimenta *Mentor* y *Sabio del Foro*.
+> - Texto escapado; portada con contador de consultas sin respuesta; «Foro» en la navegación y el módulo queda disponible.
+> - **Pendiente (Bloque 16):** fijar, ocultar, mover, reportar y avisos al responder.
 - Hilos y posts por categoría y disciplina; consultas con respuesta aceptada; consultas sin respuesta en la portada.
 - Las notas de rutas (Bloque 4) se muestran también en el foro, en la categoría de la ruta.
 - XP por respuesta aceptada; insignias de comunidad.

@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import PersonStatus
+from apps.community import forum
 from apps.credentials import services as credential_services
 from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
@@ -144,6 +145,7 @@ def counters(person):
             expires_on__lte=today + timedelta(days=WARNING_DAYS),
         ).count(),
         "to_review": None,
+        "open_questions": forum.open_questions_count(),
     }
     if person.is_lead:
         out["to_review"] = Credential.objects.filter(status=Credential.Status.PENDING).count()

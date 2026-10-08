@@ -38,3 +38,71 @@ class Note(TimeStampedModel):
 
     def __str__(self):
         return f"{self.get_type_display()} · {self.author}"
+
+
+THREAD_TITLE_MAX = 150
+BODY_MAX = 5000
+
+
+class Category(TimeStampedModel):
+    slug = models.SlugField(unique=True)
+    name = models.CharField("nombre", max_length=80)
+    description = models.CharField("descripción", max_length=200, blank=True)
+    order = models.PositiveSmallIntegerField(default=0)
+    retired = models.BooleanField("retirada", default=False)
+
+    class Meta:
+        verbose_name = "categoría"
+        verbose_name_plural = "categorías"
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Thread(TimeStampedModel):
+    """Hilo del foro: una conversación (`discussion`) o una consulta con respuesta aceptada (`question`)."""
+
+    class Kind(models.TextChoices):
+        DISCUSSION = "discussion", "Conversación"
+        QUESTION = "question", "Consulta"
+
+    author = models.ForeignKey("accounts.Person", on_delete=models.CASCADE, related_name="threads")
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="threads")
+    kind = models.CharField("tipo", max_length=10, choices=Kind.choices, default=Kind.QUESTION)
+    title = models.CharField("título", max_length=THREAD_TITLE_MAX)
+    body = models.TextField("detalle", max_length=BODY_MAX)
+    disciplines = models.ManyToManyField("catalog.Discipline", blank=True, related_name="threads")
+    accepted_post = models.ForeignKey(
+        "Post", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
+    )
+    is_closed = models.BooleanField("cerrado", default=False)
+    last_activity_at = models.DateTimeField("última actividad", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "hilo"
+        verbose_name_plural = "hilos"
+        ordering = ["-last_activity_at", "-id"]
+        indexes = [models.Index(fields=["category", "-last_activity_at"])]
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def is_answered(self):
+        return self.accepted_post_id is not None
+
+
+class Post(TimeStampedModel):
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="posts")
+    author = models.ForeignKey("accounts.Person", on_delete=models.CASCADE, related_name="posts")
+    body = models.TextField("mensaje", max_length=BODY_MAX)
+    is_deleted = models.BooleanField("borrado", default=False)
+
+    class Meta:
+        verbose_name = "mensaje"
+        verbose_name_plural = "mensajes"
+        ordering = ["created_at", "id"]
+
+    def __str__(self):
+        return f"{self.author} en {self.thread_id}"

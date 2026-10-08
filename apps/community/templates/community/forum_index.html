@@ -1,0 +1,51 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Foro y consultas{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'community/forum.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Foro y consultas</h1>
+  <p>Preguntas con respuesta aceptada y conversaciones del equipo. <a class="btn primary" href="{% url 'community:thread_new' %}">Nuevo hilo</a></p>
+</div>
+
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ f.q }}" placeholder="Buscar…" aria-label="Buscar">
+  <select name="categoria" aria-label="Categoría"><option value="">Todas las categorías</option>{% for c in categories %}<option value="{{ c.slug }}"{% if f.categoria == c.slug %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
+  <select name="disciplina" aria-label="Disciplina"><option value="">Todas las disciplinas</option>{% for d in disciplines %}<option value="{{ d.slug }}"{% if f.disciplina == d.slug %} selected{% endif %}>{{ d.name }}</option>{% endfor %}</select>
+  <select name="tipo" aria-label="Tipo"><option value="">Consultas y conversaciones</option>{% for v, l in kinds %}<option value="{{ v }}"{% if f.tipo == v %} selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+  <select name="estado" aria-label="Estado"><option value="">Cualquier estado</option><option value="open"{% if f.estado == "open" %} selected{% endif %}>Consultas sin respuesta</option><option value="answered"{% if f.estado == "answered" %} selected{% endif %}>Con respuesta aceptada</option></select>
+  <button class="btn" type="submit">Filtrar</button>
+</form>
+
+<ul class="threads">
+  {% for t in page %}
+  <li class="thread{% if t.is_answered %} answered{% endif %}">
+    <a class="title" href="{% url 'community:thread' t.pk %}">{{ t.title }}</a>
+    <span class="meta">
+      <span class="chip">{{ t.get_kind_display }}</span>
+      {% if t.is_answered %}<span class="chip ok">✔ Respondida</span>{% elif t.kind == "question" and not t.is_closed %}<span class="chip pend">Sin respuesta</span>{% endif %}
+      {% if t.is_closed %}<span class="chip">Cerrado</span>{% endif %}
+      {{ t.category.name }} · {{ t.author.name }} · {{ t.last_activity_at|date:"d/m/Y" }} · {{ t.n_posts }} respuesta{{ t.n_posts|pluralize }}
+    </span>
+  </li>
+  {% empty %}<li class="muted">No hay hilos con estos filtros.</li>{% endfor %}
+</ul>
+
+{% if page.has_other_pages %}
+<nav class="pager" aria-label="Páginas">
+  {% if page.has_previous %}<a href="?{% if qs %}{{ qs }}&amp;{% endif %}pagina={{ page.previous_page_number }}">← Anterior</a>{% endif %}
+  <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a href="?{% if qs %}{{ qs }}&amp;{% endif %}pagina={{ page.next_page_number }}">Siguiente →</a>{% endif %}
+</nav>
+{% endif %}
+
+{% if paths %}
+<section class="path-notes" aria-labelledby="pn-h">
+  <h2 id="pn-h">Notas de las rutas</h2>
+  <p class="muted">Lo que el equipo anota mientras avanza en cada ruta.</p>
+  <ul class="chips">{% for p in paths %}<li><a href="{% url 'community:path_notes' p.slug %}">{{ p.title }}</a></li>{% endfor %}</ul>
+</section>
+{% endif %}
+{% endblock %}
