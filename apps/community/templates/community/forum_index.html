@@ -10,6 +10,10 @@
   <p>Preguntas con respuesta aceptada y conversaciones del equipo. <a class="btn primary" href="{% url 'community:thread_new' %}">Nuevo hilo</a></p>
 </div>
 
+<details class="rules"><summary>Normas del foro</summary>
+  <ul><li>Respeto, y preguntar sin miedo.</li><li>Nada de datos personales ni de clientes en el foro.</li><li>Términos de software en inglés, como aparecen en pantalla.</li><li>Si te resolvieron la duda, marca la respuesta aceptada.</li></ul>
+</details>
+
 <form class="filters" method="get">
   <input type="search" name="q" value="{{ f.q }}" placeholder="Buscar…" aria-label="Buscar">
   <select name="categoria" aria-label="Categoría"><option value="">Todas las categorías</option>{% for c in categories %}<option value="{{ c.slug }}"{% if f.categoria == c.slug %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
@@ -22,11 +26,12 @@
 <ul class="threads">
   {% for t in page %}
   <li class="thread{% if t.is_answered %} answered{% endif %}">
-    <a class="title" href="{% url 'community:thread' t.pk %}">{{ t.title }}</a>
+    <a class="title" href="{% url 'community:thread' t.pk %}">{% if t.is_pinned %}📌 {% endif %}{{ t.title }}</a>
     <span class="meta">
       <span class="chip">{{ t.get_kind_display }}</span>
       {% if t.is_answered %}<span class="chip ok">✔ Respondida</span>{% elif t.kind == "question" and not t.is_closed %}<span class="chip pend">Sin respuesta</span>{% endif %}
       {% if t.is_closed %}<span class="chip">Cerrado</span>{% endif %}
+      {% if t.is_hidden %}<span class="chip warn">Oculto</span>{% endif %}
       {{ t.category.name }} · {{ t.author.name }} · {{ t.last_activity_at|date:"d/m/Y" }} · {{ t.n_posts }} respuesta{{ t.n_posts|pluralize }}
     </span>
   </li>

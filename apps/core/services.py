@@ -1,6 +1,7 @@
 from django.urls import reverse
 
 from apps.catalog.models import Discipline, Resource
+from apps.notifications import services as notifications
 from apps.paths.models import LearningPath
 
 from . import dashboard
@@ -50,6 +51,7 @@ def home_context(person):
         "suite": SUITE_AERO,
         "sponsor_text": SPONSOR_TEXT,
         "first_path": paths[0] if paths else None,
+        "announcements": notifications.active_announcements(),
         "mission": dashboard.suggested_mission(person),
         "board": dashboard.guild_board(person),
         "counters": dashboard.counters(person),

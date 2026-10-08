@@ -1,0 +1,65 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Moderación{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'community/forum.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head"><h1>Moderación</h1><p>Personas por aprobar, certificados, reportes, anuncios y la bitácora de acciones.</p></div>
+
+<section class="mod-sec" aria-labelledby="m-people">
+  <h2 id="m-people">Personas por aprobar <small>({{ pending|length }})</small></h2>
+  {% for p in pending %}
+  <form class="mod-card" method="post" action="{% url 'community:approve_person' p.pk %}">
+    {% csrf_token %}
+    <p><b>{{ p.name }}</b> <span class="muted">{{ p.login }} · pidió acceso el {{ p.created_at|date:"d/m/Y" }}</span></p>
+    <label>Clase sugerida <select name="character_class"><option value="">Sin clase</option>{% for v, l in classes %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></label>
+    {% if can_name_leads %}<label>Rol <select name="role"><option value="member">Miembro</option><option value="lead">Responsable</option></select></label>{% endif %}
+    <fieldset><legend>Disciplinas</legend>{% for d in disciplines %}<label class="inline"><input type="checkbox" name="disciplines" value="{{ d.slug }}"> {{ d.name }}</label>{% endfor %}</fieldset>
+    <button class="btn primary" type="submit">Aprobar</button>
+    <button class="btn" type="submit" formaction="{% url 'community:reject_person' p.pk %}">Rechazar</button>
+  </form>
+  {% empty %}<p class="muted">No hay personas esperando.</p>{% endfor %}
+</section>
+
+<section class="mod-sec" aria-labelledby="m-creds">
+  <h2 id="m-creds">Certificados por revisar</h2>
+  <p><a class="btn" href="{% url 'credentials:review_queue' %}">{{ to_review }} en la cola</a></p>
+</section>
+
+<section class="mod-sec" aria-labelledby="m-reports">
+  <h2 id="m-reports">Reportes abiertos <small>({{ reports|length }})</small></h2>
+  {% for row in reports %}
+  <form class="mod-card" method="post" action="{% url 'community:resolve_report' row.report.pk %}">
+    {% csrf_token %}
+    <p><b>{{ row.report.reporter.name }}</b> reportó {% if row.report.target_type == "post" %}un mensaje{% else %}una nota{% endif %}: «{{ row.report.reason }}»</p>
+    <blockquote>{% if row.target %}{{ row.text|truncatechars:300 }}{% else %}El contenido ya no existe.{% endif %}</blockquote>
+    <input name="reason" maxlength="300" placeholder="Motivo (obligatorio para ocultar)" aria-label="Motivo">
+    <button class="btn primary" type="submit" name="action" value="hide">Ocultar</button>
+    <button class="btn" type="submit" name="action" value="dismiss">Descartar</button>
+  </form>
+  {% empty %}<p class="muted">No hay reportes.</p>{% endfor %}
+</section>
+
+<section class="mod-sec" aria-labelledby="m-ann">
+  <h2 id="m-ann">Anuncios</h2>
+  <form class="mod-card" method="post" action="{% url 'community:new_announcement' %}">
+    {% csrf_token %}
+    <label>Título <input name="title" maxlength="120" required></label>
+    <label>Texto <textarea name="body" rows="3" maxlength="500" required></textarea></label>
+    <label>Vence el <input type="date" name="expires_on" min="{{ today }}" required></label>
+    <button class="btn primary" type="submit">Publicar y avisar a todos</button>
+  </form>
+  <ul class="plain">{% for a in announcements %}
+    <li><b>{{ a.title }}</b> · vence el {{ a.expires_on|date:"d/m/Y" }}
+      <form class="inline" method="post" action="{% url 'community:remove_announcement' a.pk %}">{% csrf_token %}<button class="link-btn" type="submit">Retirar</button></form></li>
+  {% empty %}<li class="muted">No hay anuncios activos.</li>{% endfor %}</ul>
+</section>
+
+<section class="mod-sec" aria-labelledby="m-log">
+  <h2 id="m-log">Bitácora</h2>
+  <ul class="plain">{% for e in log %}
+    <li><time datetime="{{ e.created_at|date:'c' }}">{{ e.created_at|date:"d/m/Y H:i" }}</time> · <b>{{ e.actor.name|default:"—" }}</b> · {{ e.action }} · {{ e.object_type }} #{{ e.object_id }}{% if e.summary %} · {{ e.summary }}{% endif %}{% if e.reason %} · <i>{{ e.reason }}</i>{% endif %}</li>
+  {% empty %}<li class="muted">Sin acciones registradas.</li>{% endfor %}</ul>
+</section>
+{% endblock %}

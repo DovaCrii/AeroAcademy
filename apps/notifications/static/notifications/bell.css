@@ -1,0 +1,13 @@
+.bell{position:relative}
+.bell summary{list-style:none;cursor:pointer;padding:.2rem .4rem;display:inline-flex;align-items:center;gap:.2rem}
+.bell summary::-webkit-details-marker{display:none}
+.bell .count{background:#d33;color:#fff;border-radius:9px;font-size:.7rem;padding:0 .35rem;min-width:1.1rem;text-align:center}
+.bell-pop{position:absolute;right:0;top:100%;z-index:50;width:min(340px,92vw);background:var(--sheet,#fff);color:var(--ink,#111);border:1.5px solid var(--line,#8d9cad);padding:.5rem;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.bell-pop ul,.inbox{list-style:none;margin:0;padding:0}
+.bell-pop button,.notice-btn{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:.1rem;width:100%;box-sizing:border-box;padding:.4rem .3rem}
+.bell-pop li.unread,.notice.unread{border-left:4px solid #1e8cff;background:rgba(30,140,255,.07)}
+.bell-pop span,.notice-btn span{font-size:.82rem;opacity:.8}.notice-btn time{font-size:.75rem;opacity:.6}
+.notice{border:1px solid var(--line,#8d9cad);margin-bottom:.5rem}
+.bell-pop a{display:block;text-align:center;padding:.4rem}
+.announce{margin:0 0 1rem;padding:.7rem 1rem;border:2px solid #ffc21a;background:rgba(255,194,26,.12)}
+.announce b{display:block}

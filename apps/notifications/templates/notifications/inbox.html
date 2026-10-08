@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block title %}Avisos{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Avisos</h1>
+  <form method="post" action="{% url 'notifications:read_all' %}" class="inline">{% csrf_token %}<button class="btn" type="submit">Marcar todo como leído</button></form>
+</div>
+<ul class="inbox">
+  {% for n in items %}
+  <li class="notice{% if not n.is_read %} unread{% endif %}">
+    <form method="post" action="{% url 'notifications:read' n.pk %}">{% csrf_token %}
+      <button class="notice-btn" type="submit"><b>{{ n.title }}</b>{% if n.body %}<span>{{ n.body }}</span>{% endif %}<time datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|date:"d/m/Y H:i" }}</time></button>
+    </form>
+  </li>
+  {% empty %}<li class="muted">No tienes avisos.</li>{% endfor %}
+</ul>
+{% endblock %}

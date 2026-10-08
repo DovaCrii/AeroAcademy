@@ -335,10 +335,11 @@ def test_review_queue_is_for_leads_and_oldest_first(client_for, member, lead, ma
     first = make(member, title="Primera")
     second = make(make_person("otra@lev.cl"), title="Segunda")
     assert client_for(member.login).get("/certificados/revisar/").status_code == 403
-    html = client_for(lead.login).get("/certificados/revisar/").content.decode()
+    html = client_for(lead.login).get("/certificados/revisar/").content.decode().split("<main")[1]
     assert html.index("Primera") < html.index("Segunda")
     services.verify(first, lead)
-    assert "Primera" not in client_for(lead.login).get("/certificados/revisar/").content.decode()
+    after = client_for(lead.login).get("/certificados/revisar/").content.decode()
+    assert "Primera" not in after.split("<main")[1]
     assert second.status == "pending"
 
 

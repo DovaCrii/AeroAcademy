@@ -25,6 +25,8 @@
   </div>
 </section>
 
+{% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
+
 <section class="w-greet" aria-labelledby="hola">
   <div>
     <h2 id="hola">Hola, {{ user.name }}</h2>
@@ -61,6 +63,8 @@
     <small>{{ board.weekly_xp }} XP ganados entre todos esta semana.</small>
   </div>
   <ul class="w-counters" aria-label="Pendientes">
+    {% if counters.pending_people %}<li><a href="{% url 'community:moderation' %}"><b>{{ counters.pending_people }}</b> personas por aprobar</a></li>{% endif %}
+    {% if counters.open_reports %}<li><a href="{% url 'community:moderation' %}"><b>{{ counters.open_reports }}</b> reportes abiertos</a></li>{% endif %}
     {% if counters.to_review is not None %}<li><a href="{% url 'credentials:review_queue' %}"><b>{{ counters.to_review }}</b> certificados por revisar</a></li>{% endif %}
     <li><a href="{% url 'community:forum' %}?estado=open"><b>{{ counters.open_questions }}</b> consultas sin respuesta</a></li>
     <li><a href="{% url 'credentials:mine' %}"><b>{{ counters.expiring }}</b> de tus credenciales por vencer</a></li>

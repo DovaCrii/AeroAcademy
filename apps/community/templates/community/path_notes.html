@@ -32,7 +32,13 @@
   {% for n in notes %}
   <li class="note note-{{ n.type }}">
     <p class="meta"><b>{{ n.get_type_display }}</b> · {{ n.author.name }} · <time datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|date:"d/m/Y H:i" }}</time>{% if n.level %} · {{ n.level.short }}{% endif %}</p>
+    {% if n.is_hidden %}<p class="chip warn">Oculta por moderación</p>{% endif %}
     <p class="body">{{ n.text }}</p>
+    {% if user.is_lead %}<form class="inline" method="post" action="{% url 'community:moderate_note' n.pk %}">{% csrf_token %}<input name="reason" maxlength="300" placeholder="Motivo" aria-label="Motivo"><button class="link-btn" name="action" value="{% if n.is_hidden %}unhide{% else %}hide{% endif %}">{% if n.is_hidden %}Mostrar{% else %}Ocultar{% endif %}</button></form>{% endif %}
+    {% if n.author_id != user.pk %}
+      <details class="report"><summary>Reportar</summary>
+        <form method="post" action="{% url 'community:report' 'note' n.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><input name="reason" maxlength="300" placeholder="¿Qué pasa con esto?" aria-label="Motivo del reporte" required><button class="btn" type="submit">Enviar</button></form></details>
+    {% endif %}
     {% if n.visible_replies %}
     <ul class="replies">{% for r in n.visible_replies %}
       <li><b>{{ r.author.name }}</b>: {{ r.text }}

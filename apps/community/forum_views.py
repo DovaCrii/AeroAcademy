@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods, require_POST
@@ -29,6 +30,7 @@ def index(request):
             discipline=discipline,
             state=p.get("estado", ""),
             q=p.get("q", "").strip()[:100],
+            show_hidden=request.user.is_lead,
         ),
         PAGE_SIZE,
     ).get_page(p.get("pagina"))
@@ -88,6 +90,8 @@ def thread_detail(request, pk):
     thread = get_object_or_404(
         Thread.objects.select_related("author", "category", "accepted_post__author"), pk=pk
     )
+    if thread.is_hidden and not request.user.is_lead:
+        raise Http404
     if request.method == "POST":
         try:
             forum.reply(thread, request.user, request.POST.get("body", ""))
@@ -95,7 +99,10 @@ def thread_detail(request, pk):
         except ValueError as exc:
             messages.error(request, str(exc))
         return redirect("community:thread", pk=thread.pk)
-    posts = list(thread.posts.filter(is_deleted=False).select_related("author"))
+    posts = thread.posts.filter(is_deleted=False).select_related("author")
+    if not request.user.is_lead:
+        posts = posts.filter(is_hidden=False)
+    posts = list(posts)
     return render(
         request,
         "community/thread.html",
@@ -104,6 +111,7 @@ def thread_detail(request, pk):
             "posts": posts,
             "can_manage": forum.can_manage(request.user, thread),
             "disciplines": thread.disciplines.all(),
+            "categories": _categories(),
         },
     )
 

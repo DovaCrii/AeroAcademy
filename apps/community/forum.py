@@ -5,7 +5,9 @@ from django.db.models import Count, Q
 from django.utils import timezone
 
 from apps.gamification import game
+from apps.notifications import services as notifications
 
+from . import moderation
 from .models import BODY_MAX, THREAD_TITLE_MAX, Post, Thread
 
 ACCEPT_XP_KIND = "accepted_answer"
@@ -48,6 +50,15 @@ def reply(thread, author, body):
     body = _clean(body, BODY_MAX, "el mensaje")
     post = Post.objects.create(thread=thread, author=author, body=body)
     Thread.objects.filter(pk=thread.pk).update(last_activity_at=timezone.now())
+    if thread.author_id != author.pk:
+        notifications.notify(
+            thread.author,
+            "thread_reply",
+            f"{author.name} respondió tu hilo",
+            thread.title,
+            url=f"/foro/{thread.pk}/#post-{post.pk}",
+            key=f"reply:{post.pk}",
+        )
     return post
 
 
@@ -78,6 +89,16 @@ def accept(thread, post, by):
     if post.author_id != thread.author_id:
         game.award(post.author, _source(thread), ACCEPT_XP_KIND, label=thread.title)
         game.evaluate(post.author)
+        notifications.notify(
+            post.author,
+            "answer_accepted",
+            "Tu respuesta fue aceptada",
+            thread.title,
+            url=f"/foro/{thread.pk}/#post-{post.pk}",
+            key=f"accepted:{thread.pk}:{post.pk}",
+        )
+    if by.is_lead and by.pk != thread.author_id:
+        moderation.log(by, "accept", thread, thread.title)
     return thread
 
 
@@ -109,14 +130,18 @@ def set_closed(thread, by, closed: bool):
         raise PermissionError("Solo quien abrió el hilo o un responsable lo cierra.")
     thread.is_closed = closed
     thread.save(update_fields=["is_closed", "updated_at"])
+    if by.is_lead and by.pk != thread.author_id:
+        moderation.log(by, "close" if closed else "reopen", thread, thread.title)
 
 
-def listing(*, category=None, kind="", discipline=None, state="", q=""):
+def listing(*, category=None, kind="", discipline=None, state="", q="", show_hidden=False):
     qs = (
         Thread.objects.select_related("author", "category", "accepted_post")
         .annotate(n_posts=Count("posts", filter=Q(posts__is_deleted=False)))
-        .order_by("-last_activity_at", "-id")
+        .order_by("-is_pinned", "-last_activity_at", "-id")
     )
+    if not show_hidden:
+        qs = qs.filter(is_hidden=False)
     if category is not None:
         qs = qs.filter(category=category)
     if kind in Thread.Kind.values:
@@ -134,5 +159,5 @@ def listing(*, category=None, kind="", discipline=None, state="", q=""):
 
 def open_questions_count() -> int:
     return Thread.objects.filter(
-        kind=Thread.Kind.QUESTION, accepted_post__isnull=True, is_closed=False
+        kind=Thread.Kind.QUESTION, accepted_post__isnull=True, is_closed=False, is_hidden=False
     ).count()

@@ -49,10 +49,12 @@ def path_notes(request, slug):
     kind = request.GET.get("tipo", "")
     code = request.GET.get("nivel", "")
     level = next((lv for lv in levels if lv.code == code), None)
+    lead = request.user.is_lead
     notes = services.with_replies(
-        services.notes_for(path, level=level, type=kind if kind in services.TOP_TYPES else None)[
-            :100
-        ]
+        services.notes_for(
+            path, level=level, type=kind if kind in services.TOP_TYPES else None, show_hidden=lead
+        )[:100],
+        show_hidden=lead,
     )
     return render(
         request,

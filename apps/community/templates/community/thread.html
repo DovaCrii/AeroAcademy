@@ -12,10 +12,25 @@
     <span class="chip">{{ thread.get_kind_display }}</span>
     {% if thread.is_answered %}<span class="chip ok">✔ Respondida</span>{% endif %}
     {% if thread.is_closed %}<span class="chip">Cerrado</span>{% endif %}
+    {% if thread.is_pinned %}<span class="chip">📌 Fijado</span>{% endif %}
+    {% if thread.is_hidden %}<span class="chip warn">Oculto: {{ thread.hidden_reason }}</span>{% endif %}
     {{ thread.author.name }} · {{ thread.created_at|date:"d/m/Y H:i" }}
     {% for d in disciplines %}<span class="chip">{{ d.name }}</span>{% endfor %}
   </p>
   <div class="body">{{ thread.body|linebreaks }}</div>
+  {% if user.is_lead %}
+  <details class="mod-tools"><summary>Moderar</summary>
+    <form method="post" action="{% url 'community:moderate_thread' thread.pk %}">{% csrf_token %}
+      <input name="title" value="{{ thread.title }}" maxlength="150" aria-label="Título"><button class="btn" name="action" value="rename">Cambiar título</button>
+      <button class="btn" name="action" value="{% if thread.is_pinned %}unpin{% else %}pin{% endif %}">{% if thread.is_pinned %}Quitar fijado{% else %}Fijar{% endif %}</button>
+      <input name="reason" maxlength="300" placeholder="Motivo para ocultar" aria-label="Motivo"><button class="btn" name="action" value="{% if thread.is_hidden %}unhide{% else %}hide{% endif %}">{% if thread.is_hidden %}Mostrar{% else %}Ocultar{% endif %}</button>
+    </form>
+    <form method="post" action="{% url 'community:moderate_thread' thread.pk %}">{% csrf_token %}
+      <select name="category" aria-label="Categoría">{% for c in categories %}<option value="{{ c.slug }}"{% if c.pk == thread.category_id %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
+      <button class="btn" name="action" value="move">Mover</button>
+    </form>
+  </details>
+  {% endif %}
   {% if can_manage %}
   <form class="inline" method="post" action="{% url 'community:toggle_closed' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">{% if thread.is_closed %}Reabrir{% else %}Cerrar hilo{% endif %}</button></form>
   {% if thread.is_answered %}<form class="inline" method="post" action="{% url 'community:unaccept' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">Quitar respuesta aceptada</button></form>{% endif %}
@@ -28,7 +43,13 @@
     {% for p in posts %}
     <li class="post{% if thread.accepted_post_id == p.pk %} accepted{% endif %}" id="post-{{ p.pk }}">
       <p class="meta"><b>{{ p.author.name }}</b> · {{ p.created_at|date:"d/m/Y H:i" }}{% if thread.accepted_post_id == p.pk %} · <span class="chip ok">✔ Respuesta aceptada</span>{% endif %}</p>
+      {% if p.is_hidden %}<p class="chip warn">Oculto por moderación: {{ p.hidden_reason }}</p>{% endif %}
       <div class="body">{{ p.body|linebreaks }}</div>
+      {% if user.is_lead %}<form class="inline" method="post" action="{% url 'community:moderate_post' p.pk %}">{% csrf_token %}<input name="reason" maxlength="300" placeholder="Motivo" aria-label="Motivo"><button class="link-btn" name="action" value="{% if p.is_hidden %}unhide{% else %}hide{% endif %}">{% if p.is_hidden %}Mostrar{% else %}Ocultar{% endif %}</button></form>{% endif %}
+      {% if p.author_id != user.pk %}
+        <details class="report"><summary>Reportar</summary>
+        <form method="post" action="{% url 'community:report' 'post' p.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><input name="reason" maxlength="300" placeholder="¿Qué pasa con esto?" aria-label="Motivo del reporte" required><button class="btn" type="submit">Enviar</button></form></details>
+      {% endif %}
       {% if can_manage and thread.kind == "question" and thread.accepted_post_id != p.pk %}
       <form class="inline" method="post" action="{% url 'community:accept' thread.pk p.pk %}">{% csrf_token %}<button class="btn" type="submit">Aceptar esta respuesta</button></form>
       {% endif %}
