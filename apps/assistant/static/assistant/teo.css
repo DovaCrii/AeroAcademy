@@ -10,3 +10,4 @@
 .teo-form{display:grid;gap:.5rem;max-width:640px}
 .teo-pop .teo-answer{max-height:50vh;overflow:auto}
 @media (prefers-reduced-motion:no-preference){.teo-widget summary{transition:transform .15s}.teo-widget summary:hover{transform:translateY(-2px)}}
+.teo-shortcuts{display:flex;flex-wrap:wrap;gap:.35rem;margin:.2rem 0 .6rem}.teo-shortcuts .btn{font-size:.8rem;padding:.25rem .55rem}

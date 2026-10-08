@@ -28,4 +28,6 @@ def teo(request):
     if not user or not user.is_authenticated or getattr(user, "status", "approved") != "approved":
         return {}
     awake = services.enabled()
-    return {"teo_awake": awake, "teo_sprite": _sprite(request, awake)}
+    from .quick import SHORTCUTS
+
+    return {"teo_awake": awake, "teo_sprite": _sprite(request, awake), "teo_shortcuts": SHORTCUTS}

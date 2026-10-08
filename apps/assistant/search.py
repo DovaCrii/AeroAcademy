@@ -18,6 +18,7 @@ from django.utils import timezone
 from apps.catalog.models import Resource
 from apps.community.models import Note, Post, Thread
 from apps.knowledge.models import Article
+from apps.library.models import Document
 from apps.paths.models import LearningPath, PathExtra
 
 from .models import IndexState
@@ -102,6 +103,15 @@ def _rows():
             a.body,
             reverse("knowledge:detail", args=[a.pk]),
         )
+    for d in Document.objects.filter(is_restricted=False):
+        body = f"{d.get_doc_type_display()}. {d.description} {' '.join(d.tags or [])}".strip()
+        yield (
+            "document",
+            f"document:{d.pk}",
+            d.title,
+            body,
+            reverse("library:detail", args=[d.pk]),
+        )
     yield from _help_rows()
 
 
@@ -151,6 +161,8 @@ def _still_visible(ref):
         return Post.objects.filter(
             pk=pk, is_deleted=False, is_hidden=False, thread__is_hidden=False
         ).exists()
+    if kind == "document":
+        return Document.objects.filter(pk=pk, is_restricted=False).exists()
     if kind == "article":
         return Article.objects.filter(pk=pk, is_published=True).exists()
     if kind == "path":

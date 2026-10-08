@@ -3,6 +3,10 @@
   <details>
     <summary aria-label="Hablar con Teo"><img src="{% static 'game/teo/' %}{{ teo_sprite }}" width="48" height="48" alt=""></summary>
     <div class="teo-pop">
+      <form method="post" action="{% url 'assistant:page' %}" class="teo-teo_shortcuts" data-teo-form data-endpoint="{% url 'assistant:ask' %}" aria-label="Atajos de Teo">
+  {% csrf_token %}
+  {% for key, text in teo_shortcuts %}<button class="btn" type="submit" name="atajo" value="{{ key }}">{{ text }}</button>{% endfor %}
+</form>
       {% if teo_awake %}
       <form method="post" action="{% url 'assistant:page' %}" data-teo-form data-endpoint="{% url 'assistant:ask' %}">
         {% csrf_token %}

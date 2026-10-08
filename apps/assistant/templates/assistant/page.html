@@ -10,6 +10,10 @@
   <p>Pregúntale por tu ruta, cómo usar la academia, un término o dónde aprender algo. Responde con lo que el equipo ya dejó aquí.</p>
 </div>
 {% if thread %}<p><a href="{% url 'community:thread' thread.pk %}">← Volver al hilo</a></p>{% endif %}
+<form method="post" action="{% url 'assistant:page' %}" class="teo-shortcuts" data-teo-form data-endpoint="{% url 'assistant:ask' %}" aria-label="Atajos de Teo">
+  {% csrf_token %}
+  {% for key, text in shortcuts %}<button class="btn" type="submit" name="atajo" value="{{ key }}">{{ text }}</button>{% endfor %}
+</form>
 {% if teo.enabled %}
 <form method="post" action="{% url 'assistant:page' %}" class="teo-form">
   {% csrf_token %}

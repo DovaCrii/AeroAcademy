@@ -61,12 +61,16 @@ def run(today=None):
     summary = 0
     if idle_total or Credential.objects.filter(status=Credential.Status.PENDING).exists():
         pending = Credential.objects.filter(status=Credential.Status.PENDING).count()
+        stale = Credential.objects.filter(
+            status=Credential.Status.PENDING, created_at__lte=now - timedelta(days=IDLE_DAYS)
+        ).count()
         for lead in notifications.leads():
             sent = notifications.notify(
                 lead,
                 "teo_digest",
                 "Teo: resumen de la semana",
-                f"{idle_total} persona(s) sin avance en {IDLE_DAYS} días · {pending} certificado(s) por revisar",
+                f"{idle_total} persona(s) sin avance en {IDLE_DAYS} días · {pending} certificado(s) por revisar"
+                + (f" ({stale} esperan hace más de {IDLE_DAYS} días)" if stale else ""),
                 url="/equipo/",
                 key=f"teo-digest:{week}",
             )
