@@ -62,6 +62,7 @@
   </div>
   <ul class="w-counters" aria-label="Pendientes">
     {% if counters.to_review is not None %}<li><a href="{% url 'credentials:review_queue' %}"><b>{{ counters.to_review }}</b> certificados por revisar</a></li>{% endif %}
+    <li><a href="{% url 'community:forum' %}?estado=open"><b>{{ counters.open_questions }}</b> consultas sin respuesta</a></li>
     <li><a href="{% url 'credentials:mine' %}"><b>{{ counters.expiring }}</b> de tus credenciales por vencer</a></li>
   </ul>
 </section>

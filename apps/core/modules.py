@@ -78,7 +78,7 @@ MODULES = [
         "description": "Hilos por categoría y disciplina, consultas con respuesta aceptada y las notas de "
         "cada ruta.",
         "items": ["Hilos y consultas", "Respuesta aceptada como solución", "Moderación del equipo"],
-        "url_name": None,
+        "url_name": "community:forum",
         "block": "Bloques 4, 10 y 16",
     },
     {

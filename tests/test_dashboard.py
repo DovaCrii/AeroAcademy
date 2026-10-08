@@ -143,7 +143,7 @@ def test_board_counts_weekly_xp_without_the_streak_bonus(member):
 def test_counters_for_members_and_leads(member, lead):
     creds.verify(make_cred(member, expires_on=timezone.localdate() + timedelta(days=10)), lead)
     make_cred(member, title="Otro")
-    assert dashboard.counters(member) == {"expiring": 1, "to_review": None}
+    assert dashboard.counters(member) == {"expiring": 1, "to_review": None, "open_questions": 0}
     assert dashboard.counters(lead)["to_review"] == 1
 
 

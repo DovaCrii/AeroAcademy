@@ -1,0 +1,52 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}{{ thread.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'community/forum.css' %}">{% endblock %}
+
+{% block content %}
+<p class="crumb"><a href="{% url 'community:forum' %}">Foro</a> › {{ thread.category.name }}</p>
+<article class="thread-main">
+  <h1>{{ thread.title }}</h1>
+  <p class="meta">
+    <span class="chip">{{ thread.get_kind_display }}</span>
+    {% if thread.is_answered %}<span class="chip ok">✔ Respondida</span>{% endif %}
+    {% if thread.is_closed %}<span class="chip">Cerrado</span>{% endif %}
+    {{ thread.author.name }} · {{ thread.created_at|date:"d/m/Y H:i" }}
+    {% for d in disciplines %}<span class="chip">{{ d.name }}</span>{% endfor %}
+  </p>
+  <div class="body">{{ thread.body|linebreaks }}</div>
+  {% if can_manage %}
+  <form class="inline" method="post" action="{% url 'community:toggle_closed' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">{% if thread.is_closed %}Reabrir{% else %}Cerrar hilo{% endif %}</button></form>
+  {% if thread.is_answered %}<form class="inline" method="post" action="{% url 'community:unaccept' thread.pk %}">{% csrf_token %}<button class="btn" type="submit">Quitar respuesta aceptada</button></form>{% endif %}
+  {% endif %}
+</article>
+
+<section aria-labelledby="resp-h">
+  <h2 id="resp-h">{{ posts|length }} respuesta{{ posts|length|pluralize }}</h2>
+  <ol class="posts">
+    {% for p in posts %}
+    <li class="post{% if thread.accepted_post_id == p.pk %} accepted{% endif %}" id="post-{{ p.pk }}">
+      <p class="meta"><b>{{ p.author.name }}</b> · {{ p.created_at|date:"d/m/Y H:i" }}{% if thread.accepted_post_id == p.pk %} · <span class="chip ok">✔ Respuesta aceptada</span>{% endif %}</p>
+      <div class="body">{{ p.body|linebreaks }}</div>
+      {% if can_manage and thread.kind == "question" and thread.accepted_post_id != p.pk %}
+      <form class="inline" method="post" action="{% url 'community:accept' thread.pk p.pk %}">{% csrf_token %}<button class="btn" type="submit">Aceptar esta respuesta</button></form>
+      {% endif %}
+      {% if p.author_id == user.pk %}
+      <form class="inline" method="post" action="{% url 'community:delete_post' p.pk %}">{% csrf_token %}<button class="link-btn" type="submit">Eliminar</button></form>
+      {% endif %}
+    </li>
+    {% empty %}<li class="muted">Aún nadie ha respondido.</li>{% endfor %}
+  </ol>
+</section>
+
+{% if thread.is_closed %}
+<p class="muted">El hilo está cerrado.</p>
+{% else %}
+<form method="post" class="thread-form">
+  {% csrf_token %}
+  <label>Tu respuesta <textarea name="body" rows="5" maxlength="5000" required></textarea></label>
+  <p><button class="btn primary" type="submit">Responder</button></p>
+</form>
+{% endif %}
+{% endblock %}
