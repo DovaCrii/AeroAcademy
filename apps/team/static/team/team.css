@@ -1,0 +1,22 @@
+.meter{height:8px;border:1px solid currentColor;position:relative;min-width:70px}
+.meter i{position:absolute;inset:0 auto 0 0;background:#1e8cff}
+td small{font-size:.72rem;opacity:.75}
+.board-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1rem;margin-top:1.5rem}
+.board-grid section{border:1px solid var(--line,#8d9cad);padding:.8rem 1rem}
+.board-grid h2{margin-top:0;font-size:1rem}
+.matrix th.vert{height:140px;vertical-align:bottom}
+.matrix th.vert span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font-size:.75rem;font-weight:600}
+.matrix td.cell{text-align:center;min-width:1.8rem}.matrix td.cell.on{background:rgba(30,140,255,.25);font-weight:700}
+.matrix tfoot td,.matrix tfoot th{font-weight:700;border-top:2px solid currentColor}
+.gantt{list-style:none;margin:0 0 1.5rem;padding:0;display:grid;gap:.4rem}
+.gantt li{display:grid;grid-template-columns:minmax(120px,220px) 1fr auto;gap:.6rem;align-items:center}
+.g-label small{display:block;font-size:.72rem;opacity:.7}
+.g-track{height:18px;border:1px solid var(--line,#8d9cad);position:relative;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/12 - 1px),rgba(141,156,173,.35) calc(100%/12 - 1px) calc(100%/12))}
+.g-bar{position:absolute;top:2px;bottom:2px;background:rgba(30,140,255,.35);border:1px solid #1e8cff;overflow:hidden}
+.g-bar.rec{border-style:dashed}.g-bar i{position:absolute;inset:0 auto 0 0;background:#1e8cff}
+.g-pct{font-family:ui-monospace,monospace;font-size:.8rem}
+@media (max-width:640px){.gantt li{grid-template-columns:1fr}.g-pct{justify-self:start}}
+.checks{list-style:none;margin:0 0 1rem;padding:0;display:grid;gap:.3rem}
+.check{display:flex;gap:.6rem;align-items:flex-start;padding:.3rem .2rem;border-bottom:1px dotted var(--line,#8d9cad)}
+.check .box{width:1.5rem;height:1.5rem;border:2px solid currentColor;background:none;color:inherit;cursor:pointer;line-height:1;font-weight:700}
+.check.done .box{background:#13803c;border-color:#13803c;color:#fff}.check.done .txt{opacity:.75}

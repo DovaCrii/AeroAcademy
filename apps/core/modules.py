@@ -42,7 +42,7 @@ MODULES = [
             "Credenciales validadas por persona",
             "A quién preguntar por cada software",
         ],
-        "url_name": None,
+        "url_name": "team:board",
         "block": "Bloques 7 y 14",
     },
     {

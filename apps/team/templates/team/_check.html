@@ -1,0 +1,8 @@
+{% load core_extras %}<li id="{{ r.item.key }}" class="check{% if r.check %} done{% endif %}">
+  <form method="post" action="{% url 'team:toggle' path.slug r.item.key %}">{% csrf_token %}
+    <input type="hidden" name="checked" value="{% if r.check %}0{% else %}1{% endif %}">
+    <button type="submit" class="box" aria-pressed="{% if r.check %}true{% else %}false{% endif %}" aria-label="{% if r.check %}Desmarcar{% else %}Marcar{% endif %}: {{ r.item.text }}">{% if r.check %}✔{% endif %}</button>
+  </form>
+  <span class="txt">{{ r.item.text|terms }}</span>
+  {% if r.check %}<small class="muted">{{ r.check.checked_by.name|default:"alguien" }} · {{ r.check.created_at|date:"d/m/Y" }}</small>{% endif %}
+</li>

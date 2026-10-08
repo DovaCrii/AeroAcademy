@@ -266,7 +266,15 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** la XLSX abre en Excel con columnas y fechas tipadas; solo los leads exportan; los archivos del ZIP coinciden con la selección.
 
-## Bloque 7 · Tablero del equipo `[ ]`
+## Bloque 7 · Tablero del equipo `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `/equipo/`: avance por ruta y persona (calculado **en lote**, con una prueba que lo compara con el cálculo de cada mundo), últimas notas, credenciales recientes, por vencer y vencidas. Todo respeta la visibilidad del repositorio (de otras personas solo lo verificado y visible al equipo; los responsables ven todo).
+> - `/equipo/matriz/`: personas × habilidades con el número de credenciales verificadas que las respaldan, filtrable por atributo (MOD, CAP, ANA, DOC, NOR, COL).
+> - `/equipo/kit/<ruta>/`: kit del equipo y plan de implementación con **Gantt por fases** y casillas compartidas (`SharedCheck`: la marca el equipo una sola vez y queda quién y cuándo). Sin JS funciona igual (formularios).
+> - Rendimiento: con 30 personas y 300 credenciales, el tablero y la matriz cargan en menos de 1,5 s con menos de 60 consultas (prueba incluida).
+> - **Desviación:** la matriz no suma «rutas completadas» (las rutas aún no declaran habilidades); queda anotado para cuando existan.
+> - **Pendiente:** matriz exportable y filtros por vendor.
 - Avance por ruta y persona, últimas notas, credenciales recientes, por vencer y vencidas.
 - Matriz de competencias (personas × habilidades) desde credenciales verificadas y rutas completadas.
 - Kit y plan de implementación compartidos (SharedItem/SharedCheck) con Gantt, como en el prototipo.
