@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Kit y plan · {{ path.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'team/team.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Kit y plan de implementación</h1>
+  <p><a href="{% url 'paths:detail' path.slug %}">{{ path.title }}</a> · las casillas las marca todo el equipo. <a href="{% url 'team:board' %}">← Tablero</a></p>
+</div>
+
+{% if phases %}
+<section aria-labelledby="k-gantt">
+  <h2 id="k-gantt">Plan por fases</h2>
+  <ol class="gantt" aria-label="Fases del plan en semanas">
+    {% for ph in phases %}
+    <li><span class="g-label">{{ ph.title }}<small>{{ ph.label }}</small></span>
+      <span class="g-track"><span class="g-bar{% if ph.recurring %} rec{% endif %}" style="left:{{ ph.offset }}%;width:{{ ph.width }}%"><i style="width:{{ ph.pct }}%"></i></span></span>
+      <span class="g-pct">{{ ph.done }}/{{ ph.total }}</span></li>
+    {% endfor %}
+  </ol>
+  {% for ph in phases %}
+  <h3>{{ ph.title }} <small class="muted">{{ ph.label }}</small></h3>
+  <ul class="checks">{% for r in ph.rows %}{% include "team/_check.html" with r=r path=path %}{% endfor %}</ul>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if kit %}
+<section aria-labelledby="k-kit">
+  <h2 id="k-kit">Kit del equipo</h2>
+  {% for g in kit %}
+  <h3>{{ g.title }}</h3>
+  <ul class="checks">{% for r in g.rows %}{% include "team/_check.html" with r=r path=path %}{% endfor %}</ul>
+  {% endfor %}
+</section>
+{% endif %}
+{% endblock %}

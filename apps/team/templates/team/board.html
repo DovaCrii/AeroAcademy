@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+{% load static avatar_tags %}
+
+{% block title %}Tablero del equipo{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'team/team.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Tablero del equipo</h1>
+  <p>Cómo va el gremio. <a href="{% url 'team:matrix' %}">Matriz de competencias</a>{% for p in kit_paths %} · <a href="{% url 'team:kit' p.slug %}">Kit y plan · {{ p.title }}</a>{% endfor %}</p>
+</div>
+
+<section aria-labelledby="t-prog">
+  <h2 id="t-prog">Avance por ruta y persona</h2>
+  <div class="sched"><table>
+    <thead><tr><th>Persona</th>{% for p in table.paths %}<th><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a></th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for row in table.rows %}
+      <tr><th scope="row"><a href="{% url 'gamification:sheet' row.person.pk %}">{% avatar row.person 24 %} {{ row.person.name }}</a></th>
+        {% for pct in row.cells %}<td><div class="meter" role="img" aria-label="{{ pct }} %"><i style="width:{{ pct }}%"></i></div><small>{{ pct }} %</small></td>{% endfor %}</tr>
+      {% empty %}<tr><td colspan="9" class="muted">Aún no hay personas.</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</section>
+
+<div class="board-grid">
+  <section aria-labelledby="t-notes"><h2 id="t-notes">Últimas notas</h2>
+    <ul class="plain">{% for n in notes %}<li><b>{{ n.author.name }}</b> en <a href="{% url 'community:path_notes' n.path.slug %}">{{ n.path.title }}</a>: {{ n.text|truncatechars:90 }}</li>{% empty %}<li class="muted">Sin notas todavía.</li>{% endfor %}</ul></section>
+  <section aria-labelledby="t-creds"><h2 id="t-creds">Credenciales recientes</h2>
+    <ul class="plain">{% for c in credentials %}<li><b>{{ c.owner.name }}</b> · <a href="{% url 'credentials:detail' c.pk %}">{{ c.display_title }}</a> <span class="muted">{{ c.reviewed_at|date:"d/m/Y" }}</span></li>{% empty %}<li class="muted">Sin credenciales verificadas.</li>{% endfor %}</ul></section>
+  <section aria-labelledby="t-soon"><h2 id="t-soon">Por vencer</h2>
+    <ul class="plain">{% for c in expiring %}<li><b>{{ c.owner.name }}</b> · {{ c.display_title }} <span class="chip pend">{{ c.days_to_expiry }} días</span></li>{% empty %}<li class="muted">Nada por vencer.</li>{% endfor %}</ul></section>
+  <section aria-labelledby="t-gone"><h2 id="t-gone">Vencidas</h2>
+    <ul class="plain">{% for c in expired %}<li><b>{{ c.owner.name }}</b> · {{ c.display_title }} <span class="chip warn">Vencida</span></li>{% empty %}<li class="muted">Ninguna.</li>{% endfor %}</ul></section>
+</div>
+{% endblock %}
