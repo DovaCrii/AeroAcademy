@@ -14,9 +14,11 @@ Todos los bloques de `docs/PLAN.md` están construidos. Esto es lo que queda, or
 | ✔ Hecho | Recomendar recursos por habilidad y producto (entran al índice) |
 | ⏳ Tuyo | **Probar con tu clave real** y elegir `NIM_MODEL` según cómo salga el español (`teo_probar`) |
 | ⏳ Tuyo | Rotar la clave que se pegó antes en el chat |
-| Siguiente ronda | Mostrar a Teo celebrando también al ganar una insignia; respuestas con botones («¿Qué me falta?», «¿Cómo subo un certificado?») |
-| Siguiente ronda | Teo cita documentos no restringidos de la biblioteca |
-| Siguiente ronda | Recordatorio al responsable por cada credencial en revisión > 7 días |
+| ✔ Hecho | Atajos locales («¿Qué me falta?», «¿Qué vence pronto?», «Recomiéndame un curso», «¿Cómo subo un certificado?»), sin API |
+| ✔ Hecho | Teo cita documentos no restringidos de la biblioteca |
+| ✔ Hecho | El resumen semanal avisa de certificados en revisión hace más de 7 días |
+| ✔ Hecho | Modelo vigente con respaldos automáticos y `teo_probar --buscar` (modelos que de verdad responden con tu cuenta) |
+| Siguiente ronda | Mostrar a Teo celebrando también al ganar una insignia |
 | Siguiente ronda | Correo (hoy solo el gancho `email-hook` en el log) |
 
 ## Para producción

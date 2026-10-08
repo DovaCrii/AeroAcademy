@@ -84,6 +84,8 @@ Implementación:
 - Índice FTS5 `assistant_fts` (migración 0002): se reconstruye cada 5 minutos o con `manage.py reindex_assistant`, y cada resultado se revalida contra la base.
 - Teo resume hilos de 5 o más mensajes con «Resumir con Teo». Las expresiones de los sprites son *idle*, *happy*, *thinking*, *sleep* y *celebra* (al subir de nivel); además viste el atuendo del mundo de la ruta que se mira (`teo-<mundo>.svg`).
 - **Seguimiento:** `manage.py teo_seguimiento` (lunes 09:00, temporizador `centro-teo`) avisa en la campana a quien lleva 7 días sin avanzar con su misión sugerida y manda un resumen semanal a los responsables. Es local (sin API) y se apaga con `TEO_NUDGES=false`.
+- **Atajos** («¿Qué me falta?», «¿Qué vence pronto?», «Recomiéndame un curso», «¿Cómo subo un certificado?»): respuestas calculadas en la VM con los datos de la propia persona, sin la API, sin gastar el límite diario y aunque Teo duerma (`assistant/quick.py`).
+- **Documentos:** Teo también cita los documentos **no restringidos** de la biblioteca (título, tipo, etiquetas y descripción; nunca el archivo), revalidados al consultar.
 - **Ayuda sin modelo:** `/ayuda/?q=` busca en la ayuda, rutas, glosarios, recursos y artículos con el índice local; funciona aunque Teo duerma.
 - **Probar la conexión:** `manage.py teo_probar` hace una llamada corta, muestra latencia y respuesta, o explica el fallo; nunca muestra la clave.
 

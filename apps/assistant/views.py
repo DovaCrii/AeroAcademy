@@ -7,7 +7,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.community.models import Thread
 
-from . import context, services
+from . import context, quick, services
 from . import search as search_module
 from .search import HELP_DIR
 
@@ -15,10 +15,16 @@ from .search import HELP_DIR
 def _ctx(request, answer=None, question="", extra=None):
     ctx = {
         "teo": {"enabled": services.enabled(), "remaining": services.remaining(request.user)},
+        "shortcuts": quick.SHORTCUTS,
         "answer": answer,
         "question": question,
     }
-    if answer is not None and answer.status in ("ok", "error"):
+    if (
+        answer is not None
+        and answer.status in ("ok", "error")
+        and question
+        and not request.POST.get("atajo")
+    ):
         ctx["ask_forum"] = (
             reverse("community:thread_new") + "?" + urlencode(services.forum_prefill(question))
         )
@@ -31,8 +37,7 @@ def _ctx(request, answer=None, question="", extra=None):
 def page(request):
     """Teo en una página completa (funciona sin JavaScript)."""
     if request.method == "POST":
-        question = request.POST.get("question", "")
-        answer = services.answer(request.user, question)
+        answer, question = _respond(request)
         return render(request, "assistant/page.html", _ctx(request, answer, question))
     return render(request, "assistant/page.html", _ctx(request))
 
@@ -40,9 +45,17 @@ def page(request):
 @require_POST
 def ask(request):
     """Fragmento HTML con la respuesta, para el widget de la esquina."""
-    question = request.POST.get("question", "")
-    answer = services.answer(request.user, question)
+    answer, question = _respond(request)
     return render(request, "assistant/_answer.html", _ctx(request, answer, question))
+
+
+def _respond(request):
+    """Un atajo (local, sin el modelo) o una pregunta libre."""
+    key = request.POST.get("atajo", "")
+    if key:
+        return quick.answer(request.user, key), quick.label(key)
+    question = request.POST.get("question", "")
+    return services.answer(request.user, question), question
 
 
 @require_POST
@@ -76,7 +89,7 @@ def help_page(request, slug):
     )
 
 
-HELP_KINDS = {"help", "path", "glossary", "resource", "article"}
+HELP_KINDS = {"help", "path", "glossary", "resource", "article", "document"}
 
 
 def help_index(request):
