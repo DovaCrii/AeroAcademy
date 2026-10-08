@@ -78,7 +78,17 @@ certificado, que el moderador los valide y ver crecer XP, insignias y la hoja de
 
 **Acepta si:** `seed_catalog` dos veces no duplica; la ruta forma-revit queda con 7 niveles y todas sus `key`; bentley-learn queda con sus capítulos y cursos externos; `--dry-run` detecta una `key` duplicada.
 
-## Bloque 3 · Mundo Arquitectura: ruta interactiva y avance `[ ]`
+## Bloque 3 · Mundo Arquitectura: ruta interactiva y avance `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `progress`: `MilestoneCheck`, `QuizAnswer` y `PathGoal` (únicos por persona). `SharedCheck` llega con el Bloque 7.
+> - Contrato de mundos (`docs/MUNDOS.md`): `worlds/<mundo>/path.html` + `_app.html`; `paths:detail` usa el mundo si existe y si no cae a la vista genérica. Primer mundo: `architecture` (portada con nube de puntos, corte del edificio, *Project Browser*, panel del nivel).
+> - Avance = (hitos + preguntas correctas) / (hitos + preguntas), sin lo retirado; redondeo clásico (12,5 → 13).
+> - Cada persona aparece en el piso donde trabajó por última vez (solo aprobadas).
+> - **Sin HTMX por ahora (D23):** `core/static/core/enhance.js` hace la actualización parcial (`X-Partial`); sin JS, formularios y enlaces normales con redirección.
+> - Semilla de Forma ampliada con `description`, `intro` y `flow` (nuevos tipos de extra).
+> - 127 pruebas en verde; revisado a escritorio y 390 px, claro y oscuro.
+> - **Pendiente:** notas del equipo en el mundo (Bloque 4), tabla del equipo y meta visible por persona (Bloque 7).
 - Contrato de mundos de `MUNDOS.md`: componentes compartidos (panel del capítulo, schedules) + piel `architecture` migrada del prototipo (corte del edificio, Project Browser, cajetín, portada con nube de puntos).
 - HTMX: marcar hito, responder quiz, fijar meta de certificación. Recalcular porcentajes en la respuesta parcial.
 - Avance del equipo visible en el corte (marcas por persona).

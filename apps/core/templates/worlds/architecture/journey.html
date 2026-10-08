@@ -1,0 +1,28 @@
+{# Corte del edificio: un piso por nivel (el 0 abajo), relleno según el avance y las personas del equipo en su piso. #}
+<svg class="ar-section" viewBox="0 0 760 {{ building.height }}" role="img" aria-labelledby="secT">
+  <title id="secT">Corte del edificio: {{ stats.levels_total }} niveles de aprendizaje. Tu avance es {{ stats.pct }} % y completaste {{ stats.levels_done }} niveles.</title>
+  <defs>
+    <pattern id="ar-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" class="hatch"/></pattern>
+  </defs>
+  <rect class="ar-earth" x="20" y="{{ building.ground }}" width="720" height="34" fill="url(#ar-hatch)"/>
+  <line class="ar-ground" x1="20" y1="{{ building.ground }}" x2="740" y2="{{ building.ground }}"/>
+  <rect class="ar-roof" x="110" y="{{ building.top }}" width="420" height="6"/>
+  {% for f in building.floors %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ f.code }}#panel" data-enhance data-fid="floor-{{ f.code }}" aria-label="Nivel {{ f.code|upper }} {{ f.short }}: {{ f.pct }} % completo"{% if f.code == current.level.code %} aria-current="true"{% endif %}>
+    <g class="ar-floor{% if f.code == current.level.code %} on{% endif %}{% if f.complete %} done{% endif %}">
+      <rect class="ar-slab" x="120" y="{{ f.y }}" width="400" height="52"/>
+      <rect class="ar-fill" x="120" y="{{ f.y }}" width="{{ f.fill_w }}" height="52"/>
+      <rect class="ar-box" x="120" y="{{ f.y }}" width="400" height="52"/>
+      <text class="ar-elev" x="106" y="{{ f.mid }}" text-anchor="end">{{ f.elev }}</text>
+      <text class="ar-code" x="136" y="{{ f.mid }}">{{ f.code|upper }}</text>
+      <text class="ar-name" x="178" y="{{ f.mid }}">{{ f.short }}</text>
+      <text class="ar-pct" x="508" y="{{ f.mid }}" text-anchor="end">{{ f.pct }} %</text>
+      {% for m in f.marks %}
+      <g class="ar-mark{% if m.me %} me{% endif %}"><title>{{ m.name }}</title><circle cx="{{ m.x }}" cy="{{ f.mid|add:'-4' }}" r="13"/><text x="{{ m.x }}" y="{{ f.mid }}" text-anchor="middle">{{ m.initials }}</text></g>
+      {% endfor %}
+      {% if f.extra %}<text class="ar-more" x="{{ f.extra_x }}" y="{{ f.mid }}">+{{ f.extra }}</text>{% endif %}
+    </g>
+  </a>
+  {% endfor %}
+  <text class="ar-cota" x="20" y="{{ building.ground|add:'-8' }}">COTA ±0,00</text>
+</svg>

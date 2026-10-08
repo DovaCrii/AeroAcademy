@@ -1323,5 +1323,32 @@
     "ACP Revit Electrical Design",
     "ACP BIM Management for Building Design",
     "ACP Civil 3D Infrastructure Design"
+  ],
+  "description": "Del terreno real al modelo BIM en un solo flujo: captura con dron, escáner láser y topografía; contexto y análisis en Forma; modelo y documentación en Revit. Esta es la ruta con la que el equipo se capacita para hacerlo.",
+  "intro": {
+    "title": "De la cota 0 a la certificación",
+    "text": "Ruta del equipo para usar Forma y Revit como un solo flujo, del sitio real al modelo documentado. Cada nivel del edificio es una etapa: recursos oficiales de Autodesk, hitos, un mini quiz y las notas del equipo."
+  },
+  "flow": [
+    {
+      "title": "Captura",
+      "text": "Dron, escáner láser y topografía"
+    },
+    {
+      "title": "Nube de puntos",
+      "text": "Registro y georreferencia"
+    },
+    {
+      "title": "Forma",
+      "text": "Sitio, contexto y análisis"
+    },
+    {
+      "title": "Revit",
+      "text": "Modelo BIM y planos"
+    },
+    {
+      "title": "Entrega",
+      "text": "Coordinación y CDE"
+    }
   ]
 }

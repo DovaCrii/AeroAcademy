@@ -251,14 +251,23 @@ def test_paths_index_empty_without_seed(member_client):
     assert "seed_catalog" in member_client.get("/rutas/").content.decode()
 
 
-def test_path_detail_structured(seeded, member_client):
-    response = member_client.get("/rutas/forma-revit/")
+def test_path_detail_structured_uses_its_world(seeded, member_client):
+    response = member_client.get("/rutas/forma-revit/?nivel=n3")
     html = response.content.decode()
     assert response.status_code == 200
-    assert "Ruta Forma + Revit" in html and "CC 410" in html
-    assert 'id="n3"' in html
+    assert "Levantamiento Digital" in html and "CC 410" in html
+    assert 'aria-label="Nivel N3' in html
     assert '<em class="term">Send to Revit</em>' in html
-    assert "Learn Forma Site Design in 90 minutes" in html
+    assert (
+        "Learn Forma Site Design in 90 minutes"
+        in member_client.get("/rutas/forma-revit/?nivel=n2").content.decode()
+    )
+
+
+def test_path_detail_generic_for_worlds_not_built_yet(seeded, member_client):
+    LearningPath.objects.filter(slug="forma-revit").update(world="mechanical")
+    html = member_client.get("/rutas/forma-revit/").content.decode()
+    assert 'id="n3"' in html and '<em class="term">Send to Revit</em>' in html
 
 
 def test_path_detail_external(seeded, member_client):

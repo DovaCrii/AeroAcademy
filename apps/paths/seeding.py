@@ -268,6 +268,8 @@ def _load_extras(path, data):
         [{"title": t} for t in data.get("certification_goals", [])],
     )
     add(PathExtra.Kind.CERTIFICATION_STEP, data.get("certification_ladder", []))
+    add(PathExtra.Kind.INTRO, [data["intro"]] if data.get("intro") else [])
+    add(PathExtra.Kind.FLOW, data.get("flow", []))
     PathExtra.objects.bulk_create(extras)
 
     for group in data.get("team_kit", []):

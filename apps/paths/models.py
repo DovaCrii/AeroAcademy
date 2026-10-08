@@ -182,6 +182,8 @@ class PathExtra(TimeStampedModel):
         ROLLOUT_PHASE = "rollout_phase", "Fase del plan"
         CERTIFICATION_GOAL = "certification_goal", "Meta de certificación"
         CERTIFICATION_STEP = "certification_step", "Peldaño de certificación"
+        INTRO = "intro", "Introducción de la ruta"
+        FLOW = "flow", "Flujo de la portada"
 
     path = models.ForeignKey(LearningPath, on_delete=models.CASCADE, related_name="extras")
     kind = models.CharField(max_length=20, choices=Kind.choices)
