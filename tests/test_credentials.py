@@ -12,6 +12,7 @@ from django.test import Client
 from apps.catalog.models import Resource
 from apps.credentials import files, services
 from apps.credentials.models import Credential
+from apps.gamification import game
 from apps.paths.models import ExternalCourse, LearningPath, Milestone
 from apps.progress import services as progress
 from apps.progress.models import MilestoneCheck
@@ -431,20 +432,44 @@ def test_replacing_the_file_sends_it_back_and_removes_the_old_one(
     assert Path(cred.file.path).is_file() and not old.exists()
 
 
-def test_editing_other_fields_keeps_the_credential_verified(client_for, member, lead):
+def test_only_visibility_can_change_without_a_new_review(client_for, member, lead):
     cred = make(member, issuer="Autodesk")
     services.verify(cred, lead)
-    edit(
-        client_for(member.login),
-        cred,
-        title="Nuevo título",
-        issuer="Autodesk",
-        visibility="private",
-    )
+    edit(client_for(member.login), cred, title=cred.title, issuer="Autodesk", visibility="private")
     cred.refresh_from_db()
-    assert (
-        cred.status == "verified" and cred.title == "Nuevo título" and cred.visibility == "private"
-    )
+    assert cred.status == "verified" and cred.visibility == "private"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("title", "Otro título"),
+        ("kind", "certification"),
+        ("verify_url", "https://evil.example/x"),
+        ("credential_id", "ZZ-1"),
+    ],
+)
+def test_editing_what_was_verified_sends_it_back_and_takes_the_points_away(
+    client_for, member, lead, field, value
+):
+    cred = make(member, issuer="Autodesk", kind="other")
+    services.verify(cred, lead)
+    edit(client_for(member.login), cred, **{field: value})
+    cred.refresh_from_db()
+    assert cred.status == "pending"
+    assert not member.xp_events.filter(kind="credential").exists()
+    game.refresh(member)  # recalcular no devuelve nada mientras esté en revisión
+    assert not member.xp_events.filter(kind="credential").exists()
+
+
+def test_changing_the_kind_of_a_verified_credential_cannot_mint_xp(member, lead):
+    cred = make(member, kind="other")
+    services.verify(cred, lead)
+    cred.kind = "certification"
+    cred.save(update_fields=["kind"])  # un cambio directo en la base
+    game.refresh(member)
+    # la credencial sigue verificada: el XP debe seguir al tipo vigente y recalcularse
+    assert member.xp_events.get(kind="credential").points == 500
 
 
 def test_editing_a_rejected_credential_resubmits_it(client_for, member, lead):

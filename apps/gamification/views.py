@@ -67,7 +67,13 @@ def avatar_preview(request):
 @require_POST
 def seen(request):
     """La persona vio sus celebraciones (insignias nuevas y subida de nivel)."""
-    game.mark_seen(request.user, game.level_info(request.user)["level"])
+    shown = [int(x) for x in request.POST.getlist("badge") if x.isdigit()]
+    level = request.POST.get("level", "")
+    game.mark_seen(
+        request.user,
+        min(int(level), game.level_info(request.user)["level"]) if level.isdigit() else None,
+        shown,
+    )  # solo lo que se mostró: lo ganado después sigue pendiente
     target = request.POST.get("next", "")
     ok = target.startswith("/") and not target.startswith("//")
     if not ok or not url_has_allowed_host_and_scheme(target, {request.get_host()}):
@@ -109,7 +115,12 @@ def edit_sheet(request):
             person.character_class = data["character_class"]
             if person.avatar_config and data["character_class"]:
                 person.avatar_config = {**person.avatar_config, "class": data["character_class"]}
-        person.save()
+        person.save(
+            update_fields=[
+                "headline", "bio", "selected_title", "show_game_view", "links",
+                "character_class", "avatar_config", "updated_at",
+            ]
+        )  # fmt: skip
         sheet_data.sync_profile(person)
         messages.success(request, "Tu hoja de personaje quedó guardada.")
         return redirect("gamification:my_sheet")

@@ -126,6 +126,11 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 - verificar una credencial de *Bentley Accredited Road Modeler* cumple su curso externo y levanta su pilar;
 - promover un curso libre crea un Resource y un ExternalCourse al final del capítulo "Cursos libres".
 
+## Revisión independiente de los bloques 13 a 8 (2026-10-08)
+
+> Un revisor sin acceso a mi contexto encontró 13 puntos; todos reproducidos y corregidos con una prueba cada uno (`tests/test_revision.py`):
+> editar una credencial verificada ya no cambia su tipo, plataforma ni enlace sin nueva revisión y el XP se recalcula; el índice de Teo no entrega notas de rutas sin publicar ni respuestas de notas ocultas; el tablero no muestra borradores ni porcentajes de credenciales privadas; a Teo no viaja el correo ni qué cursos faltan; ocultar una respuesta quita su XP y su aceptación (y las aceptaciones concurrentes pagan una sola vez, con tope diario); enlaces del perfil y Markdown sin trucos de `\`; los artículos copiados de un hilo oculto se despublican; la exportación usa un archivo temporal y se descarga en flujo; `install.sh` comprueba la salud con el `Host` permitido y crea `/etc/centro/env` con `umask 077`. Decisión D31 sobre qué es público de una credencial privada.
+
 ## Bloque 13 · Motor de juego `[x]`
 
 > **Hecho (2026-10-08).** Notas:

@@ -23,7 +23,11 @@ def _clean(value, limit, what, *, required=True):
 
 
 def can_view(person, article) -> bool:
-    return article.is_published or article.author_id == person.pk or person.is_lead
+    if person.is_lead or article.author_id == person.pk:
+        return True
+    # Un artículo copiado de un hilo que luego se ocultó deja de verse.
+    source_ok = article.source_thread_id is None or not article.source_thread.is_hidden
+    return article.is_published and source_ok
 
 
 def can_edit(person, article) -> bool:
@@ -32,7 +36,10 @@ def can_edit(person, article) -> bool:
 
 def visible(person):
     qs = Article.objects.select_related("author")
-    return qs if person.is_lead else qs.filter(Q(is_published=True) | Q(author=person))
+    if person.is_lead:
+        return qs
+    alive = Q(source_thread__isnull=True) | Q(source_thread__is_hidden=False)
+    return qs.filter((Q(is_published=True) & alive) | Q(author=person))
 
 
 def listing(person, *, kind="", discipline=None, q=""):

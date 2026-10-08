@@ -101,6 +101,12 @@ class Credential(TimeStampedModel):
     def __str__(self):
         return f"{self.title} · {self.owner}"
 
+    def file_size_bytes(self) -> int:
+        try:
+            return self.file.size
+        except (OSError, ValueError):
+            return 0
+
     @property
     def display_title(self):
         return self.title or self.course_name_free

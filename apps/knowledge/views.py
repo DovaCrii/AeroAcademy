@@ -60,6 +60,8 @@ def new(request):
     thread_id = request.GET.get("hilo") or request.POST.get("thread")
     if thread_id and thread_id.isdigit():
         thread = get_object_or_404(Thread, pk=int(thread_id))
+        if thread.is_hidden and not request.user.is_lead:
+            raise Http404  # no se revela que existe
         try:
             initial = services.draft_from_thread(thread, request.user)
         except PermissionError as exc:

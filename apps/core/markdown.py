@@ -13,10 +13,11 @@ from django.utils.safestring import mark_safe
 _CODE = re.compile(r"`([^`\n]+)`")
 _BOLD = re.compile(r"\*\*([^*\n]+)\*\*")
 _LINK = re.compile(r"\[([^\]\n]+)\]\(([^)\s]+)\)")
+_ANCHOR = re.compile(r"(<a href=.*?</a>)")
 _HEADING = re.compile(r"^(#{1,3})\s+(.+)$")
 _UL = re.compile(r"^[-*]\s+(.+)$")
 _OL = re.compile(r"^\d+[.)]\s+(.+)$")
-_SAFE_URL = re.compile(r"^(https?://[^\s\"'<>]+|/(?!/)[^\s\"'<>]*)$")
+_SAFE_URL = re.compile(r"^(https?://[^\s\"'<>]+|/(?![/\\])[^\s\"'<>\\]*)$")
 
 
 def _link(match):
@@ -26,7 +27,7 @@ def _link(match):
         return match.group(0)  # no es un enlace permitido: queda como texto
     external = raw.startswith("http")
     extra = ' rel="noopener noreferrer" target="_blank"' if external else ""
-    return f'<a href="{url}"{extra}>{label}</a>'
+    return f'<a href="{url}"{extra}>{_BOLD.sub(r"<strong>\1</strong>", label)}</a>'
 
 
 def _inline(text):
@@ -37,7 +38,11 @@ def _inline(text):
             out.append(f"<code>{part}</code>")
         else:
             part = _LINK.sub(_link, part)
-            part = _BOLD.sub(r"<strong>\1</strong>", part)
+            # La negrita solo fuera de los enlaces ya armados (no dentro del href).
+            pieces = _ANCHOR.split(part)
+            part = "".join(
+                p if i % 2 else _BOLD.sub(r"<strong>\1</strong>", p) for i, p in enumerate(pieces)
+            )
             out.append(part)
     return "".join(out)
 

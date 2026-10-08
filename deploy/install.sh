@@ -40,6 +40,7 @@ rsync -a --delete \
 
 echo "==> Configuración en $ENV_FILE"
 if [ ! -f "$ENV_FILE" ]; then
+  umask 077   # el archivo nace sin permisos para otros: lleva la SECRET_KEY
   SECRET="$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')"
   cat > "$ENV_FILE" <<EOF
 # Configuración de AeroAcademy. Nunca se versiona. Reinicia el servicio después de editarla.
@@ -63,6 +64,10 @@ EOF
   if [ -z "$HOST" ]; then echo "    (falta el nombre MagicDNS: ./deploy/install.sh mi-vm.tailnet.ts.net)"; fi
 else
   echo "    ya existe; no se toca"
+  if [ -n "$HOST" ] && grep -q '^ALLOWED_HOSTS=$' "$ENV_FILE"; then
+    sed -i "s|^ALLOWED_HOSTS=\$|ALLOWED_HOSTS=$HOST|" "$ENV_FILE"
+    echo "    ALLOWED_HOSTS completado con $HOST"
+  fi
 fi
 
 if grep -q '^ALLOWED_HOSTS=$' "$ENV_FILE"; then
@@ -97,8 +102,10 @@ systemctl enable --now centro.service centro-backup.timer centro-expiry.timer
 systemctl restart centro.service
 
 echo "==> Comprobando el servicio"
+# Django rechaza un Host que no esté en ALLOWED_HOSTS: se usa el primero (el nombre MagicDNS).
+HC_HOST="$(grep '^ALLOWED_HOSTS=' "$ENV_FILE" | cut -d= -f2 | cut -d, -f1)"
 for _ in 1 2 3 4 5 6 7 8 9 10; do
-  if curl -fsS "http://127.0.0.1:$PORT/healthz" >/dev/null 2>&1; then OK=1; break; fi
+  if curl -fsS -H "Host: $HC_HOST" "http://127.0.0.1:$PORT/healthz" >/dev/null 2>&1; then OK=1; break; fi
   sleep 1
 done
 [ "${OK:-0}" = 1 ] && echo "    servicio OK en 127.0.0.1:$PORT" || { echo "    el servicio no responde; revisa: journalctl -u centro" >&2; exit 1; }

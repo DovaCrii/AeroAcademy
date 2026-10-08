@@ -17,7 +17,7 @@ def board(request):
         "team/board.html",
         {
             "table": services.progress_table(request.user),
-            "notes": services.recent_notes(),
+            "notes": services.recent_notes(request.user),
             "credentials": services.recent_credentials(request.user),
             "expiring": expiring,
             "expired": expired,

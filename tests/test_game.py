@@ -394,7 +394,8 @@ def test_celebrations_show_once_and_seen_clears_them(client_for, member):
     client = client_for(member.login)
     html = client.get("/").content.decode()
     assert "Nueva insignia" in html and "Primera Luz" in html
-    client.post("/juego/visto/", {"next": "/"})
+    ids = [b.pk for b in PersonBadge.objects.filter(person=member)]
+    client.post("/juego/visto/", {"next": "/", "badge": ids})
     assert "Nueva insignia" not in client.get("/").content.decode()
 
 
@@ -402,7 +403,7 @@ def test_level_up_is_celebrated_once(client_for, member):
     game.award(member, "x:1", "manual", 150)
     client = client_for(member.login)
     assert "Subiste de nivel" in client.get("/").content.decode()
-    client.post("/juego/visto/", {"next": "/"})
+    client.post("/juego/visto/", {"next": "/", "level": 2})
     assert "Subiste de nivel" not in client.get("/").content.decode()
 
 
@@ -429,3 +430,13 @@ def test_pending_people_get_no_game_context(client_for, make_person):
 def test_badge_count_is_stable(member):
     assert PersonBadge.objects.filter(person=member).count() == 0
     assert Level.objects.exists()
+
+
+def test_seen_only_marks_what_was_shown(client_for, member):
+    progress.set_milestone(member, first_milestone(), True)
+    shown = list(PersonBadge.objects.filter(person=member))
+    later = PersonBadge.objects.create(person=member, badge=Badge.objects.get(slug="primera-nube"))
+    client_for(member.login).post("/juego/visto/", {"next": "/", "badge": [b.pk for b in shown]})
+    assert not PersonBadge.objects.filter(pk__in=[b.pk for b in shown], seen=False).exists()
+    later.refresh_from_db()
+    assert later.seen is False

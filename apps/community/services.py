@@ -36,7 +36,7 @@ def create_note(author, path, text, type, *, level=None, resource=None, parent=N
     if len(text) > NOTE_MAX:
         raise ValueError(f"La nota admite hasta {NOTE_MAX} caracteres.")
     if parent is not None:
-        if parent.is_deleted or parent.parent_id or parent.path_id != path.pk:
+        if parent.is_deleted or parent.is_hidden or parent.parent_id or parent.path_id != path.pk:
             raise ValueError("No se puede responder a esa nota.")
         type, level, resource = Note.Type.REPLY, parent.level, parent.resource
     elif type not in TOP_TYPES:

@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from apps.notifications import services as notifications
 
-from .models import ModerationLog, Note, Post, Report
+from .models import ModerationLog, Note, Post, Report, Thread
 
 REASON_MAX = 300
 TARGETS = {"post": Post, "note": Note}
@@ -57,6 +57,7 @@ def set_hidden(obj, by, hidden, reason=""):
     obj.save(update_fields=fields)
     log(by, "hide" if hidden else "unhide", obj, str(obj)[:150], reason)
     if hidden:
+        _undo_effects(obj)
         notifications.notify(
             obj.author,
             "content_hidden",
@@ -64,6 +65,26 @@ def set_hidden(obj, by, hidden, reason=""):
             reason,
             key=f"hidden:{type(obj).__name__.lower()}:{obj.pk}",
         )
+
+
+def _undo_effects(obj):
+    """Lo oculto no deja XP, respuestas aceptadas ni artículos publicados que lo copien."""
+    from apps.gamification import game
+    from apps.knowledge.models import Article
+
+    if isinstance(obj, Note):
+        game.revoke(obj.author, f"note:{obj.pk}")
+        game.evaluate(obj.author)
+    elif isinstance(obj, Post):
+        thread = Thread.objects.select_for_update().get(pk=obj.thread_id)
+        if thread.accepted_post_id == obj.pk:
+            from . import forum
+
+            forum._revoke_accepted(thread)
+            thread.accepted_post = None
+            thread.save(update_fields=["accepted_post", "updated_at"])
+    elif isinstance(obj, Thread):
+        Article.objects.filter(source_thread=obj).update(is_published=False)
 
 
 @transaction.atomic
@@ -102,7 +123,9 @@ def report_content(reporter, kind, pk, reason):
     model = TARGETS.get(kind)
     if model is None:
         raise ValueError("No se puede reportar eso.")
-    target = model.objects.filter(pk=pk, is_deleted=False).first()
+    target = model.objects.filter(
+        pk=pk, is_deleted=False, is_hidden=False
+    ).first()  # no revela lo oculto
     if target is None:
         raise ValueError("Ese contenido ya no existe.")
     if target.author_id == reporter.pk:

@@ -96,6 +96,10 @@ def _reconcile(person, desired: dict, universe: set):
     for source, (kind, points, label) in desired.items():
         if source not in existing:
             award(person, source, kind, points, label)
+        else:  # el valor puede haber cambiado (p. ej. el tipo de la credencial)
+            XPEvent.objects.filter(person=person, source=source).exclude(
+                points=points, kind=kind
+            ).update(points=points, kind=kind, label=label[:200])
     stale = existing - set(desired)
     if stale:
         XPEvent.objects.filter(person=person, source__in=stale).delete()
@@ -367,6 +371,11 @@ def celebrations(person, level):
     }
 
 
-def mark_seen(person, level):
-    PersonBadge.objects.filter(person=person, seen=False).update(seen=True)
-    PlayerState.objects.update_or_create(person=person, defaults={"celebrated_level": level})
+def mark_seen(person, level=None, badge_ids=None):
+    """Marca como vistas las insignias indicadas (todas si no se indican) y el nivel celebrado."""
+    badges = PersonBadge.objects.filter(person=person, seen=False)
+    if badge_ids is not None:
+        badges = badges.filter(pk__in=badge_ids)
+    badges.update(seen=True)
+    if level is not None:
+        PlayerState.objects.update_or_create(person=person, defaults={"celebrated_level": level})

@@ -252,6 +252,7 @@ def solved(member, lead):
     )
     post = forum.reply(t, lead, "Usa *Export → IFC* con la plantilla del equipo.")
     forum.accept(t, post, member)
+    t.refresh_from_db()
     return t
 
 

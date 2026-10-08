@@ -5,6 +5,8 @@ y cada exportación queda en la bitácora. Los nombres dentro del ZIP se generan
 """
 
 import io
+import shutil
+import tempfile
 import zipfile
 from datetime import date
 
@@ -19,7 +21,7 @@ from apps.community.models import ModerationLog
 from .models import Credential
 
 MAX_CREDENTIALS = 500
-MAX_BYTES = 300 * 1024 * 1024
+MAX_BYTES = 200 * 1024 * 1024
 COLUMNS = [
     ("Persona", 26), ("Credencial", 40), ("Tipo", 22), ("Emisor", 24), ("ID de la credencial", 24),
     ("Emisión", 12), ("Vencimiento", 12), ("URL de verificación", 36), ("Estado", 14),
@@ -101,7 +103,7 @@ def _workbook(rows):
     return out.getvalue()
 
 
-def build_zip(by, creds):
+def build_zip_file(by, creds):
     """Devuelve (bytes del ZIP, cantidad). Lanza ValueError si la selección es vacía o demasiado grande."""
     if not by.is_lead:
         raise PermissionError("Solo un responsable puede exportar credenciales.")
@@ -110,30 +112,45 @@ def build_zip(by, creds):
         raise ValueError("No hay credenciales con esa selección.")
     if len(creds) > MAX_CREDENTIALS:
         raise ValueError(f"La selección supera {MAX_CREDENTIALS} credenciales: acótala.")
-    buffer, used, rows, total = io.BytesIO(), set(), [], 0
+    # Archivo temporal (en disco pasados 16 MB): el ZIP nunca vive entero en memoria.
+    buffer, used, rows, total = (
+        tempfile.SpooledTemporaryFile(max_size=16 * 1024 * 1024),
+        set(),
+        [],
+        0,
+    )
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
         for cred in creds:
             name = ""
             try:
-                with cred.file.open("rb") as handle:
-                    data = handle.read()
+                handle = cred.file.open("rb")
             except (OSError, ValueError):
-                data = None
-            if data is not None:
-                total += len(data)
-                if total > MAX_BYTES:
-                    raise ValueError(
-                        "Los archivos superan el tamaño máximo del ZIP: acota la selección."
-                    )
-                name = _zip_name(cred, used)
-                zf.writestr(name, data)
+                handle = None
+            if handle is not None:
+                with handle:
+                    total += cred.file_size_bytes()
+                    if total > MAX_BYTES:
+                        raise ValueError(
+                            "Los archivos superan el tamaño máximo del ZIP: acota la selección."
+                        )
+                    name = _zip_name(cred, used)
+                    with zf.open(name, "w") as dest:
+                        shutil.copyfileobj(handle, dest, 1024 * 1024)
             rows.append((cred, name or "(archivo no disponible)"))
         zf.writestr("evidencia.xlsx", _workbook(rows))
     ModerationLog.objects.create(
         actor=by, action="export_credentials", object_type="credential", object_id=0,
         summary=f"{len(creds)} credenciales",
     )  # fmt: skip
-    return buffer.getvalue(), len(creds)
+    buffer.seek(0)
+    return buffer, len(creds)
+
+
+def build_zip(by, creds):
+    """Igual que `build_zip_file`, pero devuelve los bytes (solo para pruebas y usos pequeños)."""
+    handle, count = build_zip_file(by, creds)
+    with handle:
+        return handle.read(), count
 
 
 def filename(today=None):

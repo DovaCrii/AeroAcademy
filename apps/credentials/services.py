@@ -20,11 +20,12 @@ from . import files
 from .models import Credential
 
 # Cambiar cualquiera de estos campos (o el archivo) obliga a una nueva revisión.
-REVIEW_FIELDS = ("issuer", "issued_on", "expires_on")
 EDITABLE = (
     "title", "issuer", "platform", "kind", "credential_id", "verify_url", "issued_on", "expires_on", "resource",
     "path", "visibility", "course_name_free", "course_url_free", "completed_on",
 )  # fmt: skip
+# Solo la visibilidad (y las habilidades) se cambian sin nueva revisión: todo lo demás define qué se verificó.
+REVIEW_FIELDS = tuple(f for f in EDITABLE if f != "visibility")
 
 
 # --- permisos --------------------------------------------------------------------------------------------------
@@ -156,7 +157,7 @@ def update_credential(cred, data, upload=None) -> bool:
         _notify_review(cred)
     if was_verified and cred.status != Credential.Status.VERIFIED:
         _unapply(cred)
-        game.refresh(cred.owner)
+    game.refresh(cred.owner)  # lo derivado (XP, insignias, marcas) se recalcula siempre
     return needs_review and cred.status == Credential.Status.PENDING
 
 
