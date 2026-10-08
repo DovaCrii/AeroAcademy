@@ -53,6 +53,11 @@ h3{font-weight:700;font-stretch:85%;font-size:19px;line-height:1.2;margin:0}
 .teo-px{image-rendering:pixelated;width:96px;height:96px}
 
 @media (max-width:640px){
+  /* En el celular la navegación baja a su propia fila y se desliza de lado: ya son 10 secciones. */
+  .top .wrap{grid-template-columns:minmax(0,1fr) auto auto auto auto}
+  .top .nav{grid-column:1/-1;grid-row:2;padding:8px 0;border-right:0;border-top:1px solid var(--line);gap:16px}
+  .top .brandcell{min-width:0}
+  .top .brand{font-size:15px;white-space:nowrap}
   .userchip .txt{display:none}
   .waiting{grid-template-columns:1fr}
   .wrap{padding:0 16px}
