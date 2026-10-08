@@ -14,6 +14,15 @@ class MilestoneCheck(TimeStampedModel):
         "paths.Milestone", on_delete=models.CASCADE, related_name="checks"
     )
     checked_at = models.DateTimeField(default=timezone.now)
+    # Una misión puede marcarla la persona o una credencial verificada (que la respalda con evidencia).
+    source = models.CharField(max_length=10, default="manual")
+    credential = models.ForeignKey(
+        "credentials.Credential",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="checks",
+    )
 
     class Meta:
         verbose_name = "misión marcada"

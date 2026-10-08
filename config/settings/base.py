@@ -109,6 +109,9 @@ MEDIA_ROOT = Path(os.environ.get("MEDIA_ROOT", str(BASE_DIR / "media")))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Avisar de vencimientos con esta anticipación (docs/PRD.md: 60 días).
+CREDENTIAL_WARNING_DAYS = int(os.environ.get("CREDENTIAL_WARNING_DAYS", "60"))
+
 # Marca (docs/VISION.md)
 BRAND_PLATFORM = "AeroAcademy"
 BRAND_ACADEMY = "Academia LEV Digital 101"

@@ -57,7 +57,7 @@ MODULES = [
             "Validación por el moderador",
             "Avisos de vencimiento y exportación para licitaciones",
         ],
-        "url_name": None,
+        "url_name": "credentials:mine",
         "block": "Bloques 5 y 6",
     },
     {

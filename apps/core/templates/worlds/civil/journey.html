@@ -1,0 +1,29 @@
+{# Planta-perfil: estacas sobre el eje y pilares del puente. Todo con datos reales de las credenciales. #}
+<svg class="cv-svg" viewBox="0 0 1000 400" role="img" aria-labelledby="cvT">
+  <title id="cvT">Planta-perfil de {{ path.title }}: {{ stats.verified }} estacas verificadas de {{ stats.courses }} y {{ stats.relics_verified }} pilares de {{ stats.relics }}.</title>
+  <text x="16" y="24" class="ttl">PLANTA · eje del corredor</text>
+  <polyline points="{{ journey.axis }}" class="cv-band"/>
+  {% if journey.pavement %}<polyline points="{{ journey.pavement }}" class="cv-road"/><polyline points="{{ journey.pavement }}" class="cv-dash"/>{% endif %}
+  <polyline points="{{ journey.axis }}" class="cv-axis"/>
+  {% for s in journey.stakes %}
+  <g class="cv-stake {{ s.state }}{% if s.relic %} relic{% endif %}" transform="translate({{ s.x }} {{ s.y }})">
+    <title>{{ s.title }}: {% if s.state == "verified" %}verificado{% elif s.state == "pending" %}en revisión{% elif s.state == "rejected" %}rechazado{% else %}por hacer{% endif %}</title>
+    <line x1="0" y1="-8" x2="0" y2="24"/><path d="M0 -8 h16 l-4 5 l4 5 h-16z"/>
+    <text x="0" y="-14" text-anchor="middle">{{ s.key }}</text>
+  </g>
+  {% endfor %}
+  <circle cx="{{ journey.marker_x }}" cy="{{ journey.marker_y }}" r="11" class="cv-you"/><text x="{{ journey.marker_x }}" y="{{ journey.marker_ty }}" text-anchor="middle" class="cv-you-t">TÚ</text>
+
+  <line x1="16" y1="170" x2="984" y2="170" class="cv-sep"/>
+  <text x="16" y="194" class="ttl">PERFIL LONGITUDINAL · rasante y terreno</text>
+  <polygon points="40,380 {{ journey.ground }} 960,380" class="cv-earth"/>
+  <polyline points="{{ journey.ground }}" class="cv-ground"/>
+  <line x1="40" y1="{{ journey.deck.y }}" x2="{{ journey.deck.x }}" y2="{{ journey.deck.y }}" class="cv-grade"/>
+  <rect x="{{ journey.deck.x }}" y="{{ journey.deck.y }}" width="{{ journey.deck.width }}" height="7" class="cv-deck"/>
+  {% for p in journey.piers %}
+  <g class="cv-pier {{ p.state }}"><title>{{ p.title }}: {% if p.state == "verified" %}pilar en pie{% elif p.state == "pending" %}en revisión{% else %}por levantar{% endif %}</title>
+    <rect x="{{ p.x }}" y="{{ p.top }}" width="14" height="{{ p.height }}"/><text x="{{ p.cx }}" y="{{ p.label_y }}" text-anchor="middle">P{{ p.n }}</text></g>
+  {% endfor %}
+  <text x="40" y="236" class="km">0+000</text><text x="{{ journey.deck.x }}" y="236" class="km">puente</text><text x="940" y="236" class="km" text-anchor="end">fin</text>
+  <line x1="{{ journey.marker_x }}" y1="180" x2="{{ journey.marker_x }}" y2="380" class="cv-now"/>
+</svg>

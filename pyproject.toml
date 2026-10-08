@@ -32,6 +32,8 @@ extend-exclude = ["legacy", "design", "seed", "apps/*/migrations"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "DJ"]
+# El formateador parte el código a 100 columnas; las frases largas en español (comentarios y docstrings) se permiten.
+ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "config/settings/*.py" = ["F403", "F405"]
@@ -39,3 +41,4 @@ select = ["E", "F", "I", "B", "UP", "DJ"]
 "apps/gamification/avatar/**/*.py" = ["E501"]  # arte ASCII y SVG
 "tools/*.py" = ["E501"]
 "tests/test_avatar*.py" = ["E501"]
+"tests/test_credentials.py" = ["E501"]

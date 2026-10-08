@@ -1,0 +1,68 @@
+{% load core_extras %}
+{% if current %}
+<div class="cv-panel" id="panel" role="region" aria-label="Corredor {{ current.level.short }}">
+  <div class="cv-phead">
+    <div class="station"><small>PROGRESIVA</small>{{ current.km }}</div>
+    <div>
+      <h3>{{ current.level.title }}</h3>
+      <div class="meta">{{ current.level.estimated_hours }}{% if current.level.audience %} · {{ current.level.audience }}{% endif %}{% if current.total %} · {{ current.done }} de {{ current.total }}{% endif %}</div>
+    </div>
+    <div class="pnav">
+      {% if prev_code %}<a class="btn ghost" href="?nivel={{ prev_code }}#panel">← Anterior</a>{% endif %}
+      {% if next_code %}<a class="btn ghost" href="?nivel={{ next_code }}#panel">Siguiente →</a>{% endif %}
+    </div>
+  </div>
+  {% if current.level.goal %}<div class="cv-goal"><b>Meta:</b> {{ current.level.goal|terms }}</div>{% endif %}
+  {% if current.level.completion_rule == "any_one" %}<p class="cv-rule">Basta una acreditación de este corredor para completarlo.</p>{% endif %}
+
+  <ul class="cv-courses">
+    {% for item in current.courses %}
+    {% with c=item.obj %}
+    <li class="cv-course {{ item.state }}">
+      <svg class="stake" viewBox="0 0 34 46" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="44"/><path d="M6 4 h22 l-6 7 l6 7 h-22z"/></svg>
+      <div>
+        <h4>{% if c.resource.url %}<a href="{{ c.resource.url }}" target="_blank" rel="noopener">{{ c.resource.title }}</a>{% else %}{{ c.resource.title }}{% endif %}</h4>
+        <div class="meta">{{ c.resource.get_kind_display }}{% if c.resource.duration_text %} · {{ c.resource.duration_text }}{% endif %}{% if not c.is_required %} · opcional{% endif %}</div>
+        <div class="chips" style="margin-top:4px">
+          <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span>
+          {% if c.resource.verify_url %}<span class="chip warn" title="La URL apunta al catálogo; falta el enlace exacto">Confirmar enlace</span>{% endif %}
+        </div>
+        {% if c.contains %}<details class="contains"><summary>Qué incluye</summary><ol>{% for t in c.contains %}<li>{{ t }}</li>{% endfor %}</ol></details>{% endif %}
+      </div>
+      <div class="right">
+        {% if item.state == "verified" %}<span class="chip ok">✔ Verificado</span><a class="link-btn" href="{% url 'credentials:detail' item.cred_id %}">Ver certificado</a>
+        {% elif item.state == "pending" %}<span class="chip pend">⧗ En revisión</span><a class="link-btn" href="{% url 'credentials:detail' item.cred_id %}">Ver</a>
+        {% elif item.state == "rejected" %}<span class="chip warn">✖ Rechazado</span><a class="link-btn" href="{% url 'credentials:detail' item.cred_id %}">Ver motivo</a><a class="btn" href="{% url 'credentials:register_course' path.slug %}?curso={{ c.key }}">Registrar de nuevo</a>
+        {% else %}<a class="btn" href="{% url 'credentials:register_course' path.slug %}?curso={{ c.key }}">Registrar</a>{% endif %}
+      </div>
+    </li>
+    {% endwith %}
+    {% empty %}
+    {% if not current.level.is_free_courses %}<li class="empty">Este corredor no tiene cursos con certificado.</li>{% endif %}
+    {% endfor %}
+  </ul>
+
+  {% if current.level.is_free_courses %}
+  <div class="cv-free">
+    <h4>Tus cursos libres</h4>
+    <ul class="cv-courses">
+      {% for cred in current.free_credentials %}
+      <li class="cv-course {% if cred.status == 'verified' %}verified{% elif cred.status == 'pending' %}pending{% else %}rejected{% endif %}">
+        <svg class="stake" viewBox="0 0 34 46" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="44"/><path d="M6 4 h22 l-6 7 l6 7 h-22z"/></svg>
+        <div><h4>{{ cred.course_name_free }}</h4><div class="meta">Curso libre · pendiente de sumarse a la ruta</div></div>
+        <div class="right">{% include "credentials/_status.html" %}<a class="link-btn" href="{% url 'credentials:detail' cred.pk %}">Ver</a></div>
+      </li>
+      {% empty %}<li class="empty">Aún no registraste cursos libres.</li>{% endfor %}
+    </ul>
+    {% if path.allow_free_courses %}<p><a class="btn" href="{% url 'credentials:register_course' path.slug %}?curso=__free__">Registrar un curso libre</a></p>{% endif %}
+  </div>
+  {% endif %}
+
+  {% if current.resources %}
+  <div class="cv-res">
+    <h4>Dónde encontrar los cursos</h4>
+    <ul class="reslist">{% for lr in current.resources %}<li><a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>{% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
