@@ -1,0 +1,12 @@
+.teo-widget{position:fixed;right:14px;bottom:14px;z-index:60}
+.teo-widget summary{list-style:none;cursor:pointer;width:56px;height:56px;display:grid;place-items:center;background:var(--sheet,#fff);border:2px solid #1e8cff;border-radius:50%}
+.teo-widget summary::-webkit-details-marker{display:none}
+.teo-widget summary img,.px-img{image-rendering:pixelated}
+.teo-pop{position:absolute;right:0;bottom:64px;width:min(360px,92vw);padding:.8rem;background:var(--sheet,#fff);color:var(--ink,#111);border:1.5px solid var(--line,#8d9cad);box-shadow:0 6px 18px rgba(0,0,0,.3);display:grid;gap:.5rem}
+.teo-pop textarea,.teo-form textarea{width:100%;box-sizing:border-box}
+.teo-reply{display:flex;gap:.6rem;align-items:flex-start;margin:1rem 0}
+.teo-text{margin:0 0 .4rem;overflow-wrap:anywhere}
+.teo-sources{margin:0 0 .4rem;padding-left:1.2rem;font-size:.85rem}
+.teo-form{display:grid;gap:.5rem;max-width:640px}
+.teo-pop .teo-answer{max-height:50vh;overflow:auto}
+@media (prefers-reduced-motion:no-preference){.teo-widget summary{transition:transform .15s}.teo-widget summary:hover{transform:translateY(-2px)}}

@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Teo{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'assistant/teo.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Teo, el asistente</h1>
+  <p>Pregúntale por tu ruta, cómo usar la academia, un término o dónde aprender algo. Responde con lo que el equipo ya dejó aquí.</p>
+</div>
+{% if thread %}<p><a href="{% url 'community:thread' thread.pk %}">← Volver al hilo</a></p>{% endif %}
+{% if teo.enabled %}
+<form method="post" action="{% url 'assistant:page' %}" class="teo-form">
+  {% csrf_token %}
+  <label for="q">Tu pregunta <small>(te quedan {{ teo.remaining }} hoy)</small></label>
+  <textarea id="q" name="question" rows="3" maxlength="500" required>{% if not thread %}{{ question }}{% endif %}</textarea>
+  <button class="btn primary" type="submit">Preguntar</button>
+</form>
+{% else %}
+<p class="teo-reply teo-disabled"><img src="{% static 'game/teo/teo-sleep.svg' %}" width="40" height="40" alt="" class="px-img"> Estoy durmiendo por ahora. Mira la <a href="{% url 'assistant:help_index' %}">ayuda</a> o pregunta en el <a href="{% url 'community:forum' %}">foro</a>.</p>
+{% endif %}
+{% include "assistant/_answer.html" %}
+<p class="muted small">Teo nunca ve tus certificados ni tus datos de contacto. No guardamos lo que preguntas ni lo que responde.</p>
+{% endblock %}

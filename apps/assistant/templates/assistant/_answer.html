@@ -1,0 +1,12 @@
+{% load static %}{% if answer %}
+<div class="teo-reply teo-{{ answer.status }}">
+  <img src="{% static 'game/teo/' %}teo-{{ answer.mood }}.svg" width="40" height="40" alt="" class="px-img">
+  <div>
+    <p class="teo-text">{{ answer.text|linebreaksbr }}</p>
+    {% if answer.sources %}
+    <ol class="teo-sources">{% for s in answer.sources %}<li value="{{ s.n }}"><a href="{{ s.url }}">{{ s.title }}</a></li>{% endfor %}</ol>
+    {% endif %}
+    {% if ask_forum %}<p><a class="btn" href="{{ ask_forum }}">Abrir una consulta en el foro con esta pregunta</a></p>{% endif %}
+  </div>
+</div>
+{% endif %}

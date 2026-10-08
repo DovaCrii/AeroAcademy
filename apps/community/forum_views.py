@@ -80,7 +80,11 @@ def new(request):
             "categories": categories,
             "disciplines": Discipline.objects.all(),
             "kinds": Thread.Kind.choices,
-            "v": request.POST,
+            "v": request.POST
+            or {
+                "title": request.GET.get("titulo", "")[:150],
+                "body": request.GET.get("detalle", "")[:5000],
+            },
         },
     )
 

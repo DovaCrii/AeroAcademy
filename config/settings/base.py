@@ -4,6 +4,23 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
+def _load_dotenv(path: Path) -> None:
+    """Lee `.env` (CLAVE=valor) sin dependencias. Lo ya definido en el entorno manda; el archivo no se versiona."""
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
+
+
+_load_dotenv(BASE_DIR / ".env")
+
+
 def env_bool(name: str, default: bool = False) -> bool:
     return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
 
@@ -70,6 +87,7 @@ TEMPLATES = [
                 "apps.core.context_processors.brand",
                 "apps.gamification.context_processors.player",
                 "apps.notifications.context_processors.bell",
+                "apps.assistant.context_processors.teo",
             ],
         },
     },
@@ -117,3 +135,11 @@ CREDENTIAL_WARNING_DAYS = int(os.environ.get("CREDENTIAL_WARNING_DAYS", "60"))
 # Marca (docs/VISION.md)
 BRAND_PLATFORM = "AeroAcademy"
 BRAND_ACADEMY = "Academia LEV Digital 101"
+
+# Teo (asistente). La clave va en `.env` o en /etc/centro/env; nunca en el repositorio.
+NIM_API_KEY = os.environ.get("NIM_API_KEY", "").strip()
+NIM_BASE_URL = os.environ.get("NIM_BASE_URL", "https://integrate.api.nvidia.com/v1").rstrip("/")
+NIM_MODEL = os.environ.get("NIM_MODEL", "meta/llama-3.3-70b-instruct")
+BOT_ENABLED = env_bool("BOT_ENABLED", True)
+BOT_DAILY_LIMIT = int(os.environ.get("BOT_DAILY_LIMIT", "40"))
+BOT_TIMEOUT_S = float(os.environ.get("BOT_TIMEOUT_S", "20"))

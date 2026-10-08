@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{% static 'gamification/game.css' %}">
 <link rel="stylesheet" href="{% static 'community/notes.css' %}">
 <link rel="stylesheet" href="{% static 'notifications/bell.css' %}">
+<link rel="stylesheet" href="{% static 'assistant/teo.css' %}">
 <script src="{% static 'core/theme.js' %}"></script>
 {% block extra_head %}{% endblock %}
 </head>
@@ -49,7 +50,7 @@
 </main>
 
 <footer class="wrap foot">
-  {{ BRAND_PLATFORM }} · {{ BRAND_ACADEMY }} · Con el auspicio de <b>Suite Aero</b>
+  {{ BRAND_PLATFORM }} · {{ BRAND_ACADEMY }} · Con el auspicio de <b>Suite Aero</b> · <a href="{% url 'assistant:help_index' %}">Ayuda</a>
 </footer>
 
 {% block slot_teo %}{% include "core/partials/teo.html" %}{% endblock %}

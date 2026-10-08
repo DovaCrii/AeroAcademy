@@ -77,6 +77,13 @@ Implementación:
 - Con un error de la API o un *timeout*, Teo responde "Se me empañó el lente, intenta de nuevo en un rato" y se registra el error.
 - Al superar el límite diario: "Por hoy medí suficiente, ¡mañana seguimos!"
 
+## Estado de la implementación
+
+- El widget usa un `fetch` propio (`assistant/static/assistant/teo.js`) en vez de HTMX (D23); sin JS, `/teo/` hace un POST normal.
+- La respuesta del modelo se escapa y no se interpreta como Markdown ni como enlaces; las fuentes se listan aparte con enlaces internos.
+- Índice FTS5 `assistant_fts` (migración 0002): se reconstruye cada 5 minutos o con `manage.py reindex_assistant`, y cada resultado se revalida contra la base.
+- Teo resume hilos de 5 o más mensajes con «Resumir con Teo». Las expresiones de los sprites son *idle*, *happy*, *thinking* y *sleep*.
+
 ## Pruebas
 
 - Con `httpx.MockTransport`: respuesta normal, *timeout*, 401 y 429.
