@@ -110,6 +110,8 @@ echo "==> Entorno Python (uv)"
 cd "$APP"
 # Python 3.12 lo instala uv dentro de /opt/aeroacademy (no en /root): así el usuario `centro` puede leerlo.
 export UV_PYTHON_INSTALL_DIR="$APP/.uv-python"
+# Siempre Python 3.12 (el probado), aunque el del sistema sea más nuevo (Ubuntu 26.04 trae 3.14).
+export UV_PYTHON=3.12
 UV_PROJECT_ENVIRONMENT="$APP/.venv" uv sync --frozen --no-dev
 chown -R "$USER_NAME:$USER_NAME" "$APP"
 
@@ -156,7 +158,7 @@ sed -i "s|127.0.0.1:8010|127.0.0.1:$PORT|" /etc/systemd/system/centro.service
 for unit in centro-backup.service centro-backup.timer centro-expiry.service centro-expiry.timer centro-teo.service centro-teo.timer; do
   install -m 644 "deploy/$unit" "/etc/systemd/system/$unit"
 done
-install -m 755 deploy/backup.sh "$APP/deploy/backup.sh"
+chmod 755 "$APP/deploy/backup.sh"   # rsync ya lo copió: aquí solo se le da permiso de ejecución
 systemctl daemon-reload
 systemctl enable --now centro.service centro-backup.timer centro-expiry.timer centro-teo.timer
 systemctl restart centro.service
