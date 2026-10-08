@@ -42,6 +42,7 @@ PROJECT_APPS = [
     "apps.community",
     "apps.credentials",
     "apps.library",
+    "apps.knowledge",
     "apps.team",
     "apps.gamification",
     "apps.notifications",

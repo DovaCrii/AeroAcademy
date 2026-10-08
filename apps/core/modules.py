@@ -88,7 +88,7 @@ MODULES = [
         "subtitle": "Lecciones aprendidas y mejoras en marcha.",
         "description": "Base de conocimiento y tablero de mejoras: Ideas → Plan → Ejecución → Resultados.",
         "items": ["Lecciones aprendidas y procedimientos", "Propuestas de mejora con estado"],
-        "url_name": None,
+        "url_name": "knowledge:index",
         "block": "Bloque 11",
     },
 ]

@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Conocimiento{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'knowledge/knowledge.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Conocimiento</h1>
+  <p>Lecciones aprendidas, procedimientos y preguntas frecuentes del equipo. <a class="btn primary" href="{% url 'knowledge:new' %}">Escribir artículo</a> <a class="btn" href="{% url 'knowledge:improvements' %}">Tablero de mejoras</a></p>
+</div>
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ f.q }}" placeholder="Buscar…" aria-label="Buscar">
+  <select name="tipo" aria-label="Tipo"><option value="">Todos los tipos</option>{% for v, l in kinds %}<option value="{{ v }}"{% if f.tipo == v %} selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+  <select name="disciplina" aria-label="Disciplina"><option value="">Todas las disciplinas</option>{% for d in disciplines %}<option value="{{ d.slug }}"{% if f.disciplina == d.slug %} selected{% endif %}>{{ d.name }}</option>{% endfor %}</select>
+  <button class="btn" type="submit">Filtrar</button>
+</form>
+<ul class="kn-list">
+  {% for a in page %}
+  <li class="kn-item"><a class="title" href="{% url 'knowledge:detail' a.pk %}">{{ a.title }}</a>
+    <span class="meta"><span class="chip">{{ a.get_kind_display }}</span>{% if not a.is_published %}<span class="chip warn">Borrador</span>{% endif %}{% for d in a.disciplines.all %}<span class="chip">{{ d.name }}</span>{% endfor %} · {{ a.author.name }} · {{ a.updated_at|date:"d/m/Y" }}</span></li>
+  {% empty %}<li class="muted">Todavía no hay artículos con estos filtros.</li>{% endfor %}
+</ul>
+{% if page.has_other_pages %}
+<nav class="pager" aria-label="Páginas">
+  {% if page.has_previous %}<a href="?{% if qs %}{{ qs }}&amp;{% endif %}pagina={{ page.previous_page_number }}">← Anterior</a>{% endif %}
+  <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a href="?{% if qs %}{{ qs }}&amp;{% endif %}pagina={{ page.next_page_number }}">Siguiente →</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

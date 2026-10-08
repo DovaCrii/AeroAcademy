@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% load static core_extras %}
+
+{% block title %}{{ a.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'knowledge/knowledge.css' %}">{% endblock %}
+
+{% block content %}
+<p class="crumb"><a href="{% url 'knowledge:index' %}">Conocimiento</a></p>
+<article class="kn-main">
+  <h1>{{ a.title }}</h1>
+  <p class="meta"><span class="chip">{{ a.get_kind_display }}</span>{% if not a.is_published %}<span class="chip warn">Borrador</span>{% endif %}{% for d in disciplines %}<span class="chip">{{ d.name }}</span>{% endfor %} · {{ a.author.name }} · {{ a.updated_at|date:"d/m/Y" }}{% if a.source_thread and not a.source_thread.is_hidden %} · <a href="{% url 'community:thread' a.source_thread.pk %}">Viene de una consulta</a>{% endif %}</p>
+  <div class="md">{{ a.body|md }}</div>
+  {% if can_edit %}
+  <p><a class="btn" href="{% url 'knowledge:edit' a.pk %}">Editar</a>
+    <form class="inline" method="post" action="{% url 'knowledge:publish' a.pk %}">{% csrf_token %}<input type="hidden" name="published" value="{% if a.is_published %}0{% else %}1{% endif %}"><button class="btn" type="submit">{% if a.is_published %}Pasar a borrador{% else %}Publicar{% endif %}</button></form>
+    <form class="inline" method="post" action="{% url 'knowledge:delete' a.pk %}">{% csrf_token %}<button class="btn" type="submit" onclick="return confirm('¿Eliminar el artículo?')">Eliminar</button></form></p>
+  {% endif %}
+</article>
+{% endblock %}

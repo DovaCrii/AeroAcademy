@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}{% if editing %}Editar artículo{% else %}Nuevo artículo{% endif %}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'knowledge/knowledge.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head"><h1>{% if editing %}Editar artículo{% else %}Nuevo artículo{% endif %}</h1>
+  <p>Admite Markdown simple: <code># Título</code>, <code>- listas</code>, <code>**negrita**</code>, <code>`código`</code> y <code>[texto](https://enlace)</code>. El HTML se muestra como texto. No pongas datos personales ni de clientes.{% if thread %} Viene de la consulta «{{ thread.title }}».{% endif %}</p></div>
+<form method="post" class="kn-form">
+  {% csrf_token %}
+  {% if thread %}<input type="hidden" name="thread" value="{{ thread.pk }}">{% endif %}
+  <label>Título <input name="title" maxlength="150" value="{{ v.title }}" required></label>
+  <label>Tipo <select name="kind">{% for value, label in kinds %}<option value="{{ value }}"{% if v.kind == value %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  <label>Contenido <textarea name="body" rows="16" maxlength="20000" required>{{ v.body }}</textarea></label>
+  <fieldset><legend>Disciplinas</legend>{% for d in disciplines %}<label class="inline"><input type="checkbox" name="disciplines" value="{{ d.slug }}"{% if d.slug in chosen %} checked{% endif %}> {{ d.name }}</label>{% endfor %}</fieldset>
+  <label class="inline"><input type="checkbox" name="publish"{% if v.publish %} checked{% endif %}> Publicar para todo el equipo (si no, queda como borrador)</label>
+  <p><button class="btn primary" type="submit">Guardar</button> <a class="btn" href="{% if editing %}{% url 'knowledge:detail' a.pk %}{% else %}{% url 'knowledge:index' %}{% endif %}">Cancelar</a></p>
+</form>
+{% endblock %}
