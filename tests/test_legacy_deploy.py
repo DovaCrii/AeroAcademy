@@ -396,3 +396,15 @@ def test_the_env_template_carries_no_secret_and_the_real_file_is_ignored():
     text = (DEPLOY / "centro.env.plantilla").read_text(encoding="utf-8")
     assert "\nNIM_API_KEY=\n" in text and "nvapi-" not in text
     assert "PUBLIC_HTTPS_PORT=443" in text and "aeroacademy.tailccd107.ts.net" in text
+
+
+def test_the_installer_does_not_copy_a_file_onto_itself_and_pins_python():
+    """Error real en p340: tras `cd "$APP"`, `install deploy/backup.sh "$APP/deploy/backup.sh"` era el mismo archivo."""
+    install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
+    assert 'install -m 755 deploy/backup.sh "$APP/deploy/backup.sh"' not in install
+    assert 'chmod 755 "$APP/deploy/backup.sh"' in install
+    assert "export UV_PYTHON=3.12" in install
+    # todo `install` relativo escribe a /etc: nunca a una ruta dentro de $APP
+    for line in install.splitlines():
+        if line.strip().startswith("install ") and "deploy/" in line:
+            assert "/etc/systemd/system" in line or "$unit" in line, line
