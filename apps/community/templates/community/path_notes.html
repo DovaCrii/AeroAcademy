@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Notas · {{ path.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'community/notes.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Notas del equipo</h1>
+  <p><a href="{% url 'paths:detail' path.slug %}">{{ path.title }}</a> · lo que funciona, lo que no, recomendaciones y preguntas.</p>
+</div>
+
+<form class="note-form" method="post" action="{% url 'community:path_notes' path.slug %}">
+  {% csrf_token %}
+  <label>Tipo
+    <select name="type">{% for value, label in types %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+  </label>
+  <label>Capítulo
+    <select name="level"><option value="">Toda la ruta</option>{% for lv in levels %}<option value="{{ lv.code }}"{% if f.nivel == lv.code %} selected{% endif %}>{{ lv.short }}</option>{% endfor %}</select>
+  </label>
+  <label class="grow">Nota <textarea name="text" rows="3" maxlength="{{ max }}" required></textarea></label>
+  <button class="btn primary" type="submit">Publicar</button>
+</form>
+
+<form class="filters" method="get">
+  <select name="tipo" aria-label="Tipo"><option value="">Todos los tipos</option>{% for value, label in types %}<option value="{{ value }}"{% if f.tipo == value %} selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+  <select name="nivel" aria-label="Capítulo"><option value="">Todos los capítulos</option>{% for lv in levels %}<option value="{{ lv.code }}"{% if f.nivel == lv.code %} selected{% endif %}>{{ lv.short }}</option>{% endfor %}</select>
+  <button class="btn" type="submit">Filtrar</button>
+</form>
+
+<ul class="notes world-{{ path.world|default:'plain' }}">
+  {% for n in notes %}
+  <li class="note note-{{ n.type }}">
+    <p class="meta"><b>{{ n.get_type_display }}</b> · {{ n.author.name }} · <time datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|date:"d/m/Y H:i" }}</time>{% if n.level %} · {{ n.level.short }}{% endif %}</p>
+    <p class="body">{{ n.text }}</p>
+    {% if n.visible_replies %}
+    <ul class="replies">{% for r in n.visible_replies %}
+      <li><b>{{ r.author.name }}</b>: {{ r.text }}
+        {% if r.author_id == user.pk %}<form class="inline" method="post" action="{% url 'community:delete' r.pk %}">{% csrf_token %}<button class="link-btn" type="submit">Eliminar</button></form>{% endif %}
+      </li>{% endfor %}
+    </ul>
+    {% endif %}
+    <form class="reply" method="post" action="{% url 'community:reply' n.pk %}">
+      {% csrf_token %}
+      <input name="text" maxlength="{{ max }}" placeholder="Responder…" aria-label="Responder" required>
+      <button class="btn" type="submit">Responder</button>
+    </form>
+    {% if n.author_id == user.pk %}
+    <form class="inline" method="post" action="{% url 'community:delete' n.pk %}">{% csrf_token %}<button class="link-btn" type="submit">Eliminar mi nota</button></form>
+    {% endif %}
+  </li>
+  {% empty %}<li class="muted">No hay notas con estos filtros.</li>{% endfor %}
+</ul>
+{% endblock %}
