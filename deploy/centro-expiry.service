@@ -1,5 +1,6 @@
 [Unit]
 Description=AeroAcademy · avisos de credenciales por vencer o vencidas
+OnFailure=centro-alerta@%n.service
 
 [Service]
 Type=oneshot

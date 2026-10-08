@@ -1,0 +1,10 @@
+[Unit]
+Description=AeroAcademy · aviso de que falló %i
+
+[Service]
+Type=oneshot
+User=centro
+Group=centro
+WorkingDirectory=/opt/aeroacademy
+EnvironmentFile=/etc/centro/env
+ExecStart=/opt/aeroacademy/.venv/bin/python manage.py avisar_fallo %i

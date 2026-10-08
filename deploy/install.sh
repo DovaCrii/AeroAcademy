@@ -157,7 +157,7 @@ run_manage reindex_assistant || true
 echo "==> Servicios systemd"
 install -m 644 deploy/centro.service /etc/systemd/system/centro.service
 sed -i "s|127.0.0.1:8010|127.0.0.1:$PORT|" /etc/systemd/system/centro.service
-for unit in centro-backup.service centro-backup.timer centro-expiry.service centro-expiry.timer centro-teo.service centro-teo.timer; do
+for unit in centro-backup.service centro-backup.timer centro-expiry.service centro-expiry.timer centro-teo.service centro-teo.timer centro-alerta@.service; do
   install -m 644 "deploy/$unit" "/etc/systemd/system/$unit"
 done
 chmod 755 "$APP/deploy/backup.sh"   # rsync ya lo copió: aquí solo se le da permiso de ejecución

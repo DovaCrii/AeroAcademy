@@ -1,5 +1,6 @@
 [Unit]
 Description=AeroAcademy · respaldo diario (base + archivos)
+OnFailure=centro-alerta@%n.service
 
 [Service]
 Type=oneshot
