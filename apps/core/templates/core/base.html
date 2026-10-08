@@ -1,4 +1,4 @@
-{% load static %}<!DOCTYPE html>
+{% load static avatar_tags %}<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -26,10 +26,10 @@
     <div class="cell slot" data-slot="player">{% block slot_player %}{% include "core/partials/player.html" %}{% endblock %}</div>
     <div class="cell slot" data-slot="bell">{% block slot_bell %}{% include "core/partials/bell.html" %}{% endblock %}</div>
     {% if user.is_authenticated %}
-    <div class="cell userchip">
-      <span class="cap">{{ user.role }}</span>
-      <span class="uname">{{ user.name }}</span>
-    </div>
+    <a class="cell userchip" href="{% url 'gamification:avatar_editor' %}" title="Editar mi avatar">
+      <span class="who">{% avatar user 32 %}</span>
+      <span class="txt"><span class="cap">{{ user.role }}</span><span class="uname">{{ user.name }}</span></span>
+    </a>
     {% endif %}
     <div class="cell">
       <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
@@ -38,6 +38,9 @@
 </header>
 
 <main id="contenido" class="wrap">
+  {% if messages %}
+  <ul class="msgs" role="status">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>
+  {% endif %}
   {% block content %}{% endblock %}
 </main>
 

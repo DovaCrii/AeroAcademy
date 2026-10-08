@@ -29,6 +29,9 @@
 
 | D23 | Mientras no se agregue `htmx.min.js`, la actualización parcial la hace un ayudante propio (`core/static/core/enhance.js`, ~60 líneas, mismo contrato `X-Partial`). Sin JS todo funciona con formularios normales | Evitar una descarga externa sin permiso y una dependencia nueva; se puede cambiar a HTMX sin tocar las vistas |
 
+| D24 | Avatares **32×32** con motor propio sin dependencias (`apps/gamification/avatar/`), editables por la persona (cuerpo hombre/mujer/neutro, piel, cara, pelo, barba, lentes, gorro, ropa, colores, fondo y marco). Se descartó DiceBear (build de Node) y el generador LPC (licencias mixtas) | Más variedad y detalle que 16×16, sin dependencias ni datos a terceros |
+| D25 | Se trabaja con **subagentes del proyecto** (`.claude/agents/`) alineados con las skills; cada uno edita solo lo asignado y quien lo lanza verifica antes de integrar | Paralelizar arte, semillas y bloques independientes sin pisarse |
+
 ## Abiertas (no resolver sin confirmar)
 
 | # | Pregunta | Propuesta por defecto |

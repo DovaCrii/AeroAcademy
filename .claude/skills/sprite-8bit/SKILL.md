@@ -5,6 +5,11 @@ description: Dibuja sprites pixel-art como SVG para AeroAcademy (avatares por ca
 
 # Sprites 8-bit en SVG
 
+> **Avatares de personas:** no se dibujan a mano como SVG. Viven en `apps/gamification/avatar/parts/` como arte ASCII
+> por capas (grilla **32×32**) y se documentan en `docs/AVATARES_PIXEL.md`. Para una pieza nueva: lanza el subagente
+> `artista-pixel`, valida con `python tools/validate_part.py <categoría>`, míralo con `tools/preview_avatar.py` y regenera
+> `design/avatares/galeria.html`. Esta skill cubre el resto: insignias, Teo y sprites sueltos.
+
 ## Grilla
 
 | Tipo | Tamaño | Escala de visualización |
