@@ -11,7 +11,7 @@ from pathlib import Path
 
 from django.conf import settings
 
-from . import avatar, game
+from . import avatar, game, sheet
 from .avatar import engine
 
 # categoría → (título en español, tipo de selector)
@@ -123,6 +123,7 @@ def save_config(person, data) -> dict:
     person.avatar_config = cfg
     person.character_class = cfg["class"]
     person.save(update_fields=["avatar_config", "character_class", "updated_at"])
+    sheet.sync_profile(person)
     return cfg
 
 

@@ -227,7 +227,22 @@ def on_credential_change(person):
 # --- insignias ----------------------------------------------------------------------------------------------
 
 
+def prefetch_badges(people):
+    """Una sola consulta para listas de personas (evita una por tarjeta)."""
+    by_person = {p.pk: set() for p in people}
+    rows = PersonBadge.objects.filter(person__in=by_person, badge__retired=False).values_list(
+        "person_id", "badge__slug"
+    )
+    for pid, slug in rows:
+        by_person[pid].add(slug)
+    for p in people:
+        p._badge_slugs = by_person[p.pk]
+
+
 def unlocked_badges(person) -> set:
+    cached = getattr(person, "_badge_slugs", None)
+    if cached is not None:
+        return set(cached)
     return set(
         PersonBadge.objects.filter(person=person, badge__retired=False).values_list(
             "badge__slug", flat=True

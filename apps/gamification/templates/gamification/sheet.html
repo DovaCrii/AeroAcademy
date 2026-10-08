@@ -1,0 +1,93 @@
+{% extends "core/base.html" %}
+{% load static avatar_tags %}
+
+{% block title %}{{ person.name }} · Hoja de personaje{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'gamification/sheet.css' %}">{% endblock %}
+
+{% block content %}
+<div class="sheet-bar">
+  <div class="toggle" role="group" aria-label="Vista de la hoja">
+    <a href="?vista=juego" {% if view == "juego" %}aria-current="true"{% endif %}>Vista de juego</a>
+    <a href="?vista=pro" {% if view == "pro" %}aria-current="true"{% endif %}>Vista profesional</a>
+  </div>
+  {% if is_owner %}
+  <span class="actions"><a class="btn" href="{% url 'gamification:edit_sheet' %}">Editar mi hoja</a> <a class="btn" href="{% url 'gamification:avatar_editor' %}">Mi avatar</a></span>
+  {% endif %}
+</div>
+
+<section class="hero" aria-label="{{ person.name }}">
+  <div class="hero-avatar">{{ avatar_big|safe }}</div>
+  <div class="hero-who">
+    <h1>{{ person.name }}</h1>
+    {% if person.headline %}<p class="headline">{{ person.headline }}</p>{% elif is_owner %}<p class="headline muted">Agrega tu titular profesional en «Editar mi hoja».</p>{% endif %}
+    <p class="tags">
+      {% if person.character_class %}<span class="tag cls">{{ person.get_character_class_display }}</span>{% endif %}
+      {% for d in person.disciplines.all %}<span class="tag">{{ d.name }}</span>{% endfor %}
+      {% if person.role_title %}<span class="tag">{{ person.role_title }}</span>{% endif %}
+    </p>
+    {% if person.bio %}<p class="bio">{{ person.bio }}</p>{% endif %}
+    {% if person.links %}<p class="links">{% for key, url in person.links.items %}<a href="{{ url }}" rel="noopener noreferrer" target="_blank">{{ key|capfirst }}</a> {% endfor %}</p>{% endif %}
+  </div>
+  {% if view == "juego" %}
+  <div class="lvlbox">
+    <div class="n">NV {{ info.level }}</div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ info.pct }}"><i style="width:{{ info.pct }}%"></i></div>
+    <div class="xp">{{ info.xp }} XP · faltan {{ info.to_next }}</div>
+    <div class="ttl">{% if title %}{{ title.name }}{% else %}Sin título{% endif %}</div>
+  </div>
+  {% endif %}
+</section>
+
+<div class="sheet-grid">
+  {% if view == "juego" %}
+  <section class="card" aria-labelledby="h-attrs">
+    <h2 id="h-attrs">Atributos</h2>
+    <svg class="hex" viewBox="-20 -10 240 220" role="img" aria-label="Atributos: {% for a in attributes %}{{ a.name }} {{ a.value }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+      {% for ring in hex.rings %}<polygon points="{{ ring }}" class="ring"/>{% endfor %}
+      {% for ax in hex.axes %}<line x1="{{ hex.center }}" y1="{{ hex.center }}" x2="{{ ax.x }}" y2="{{ ax.y }}" class="axis"/>{% endfor %}
+      <polygon points="{{ hex.values }}" class="values"/>
+      {% for l in hex.labels %}<text x="{{ l.x }}" y="{{ l.y }}" text-anchor="middle" dominant-baseline="middle" class="lab">{{ l.text }}</text>{% endfor %}
+    </svg>
+    <ul class="attrs">{% for a in attributes %}<li><b>{{ a.code }}</b> {{ a.name }} <span>{{ a.value }}</span></li>{% endfor %}</ul>
+    <p class="muted small">Se calculan con las habilidades de las credenciales verificadas.</p>
+  </section>
+
+  <section class="card wide" aria-labelledby="h-badges">
+    <h2 id="h-badges">Vitrina de insignias <small>{{ earned_count }} de {{ showcase|length }}</small></h2>
+    <ul class="cases">
+      {% for row in showcase %}
+      <li class="case {{ row.badge.rarity }}{% if not row.earned %} locked{% endif %}" title="{{ row.badge.description }}">
+        {% if row.earned and row.badge.sprite %}<img src="{% static 'game/badges/' %}{{ row.badge.sprite }}" width="48" height="48" alt="">{% else %}<img src="{% static 'game/badges/locked.svg' %}" width="48" height="48" alt="">{% endif %}
+        <b>{{ row.badge.name }}</b>
+        <span>{% if row.earned %}{{ row.at|date:"d/m/Y" }}{% else %}{{ row.badge.description }}{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="card" aria-labelledby="h-skills">
+    <h2 id="h-skills">Habilidades por vendor</h2>
+    {% for group in tree %}
+    <h3>{{ group.vendor }}</h3>
+    <ul class="chips">{% for name, n in group.skills %}<li>{{ name }}{% if n > 1 %} <b>×{{ n }}</b>{% endif %}</li>{% endfor %}</ul>
+    {% empty %}<p class="muted">Aún no hay habilidades demostradas con credenciales verificadas.</p>{% endfor %}
+  </section>
+
+  <section class="card" aria-labelledby="h-creds">
+    <h2 id="h-creds">Credenciales verificadas</h2>
+    {% if credentials %}
+    <ul class="plain">{% for c in credentials %}<li><a href="{% url 'credentials:detail' c.pk %}">{{ c.display_title }}</a> <span class="muted">{{ c.issuer }}{% if c.issued_on %} · {{ c.issued_on|date:"M Y" }}{% endif %}</span></li>{% endfor %}</ul>
+    {% else %}<p class="muted">Sin credenciales verificadas visibles.</p>{% endif %}
+  </section>
+
+  {% if view == "juego" %}
+  <section class="card wide" aria-labelledby="h-line">
+    <h2 id="h-line">Línea de tiempo</h2>
+    {% if timeline %}
+    <ol class="timeline">{% for e in timeline %}<li><time datetime="{{ e.when|date:'c' }}">{{ e.when|date:"d/m/Y" }}</time> {{ e.text }}{% if e.detail %}: <b>{{ e.detail }}</b>{% endif %}{% if e.points %} <span class="pts">+{{ e.points }} XP</span>{% endif %}</li>{% endfor %}</ol>
+    {% else %}<p class="muted">Todavía no hay logros.</p>{% endif %}
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

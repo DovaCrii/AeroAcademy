@@ -145,7 +145,17 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** marcar y desmarcar no duplica XP; rechazar o editar una credencial verificada revoca su XP e insignia; cada tipo de regla tiene prueba; el nivel coincide con la tabla de GAMIFICACION.
 
-## Bloque 14 · Hoja de personaje `[ ]`
+## Bloque 14 · Hoja de personaje `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - Rutas: `/perfil/` (mi hoja), `/perfil/editar/` (solo yo: la ruta no recibe un id), `/personas/<id>/` (hoja de otra persona, solo aprobadas) y `/personas/` (**El gremio**, orden alfabético, sin ranking: D17).
+> - Edición: titular, bio, clase, título (solo entre los desbloqueados, validado en el servidor), enlaces LinkedIn/Credly (solo https del sitio correcto) y vista por defecto. Cambiar la clase actualiza la del avatar. El avatar sigue en `/perfil/avatar/`.
+> - Vista de juego (nivel, barra de XP, atributos en hexágono, vitrina con insignias bloqueadas y su pista, línea de tiempo) y vista profesional (habilidades por vendor y credenciales verificadas), con `?vista=`.
+> - Atributos MOD/CAP/ANA/DOC/NOR/COL = 2 por credencial verificada con una habilidad de ese atributo (tope 20; COL suma 1 cada 3 respuestas aceptadas). Todo lo que sale de credenciales respeta la visibilidad del repositorio: de otra persona solo lo verificado y visible al equipo.
+> - Completar la hoja (titular, bio, clase y avatar) otorga una vez la marca `profile_completed` → insignia *Hoja Completa*.
+> - Cabecera: el avatar y el nivel llevan a la hoja; nueva sección «Gremio».
+> - Directorio sin consultas por tarjeta (`game.prefetch_badges`).
+> - **Pendiente:** exportar la vista profesional a PDF; árbol de habilidades con las campañas que las declaran; accesorios de nivel 10 (capa del mundo favorito).
 
 > **Adelanto:** el generador de avatares pixel-art ya existe (`apps/gamification/avatars.py`, con pruebas) y su
 > galería está en `design/avatares/`. Este bloque lo conecta: componente `{% avatar person size=32 %}`,
