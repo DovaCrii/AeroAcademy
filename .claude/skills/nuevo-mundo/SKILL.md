@@ -40,10 +40,11 @@ Las acciones (`progress:toggle_milestone`, `answer_quiz`, `set_goal`) son comune
 3. **Plantillas y CSS** según la tabla. Clases con prefijo del mundo (`ar-` en Arquitectura) para no chocar.
 4. **Recorrido en SVG inline**, con estados por clases CSS (`on`, `done`) y enlaces `?nivel=<code>` para que
    funcione sin JS.
-5. **Teo:** su atuendo para el mundo con la skill `sprite-8bit`.
-6. **Pruebas** (ver `tests/test_progress.py`): la página renderiza todas las piezas; porcentajes; lectura sin
+5. **Notas del equipo:** cerrar `_panel.html` con `{% load community_tags %}` y `{% level_notes path current.level.code %}`, y darle a las notas la forma del oficio en `apps/community/static/community/notes.css` (`.world-<world> .note`: nube de revisión en Arquitectura, estaca anotada en Civil).
+6. **Teo:** su atuendo para el mundo con la skill `sprite-8bit` (sprites en `apps/core/static/game/teo/`).
+7. **Pruebas** (ver `tests/test_progress.py` y `tests/test_notes.py`): la página renderiza todas las piezas; porcentajes; lectura sin
    JS; respuesta parcial; texto escapado; el equipo aparece en el recorrido.
-7. **Comprobar en el navegador:** escritorio y 390 px, claro y oscuro, sin desborde; interacción real
+8. **Comprobar en el navegador:** escritorio y 390 px, claro y oscuro, sin desborde; interacción real
    (marcar un hito actualiza sin recargar).
 
 ## Reglas

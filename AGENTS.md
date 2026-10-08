@@ -33,7 +33,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
 ## Stack
 
 - Python 3.12, gestionado con `uv`.
-- Django (monolito modular), SQLite en modo WAL, plantillas de Django + HTMX. Sin framework JS ni build de frontend.
+- Django (monolito modular), SQLite en modo WAL, plantillas de Django y mejora progresiva con `core/static/core/enhance.js` (D23: sin HTMX hasta decidir A11). Todo funciona sin JS. Sin framework JS ni build de frontend.
 - CSS propio, en tres capas:
   - **Identidad general:** tomada de `design/academia/index.html`.
   - **Un CSS por mundo:** `core/static/worlds/<world>.css`, ver `docs/MUNDOS.md`. El mundo Arquitectura sale de `legacy/ruta-forma-revit/static/index.html`.
@@ -49,9 +49,22 @@ uv sync                                   # dependencias
 uv run python manage.py migrate
 uv run python manage.py seed_catalog      # plataformas, vendors, rutas, insignias y títulos desde seed/
 uv run python manage.py runserver         # desarrollo (usar DEV_REMOTE_USER, ver ARQUITECTURA)
+uv run python manage.py check_expirations # avisos de vencimientos (tarea diaria)
+uv run python manage.py reindex_assistant # índice de búsqueda de Teo
+uv run python manage.py import_legacy --db ruta.db --dry-run   # datos del prototipo
 uv run pytest                             # pruebas
 uv run ruff check . && uv run ruff format --check .
 ```
+
+## Reglas que salieron de las revisiones (aplican a todo bloque)
+
+- **Autorización primero:** cada vista decide quién ve y quién edita; lo oculto, restringido o en borrador responde 404 (no revela que existe) y no sale en listados, búsquedas, avisos, tablero ni exportaciones.
+- **Privacidad:** nada de `credentials` ni de logins hacia Teo, logs o el índice; lo que sale de credenciales se filtra con `credentials.services.visible_filter`.
+- **Toda acción que cambia datos es POST con CSRF**, y todo `next` pasa por `url_has_allowed_host_and_scheme` (probar `//evil.com` y `/\evil.com`).
+- **Texto de usuarios escapado;** el Markdown solo con `apps/core/markdown.py`. Probar `<script>` en cada campo nuevo.
+- **XP, insignias y avisos son idempotentes** (`game.award/revoke/refresh`, `notify(key=...)`): marcar/desmarcar, verificar/rechazar y reintentar no duplican.
+- **Archivos privados:** nombre generado, tipo real, tamaño máximo, sin URL pública, descarga como adjunto, borrado al confirmar la transacción.
+- **Consultas acotadas:** cada listado nuevo lleva una prueba de que las consultas no crecen con los datos.
 
 ## Skills del proyecto
 
