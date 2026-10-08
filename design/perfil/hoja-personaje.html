@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoja de Personaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* Concepto de la hoja de personaje (docs/GAMIFICACION.md, Bloque 14). Referencia de diseño, no código de producción. */
+:root{
+  --bg:#EEF2F7; --sheet:#FFFFFF; --sheet-2:#E8EEF6; --ink:#0A0E13; --ink-2:#2F3B49; --line:#8D9CAD; --hair:#D3DCE6;
+  --navy:#05111F; --navy-2:#0B2440; --blue:#1E8CFF; --cyan:#4CC6FF; --yellow:#FFC21A; --ok:#13803C; --pend:#D97706;
+  --common:#8D9CAD; --rare:#1E8CFF; --epic:#8B5CF6; --legend:#E0A800;
+  --font:"Archivo","Arial Narrow",Arial,sans-serif; --px:"Press Start 2P",monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#021428; --sheet:#05203D; --sheet-2:#0A2D52; --ink:#FFFFFF; --ink-2:#D3E6F8; --line:#4E86BD; --hair:#1D4A78;
+  --ok:#4ADE80; --pend:#FBBF24; --common:#9FB0C2; --epic:#A78BFA; --legend:#FFC21A;
+}}
+:root[data-theme="dark"]{
+  --bg:#021428; --sheet:#05203D; --sheet-2:#0A2D52; --ink:#FFFFFF; --ink-2:#D3E6F8; --line:#4E86BD; --hair:#1D4A78;
+  --ok:#4ADE80; --pend:#FBBF24; --common:#9FB0C2; --epic:#A78BFA; --legend:#FFC21A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.5;font-variant-numeric:tabular-nums;overflow-x:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+svg.px{shape-rendering:crispEdges;display:block}
+.pxfont{font-family:var(--px)}
+
+/* cabecera */
+.top{background:var(--navy);color:#fff;border-bottom:3px solid var(--blue)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:58px}
+.brand small{display:block;font-size:11px;letter-spacing:.14em;color:#BFD3E8}
+.brand b{font-stretch:75%;font-size:19px}
+.brand b i{font-style:normal;color:var(--blue)}
+.spacer{flex:1}
+.toggle{display:inline-flex;border:1.5px solid #fff;border-radius:3px;overflow:hidden}
+.toggle button{font:inherit;font-size:13px;font-weight:700;background:none;color:#fff;border:0;padding:6px 12px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:#fff;color:var(--navy)}
+
+/* tarjeta héroe */
+.hero{margin:22px 0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;border:1px solid var(--ink);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(76,198,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(76,198,255,.08) 1px,transparent 1px);background-size:16px 16px;pointer-events:none}
+.hero .in{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:24px;padding:26px;align-items:center}
+.avatar{width:148px;height:148px;background:#0E3563;border:4px solid var(--epic);box-shadow:0 0 0 4px var(--navy),0 0 24px rgba(139,92,246,.55);display:grid;place-items:center}
+.avatar svg{width:128px;height:128px}
+.who h1{margin:0;font-weight:800;font-stretch:70%;font-size:clamp(34px,5vw,56px);line-height:.95}
+.who .headline{color:#D5E5F5;font-size:17px;margin:6px 0 10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12.5px;font-weight:700;border:1.5px solid rgba(255,255,255,.7);padding:1px 8px}
+.tag.cls{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+.lvlbox{text-align:center;min-width:170px}
+.lvlbox .n{font-family:var(--px);font-size:34px;color:var(--yellow);line-height:1;text-shadow:3px 3px 0 #000}
+.lvlbox .lbl{font-family:var(--px);font-size:9px;color:#BFD3E8;margin-top:8px}
+.lvlbox .title{font-weight:800;font-stretch:85%;font-size:16px;margin-top:10px}
+.xpbar{height:14px;margin-top:8px;background:#0A1B30;border:2px solid #000;position:relative}
+.xpbar i{position:absolute;inset:0 auto 0 0;width:62%;background:repeating-linear-gradient(90deg,var(--cyan) 0 6px,#2AA9E0 6px 8px)}
+.xpbar + small{display:block;font-size:12px;color:#BFD3E8;margin-top:4px}
+
+/* grilla de secciones */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:18px}
+.card{background:var(--sheet);border:1px solid var(--ink);padding:18px 20px;min-width:0}
+.card h2{margin:0 0 4px;font-weight:750;font-stretch:75%;font-size:26px;line-height:1.05}
+.card .sub{color:var(--ink-2);font-size:14px;margin:0 0 12px}
+.span2{grid-column:1/-1}
+
+/* atributos */
+.attrs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 16px;align-items:center}
+.hex{width:100%;max-width:260px;margin:0 auto}
+.hex text{font-family:var(--px);font-size:8px;fill:var(--ink)}
+.stat{display:grid;grid-template-columns:44px 1fr 28px;gap:8px;align-items:center;font-size:13px}
+.stat b{font-family:var(--px);font-size:9px}
+.stat .bar{height:10px;border:1.5px solid var(--ink);background:var(--sheet-2)}
+.stat .bar i{display:block;height:100%;background:var(--blue)}
+.stat span:last-child{font-weight:800;text-align:right}
+
+/* insignias */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:12px}
+.badge{text-align:center;font-size:12px;line-height:1.2;cursor:default}
+.badge .frame{width:72px;height:72px;margin:0 auto 6px;display:grid;place-items:center;background:var(--sheet-2);border:4px solid var(--common);box-shadow:3px 3px 0 var(--ink)}
+.badge.rare .frame{border-color:var(--rare)} .badge.epic .frame{border-color:var(--epic)} .badge.legendary .frame{border-color:var(--legend)}
+.badge .frame svg{width:48px;height:48px}
+.badge.locked{opacity:.45} .badge.locked .frame svg{filter:grayscale(1)}
+.badge small{display:block;font-family:var(--px);font-size:7px;color:var(--ink-2);margin-top:3px;text-transform:uppercase}
+@media (prefers-reduced-motion:no-preference){
+  .badge.legendary:not(.locked) .frame{animation:glow 2.2s ease-in-out infinite}
+  @keyframes glow{50%{box-shadow:3px 3px 0 var(--ink),0 0 18px var(--legend)}}
+}
+
+/* vitrina de cursos estilo catálogo */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);padding:3px 10px;border-radius:2px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.ccard{border:1px solid var(--ink);background:var(--sheet);display:flex;flex-direction:column;min-width:0}
+.ccard .thumb{height:86px;position:relative;display:flex;align-items:end;padding:8px;color:#fff;overflow:hidden}
+.ccard .thumb::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:12px 12px}
+.ccard .thumb b{position:relative;z-index:1;font-stretch:75%;font-size:20px;line-height:1}
+.ccard .thumb .v{position:absolute;top:8px;left:8px;z-index:1;font-family:var(--px);font-size:8px;background:rgba(0,0,0,.45);padding:3px 5px}
+.ccard .thumb .rw{position:absolute;top:8px;right:8px;z-index:1;font-family:var(--px);font-size:8px;padding:3px 5px;background:var(--epic)}
+.ccard .thumb .rw.trophy{background:var(--rare)}
+.ccard .body{padding:10px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ccard h3{margin:0;font-size:14.5px;font-stretch:92%;line-height:1.25}
+.ccard .meta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--ink-2)}
+.ccard .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px;border-top:1px solid var(--hair);font-size:12.5px}
+.st{font-weight:800}
+.st.ok{color:var(--ok)} .st.pend{color:var(--pend)}
+.xpchip{font-family:var(--px);font-size:8px}
+
+/* árbol de habilidades */
+.tree svg{width:100%;height:auto;display:block}
+.tree text{font-family:var(--font);font-size:12px;fill:var(--ink)}
+.tree .v{font-family:var(--px);font-size:9px}
+
+/* actividad */
+.heat{display:grid;grid-template-columns:repeat(26,minmax(0,1fr));gap:3px}
+.heat i{aspect-ratio:1;background:var(--sheet-2);border:1px solid var(--hair)}
+.heat i.l1{background:color-mix(in srgb,var(--blue) 30%,var(--sheet))}
+.heat i.l2{background:color-mix(in srgb,var(--blue) 60%,var(--sheet))}
+.heat i.l3{background:var(--blue)}
+.streak{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--ink-2)}
+.streak b{font-family:var(--px);font-size:11px;color:var(--ink)}
+
+/* línea de tiempo */
+.tl{list-style:none;margin:0;padding:0 0 0 18px;border-left:2px dashed var(--line)}
+.tl li{position:relative;padding:0 0 14px 10px}
+.tl li::before{content:"";position:absolute;left:-25px;top:4px;width:12px;height:12px;background:var(--blue);border:2px solid var(--ink)}
+.tl li.epic::before{background:var(--epic)} .tl li.lvl::before{background:var(--yellow)}
+.tl small{color:var(--ink-2)}
+
+/* vista profesional */
+.pro{display:none}
+.cv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.cv table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}
+.cv td{overflow-wrap:anywhere}
+.cv th:first-child{width:44%}
+@media (max-width:560px){.cv table{font-size:12.5px}.cv th,.cv td{padding:6px 4px}}
+.cv th,.cv td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--hair);vertical-align:top}
+.cv th{font-size:12px;color:var(--ink-2);font-weight:600;background:var(--sheet-2)}
+.skillrow{display:grid;grid-template-columns:150px 1fr;gap:8px;align-items:center;font-size:13.5px;padding:4px 0}
+.dots{display:flex;gap:3px}.dots i{width:14px;height:8px;background:var(--hair)}.dots i.on{background:var(--blue)}
+body.mode-pro .game{display:none}
+body.mode-pro .pro{display:block}
+body.mode-pro .hero .lvlbox,body.mode-pro .hero .avatar{display:none}
+body.mode-pro .hero .in{grid-template-columns:1fr}
+
+/* edición */
+.edit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.edit label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-2)}
+.edit input,.edit select,.edit textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--sheet);border:1px solid var(--line);border-radius:3px;padding:7px 8px;min-width:0}
+.edit .full{grid-column:1/-1}
+.pick{display:flex;gap:8px;flex-wrap:wrap}
+.pick button{width:58px;height:58px;padding:4px;border:2px solid var(--line);background:var(--sheet-2);cursor:pointer;position:relative}
+.pick button[aria-pressed="true"]{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue)}
+.pick button:disabled{opacity:.35;cursor:not-allowed}
+.pick button:disabled::after{content:"🔒";position:absolute;right:2px;bottom:0;font-size:12px}
+.pick svg{width:100%;height:100%}
+.btn{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--ink);background:var(--yellow);color:#0A0E13;padding:7px 14px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+footer{padding:30px 0 50px;color:var(--ink-2);font-size:13px}
+
+@media (max-width:900px){
+  .grid,.cv{grid-template-columns:1fr}
+  .hero .in{grid-template-columns:auto minmax(0,1fr)}
+  .lvlbox{grid-column:1/-1;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+  .lvlbox .n{grid-row:1/4}
+  .lvlbox .lbl,.lvlbox .title{margin:0}
+}
+@media (max-width:560px){
+  .hero .in{grid-template-columns:1fr;padding:18px}
+  .avatar{width:112px;height:112px}.avatar svg{width:96px;height:96px}
+  .attrs{grid-template-columns:1fr}
+  .edit{grid-template-columns:1fr}
+  .heat{grid-template-columns:repeat(13,minmax(0,1fr))}
+  .heat i:nth-child(n+170){display:none}
+  .brand small{display:none}
+  .skillrow{grid-template-columns:110px 1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><small>AEROACADEMY</small><b>LEV DIGITAL <i>101</i></b></div>
+    <div class="spacer"></div>
+    <div class="toggle" role="group" aria-label="Vista del perfil">
+      <button id="vGame" aria-pressed="true">Juego</button>
+      <button id="vPro" aria-pressed="false">Profesional</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="hero" aria-label="Personaje">
+  <div class="in">
+    <div class="avatar" title="Marco épico: tu mejor insignia es épica"><svg class="px" id="avatarSvg" viewBox="0 0 16 16" role="img" aria-label="Avatar 8-bit de Calculista con casco"></svg></div>
+    <div class="who">
+      <h1>Ana Muñoz</h1>
+      <div class="headline">Ingeniera civil · Modelación vial y BIM de infraestructura</div>
+      <div class="tags">
+        <span class="tag cls game">⚔ Calculista</span>
+        <span class="tag">Civil-Estructural</span>
+        <span class="tag">Topografía</span>
+        <span class="tag pro" style="border-color:var(--cyan)">5 credenciales verificadas</span>
+      </div>
+    </div>
+    <div class="lvlbox">
+      <div class="n">06</div>
+      <div class="lbl">NIVEL</div>
+      <div class="title">Guardián del Eje</div>
+      <div style="grid-column:2">
+        <div class="xpbar" role="progressbar" aria-valuenow="1870" aria-valuemin="1500" aria-valuemax="2100" aria-label="XP"><i></i></div>
+        <small>1 870 / 2 100 XP · faltan 230 para el nivel 7</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISTA DE JUEGO ============ -->
+<div class="grid game">
+
+  <section class="card">
+    <h2>Atributos</h2>
+    <p class="sub">De 0 a 20, calculados desde tus credenciales verificadas y campañas completas.</p>
+    <div class="attrs">
+      <svg class="hex" id="hex" viewBox="0 0 220 210" role="img" aria-label="Hexágono de atributos"></svg>
+      <div id="stats"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Vitrina de insignias</h2>
+    <p class="sub">7 de 19 ganadas. Las bloqueadas muestran cómo conseguirlas.</p>
+    <div class="badges" id="badges"></div>
+  </section>
+
+  <section class="card span2">
+    <h2>Trofeos y reliquias</h2>
+    <p class="sub">Cada curso terminado, con su certificado. Las tarjetas siguen el estilo de catálogo de Bentley Learn y Autodesk Learning: producto, tipo, duración y estado.</p>
+    <div class="filters" role="group" aria-label="Filtrar">
+      <button aria-pressed="true" data-f="all">Todos</button>
+      <button aria-pressed="false" data-f="bentley">Bentley</button>
+      <button aria-pressed="false" data-f="autodesk">Autodesk</button>
+      <button aria-pressed="false" data-f="relic">Reliquias</button>
+      <button aria-pressed="false" data-f="pend">En revisión</button>
+    </div>
+    <div class="shelf" id="shelf"></div>
+  </section>
+
+  <section class="card">
+    <h2>Árbol de habilidades</h2>
+    <p class="sub">Ramas por empresa de software. Los nodos se encienden con cada certificado.</p>
+    <div class="tree"><svg viewBox="0 0 440 300" id="tree" role="img" aria-label="Árbol de habilidades por vendor"></svg></div>
+  </section>
+
+  <section class="card">
+    <h2>Actividad</h2>
+    <p class="sub">Últimas 26 semanas. Una acción de aprendizaje por semana mantiene la racha.</p>
+    <div class="heat" id="heat" aria-label="Calendario de actividad"></div>
+    <div class="streak"><span>Racha actual <b>06</b> semanas</span><span>Mejor racha <b>09</b></span><span>Próxima insignia: <em>Racha de 12</em></span></div>
+    <h2 style="font-size:20px;margin-top:18px">Bitácora de logros</h2>
+    <ul class="tl" style="margin-top:8px">
+      <li class="lvl"><b>Subiste a nivel 6</b> · nuevo título <em>Guardián del Eje</em><br><small>hace 3 días</small></li>
+      <li class="epic"><b>Reliquia:</b> Bentley Accredited MicroStation User <span class="xpchip">+500</span><br><small>hace 3 días · verificada por el moderador</small></li>
+      <li><b>Insignia:</b> Explorador Multi-vendor<br><small>hace 2 semanas</small></li>
+      <li><b>Trofeo:</b> Learn Forma Site Design in 90 minutes <span class="xpchip">+100</span><br><small>hace 1 mes</small></li>
+    </ul>
+  </section>
+
+  <section class="card span2">
+    <h2>Editar mi hoja</h2>
+    <p class="sub">Solo tú editas tu hoja. Los títulos y accesorios bloqueados se desbloquean jugando.</p>
+    <form class="edit" onsubmit="return false">
+      <label>Titular profesional<input value="Ingeniera civil · Modelación vial y BIM de infraestructura" maxlength="90"></label>
+      <label>Clase
+        <select><option>Arquitecto-Constructor</option><option selected>Calculista</option><option>Cartógrafo</option><option>Artífice</option><option>Piloto de Nubes</option></select>
+      </label>
+      <label>Título visible
+        <select><option>Aprendiz de Cota</option><option>Dibujante de Grilla</option><option>Modelador de Familias</option><option selected>Guardián del Eje</option><option>Primera Luz</option><option disabled>Topógrafo Arcano · nivel 7 🔒</option></select>
+      </label>
+      <label>LinkedIn / Credly<input placeholder="https://www.credly.com/users/…"></label>
+      <label class="full">Bio<textarea rows="2" maxlength="600">Diseño vial en OpenRoads y coordinación BIM. Pregúntame por corredores y peraltes.</textarea></label>
+      <div class="full">
+        <div style="font-size:13px;color:var(--ink-2);margin-bottom:6px">Accesorio del avatar</div>
+        <div class="pick" id="pick"></div>
+      </div>
+      <div class="full"><button class="btn">Guardar hoja</button></div>
+    </form>
+  </section>
+</div>
+
+<!-- ============ VISTA PROFESIONAL ============ -->
+<div class="pro">
+  <div class="cv">
+    <section class="card">
+      <h2>Credenciales verificadas</h2>
+      <p class="sub">Validadas por el responsable del equipo. Archivo disponible para el dueño y los responsables.</p>
+      <table>
+        <thead><tr><th>Credencial</th><th>Emisor</th><th>Emisión</th><th>Vence</th></tr></thead>
+        <tbody>
+          <tr><td>Bentley Accredited MicroStation User</td><td>Bentley Systems</td><td>05-10-2026</td><td>—</td></tr>
+          <tr><td>Autodesk Certified User: Revit</td><td>Autodesk · Certiport</td><td>14-06-2026</td><td>—</td></tr>
+          <tr><td>Learn Forma Site Design in 90 minutes</td><td>Autodesk</td><td>02-09-2026</td><td>—</td></tr>
+          <tr><td>Introduction to BIM for architectural design</td><td>Autodesk</td><td>20-07-2026</td><td>—</td></tr>
+          <tr><td>Curso interno: georreferenciación de proyectos</td><td>Capacitación interna</td><td>11-08-2026</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="card">
+      <h2>Competencias</h2>
+      <p class="sub">Matriz de habilidades a partir de credenciales verificadas y rutas completadas.</p>
+      <div id="skills"></div>
+      <h2 style="font-size:20px;margin-top:16px">Rutas</h2>
+      <table><tbody>
+        <tr><td>Ruta Forma + Revit (CC 410)</td><td style="text-align:right"><b>68 %</b></td></tr>
+        <tr><td>Ruta Bentley</td><td style="text-align:right"><b>24 %</b></td></tr>
+      </tbody></table>
+    </section>
+  </div>
+</div>
+
+<footer>Concepto de la hoja de personaje para AeroAcademy · Academia LEV Digital 101 (docs/GAMIFICACION.md, Bloque 14). Persona y datos de ejemplo.</footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg";
+var PAL={K:"#0A0E13",Y:"#FFC21A",y:"#D99A00",W:"#FFFFFF",S:"#C9D3DD",s:"#8A99A8",C:"#4CC6FF",B:"#1E8CFF",O:"#FF7A1A",R:"#E5322A",G:"#13803C",P:"#8B5CF6",F:"#F2C9A0",f:"#D9A577",N:"#3B2A1F",A:"#2B2F36",L:"#A78BFA"};
+function px(svg,rows,ox,oy){ // pinta arte ASCII como rectángulos
+  rows.forEach(function(row,y){for(var x=0;x<row.length;){var c=row[x];if(c==="."){x++;continue}var n=1;while(row[x+n]===c)n++;
+    var r=document.createElementNS(NS,"rect");r.setAttribute("x",x+(ox||0));r.setAttribute("y",y+(oy||0));r.setAttribute("width",n);r.setAttribute("height",1);r.setAttribute("fill",PAL[c]);svg.appendChild(r);x+=n;}});
+}
+function mk(view,rows){var s=document.createElementNS(NS,"svg");s.setAttribute("viewBox",view);s.setAttribute("class","px");s.setAttribute("aria-hidden","true");px(s,rows);return s}
+
+/* avatar 16x16 por capas: base + casco (accesorio) */
+var BASE=["................","................","................","................",".....KKKKKK.....","....KFFFFFFK....","....KFKFFKFK....","....KFFFFFFK....","....KFFRRFFK....",".....KFFFFK.....","...KKBBBBBBKK...","..KFKBBWWBBKFK..","..KFKBBBBBBKFK..","....KAAKKAAK....","....KAAK.KAAK...","....KKKK.KKKK..."];
+var ACC={
+  casco:["...KKKKKKKK.....","..KYYYYYYYYK....","..KYYWYYYYYYK...","KKKKKKKKKKKKKK.."],
+  gafas:["................","................","................","....KKKKKKKK....","....KCCKKCCK...."],
+  sombrero:["....KKKKKK......","...KNNNNNNK.....","..KNNNNNNNNK....","KKKKKKKKKKKKKK.."],
+  lapiz:["..........KY....",".........KYK....","........KYK.....","..........K....."]
+};
+function avatar(acc){
+  var s=document.getElementById("avatarSvg");s.innerHTML="";px(s,BASE);
+  if(acc==="casco"||acc==="sombrero")px(s,ACC[acc],1,1);else if(acc==="gafas"){px(s,ACC.casco,1,1);px(s,ACC.gafas.slice(3),0,5);}else if(acc)px(s,ACC[acc],1,1);
+}
+avatar("casco");
+
+/* atributos */
+var ATTR=[["MOD","Modelado",14],["CAP","Captura",6],["ANA","Análisis",9],["DOC","Documentación",11],["NOR","Normativa",3],["COL","Colaboración",8]];
+var hex=document.getElementById("hex"),cx=110,cy=105,R=82;
+function pt(i,r){var a=-Math.PI/2+i*Math.PI/3;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+[0.25,0.5,0.75,1].forEach(function(k){var p=document.createElementNS(NS,"polygon");p.setAttribute("points",ATTR.map(function(_,i){return pt(i,R*k).join(",")}).join(" "));p.setAttribute("fill","none");p.setAttribute("stroke","var(--hair)");hex.appendChild(p)});
+var poly=document.createElementNS(NS,"polygon");poly.setAttribute("points",ATTR.map(function(a,i){return pt(i,R*a[2]/20).join(",")}).join(" "));poly.setAttribute("fill","color-mix(in srgb,var(--blue) 35%,transparent)");poly.setAttribute("stroke","var(--blue)");poly.setAttribute("stroke-width","2");hex.appendChild(poly);
+ATTR.forEach(function(a,i){var p=pt(i,R+14),t=document.createElementNS(NS,"text");t.setAttribute("x",p[0]);t.setAttribute("y",p[1]+3);t.setAttribute("text-anchor","middle");t.textContent=a[0];hex.appendChild(t)});
+document.getElementById("stats").innerHTML=ATTR.map(function(a){return '<div class="stat"><b title="'+a[1]+'">'+a[0]+'</b><span class="bar"><i style="width:'+(a[2]*5)+'%"></i></span><span>'+a[2]+'</span></div>'}).join("");
+
+/* insignias (arte 12x12) */
+var ICON={
+  luz:["....YYYY....","...YWWWWY...","..YWWYYWWY..","..YWYYYYWY..","..YWYYYYWY..","..YWWYYWWY..","...YWWWWY...","....YYYY....","....KSSK....","....KSSK....","....KKKK....","............"],
+  trofeo:["..YYYYYYYY..","YYYWYYYYYYYY","Y.YWYYYYYY.Y","Y.YYYYYYYY.Y",".YYYYYYYYYY.","...YYYYYY...","....YYYY....",".....YY.....",".....YY.....","...yyyyyy...","...KKKKKK...","............"],
+  puente:["............","............","PPPPPPPPPPPP","PKPPKPPKPPKP","............",".PP..PP..PP.",".PP..PP..PP.",".PP..PP..PP.","CCCCCCCCCCCC","CCWCCCCCWCCC","CCCCCCCCCCCC","............"],
+  nube:["............","....WWWW....","..WWWWWWWW..",".WWBWWWWWWW.","WWWWWWWWWWWW","WWWWWWWWWBWW",".WWWWWWWWWW.","............","..R.R..R.R..","...R....R...","............","............"],
+  llama:[".....O......","....OO......","....OOO..O..","...OOYOO.O..","..OOYYOOOO..","..OYYYYOOO..",".OOYYWYYOO..",".OYYWWWYYO..",".OYYWWWYYO..","..OYYYYYO...","...OOOOO....","............"],
+  alas:["............","CC........CC","CCC......CCC",".CCC.KK.CCC.",".CCCCKKCCCC.","..CCCKKCCC..","...CCKKCC...",".....KK.....","............","............","............","............"],
+  hoja:["..KKKKKKKK..","..KWWWWWWK..","..KWKKKKWK..","..KWWWWWWK..","..KWKKKWWK..","..KWWWWWWK..","..KWKKKKWK..","..KWWWWWWK..","..KWKKWWWK..","..KWWWWWWK..","..KKKKKKKK..","............"],
+  mundo:["....BBBB....","..BBGGBBBB..",".BGGGGBBBBB.",".BGGGBBBGGB.","BBBGBBBGGGBB","BBBBBBBBGGBB","BBGGBBBBBBBB","BBGGGBBBBBBB",".BBGGBBBBBB.",".BBBBBBBBBB.","..BBBBBBBB..","....BBBB...."],
+  sabio:["....PPPP....","...PPPPPP...","..PPPPPPPP..","....FFFF....","...FKFFKF...","...FFFFFF...","..WWFFFFWW..",".WWWWWWWWWW.",".WWWWWWWWWW.","..WWWWWWWW..","............","............"]
+};
+var BADGES=[["Primera Luz","common","luz",0],["Hoja Completa","common","hoja",0],["Primer Trofeo","common","trofeo",0],["Primera Nube","common","nube",0],["Iniciado Autodesk","common","trofeo",0],["Explorador Multi-vendor","rare","mundo",0],["Reliquia Bentley","epic","puente",0],["Racha de 12","rare","llama",1],["Constructor de Puentes","legendary","puente",1],["Sabio del Foro","epic","sabio",1],["Alas DGAC","epic","alas",1],["Tríada Autodesk","rare","trofeo",1]];
+var RN={common:"común",rare:"rara",epic:"épica",legendary:"legendaria"};
+var bd=document.getElementById("badges");
+BADGES.forEach(function(b){var d=document.createElement("div");d.className="badge "+b[1]+(b[3]?" locked":"");d.title=b[3]?"Bloqueada":"Ganada";
+  var f=document.createElement("div");f.className="frame";f.appendChild(mk("0 0 12 12",ICON[b[2]]));d.appendChild(f);
+  d.insertAdjacentHTML("beforeend",b[0]+"<small>"+RN[b[1]]+"</small>");bd.appendChild(d)});
+
+/* vitrina de cursos */
+var COURSES=[
+  {v:"bentley",vn:"BENTLEY",prod:"MicroStation",t:"Bentley Accredited MicroStation User",type:"Learning plan",dur:"9 h 30 min",rw:"relic",st:"ok",c:"#5A2D82"},
+  {v:"bentley",vn:"BENTLEY",prod:"OpenRoads",t:"Bentley Accredited Road Modeler: OpenRoads Modeling Core Skills",type:"Learning plan",dur:"7 h 55 min",rw:"relic",st:"pend",c:"#7A3E12"},
+  {v:"bentley",vn:"BENTLEY",prod:"Bentley Learn",t:"Navigating Bentley Learn",type:"On Demand",dur:"20 min",rw:"trophy",st:"ok",c:"#2B2F36"},
+  {v:"autodesk",vn:"AUTODESK",prod:"Revit",t:"Autodesk Certified User: Revit",type:"Examen",dur:"50 min",rw:"relic",st:"ok",c:"#0A5BD3"},
+  {v:"autodesk",vn:"AUTODESK",prod:"Forma",t:"Learn Forma Site Design in 90 minutes",type:"Course",dur:"90 min",rw:"trophy",st:"ok",c:"#0F7A6B"},
+  {v:"autodesk",vn:"AUTODESK",prod:"Revit",t:"Introduction to BIM for architectural design",type:"Course",dur:"6 h",rw:"trophy",st:"ok",c:"#0A5BD3"}
+];
+var shelf=document.getElementById("shelf");
+function renderShelf(f){shelf.innerHTML=COURSES.filter(function(c){return f==="all"||c.v===f||(f==="relic"&&c.rw==="relic")||(f==="pend"&&c.st==="pend")}).map(function(c){
+  return '<article class="ccard"><div class="thumb" style="background:'+c.c+'"><span class="v">'+c.vn+'</span><span class="rw '+(c.rw==="trophy"?"trophy":"")+'">'+(c.rw==="relic"?"RELIQUIA":"TROFEO")+'</span><b>'+c.prod+'</b></div>'+
+  '<div class="body"><h3>'+c.t+'</h3><div class="meta"><span>'+c.type+'</span><span>'+c.dur+'</span><span>EN</span></div>'+
+  '<div class="foot"><span class="st '+c.st+'">'+(c.st==="ok"?"✔ Verificado":"⧗ En revisión")+'</span><span class="xpchip">'+(c.st==="ok"?"+":"")+(c.rw==="relic"?500:100)+' XP</span></div></div></article>'}).join("")}
+renderShelf("all");
+document.querySelectorAll(".filters button").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll(".filters button").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");renderShelf(b.dataset.f)})});
+
+/* árbol de habilidades */
+var tree=document.getElementById("tree");
+var NODES=[
+  ["AUTODESK",95,30,1,null],["Revit",50,110,1,0],["Forma",140,110,1,0],["Civil 3D",95,190,0,1],["Revit Pro",50,260,0,1],
+  ["BENTLEY",325,30,1,null],["MicroStation",265,110,1,5],["OpenRoads",375,110,.5,5],["OpenBridge",390,190,0,7],["OpenBuildings",265,190,0,6],["Road Designer",345,260,0,7]
+];
+NODES.forEach(function(n){if(n[4]===null)return;var p=NODES[n[4]],l=document.createElementNS(NS,"line");l.setAttribute("x1",p[1]);l.setAttribute("y1",p[2]);l.setAttribute("x2",n[1]);l.setAttribute("y2",n[2]);l.setAttribute("stroke",n[3]?"var(--blue)":"var(--hair)");l.setAttribute("stroke-width","3");if(!n[3])l.setAttribute("stroke-dasharray","5 4");tree.appendChild(l)});
+NODES.forEach(function(n){var g=document.createElementNS(NS,"g"),r=document.createElementNS(NS,"rect"),root=n[4]===null,w=root?84:Math.max(64,n[0].length*7+14);
+  r.setAttribute("x",n[1]-w/2);r.setAttribute("y",n[2]-14);r.setAttribute("width",w);r.setAttribute("height",28);
+  r.setAttribute("fill",root?"var(--ink)":n[3]===1?"var(--blue)":n[3]?"color-mix(in srgb,var(--pend) 35%,var(--sheet))":"var(--sheet-2)");r.setAttribute("stroke","var(--ink)");r.setAttribute("stroke-width","2");g.appendChild(r);
+  var t=document.createElementNS(NS,"text");t.setAttribute("x",n[1]);t.setAttribute("y",n[2]+4);t.setAttribute("text-anchor","middle");t.textContent=n[0];if(root){t.setAttribute("class","v");t.style.fill="var(--sheet)"}else if(n[3]===1)t.style.fill="#fff";
+  g.appendChild(t);tree.appendChild(g)});
+
+/* actividad */
+var heat=document.getElementById("heat"),seed=7;function rnd(){seed=(seed*9301+49297)%233280;return seed/233280}
+var cells="";for(var i=0;i<26*7;i++){var v=rnd(),w=Math.floor(i/7),l=w<6?(v>.85?1:0):(v>.55?(v>.85?3:v>.7?2:1):0);cells+='<i class="'+(l?"l"+l:"")+'"></i>'}
+heat.innerHTML=cells;heat.style.gridAutoFlow="column";heat.style.gridTemplateRows="repeat(7,auto)";
+
+/* selector de accesorio */
+var PICK=[["casco","Casco de obra · Primer Trofeo",1],["lapiz","Lápiz · Arquitectura",1],["sombrero","Sombrero de explorador · Cartógrafo nivel 5",0],["gafas","Gafas de piloto · Alas DGAC",0]];
+var pk=document.getElementById("pick");
+PICK.forEach(function(p,i){var b=document.createElement("button");b.type="button";b.title=p[1];b.setAttribute("aria-label",p[1]);b.setAttribute("aria-pressed",i===0?"true":"false");if(!p[2])b.disabled=true;
+  var s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 16 16");s.setAttribute("class","px");px(s,BASE);if(p[0]==="gafas"){px(s,ACC.casco,1,1);px(s,ACC.gafas.slice(3),0,5)}else px(s,ACC[p[0]],1,1);b.appendChild(s);
+  b.addEventListener("click",function(){pk.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");avatar(p[0])});pk.appendChild(b)});
+
+/* competencias (vista profesional) */
+var SK=[["Modelado BIM",4],["Corredores viales",2],["Dibujo 2D / láminas",4],["Análisis ambiental",2],["Georreferenciación",3],["Nubes de puntos",1]];
+document.getElementById("skills").innerHTML=SK.map(function(s){var d="";for(var i=0;i<5;i++)d+='<i class="'+(i<s[1]?"on":"")+'"></i>';return '<div class="skillrow"><span>'+s[0]+'</span><span class="dots">'+d+'</span></div>'}).join("");
+
+/* alternar vistas */
+function mode(pro){document.body.classList.toggle("mode-pro",pro);document.getElementById("vPro").setAttribute("aria-pressed",pro);document.getElementById("vGame").setAttribute("aria-pressed",!pro)}
+document.getElementById("vGame").addEventListener("click",function(){mode(false)});
+document.getElementById("vPro").addEventListener("click",function(){mode(true)});
+})();
+</script>
+</body>
+</html>

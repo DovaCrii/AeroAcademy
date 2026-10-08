@@ -1,0 +1,24 @@
+{
+  "_nota": "Insignias iniciales. Reglas en docs/GAMIFICACION.md. 'sprite' es la ruta bajo core/static/game/badges/ (se dibuja con la skill sprite-8bit). Agregar siempre al final.",
+  "badges": [
+    {"slug": "primera-luz", "name": "Primera Luz", "description": "Tu primera misión en la academia.", "rarity": "common", "sprite": "primera-luz.svg", "rule": {"type": "count", "event": "milestone", "min": 1}},
+    {"slug": "hoja-completa", "name": "Hoja Completa", "description": "Completaste tu hoja de personaje: titular, bio, clase y avatar.", "rarity": "common", "sprite": "hoja-completa.svg", "rule": {"type": "count", "event": "profile_completed", "min": 1}},
+    {"slug": "primer-trofeo", "name": "Primer Trofeo", "description": "Tu primer certificado verificado.", "rarity": "common", "sprite": "primer-trofeo.svg", "rule": {"type": "credential_kind", "kinds": ["completion", "certification", "license", "internal"], "min": 1}},
+    {"slug": "primera-nube", "name": "Primera Nube", "description": "Tu primera nota para el equipo.", "rarity": "common", "sprite": "primera-nube.svg", "rule": {"type": "count", "event": "note", "min": 1}},
+    {"slug": "iniciado-autodesk", "name": "Iniciado Autodesk", "description": "Primer certificado Autodesk verificado.", "rarity": "common", "sprite": "iniciado-autodesk.svg", "rule": {"type": "credential_kind", "kinds": ["completion", "certification"], "vendor": "autodesk", "min": 1}},
+    {"slug": "triada-autodesk", "name": "Tríada Autodesk", "description": "Tres certificados Autodesk verificados.", "rarity": "rare", "sprite": "triada-autodesk.svg", "rule": {"type": "credential_kind", "kinds": ["completion", "certification"], "vendor": "autodesk", "min": 3}},
+    {"slug": "primer-trofeo-bentley", "name": "Primer Trofeo Bentley", "description": "Primer curso de Bentley Learn verificado.", "rarity": "common", "sprite": "primer-trofeo-bentley.svg", "rule": {"type": "credential_kind", "kinds": ["completion", "certification"], "vendor": "bentley", "min": 1}},
+    {"slug": "reliquia-bentley", "name": "Reliquia Bentley", "description": "Una acreditación 'Bentley Accredited' verificada.", "rarity": "epic", "sprite": "reliquia-bentley.svg", "rule": {"type": "credential_kind", "kinds": ["certification"], "vendor": "bentley", "min": 1}},
+    {"slug": "cota-0-a-certificacion", "name": "De la Cota 0 a la Certificación", "description": "Completaste la Ruta Forma + Revit.", "rarity": "epic", "sprite": "cota-0.svg", "rule": {"type": "path_complete", "path": "forma-revit"}},
+    {"slug": "constructor-de-puentes", "name": "Constructor de Puentes", "description": "Levantaste todos los pilares de la Ruta Bentley.", "rarity": "legendary", "sprite": "constructor-de-puentes.svg", "rule": {"type": "path_complete", "path": "bentley-learn"}},
+    {"slug": "explorador-multivendor", "name": "Explorador Multi-vendor", "description": "Certificados verificados de tres empresas de software distintas.", "rarity": "rare", "sprite": "multivendor.svg", "rule": {"type": "distinct_vendors", "min": 3}},
+    {"slug": "poliglota-bim", "name": "Políglota BIM", "description": "Certificados en Revit y en OpenBuildings.", "rarity": "epic", "sprite": "poliglota-bim.svg", "rule": {"type": "credential_kind", "kinds": ["completion", "certification"], "products_all": ["revit", "openbuildings"], "min": 2}},
+    {"slug": "sabio-del-foro", "name": "Sabio del Foro", "description": "10 respuestas aceptadas en Consultas.", "rarity": "epic", "sprite": "sabio-del-foro.svg", "rule": {"type": "count", "event": "accepted_answer", "min": 10}},
+    {"slug": "mentor", "name": "Mentor", "description": "5 respuestas aceptadas a otras personas.", "rarity": "rare", "sprite": "mentor.svg", "rule": {"type": "count", "event": "accepted_answer", "min": 5}},
+    {"slug": "racha-4", "name": "Racha de 4", "description": "Cuatro semanas seguidas aprendiendo.", "rarity": "common", "sprite": "racha-4.svg", "rule": {"type": "streak", "weeks": 4}},
+    {"slug": "racha-12", "name": "Racha de 12", "description": "Doce semanas seguidas aprendiendo.", "rarity": "rare", "sprite": "racha-12.svg", "rule": {"type": "streak", "weeks": 12}},
+    {"slug": "alas-dgac", "name": "Alas DGAC", "description": "Habilitación de piloto RPA vigente. Se apaga si vence.", "rarity": "epic", "sprite": "alas-dgac.svg", "rule": {"type": "credential_kind", "kinds": ["license"], "platform": "dgac-chile", "min": 1, "requires_valid": true}},
+    {"slug": "cartografo-de-cursos", "name": "Cartógrafo de Cursos", "description": "Un curso libre tuyo fue sumado a una ruta para todo el equipo.", "rarity": "rare", "sprite": "cartografo-de-cursos.svg", "rule": {"type": "count", "event": "free_course_promoted", "min": 1}},
+    {"slug": "gremio-unido", "name": "Gremio Unido", "description": "Aportaste a una expedición del equipo completada.", "rarity": "rare", "sprite": "gremio-unido.svg", "rule": {"type": "manual"}}
+  ]
+}

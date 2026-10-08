@@ -1,0 +1,22 @@
+[Unit]
+Description=Ruta Forma + Revit (guía del equipo)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=forma
+Group=forma
+WorkingDirectory=/opt/forma-ruta
+Environment=RUTA_DB=/var/lib/forma-ruta/ruta.db
+ExecStart=/opt/forma-ruta/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8080
+Restart=on-failure
+RestartSec=3
+StateDirectory=forma-ruta
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/forma-ruta
+
+[Install]
+WantedBy=multi-user.target

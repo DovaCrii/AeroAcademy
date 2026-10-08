@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mundo Civil · Ruta Bentley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* Concepto del mundo `civil` (docs/MUNDOS.md). Referencia de diseño, no código de producción. */
+:root{
+  --bg:#ECEEF1; --sheet:#FFFFFF; --sheet-2:#F3F4F6; --ink:#14171C; --ink-2:#3B4250; --line:#9AA3AF; --hair:#D9DDE3;
+  --asphalt:#2B2F36; --asphalt-2:#3A3F48; --sign:#FFC21A; --sign-ink:#14171C; --mark:#FFFFFF; --slope:#3E8E4E;
+  --ok:#13803C; --pending:#D97706; --todo:#9AA3AF; --relic:#8B5CF6; --blue:#1E8CFF;
+  --font:"Archivo","Arial Narrow",Arial,sans-serif; --px:"Press Start 2P",monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101318; --sheet:#181C23; --sheet-2:#20252E; --ink:#F4F6F8; --ink-2:#C4CAD3; --line:#5B6472; --hair:#2C323C;
+  --asphalt:#0B0D11; --asphalt-2:#1A1E25; --ok:#4ADE80; --pending:#FBBF24; --todo:#6B7280; --relic:#A78BFA; --slope:#4CAF64;
+}}
+:root[data-theme="dark"]{
+  --bg:#101318; --sheet:#181C23; --sheet-2:#20252E; --ink:#F4F6F8; --ink-2:#C4CAD3; --line:#5B6472; --hair:#2C323C;
+  --asphalt:#0B0D11; --asphalt-2:#1A1E25; --ok:#4ADE80; --pending:#FBBF24; --todo:#6B7280; --relic:#A78BFA; --slope:#4CAF64;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.5;font-variant-numeric:tabular-nums;overflow-x:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--sign);outline-offset:2px}
+.term{font-weight:600;font-stretch:92%;padding:0 4px;border:1px solid var(--line);border-radius:2px;background:var(--sheet-2);white-space:nowrap}
+
+/* cabecera: señal vial + jugador */
+.top{position:sticky;top:0;z-index:10;background:var(--asphalt);color:#fff;border-bottom:4px solid var(--sign)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.brand{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.brand small{font-size:11px;color:#C9D0DA;letter-spacing:.12em}
+.brand b{font-stretch:75%;font-size:19px;white-space:nowrap}
+.brand b i{font-style:normal;color:var(--blue)}
+.spacer{flex:1}
+.player{display:grid;grid-template-columns:auto auto;gap:2px 10px;align-items:center}
+.lvl{font-family:var(--px);font-size:11px;background:var(--sign);color:var(--sign-ink);padding:6px 7px;grid-row:1/3}
+.player .t{font-size:13px;font-weight:700;font-stretch:85%;white-space:nowrap}
+.xp{width:130px;height:8px;background:#4A505B;border:1px solid #000;position:relative}
+.xp i{position:absolute;inset:0 auto 0 0;width:62%;background:repeating-linear-gradient(90deg,var(--sign) 0 6px,#E0A800 6px 8px)}
+.bell{width:34px;height:34px;border:1px solid #6B7280;background:none;color:#fff;border-radius:4px;position:relative;cursor:pointer}
+.bell b{position:absolute;top:-6px;right:-6px;background:#E5322A;font-size:10px;border-radius:9px;padding:0 5px}
+
+/* portada */
+.cover{position:relative;background:var(--asphalt);color:#fff;overflow:hidden;margin:0 calc(50% - 50vw)}
+.cover svg.road{position:absolute;inset:0;width:100%;height:100%}
+.cover .in{position:relative;z-index:1;padding:56px 16px 44px;max-width:1180px;margin:0 auto}
+.kicker{display:inline-flex;border:2px solid #fff;margin-bottom:14px}
+.kicker span{padding:3px 10px;font-weight:700;font-stretch:85%;font-size:14px}
+.kicker .code{background:var(--sign);color:var(--sign-ink);font-family:var(--px);font-size:11px;display:grid;place-items:center}
+.cover h1{font-weight:800;font-stretch:65%;font-size:clamp(48px,8vw,104px);line-height:.88;margin:0 0 12px}
+.cover p{max-width:56ch;color:#DDE3EA;font-size:clamp(15px,1.5vw,19px);margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px}
+.stats div{border-left:3px solid var(--sign);padding-left:10px}
+.stats b{display:block;font-stretch:75%;font-size:28px;line-height:1}
+.stats small{color:#C9D0DA}
+
+h2{font-weight:750;font-stretch:72%;font-size:clamp(28px,4vw,42px);line-height:1;margin:48px 0 6px}
+.sub{color:var(--ink-2);max-width:72ch;margin:0 0 16px}
+
+/* recorrido: planta-perfil */
+.pp{background:var(--sheet);border:1px solid var(--ink)}
+.pp svg{display:block;width:100%;height:auto}
+.pp text{font-family:var(--font)}
+.pp text:not([fill]){fill:var(--ink)}
+.pp .lbl{font-size:11px;fill:var(--ink-2)}
+.pp .km{font-size:12px;font-weight:700}
+.pp .ttl{font-size:13px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:14px;padding:10px 14px;border-top:1px solid var(--hair);font-size:13px;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px;border:1px solid var(--ink)}
+.tb{display:grid;grid-template-columns:2fr 2fr 1fr 1fr;border-top:1px solid var(--ink)}
+.tb div{padding:6px 12px;border-right:1px solid var(--line);font-size:12px;color:var(--ink-2);min-width:0}
+.tb div:last-child{border-right:0}
+.tb b{display:block;color:var(--ink);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* explorador + panel */
+.viewer{display:grid;grid-template-columns:270px minmax(0,1fr);background:var(--sheet);border:1px solid var(--ink);margin-top:18px}
+.explorer{background:var(--sheet-2);border-right:1px solid var(--ink)}
+.explorer .h{padding:10px 14px;font-size:12px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.cor{display:grid;grid-template-columns:28px 1fr auto;gap:2px 10px;align-items:center;width:100%;padding:11px 14px;border:0;border-bottom:1px solid var(--hair);background:none;text-align:left;cursor:pointer;color:inherit}
+.cor[aria-selected="true"]{background:var(--sheet);box-shadow:inset 4px 0 0 var(--sign)}
+.cor .st{font-size:11px;font-weight:700;color:var(--ink-2)}
+.cor .nm{font-weight:650;font-stretch:88%}
+.cor .pc{font-weight:800;font-stretch:80%;grid-row:1/3;grid-column:3}
+.cor .bar{grid-column:2/4;height:4px;background:var(--hair)}
+.cor .bar i{display:block;height:100%;background:var(--sign)}
+.panel{min-width:0;padding:20px 24px}
+.ph{display:flex;flex-wrap:wrap;align-items:end;gap:6px 16px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.ph .station{font-weight:800;font-stretch:62%;font-size:54px;line-height:.85;color:var(--ink)}
+.ph .station small{display:block;font-size:12px;font-stretch:100%;font-weight:600;color:var(--ink-2);letter-spacing:.08em}
+.goal{margin:14px 0;padding:10px 14px;border:1px solid var(--sign);border-left-width:5px;background:color-mix(in srgb,var(--sign) 10%,transparent)}
+.courses{list-style:none;margin:0;padding:0}
+.course{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--hair);align-items:start}
+.stake{width:34px;height:46px}
+.course h4{margin:0;font-size:16px;font-stretch:90%;line-height:1.25}
+.course .meta{font-size:13px;color:var(--ink-2);margin-top:2px}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border:1.5px solid;border-radius:2px;white-space:nowrap}
+.chip.ok{color:var(--ok)} .chip.pend{color:var(--pending)} .chip.todo{color:var(--ink-2)}
+.chip.relic{color:var(--relic);font-family:var(--px);font-size:9px;padding:4px 6px}
+.right{display:flex;flex-direction:column;align-items:end;gap:6px}
+details{margin-top:6px;font-size:13.5px}
+details summary{cursor:pointer;color:var(--blue)}
+details ol{margin:6px 0 0;padding-left:20px;color:var(--ink-2)}
+.btn{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--ink);background:var(--sign);color:var(--sign-ink);padding:6px 12px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:var(--sheet);color:var(--ink)}
+
+/* registrar curso */
+.reg{margin-top:18px;border:2px dashed var(--line);padding:16px}
+.reg h3{margin:0 0 10px;font-stretch:85%}
+.reg .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.reg label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-2)}
+.reg input,.reg select{font:inherit;font-size:14px;color:var(--ink);background:var(--sheet);border:1px solid var(--line);border-radius:3px;padding:7px 8px;min-width:0}
+.reg .full{grid-column:1/-1}
+.reg .foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px;font-size:13px;color:var(--ink-2)}
+
+/* nota del oficio: estaca anotada */
+.notes{margin-top:18px}
+.note{display:grid;grid-template-columns:22px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--hair)}
+.note svg{width:22px;height:34px}
+.note b{font-stretch:90%}
+.note small{color:var(--ink-2)}
+.note p{margin:2px 0 0}
+
+/* escalera */
+.ladder{display:grid;grid-template-columns:repeat(3,1fr);align-items:end;gap:0;background:var(--sheet);border:1px solid var(--ink);padding:22px 22px 0}
+.rung{border-top:8px solid var(--ink);border-left:2px solid var(--ink);padding:12px 14px 16px}
+.rung:nth-child(1){min-height:150px} .rung:nth-child(2){min-height:200px} .rung:nth-child(3){min-height:250px}
+.rung small{color:var(--ink-2)} .rung b{display:block;font-stretch:80%;font-size:19px;line-height:1.1;margin:4px 0 6px}
+.ground{grid-column:1/-1;height:14px;margin:0 -22px;border-top:2px solid var(--ink);background:repeating-linear-gradient(45deg,var(--line) 0 1px,transparent 1px 7px)}
+
+/* Teo */
+.teo{position:fixed;right:16px;bottom:16px;z-index:20;display:flex;align-items:end;gap:8px;max-width:min(360px,calc(100vw - 32px))}
+.teo .bubble{background:var(--sheet);color:var(--ink);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:10px 12px;font-size:14px;position:relative}
+.teo .bubble b{font-family:var(--px);font-size:9px;display:block;margin-bottom:6px;color:var(--relic)}
+.teo .teo-px{width:80px;height:80px;flex:none}
+footer{padding:40px 0 140px;color:var(--ink-2);font-size:13px}
+
+@media (max-width:900px){
+  .viewer{grid-template-columns:1fr}
+  .explorer{display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--ink)}
+  .explorer .h{display:none}
+  .cor{min-width:200px;border-bottom:0;border-right:1px solid var(--hair)}
+  .cor[aria-selected="true"]{box-shadow:inset 0 -4px 0 var(--sign)}
+  .ladder{grid-template-columns:1fr}
+  .rung{min-height:0!important;margin-bottom:10px}
+  .tb{grid-template-columns:1fr 1fr}
+  .player .t,.xp{display:none}
+}
+@media (max-width:560px){
+  .panel{padding:16px}
+  .course{grid-template-columns:28px minmax(0,1fr)}
+  .right{grid-column:2;align-items:start;flex-direction:row;flex-wrap:wrap}
+  .reg .grid{grid-template-columns:1fr}
+  .brand small{display:none}
+  .teo .bubble{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .dash{animation:dash 1.6s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-24}}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><small>AEROACADEMY</small><b>LEV DIGITAL <i>101</i></b></div>
+    <div class="spacer"></div>
+    <div class="player" aria-label="Tu nivel">
+      <span class="lvl">NV 6</span>
+      <span class="t">Guardián del Eje · Calculista</span>
+      <span class="xp" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="XP hacia el nivel 7"><i></i></span>
+    </div>
+    <button class="bell" aria-label="Notificaciones: 2 nuevas">🔔<b>2</b></button>
+  </div>
+</header>
+
+<main class="wrap">
+<section class="cover" aria-label="Ruta Bentley">
+  <svg class="road" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B0D11"/><stop offset="1" stop-color="#2B2F36"/></linearGradient></defs>
+    <rect width="1200" height="520" fill="url(#sky)"/>
+    <path d="M0 330 L180 300 L330 318 L520 270 L700 292 L860 250 L1040 280 L1200 260 L1200 520 L0 520Z" fill="#232830"/>
+    <path d="M760 520 L905 300 L925 300 L1200 520Z" fill="#3A3F48"/>
+    <path d="M913 300 L913 520" stroke="#FFC21A" stroke-width="5" stroke-dasharray="26 22" class="dash" opacity=".9"/>
+    <path d="M905 300 L760 520 M925 300 L1200 520" stroke="#fff" stroke-width="3" opacity=".7"/>
+    <g stroke="#FFC21A" stroke-width="2" opacity=".55">
+      <line x1="860" y1="330" x2="860" y2="290"/><rect x="848" y="282" width="24" height="10" fill="#FFC21A"/>
+      <line x1="1010" y1="380" x2="1010" y2="330"/><rect x="996" y="320" width="28" height="12" fill="#FFC21A"/>
+    </g>
+  </svg>
+  <div class="in">
+    <div class="kicker"><span class="code">BENTLEY</span><span>Ruta externa · Bentley Learn</span></div>
+    <h1>Ruta Bentley</h1>
+    <p>Del km 0+000 al puente: MicroStation, OpenRoads, OpenBridge y OpenBuildings. Cada curso que terminas en Bentley Learn es una estaca; cada acreditación levanta un pilar del puente.</p>
+    <div class="stats">
+      <div><b>1 / 5</b><small>pilares en pie</small></div>
+      <div><b>0+760</b><small>tu progresiva</small></div>
+      <div><b>4</b><small>personas en la ruta</small></div>
+    </div>
+  </div>
+</section>
+
+<h2>Planta-perfil</h2>
+<p class="sub">Arriba, la planta del camino con una estaca por curso. Abajo, el perfil: lo pavimentado es tu avance y los pilares del puente se levantan con cada acreditación verificada.</p>
+<div class="pp">
+  <svg viewBox="0 0 1000 400" role="img" aria-labelledby="ppT">
+    <title id="ppT">Planta-perfil de la Ruta Bentley: avance hasta la progresiva 0+760, un pilar levantado de cinco</title>
+    <!-- PLANTA -->
+    <text x="16" y="24" class="ttl">PLANTA · eje del corredor</text>
+    <path d="M40 110 C200 60 320 150 480 110 S760 70 960 110" fill="none" stroke="var(--hair)" stroke-width="34" stroke-linecap="round"/>
+    <path d="M40 110 C200 60 320 150 480 110 S600 90 420 0" fill="none" stroke="none"/>
+    <path id="axis" d="M40 110 C200 60 320 150 480 110 S760 70 960 110" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="14 5 2 5"/>
+    <path d="M40 110 C200 60 320 150 480 110 S560 98 600 96" fill="none" stroke="var(--asphalt)" stroke-width="22" stroke-linecap="butt" opacity=".9"/>
+    <path d="M40 110 C200 60 320 150 480 110 S560 98 600 96" fill="none" stroke="var(--sign)" stroke-width="2" stroke-dasharray="10 8"/>
+    <!-- estacas: ms-c0 ok, ms-c1 todo, ord-c0 pending, ord-c1 todo, obr-c0 todo, obd todo -->
+    <g font-size="11">
+      <g transform="translate(120 70)"><line x1="0" y1="0" x2="0" y2="26" stroke="var(--ink)" stroke-width="2"/><path d="M0 0 h16 l-4 5 l4 5 h-16z" fill="var(--ok)" stroke="var(--ink)"/><text x="0" y="-6" class="lbl" text-anchor="middle">ms-c0</text></g>
+      <g transform="translate(250 92)"><line x1="0" y1="0" x2="0" y2="26" stroke="var(--line)" stroke-width="2"/><path d="M0 0 h16 l-4 5 l4 5 h-16z" fill="var(--sheet)" stroke="var(--line)"/><text x="0" y="-6" class="lbl" text-anchor="middle">ms-c1</text></g>
+      <g transform="translate(420 84)"><line x1="0" y1="0" x2="0" y2="26" stroke="var(--ink)" stroke-width="2"/><path d="M0 0 h16 l-4 5 l4 5 h-16z" fill="var(--pending)" stroke="var(--ink)"/><text x="0" y="-6" class="lbl" text-anchor="middle">ord-c0</text></g>
+      <g transform="translate(560 72)"><line x1="0" y1="0" x2="0" y2="26" stroke="var(--line)" stroke-width="2"/><path d="M0 0 h16 l-4 5 l4 5 h-16z" fill="var(--sheet)" stroke="var(--line)"/><text x="0" y="-6" class="lbl" text-anchor="middle">ord-c1</text></g>
+      <g transform="translate(720 64)"><line x1="0" y1="0" x2="0" y2="26" stroke="var(--line)" stroke-width="2"/><path d="M0 0 h16 l-4 5 l4 5 h-16z" fill="var(--sheet)" stroke="var(--line)"/><text x="0" y="-6" class="lbl" text-anchor="middle">obr-c0</text></g>
+      <g transform="translate(880 78)"><line x1="0" y1="0" x2="0" y2="26" stroke="var(--line)" stroke-width="2"/><path d="M0 0 h16 l-4 5 l4 5 h-16z" fill="var(--sheet)" stroke="var(--line)"/><text x="0" y="-6" class="lbl" text-anchor="middle">obd</text></g>
+    </g>
+    <!-- marcas del equipo -->
+    <g>
+      <circle cx="180" cy="128" r="9" fill="#1E8CFF" stroke="var(--sheet)" stroke-width="2"/><text x="180" y="132" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">AM</text>
+      <circle cx="600" cy="96" r="11" fill="var(--sign)" stroke="var(--ink)" stroke-width="2"/><text x="600" y="100" font-size="9" fill="var(--sign-ink)" text-anchor="middle" font-weight="800">TÚ</text>
+      <circle cx="455" cy="128" r="9" fill="#8B5CF6" stroke="var(--sheet)" stroke-width="2"/><text x="455" y="132" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">JP</text>
+    </g>
+    <line x1="16" y1="170" x2="984" y2="170" stroke="var(--ink)"/>
+    <!-- PERFIL -->
+    <text x="16" y="194" class="ttl">PERFIL LONGITUDINAL · rasante y terreno</text>
+    <path d="M40 300 L140 285 L240 300 L330 270 L430 282 L520 262 L600 280 L640 360 L700 375 L760 365 L800 285 L880 270 L960 262" fill="none" stroke="var(--slope)" stroke-width="2"/>
+    <path d="M40 300 L140 285 L240 300 L330 270 L430 282 L520 262 L600 280 L640 360 L700 375 L760 365 L800 285 L880 270 L960 262 L960 380 L40 380Z" fill="color-mix(in srgb,var(--slope) 12%,transparent)"/>
+    <path d="M40 292 L600 268" stroke="var(--asphalt)" stroke-width="8"/>
+    <path d="M600 268 L960 254" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="8 6"/>
+    <!-- puente: tablero y pilares -->
+    <rect x="610" y="262" width="190" height="8" fill="none" stroke="var(--ink)" stroke-dasharray="6 4"/>
+    <g>
+      <rect x="626" y="270" width="12" height="96" fill="var(--relic)" stroke="var(--ink)"/>
+      <rect x="664" y="270" width="12" height="104" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <rect x="702" y="270" width="12" height="104" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <rect x="740" y="270" width="12" height="100" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <rect x="776" y="270" width="12" height="40" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="632" y="392" class="lbl" text-anchor="middle">P1</text><text x="670" y="392" class="lbl" text-anchor="middle">P2</text><text x="708" y="392" class="lbl" text-anchor="middle">P3</text><text x="746" y="392" class="lbl" text-anchor="middle">P4</text><text x="782" y="392" class="lbl" text-anchor="middle">P5</text>
+    </g>
+    <g class="km">
+      <text x="40" y="240">0+000</text><text x="300" y="240">0+500</text><text x="580" y="240">0+760</text><text x="800" y="240">1+000</text>
+    </g>
+    <line x1="600" y1="246" x2="600" y2="380" stroke="var(--sign)" stroke-width="2"/>
+  </svg>
+  <div class="legend">
+    <span><i style="background:var(--ok)"></i>Curso verificado</span>
+    <span><i style="background:var(--pending)"></i>En revisión</span>
+    <span><i style="background:var(--sheet)"></i>Por hacer</span>
+    <span><i style="background:var(--relic)"></i>Pilar = acreditación</span>
+    <span><i style="background:var(--asphalt)"></i>Tramo pavimentado (tu avance)</span>
+  </div>
+  <div class="tb">
+    <div>Proyecto<b>Ruta Bentley · Infraestructura digital</b></div>
+    <div>Contenido<b>Planta-perfil · avance personal y del equipo</b></div>
+    <div>Escala<b>A tu ritmo</b></div>
+    <div>Lámina<b>C-101</b></div>
+  </div>
+</div>
+
+<h2>Corredores</h2>
+<p class="sub">Cada capítulo es un corredor. Los cursos se toman en Bentley Learn; aquí registras el nombre y el certificado, y el moderador lo verifica.</p>
+<div class="viewer">
+  <div class="explorer" role="tablist" aria-label="Capítulos">
+    <div class="h">Explorer · Corridors</div>
+    <button class="cor" role="tab" aria-selected="false"><span class="st">0+000</span><span class="nm">MicroStation</span><span class="pc">100%</span><span class="bar"><i style="width:100%"></i></span></button>
+    <button class="cor" role="tab" aria-selected="true"><span class="st">1+000</span><span class="nm">OpenRoads</span><span class="pc">0%</span><span class="bar"><i style="width:4%"></i></span></button>
+    <button class="cor" role="tab" aria-selected="false"><span class="st">2+000</span><span class="nm">OpenBridge</span><span class="pc">0%</span><span class="bar"><i style="width:0"></i></span></button>
+    <button class="cor" role="tab" aria-selected="false"><span class="st">3+000</span><span class="nm">OpenBuildings</span><span class="pc">0%</span><span class="bar"><i style="width:0"></i></span></button>
+    <button class="cor" role="tab" aria-selected="false"><span class="st">ramal</span><span class="nm">Cursos libres</span><span class="pc">2</span><span class="bar"><i style="width:0"></i></span></button>
+  </div>
+  <div class="panel" role="tabpanel">
+    <div class="ph">
+      <div class="station"><small>PROGRESIVA</small>1+000</div>
+      <div><strong style="font-size:20px;font-stretch:85%">OpenRoads Designer: del terreno al corredor</strong><div style="color:var(--ink-2);font-size:14px">8 a 25 h · Civil y topografía</div></div>
+    </div>
+    <div class="goal"><b>Meta:</b> terreno, geometría, peraltes, plantillas, corredores, cubicación y láminas de planta-perfil. Acreditación: <em>Bentley Accredited Road Modeler</em>.</div>
+    <ul class="courses">
+      <li class="course">
+        <svg class="stake" viewBox="0 0 34 46" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="44" stroke="var(--ink)" stroke-width="3"/><path d="M6 4 h22 l-6 7 l6 7 h-22z" fill="var(--pending)" stroke="var(--ink)" stroke-width="1.5"/></svg>
+        <div>
+          <h4><a href="https://learning.bentley.com/learn/learning-plans/516/bentley-accredited-road-modeler-openroads-modeling-core-skills" target="_blank" rel="noopener">Bentley Accredited Road Modeler: OpenRoads Modeling Core Skills</a></h4>
+          <div class="meta">Learning plan · 7 h 55 min · 11 cursos · termina con <span class="term">Assessment</span></div>
+          <details><summary>Qué incluye</summary><ol>
+            <li>Navigating the Interface</li><li>QuickStart for Terrain Display</li><li>QuickStart for Geometry - Road</li><li>Beyond Centerline Geometry</li><li>Using and Editing Templates</li><li>QuickStart for Corridor Modeling - Road</li><li>Quantities and Earthwork</li><li>Drawing Production - Creating Plan and Profile Sheets</li><li>Drawing Production - Creating Cross Section Sheets</li>
+          </ol></details>
+        </div>
+        <div class="right"><span class="chip relic">RELIQUIA +500</span><span class="chip pend">En revisión</span></div>
+      </li>
+      <li class="course">
+        <svg class="stake" viewBox="0 0 34 46" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="44" stroke="var(--line)" stroke-width="3"/><path d="M6 4 h22 l-6 7 l6 7 h-22z" fill="var(--sheet)" stroke="var(--line)" stroke-width="1.5"/></svg>
+        <div>
+          <h4>Bentley Accredited Road Designer: Road Design Modeling with OpenRoads Designer</h4>
+          <div class="meta">Learning plan · 24 h 45 min · 12 cursos · opcional</div>
+        </div>
+        <div class="right"><span class="chip relic">RELIQUIA +500</span><button class="btn">Registrar</button></div>
+      </li>
+    </ul>
+
+    <form class="reg" onsubmit="return false" aria-labelledby="regT">
+      <h3 id="regT">Registrar curso + certificado</h3>
+      <div class="grid">
+        <label class="full">Curso
+          <select><option>Bentley Accredited Road Designer: Road Design Modeling…</option><option>Otro curso de Bentley Learn (curso libre)…</option></select>
+        </label>
+        <label>Fecha de término<input type="date"></label>
+        <label>ID de credencial (opcional)<input type="text" placeholder="Como aparece en el certificado"></label>
+        <label class="full">Certificado (PDF, PNG o JPG · máx. 10 MB)<input type="file" accept=".pdf,.png,.jpg,.jpeg"></label>
+      </div>
+      <div class="foot"><button class="btn" type="submit">Clavar estaca</button><span>El moderador lo verifica. El archivo solo lo ven tú y el moderador.</span></div>
+    </form>
+
+    <div class="notes">
+      <h3 style="margin:0 0 6px;font-stretch:85%">Estacas anotadas del equipo</h3>
+      <div class="note">
+        <svg viewBox="0 0 22 34" aria-hidden="true"><line x1="4" y1="2" x2="4" y2="32" stroke="var(--ink)" stroke-width="2"/><path d="M4 2 h14 l-4 5 l4 5 h-14z" fill="var(--ok)" stroke="var(--ink)"/></svg>
+        <div><b>Funciona</b> · <small>Juan P. · hace 2 días</small><p>Hagan <span class="term">QuickStart for Terrain Display</span> con el dataset del curso antes de cargar nuestro levantamiento; el sistema de coordenadas se configura igual.</p></div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 22 34" aria-hidden="true"><line x1="4" y1="2" x2="4" y2="32" stroke="var(--ink)" stroke-width="2"/><path d="M4 2 h14 l-4 5 l4 5 h-14z" fill="var(--pending)" stroke="var(--ink)"/></svg>
+        <div><b>Duda</b> · <small>Ana M. · hace 5 h</small><p>¿Alguien rindió el <span class="term">Assessment</span>? ¿Cuántos intentos permite?</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>Escalera de acreditación</h2>
+<p class="sub">Las acreditaciones <em>Bentley Accredited</em> son gratuitas y terminan con una evaluación o con la entrega de un proyecto. En la academia valen una Reliquia.</p>
+<div class="ladder">
+  <div class="rung"><small>Peldaño 1 · base</small><b>MicroStation User</b>9 h 30 min · 13 cursos</div>
+  <div class="rung"><small>Peldaño 2 · vial</small><b>Road Modeler · Core Skills</b>7 h 55 min · 11 cursos</div>
+  <div class="rung"><small>Peldaño 3 · especialidad</small><b>Road Designer · Bridge Modeler · BIM Modeler</b>Según disciplina</div>
+  <div class="ground" aria-hidden="true"></div>
+</div>
+
+<footer>Concepto del mundo <b>civil</b> para AeroAcademy · Academia LEV Digital 101 (docs/MUNDOS.md). Datos de ejemplo; cursos y URLs tomados de learning.bentley.com el 8 de octubre de 2026.</footer>
+</main>
+
+<aside class="teo" aria-label="Teo">
+  <div class="bubble"><b>TEO DICE</b>¡Buena estaca! Cuando el moderador verifique tu <span class="term">Road Modeler</span>, se levanta el pilar P2 y pasas a nivel 7.</div>
+  <svg class="teo-px" viewBox="0 0 32 32" shape-rendering="crispEdges" role="img">
+  <title>Teo con chaleco reflectante (mundo Civil)</title>
+  <rect x="8" y="3" width="7" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="15" y="3" width="2" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="17" y="3" width="7" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="15" y="4" width="2" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="10" y="5" width="12" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="8" y="6" width="2" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="10" y="6" width="12" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="22" y="6" width="2" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="7" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="8" y="7" width="2" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="10" y="7" width="2" height="1" fill="var(--px-white, #FFFFFF)"/>
+  <rect x="12" y="7" width="12" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="24" y="7" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="8" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="8" width="2" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="9" y="8" width="2" height="1" fill="var(--px-white, #FFFFFF)"/>
+  <rect x="11" y="8" width="14" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="25" y="8" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="9" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="9" width="18" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="25" y="9" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="4" y="10" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="5" y="10" width="22" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="27" y="10" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="4" y="11" width="24" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="12" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="12" width="18" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="25" y="12" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="13" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="13" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="8" y="13" width="16" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="24" y="13" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="25" y="13" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="14" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="14" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="8" y="14" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="14" width="1" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="10" y="14" width="1" height="1" fill="var(--px-white, #FFFFFF)"/>
+  <rect x="11" y="14" width="2" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="13" y="14" width="6" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="19" y="14" width="1" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="20" y="14" width="1" height="1" fill="var(--px-white, #FFFFFF)"/>
+  <rect x="21" y="14" width="2" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="23" y="14" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="24" y="14" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="25" y="14" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="15" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="15" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="8" y="15" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="15" width="4" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="13" y="15" width="6" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="19" y="15" width="4" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="23" y="15" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="24" y="15" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="25" y="15" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="16" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="16" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="8" y="16" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="16" width="4" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="13" y="16" width="6" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="19" y="16" width="4" height="1" fill="var(--px-cyan, #4CC6FF)"/>
+  <rect x="23" y="16" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="24" y="16" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="25" y="16" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="17" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="17" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="8" y="17" width="16" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="24" y="17" width="1" height="1" fill="var(--px-steel-light, #C9D3DD)"/>
+  <rect x="25" y="17" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="18" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="18" width="18" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="25" y="18" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="19" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="19" width="7" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="14" y="19" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="15" y="19" width="2" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="17" y="19" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="18" y="19" width="7" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="25" y="19" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="20" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="20" width="8" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="15" y="20" width="2" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="17" y="20" width="8" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="25" y="20" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="21" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="21" width="1" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="8" y="21" width="16" height="1" fill="var(--px-white, #FFFFFF)"/>
+  <rect x="24" y="21" width="1" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="25" y="21" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="22" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="22" width="18" height="1" fill="var(--px-orange, #FF7A1A)"/>
+  <rect x="25" y="22" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="6" y="23" width="20" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="24" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="10" y="24" width="12" height="1" fill="var(--px-yellow, #FFC21A)"/>
+  <rect x="22" y="24" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="25" width="14" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="10" y="26" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="11" y="26" width="1" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="12" y="26" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="14" y="26" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="15" y="26" width="2" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="17" y="26" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="19" y="26" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="20" y="26" width="1" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="21" y="26" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="27" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="10" y="27" width="1" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="11" y="27" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="14" y="27" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="15" y="27" width="2" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="17" y="27" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="20" y="27" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="21" y="27" width="1" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="22" y="27" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="8" y="28" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="9" y="28" width="1" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="10" y="28" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="14" y="28" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="15" y="28" width="2" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="17" y="28" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="21" y="28" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="22" y="28" width="1" height="1" fill="var(--px-yellow-dark, #D99A00)"/>
+  <rect x="23" y="28" width="1" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="7" y="29" width="4" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="14" y="29" width="4" height="1" fill="var(--px-ink, #0A0E13)"/>
+  <rect x="21" y="29" width="4" height="1" fill="var(--px-ink, #0A0E13)"/>
+</svg>
+</aside>
+
+<script>
+// solo para el concepto: alternar capítulos visualmente
+document.querySelectorAll('.cor').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.cor').forEach(x=>x.setAttribute('aria-selected','false'));b.setAttribute('aria-selected','true');
+}));
+</script>
+</body>
+</html>

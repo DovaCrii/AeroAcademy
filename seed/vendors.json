@@ -1,0 +1,68 @@
+{
+  "_nota": "Vendor → productos → disciplinas por defecto. Ver docs/TAXONOMIA.md. Agregar siempre al final; los slugs son estables.",
+  "disciplines": [
+    {"slug": "arquitectura", "name": "Arquitectura", "default_world": "architecture", "order": 0},
+    {"slug": "civil-estructural", "name": "Civil-Estructural", "default_world": "civil", "order": 1},
+    {"slug": "topografia", "name": "Topografía", "default_world": "survey", "order": 2},
+    {"slug": "mecanica", "name": "Mecánica", "default_world": "mechanical", "order": 3},
+    {"slug": "captura-rpa", "name": "Captura / RPA", "default_world": "aero", "order": 4}
+  ],
+  "vendors": [
+    {
+      "slug": "autodesk", "name": "Autodesk", "url": "https://www.autodesk.com/", "order": 0,
+      "products": [
+        {"slug": "revit", "name": "Revit", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]},
+        {"slug": "forma", "name": "Forma", "disciplines": ["arquitectura"]},
+        {"slug": "civil-3d", "name": "Civil 3D", "disciplines": ["civil-estructural", "topografia"]},
+        {"slug": "recap", "name": "ReCap Pro", "disciplines": ["topografia", "captura-rpa"]},
+        {"slug": "navisworks", "name": "Navisworks", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]}
+      ]
+    },
+    {
+      "slug": "bentley", "name": "Bentley Systems", "url": "https://www.bentley.com/", "order": 1,
+      "products": [
+        {"slug": "microstation", "name": "MicroStation", "disciplines": ["civil-estructural", "arquitectura", "mecanica"]},
+        {"slug": "openroads-designer", "name": "OpenRoads Designer", "disciplines": ["civil-estructural", "topografia"]},
+        {"slug": "openbridge", "name": "OpenBridge", "disciplines": ["civil-estructural"]},
+        {"slug": "openbuildings", "name": "OpenBuildings Designer", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]},
+        {"slug": "openrail", "name": "OpenRail", "disciplines": ["civil-estructural"]},
+        {"slug": "openflows", "name": "OpenFlows", "disciplines": ["civil-estructural"]},
+        {"slug": "staad", "name": "STAAD", "disciplines": ["civil-estructural"]},
+        {"slug": "synchro", "name": "SYNCHRO", "disciplines": ["civil-estructural", "arquitectura"]},
+        {"slug": "projectwise", "name": "ProjectWise", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]},
+        {"slug": "itwin-capture", "name": "iTwin Capture Modeler", "disciplines": ["topografia", "captura-rpa"]}
+      ]
+    },
+    {
+      "slug": "trimble", "name": "Trimble", "url": "https://www.trimble.com/", "order": 2,
+      "products": [
+        {"slug": "tbc", "name": "Trimble Business Center", "disciplines": ["topografia", "captura-rpa"]},
+        {"slug": "trimble-access", "name": "Trimble Access", "disciplines": ["topografia"]}
+      ]
+    },
+    {
+      "slug": "esri", "name": "Esri", "url": "https://www.esri.com/", "order": 3,
+      "products": [
+        {"slug": "arcgis-pro", "name": "ArcGIS Pro", "disciplines": ["topografia", "civil-estructural"]}
+      ]
+    },
+    {
+      "slug": "dji", "name": "DJI", "url": "https://www.dji.com/", "order": 4,
+      "products": [
+        {"slug": "dji-terra", "name": "DJI Terra", "disciplines": ["captura-rpa", "topografia"]}
+      ]
+    },
+    {
+      "slug": "oracle", "name": "Oracle", "url": "https://www.oracle.com/", "order": 5,
+      "products": [
+        {"slug": "primavera-p6", "name": "Primavera P6", "disciplines": ["civil-estructural", "arquitectura", "mecanica"]}
+      ]
+    },
+    {
+      "slug": "microsoft", "name": "Microsoft", "url": "https://www.microsoft.com/", "order": 6,
+      "products": [
+        {"slug": "power-bi", "name": "Power BI", "disciplines": []}
+      ]
+    }
+  ]
+}

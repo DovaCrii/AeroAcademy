@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruta Forma + Revit · Guía del equipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"ArchivoLocal";src:url("static/fonts/Archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+:root{
+  --bg:#EEF2F7; --sheet:#FFFFFF; --sheet-2:#E6EEF8;
+  --ink:#0A0E13; --ink-2:#26323F; --line:#8D9CAD; --hair:#CFD9E4;
+  --poche:#0A0E13; --level:#0A5BD3; --red:#E5322A; --fill:#FFB000; --ok:#13803C;
+  --scan:#FF5A00; --night:#05111F; --night-2:#0B2440;
+  --font:"ArchivoLocal","Archivo","Arial Narrow",Arial,sans-serif;
+  --r:4px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#021428; --sheet:#05203D; --sheet-2:#0A2D52;
+    --ink:#FFFFFF; --ink-2:#D3E6F8; --line:#4E86BD; --hair:#1D4A78;
+    --poche:#FFFFFF; --level:#4CC9FF; --red:#FF5C4D; --fill:#FFC21A; --ok:#4ADE80;
+    --scan:#FF7A1A; --night:#010B17; --night-2:#04213F;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#021428; --sheet:#05203D; --sheet-2:#0A2D52;
+  --ink:#FFFFFF; --ink-2:#D3E6F8; --line:#4E86BD; --hair:#1D4A78;
+  --poche:#FFFFFF; --level:#4CC9FF; --red:#FF5C4D; --fill:#FFC21A; --ok:#4ADE80;
+  --scan:#FF7A1A; --night:#010B17; --night-2:#04213F;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:var(--level);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+
+/* ---------- cajetín superior ---------- */
+.top{position:sticky;top:0;z-index:30;background:var(--sheet);border-bottom:3px solid var(--scan)}
+.top .wrap{display:grid;grid-template-columns:auto 1fr auto auto;align-items:stretch;height:56px}
+.top .cell{display:flex;flex-direction:column;justify-content:center;padding:0 14px;border-right:1px solid var(--line)}
+.top .cell:first-child{padding-left:0}
+.top .cell:last-child{border-right:0;padding-right:0}
+.cap{font-size:11px;line-height:1.1;color:var(--ink-2)}
+.brand{font-weight:800;font-stretch:75%;font-size:20px;line-height:1.1;letter-spacing:.2px}
+.nav{display:flex;align-items:center;gap:18px;overflow-x:auto;scrollbar-width:none;padding:0 16px;border-right:1px solid var(--line)}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:var(--ink-2);text-decoration:none;font-size:14px;white-space:nowrap;font-stretch:90%}
+.nav a:hover{color:var(--ink)}
+.mine{display:grid;grid-template-columns:auto 84px;gap:2px 10px;align-items:center}
+.mine b{font-stretch:80%;font-size:18px;line-height:1}
+.mbar{grid-column:1/-1;height:4px;background:var(--hair)}
+.mbar i{display:block;height:100%;width:0;background:var(--fill);transition:width .4s}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:var(--r);width:32px;height:32px;cursor:pointer;display:grid;place-items:center}
+
+/* ---------- lámina (sheet) ---------- */
+.sheet{background:var(--sheet);border:1px solid var(--poche);margin:22px 0;position:relative}
+.sheet-in{padding:26px 28px}
+.tb{display:grid;grid-template-columns:2fr 2.4fr 1fr 1fr .8fr;border-top:1px solid var(--poche)}
+.tb>div{padding:7px 12px;border-right:1px solid var(--line);min-width:0}
+.tb>div:last-child{border-right:0}
+.tb b{display:block;font-size:14px;font-weight:600;font-stretch:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+h1{font-weight:800;font-stretch:65%;font-size:clamp(40px,5.4vw,78px);overflow-wrap:break-word;line-height:.9;letter-spacing:-.5px;margin:0 0 14px;max-width:12ch}
+h2{font-weight:750;font-stretch:72%;font-size:clamp(30px,4vw,44px);line-height:1;margin:0;letter-spacing:-.2px}
+h3{font-weight:700;font-stretch:85%;font-size:19px;line-height:1.2;margin:0}
+h4{font-weight:700;font-stretch:90%;font-size:15px;margin:0 0 10px}
+.lead{font-size:18px;line-height:1.5;color:var(--ink-2);font-weight:450;max-width:60ch;margin:0}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:30px;align-items:end}
+.hero-meta{display:grid;grid-template-columns:repeat(3,auto);gap:18px;margin-top:22px;justify-content:start}
+.hero-meta div{border-left:2px solid var(--level);padding-left:10px}
+.hero-meta b{display:block;font-stretch:75%;font-size:28px;line-height:1}
+.section-svg{width:100%;height:auto;display:block}
+.section-svg text{font-family:var(--font);fill:var(--ink)}
+.story{cursor:pointer}
+.story:focus-visible .storybox{stroke:var(--red);stroke-width:2.5}
+.status{margin:0;padding:9px 28px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2);display:flex;gap:10px;align-items:center}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink-2);flex:none}
+.status.live::before{background:var(--ok)}
+
+/* ---------- títulos de sección con marca de corte ---------- */
+.shead{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin:54px 0 8px}
+.mark{width:46px;height:46px;flex:none}
+.mark circle{fill:var(--sheet);stroke:var(--poche);stroke-width:1.5}
+.mark line{stroke:var(--poche);stroke-width:1.5}
+.mark text{font-family:var(--font);font-size:12px;font-weight:700;fill:var(--ink)}
+.mark text.sm{font-size:8.5px;font-weight:600}
+.sub{color:var(--ink-2);max-width:70ch;margin:0 0 18px 62px}
+
+/* ---------- planta del ecosistema ---------- */
+.plan{display:grid;grid-template-columns:repeat(4,1fr);border:6px solid var(--poche);background:var(--sheet)}
+.room{padding:18px 18px 20px;border-right:3px solid var(--poche);position:relative;min-height:170px}
+.room:last-child{border-right:0}
+.room::after{content:"";position:absolute;right:-3px;top:46%;width:3px;height:36px;background:var(--sheet)}
+.room:last-child::after{display:none}
+.tag{display:inline-grid;grid-template-columns:auto auto;border:1px solid var(--ink);font-size:12px;margin-bottom:10px}
+.tag span{padding:1px 7px}
+.tag span+span{border-left:1px solid var(--ink);font-weight:700}
+.room b{display:block;font-stretch:78%;font-size:22px;line-height:1.05;margin-bottom:6px}
+.room p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.renames{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 22px;font-size:14px}
+.renames div{display:grid;grid-template-columns:1fr 18px 1fr;align-items:baseline;border-bottom:1px dashed var(--line);padding:3px 0}
+.renames s{color:var(--ink-2);text-decoration-color:var(--red)}
+.renames i{font-style:normal;color:var(--ink-2);text-align:center}
+
+/* ---------- visor de niveles ---------- */
+.viewer{display:grid;grid-template-columns:260px minmax(0,1fr);background:var(--sheet);border:1px solid var(--poche)}
+.browser{border-right:1px solid var(--poche);background:var(--sheet-2)}
+.browser .bh{padding:10px 14px;font-size:12px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.lvbtn{display:grid;grid-template-columns:22px 1fr auto;gap:4px 10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--hair);padding:11px 14px;cursor:pointer}
+.lvbtn:hover{background:var(--sheet)}
+.lvbtn[aria-selected="true"]{background:var(--sheet);box-shadow:inset 4px 0 0 var(--scan)}
+.lvbtn svg{width:22px;height:22px}
+.lvbtn .nm{font-size:14.5px;font-weight:600;font-stretch:88%;line-height:1.2}
+.lvbtn .el{font-size:12px;color:var(--ink-2)}
+.lvbtn .pc{font-size:13px;font-weight:700;font-stretch:80%;grid-row:1/3;grid-column:3}
+.lvbtn .bar{grid-column:2/4;height:3px;background:var(--hair)}
+.lvbtn .bar i{display:block;height:100%;background:var(--fill)}
+.lvbtn.done .pc{color:var(--ok)}
+.panel{min-width:0}
+.phead{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:end;padding:22px 26px 16px;border-bottom:1px solid var(--line)}
+.elev{font-weight:800;font-stretch:62%;font-size:58px;line-height:.85;color:var(--level)}
+.phead .meta{font-size:14px;color:var(--ink-2);margin-top:4px}
+.pnav{display:flex;gap:6px}
+.pnav button{border:1px solid var(--line);background:var(--sheet);border-radius:var(--r);padding:6px 10px;font-size:13.5px;cursor:pointer}
+.pnav button:disabled{opacity:.4;cursor:default}
+.goal{margin:18px 26px 0;padding:10px 14px;border:1px solid var(--level);border-left-width:4px;font-size:15px}
+.pbody{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.pcol{padding:18px 26px 22px}
+.pcol+.pcol{border-left:1px solid var(--hair)}
+.res{list-style:none;margin:0;padding:0}
+.res li{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:11px 0;border-bottom:1px solid var(--hair)}
+.res li:last-child{border-bottom:0}
+.res .k{font-size:12px;font-weight:700;color:var(--ink-2);padding-top:2px}
+.res a{font-weight:600;font-stretch:92%}
+.res .d{font-size:14px;color:var(--ink-2);margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chip{font-size:11.5px;line-height:18px;padding:0 7px;border:1px solid var(--line);border-radius:2px;color:var(--ink-2)}
+.chip.cert{border-color:var(--fill);color:var(--ink);background:color-mix(in srgb,var(--fill) 22%,transparent)}
+.chip.off{border-color:var(--level);color:var(--level);font-weight:600}
+.term{font-style:normal;font-weight:600;font-stretch:92%;padding:0 4px;border:1px solid var(--line);border-radius:2px;background:var(--sheet-2);white-space:nowrap}
+.checks{list-style:none;margin:0 0 18px;padding:0}
+.checks li{margin:0}
+.checks label{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start;padding:6px 0;cursor:pointer;font-size:15px}
+.checks input,.sched input[type=checkbox]{appearance:none;width:18px;height:18px;margin:2px 0 0;border:1.5px solid var(--poche);background:var(--sheet);cursor:pointer;display:grid;place-items:center}
+.checks input:checked,.sched input[type=checkbox]:checked{background:var(--poche)}
+.checks input:checked::after,.sched input[type=checkbox]:checked::after{content:"";width:9px;height:5px;border-left:2px solid var(--sheet);border-bottom:2px solid var(--sheet);transform:translateY(-1px) rotate(-45deg)}
+.checks input:checked+span{color:var(--ink-2);text-decoration:line-through;text-decoration-color:var(--line)}
+.by{display:block;font-size:12px;color:var(--ink-2);margin:-2px 0 4px 30px}
+.look{margin:0 0 18px;padding-left:18px;font-size:14.5px}
+.quiz .q{margin-bottom:14px}
+.quiz p{margin:0 0 6px;font-weight:600;font-size:15px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts button{font-size:14px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;cursor:pointer;text-align:left}
+.opts button:hover{border-color:var(--ink-2)}
+.opts .right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.opts .wrong{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent)}
+.fb{font-size:14px;margin-top:5px;min-height:1px}
+.badge{display:none;margin-top:10px;font-weight:700;font-stretch:85%;color:var(--ok)}
+.panel.complete .badge{display:block}
+.pnotes{border-top:1px solid var(--line);padding:18px 26px 24px}
+
+/* ---------- redlines (notas) ---------- */
+.nform{display:grid;grid-template-columns:150px minmax(0,220px) 1fr auto;gap:8px;align-items:start;margin-bottom:12px}
+.nform select,.nform textarea,.rform input,.ctl{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:6px 8px;font-size:14px;min-height:34px}
+.nform textarea{resize:vertical;min-height:34px}
+.nform>*{min-width:0;width:100%}
+.feedbar select{max-width:100%}
+.btn{border:1px solid var(--poche);background:var(--poche);color:var(--sheet);border-radius:var(--r);padding:6px 14px;font-size:14px;font-weight:600;cursor:pointer;min-height:34px}
+.btn.ghost{background:var(--sheet);color:var(--ink)}
+.nlist{list-style:none;margin:0;padding:0}
+.note{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair)}
+.note:last-child{border-bottom:0}
+.cloud{width:34px;height:34px}
+.cloud path{fill:none;stroke-width:1.6}
+.nhead{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:13px;color:var(--ink-2)}
+.nhead b{color:var(--ink);font-size:14.5px;font-stretch:90%}
+.av{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-size:10.5px;font-weight:700;color:#fff;flex:none;overflow:hidden;vertical-align:middle}
+.av img{width:100%;height:100%;object-fit:cover}
+.ntype{font-weight:700;font-size:12px}
+.ntext{margin:4px 0;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.nact{display:flex;gap:14px}
+.link{background:none;border:0;padding:0;font-size:13px;color:var(--level);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.replies{list-style:none;margin:8px 0 0;padding:0 0 0 14px;border-left:1px dashed var(--line)}
+.replies .note{grid-template-columns:24px 1fr;padding:6px 0;border:0}
+.replies .cloud{width:22px;height:22px}
+.rform{display:flex;gap:6px;margin-top:6px}
+.rform input{flex:1}
+.empty{font-size:14px;color:var(--ink-2);padding:6px 0}
+.feedbar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.box{background:var(--sheet);border:1px solid var(--poche);padding:18px 22px}
+
+/* ---------- tablas de planificación (schedules) ---------- */
+.sched{background:var(--sheet);border:1px solid var(--poche);overflow-x:auto}
+.sched table{border-collapse:collapse;width:100%;min-width:720px;font-size:14.5px}
+.sched caption{caption-side:top;text-align:center;font-weight:700;font-stretch:85%;padding:8px;border-bottom:1px solid var(--poche);font-size:15px}
+.sched th{font-size:12.5px;font-weight:600;color:var(--ink-2);text-align:left;padding:7px 12px;border-bottom:1px solid var(--poche);border-right:1px solid var(--line);background:var(--sheet-2)}
+.sched td{padding:8px 12px;border-bottom:1px solid var(--hair);border-right:1px solid var(--hair);vertical-align:middle}
+.sched th:last-child,.sched td:last-child{border-right:0}
+.sched tr:last-child td{border-bottom:0}
+.sched tr.me td{background:color-mix(in srgb,var(--fill) 10%,var(--sheet))}
+.sched .num{text-align:right;font-weight:700;font-stretch:80%;font-size:17px;width:76px}
+.person{display:flex;align-items:center;gap:10px}
+.person .av{width:28px;height:28px;font-size:12px}
+.stack{display:inline-grid;grid-template-columns:repeat(7,16px);gap:3px;vertical-align:middle}
+.stack i{height:16px;border:1px solid var(--poche);background:linear-gradient(to top,var(--fill) var(--p),transparent var(--p))}
+.small{font-size:13px;color:var(--ink-2)}
+.jej{display:block;font-size:13px;color:var(--ok);margin-top:2px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.filters button{border:1px solid var(--line);background:var(--sheet);border-radius:2px;padding:4px 11px;font-size:14px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--poche);color:var(--sheet);border-color:var(--poche)}
+tr[hidden]{display:none}
+
+/* ---------- escalera de certificación ---------- */
+.stairs{display:grid;grid-template-columns:repeat(3,1fr);align-items:end;background:var(--sheet);border:1px solid var(--poche);padding:26px 26px 0}
+.step{border-top:8px solid var(--poche);border-left:2px solid var(--poche);padding:14px 16px 18px;background:var(--sheet)}
+.step:nth-child(1){min-height:190px}
+.step:nth-child(2){min-height:255px}
+.step:nth-child(3){min-height:320px}
+.step .lvl{font-size:12px;color:var(--ink-2)}
+.step b{display:block;font-stretch:80%;font-size:21px;line-height:1.1;margin:3px 0 8px}
+.step p{margin:0 0 8px;font-size:14.5px}
+.step ul{margin:0;padding-left:16px;font-size:14px}
+.earth{height:16px;margin:0 -26px;border-top:2px solid var(--poche);background:repeating-linear-gradient(45deg,var(--line) 0 1px,transparent 1px 7px)}
+.note-p{font-size:14px;color:var(--ink-2);max-width:80ch;margin:12px 0 0}
+
+/* ---------- Gantt del plan ---------- */
+.gantt{background:var(--sheet);border:1px solid var(--poche);overflow-x:auto}
+.gantt>*{min-width:660px}
+.gaxis,.gsum{display:grid;grid-template-columns:260px 1fr;align-items:center}
+.gaxis{border-bottom:1px solid var(--poche);font-size:12px;color:var(--ink-2)}
+.gaxis .cols,.gsum .track{display:grid;grid-template-columns:repeat(12,1fr);height:100%}
+.gaxis .cols span{border-left:1px solid var(--hair);padding:6px 0;text-align:center}
+.gaxis>span{padding:6px 14px}
+.gph{border-bottom:1px solid var(--hair)}
+.gph:last-child{border-bottom:0}
+.gsum{list-style:none;cursor:pointer;min-height:48px}
+.gsum::-webkit-details-marker{display:none}
+.gsum .lab{padding:8px 14px;font-weight:600;font-stretch:88%;font-size:14.5px;line-height:1.25}
+.gsum .lab small{display:block;font-weight:400;font-size:12.5px;color:var(--ink-2)}
+.gsum .track{position:relative;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/12 - 1px),var(--hair) calc(100%/12 - 1px) calc(100%/12))}
+.gbar{grid-row:1;height:16px;align-self:center;border:1.5px solid var(--poche);background:linear-gradient(90deg,var(--fill) var(--p),var(--sheet) var(--p))}
+.gbar.loop{border-style:dashed}
+.gph[open] .gsum{background:var(--sheet-2)}
+.gbody{padding:10px 14px 4px 274px}
+
+
+body{overflow-x:hidden}
+/* portada: levantamiento digital */
+.cover{position:relative;margin:0 calc(50% - 50vw);min-height:min(78vh,720px);background:var(--night);color:#fff;overflow:hidden;display:flex;align-items:flex-end;border-bottom:4px solid var(--scan)}
+.cover canvas,.cover .cover-photo{position:absolute;inset:0;width:100%;height:100%}
+.cover .cover-photo{background-size:cover;background-position:center;opacity:0;transition:opacity .8s}
+.cover .cover-photo.on{opacity:1}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,8,16,.9) 0%,rgba(1,8,16,.62) 40%,rgba(1,8,16,0) 70%),linear-gradient(0deg,rgba(1,8,16,.85) 0%,transparent 45%);pointer-events:none}
+.cover-in{position:relative;z-index:2;width:100%;padding-top:60px;padding-bottom:34px}
+.kicker{display:inline-grid;grid-template-columns:auto auto;border:1.5px solid #fff;margin-bottom:18px}
+.kicker span{padding:4px 12px;font-size:14px;font-weight:600;font-stretch:90%}
+.kicker .code{background:var(--scan);color:#fff;font-weight:800;font-stretch:75%;font-size:18px;letter-spacing:.5px}
+.cover h1{color:#fff;font-size:clamp(52px,9vw,128px);max-width:none;margin:0 0 14px;line-height:.86}
+.cover .lead{color:#E9F2FC;max-width:58ch;font-size:clamp(16px,1.6vw,20px)}
+.flow{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;max-width:1000px}
+.flow::before{content:"";position:absolute;left:24px;right:24px;top:24px;border-top:1.5px dashed rgba(255,255,255,.7)}
+.flow li{position:relative;padding-right:12px}
+.flow .ic{width:48px;height:48px;border:1.5px solid #fff;background:var(--night);display:grid;place-items:center;position:relative;z-index:1}
+.flow li:nth-child(1) .ic{background:var(--scan);border-color:var(--scan)}
+.flow svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.6}
+.flow b{display:block;font-stretch:80%;font-size:19px;margin-top:10px;line-height:1.1}
+.flow small{display:block;font-size:13.5px;color:#C9DCF0;line-height:1.35;margin-top:3px}
+.flow .n{font-size:12px;font-weight:700;color:var(--fill)}
+.cover-north{position:absolute;right:28px;top:22px;z-index:2;width:110px;height:auto}
+.cover-north *{stroke:#fff;fill:none}
+.cover-north text{fill:#fff;stroke:none;font-family:var(--font);font-weight:700}
+.cover-cap{position:absolute;right:28px;bottom:14px;z-index:2;font-size:12px;color:#BFD3E8}
+/* bandas fotográficas */
+.band{position:relative;margin:56px calc(50% - 50vw) 0;height:clamp(180px,24vw,280px);background:var(--night) center/cover no-repeat;border-top:3px solid var(--poche);border-bottom:3px solid var(--poche)}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,8,16,.78),rgba(1,8,16,.05) 60%)}
+.band .callout{position:absolute;left:max(20px,calc(50vw - 580px));bottom:22px;z-index:1;display:grid;grid-template-columns:52px auto;gap:14px;align-items:center;color:#fff}
+.band .callout svg{width:52px;height:52px}
+.band .callout circle{fill:var(--night);stroke:#fff;stroke-width:1.5}
+.band .callout line{stroke:#fff;stroke-width:1.5}
+.band .callout text{fill:#fff;font-family:var(--font);font-weight:700}
+.band .callout b{display:block;font-stretch:78%;font-size:clamp(22px,2.6vw,32px);line-height:1}
+.band .callout span{font-size:14px;color:#D5E5F5}
+/* tabla del flujo */
+.sched th{background:var(--poche);color:var(--sheet);border-right-color:color-mix(in srgb,var(--sheet) 25%,transparent)}
+.sched caption{background:var(--sheet);color:var(--ink)}
+.stepno{display:inline-grid;place-items:center;width:28px;height:28px;background:var(--scan);color:#fff;font-weight:800;font-stretch:80%;margin-right:10px;vertical-align:middle}
+.stepcell{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center}
+.stepcell .stepno{margin:0}
+.lvref{display:inline-block;font-size:12.5px;font-weight:700;color:var(--level);border:1.5px solid var(--level);padding:0 6px;margin:2px 4px 2px 0}
+.hero h2.big{font-weight:800;font-stretch:65%;font-size:clamp(36px,4.6vw,64px);line-height:.92;margin:0 0 14px}
+.photo-note{font-size:13px;color:var(--ink-2);margin-top:8px}
+@media (max-width:860px){
+  .flow{grid-template-columns:1fr;gap:14px}
+  .flow::before{left:24px;right:auto;top:24px;bottom:24px;border-top:0;border-left:1.5px dashed rgba(255,255,255,.7)}
+  .flow li{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start}
+  .flow b{margin-top:0}
+  .cover-north{width:76px;right:14px}
+  .cover-in{padding-bottom:48px}
+  .cover::after{background:linear-gradient(0deg,rgba(1,8,16,.94) 0%,rgba(1,8,16,.7) 60%,rgba(1,8,16,.35) 100%)}
+}
+footer{padding:40px 0 50px;color:var(--ink-2);font-size:13.5px;max-width:90ch}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr}
+  .viewer{grid-template-columns:1fr}
+  .browser{border-right:0;border-bottom:1px solid var(--poche);display:flex;overflow-x:auto}
+  .browser .bh{display:none}
+  .lvbtn{min-width:190px;border-bottom:0;border-right:1px solid var(--hair)}
+  .lvbtn[aria-selected="true"]{box-shadow:inset 0 -3px 0 var(--red)}
+  .pbody{grid-template-columns:1fr}
+  .pcol+.pcol{border-left:0;border-top:1px solid var(--hair)}
+  .plan{grid-template-columns:1fr 1fr}
+  .room:nth-child(2){border-right:0}
+  .room:nth-child(-n+2){border-bottom:3px solid var(--poche)}
+  .room::after{display:none}
+  .stairs{grid-template-columns:1fr}
+  .step{min-height:0!important;margin-bottom:12px}
+  .nform{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .nform textarea{grid-column:1/-1}
+  .gaxis,.gsum{grid-template-columns:150px 1fr}
+  .gbody{padding-left:14px}
+  .tb{grid-template-columns:1fr 1fr}
+  .tb>div{border-bottom:1px solid var(--line)}
+  .top .wrap{grid-template-columns:1fr auto auto}
+  .top .brandcell{display:none}
+}
+@media (max-width:560px){
+  .sheet-in{padding:20px 16px}
+  .plan{grid-template-columns:1fr}
+  .room{border-right:0!important;border-bottom:3px solid var(--poche)}
+  .room:last-child{border-bottom:0}
+  .phead{grid-template-columns:auto 1fr;padding:18px 16px 12px}
+  .pnav{grid-column:1/-1}
+  .pcol,.pnotes{padding-left:16px;padding-right:16px}
+  .goal{margin:14px 16px 0}
+  .sub{margin-left:0}
+  .hero-meta{grid-template-columns:repeat(3,1fr)}
+  .mine{grid-template-columns:auto 50px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="cell brandcell"><span class="cap">CC 410 · Levantamiento Digital</span><span class="brand">Ruta Forma + Revit</span></div>
+    <nav class="nav" aria-label="Secciones">
+      <a href="#inicio">CC 410</a><a href="#corte">Corte</a><a href="#mapa">Planta</a><a href="#flujo">Flujo</a><a href="#niveles">Niveles</a><a href="#equipo">Equipo</a>
+      <a href="#bitacora">Bitácora</a><a href="#certificaciones">Certificaciones</a><a href="#capacidades">Capacidades</a>
+      <a href="#glosario">Glosario</a><a href="#kit">Kit</a><a href="#plan">Plan</a>
+    </nav>
+    <div class="cell"><div class="mine"><span class="cap">Mi avance</span><b id="pctTop">0 %</b><span class="mbar"><i id="barTop"></i></span></div></div>
+    <div class="cell"><button class="iconbtn" id="themeBtn" aria-label="Cambiar entre plano claro y blueprint">◐</button></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="cover" id="inicio" aria-label="Levantamiento Digital CC 410">
+  <canvas id="cloudCv" aria-hidden="true"></canvas>
+  <div class="cover-photo" data-photo="portada"></div>
+  <svg class="cover-north" viewBox="0 0 110 120" aria-hidden="true">
+    <circle cx="55" cy="44" r="30" stroke-width="1.5"/><path d="M55 8 L66 54 L55 46 L44 54 Z" stroke-width="1.5" style="fill:#fff"/>
+    <text x="55" y="92" text-anchor="middle" font-size="16">N</text>
+    <line x1="10" y1="110" x2="100" y2="110" stroke-width="1.5"/><line x1="10" y1="104" x2="10" y2="116" stroke-width="1.5"/><line x1="55" y1="106" x2="55" y2="114" stroke-width="1.5"/><line x1="100" y1="104" x2="100" y2="116" stroke-width="1.5"/>
+  </svg>
+  <div class="wrap cover-in">
+    <div class="kicker"><span class="code">CC 410</span><span>Propuesta de implementación</span></div>
+    <h1>Levantamiento Digital</h1>
+    <p class="lead">Del terreno real al modelo BIM en un solo flujo: captura con dron, escáner láser y topografía; contexto y análisis en Forma; modelo y documentación en Revit. Esta es la ruta con la que el equipo se capacita para hacerlo.</p>
+    <ol class="flow">
+      <li><span class="ic"><svg viewBox="0 0 28 28"><rect x="10" y="11" width="8" height="6"/><line x1="10" y1="11" x2="5" y2="6"/><line x1="18" y1="11" x2="23" y2="6"/><line x1="10" y1="17" x2="5" y2="22"/><line x1="18" y1="17" x2="23" y2="22"/><circle cx="5" cy="6" r="3"/><circle cx="23" cy="6" r="3"/><circle cx="5" cy="22" r="3"/><circle cx="23" cy="22" r="3"/></svg></span><div><span class="n">01</span><b>Captura</b><small>Dron, escáner láser y topografía</small></div></li>
+      <li><span class="ic"><svg viewBox="0 0 28 28"><circle cx="6" cy="20" r="1.2"/><circle cx="10" cy="16" r="1.2"/><circle cx="14" cy="12" r="1.2"/><circle cx="18" cy="15" r="1.2"/><circle cx="22" cy="9" r="1.2"/><circle cx="9" cy="22" r="1.2"/><circle cx="15" cy="19" r="1.2"/><circle cx="20" cy="21" r="1.2"/><circle cx="12" cy="7" r="1.2"/><circle cx="24" cy="17" r="1.2"/></svg></span><div><span class="n">02</span><b>Nube de puntos</b><small>Registro y georreferencia</small></div></li>
+      <li><span class="ic"><svg viewBox="0 0 28 28"><path d="M2 22 L8 17 L13 19 L19 13 L26 16"/><rect x="9" y="7" width="6" height="10"/><rect x="16" y="4" width="5" height="9"/></svg></span><div><span class="n">03</span><b>Forma</b><small>Sitio, contexto y análisis</small></div></li>
+      <li><span class="ic"><svg viewBox="0 0 28 28"><rect x="6" y="4" width="16" height="20"/><line x1="6" y1="11" x2="22" y2="11"/><line x1="6" y1="17" x2="22" y2="17"/><line x1="12" y1="4" x2="12" y2="24"/></svg></span><div><span class="n">04</span><b>Revit</b><small>Modelo BIM y planos</small></div></li>
+      <li><span class="ic"><svg viewBox="0 0 28 28"><path d="M6 3h11l5 5v17H6z"/><path d="M17 3v5h5"/><path d="M10 16l3 3 6-7"/></svg></span><div><span class="n">05</span><b>Entrega</b><small>Coordinación y CDE</small></div></li>
+    </ol>
+  </div>
+  <div class="cover-cap" id="coverCap">Nube de puntos clasificada por elevación</div>
+</section>
+
+  <div class="sheet" id="corte">
+    <div class="sheet-in hero">
+      <div>
+        <h2 class="big">De la cota 0 a la certificación</h2>
+        <p class="lead">Ruta del equipo para usar Forma y Revit como un solo flujo, del sitio real al modelo documentado. Cada nivel del edificio es una etapa: recursos oficiales de Autodesk, hitos, un mini quiz y las notas del equipo.</p>
+        <div class="hero-meta">
+          <div><b id="mLevels">0/7</b><span class="small">niveles completos</span></div>
+          <div><b id="mTeam">—</b><span class="small">personas en la ruta</span></div>
+          <div><b id="mNotes">—</b><span class="small">notas del equipo</span></div>
+        </div>
+      </div>
+      <svg class="section-svg" id="sectionSvg" viewBox="0 -56 760 576" role="img" aria-labelledby="secT">
+        <title id="secT">Corte del edificio: siete niveles de aprendizaje, tu avance en cada piso y la posición del equipo</title>
+      </svg>
+    </div>
+    <p class="status" id="status">Conectando…</p>
+    <div class="tb">
+      <div><span class="cap">Proyecto</span><b>CC 410 · Levantamiento Digital</b></div>
+      <div><span class="cap">Contenido</span><b>Corte A-A · avance personal y del equipo</b></div>
+      <div><span class="cap">Escala</span><b>A tu ritmo</b></div>
+      <div><span class="cap">Fecha</span><b>Oct 2026</b></div>
+      <div><span class="cap">Lámina</span><b>A-101</b></div>
+    </div>
+  </div>
+
+  <div class="shead" id="mapa"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">1</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-102</text></svg><h2>Planta: el ecosistema 2026</h2></div>
+  <p class="sub">Forma es ahora la nube completa de Autodesk y Revit se conecta a ella. Muchos tutoriales usan aún los nombres antiguos; el contenido sigue siendo válido.</p>
+  <div class="plan">
+    <div class="room"><div class="tag"><span>Explorar</span><span>101</span></div><b>Forma Site Design</b><p>Contexto real, volumetría y análisis de sol, viento, ruido y microclima.</p></div>
+    <div class="room"><div class="tag"><span>Esquema</span><span>102</span></div><b>Forma Building Design</b><p>Plantas, fachadas y unidades a nivel LOD 200, con métricas y análisis.</p></div>
+    <div class="room"><div class="tag"><span>Detalle</span><span>103</span></div><b>Revit</b><p>Modelo BIM y documentación. En 2027 funciona como Forma Connected Client.</p></div>
+    <div class="room"><div class="tag"><span>Entrega</span><span>104</span></div><b>Forma Data Management</b><p>CDE: Files, Reviews, Issues y Transmittals. Forma Board para presentar.</p></div>
+  </div>
+  <div class="renames">
+    <div><s>Autodesk Forma</s><i>→</i><span>Forma Site Design</span></div>
+    <div><s>Autodesk Docs</s><i>→</i><span>Forma Data Management</span></div>
+    <div><s>BIM Collaborate Pro</s><i>→</i><span>Forma Design Collaboration</span></div>
+    <div><s>Autodesk Build</s><i>→</i><span>Forma Build</span></div>
+    <div><s>Autodesk Takeoff</s><i>→</i><span>Forma Takeoff</span></div>
+    <div><s>Construction Cloud</s><i>→</i><span>Autodesk Forma</span></div>
+  </div>
+
+<div class="band" data-photo="captura" aria-hidden="true"><div class="callout"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><line x1="3" y1="26" x2="49" y2="26"/><text x="26" y="17" text-anchor="middle" dominant-baseline="middle" font-size="13">D1</text><text x="26" y="36" text-anchor="middle" dominant-baseline="middle" font-size="9">A-120</text></svg><div><b>De la nube al modelo</b><span>Captura con dron y láser como punto de partida</span></div></div></div>
+<div class="shead" id="flujo"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">1b</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-110</text></svg><h2>Del levantamiento al BIM</h2></div>
+  <p class="sub">El flujo que propone CC 410 y en qué nivel de la ruta se aprende cada etapa.</p>
+  <div class="sched"><table>
+    <caption>&lt;Flujo de trabajo CC 410&gt;</caption>
+    <thead><tr><th>Etapa</th><th>Herramientas</th><th>Entregable</th><th>Se aprende en</th></tr></thead>
+    <tbody>
+      <tr><td><span class="stepcell"><span class="stepno">1</span><b>Captura en terreno</b></span></td><td>Dron (fotogrametría), escáner láser, topografía y GNSS</td><td>Imágenes, escaneos y puntos de control</td><td><span class="lvref">Kit</span></td></tr>
+      <tr><td><span class="stepcell"><span class="stepno">2</span><b>Procesamiento</b></span></td><td><em class="term">ReCap Pro</em> (.rcp / .rcs) y software de fotogrametría</td><td>Nube de puntos registrada y georreferenciada, modelo de terreno</td><td><span class="lvref">N3</span></td></tr>
+      <tr><td><span class="stepcell"><span class="stepno">3</span><b>Contexto y análisis</b></span></td><td>Forma Site Design: terreno propio, <em class="term">Analyze</em></td><td>Escenarios y análisis de sol, viento y ruido</td><td><span class="lvref">N2</span></td></tr>
+      <tr><td><span class="stepcell"><span class="stepno">4</span><b>Modelo BIM</b></span></td><td>Revit: <em class="term">Insert → Point Cloud</em>, <em class="term">Toposolid</em>, <em class="term">Send to Revit</em></td><td>Modelo as-built o de diseño, planos</td><td><span class="lvref">N1</span><span class="lvref">N3</span></td></tr>
+      <tr><td><span class="stepcell"><span class="stepno">5</span><b>Coordinación y entrega</b></span></td><td>Forma Data Management, Model Coordination, Forma Board</td><td>Modelos coordinados, transmittals y presentación</td><td><span class="lvref">N4</span></td></tr>
+    </tbody></table></div>
+
+  <div class="shead" id="niveles"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">2</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-201</text></svg><h2>Niveles</h2></div>
+  <p class="sub">Elige un nivel en el navegador de proyecto, como en Revit. Los niveles 0 a 3 son para todo el equipo; el 4 para coordinación; el 5 por disciplina; el 6 para quien automatiza. Usa las flechas ← → para cambiar de nivel.</p>
+  <div class="viewer">
+    <div class="browser" role="tablist" aria-label="Niveles" id="browser"><div class="bh">Project Browser · Levels</div></div>
+    <div class="panel" id="panel" role="tabpanel"></div>
+  </div>
+
+<div class="band" data-photo="equipo" aria-hidden="true"><div class="callout"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><line x1="3" y1="26" x2="49" y2="26"/><text x="26" y="17" text-anchor="middle" dominant-baseline="middle" font-size="13">D2</text><text x="26" y="36" text-anchor="middle" dominant-baseline="middle" font-size="9">A-300</text></svg><div><b>Un equipo, un flujo</b><span>Captura, BIM, documentación y visualización</span></div></div></div>
+  <div class="shead" id="equipo"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">3</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-301</text></svg><h2>Tabla de planificación: equipo</h2></div>
+  <p class="sub">Todos ven el avance de todos para saber a quién preguntar. Cada uno define aquí su meta de certificación.</p>
+  <div class="sched"><table id="teamTbl"></table></div>
+
+  <div class="shead" id="bitacora"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">4</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-401</text></svg><h2>Bitácora de revisiones</h2></div>
+  <p class="sub">Todas las notas en un solo lugar, como nubes de revisión sobre el plano: qué funciona, qué no, recomendaciones y dudas.</p>
+  <div class="box">
+    <div id="feedForm"></div>
+    <div class="feedbar"><select class="ctl" id="fType" aria-label="Filtrar por tipo"></select><select class="ctl" id="fLevel" aria-label="Filtrar por nivel"></select></div>
+    <ul class="nlist" id="feed"></ul>
+  </div>
+
+  <div class="shead" id="certificaciones"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">5</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-501</text></svg><h2>Escalera de certificación</h2></div>
+  <p class="sub">Los cursos de Autodesk Learning son gratuitos y varios entregan Certificate of completion. Las certificaciones oficiales se obtienen rindiendo un examen aparte.</p>
+  <div class="stairs">
+    <div class="step"><span class="lvl">Peldaño 1 · entrada</span><b>Autodesk Certified User: Revit</b><p>Conocimientos base. Examen de 50 minutos vía Certiport.</p>
+      <ul><li><a href="https://certiport.pearsonvue.com/Certifications/Autodesk/Certifications/Certify.aspx#Revit" target="_blank" rel="noopener">Detalle del examen</a></li></ul></div>
+    <div class="step"><span class="lvl">Peldaño 2 · disciplina</span><b>Autodesk Certified Professional: Revit</b><p>Examen de 120 minutos por disciplina.</p>
+      <ul>
+        <li><a href="https://www.autodesk.com/certification/all-certifications/revit-architectural-design-professional" target="_blank" rel="noopener">Architectural Design</a></li>
+        <li><a href="https://www.autodesk.com/certification/all-certifications/revit-structural-design-professional" target="_blank" rel="noopener">Structural Design</a></li>
+        <li><a href="https://www.autodesk.com/certification/all-certifications/revit-mechanical-design-professional" target="_blank" rel="noopener">Mechanical Design</a></li>
+        <li><a href="https://www.autodesk.com/certification/all-certifications/revit-electrical-design-professional" target="_blank" rel="noopener">Electrical Design</a></li>
+      </ul></div>
+    <div class="step"><span class="lvl">Peldaño 3 · gestión</span><b>Autodesk Certified Professional: BIM Management for Building Design</b><p>Gestión, coordinación y control de calidad BIM. 120 minutos.</p>
+      <ul><li><a href="https://www.autodesk.com/certification/all-certifications/bim-building-design-professional" target="_blank" rel="noopener">Detalle de la certificación</a></li>
+      <li><a href="https://www.autodesk.com/certification/all-certifications/civil-3d-infrastructure-design-professional" target="_blank" rel="noopener">Complemento: Civil 3D for Infrastructure Design</a></li></ul></div>
+    <div class="earth" style="grid-column:1/-1" aria-hidden="true"></div>
+  </div>
+  <p class="note-p">Forma no tiene examen propio: se acredita con los Certificate of completion de los cursos. Revisa precio, idioma y modalidad en la <a href="https://www.autodesk.com/certification/architecture-engineering-construction-certification" target="_blank" rel="noopener">página de certificaciones AEC</a> antes de agendar.</p>
+
+  <div class="shead" id="capacidades"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">6</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-601</text></svg><h2>Qué se puede hacer y combinar</h2></div>
+  <p class="sub">Filtra por tipo de tarea. En verde, una idea para proyectos del equipo. Forma está pensado para edificación y escala urbana; en plantas industriales o infraestructura lineal aporta sobre todo contexto y análisis temprano.</p>
+  <div class="filters" id="capFilters" role="group" aria-label="Filtrar capacidades"></div>
+  <div class="sched"><table id="capTbl"></table></div>
+
+  <div class="shead" id="glosario"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">7</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-701</text></svg><h2>Glosario de comandos</h2></div>
+  <p class="sub">Términos tal como aparecen en pantalla, dónde encontrarlos y qué hacen.</p>
+  <input class="ctl" id="gsearch" type="search" placeholder="Buscar comando o término" aria-label="Buscar en el glosario" style="width:100%;max-width:380px;margin-bottom:12px">
+  <div class="sched"><table id="glossTbl"></table></div>
+
+<div class="band" data-photo="terreno" aria-hidden="true"><div class="callout"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><line x1="3" y1="26" x2="49" y2="26"/><text x="26" y="17" text-anchor="middle" dominant-baseline="middle" font-size="13">D3</text><text x="26" y="36" text-anchor="middle" dominant-baseline="middle" font-size="9">A-800</text></svg><div><b>Preparar el estándar</b><span>Plantillas, familias y georreferenciación antes del piloto</span></div></div></div>
+  <div class="shead" id="kit"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">8</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-801</text></svg><h2>Kit del equipo</h2></div>
+  <p class="sub">Lo que hay que tener listo y aprobado. Las casillas son compartidas: queda registrado quién marcó cada una.</p>
+  <div class="sched"><table id="kitTbl"></table></div>
+
+  <div class="shead" id="plan"><svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">9</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-901</text></svg><h2>Plan de implementación</h2></div>
+  <p class="sub">Doce semanas más una fase continua. Abre cada fase para ver y marcar sus tareas; la barra se llena con el avance.</p>
+  <div class="gantt" id="gantt"></div>
+  <p style="margin-top:14px"><button class="btn ghost" id="resetBtn">Reiniciar mi avance personal</button></p>
+</main>
+
+<footer class="wrap">
+  Guía preparada en octubre de 2026 con fuentes oficiales de Autodesk. Revit 2027 como Forma Connected Client está en Tech Preview y su disponibilidad regional puede cambiar: confírmalo antes de usarlo en un proyecto productivo. Si un enlace cambia, búscalo por su nombre en el <a href="https://www.autodesk.com/learn/catalog" target="_blank" rel="noopener">catálogo de Autodesk Learning</a>.
+</footer>
+
+<script>
+(function(){
+"use strict";
+var KEY="ruta-forma-revit-v1";
+var L="https://www.autodesk.com/learn/ondemand/";
+
+/* ======================= contenido ======================= */
+var LEVELS=[
+ {id:"n0",short:"Orientación",name:"Orientación: el nuevo mapa Forma",hours:"2 h",who:"Todo el equipo",
+  goal:"Saber qué es cada producto, entrar al hub correcto y tener cuenta activa en Autodesk Learning.",
+  res:[
+   {t:"Conceptual design with Autodesk Forma",u:L+"course/conceptual-design-with-autodesk-forma",d:"Curso introductorio: qué es Forma, estudio de masas y dónde seguir aprendiendo.",tags:["Course","Oficial"]},
+   {t:"Forma Learning Hub",u:"https://autodesk.com/forma-learning-hub",d:"Help Center, webinars en vivo y grabados, y cursos de Customer Success.",tags:["Portal","Oficial"]},
+   {t:"Autodesk Learning catalog: Revit",u:"https://www.autodesk.com/learn/catalog/product%7Cdeepdive/Revit%7Cmodules,courses,collections",d:"Más de 90 módulos, cursos y colecciones. Usa el filtro *Certification prep*.",tags:["Catalog","Oficial"]},
+   {t:"Introduction to Forma Building Design",u:"https://blogs.autodesk.com/forma/2026/04/07/introduction-to-forma-building-design/",d:"Cuándo usar Building Design y cuándo Revit.",tags:["Blog","Oficial"]}
+  ],
+  tasks:["Entrar a *Forma Home* con la cuenta corporativa y confirmar que estás en el hub de la empresa","Crear perfil en Autodesk Learning y revisar *My dashboard*","Hacer un *Product tour* dentro de Forma","Explicar a un colega la diferencia entre *Site Design*, *Building Design*, *Data Management* y Revit"],
+  look:["Nombras cada producto con su nombre nuevo y el antiguo","Sabes en qué hub y región está guardado el proyecto"],
+  quiz:[
+   {q:"¿Cómo se llama hoy Autodesk Docs?",o:["Forma Board","Forma Data Management","Forma Build"],a:1,e:"Desde marzo de 2026 Docs es Forma Data Management, el CDE de la plataforma."},
+   {q:"¿Qué producto se llamaba antes simplemente “Autodesk Forma”?",o:["Forma Site Design","Forma Building Design","Revit Cloud"],a:0,e:"El Forma original, de análisis de sitio, pasó a ser Forma Site Design."}
+  ]},
+ {id:"n1",short:"Fundamentos Revit",name:"Fundamentos de Revit",hours:"15 a 25 h",who:"Modeladores nuevos o que vienen de CAD",
+  goal:"Modelar, crear familias simples y documentar. Meta opcional: Autodesk Certified User en Revit.",
+  res:[
+   {t:"Introduction to BIM for architectural design",u:L+"course/introduction-to-bim-for-architectural-design",d:"Curso de BIM con Revit; incluye una unidad de modelado conceptual en Forma.",tags:["Course","Oficial"]},
+   {t:"Architectural modeling by project phase",u:L+"collection/architecture",d:"Colección de 7 piezas ordenadas por fase de proyecto.",tags:["Collection","Oficial"]},
+   {t:"BIM foundations for education",u:L+"collection/bim-foundations-for-education",d:"Bases de BIM con Revit, Forma Site Design y Navisworks.",tags:["Collection","Oficial"]},
+   {t:"Communicate the design intent of the Revit model",u:L+"module/communicate-the-design-intent-of-the-revit-model",d:"Módulo de 45 minutos sobre *Views*, anotación y *Sheets*.",tags:["Module","Oficial"]},
+   {t:"Autodesk Certified User: Revit",u:"https://certiport.pearsonvue.com/Certifications/Autodesk/Certifications/Certify.aspx#Revit",d:"Examen de entrada, 50 minutos.",tags:["cert"]}
+  ],
+  tasks:["Completar el curso introductorio de BIM","Modelar un edificio simple con *Levels*, *Grids*, *Walls*, *Floors* y *Roof*","Crear una familia en el *Family Editor* con parámetros de *Type* e *Instance*","Emitir un *Sheet* con el *Title block* corporativo","(Opcional) Rendir Autodesk Certified User"],
+  look:["Distingues *System families*, *Loadable families* e *In-place*","Usas *View Templates* en lugar de ajustar vista por vista","Entiendes *Project Base Point* y *Survey Point*"],
+  quiz:[{q:"¿Cuál es la certificación de entrada en Revit?",o:["Autodesk Certified Professional","Autodesk Certified User","BIM Management"],a:1,e:"Autodesk Certified User es el nivel de entrada; el examen dura 50 minutos."}]},
+ {id:"n2",short:"Site Design",name:"Forma Site Design: sitio y análisis",hours:"6 a 8 h",who:"Todo el equipo de diseño",
+  goal:"Crear un sitio real, modelar volúmenes, correr todos los análisis y presentar en Forma Board. Meta: Certificate of completion.",
+  res:[
+   {t:"Getting started with Autodesk Forma Site Design for conceptual design",u:L+"module/getting-started-with-autodesk-forma-for-conceptual-design",d:"Módulo de 45 minutos: interfaz, contexto y masas.",tags:["Module","Oficial"]},
+   {t:"Learn Forma Site Design in 90 minutes",u:L+"course/learn-forma-site-design-in-90-minutes-workflows-for-design-studios",d:"Curso con proyecto completo, ejercicios y Forma Board.",tags:["Course","Oficial","Certificate of completion"]},
+   {t:"Analysis in Forma",u:L+"tutorial/analysis-in-forma",d:"Paso a paso del menú *Analyze*: Sun hours, Daylight potential, Wind, Microclimate, Operational energy, Noise y Solar energy.",tags:["Tutorial","Oficial"]},
+   {t:"Practice exercise: create a new conceptual site layout proposal",u:L+"module/practice-exercise-create-a-new-conceptual-site-layout-proposal",d:"Ejercicio con pauta de evaluación.",tags:["Exercise","Oficial"]}
+  ],
+  tasks:["Crear un sitio con *Create new site* → *Confirm map area* en una ubicación real","Revisar la cobertura de terreno y edificios del *Data Marketplace*","Correr cada análisis del menú *Analyze* al menos una vez","Comparar dos *Proposals* con *Area metrics*","Armar un *Forma Board* con los resultados","Completar el curso de 90 minutos y descargar el *Certificate of completion*"],
+  look:["Sabes cuándo basta el análisis *Rapid* (ML) y cuándo correr el *Detailed*","Diferencias *Sun hours* de *Daylight potential*"],
+  quiz:[
+   {q:"¿Qué análisis usan machine learning para dar resultados casi instantáneos?",o:["Wind y Noise en modo Rapid","Sun hours","Area metrics"],a:0,e:"Los análisis rápidos de viento y ruido usan ML; luego se verifica con el análisis detallado."},
+   {q:"Daylight potential se basa en…",o:["Horas de sol en el suelo","Vertical Sky Component (VSC)","Radiación en techos"],a:1,e:"Daylight potential mide VSC sobre las fachadas."}
+  ]},
+ {id:"n3",short:"Forma ↔ Revit",name:"Integración Forma ↔ Revit",hours:"8 a 10 h",who:"Modeladores y coordinadores",
+  goal:"Llevar una propuesta de Forma a Revit y volver a Forma con los cambios, sin re-modelar y sin perder la georreferencia.",
+  res:[
+   {t:"Design performance and sustainability with Forma Site Design, Revit and Forma Carbon Insights",u:L+"course/design-performance-and-sustainability-with-autodesk-forma-revit-and-insight",d:"Curso largo (unas 7 h) del flujo completo Forma → Revit con análisis.",tags:["Course","Oficial"]},
+   {t:"Iterative design and analysis with Forma and Revit",u:"https://help.autodesk.com/cloudhelp/2026/ENU/Revit-HaveYouTried/files/GUID-02430F6D-AB33-468E-8D39-D4F6516168D8.htm",d:"Guía de ayuda: transferir y actualizar entre Forma y Revit.",tags:["Help","Oficial"]},
+   {t:"Forma Site Design Add-In for Revit",u:"https://marketplace.autodesk.com/apps/4fb0800c-4ad1-4d29-84be-9c2b1c3b0321",d:"Gratuito. Compatible con Revit 2022 a 2026.",tags:["Add-in","Oficial"]},
+   {t:"Revit 2027: a more connected way to design",u:"https://www.autodesk.com/blogs/aec/2026/04/09/revit-2027-a-more-connected-way-to-design/",d:"Revit como Forma Connected Client (Tech Preview).",tags:["Blog","Oficial"]},
+   {t:"Revit as a Forma Connected Client: what customers can do today",u:"https://adsknews.autodesk.com/en/views/views-revit-forma-connected-client/",d:"Contexto, Wind y Microclimate dentro de Revit.",tags:["Blog","Oficial"]},
+   {t:"Connect your design workflows with Forma Building Design",u:"https://blogs.autodesk.com/forma/2026/04/14/connect-your-design-workflows-with-forma-building-design/",d:"Building Design → Revit, Site Design ↔ Building Design, y Board.",tags:["Blog","Oficial"]}
+  ],
+  tasks:["Instalar el add-in con *Download Revit add-in* (Revit 2026 o anterior) o activar *Enable Forma Connected Client* (Revit 2027 con *cloud model*)","Usar *Send to Revit* y abrirlo desde la pestaña *Massing & Site*","Verificar coordenadas: *Project Base Point* y *Survey Point*","Modificar en Revit y usar *Update proposal* desde una vista 3D dedicada","Registrar qué se convierte bien (*Toposolid*, edificios, límites) y qué no","Probar el paso de *Building Design* a Revit","Vincular la nube de puntos del levantamiento con *Insert* → *Point Cloud* (.rcp) y modelar sobre ella"],
+  look:["El modelo llega georreferenciado sin ajustes manuales","Sabes qué versión de Revit usa cada flujo"],
+  quiz:[
+   {q:"¿Qué exige Revit 2027 para funcionar como Connected Client?",o:["Un archivo local .rvt","Cloud model conectado a un Scenario de Forma y Tech Preview habilitada","Solo instalar el add-in"],a:1,e:"Se requiere modelo en la nube y que el administrador habilite la Tech Preview en el proyecto."},
+   {q:"En Revit 2024 o posterior, el terreno de Forma llega como…",o:["Toposurface","Toposolid","Generic mesh"],a:1,e:"Desde Revit 2024 el terreno se convierte en Toposolid."}
+  ]},
+ {id:"n4",short:"Colaboración y CDE",name:"Colaboración y CDE",hours:"4 a 10 h",who:"Coordinadores BIM y líderes de disciplina",
+  goal:"Operar Forma Data Management como entorno común: carpetas, permisos, revisiones, transmittals y coordinación.",
+  res:[
+   {t:"Learn Forma Data Management and Build in 90 minutes",u:L+"course/learn-docs-and-build-in-90-minutes",d:"Documentación, coordinación y terreno en un solo curso, con datasets.",tags:["Course","Oficial"]},
+   {t:"Use Autodesk Forma for Construction in multidisciplinary MEP collaboration",u:L+"module/use-autodesk-forma-for-construction-in-multidisciplinary-mep-collaboration",d:"Módulo de 30 minutos con *Revit Cloud Worksharing*.",tags:["Module","Oficial"]},
+   {t:"Introduction to BIM for MEP design",u:L+"course/introduction-to-bim-for-mep-design",d:"Curso de 8 h con coordinación y detección de interferencias.",tags:["Course","Oficial"]}
+  ],
+  tasks:["Crear un proyecto plantilla en *Data Management* con *Folders* y *Permissions*","Hacer una *Review* y un *Transmittal* de prueba","Publicar un *cloud model* y revisar interferencias en *Model Coordination*","Definir la *naming convention* de archivos del equipo"],
+  look:["Cualquiera encuentra la última versión sin preguntar","Las *Reviews* dejan registro"],
+  quiz:[{q:"¿Qué producto funciona como entorno común de datos (CDE)?",o:["Forma Board","Forma Data Management","Forma Site Design"],a:1,e:"Forma Data Management es el CDE que conecta planificación, diseño y construcción."}]},
+ {id:"n5",short:"Certificación",name:"Certificación profesional por disciplina",hours:"30 a 60 h",who:"Profesionales de cada disciplina",
+  goal:"Preparar y rendir la certificación profesional de Revit que corresponda al rol.",
+  res:[
+   {t:"Revit for Architectural Design Professional Certification Prep",u:L+"course/revit-architectural-design-cert-prep",d:"Lecciones por dominio del examen, datasets y *Practice test*.",tags:["Cert prep","Oficial","Prepara certificación"]},
+   {t:"Revit for Structural Design Professional Certification Prep",u:L+"course/revit-structural-design-cert-prep",d:"Fundaciones, marcos, muros, columnas, *Phases* y *Worksharing*.",tags:["Cert prep","Oficial","Prepara certificación"]},
+   {t:"Revit for Electrical Design Professional Certification Prep",u:L+"course/revit-electrical-design-cert-prep",d:"Vistas, familias, *Schedules* y análisis eléctrico.",tags:["Cert prep","Oficial","Prepara certificación"]},
+   {t:"Autodesk Certification for AEC",u:"https://www.autodesk.com/certification/architecture-engineering-construction-certification",d:"Listado oficial, incluidas Mechanical Design y BIM Management.",tags:["Portal","Oficial"]}
+  ],
+  tasks:["Elegir la certificación según el rol y registrarla en la tabla del equipo","Completar el curso de preparación","Aprobar el *Practice test*","Revisar costo, idioma y modalidad, y agendar el examen","Compartir la credencial obtenida"],
+  look:["Resuelves los *Challenge exercises* sin mirar la solución","Te sobra tiempo en el *Practice test*"],
+  quiz:[{q:"¿Cuánto dura un examen Autodesk Certified Professional de Revit?",o:["50 minutos","90 minutos","120 minutos"],a:2,e:"Los exámenes profesionales duran 120 minutos."}]},
+ {id:"n6",short:"Automatización",name:"Automatización y extensiones",hours:"Variable",who:"Quien programa o automatiza",
+  goal:"Automatizar tareas repetitivas en Forma con Dynamo y evaluar extensiones propias con la Forma API.",
+  res:[
+   {t:"Dynamo in Forma",u:"https://dynamobim.org/dynamo-in-forma/",d:"Instalar *Dynamo Player* en Forma y correr gráficos.",tags:["Guide","Oficial"]},
+   {t:"Dynamo Primer: set up Dynamo Player in Forma",u:"https://primer2.dynamobim.org/dynamo-in-forma-beta/set-up-dynamo-player-in-forma",d:"Configuración paso a paso.",tags:["Guide","Oficial"]},
+   {t:"Forma API (Autodesk Platform Services)",u:"https://aps.autodesk.com/en/docs/forma/v1/embedded-views/using-http-apis",d:"Extensiones, terreno, propuestas y publicación en el marketplace.",tags:["API","Oficial"]},
+   {t:"Forma Developer Forum",u:"https://forums.autodesk.com/t5/forma-api-forum/bd-p/forma_api_forum",d:"Preguntas, ejemplos y novedades.",tags:["Forum","Oficial"]}
+  ],
+  tasks:["En Forma: *Extensions* → *Add extension* → *Dynamo Player*, y correr el ejemplo","Crear un gráfico que lea *Area metrics*","Evaluar una extensión propia (por ejemplo, layout de campamentos)"],
+  look:["Un script ahorra horas en una tarea que el equipo repite"],
+  quiz:[{q:"Hoy, ¿qué crea Dynamo Player dentro de Forma con el ejemplo integrado?",o:["Solo mallas","Elementos nativos de Forma","Archivos .rvt"],a:1,e:"En la versión actual, los objetos se crean como elementos nativos de Forma."}]}
+];
+
+var CAPS=[
+ ["Sitio","Create new site","Terreno y edificios del entorno desde el Data Marketplace a partir de una dirección.","Site Design · Revit 2027","Contexto rápido para licitaciones."],
+ ["Sitio","Terreno propio","Reemplazar el terreno global por topografía de dron, láser o fotogrametría.","Site Design · Terrain API","Ventaja directa del equipo de captura de realidad."],
+ ["Sitio","Site elements","Estacionamientos, vegetación, ejes de transporte y edificios.","Site Design",""],
+ ["Sitio","Capas GIS","Predios, redes de infraestructura y terreno desde ArcGIS.","Site Design · Revit",""],
+ ["Sitio","Import","Rhino, SketchUp o GeoJSON convertidos a geometría editable.","Site Design",""],
+ ["Diseño","Massing y Proposals","Varias propuestas comparadas con Area metrics en vivo.","Site Design","Implantación de edificios de apoyo en faena."],
+ ["Diseño","Floor plans, facades, units","Automatizaciones de diseño esquemático a nivel LOD 200.","Building Design",""],
+ ["Análisis","Sun hours","Asoleamiento en suelo o fachadas para cualquier fecha.","Site Design",""],
+ ["Análisis","Daylight potential","Vertical Sky Component sobre fachadas.","Site Design · Building Design",""],
+ ["Análisis","Wind","Rapid (ML) o Detailed; confort peatonal.","Site Design · Revit 2027","Campamentos y patios en zonas expuestas."],
+ ["Análisis","Microclimate","Temperatura percibida en espacios exteriores.","Site Design · Revit 2027",""],
+ ["Análisis","Noise","Ruido de tráfico vial y ferroviario, Rapid o Detailed.","Site Design","Recintos junto a vías o estaciones."],
+ ["Análisis","Solar energy","Potencial anual en techos y fachadas.","Site Design","Prefactibilidad de paneles."],
+ ["Análisis","Operational energy","Consumo estimado de iluminación, clima y equipos.","Site Design","Verificar disponibilidad para Chile."],
+ ["Análisis","Forma Carbon Insights","Carbono incorporado en Building Design y Revit.","Building Design · Revit","Hoy limitado a EE.UU. en Building Design."],
+ ["Revit","Nube de puntos en Revit","Modelar as-built sobre la nube del levantamiento (.rcp).","Revit · ReCap Pro","Núcleo de la propuesta CC 410."],
+ ["Revit","Send to Revit","Propuesta convertida en Toposolid, edificios y límites editables.","Add-in 2022–2026",""],
+ ["Revit","Update proposal","Devolver cambios de Revit a Forma para volver a analizar.","Add-in · Revit 2027",""],
+ ["Revit","Forma Contextual Data","Terreno, edificios, predios y análisis sin salir de Revit.","Revit 2027 (Tech Preview)",""],
+ ["Colaboración","Forma Board","Presentar opciones y resultados a clientes o gerencia.","Board",""],
+ ["Colaboración","CDE","Files, Reviews, Issues, Transmittals y Reports.","Data Management",""],
+ ["Colaboración","Model Coordination","Interferencias y coordinación multidisciplinaria.","Design Collaboration",""],
+ ["Automatización","Dynamo Player","Gráficos que crean elementos nativos o leen métricas.","Site Design",""],
+ ["Automatización","Extensions y Forma API","Análisis y herramientas propias publicables.","Forma API","Layout de campamentos o reglas internas."],
+ ["Automatización","Data Exchange","Datos hacia Power BI, Rhino o Tekla.","Data Management","Tableros de avance."]
+];
+
+var GLOSS=[
+ ["Forma Home","Inicio de Forma","Punto de entrada a Site Design, Building Design, Board y Data Management."],
+ ["Create new site","Forma Home","Crea un sitio a partir de una dirección o ciudad."],
+ ["Confirm map area","Al crear el sitio","Fija el área y descarga terreno y edificios del entorno."],
+ ["Proposal","Site Design","Una alternativa de diseño dentro del sitio."],
+ ["Area metrics","Panel derecho de Site Design","Superficies y métricas de la propuesta en vivo."],
+ ["Analyze","Menú de Site Design","Agrupa Sun hours, Daylight potential, Wind, Microclimate, Noise, Solar energy y Operational energy."],
+ ["Rapid / Detailed","Dentro de Wind y Noise","Rapid usa ML para resultados inmediatos; Detailed es la simulación completa."],
+ ["Data Marketplace","Site Design · Revit 2027","Catálogo de terreno y edificios de contexto por ubicación."],
+ ["Extensions → Add extension","Panel izquierdo de Forma","Agrega extensiones como Dynamo Player o análisis de terceros."],
+ ["Download Revit add-in","Menú de tres puntos de la propuesta","Descarga el add-in de Forma para Revit 2022–2026."],
+ ["Send to Revit","Forma → add-in","Envía la propuesta a Revit como elementos editables."],
+ ["Massing & Site","Pestaña de Revit","Donde aparece el add-in de Forma en Revit."],
+ ["Update proposal","Add-in en Revit","Devuelve a Forma los cambios hechos en Revit."],
+ ["Scenario","Forma (Revit 2027)","Espacio en la nube que conecta un modelo de Revit con Forma."],
+ ["Enable Forma Connected Client","Data Management → Settings → Revit","Activa la Tech Preview del proyecto (lo hace el administrador)."],
+ ["Cloud model","Revit · Data Management","Modelo guardado en la nube; requisito del Connected Client."],
+ ["Toposolid","Revit 2024+","Elemento de terreno sólido en el que se convierte el terreno de Forma."],
+ ["Project Base Point","Revit","Origen del proyecto; con Forma se alinea con el origen de la propuesta."],
+ ["Survey Point","Revit","Punto de referencia topográfico del sitio."],
+ ["Shared Coordinates","Revit → Manage","Coordenadas comunes entre modelos vinculados."],
+ ["View Template","Revit → View","Configuración reutilizable de vistas."],
+ ["Family Editor","Revit","Editor para crear familias cargables (.rfa)."],
+ ["Shared Parameters","Revit → Manage","Parámetros comunes a familias, proyectos y tablas."],
+ ["Template (.rte)","Revit → New project","Plantilla de proyecto con estándares del equipo."],
+ ["Forma Board","Forma","Lienzo para presentar opciones y resultados."],
+ ["Reviews / Transmittals / Issues","Data Management","Revisión, envío formal y seguimiento de observaciones."],
+ ["My dashboard","Autodesk Learning","Tu historial de cursos y certificados de finalización."],
+ ["Certification prep","Filtro del catálogo","Muestra solo cursos que preparan para certificación."],
+ ["Insert → Point Cloud","Revit","Vincula una nube de puntos de ReCap (.rcp / .rcs) al modelo."],
+ ["ReCap Pro","Autodesk","Registra escaneos láser y genera nubes de puntos .rcp / .rcs."]
+];
+
+var KIT=[
+ {t:"Accesos y licencias",m:"Administración Autodesk",items:["Confirmar qué incluye cada contrato (Revit, AEC Collection, asientos de Forma)","Definir región del hub y avisar al equipo que no use *Switch region*","Definir versión de Revit oficial (2026 con add-in o 2027)","Instalar el add-in de Forma en todas las estaciones"]},
+ {t:"Plantillas Revit (.rte)",m:"ARQ, EST, MEP y sitio",items:["Tipos de *Toposolid* y materiales de terreno","*View Templates* por disciplina","Vista 3D dedicada para *Update proposal*","*Title block* y *Sheets* corporativos","Unidades, estilos de texto y cotas"]},
+ {t:"Biblioteca de familias",m:"Propias y de fabricantes",items:["Reglas de nomenclatura","Nivel de detalle mínimo por categoría","Parámetros obligatorios","Responsable de aprobación y carpeta oficial"]},
+ {t:"Parámetros y clasificación",m:"Base: Estándar BIM de Planbim",items:["Archivo de *Shared Parameters*","Códigos de clasificación","Parámetros de entrega por cliente"]},
+ {t:"Georreferenciación",m:"Un solo procedimiento",items:["Sistema de referencia oficial","Uso de *Survey Point* y *Project Base Point*","Prueba de ida y vuelta con Forma documentada"]},
+ {t:"CDE y documentos",m:"Forma Data Management",items:["Proyecto plantilla con *Folders* y *Permissions*","Flujo de *Review* y *Transmittal*","BEP tipo","Guía rápida Forma → Revit","Registro de lecciones aprendidas"]}
+];
+
+var PHASES=[
+ {t:"Fase 0 · Diagnóstico",s:1,e:2,w:"semanas 1 y 2",items:["Verificar en el portal de administración qué incluye cada contrato","Confirmar la región del hub de Forma","Confirmar si el *Connected Client* (Tech Preview) está disponible para la región del hub","Revisar si *Operational energy* y *Carbon* funcionan para ubicaciones en Chile","Probar la cobertura del *Data Marketplace* en tres sitios reales","Inventariar las versiones de Revit instaladas"]},
+ {t:"Fase 1 · Capacitación individual",s:2,e:6,w:"semanas 2 a 6",items:["Todo el equipo completa los niveles 0 a 2","Modeladores completan el nivel 3","Coordinadores completan el nivel 4","Cada profesional registra su meta de certificación"]},
+ {t:"Fase 2 · Estándares y contenido",s:4,e:10,w:"semanas 4 a 10",items:["Extraer nomenclatura y parámetros del Estándar BIM de Planbim","Redactar el procedimiento de georreferenciación","Crear las plantillas .rte por disciplina","Crear el archivo de *Shared Parameters*","Migrar las familias críticas a la biblioteca","Crear el proyecto plantilla en *Data Management*","Redactar BEP tipo y guía rápida"]},
+ {t:"Fase 3 · Piloto",s:8,e:12,w:"semanas 8 a 12",items:["Elegir un proyecto piloto de edificación de apoyo","Flujo completo: terreno propio → Forma → *Analyze* → Revit → *Update proposal* → *Forma Board*","Medir horas ahorradas y problemas de conversión","Ajustar plantillas con lo aprendido"]},
+ {t:"Fase 4 · Investigación continua",s:1,e:12,w:"mensual",loop:true,items:["Probar formatos y precisión del terreno propio frente al del marketplace","Explorar extensiones para casos industriales","Revisar novedades del blog de Forma y de Revit 2027","Ajustar la asignación de asientos de Forma por rol"]}
+];
+
+var CERTS=["","Autodesk Certified User: Revit","ACP Revit Architectural Design","ACP Revit Structural Design","ACP Revit Mechanical Design","ACP Revit Electrical Design","ACP BIM Management for Building Design","ACP Civil 3D Infrastructure Design"];
+var NTYPES={works:{l:"Funciona",v:"--ok"},fails:{l:"No funciona",v:"--red"},tip:{l:"Recomendación",v:"--level"},ask:{l:"Duda",v:"--fill"}};
+
+/* ======================= utilidades ======================= */
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function fmt(s){return esc(s).replace(/\*([^*]+)\*/g,'<em class="term">$1</em>');}
+function fdate(ts){if(!ts)return"—";var d=new Date(ts);return d.toLocaleDateString("es-CL",{day:"numeric",month:"short"})+" · "+d.toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"});}
+function isShared(k){return /^(kit|ph)\d/.test(k);}
+function hue(id){var h=0;for(var i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))%360;return "hsl("+h+" 45% 42%)";}
+function initials(n){var p=String(n||"?").trim().split(/\s+/);return ((p[0]||"?")[0]+((p[1]||"")[0]||"")).toUpperCase();}
+function avatar(id){
+  var p=prof[id]||{};
+  if(p.pic)return '<span class="av"><img alt="" src="'+esc(p.pic)+'"></span>';
+  return '<span class="av" style="background:'+(p.color||hue(id||"x"))+'">'+esc(initials(p.name))+'</span>';
+}
+function pname(id){return (prof[id]&&prof[id].name)||"Alguien";}
+function cloudSvg(v){
+  return '<svg class="cloud" viewBox="0 0 34 34" aria-hidden="true"><path style="stroke:var('+v+')" d="M9 11a4 4 0 0 1 6-3a4 4 0 0 1 7 0a4 4 0 0 1 5 4a4 4 0 0 1 1 7a4 4 0 0 1-4 5a4 4 0 0 1-6 2a4 4 0 0 1-7-1a4 4 0 0 1-5-4a4 4 0 0 1-1-6a4 4 0 0 1 4-4z"/></svg>';
+}
+
+/* ======================= estado ======================= */
+var state={checks:{},quiz:{},certGoal:""};
+try{var raw=localStorage.getItem(KEY);if(raw){var p0=JSON.parse(raw);if(p0&&typeof p0==="object"){state.checks=p0.checks||{};state.quiz=p0.quiz||{};state.certGoal=p0.certGoal||"";}}}catch(e){}
+var team={},notes=[],shared={},prof={};
+var cur=0;
+
+/* ======================= almacenamiento =======================
+   Tres modos, en este orden:
+   - api: servidor propio (FastAPI + Tailscale) en /api
+   - claude: publicado en claude.ai (capacidades db + user)
+   - local: solo este navegador */
+var S={mode:"local",me:null,canWrite:true};
+var claudeDb=null,claudeUser=null,myRef=null,poll=null;
+
+async function api(path,opt){
+  var r=await fetch(path,Object.assign({headers:{"Content-Type":"application/json"},credentials:"same-origin"},opt||{}));
+  if(!r.ok){var e=new Error("HTTP "+r.status);e.status=r.status;throw e;}
+  return r.json();
+}
+async function startApi(){
+  var me=await api("api/me");
+  S.mode="api";S.me=me.id;prof[me.id]={name:me.name,pic:me.pic};
+  await pullApi();
+  poll=setInterval(function(){if(!document.hidden)pullApi();},8000);
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)pullApi();});
+}
+async function pullApi(){
+  try{
+    var st=await api("api/state");
+    Object.keys(st.people||{}).forEach(function(id){prof[id]={name:st.people[id].name,pic:st.people[id].pic};});
+    team=st.progress||{};
+    notes=(st.notes||[]).map(function(n){n._id=n.id;return n;});
+    shared=st.shared||{};
+    var mine=team[S.me];
+    if(mine&&!pullApi.merged){mergeMine(mine);pullApi.merged=true;pushProgress();}
+    if(!mine&&!pullApi.merged){pullApi.merged=true;pushProgress();}
+    renderAll();
+  }catch(e){setStatus("Sin conexión con el servidor. Reintentando…",false);}
+}
+async function startClaude(){
+  if(!window.claude||!window.claude.use)throw new Error("no claude");
+  claudeUser=await window.claude.use("user");claudeDb=await window.claude.use("db");
+  if(!claudeUser||!claudeDb)throw new Error("no caps");
+  var id=await claudeUser.id();if(!id)throw new Error("no id");
+  S.mode="claude";S.me=id;
+  try{if((await claudeUser.can("data.write"))===false)S.canWrite=false;}catch(e){}
+  myRef=claudeDb.doc("progress/"+id);
+  var snap=await myRef.get();
+  if(snap.exists)mergeMine(snap.data()||{});
+  if(S.canWrite)pushProgress();
+  claudeDb.collection("progress").onSnapshot(function(s){team={};s.docs.forEach(function(x){team[x.id]=x.data()||{};});resolveClaude();},function(){});
+  claudeDb.collection("notes").orderBy("ts","desc").limit(800).onSnapshot(function(s){notes=s.docs.map(function(x){var o=Object.assign({},x.data());o._id=x.id;return o;});resolveClaude();},function(){});
+  claudeDb.collection("team-checks").onSnapshot(function(s){shared={};s.docs.forEach(function(x){shared[x.id]=x.data()||{};});resolveClaude();},function(){});
+}
+var rcT=null;
+function resolveClaude(){
+  clearTimeout(rcT);
+  rcT=setTimeout(async function(){
+    var ids={};ids[S.me]=1;
+    Object.keys(team).forEach(function(i){ids[i]=1;});
+    notes.forEach(function(n){if(n.author)ids[n.author]=1;});
+    Object.keys(shared).forEach(function(k){if(shared[k].by)ids[shared[k].by]=1;});
+    try{var ps=await claudeUser.profiles(Object.keys(ids));Object.keys(ps).forEach(function(i){prof[i]={name:ps[i].name,pic:ps[i].avatarUrl,color:ps[i].color};});}catch(e){}
+    renderAll();
+  },80);
+}
+function mergeMine(d){
+  Object.keys(d.checks||{}).forEach(function(k){if(!isShared(k))state.checks[k]=true;});
+  Object.keys(d.quiz||{}).forEach(function(k){if(state.quiz[k]===undefined)state.quiz[k]=d.quiz[k];});
+  if(!state.certGoal&&d.certGoal)state.certGoal=d.certGoal;
+  Object.keys(state.checks).forEach(function(k){if(isShared(k))delete state.checks[k];});
+}
+
+var wT=null,writing=false,again=false;
+function pushProgress(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+  if(S.mode==="local"||!S.canWrite)return;
+  clearTimeout(wT);
+  wT=setTimeout(async function(){
+    if(writing){again=true;return;}
+    writing=true;
+    var body={checks:state.checks,quiz:state.quiz,certGoal:state.certGoal};
+    try{
+      if(S.mode==="api")await api("api/progress",{method:"PUT",body:JSON.stringify(body)});
+      else{body.updated=Date.now();await myRef.set(body);}
+      if(S.me){team[S.me]=Object.assign({},body,{updated:Date.now()});}
+    }catch(e){fail(e);}
+    writing=false;if(again){again=false;pushProgress();}
+  },700);
+}
+async function addNote(doc){
+  if(S.mode==="api"){var n=await api("api/notes",{method:"POST",body:JSON.stringify(doc)});n._id=n.id;notes.unshift(n);renderAll();pullApi();}
+  else if(S.mode==="claude"){doc.author=S.me;doc.ts=Date.now();await claudeDb.collection("notes").add(doc);}
+}
+async function delNote(id){
+  if(S.mode==="api"){await api("api/notes/"+encodeURIComponent(id),{method:"DELETE"});notes=notes.filter(function(n){return n._id!==id&&n.parent!==id;});renderAll();}
+  else if(S.mode==="claude"){await claudeDb.doc("notes/"+id).delete();}
+}
+async function setShared(k,on){
+  if(on)shared[k]={by:S.me,ts:Date.now()};else delete shared[k];
+  renderAll();
+  if(S.mode==="api")await api("api/shared/"+k,{method:"PUT",body:JSON.stringify({done:on})});
+  else if(S.mode==="claude"){var r=claudeDb.doc("team-checks/"+k);if(on)await r.set({by:S.me,ts:shared[k].ts});else await r.delete();}
+}
+function fail(e){
+  if((e&&e.code==="invalid_argument")||(e&&e.status===403)){S.canWrite=false;}
+  setStatus(S.canWrite?"No se pudo guardar el último cambio. Revisa la conexión.":"Modo lectura: no tienes permiso de escritura.",S.mode!=="local");
+  renderAll();
+}
+function isChecked(k){return isShared(k)&&S.mode!=="local"?!!shared[k]:!!state.checks[k];}
+function team2(){var t=Object.assign({},team);if(S.me)t[S.me]=Object.assign({},t[S.me]||{},state);return t;}
+
+/* ======================= cálculo de avance ======================= */
+function pctFor(d,lv){
+  var c=(d&&d.checks)||{},q=(d&&d.quiz)||{},tot=lv.tasks.length+lv.quiz.length,ok=0;
+  lv.tasks.forEach(function(_,i){if(c[lv.id+"-t"+i])ok++;});
+  lv.quiz.forEach(function(qq,i){if(q[lv.id+"-q"+i]===qq.a)ok++;});
+  return Math.round(ok/tot*100);
+}
+function totalFor(d){var t=0,o=0;LEVELS.forEach(function(lv){var n=lv.tasks.length+lv.quiz.length;t+=n;o+=pctFor(d,lv)*n/100;});return Math.round(o/t*100);}
+function currentLevel(d){for(var i=0;i<LEVELS.length;i++){if(pctFor(d,LEVELS[i])<100)return i;}return LEVELS.length-1;}
+
+/* ======================= corte del edificio ======================= */
+var NS="http://www.w3.org/2000/svg";
+function E(n,a,txt){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function renderSection(){
+  var s=document.getElementById("sectionSvg"),t=s.querySelector("title");s.innerHTML="";s.appendChild(t);
+  var X0=70,X1=520,G=448,H=54,SL=7;
+  var defs=E("defs",{});
+  var hp=E("pattern",{id:"earth",width:"8",height:"8",patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"});
+  hp.appendChild(E("line",{x1:0,y1:0,x2:0,y2:8,stroke:"var(--line)","stroke-width":"1.2"}));defs.appendChild(hp);
+  var hp2=E("pattern",{id:"empty",width:"6",height:"6",patternUnits:"userSpaceOnUse",patternTransform:"rotate(-45)"});
+  hp2.appendChild(E("line",{x1:0,y1:0,x2:0,y2:6,stroke:"var(--hair)","stroke-width":"1"}));defs.appendChild(hp2);
+  s.appendChild(defs);
+  // ejes
+  var axes=[X0,X0+150,X0+300,X1],labs=["A","B","C","D"];
+  axes.forEach(function(x,i){
+    s.appendChild(E("line",{x1:x,y1:34,x2:x,y2:G+30,stroke:"var(--line)","stroke-width":"1","stroke-dasharray":"10 4 2 4"}));
+    s.appendChild(E("circle",{cx:x,cy:20,r:12,fill:"var(--sheet)",stroke:"var(--poche)","stroke-width":"1.3"}));
+    s.appendChild(E("text",{x:x,y:20,"text-anchor":"middle","dominant-baseline":"central","font-size":"12","font-weight":"700"},labs[i]));
+  });
+  // terreno
+  s.appendChild(E("path",{d:"M0 "+(G+6)+" L"+(X0-20)+" "+(G+2)+" L"+X0+" "+G+" L"+X1+" "+G+" L"+(X1+40)+" "+(G+8)+" L760 "+(G+14)+" L760 520 L0 520 Z",fill:"url(#earth)",stroke:"none"}));
+  s.appendChild(E("path",{d:"M0 "+(G+6)+" L"+(X0-20)+" "+(G+2)+" L"+X0+" "+G+" M"+X1+" "+G+" L"+(X1+40)+" "+(G+8)+" L760 "+(G+14),fill:"none",stroke:"var(--poche)","stroke-width":"2"}));
+  s.appendChild(E("rect",{x:X0-10,y:G,width:X1-X0+20,height:22,fill:"var(--poche)"}));
+  var everyone=team2(),meLv=currentLevel(state);
+  LEVELS.forEach(function(lv,i){
+    var y=G-i*H,top=y-H,pct=pctFor(state,lv),w=(X1-X0)*pct/100;
+    var g=E("g",{"class":"story",tabindex:"0",role:"button","aria-label":"Nivel "+i+": "+lv.name+", "+pct+" por ciento"});
+    g.appendChild(E("rect",{"class":"storybox",x:X0,y:top,width:X1-X0,height:H-SL,fill:"url(#empty)",stroke:"none"}));
+    if(w>0)g.appendChild(E("rect",{x:X0,y:top,width:w,height:H-SL,fill:"var(--fill)",opacity:i===cur?"0.95":"0.75"}));
+    if(i===cur)g.appendChild(E("rect",{x:X0+1,y:top+1,width:X1-X0-2,height:H-SL-2,fill:"none",stroke:"var(--red)","stroke-width":"1.5","stroke-dasharray":"5 3"}));
+    g.appendChild(E("text",{x:X0+12,y:top+(H-SL)/2,"dominant-baseline":"central","font-size":"13","font-weight":"700"},pct+" %"));
+    // equipo en este piso
+    var n=0;
+    Object.keys(everyone).forEach(function(id){
+      if(id===S.me||currentLevel(everyone[id])!==i)return;
+      if(n>=8)return;
+      var cx=X1-14-n*16;n++;
+      var c=E("circle",{cx:cx,cy:top+(H-SL)/2,r:6,fill:(prof[id]&&prof[id].color)||hue(id),stroke:"var(--sheet)","stroke-width":"1.5"});
+      c.appendChild(E("title",{},pname(id)));g.appendChild(c);
+    });
+    // losa
+    g.appendChild(E("rect",{x:X0-10,y:y-SL,width:X1-X0+20,height:SL,fill:"var(--poche)"}));
+    // cabeza de nivel (estilo Revit)
+    var hx=X1+40;
+    g.appendChild(E("line",{x1:X1+10,y1:y-SL/2,x2:hx-9,y2:y-SL/2,stroke:"var(--level)","stroke-width":"1","stroke-dasharray":"6 3"}));
+    g.appendChild(E("circle",{cx:hx,cy:y-SL/2,r:8,fill:"var(--sheet)",stroke:"var(--level)","stroke-width":"1.4"}));
+    g.appendChild(E("path",{d:"M"+hx+" "+(y-SL/2)+" L"+hx+" "+(y-SL/2-8)+" A8 8 0 0 1 "+(hx+8)+" "+(y-SL/2)+" Z M"+hx+" "+(y-SL/2)+" L"+hx+" "+(y-SL/2+8)+" A8 8 0 0 1 "+(hx-8)+" "+(y-SL/2)+" Z",fill:"var(--level)"}));
+    g.appendChild(E("text",{x:hx+16,y:y-SL/2-7,"dominant-baseline":"central","font-size":"13","font-weight":"700",fill:"var(--level)"},"N"+i+" · "+lv.short));
+    g.appendChild(E("text",{x:hx+16,y:y-SL/2+8,"dominant-baseline":"central","font-size":"11.5",fill:"var(--ink-2)"},"+"+(i*3.5).toFixed(2)));
+    function go(){select(i,true);}
+    g.addEventListener("click",go);
+    g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
+    s.appendChild(g);
+  });
+  // cubierta y columnas
+  var roof=G-LEVELS.length*H;
+  s.appendChild(E("rect",{x:X0-10,y:roof-SL,width:X1-X0+20,height:SL,fill:"var(--poche)"}));
+  s.appendChild(E("rect",{x:X0-10,y:roof-SL-14,width:6,height:14,fill:"var(--poche)"}));
+  s.appendChild(E("rect",{x:X1+4,y:roof-SL-14,width:6,height:14,fill:"var(--poche)"}));
+  axes.forEach(function(x){s.appendChild(E("rect",{x:x-3,y:roof,width:6,height:G-roof,fill:"var(--poche)",opacity:".9"}));});
+  // marcador "tú"
+  var my=G-meLv*H-H+(H-SL)/2;
+  s.appendChild(E("path",{d:"M"+(X0+58)+" "+my+" l10 -6 v12 z",fill:"var(--red)"}));
+  s.appendChild(E("text",{x:X0+72,y:my,"dominant-baseline":"central","font-size":"12.5","font-weight":"800",fill:"var(--red)"},"Tú"));
+  // cadena de cotas entre ejes
+  var dy=40;
+  s.appendChild(E("line",{x1:axes[0],y1:dy,x2:axes[3],y2:dy,stroke:"var(--ink)","stroke-width":"1"}));
+  axes.forEach(function(x){s.appendChild(E("line",{x1:x-4,y1:dy+4,x2:x+4,y2:dy-4,stroke:"var(--ink)","stroke-width":"1.6"}));});
+  for(var a=0;a<3;a++){s.appendChild(E("text",{x:(axes[a]+axes[a+1])/2,y:dy-6,"text-anchor":"middle","font-size":"10.5","font-weight":"600"},a===2?"7.50":"6.00"));}
+  // dron con cono de captura
+  var dx=640,dyy=-28;
+  s.appendChild(E("path",{d:"M"+dx+" "+(dyy+6)+" L"+(X1-90)+" "+(roof-SL-16)+" L"+(X1+12)+" "+(roof-SL-16)+" Z",fill:"var(--scan)",opacity:".16"}));
+  s.appendChild(E("path",{d:"M"+dx+" "+(dyy+6)+" L"+(X1-90)+" "+(roof-SL-16)+" M"+dx+" "+(dyy+6)+" L"+(X1+12)+" "+(roof-SL-16),stroke:"var(--scan)","stroke-width":"1","stroke-dasharray":"4 3",fill:"none"}));
+  s.appendChild(E("rect",{x:dx-7,y:dyy-3,width:14,height:8,fill:"var(--scan)"}));
+  [[-14,-6],[14,-6]].forEach(function(o){s.appendChild(E("line",{x1:dx,y1:dyy,x2:dx+o[0],y2:dyy+o[1],stroke:"var(--ink)","stroke-width":"1.4"}));s.appendChild(E("ellipse",{cx:dx+o[0],cy:dyy+o[1]-1,rx:8,ry:2.2,fill:"none",stroke:"var(--ink)","stroke-width":"1.2"}));});
+  s.appendChild(E("text",{x:dx+24,y:dyy+2,"dominant-baseline":"central","font-size":"11","font-weight":"700",fill:"var(--scan)"},"Dron"));
+  // escáner láser en terreno con rayos a la fachada
+  var tx=26,ty=G-28;
+  [G-70,G-170,G-280,G-360].forEach(function(yy){s.appendChild(E("line",{x1:tx,y1:ty,x2:X0-10,y2:yy,stroke:"var(--scan)","stroke-width":"1","stroke-dasharray":"3 3",opacity:".9"}));});
+  s.appendChild(E("path",{d:"M"+tx+" "+(ty+4)+" L"+(tx-10)+" "+(G+5)+" M"+tx+" "+(ty+4)+" L"+(tx+10)+" "+(G+5)+" M"+tx+" "+(ty+4)+" L"+tx+" "+(G+6),stroke:"var(--ink)","stroke-width":"1.5",fill:"none"}));
+  s.appendChild(E("rect",{x:tx-5,y:ty-7,width:10,height:11,rx:2,fill:"var(--scan)"}));
+  s.appendChild(E("text",{x:6,y:G+38,"font-size":"11","font-weight":"700",fill:"var(--scan)"},"Escáner láser"));
+  // marca de corte
+  [[110,G+44],[742,G+28]].forEach(function(p,k){
+    s.appendChild(E("circle",{cx:p[0],cy:p[1],r:11,fill:"var(--sheet)",stroke:"var(--poche)","stroke-width":"1.3"}));
+    s.appendChild(E("text",{x:p[0],y:p[1],"text-anchor":"middle","dominant-baseline":"central","font-size":"11","font-weight":"700"},"A"));
+  });
+}
+
+/* ======================= visor de niveles ======================= */
+function levelIcon(){return '<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="8" fill="none" stroke="var(--level)" stroke-width="1.4"/><path d="M11 11V3A8 8 0 0 1 19 11ZM11 11V19A8 8 0 0 1 3 11Z" fill="var(--level)"/></svg>';}
+function renderBrowser(){
+  var b=document.getElementById("browser"),h='<div class="bh">Project Browser · Levels</div>';
+  for(var i=LEVELS.length-1;i>=0;i--){
+    var lv=LEVELS[i],pct=pctFor(state,lv);
+    h+='<button class="lvbtn'+(pct===100?" done":"")+'" role="tab" id="tab'+i+'" aria-selected="'+(i===cur)+'" aria-controls="panel" data-lv="'+i+'">'+levelIcon()+
+       '<span><span class="nm">N'+i+' · '+esc(lv.short)+'</span><br><span class="el">+'+(i*3.5).toFixed(2)+' · '+esc(lv.hours)+'</span></span><span class="pc">'+pct+' %</span><span class="bar"><i style="width:'+pct+'%"></i></span></button>';
+  }
+  b.innerHTML=h;
+}
+function renderPanel(){
+  var lv=LEVELS[cur],i=cur,pct=pctFor(state,lv),p=document.getElementById("panel");
+  p.classList.toggle("complete",pct===100);
+  p.setAttribute("aria-labelledby","tab"+i);
+  var h='<div class="phead"><div class="elev">N'+i+'</div><div><h3>'+esc(lv.name)+'</h3><div class="meta">'+esc(lv.hours)+' · '+esc(lv.who)+' · '+pct+' % completado</div></div>'+
+    '<div class="pnav"><button type="button" data-step="-1"'+(i===0?" disabled":"")+'>↓ Nivel inferior</button><button type="button" data-step="1"'+(i===LEVELS.length-1?" disabled":"")+'>Nivel superior ↑</button></div></div>'+
+    '<p class="goal"><strong>Meta del nivel:</strong> '+fmt(lv.goal)+'</p><div class="pbody"><div class="pcol"><h4>Recursos</h4><ul class="res">';
+  lv.res.forEach(function(r,ri){
+    h+='<li><span class="k">'+String(ri+1).padStart(2,"0")+'</span><div><a href="'+esc(r.u)+'" target="_blank" rel="noopener">'+esc(r.t)+'</a><div class="d">'+fmt(r.d)+'</div><div class="chips">';
+    r.tags.forEach(function(t){var cls=t==="Oficial"?"chip off":(t==="cert"||/Certificate|Prepara/.test(t))?"chip cert":"chip";h+='<span class="'+cls+'">'+esc(t==="cert"?"Certificación oficial":t)+'</span>';});
+    h+='</div></div></li>';
+  });
+  h+='</ul></div><div class="pcol"><h4>Hitos para marcar</h4><ul class="checks">';
+  lv.tasks.forEach(function(t,ti){var k=lv.id+"-t"+ti;h+='<li><label><input type="checkbox" data-k="'+k+'"'+(state.checks[k]?" checked":"")+'><span>'+fmt(t)+'</span></label></li>';});
+  h+='</ul><h4>Señales de que lo dominas</h4><ul class="look">';
+  lv.look.forEach(function(t){h+='<li>'+fmt(t)+'</li>';});
+  h+='</ul><div class="quiz"><h4>Mini quiz</h4>';
+  lv.quiz.forEach(function(q,qi){
+    var k=lv.id+"-q"+qi,ch=state.quiz[k];
+    h+='<div class="q" data-q="'+k+'"><p>'+esc(q.q)+'</p><div class="opts">';
+    q.o.forEach(function(o,oi){var cls=ch===undefined?"":(oi===q.a&&ch===q.a?"right":(oi===ch&&ch!==q.a?"wrong":""));h+='<button type="button" class="'+cls+'" data-qk="'+k+'" data-oi="'+oi+'">'+esc(o)+'</button>';});
+    h+='</div><div class="fb" aria-live="polite">'+(ch===undefined?"":(ch===q.a?"Correcto. "+esc(q.e):"No es esa. Intenta otra."))+'</div></div>';
+  });
+  h+='</div><div class="badge">N'+i+' alcanzado. Sigue subiendo.</div></div></div>'+
+    '<div class="pnotes"><h4>Nubes de revisión del equipo en este nivel</h4>'+formHTML(lv.id)+'<ul class="nlist">'+notesHTML(function(n){return n.lv===lv.id;},true,'Todavía no hay notas en este nivel.')+'</ul></div>';
+  p.innerHTML=h;
+}
+function select(i,scroll){
+  cur=Math.max(0,Math.min(LEVELS.length-1,i));
+  renderBrowser();renderPanel();renderSection();
+  if(scroll)document.getElementById("niveles").scrollIntoView({block:"start"});
+}
+
+/* ======================= notas ======================= */
+function typeOpts(){return Object.keys(NTYPES).map(function(k){return '<option value="'+k+'">'+NTYPES[k].l+'</option>';}).join("");}
+function formHTML(scope){
+  if(S.mode==="local")return '<p class="empty">Las notas del equipo aparecen al abrir la guía desde el servidor del equipo o desde claude.ai.</p>';
+  if(!S.canWrite)return '<p class="empty">Estás en modo lectura: puedes ver las notas, pero no publicar.</p>';
+  var lv=LEVELS.filter(function(l){return l.id===scope;})[0],target;
+  if(lv)target='<select name="res" aria-label="Sobre qué"><option value="-1">General del nivel</option>'+lv.res.map(function(r,i){return '<option value="'+i+'">'+esc(r.t.length>40?r.t.slice(0,39)+"…":r.t)+'</option>';}).join("")+'</select>';
+  else target='<select name="lv" aria-label="Nivel"><option value="general">General</option>'+LEVELS.map(function(l,i){return '<option value="'+l.id+'">N'+i+' · '+esc(l.short)+'</option>';}).join("")+'</select>';
+  return '<form class="nform" data-scope="'+esc(scope)+'"><select name="type" aria-label="Tipo de nota">'+typeOpts()+'</select>'+target+
+    '<textarea name="text" maxlength="1000" required rows="1" placeholder="Qué funcionó, qué no, un atajo o una duda"></textarea><button class="btn" type="submit">Publicar</button></form>';
+}
+function whereOf(n){
+  if(!n.lv||n.lv==="general")return "General";
+  var i=+n.lv.slice(1),lv=LEVELS[i];if(!lv)return "";
+  return "N"+i+(n.res>=0&&lv.res[n.res]?" · "+lv.res[n.res].t:"");
+}
+function oneNote(n,top){
+  var t=NTYPES[n.type]||{l:"Respuesta",v:"--ink-2"};
+  var h='<li class="note">'+cloudSvg(t.v)+'<div><div class="nhead">'+avatar(n.author)+'<b>'+esc(pname(n.author))+'</b>'+
+    (n.type?'<span class="ntype" style="color:var('+t.v+')">'+t.l+'</span>':'')+
+    (top?'<span>'+esc(whereOf(n))+'</span>':'')+'<span>'+fdate(n.ts)+'</span></div><p class="ntext">'+esc(n.text)+'</p><div class="nact">';
+  if(top&&S.mode!=="local"&&S.canWrite)h+='<button class="link" type="button" data-reply="'+esc(n._id)+'">Responder</button>';
+  if(n.author===S.me)h+='<button class="link" type="button" data-del="'+esc(n._id)+'">Borrar</button>';
+  h+='</div>';
+  if(top){var rs=notes.filter(function(r){return r.parent===n._id;}).sort(function(a,b){return a.ts-b.ts;});
+    if(rs.length)h+='<ul class="replies">'+rs.map(function(r){return oneNote(r,false);}).join("")+'</ul>';}
+  return h+'</div></li>';
+}
+function notesHTML(filter,top,empty){
+  var list=notes.filter(function(n){return !n.parent&&filter(n);}).sort(function(a,b){return b.ts-a.ts;});
+  if(!list.length)return S.mode==="local"?"":'<li class="empty">'+empty+'</li>';
+  return list.map(function(n){return oneNote(n,top);}).join("");
+}
+function renderFeed(){
+  document.getElementById("feedForm").innerHTML=formHTML("feed");
+  var ft=document.getElementById("fType").value,fl=document.getElementById("fLevel").value;
+  document.getElementById("feed").innerHTML=notesHTML(function(n){return (!ft||n.type===ft)&&(!fl||n.lv===fl);},true,"No hay notas con ese filtro.")||'<li class="empty">Sin notas en modo local.</li>';
+}
+
+/* ======================= tablas ======================= */
+function renderTeam(){
+  var tbl=document.getElementById("teamTbl"),all=team2();
+  var ids=Object.keys(all);
+  var h='<caption>&lt;Equipo&gt;</caption><thead><tr><th>Persona</th><th>Niveles N0 a N6</th><th style="text-align:right">Avance</th><th>Meta de certificación</th><th>Actualizado</th></tr></thead><tbody>';
+  if(S.mode==="local")h+='<tr><td colspan="5" class="small">La tabla del equipo aparece al abrir la guía desde el servidor del equipo o desde claude.ai. Tu avance se guarda en este navegador.</td></tr>';
+  else ids.sort(function(a,b){return totalFor(all[b])-totalFor(all[a]);}).forEach(function(id){
+    var d=all[id],me=id===S.me;
+    h+='<tr class="'+(me?"me":"")+'"><td><span class="person">'+avatar(id)+'<span>'+esc(pname(id))+(me?" (tú)":"")+'</span></span></td><td><span class="stack">';
+    LEVELS.forEach(function(lv,i){var pc=pctFor(d,lv);h+='<i style="--p:'+pc+'%" title="N'+i+': '+pc+' %"></i>';});
+    h+='</span></td><td class="num">'+totalFor(d)+' %</td><td>';
+    if(me&&S.canWrite)h+='<select class="ctl" id="certSel" aria-label="Mi meta de certificación">'+CERTS.map(function(c){return '<option value="'+esc(c)+'"'+(c===state.certGoal?" selected":"")+'>'+esc(c||"Sin definir")+'</option>';}).join("")+'</select>';
+    else h+='<span class="small">'+esc(d.certGoal||"Sin definir")+'</span>';
+    h+='</td><td class="small">'+fdate(d.updated)+'</td></tr>';
+  });
+  tbl.innerHTML=h+'</tbody>';
+}
+var capCat="Todas";
+function renderCaps(){
+  var cats=["Todas"];CAPS.forEach(function(c){if(cats.indexOf(c[0])<0)cats.push(c[0]);});
+  document.getElementById("capFilters").innerHTML=cats.map(function(c){return '<button type="button" aria-pressed="'+(c===capCat)+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>';}).join("");
+  document.getElementById("capTbl").innerHTML='<caption>&lt;Capacidades de Forma&gt;</caption><thead><tr><th>Tipo</th><th>Capacidad</th><th>Qué hace</th><th>Dónde</th></tr></thead><tbody>'+
+    CAPS.map(function(c){return '<tr'+(capCat==="Todas"||capCat===c[0]?"":" hidden")+'><td class="small">'+esc(c[0])+'</td><td><b>'+esc(c[1])+'</b></td><td>'+esc(c[2])+(c[4]?'<span class="jej">'+esc(c[4])+'</span>':'')+'</td><td class="small">'+esc(c[3])+'</td></tr>';}).join("")+'</tbody>';
+}
+function renderGloss(q){
+  q=(q||"").toLowerCase();
+  var rows=GLOSS.filter(function(g){return !q||g.join(" ").toLowerCase().indexOf(q)>=0;});
+  document.getElementById("glossTbl").innerHTML='<caption>&lt;Glosario&gt;</caption><thead><tr><th>Comando o término</th><th>Dónde está</th><th>Qué hace</th></tr></thead><tbody>'+
+    (rows.length?rows.map(function(g){return '<tr><td><em class="term">'+esc(g[0])+'</em></td><td class="small">'+esc(g[1])+'</td><td>'+esc(g[2])+'</td></tr>';}).join(""):'<tr><td colspan="3" class="small">Sin resultados.</td></tr>')+'</tbody>';
+}
+function renderKit(){
+  var h='<caption>&lt;Kit del equipo&gt;</caption><thead><tr><th style="width:24%">Partida</th><th>Elemento</th><th style="width:18%">Estado</th></tr></thead><tbody>';
+  KIT.forEach(function(b,bi){
+    b.items.forEach(function(t,i){
+      var k="kit"+bi+"-"+i,s=S.mode!=="local"&&shared[k];
+      h+='<tr>'+(i===0?'<td rowspan="'+b.items.length+'"><b>'+esc(b.t)+'</b><br><span class="small">'+esc(b.m)+'</span></td>':'')+
+        '<td><label style="display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start;cursor:pointer"><input class="cb" type="checkbox" data-k="'+k+'"'+(isChecked(k)?" checked":"")+'><span>'+fmt(t)+'</span></label></td>'+
+        '<td class="small">'+(isChecked(k)?(s?esc(pname(s.by))+'<br>'+fdate(s.ts):"Listo"):"Pendiente")+'</td></tr>';
+    });
+  });
+  document.getElementById("kitTbl").innerHTML=h+'</tbody>';
+}
+var openPh={};
+function renderGantt(){
+  var h='<div class="gaxis"><span>Fase</span><div class="cols">';
+  for(var w=1;w<=12;w++)h+='<span>S'+w+'</span>';
+  h+='</div></div>';
+  PHASES.forEach(function(p,pi){
+    var done=p.items.filter(function(_,i){return isChecked("ph"+pi+"-"+i);}).length,pc=Math.round(done/p.items.length*100);
+    h+='<details class="gph" data-ph="'+pi+'"'+(openPh[pi]?" open":"")+'><summary class="gsum"><span class="lab">'+esc(p.t)+'<small>'+esc(p.w)+' · '+done+'/'+p.items.length+'</small></span>'+
+      '<span class="track"><span class="gbar'+(p.loop?" loop":"")+'" style="grid-column:'+p.s+' / '+(p.e+1)+';--p:'+pc+'%" title="'+pc+' %"></span></span></summary><div class="gbody"><ul class="checks">';
+    p.items.forEach(function(t,i){var k="ph"+pi+"-"+i,s=S.mode!=="local"&&shared[k];h+='<li><label><input type="checkbox" data-k="'+k+'"'+(isChecked(k)?" checked":"")+'><span>'+fmt(t)+'</span></label>'+(s?'<span class="by">'+esc(pname(s.by))+' · '+fdate(s.ts)+'</span>':'')+'</li>';});
+    h+='</ul></div></details>';
+  });
+  document.getElementById("gantt").innerHTML=h;
+}
+
+/* ======================= render global ======================= */
+var rT=null;
+function renderAll(){clearTimeout(rT);rT=setTimeout(doRender,30);}
+function doRender(){
+  var ae=document.activeElement,keepFocus=ae&&(ae.tagName==="TEXTAREA"||ae.tagName==="INPUT"&&ae.type!=="checkbox");
+  var g=totalFor(state);
+  document.getElementById("pctTop").textContent=g+" %";
+  document.getElementById("barTop").style.width=g+"%";
+  document.getElementById("mLevels").textContent=LEVELS.filter(function(lv){return pctFor(state,lv)===100;}).length+"/7";
+  document.getElementById("mTeam").textContent=S.mode==="local"?"—":String(Object.keys(team2()).length);
+  document.getElementById("mNotes").textContent=S.mode==="local"?"—":String(notes.length);
+  renderSection();renderBrowser();
+  if(!keepFocus){renderPanel();renderFeed();}
+  renderTeam();renderKit();renderGantt();
+}
+function setStatus(msg,live){var el=document.getElementById("status");el.textContent=msg;el.classList.toggle("live",!!live);}
+function statusFor(){
+  if(S.mode==="api")setStatus(S.canWrite?"Servidor del equipo conectado: avance, casillas compartidas y notas se sincronizan cada pocos segundos.":"Modo lectura en el servidor del equipo.",true);
+  else if(S.mode==="claude")setStatus(S.canWrite?"Modo equipo en claude.ai: todo se comparte en tiempo real.":"Modo lectura: pide acceso Contributor para registrar avance y comentar.",true);
+  else setStatus("Modo individual: tu avance se guarda solo en este navegador.",false);
+}
+
+/* ======================= eventos ======================= */
+document.addEventListener("change",async function(e){
+  var t=e.target;
+  if(t.id==="certSel"){state.certGoal=t.value;pushProgress();renderAll();return;}
+  if(t.id==="fType"||t.id==="fLevel"){renderFeed();return;}
+  var k=t.dataset&&t.dataset.k;if(!k)return;
+  if(isShared(k)&&S.mode!=="local"){
+    if(!S.canWrite){t.checked=!t.checked;return;}
+    try{await setShared(k,t.checked);}catch(err){fail(err);}
+    return;
+  }
+  if(t.checked)state.checks[k]=true;else delete state.checks[k];
+  pushProgress();renderAll();
+});
+document.addEventListener("click",async function(e){
+  var tgt=e.target;
+  var lvb=tgt.closest(".lvbtn");if(lvb){select(+lvb.dataset.lv,false);return;}
+  var st=tgt.closest("[data-step]");if(st){select(cur+ +st.dataset.step,false);return;}
+  var ob=tgt.closest("[data-qk]");if(ob){state.quiz[ob.dataset.qk]=+ob.dataset.oi;pushProgress();renderAll();return;}
+  var cb=tgt.closest("[data-cat]");if(cb){capCat=cb.dataset.cat;renderCaps();return;}
+  var dl=tgt.closest("[data-del]");if(dl){if(!confirm("¿Borrar esta nota y sus respuestas?"))return;try{await delNote(dl.dataset.del);}catch(err){fail(err);}return;}
+  var rp=tgt.closest("[data-reply]");
+  if(rp){
+    var holder=rp.closest(".note").children[1],ex=holder.querySelector(".rform");
+    if(ex){ex.remove();return;}
+    var f=document.createElement("form");f.className="rform";f.dataset.parent=rp.dataset.reply;
+    f.innerHTML='<input name="text" maxlength="1000" required placeholder="Tu respuesta" aria-label="Respuesta"><button class="btn" type="submit">Responder</button>';
+    holder.appendChild(f);f.querySelector("input").focus();
+  }
+});
+document.addEventListener("toggle",function(e){var d=e.target;if(d.dataset&&d.dataset.ph!==undefined)openPh[d.dataset.ph]=d.open;},true);
+document.addEventListener("submit",async function(e){
+  var f=e.target;e.preventDefault();
+  if(S.mode==="local"||!S.canWrite)return;
+  var btn=f.querySelector("button");btn.disabled=true;
+  try{
+    if(f.classList.contains("nform")){
+      var text=f.elements.text.value.trim();if(!text){btn.disabled=false;return;}
+      var sc=f.dataset.scope,doc={type:f.elements.type.value,text:text.slice(0,1000),parent:null,res:-1};
+      if(sc==="feed")doc.lv=f.elements.lv.value;else{doc.lv=sc;doc.res=+f.elements.res.value;}
+      f.elements.text.value="";document.activeElement.blur();
+      await addNote(doc);
+    }else if(f.classList.contains("rform")){
+      var t2=f.elements.text.value.trim();if(!t2){btn.disabled=false;return;}
+      var par=notes.filter(function(n){return n._id===f.dataset.parent;})[0];
+      f.remove();
+      await addNote({type:"",text:t2.slice(0,1000),parent:f.dataset.parent,lv:par?par.lv:"general",res:-1});
+    }
+  }catch(err){fail(err);}
+  btn.disabled=false;renderAll();
+});
+document.addEventListener("keydown",function(e){
+  if(e.target.closest&&e.target.closest("input,textarea,select"))return;
+  var inViewer=e.target.closest&&e.target.closest(".viewer");
+  if(!inViewer)return;
+  if(e.key==="ArrowRight"||e.key==="ArrowUp"){e.preventDefault();select(cur+1);document.getElementById("tab"+cur).focus();}
+  if(e.key==="ArrowLeft"||e.key==="ArrowDown"){e.preventDefault();select(cur-1);document.getElementById("tab"+cur).focus();}
+});
+document.getElementById("gsearch").addEventListener("input",function(e){renderGloss(e.target.value);});
+document.getElementById("resetBtn").addEventListener("click",function(){
+  if(!confirm("¿Borrar tu avance personal (hitos, quiz y meta)? Las casillas compartidas y las notas no se tocan."))return;
+  state.checks={};state.quiz={};state.certGoal="";pushProgress();renderAll();
+});
+document.getElementById("themeBtn").addEventListener("click",function(){
+  var r=document.documentElement,c=r.getAttribute("data-theme");
+  var dark=c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  r.setAttribute("data-theme",dark?"light":"dark");
+  try{localStorage.setItem(KEY+"-theme",dark?"light":"dark");}catch(e){}
+});
+try{var th=localStorage.getItem(KEY+"-theme");if(th)document.documentElement.setAttribute("data-theme",th);}catch(e){}
+
+
+/* ======================= nube de puntos y fotos ======================= */
+var RAMP=[[0,[37,99,235]],[.28,[14,165,233]],[.5,[34,197,94]],[.72,[250,204,21]],[1,[249,115,22]]];
+function ramp(t){t=Math.max(0,Math.min(1,t));for(var i=1;i<RAMP.length;i++){if(t<=RAMP[i][0]){var a=RAMP[i-1],b=RAMP[i],k=(t-a[0])/(b[0]-a[0]);return "rgb("+Math.round(a[1][0]+(b[1][0]-a[1][0])*k)+","+Math.round(a[1][1]+(b[1][1]-a[1][1])*k)+","+Math.round(a[1][2]+(b[1][2]-a[1][2])*k)+")";}}return "rgb(249,115,22)";}
+function rng(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function cloudPts(W,H,seed,cxf,n){
+  var r=rng(seed),pts=[],cx=W*cxf,cy=H*0.52,sc=Math.min(W*0.5,H*1.5)*0.78;
+  function zt(x,y){return 0.16*Math.sin(2.1*x+seed%7)+0.1*Math.cos(3.3*y+seed%5)+0.05*Math.sin(6.2*x+4.1*y);}
+  var B=[];for(var b=0;b<7;b++){var bx=-0.6+r()*1.5,by=-0.8+r()*1.4,w=0.12+r()*0.22,d=0.12+r()*0.22;B.push({x0:bx,x1:bx+w,y0:by,y1:by+d,h:0.18+r()*0.55,z:zt(bx,by)});}
+  function P(x,y,z,t){var sx=cx+(x-y)*sc,sy=cy+(x+y)*sc*0.48-z*sc*1.05;if(sx>-4&&sx<W+4&&sy>-4&&sy<H+4)pts.push([sx,sy,t]);}
+  function inB(x,y){for(var i=0;i<B.length;i++){var q=B[i];if(x>=q.x0&&x<=q.x1&&y>=q.y0&&y<=q.y1)return q;}return null;}
+  for(var i=0;i<n;i++){var x=-1.5+r()*3,y=-1.5+r()*3,q=inB(x,y);if(q){P(x,y,q.z+q.h,0.55+q.h*0.8);}else{var z=zt(x,y);P(x,y,z,(z+0.3)/0.75);}}
+  B.forEach(function(q){var m=Math.round(n*0.012*(q.h+0.2));for(var k=0;k<m;k++){var u=r(),v=r();if(r()<0.5)P(q.x1,q.y0+(q.y1-q.y0)*u,q.z+q.h*v,(q.z+q.h*v+0.3)/0.9);else P(q.x0+(q.x1-q.x0)*u,q.y1,q.z+q.h*v,(q.z+q.h*v+0.3)/0.9);}});
+  pts.sort(function(a,b){return a[0]-b[0];});
+  return pts;
+}
+function paintPts(ctx,pts,from,to,sz){to=Math.min(to,pts.length);for(var i=from;i<to;i++){var p=pts[i];ctx.fillStyle=ramp(p[2]);ctx.fillRect(p[0],p[1],sz,sz);}}
+function drawCover(animate){
+  var cv=document.getElementById("cloudCv");if(!cv)return;
+  var box=cv.parentElement.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+  var W=Math.round(box.width),Hh=Math.round(box.height);
+  cv.width=W*dpr;cv.height=Hh*dpr;
+  var ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle="#020A14";ctx.fillRect(0,0,W,Hh);
+  var pts=cloudPts(W,Hh,410,W<760?0.55:0.7,Math.round(Math.min(110000,W*Hh/8)));
+  var sz=W<760?1.8:1.7;
+  ctx.globalAlpha=0.9;
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!animate||reduce){paintPts(ctx,pts,0,pts.length,sz);return;}
+  var t0=null,done=0,DUR=1800;
+  function step(ts){if(t0===null)t0=ts;var k=Math.min(1,(ts-t0)/DUR),target=Math.round(pts.length*k);paintPts(ctx,pts,done,target,sz);done=target;if(k<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+function bandImage(seed){
+  var W=1600,Hh=360,c=document.createElement("canvas");c.width=W;c.height=Hh;
+  var ctx=c.getContext("2d");ctx.fillStyle="#020A14";ctx.fillRect(0,0,W,Hh);ctx.globalAlpha=0.92;
+  paintPts(ctx,cloudPts(W,Hh,seed,0.66,90000),0,Infinity,1.8);
+  try{return c.toDataURL("image/jpeg",0.82);}catch(e){return "";}
+}
+function tryPhoto(name,ok){var i=new Image();i.onload=function(){ok(i.src);};i.src="static/img/"+name+".jpg";}
+function initVisuals(){
+  drawCover(true);
+  var rz=null;window.addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){drawCover(false);},200);});
+  var cp=document.querySelector(".cover-photo");
+  tryPhoto("portada",function(src){cp.style.backgroundImage='url("'+src+'")';cp.classList.add("on");document.getElementById("coverCap").textContent="Fotografía del levantamiento";});
+  var seeds={captura:11,equipo:27,terreno:53};
+  document.querySelectorAll(".band").forEach(function(b){
+    var name=b.dataset.photo,url=bandImage(seeds[name]||7);
+    if(url)b.style.backgroundImage='url("'+url+'")';
+    tryPhoto(name,function(src){b.style.backgroundImage='url("'+src+'")';});
+  });
+}
+/* ======================= arranque ======================= */
+document.getElementById("fType").innerHTML='<option value="">Todos los tipos</option>'+typeOpts();
+document.getElementById("fLevel").innerHTML='<option value="">Todos los niveles</option><option value="general">General</option>'+LEVELS.map(function(l,i){return '<option value="'+l.id+'">N'+i+' · '+esc(l.short)+'</option>';}).join("");
+cur=currentLevel(state);
+renderCaps();renderGloss("");doRender();statusFor();
+try{initVisuals();}catch(e){}
+
+(async function(){
+  try{await startApi();statusFor();return;}catch(e){}
+  try{await startClaude();statusFor();renderAll();return;}catch(e){}
+  S.mode="local";statusFor();renderAll();
+})();
+})();
+</script>
+</body>
+</html>

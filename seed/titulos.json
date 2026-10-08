@@ -1,0 +1,30 @@
+{
+  "_nota": "Títulos por nivel y por clase. Ver docs/GAMIFICACION.md. character_class: architect | engineer | cartographer | artificer | pilot.",
+  "classes": [
+    {"slug": "architect", "name": "Arquitecto-Constructor", "discipline": "arquitectura", "archetype": "Mago de la forma"},
+    {"slug": "engineer", "name": "Calculista", "discipline": "civil-estructural", "archetype": "Paladín de las cargas"},
+    {"slug": "cartographer", "name": "Cartógrafo", "discipline": "topografia", "archetype": "Explorador"},
+    {"slug": "artificer", "name": "Artífice", "discipline": "mecanica", "archetype": "Inventor"},
+    {"slug": "pilot", "name": "Piloto de Nubes", "discipline": "captura-rpa", "archetype": "Arquero de largo alcance"}
+  ],
+  "titles": [
+    {"slug": "aprendiz-de-cota", "name": "Aprendiz de Cota", "min_level": 1},
+    {"slug": "dibujante-de-grilla", "name": "Dibujante de Grilla", "min_level": 3},
+    {"slug": "portador-del-jalon", "name": "Portador del Jalón", "min_level": 3, "character_class": "cartographer"},
+    {"slug": "aprendiz-de-helices", "name": "Aprendiz de Hélices", "min_level": 3, "character_class": "pilot"},
+    {"slug": "modelador-de-familias", "name": "Modelador de Familias", "min_level": 5},
+    {"slug": "guardian-del-eje", "name": "Guardián del Eje", "min_level": 5, "character_class": "engineer"},
+    {"slug": "topografo-arcano", "name": "Topógrafo Arcano", "min_level": 7},
+    {"slug": "domador-de-helices", "name": "Domador de Hélices", "min_level": 7, "character_class": "pilot"},
+    {"slug": "maestro-de-nubes", "name": "Maestro de Nubes de Puntos", "min_level": 10},
+    {"slug": "senor-del-despiece", "name": "Señor del Despiece", "min_level": 10, "character_class": "artificer"},
+    {"slug": "arquitecto-del-gemelo", "name": "Arquitecto del Gemelo Digital", "min_level": 13},
+    {"slug": "tejedor-de-laminas", "name": "Tejedor de Láminas", "min_level": 13, "character_class": "architect"},
+    {"slug": "archimago-bim", "name": "Archimago BIM", "min_level": 16},
+    {"slug": "archicalculista", "name": "Archicalculista", "min_level": 16, "character_class": "engineer"},
+    {"slug": "leyenda-lev-101", "name": "Leyenda LEV 101", "min_level": 20},
+    {"slug": "primera-luz", "name": "Primera Luz", "badge": "primera-luz"},
+    {"slug": "constructor-de-puentes", "name": "Constructor de Puentes", "badge": "constructor-de-puentes"},
+    {"slug": "sabio-del-foro", "name": "Sabio del Foro", "badge": "sabio-del-foro"}
+  ]
+}

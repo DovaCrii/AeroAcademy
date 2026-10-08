@@ -1,0 +1,1327 @@
+{
+  "slug": "forma-revit",
+  "title": "Ruta Forma + Revit",
+  "program": "CC 410 · Levantamiento Digital",
+  "platform": "autodesk-learning",
+  "kind": "structured",
+  "vendor": "autodesk",
+  "products": [
+    "forma",
+    "revit",
+    "recap",
+    "navisworks"
+  ],
+  "disciplines": [
+    "arquitectura",
+    "civil-estructural",
+    "mecanica",
+    "captura-rpa"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Orientación",
+      "title": "Orientación: el nuevo mapa Forma",
+      "estimated_hours": "2 h",
+      "audience": "Todo el equipo",
+      "goal": "Saber qué es cada producto, entrar al hub correcto y tener cuenta activa en Autodesk Learning.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Conceptual design with Autodesk Forma",
+          "url": "https://www.autodesk.com/learn/ondemand/course/conceptual-design-with-autodesk-forma",
+          "description": "Curso introductorio: qué es Forma, estudio de masas y dónde seguir aprendiendo.",
+          "tags": [
+            "Course",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Forma Learning Hub",
+          "url": "https://autodesk.com/forma-learning-hub",
+          "description": "Help Center, webinars en vivo y grabados, y cursos de Customer Success.",
+          "tags": [
+            "Portal",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Autodesk Learning catalog: Revit",
+          "url": "https://www.autodesk.com/learn/catalog/product%7Cdeepdive/Revit%7Cmodules,courses,collections",
+          "description": "Más de 90 módulos, cursos y colecciones. Usa el filtro *Certification prep*.",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Introduction to Forma Building Design",
+          "url": "https://blogs.autodesk.com/forma/2026/04/07/introduction-to-forma-building-design/",
+          "description": "Cuándo usar Building Design y cuándo Revit.",
+          "tags": [
+            "Blog",
+            "Oficial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Entrar a *Forma Home* con la cuenta corporativa y confirmar que estás en el hub de la empresa"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Crear perfil en Autodesk Learning y revisar *My dashboard*"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Hacer un *Product tour* dentro de Forma"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Explicar a un colega la diferencia entre *Site Design*, *Building Design*, *Data Management* y Revit"
+        }
+      ],
+      "mastery_signals": [
+        "Nombras cada producto con su nombre nuevo y el antiguo",
+        "Sabes en qué hub y región está guardado el proyecto"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "¿Cómo se llama hoy Autodesk Docs?",
+          "options": [
+            "Forma Board",
+            "Forma Data Management",
+            "Forma Build"
+          ],
+          "answer": 1,
+          "explanation": "Desde marzo de 2026 Docs es Forma Data Management, el CDE de la plataforma."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Qué producto se llamaba antes simplemente “Autodesk Forma”?",
+          "options": [
+            "Forma Site Design",
+            "Forma Building Design",
+            "Revit Cloud"
+          ],
+          "answer": 0,
+          "explanation": "El Forma original, de análisis de sitio, pasó a ser Forma Site Design."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Fundamentos Revit",
+      "title": "Fundamentos de Revit",
+      "estimated_hours": "15 a 25 h",
+      "audience": "Modeladores nuevos o que vienen de CAD",
+      "goal": "Modelar, crear familias simples y documentar. Meta opcional: Autodesk Certified User en Revit.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Introduction to BIM for architectural design",
+          "url": "https://www.autodesk.com/learn/ondemand/course/introduction-to-bim-for-architectural-design",
+          "description": "Curso de BIM con Revit; incluye una unidad de modelado conceptual en Forma.",
+          "tags": [
+            "Course",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Architectural modeling by project phase",
+          "url": "https://www.autodesk.com/learn/ondemand/collection/architecture",
+          "description": "Colección de 7 piezas ordenadas por fase de proyecto.",
+          "tags": [
+            "Collection",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "BIM foundations for education",
+          "url": "https://www.autodesk.com/learn/ondemand/collection/bim-foundations-for-education",
+          "description": "Bases de BIM con Revit, Forma Site Design y Navisworks.",
+          "tags": [
+            "Collection",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Communicate the design intent of the Revit model",
+          "url": "https://www.autodesk.com/learn/ondemand/module/communicate-the-design-intent-of-the-revit-model",
+          "description": "Módulo de 45 minutos sobre *Views*, anotación y *Sheets*.",
+          "tags": [
+            "Module",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Autodesk Certified User: Revit",
+          "url": "https://certiport.pearsonvue.com/Certifications/Autodesk/Certifications/Certify.aspx#Revit",
+          "description": "Examen de entrada, 50 minutos.",
+          "tags": [
+            "cert"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Completar el curso introductorio de BIM",
+          "completed_by_resource": "Introduction to BIM for architectural design"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Modelar un edificio simple con *Levels*, *Grids*, *Walls*, *Floors* y *Roof*"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Crear una familia en el *Family Editor* con parámetros de *Type* e *Instance*"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Emitir un *Sheet* con el *Title block* corporativo"
+        },
+        {
+          "key": "n1-t4",
+          "text": "(Opcional) Rendir Autodesk Certified User",
+          "completed_by_resource": "Autodesk Certified User: Revit"
+        }
+      ],
+      "mastery_signals": [
+        "Distingues *System families*, *Loadable families* e *In-place*",
+        "Usas *View Templates* en lugar de ajustar vista por vista",
+        "Entiendes *Project Base Point* y *Survey Point*"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "¿Cuál es la certificación de entrada en Revit?",
+          "options": [
+            "Autodesk Certified Professional",
+            "Autodesk Certified User",
+            "BIM Management"
+          ],
+          "answer": 1,
+          "explanation": "Autodesk Certified User es el nivel de entrada; el examen dura 50 minutos."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Site Design",
+      "title": "Forma Site Design: sitio y análisis",
+      "estimated_hours": "6 a 8 h",
+      "audience": "Todo el equipo de diseño",
+      "goal": "Crear un sitio real, modelar volúmenes, correr todos los análisis y presentar en Forma Board. Meta: Certificate of completion.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Getting started with Autodesk Forma Site Design for conceptual design",
+          "url": "https://www.autodesk.com/learn/ondemand/module/getting-started-with-autodesk-forma-for-conceptual-design",
+          "description": "Módulo de 45 minutos: interfaz, contexto y masas.",
+          "tags": [
+            "Module",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Learn Forma Site Design in 90 minutes",
+          "url": "https://www.autodesk.com/learn/ondemand/course/learn-forma-site-design-in-90-minutes-workflows-for-design-studios",
+          "description": "Curso con proyecto completo, ejercicios y Forma Board.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Certificate of completion"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Analysis in Forma",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/analysis-in-forma",
+          "description": "Paso a paso del menú *Analyze*: Sun hours, Daylight potential, Wind, Microclimate, Operational energy, Noise y Solar energy.",
+          "tags": [
+            "Tutorial",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Practice exercise: create a new conceptual site layout proposal",
+          "url": "https://www.autodesk.com/learn/ondemand/module/practice-exercise-create-a-new-conceptual-site-layout-proposal",
+          "description": "Ejercicio con pauta de evaluación.",
+          "tags": [
+            "Exercise",
+            "Oficial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Crear un sitio con *Create new site* → *Confirm map area* en una ubicación real"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Revisar la cobertura de terreno y edificios del *Data Marketplace*"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Correr cada análisis del menú *Analyze* al menos una vez"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Comparar dos *Proposals* con *Area metrics*"
+        },
+        {
+          "key": "n2-t4",
+          "text": "Armar un *Forma Board* con los resultados"
+        },
+        {
+          "key": "n2-t5",
+          "text": "Completar el curso de 90 minutos y descargar el *Certificate of completion*",
+          "completed_by_resource": "Learn Forma Site Design in 90 minutes"
+        }
+      ],
+      "mastery_signals": [
+        "Sabes cuándo basta el análisis *Rapid* (ML) y cuándo correr el *Detailed*",
+        "Diferencias *Sun hours* de *Daylight potential*"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "¿Qué análisis usan machine learning para dar resultados casi instantáneos?",
+          "options": [
+            "Wind y Noise en modo Rapid",
+            "Sun hours",
+            "Area metrics"
+          ],
+          "answer": 0,
+          "explanation": "Los análisis rápidos de viento y ruido usan ML; luego se verifica con el análisis detallado."
+        },
+        {
+          "key": "n2-q1",
+          "question": "Daylight potential se basa en…",
+          "options": [
+            "Horas de sol en el suelo",
+            "Vertical Sky Component (VSC)",
+            "Radiación en techos"
+          ],
+          "answer": 1,
+          "explanation": "Daylight potential mide VSC sobre las fachadas."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Forma ↔ Revit",
+      "title": "Integración Forma ↔ Revit",
+      "estimated_hours": "8 a 10 h",
+      "audience": "Modeladores y coordinadores",
+      "goal": "Llevar una propuesta de Forma a Revit y volver a Forma con los cambios, sin re-modelar y sin perder la georreferencia.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Design performance and sustainability with Forma Site Design, Revit and Forma Carbon Insights",
+          "url": "https://www.autodesk.com/learn/ondemand/course/design-performance-and-sustainability-with-autodesk-forma-revit-and-insight",
+          "description": "Curso largo (unas 7 h) del flujo completo Forma → Revit con análisis.",
+          "tags": [
+            "Course",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Iterative design and analysis with Forma and Revit",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/Revit-HaveYouTried/files/GUID-02430F6D-AB33-468E-8D39-D4F6516168D8.htm",
+          "description": "Guía de ayuda: transferir y actualizar entre Forma y Revit.",
+          "tags": [
+            "Help",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Forma Site Design Add-In for Revit",
+          "url": "https://marketplace.autodesk.com/apps/4fb0800c-4ad1-4d29-84be-9c2b1c3b0321",
+          "description": "Gratuito. Compatible con Revit 2022 a 2026.",
+          "tags": [
+            "Add-in",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Revit 2027: a more connected way to design",
+          "url": "https://www.autodesk.com/blogs/aec/2026/04/09/revit-2027-a-more-connected-way-to-design/",
+          "description": "Revit como Forma Connected Client (Tech Preview).",
+          "tags": [
+            "Blog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Revit as a Forma Connected Client: what customers can do today",
+          "url": "https://adsknews.autodesk.com/en/views/views-revit-forma-connected-client/",
+          "description": "Contexto, Wind y Microclimate dentro de Revit.",
+          "tags": [
+            "Blog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 5,
+          "title": "Connect your design workflows with Forma Building Design",
+          "url": "https://blogs.autodesk.com/forma/2026/04/14/connect-your-design-workflows-with-forma-building-design/",
+          "description": "Building Design → Revit, Site Design ↔ Building Design, y Board.",
+          "tags": [
+            "Blog",
+            "Oficial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Instalar el add-in con *Download Revit add-in* (Revit 2026 o anterior) o activar *Enable Forma Connected Client* (Revit 2027 con *cloud model*)"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Usar *Send to Revit* y abrirlo desde la pestaña *Massing & Site*"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Verificar coordenadas: *Project Base Point* y *Survey Point*"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Modificar en Revit y usar *Update proposal* desde una vista 3D dedicada"
+        },
+        {
+          "key": "n3-t4",
+          "text": "Registrar qué se convierte bien (*Toposolid*, edificios, límites) y qué no"
+        },
+        {
+          "key": "n3-t5",
+          "text": "Probar el paso de *Building Design* a Revit"
+        },
+        {
+          "key": "n3-t6",
+          "text": "Vincular la nube de puntos del levantamiento con *Insert* → *Point Cloud* (.rcp) y modelar sobre ella"
+        }
+      ],
+      "mastery_signals": [
+        "El modelo llega georreferenciado sin ajustes manuales",
+        "Sabes qué versión de Revit usa cada flujo"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "¿Qué exige Revit 2027 para funcionar como Connected Client?",
+          "options": [
+            "Un archivo local .rvt",
+            "Cloud model conectado a un Scenario de Forma y Tech Preview habilitada",
+            "Solo instalar el add-in"
+          ],
+          "answer": 1,
+          "explanation": "Se requiere modelo en la nube y que el administrador habilite la Tech Preview en el proyecto."
+        },
+        {
+          "key": "n3-q1",
+          "question": "En Revit 2024 o posterior, el terreno de Forma llega como…",
+          "options": [
+            "Toposurface",
+            "Toposolid",
+            "Generic mesh"
+          ],
+          "answer": 1,
+          "explanation": "Desde Revit 2024 el terreno se convierte en Toposolid."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Colaboración y CDE",
+      "title": "Colaboración y CDE",
+      "estimated_hours": "4 a 10 h",
+      "audience": "Coordinadores BIM y líderes de disciplina",
+      "goal": "Operar Forma Data Management como entorno común: carpetas, permisos, revisiones, transmittals y coordinación.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Learn Forma Data Management and Build in 90 minutes",
+          "url": "https://www.autodesk.com/learn/ondemand/course/learn-docs-and-build-in-90-minutes",
+          "description": "Documentación, coordinación y terreno en un solo curso, con datasets.",
+          "tags": [
+            "Course",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Use Autodesk Forma for Construction in multidisciplinary MEP collaboration",
+          "url": "https://www.autodesk.com/learn/ondemand/module/use-autodesk-forma-for-construction-in-multidisciplinary-mep-collaboration",
+          "description": "Módulo de 30 minutos con *Revit Cloud Worksharing*.",
+          "tags": [
+            "Module",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Introduction to BIM for MEP design",
+          "url": "https://www.autodesk.com/learn/ondemand/course/introduction-to-bim-for-mep-design",
+          "description": "Curso de 8 h con coordinación y detección de interferencias.",
+          "tags": [
+            "Course",
+            "Oficial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Crear un proyecto plantilla en *Data Management* con *Folders* y *Permissions*"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Hacer una *Review* y un *Transmittal* de prueba"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Publicar un *cloud model* y revisar interferencias en *Model Coordination*"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Definir la *naming convention* de archivos del equipo"
+        }
+      ],
+      "mastery_signals": [
+        "Cualquiera encuentra la última versión sin preguntar",
+        "Las *Reviews* dejan registro"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "¿Qué producto funciona como entorno común de datos (CDE)?",
+          "options": [
+            "Forma Board",
+            "Forma Data Management",
+            "Forma Site Design"
+          ],
+          "answer": 1,
+          "explanation": "Forma Data Management es el CDE que conecta planificación, diseño y construcción."
+        }
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Certificación",
+      "title": "Certificación profesional por disciplina",
+      "estimated_hours": "30 a 60 h",
+      "audience": "Profesionales de cada disciplina",
+      "goal": "Preparar y rendir la certificación profesional de Revit que corresponda al rol.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Revit for Architectural Design Professional Certification Prep",
+          "url": "https://www.autodesk.com/learn/ondemand/course/revit-architectural-design-cert-prep",
+          "description": "Lecciones por dominio del examen, datasets y *Practice test*.",
+          "tags": [
+            "Cert prep",
+            "Oficial",
+            "Prepara certificación"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Revit for Structural Design Professional Certification Prep",
+          "url": "https://www.autodesk.com/learn/ondemand/course/revit-structural-design-cert-prep",
+          "description": "Fundaciones, marcos, muros, columnas, *Phases* y *Worksharing*.",
+          "tags": [
+            "Cert prep",
+            "Oficial",
+            "Prepara certificación"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Revit for Electrical Design Professional Certification Prep",
+          "url": "https://www.autodesk.com/learn/ondemand/course/revit-electrical-design-cert-prep",
+          "description": "Vistas, familias, *Schedules* y análisis eléctrico.",
+          "tags": [
+            "Cert prep",
+            "Oficial",
+            "Prepara certificación"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Autodesk Certification for AEC",
+          "url": "https://www.autodesk.com/certification/architecture-engineering-construction-certification",
+          "description": "Listado oficial, incluidas Mechanical Design y BIM Management.",
+          "tags": [
+            "Portal",
+            "Oficial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Elegir la certificación según el rol y registrarla en la tabla del equipo"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Completar el curso de preparación"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Aprobar el *Practice test*"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Revisar costo, idioma y modalidad, y agendar el examen"
+        },
+        {
+          "key": "n5-t4",
+          "text": "Compartir la credencial obtenida"
+        }
+      ],
+      "mastery_signals": [
+        "Resuelves los *Challenge exercises* sin mirar la solución",
+        "Te sobra tiempo en el *Practice test*"
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "¿Cuánto dura un examen Autodesk Certified Professional de Revit?",
+          "options": [
+            "50 minutos",
+            "90 minutos",
+            "120 minutos"
+          ],
+          "answer": 2,
+          "explanation": "Los exámenes profesionales duran 120 minutos."
+        }
+      ]
+    },
+    {
+      "code": "n6",
+      "order": 6,
+      "short": "Automatización",
+      "title": "Automatización y extensiones",
+      "estimated_hours": "Variable",
+      "audience": "Quien programa o automatiza",
+      "goal": "Automatizar tareas repetitivas en Forma con Dynamo y evaluar extensiones propias con la Forma API.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Dynamo in Forma",
+          "url": "https://dynamobim.org/dynamo-in-forma/",
+          "description": "Instalar *Dynamo Player* en Forma y correr gráficos.",
+          "tags": [
+            "Guide",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Dynamo Primer: set up Dynamo Player in Forma",
+          "url": "https://primer2.dynamobim.org/dynamo-in-forma-beta/set-up-dynamo-player-in-forma",
+          "description": "Configuración paso a paso.",
+          "tags": [
+            "Guide",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Forma API (Autodesk Platform Services)",
+          "url": "https://aps.autodesk.com/en/docs/forma/v1/embedded-views/using-http-apis",
+          "description": "Extensiones, terreno, propuestas y publicación en el marketplace.",
+          "tags": [
+            "API",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Forma Developer Forum",
+          "url": "https://forums.autodesk.com/t5/forma-api-forum/bd-p/forma_api_forum",
+          "description": "Preguntas, ejemplos y novedades.",
+          "tags": [
+            "Forum",
+            "Oficial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n6-t0",
+          "text": "En Forma: *Extensions* → *Add extension* → *Dynamo Player*, y correr el ejemplo"
+        },
+        {
+          "key": "n6-t1",
+          "text": "Crear un gráfico que lea *Area metrics*"
+        },
+        {
+          "key": "n6-t2",
+          "text": "Evaluar una extensión propia (por ejemplo, layout de campamentos)"
+        }
+      ],
+      "mastery_signals": [
+        "Un script ahorra horas en una tarea que el equipo repite"
+      ],
+      "quiz": [
+        {
+          "key": "n6-q0",
+          "question": "Hoy, ¿qué crea Dynamo Player dentro de Forma con el ejemplo integrado?",
+          "options": [
+            "Solo mallas",
+            "Elementos nativos de Forma",
+            "Archivos .rvt"
+          ],
+          "answer": 1,
+          "explanation": "En la versión actual, los objetos se crean como elementos nativos de Forma."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "category": "Sitio",
+      "name": "Create new site",
+      "description": "Terreno y edificios del entorno desde el Data Marketplace a partir de una dirección.",
+      "where": "Site Design · Revit 2027",
+      "team_idea": "Contexto rápido para licitaciones."
+    },
+    {
+      "category": "Sitio",
+      "name": "Terreno propio",
+      "description": "Reemplazar el terreno global por topografía de dron, láser o fotogrametría.",
+      "where": "Site Design · Terrain API",
+      "team_idea": "Ventaja directa del equipo de captura de realidad."
+    },
+    {
+      "category": "Sitio",
+      "name": "Site elements",
+      "description": "Estacionamientos, vegetación, ejes de transporte y edificios.",
+      "where": "Site Design",
+      "team_idea": ""
+    },
+    {
+      "category": "Sitio",
+      "name": "Capas GIS",
+      "description": "Predios, redes de infraestructura y terreno desde ArcGIS.",
+      "where": "Site Design · Revit",
+      "team_idea": ""
+    },
+    {
+      "category": "Sitio",
+      "name": "Import",
+      "description": "Rhino, SketchUp o GeoJSON convertidos a geometría editable.",
+      "where": "Site Design",
+      "team_idea": ""
+    },
+    {
+      "category": "Diseño",
+      "name": "Massing y Proposals",
+      "description": "Varias propuestas comparadas con Area metrics en vivo.",
+      "where": "Site Design",
+      "team_idea": "Implantación de edificios de apoyo en faena."
+    },
+    {
+      "category": "Diseño",
+      "name": "Floor plans, facades, units",
+      "description": "Automatizaciones de diseño esquemático a nivel LOD 200.",
+      "where": "Building Design",
+      "team_idea": ""
+    },
+    {
+      "category": "Análisis",
+      "name": "Sun hours",
+      "description": "Asoleamiento en suelo o fachadas para cualquier fecha.",
+      "where": "Site Design",
+      "team_idea": ""
+    },
+    {
+      "category": "Análisis",
+      "name": "Daylight potential",
+      "description": "Vertical Sky Component sobre fachadas.",
+      "where": "Site Design · Building Design",
+      "team_idea": ""
+    },
+    {
+      "category": "Análisis",
+      "name": "Wind",
+      "description": "Rapid (ML) o Detailed; confort peatonal.",
+      "where": "Site Design · Revit 2027",
+      "team_idea": "Campamentos y patios en zonas expuestas."
+    },
+    {
+      "category": "Análisis",
+      "name": "Microclimate",
+      "description": "Temperatura percibida en espacios exteriores.",
+      "where": "Site Design · Revit 2027",
+      "team_idea": ""
+    },
+    {
+      "category": "Análisis",
+      "name": "Noise",
+      "description": "Ruido de tráfico vial y ferroviario, Rapid o Detailed.",
+      "where": "Site Design",
+      "team_idea": "Recintos junto a vías o estaciones."
+    },
+    {
+      "category": "Análisis",
+      "name": "Solar energy",
+      "description": "Potencial anual en techos y fachadas.",
+      "where": "Site Design",
+      "team_idea": "Prefactibilidad de paneles."
+    },
+    {
+      "category": "Análisis",
+      "name": "Operational energy",
+      "description": "Consumo estimado de iluminación, clima y equipos.",
+      "where": "Site Design",
+      "team_idea": "Verificar disponibilidad para Chile."
+    },
+    {
+      "category": "Análisis",
+      "name": "Forma Carbon Insights",
+      "description": "Carbono incorporado en Building Design y Revit.",
+      "where": "Building Design · Revit",
+      "team_idea": "Hoy limitado a EE.UU. en Building Design."
+    },
+    {
+      "category": "Revit",
+      "name": "Nube de puntos en Revit",
+      "description": "Modelar as-built sobre la nube del levantamiento (.rcp).",
+      "where": "Revit · ReCap Pro",
+      "team_idea": "Núcleo de la propuesta CC 410."
+    },
+    {
+      "category": "Revit",
+      "name": "Send to Revit",
+      "description": "Propuesta convertida en Toposolid, edificios y límites editables.",
+      "where": "Add-in 2022–2026",
+      "team_idea": ""
+    },
+    {
+      "category": "Revit",
+      "name": "Update proposal",
+      "description": "Devolver cambios de Revit a Forma para volver a analizar.",
+      "where": "Add-in · Revit 2027",
+      "team_idea": ""
+    },
+    {
+      "category": "Revit",
+      "name": "Forma Contextual Data",
+      "description": "Terreno, edificios, predios y análisis sin salir de Revit.",
+      "where": "Revit 2027 (Tech Preview)",
+      "team_idea": ""
+    },
+    {
+      "category": "Colaboración",
+      "name": "Forma Board",
+      "description": "Presentar opciones y resultados a clientes o gerencia.",
+      "where": "Board",
+      "team_idea": ""
+    },
+    {
+      "category": "Colaboración",
+      "name": "CDE",
+      "description": "Files, Reviews, Issues, Transmittals y Reports.",
+      "where": "Data Management",
+      "team_idea": ""
+    },
+    {
+      "category": "Colaboración",
+      "name": "Model Coordination",
+      "description": "Interferencias y coordinación multidisciplinaria.",
+      "where": "Design Collaboration",
+      "team_idea": ""
+    },
+    {
+      "category": "Automatización",
+      "name": "Dynamo Player",
+      "description": "Gráficos que crean elementos nativos o leen métricas.",
+      "where": "Site Design",
+      "team_idea": ""
+    },
+    {
+      "category": "Automatización",
+      "name": "Extensions y Forma API",
+      "description": "Análisis y herramientas propias publicables.",
+      "where": "Forma API",
+      "team_idea": "Layout de campamentos o reglas internas."
+    },
+    {
+      "category": "Automatización",
+      "name": "Data Exchange",
+      "description": "Datos hacia Power BI, Rhino o Tekla.",
+      "where": "Data Management",
+      "team_idea": "Tableros de avance."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Forma Home",
+      "location": "Inicio de Forma",
+      "meaning": "Punto de entrada a Site Design, Building Design, Board y Data Management."
+    },
+    {
+      "term": "Create new site",
+      "location": "Forma Home",
+      "meaning": "Crea un sitio a partir de una dirección o ciudad."
+    },
+    {
+      "term": "Confirm map area",
+      "location": "Al crear el sitio",
+      "meaning": "Fija el área y descarga terreno y edificios del entorno."
+    },
+    {
+      "term": "Proposal",
+      "location": "Site Design",
+      "meaning": "Una alternativa de diseño dentro del sitio."
+    },
+    {
+      "term": "Area metrics",
+      "location": "Panel derecho de Site Design",
+      "meaning": "Superficies y métricas de la propuesta en vivo."
+    },
+    {
+      "term": "Analyze",
+      "location": "Menú de Site Design",
+      "meaning": "Agrupa Sun hours, Daylight potential, Wind, Microclimate, Noise, Solar energy y Operational energy."
+    },
+    {
+      "term": "Rapid / Detailed",
+      "location": "Dentro de Wind y Noise",
+      "meaning": "Rapid usa ML para resultados inmediatos; Detailed es la simulación completa."
+    },
+    {
+      "term": "Data Marketplace",
+      "location": "Site Design · Revit 2027",
+      "meaning": "Catálogo de terreno y edificios de contexto por ubicación."
+    },
+    {
+      "term": "Extensions → Add extension",
+      "location": "Panel izquierdo de Forma",
+      "meaning": "Agrega extensiones como Dynamo Player o análisis de terceros."
+    },
+    {
+      "term": "Download Revit add-in",
+      "location": "Menú de tres puntos de la propuesta",
+      "meaning": "Descarga el add-in de Forma para Revit 2022–2026."
+    },
+    {
+      "term": "Send to Revit",
+      "location": "Forma → add-in",
+      "meaning": "Envía la propuesta a Revit como elementos editables."
+    },
+    {
+      "term": "Massing & Site",
+      "location": "Pestaña de Revit",
+      "meaning": "Donde aparece el add-in de Forma en Revit."
+    },
+    {
+      "term": "Update proposal",
+      "location": "Add-in en Revit",
+      "meaning": "Devuelve a Forma los cambios hechos en Revit."
+    },
+    {
+      "term": "Scenario",
+      "location": "Forma (Revit 2027)",
+      "meaning": "Espacio en la nube que conecta un modelo de Revit con Forma."
+    },
+    {
+      "term": "Enable Forma Connected Client",
+      "location": "Data Management → Settings → Revit",
+      "meaning": "Activa la Tech Preview del proyecto (lo hace el administrador)."
+    },
+    {
+      "term": "Cloud model",
+      "location": "Revit · Data Management",
+      "meaning": "Modelo guardado en la nube; requisito del Connected Client."
+    },
+    {
+      "term": "Toposolid",
+      "location": "Revit 2024+",
+      "meaning": "Elemento de terreno sólido en el que se convierte el terreno de Forma."
+    },
+    {
+      "term": "Project Base Point",
+      "location": "Revit",
+      "meaning": "Origen del proyecto; con Forma se alinea con el origen de la propuesta."
+    },
+    {
+      "term": "Survey Point",
+      "location": "Revit",
+      "meaning": "Punto de referencia topográfico del sitio."
+    },
+    {
+      "term": "Shared Coordinates",
+      "location": "Revit → Manage",
+      "meaning": "Coordenadas comunes entre modelos vinculados."
+    },
+    {
+      "term": "View Template",
+      "location": "Revit → View",
+      "meaning": "Configuración reutilizable de vistas."
+    },
+    {
+      "term": "Family Editor",
+      "location": "Revit",
+      "meaning": "Editor para crear familias cargables (.rfa)."
+    },
+    {
+      "term": "Shared Parameters",
+      "location": "Revit → Manage",
+      "meaning": "Parámetros comunes a familias, proyectos y tablas."
+    },
+    {
+      "term": "Template (.rte)",
+      "location": "Revit → New project",
+      "meaning": "Plantilla de proyecto con estándares del equipo."
+    },
+    {
+      "term": "Forma Board",
+      "location": "Forma",
+      "meaning": "Lienzo para presentar opciones y resultados."
+    },
+    {
+      "term": "Reviews / Transmittals / Issues",
+      "location": "Data Management",
+      "meaning": "Revisión, envío formal y seguimiento de observaciones."
+    },
+    {
+      "term": "My dashboard",
+      "location": "Autodesk Learning",
+      "meaning": "Tu historial de cursos y certificados de finalización."
+    },
+    {
+      "term": "Certification prep",
+      "location": "Filtro del catálogo",
+      "meaning": "Muestra solo cursos que preparan para certificación."
+    },
+    {
+      "term": "Insert → Point Cloud",
+      "location": "Revit",
+      "meaning": "Vincula una nube de puntos de ReCap (.rcp / .rcs) al modelo."
+    },
+    {
+      "term": "ReCap Pro",
+      "location": "Autodesk",
+      "meaning": "Registra escaneos láser y genera nubes de puntos .rcp / .rcs."
+    }
+  ],
+  "team_kit": [
+    {
+      "title": "Accesos y licencias",
+      "owner_hint": "Administración Autodesk",
+      "items": [
+        {
+          "key": "kit0-0",
+          "text": "Confirmar qué incluye cada contrato (Revit, AEC Collection, asientos de Forma)"
+        },
+        {
+          "key": "kit0-1",
+          "text": "Definir región del hub y avisar al equipo que no use *Switch region*"
+        },
+        {
+          "key": "kit0-2",
+          "text": "Definir versión de Revit oficial (2026 con add-in o 2027)"
+        },
+        {
+          "key": "kit0-3",
+          "text": "Instalar el add-in de Forma en todas las estaciones"
+        }
+      ]
+    },
+    {
+      "title": "Plantillas Revit (.rte)",
+      "owner_hint": "ARQ, EST, MEP y sitio",
+      "items": [
+        {
+          "key": "kit1-0",
+          "text": "Tipos de *Toposolid* y materiales de terreno"
+        },
+        {
+          "key": "kit1-1",
+          "text": "*View Templates* por disciplina"
+        },
+        {
+          "key": "kit1-2",
+          "text": "Vista 3D dedicada para *Update proposal*"
+        },
+        {
+          "key": "kit1-3",
+          "text": "*Title block* y *Sheets* corporativos"
+        },
+        {
+          "key": "kit1-4",
+          "text": "Unidades, estilos de texto y cotas"
+        }
+      ]
+    },
+    {
+      "title": "Biblioteca de familias",
+      "owner_hint": "Propias y de fabricantes",
+      "items": [
+        {
+          "key": "kit2-0",
+          "text": "Reglas de nomenclatura"
+        },
+        {
+          "key": "kit2-1",
+          "text": "Nivel de detalle mínimo por categoría"
+        },
+        {
+          "key": "kit2-2",
+          "text": "Parámetros obligatorios"
+        },
+        {
+          "key": "kit2-3",
+          "text": "Responsable de aprobación y carpeta oficial"
+        }
+      ]
+    },
+    {
+      "title": "Parámetros y clasificación",
+      "owner_hint": "Base: Estándar BIM de Planbim",
+      "items": [
+        {
+          "key": "kit3-0",
+          "text": "Archivo de *Shared Parameters*"
+        },
+        {
+          "key": "kit3-1",
+          "text": "Códigos de clasificación"
+        },
+        {
+          "key": "kit3-2",
+          "text": "Parámetros de entrega por cliente"
+        }
+      ]
+    },
+    {
+      "title": "Georreferenciación",
+      "owner_hint": "Un solo procedimiento",
+      "items": [
+        {
+          "key": "kit4-0",
+          "text": "Sistema de referencia oficial"
+        },
+        {
+          "key": "kit4-1",
+          "text": "Uso de *Survey Point* y *Project Base Point*"
+        },
+        {
+          "key": "kit4-2",
+          "text": "Prueba de ida y vuelta con Forma documentada"
+        }
+      ]
+    },
+    {
+      "title": "CDE y documentos",
+      "owner_hint": "Forma Data Management",
+      "items": [
+        {
+          "key": "kit5-0",
+          "text": "Proyecto plantilla con *Folders* y *Permissions*"
+        },
+        {
+          "key": "kit5-1",
+          "text": "Flujo de *Review* y *Transmittal*"
+        },
+        {
+          "key": "kit5-2",
+          "text": "BEP tipo"
+        },
+        {
+          "key": "kit5-3",
+          "text": "Guía rápida Forma → Revit"
+        },
+        {
+          "key": "kit5-4",
+          "text": "Registro de lecciones aprendidas"
+        }
+      ]
+    }
+  ],
+  "rollout_phases": [
+    {
+      "title": "Fase 0 · Diagnóstico",
+      "start_week": 1,
+      "end_week": 2,
+      "label": "semanas 1 y 2",
+      "recurring": false,
+      "items": [
+        {
+          "key": "ph0-0",
+          "text": "Verificar en el portal de administración qué incluye cada contrato"
+        },
+        {
+          "key": "ph0-1",
+          "text": "Confirmar la región del hub de Forma"
+        },
+        {
+          "key": "ph0-2",
+          "text": "Confirmar si el *Connected Client* (Tech Preview) está disponible para la región del hub"
+        },
+        {
+          "key": "ph0-3",
+          "text": "Revisar si *Operational energy* y *Carbon* funcionan para ubicaciones en Chile"
+        },
+        {
+          "key": "ph0-4",
+          "text": "Probar la cobertura del *Data Marketplace* en tres sitios reales"
+        },
+        {
+          "key": "ph0-5",
+          "text": "Inventariar las versiones de Revit instaladas"
+        }
+      ]
+    },
+    {
+      "title": "Fase 1 · Capacitación individual",
+      "start_week": 2,
+      "end_week": 6,
+      "label": "semanas 2 a 6",
+      "recurring": false,
+      "items": [
+        {
+          "key": "ph1-0",
+          "text": "Todo el equipo completa los niveles 0 a 2"
+        },
+        {
+          "key": "ph1-1",
+          "text": "Modeladores completan el nivel 3"
+        },
+        {
+          "key": "ph1-2",
+          "text": "Coordinadores completan el nivel 4"
+        },
+        {
+          "key": "ph1-3",
+          "text": "Cada profesional registra su meta de certificación"
+        }
+      ]
+    },
+    {
+      "title": "Fase 2 · Estándares y contenido",
+      "start_week": 4,
+      "end_week": 10,
+      "label": "semanas 4 a 10",
+      "recurring": false,
+      "items": [
+        {
+          "key": "ph2-0",
+          "text": "Extraer nomenclatura y parámetros del Estándar BIM de Planbim"
+        },
+        {
+          "key": "ph2-1",
+          "text": "Redactar el procedimiento de georreferenciación"
+        },
+        {
+          "key": "ph2-2",
+          "text": "Crear las plantillas .rte por disciplina"
+        },
+        {
+          "key": "ph2-3",
+          "text": "Crear el archivo de *Shared Parameters*"
+        },
+        {
+          "key": "ph2-4",
+          "text": "Migrar las familias críticas a la biblioteca"
+        },
+        {
+          "key": "ph2-5",
+          "text": "Crear el proyecto plantilla en *Data Management*"
+        },
+        {
+          "key": "ph2-6",
+          "text": "Redactar BEP tipo y guía rápida"
+        }
+      ]
+    },
+    {
+      "title": "Fase 3 · Piloto",
+      "start_week": 8,
+      "end_week": 12,
+      "label": "semanas 8 a 12",
+      "recurring": false,
+      "items": [
+        {
+          "key": "ph3-0",
+          "text": "Elegir un proyecto piloto de edificación de apoyo"
+        },
+        {
+          "key": "ph3-1",
+          "text": "Flujo completo: terreno propio → Forma → *Analyze* → Revit → *Update proposal* → *Forma Board*"
+        },
+        {
+          "key": "ph3-2",
+          "text": "Medir horas ahorradas y problemas de conversión"
+        },
+        {
+          "key": "ph3-3",
+          "text": "Ajustar plantillas con lo aprendido"
+        }
+      ]
+    },
+    {
+      "title": "Fase 4 · Investigación continua",
+      "start_week": 1,
+      "end_week": 12,
+      "label": "mensual",
+      "recurring": true,
+      "items": [
+        {
+          "key": "ph4-0",
+          "text": "Probar formatos y precisión del terreno propio frente al del marketplace"
+        },
+        {
+          "key": "ph4-1",
+          "text": "Explorar extensiones para casos industriales"
+        },
+        {
+          "key": "ph4-2",
+          "text": "Revisar novedades del blog de Forma y de Revit 2027"
+        },
+        {
+          "key": "ph4-3",
+          "text": "Ajustar la asignación de asientos de Forma por rol"
+        }
+      ]
+    }
+  ],
+  "certification_goals": [
+    "Autodesk Certified User: Revit",
+    "ACP Revit Architectural Design",
+    "ACP Revit Structural Design",
+    "ACP Revit Mechanical Design",
+    "ACP Revit Electrical Design",
+    "ACP BIM Management for Building Design",
+    "ACP Civil 3D Infrastructure Design"
+  ]
+}

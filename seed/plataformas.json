@@ -1,0 +1,18 @@
+{
+  "_nota": "Plataforma = dónde se aprende o certifica. 'kind': learning | certification_body | regulator | vendor. 'vendor' enlaza con seed/vendors.json. Verificar URLs antes de publicar.",
+  "platforms": [
+    {"slug": "autodesk-learning", "name": "Autodesk Learning", "kind": "learning", "vendor": "autodesk", "url": "https://www.autodesk.com/learn"},
+    {"slug": "autodesk-certification", "name": "Autodesk Certification", "kind": "certification_body", "vendor": "autodesk", "url": "https://www.autodesk.com/certification/overview"},
+    {"slug": "certiport", "name": "Certiport (Pearson VUE)", "kind": "certification_body", "url": "https://certiport.pearsonvue.com/"},
+    {"slug": "bentley-learn", "name": "Bentley Learn", "kind": "learning", "vendor": "bentley", "url": "https://learning.bentley.com/learn", "notes": "Catálogos públicos por producto en /learn/public/catalog/view/<id>. Los learning plans de acreditación ('Bentley Accredited …') terminan con Assessment o Project Submission y entregan certificado. Requiere cuenta Bentley para inscribirse."},
+    {"slug": "trimble-learning", "name": "Trimble Learn", "kind": "learning", "vendor": "trimble", "url": "https://learn.trimble.com/"},
+    {"slug": "geocom-cursos", "name": "Geocom · Cursos Online", "kind": "learning", "url": "https://soporte.geocom.cl/", "notes": "Distribuidor en Chile. Cursos de Trimble Business Center (GNSS, terrestre, dibujo, fotogrametría), Trimble Access Carreteras, SLAM, LiDAR (XGRIDS Lixel), batimetría con dron y Geomagic Design X."},
+    {"slug": "esri-training", "name": "Esri Training", "kind": "learning", "vendor": "esri", "url": "https://www.esri.com/training/"},
+    {"slug": "microsoft-learn", "name": "Microsoft Learn", "kind": "learning", "vendor": "microsoft", "url": "https://learn.microsoft.com/"},
+    {"slug": "oracle-university", "name": "Oracle University (Primavera P6)", "kind": "learning", "vendor": "oracle", "url": "https://education.oracle.com/"},
+    {"slug": "coursera", "name": "Coursera", "kind": "learning", "url": "https://www.coursera.org/"},
+    {"slug": "linkedin-learning", "name": "LinkedIn Learning", "kind": "learning", "url": "https://www.linkedin.com/learning/"},
+    {"slug": "dgac-chile", "name": "DGAC Chile", "kind": "regulator", "url": "https://www.dgac.gob.cl/"},
+    {"slug": "interna", "name": "Capacitación interna", "kind": "vendor", "url": ""}
+  ]
+}
