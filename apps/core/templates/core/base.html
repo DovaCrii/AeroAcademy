@@ -24,6 +24,12 @@
     {# Huecos: se llenan en los bloques 13 (nivel/XP), 16 (campana) y 15 (Teo). #}
     <div class="cell slot" data-slot="player">{% block slot_player %}{% include "core/partials/player.html" %}{% endblock %}</div>
     <div class="cell slot" data-slot="bell">{% block slot_bell %}{% include "core/partials/bell.html" %}{% endblock %}</div>
+    {% if user.is_authenticated %}
+    <div class="cell userchip">
+      <span class="cap">{{ user.role }}</span>
+      <span class="uname">{{ user.name }}</span>
+    </div>
+    {% endif %}
     <div class="cell">
       <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
     </div>

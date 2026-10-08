@@ -12,7 +12,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* cajetín superior */
 .top{position:sticky;top:0;z-index:30;background:var(--sheet);border-bottom:3px solid var(--scan);padding-top:env(safe-area-inset-top,0px)}
-.top .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto auto;align-items:stretch;min-height:56px}
+.top .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto auto auto;align-items:stretch;min-height:56px}
 .top .cell{display:flex;flex-direction:column;justify-content:center;padding:0 14px;border-right:1px solid var(--line);color:inherit;text-decoration:none}
 .top .cell:first-child{padding-left:0}
 .top .cell:last-child{border-right:0;padding-right:0}
@@ -41,7 +41,13 @@ h3{font-weight:700;font-stretch:85%;font-size:19px;line-height:1.2;margin:0}
 .term{font-style:normal;font-weight:600;font-stretch:92%;padding:0 4px;border:1px solid var(--line);border-radius:2px;background:var(--sheet-2);white-space:nowrap}
 .foot{padding-top:30px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));color:var(--ink-2);font-size:13.5px}
 
+.userchip .uname{font-size:14px;font-weight:600;font-stretch:90%;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+.waiting{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+.teo-px{image-rendering:pixelated;width:96px;height:96px}
+
 @media (max-width:640px){
+  .userchip{display:none}
+  .waiting{grid-template-columns:1fr}
   .wrap{padding:0 16px}
   .sheet-in{padding:20px 16px}
   .top .cell{padding:0 10px}
