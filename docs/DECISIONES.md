@@ -27,6 +27,8 @@
 | D21 | La academia lleva un mensaje de auspicio de **Suite Aero** (bienvenida y pie). Los repositorios privados (AeroPlanner, AeroLink) se nombran pero no se enlazan | Dar a conocer el software propio sin exponer repos privados |
 | D22 | Se separó la portada: **12a Bienvenida** se entrega con el Bloque 2; **12b** (XP, misión sugerida, Teo, tablón) espera a los bloques 13, 15 y 16 | La persona pidió una ventana de inicio desde el principio |
 
+| D23 | Mientras no se agregue `htmx.min.js`, la actualización parcial la hace un ayudante propio (`core/static/core/enhance.js`, ~60 líneas, mismo contrato `X-Partial`). Sin JS todo funciona con formularios normales | Evitar una descarga externa sin permiso y una dependencia nueva; se puede cambiar a HTMX sin tocar las vistas |
+
 ## Abiertas (no resolver sin confirmar)
 
 | # | Pregunta | Propuesta por defecto |
@@ -38,4 +40,5 @@
 | A7 | Modelo NIM por defecto | Uno *instruct* gratuito de la familia Llama o Nemotron; se fija en `NIM_MODEL` tras probar calidad en español |
 | A8 | ¿Se muestra el XP de otros en su perfil o solo nivel y título? | Nivel, título e insignias visibles; XP exacto solo para el dueño |
 | A10 | Falta `PressStart2P.woff2` (fuente OFL de Google Fonts) para niveles, insignias y títulos. No se descargó por cuenta propia | Agregar el archivo y su licencia a `apps/core/static/core/fonts/` y descomentar el `@font-face` de `tokens.css` |
+| A11 | ¿Se agrega `htmx.min.js` (BSD, ~50 KB) a `core/static/` y se reemplaza `enhance.js`? | Sí, cuando la persona autorice descargar el archivo; hoy `enhance.js` cubre el uso |
 | A9 | ¿Una acreditación Bentley completa (learning plan) es *Reliquia* (500 XP) o *Trofeo mayor* (250 XP)? | Reliquia: incluye una evaluación (*Assessment*) o la entrega de un proyecto |

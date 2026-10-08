@@ -1,7 +1,11 @@
 from django.http import Http404
 from django.shortcuts import render
 
+from apps.progress import services as progress_services
+from apps.progress.views import world_template
+
 from . import services
+from .models import LearningPath
 
 
 def index(request):
@@ -22,6 +26,19 @@ def detail(request, slug):
     path = services.visible_paths(request.user).filter(slug=slug).first()
     if path is None:
         raise Http404
+
+    # Las rutas estructuradas con mundo propio se muestran con su diseño (docs/MUNDOS.md).
+    if path.kind == LearningPath.Kind.STRUCTURED and path.world:
+        full = world_template(path.world, "path.html")
+        if full:
+            ctx = progress_services.world_context(request.user, path, request.GET.get("nivel"))
+            template = (
+                world_template(path.world, "_app.html")
+                if request.headers.get("X-Partial")
+                else full
+            )
+            return render(request, template, ctx)
+
     return render(
         request,
         "paths/detail.html",

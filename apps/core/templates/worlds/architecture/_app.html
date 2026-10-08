@@ -1,0 +1,45 @@
+{% load core_extras %}
+<div class="sheet ar-sheet" id="corte">
+  <div class="sheet-in ar-hero">
+    <div>
+      <h2 class="ar-h2">{{ intro.title|default:path.title }}</h2>
+      {% if intro.text %}<p class="lead">{{ intro.text }}</p>{% endif %}
+      <div class="ar-meta">
+        <div><b>{{ stats.levels_done }}/{{ stats.levels_total }}</b><span>niveles completos</span></div>
+        <div><b>{{ stats.pct }} %</b><span>tu avance</span></div>
+        <div><b>{{ stats.participants }}</b><span>personas en la ruta</span></div>
+      </div>
+      {% if goals %}
+      <form class="ar-goal-form" method="post" action="{% url 'progress:set_goal' path.slug %}" data-enhance>
+        {% csrf_token %}
+        <input type="hidden" name="nivel" value="{{ current.level.code }}">
+        <label for="goal">Mi meta de certificación</label>
+        <div class="row">
+          <select id="goal" name="goal" data-autosubmit data-fid="goal">
+            <option value="">Sin meta todavía</option>
+            {% for g in goals %}<option value="{{ g }}"{% if g == goal %} selected{% endif %}>{{ g }}</option>{% endfor %}
+          </select>
+          <button class="btn ghost" type="submit">Guardar meta</button>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+    {% include "worlds/architecture/journey.html" %}
+  </div>
+  <div class="tb">
+    <div><span class="cap">Proyecto</span><b>{{ path.program|default:path.title }}</b></div>
+    <div><span class="cap">Contenido</span><b>Corte A-A · avance personal y del equipo</b></div>
+    <div><span class="cap">Escala</span><b>A tu ritmo</b></div>
+    <div><span class="cap">Lámina</span><b>A-101</b></div>
+  </div>
+</div>
+
+<div class="shead" id="niveles">
+  <svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">2</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">A-201</text></svg>
+  <h2>Niveles</h2>
+</div>
+<p class="ar-sub">Elige un nivel en el navegador de proyecto, como en Revit. Cada misión que marcas y cada pregunta que respondes queda guardada a tu nombre.</p>
+<div class="ar-viewer">
+  {% include "worlds/architecture/browser.html" %}
+  {% include "worlds/architecture/_panel.html" %}
+</div>

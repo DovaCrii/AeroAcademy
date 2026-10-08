@@ -25,12 +25,17 @@ Regla de fondo (`docs/FLUJO_GITHUB.md`): **el agente construye, sube y deja el P
    - archivos privados por una vista con permiso;
    - nada de `credentials` hacia `assistant`;
    - cambios de modelo con su migración, y las semillas nuevas con `seed_catalog --dry-run` en verde.
-6. **Pruebas primero** para los criterios de aceptación. Luego correr, desde la carpeta del proyecto:
+6. **Pruebas primero** para los criterios de aceptación. Luego correr, desde la carpeta del proyecto,
+   **lo mismo que corre el CI** (`.github/workflows/ci.yml`):
    ```bash
-   uv run pytest
    uv run ruff check . && uv run ruff format --check .
+   uv run python manage.py check
    uv run python manage.py makemigrations --check --dry-run
+   uv run python manage.py migrate --noinput && uv run python manage.py seed_catalog --dry-run   # base nueva
+   uv run pytest
    ```
+   La validación de semillas se prueba contra una **base nueva** (`DATABASE_PATH` temporal): el CI falló
+   una vez por correrla sin migrar.
    Si una prueba falla por algo que parece un error de Django o de una dependencia, **leer su código fuente**
    antes de adivinar (pasó con `RemoteUserMiddleware` y `configure_user` en Django 5.2).
 7. **Si el bloque tiene interfaz:** `runserver` con `DEV_REMOTE_USER` y revisión en el navegador a escritorio
@@ -45,6 +50,16 @@ Regla de fondo (`docs/FLUJO_GITHUB.md`): **el agente construye, sube y deja el P
      si aún no se fusionó;
    - `gh pr checks` y corregir si el CI falla;
    - informar en el chat: enlace del PR, resultado del CI y qué debe decidir la persona.
+
+## Trampas conocidas en este entorno (Windows + PowerShell)
+
+- El entorno bloquea comandos con `Remove-Item` y con textos largos que contienen `'\n'` o muchas rutas
+  `/algo/`. Para borrar una base usa `DATABASE_PATH` apuntando a un archivo temporal nuevo; para texto
+  largo (cuerpos de PR, scripts) **escribe el archivo con la herramienta Write** y luego ejecútalo.
+- `gh pr create` siempre con `--body-file` y la rama base explícita (`--base`).
+- Las capturas salen en blanco con `scroll-behavior:smooth`: desplazar con `behavior:'instant'`.
+- `.claude/launch.json` del navegador vive en la carpeta **padre** del proyecto, con `--directory`.
+- Redondeo: `round()` de Python redondea la mitad al par; para porcentajes usar `int(x + 0.5)`.
 
 **No hacer sin que se pida:** fusionar PR, forzar `push`, subir secretos o datos reales, cambiar la visibilidad
 o los *settings* del repositorio.
