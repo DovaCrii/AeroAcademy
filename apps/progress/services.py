@@ -147,7 +147,7 @@ def world_context(person, path, level_code=None):
         )
     )
 
-    total_done = total_items = 0
+    total_done = total_items = total_milestones = total_questions = 0
     for ch in chapters:
         ch["milestones"] = [{"obj": m, "checked": m.id in checked} for m in ch["milestones"]]
         quiz = []
@@ -170,6 +170,8 @@ def world_context(person, path, level_code=None):
         )
         total_done += done
         total_items += total
+        total_milestones += len(ch["milestones"])
+        total_questions += len(quiz)
 
     codes = [ch["level"].code for ch in chapters]
     if level_code not in codes:
@@ -200,6 +202,8 @@ def world_context(person, path, level_code=None):
             "levels_total": len(chapters),
             "participants": participants,
             "pct": percent(total_done, total_items),
+            "milestones": total_milestones,
+            "questions": total_questions,
         },
         "goals": allowed_goals(path),
         "goal": goal.certification_goal if goal else "",

@@ -54,6 +54,15 @@ HUD de vuelo.
 - **Nota del oficio:** marca de *waypoint* con texto.
 - **Paleta:** cian HUD `#4CC6FF`, ámbar de alerta y fondo noche.
 
+## Estilo "Levantamiento" (arte de presentación)
+
+Para todo lo que represente **levantamiento digital** (portadas de ruta, el mundo `aero`, presentaciones y capturas
+del README) se usa el estilo tomado de Aerotop: azul noche con grilla, acento ámbar, títulos en **serif cursiva**,
+etiquetas **monoespaciadas** (`CLAVE · valor`, `// 01`), recuadros de anotación, retícula, **nube de puntos** y una
+**línea de escaneo**. Está en `core/static/core/levantamiento.css` y `levantamiento.js` (`<canvas data-scene="building|terrain">`).
+Regla: las lecturas de telemetría son **datos reales** de la ruta (niveles, misiones, avance…), nunca valores de relleno.
+Respeta `prefers-reduced-motion` (imagen fija, con la línea de escaneo detenida).
+
 ## Contrato técnico
 
 - `LearningPath.world` elige el mundo. Si viene vacío, se usa el de la disciplina principal de la ruta.

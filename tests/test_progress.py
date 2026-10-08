@@ -254,6 +254,29 @@ def test_full_page_reads_without_js(member_client):
     assert "enhance.js" in html and "architecture.css" in html
 
 
+def test_cover_uses_the_levantamiento_style_with_real_data(member_client):
+    html = member_client.get(f"/rutas/{FORMA}/").content.decode()
+    assert "levantamiento.css" in html and "levantamiento.js" in html
+    assert 'data-scene="building"' in html
+    assert 'class="lv-title">Ruta Forma + Revit' in html  # recuadro de anotación
+    assert "// 01" in html and "// 05" in html  # pasos numerados como consola
+    readouts = html.split('class="lv-readouts"')[1].split("</div>")[0]
+    for label, value in (("Niveles", 7), ("Misiones", 34), ("Preguntas", 10)):
+        assert f"{label}<b>{value}</b>" in readouts
+    assert "Tu avance<b>0 %</b>" in readouts
+
+
+def test_cover_readouts_follow_my_progress(client_for, member):
+    toggle(client_for(member.login), "n0-t0")
+    html = client_for(member.login).get(f"/rutas/{FORMA}/").content.decode()
+    assert "Tu avance<b>2 %</b>" in html and "Equipo<b>1</b>" in html
+
+
+def test_stats_expose_item_counts(member):
+    ctx = services.world_context(member, LearningPath.objects.get(slug=FORMA))
+    assert ctx["stats"]["milestones"] == 34 and ctx["stats"]["questions"] == 10
+
+
 def test_path_without_a_built_world_uses_the_generic_page(member_client):
     LearningPath.objects.filter(slug=FORMA).update(world="mechanical")
     html = member_client.get(f"/rutas/{FORMA}/").content.decode()
