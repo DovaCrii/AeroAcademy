@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
+from . import services
+
 
 def home(request):
-    """Portada provisoria del Bloque 0; la portada real llega en el Bloque 12."""
-    return render(request, "core/home.html")
+    """Ventana de bienvenida. Contadores vivos y misión sugerida llegan con el Bloque 12b."""
+    return render(request, "core/home.html", services.home_context(request.user))
