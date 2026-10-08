@@ -6,7 +6,7 @@
   {% if player.level_up %}<input type="hidden" name="level" value="{{ player.level_up }}">{% endif %}
   {% for pb in player.badges %}<input type="hidden" name="badge" value="{{ pb.pk }}">{% endfor %}
   {% if player.level_up %}
-  <div class="cheer-card levelup"><b class="px">NV {{ player.level_up }}</b> ¡Subiste de nivel!{% if player.title %} Ahora eres <em>{{ player.title.name }}</em>.{% endif %}</div>
+  <div class="cheer-card levelup"><img src="{% static 'game/teo/teo-celebra.svg' %}" width="40" height="40" alt="" class="px-img"><b class="px">NV {{ player.level_up }}</b> ¡Subiste de nivel!{% if player.title %} Ahora eres <em>{{ player.title.name }}</em>.{% endif %}</div>
   {% endif %}
   {% for pb in player.badges %}
   <div class="cheer-card {{ pb.badge.rarity }}">

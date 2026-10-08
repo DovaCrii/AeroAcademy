@@ -1,7 +1,7 @@
 {% load static %}{% if teo_awake is not None %}
 <aside class="teo-widget" aria-label="Teo, el asistente">
   <details>
-    <summary aria-label="Hablar con Teo"><img src="{% static 'game/teo/' %}{% if teo_awake %}teo-idle.svg{% else %}teo-sleep.svg{% endif %}" width="48" height="48" alt=""></summary>
+    <summary aria-label="Hablar con Teo"><img src="{% static 'game/teo/' %}{{ teo_sprite }}" width="48" height="48" alt=""></summary>
     <div class="teo-pop">
       {% if teo_awake %}
       <form method="post" action="{% url 'assistant:page' %}" data-teo-form data-endpoint="{% url 'assistant:ask' %}">

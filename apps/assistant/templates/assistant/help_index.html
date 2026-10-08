@@ -1,6 +1,16 @@
 {% extends "core/base.html" %}
 {% block title %}Ayuda{% endblock %}
 {% block content %}
-<div class="page-head"><h1>Ayuda</h1><p>Cómo usar la academia. También puedes <a href="{% url 'assistant:page' %}">preguntarle a Teo</a>.</p></div>
+<div class="page-head"><h1>Ayuda</h1><p>Cómo usar la academia.{% if awake %} También puedes <a href="{% url 'assistant:page' %}">preguntarle a Teo</a>.{% endif %}</p></div>
+<form class="filters" method="get" role="search">
+  <input type="search" name="q" value="{{ q }}" placeholder="Busca en la ayuda, las rutas, los glosarios…" aria-label="Buscar en la ayuda">
+  <button class="btn" type="submit">Buscar</button>
+</form>
+{% if q %}
+<section aria-labelledby="h-res"><h2 id="h-res">Resultados para «{{ q }}»</h2>
+  <ul class="plain">{% for r in results %}<li><a href="{{ r.url }}">{{ r.title }}</a> <span class="muted">({{ r.kind }})</span><br><span class="muted small">{{ r.body|truncatechars:140 }}</span></li>{% empty %}<li class="muted">No encontré nada. Prueba con otras palabras o <a href="{% url 'community:thread_new' %}?titulo={{ q|urlencode }}">abre una consulta en el foro</a>.</li>{% endfor %}</ul>
+</section>
+{% endif %}
+<h2>Guías</h2>
 <ul class="plain">{% for i in items %}<li><a href="{% url 'assistant:help' i.slug %}">{{ i.title }}</a></li>{% endfor %}</ul>
 {% endblock %}
