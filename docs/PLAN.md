@@ -281,7 +281,14 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** el tablero carga en < 1 s con 30 personas y 300 credenciales de prueba (factory-boy).
 
-## Bloque 9 · Documentos `[ ]`
+## Bloque 9 · Documentos `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - App `library`: `Document` (tipo, disciplinas, etiquetas, descripción, dueño, restringido) y `DocumentVersion` (archivo privado, SHA-256, tamaño, notas, quién subió). Una restricción de base de datos garantiza **una sola versión vigente** por documento.
+> - Páginas: `/documentos/` (búsqueda, tipo, disciplina y etiqueta, paginado de 20), subir, ver con historial, editar, subir versión (queda como la vigente), marcar una versión anterior como vigente y eliminar.
+> - Archivos: lista de extensiones (pdf, imágenes, Office, dwg/dxf/dgn, rvt/rte/rfa/rft, ifc, txt/csv), firma real cuando el formato la tiene, máx. 50 MB, nombres generados, sin URL pública y descarga siempre como adjunto (`octet-stream`, `nosniff`). Un archivo borrado se retira del disco al confirmar la transacción.
+> - Permisos: un documento restringido responde 404 a miembros (no revela que existe); solo su dueño y los responsables editan, suben versiones y borran.
+> - **Pendiente:** vista previa de PDF/imágenes en línea (hoy solo descarga) y que Teo cite documentos no restringidos.
 - `library`: documentos con versiones, filtros por disciplina, tipo y etiqueta; descarga por vista con permiso.
 
 **Acepta si:** subir una versión nueva deja una sola vigente y conserva el historial; un documento restringido → 403 a miembros.
