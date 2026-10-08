@@ -1,0 +1,16 @@
+.note-form{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end;margin:1rem 0}
+.note-form label{display:flex;flex-direction:column;gap:.2rem;font-size:.85rem}.note-form .grow{flex:1 1 280px}.note-form textarea{width:100%}
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;margin:.5rem 0 1rem}
+.notes{list-style:none;padding:0;display:grid;gap:.8rem}
+.note{padding:.7rem .9rem;border:1.5px solid var(--line,#8d9cad);position:relative}
+.note .meta{margin:0 0 .3rem;font-size:.8rem;opacity:.8}.note .body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.note-works{border-left:6px solid #13803c}.note-fails{border-left:6px solid #b42318}.note-tip{border-left:6px solid #1e8cff}.note-ask{border-left:6px solid #d97706}
+.replies{list-style:none;margin:.5rem 0 0;padding-left:1rem;border-left:2px dotted var(--line,#8d9cad);font-size:.9rem}
+.reply{display:flex;gap:.4rem;margin-top:.5rem}.reply input{flex:1;min-width:0}
+form.inline{display:inline}
+.notes-mini{margin-top:1rem;padding:.7rem .9rem;border:1px dashed var(--line,#8d9cad)}
+.notes-mini h4{margin:0 0 .4rem}.notes-mini .note{border:0;padding:.2rem 0;font-size:.85rem}
+/* forma propia por mundo */
+.world-architecture .note{border-radius:18px 22px 16px 24px;border:2px dashed #d33;border-left-width:2px}
+.world-civil .note{border:2px solid #f5b800;border-left:12px solid #f5b800;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%)}
+@media (max-width:640px){.world-civil .note{clip-path:none}}

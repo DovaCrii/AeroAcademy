@@ -189,7 +189,15 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** coincide visualmente con la referencia en escritorio y no desborda a 390 px; la misión sugerida corresponde al avance real.
 
-## Bloque 4 · Notas del equipo `[ ]`
+## Bloque 4 · Notas del equipo `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `community.Note` (tipos Funciona / No funciona / Recomendación / Pregunta + respuestas de un nivel, máx. 1000 caracteres, borrado lógico). Servicios en `apps/community/services.py`.
+> - Páginas: `/rutas/<slug>/notas/` (bitácora con filtros por tipo y capítulo, formulario y respuestas) y un panel «Notas del equipo» con las últimas 3 en cada mundo (`{% level_notes %}`).
+> - Forma propia por mundo: nube de revisión (Arquitectura) y estaca anotada (Civil), en `community/notes.css`.
+> - XP: 5 por nota *Funciona* o *Recomendación*, **hasta 5 al día**; toda nota cuenta para *Primera Nube*. Borrar revoca el XP y la insignia.
+> - Solo quien escribe borra; borrar una nota oculta sus respuestas. Texto escapado; `next` sin redirección abierta; rutas no publicadas dan 404.
+> - **Pendiente:** ocultar/reportar (Bloque 16), notas por recurso en el catálogo, aviso al autor cuando le responden (Bloque 16).
 - Notas por ruta, nivel y recurso; respuestas; borrado lógico solo por el autor.
 - Cada mundo muestra la nota con su forma propia (nube de revisión, estaca anotada…).
 - Bitácora con filtros (tipo, ruta, nivel). XP por nota útil (límite diario).

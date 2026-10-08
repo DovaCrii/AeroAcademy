@@ -1,0 +1,8 @@
+{% load static %}
+<aside class="notes-mini world-{{ path.world|default:'plain' }}" aria-label="Notas del equipo">
+  <h4>Notas del equipo</h4>
+  {% for n in notes %}
+  <p class="note note-{{ n.type }}"><b>{{ n.get_type_display }}</b> · {{ n.author.name }}: {{ n.text|truncatechars:140 }}</p>
+  {% empty %}<p class="muted">Todavía no hay notas aquí.</p>{% endfor %}
+  <a class="btn ghost" href="{% url 'community:path_notes' path.slug %}{% if level_code %}?nivel={{ level_code }}{% endif %}">Ver todas y escribir</a>
+</aside>
