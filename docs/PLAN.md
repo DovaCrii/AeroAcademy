@@ -119,8 +119,13 @@ funciona sin JS para lectura; coincide visualmente con `legacy/ruta-forma-revit/
 
 **Acepta si:** solo el dueño edita su hoja; no se puede elegir un título o un accesorio bloqueado (validación en el servidor); los atributos coinciden con las credenciales verificadas; no hay desborde a 390 px.
 
-## Bloque 12 · Portada Academia `[ ]`
+## Bloque 12 · Portada Academia `[~]`
 
+> **12a · Bienvenida: hecha (2026-10-08).** Ventana de inicio según `design/academia/index.html`: hero con las
+> cinco disciplinas, saludo con el nombre, 7 módulos (con estado según su bloque), rutas por disciplina desde la
+> base, banda del equipo, **auspicio de Suite Aero** y valores. El auspicio también va en el pie de todas las páginas.
+> Pruebas en `tests/test_welcome.py`. **12b (pendiente):** XP y nivel en la cabecera, misión sugerida, Teo,
+> tablón del gremio y contadores vivos, cuando existan los bloques 13, 15 y 16.
 - Portada según `design/academia/index.html`:
   - disciplinas con fotos;
   - módulos enlazando a cada app;
