@@ -1,4 +1,5 @@
 from datetime import timedelta
+from pathlib import Path
 
 import httpx
 import pytest
@@ -185,3 +186,23 @@ def test_digest_mentions_certificates_waiting_more_than_a_week(member, lead):
     followup.run()
     digest = Notification.objects.get(recipient=lead, kind="teo_digest")
     assert "1 esperan hace más de 7 días" in digest.body
+
+
+def test_the_widget_answers_inline_even_when_teo_sleeps(client_for, member):
+    """Revisado en el navegador: con Teo dormido el atajo recargaba la página porque faltaba el recuadro de respuesta."""
+    home = client_for(member.login).get("/").content.decode()
+    widget = home.split('class="teo-widget"')[1]
+    assert (
+        'class="teo-shortcuts"' in widget
+        and "data-teo-answer" in widget
+        and "teo-sleep.svg" in home
+    )
+
+
+def test_mobile_header_puts_the_navigation_on_its_own_row():
+    """Revisado a 375 px: con 10 secciones la cabecera desbordaba 24 px."""
+    from django.conf import settings
+
+    css = (Path(settings.BASE_DIR) / "apps/core/static/core/base.css").read_text(encoding="utf-8")
+    mobile = css.split("@media (max-width:640px){", 1)[1]
+    assert ".top .nav{grid-column:1/-1;grid-row:2" in mobile
