@@ -69,14 +69,23 @@ def chat(messages, *, max_tokens=500):
         settings.NIM_MODEL,
         *[m for m in settings.NIM_MODEL_FALLBACKS if m != settings.NIM_MODEL],
     ]
+    tried = []
     for index, model in enumerate(models):
         try:
             return _chat_once(model, messages, max_tokens)
         except BotError as exc:
             gone = exc.code == "http" and exc.status in MODEL_GONE
+            tried.append(f"{model} → HTTP {exc.status}" if exc.status else f"{model} → {exc.code}")
             if not gone or index == len(models) - 1:
+                if len(tried) > 1:
+                    exc.detail = f"{exc.detail} (probados: {'; '.join(tried)})"
                 raise
     raise BotError("http")  # inalcanzable: el bucle siempre retorna o lanza
+
+
+def chat_with(model, messages, *, max_tokens=500):
+    """Una llamada a un modelo concreto, sin respaldos (para buscar modelos que respondan)."""
+    return _chat_once(model, messages, max_tokens)
 
 
 def _chat_once(model, messages, max_tokens):

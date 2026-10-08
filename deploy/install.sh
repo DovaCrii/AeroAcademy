@@ -65,7 +65,7 @@ chown "$USER_NAME:$USER_NAME" "$STATE" "$STATE/media" /var/backups/centro
 
 echo "==> Copiando la aplicación a $APP"
 rsync -a --delete \
-  --exclude ".venv" --exclude ".uv-python" --exclude "__pycache__" --exclude ".git" --exclude "staticfiles" \
+  --exclude ".venv" --exclude ".uv-python" --exclude ".gunicorn" --exclude "__pycache__" --exclude ".git" --exclude "staticfiles" \
   --exclude "db.sqlite3*" --exclude "media" --exclude ".env" --exclude "deploy/centro.env" \
   "$SRC"/ "$APP"/
 
@@ -113,6 +113,7 @@ export UV_PYTHON_INSTALL_DIR="$APP/.uv-python"
 # Siempre Python 3.12 (el probado), aunque el del sistema sea más nuevo (Ubuntu 26.04 trae 3.14).
 export UV_PYTHON=3.12
 UV_PROJECT_ENVIRONMENT="$APP/.venv" uv sync --frozen --no-dev
+mkdir -p "$APP/.gunicorn"   # gunicorn 26 guarda aquí su socket de control (el resto de /opt queda de solo lectura)
 chown -R "$USER_NAME:$USER_NAME" "$APP"
 
 run_manage() {
@@ -127,7 +128,8 @@ if [ "$PUBLISH" = "node" ]; then
   command -v tailscaled >/dev/null || { echo "tailscale no está instalado en esta VM." >&2; exit 1; }
   install -m 644 "$APP/deploy/tailscaled-aeroacademy.service" /etc/systemd/system/tailscaled-aeroacademy.service
   systemctl daemon-reload
-  systemctl enable --now tailscaled-aeroacademy.service
+  systemctl enable tailscaled-aeroacademy.service
+  systemctl restart tailscaled-aeroacademy.service   # aplica cambios de la unidad (p. ej. --statedir)
   TS=(tailscale --socket="$NODE_SOCK")
   for _ in 1 2 3 4 5 6 7 8 9 10; do [ -S "$NODE_SOCK" ] && break; sleep 1; done
   if ! "${TS[@]}" status >/dev/null 2>&1 || "${TS[@]}" status 2>&1 | grep -qiE 'logged out|needslogin|Log in at'; then

@@ -6,7 +6,9 @@ Wants=network-online.target
 [Service]
 # Una segunda instancia de tailscaled, con su propio estado, socket y nombre: no toca la del sistema ni lo que
 # publique AeroControl. Va en modo «userspace» (sin interfaz de red nueva) y con otro puerto de WireGuard.
-ExecStart=/usr/sbin/tailscaled --state=/var/lib/tailscale-aeroacademy/tailscaled.state --socket=/run/tailscale-aeroacademy/tailscaled.sock --tun=userspace-networking --port=41642
+# --statedir (y no --state=archivo): sin él tailscaled no tiene dónde guardar los certificados HTTPS
+# («no TailscaleVarRoot»). El archivo de estado sigue siendo <statedir>/tailscaled.state: el nodo conserva su identidad.
+ExecStart=/usr/sbin/tailscaled --statedir=/var/lib/tailscale-aeroacademy --socket=/run/tailscale-aeroacademy/tailscaled.sock --tun=userspace-networking --port=41642
 Restart=on-failure
 RestartSec=3
 RuntimeDirectory=tailscale-aeroacademy
