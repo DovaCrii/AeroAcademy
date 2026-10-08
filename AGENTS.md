@@ -65,6 +65,20 @@ Hay skills en `.claude/skills/`. Claude Code las carga solo; en Codex, leer el `
 | `nueva-insignia` | Al agregar insignias o títulos |
 | `sprite-8bit` | Al dibujar avatares, insignias o a Teo |
 
+## Subagentes del proyecto
+
+Definidos en `.claude/agents/` y alineados con las skills. Úsalos para paralelizar trabajo en **archivos distintos**:
+
+| Subagente | Para qué | Skill con la que trabaja |
+|---|---|---|
+| `bloque-dev` | Implementar un bloque o sub-bloque acotado | `bloque` |
+| `artista-pixel` | Dibujar piezas de avatar, insignias y sprites | `sprite-8bit`, `nuevo-mundo` |
+| `curador-semillas` | Rutas, cursos, insignias y títulos (`seed/`) | `nueva-ruta`, `nueva-insignia` |
+| `revisor-bloque` | Revisar un bloque o PR antes de entregarlo (solo lee) | `bloque` |
+
+Reglas: cada subagente edita solo lo que se le asignó; no hace `git`, `push` ni PR (eso lo hace quien lo lanzó); y quien lo
+lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de integrarlo.
+
 ## Flujo con GitHub (regla de trabajo)
 
 **El agente construye, sube y deja el PR listo; la persona revisa y fusiona.** Detalle en `docs/FLUJO_GITHUB.md`.

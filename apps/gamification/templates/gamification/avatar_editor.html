@@ -1,0 +1,56 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Mi avatar{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'gamification/editor.css' %}">
+<script src="{% static 'core/enhance.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Mi avatar</h1>
+  <p>Arma tu figurita como quieras: cuerpo, cara, pelo, lentes, gorro y ropa. Todo se puede cambiar cuando se quiera. Algunas piezas se desbloquean con insignias.</p>
+</div>
+
+<form class="av-editor" id="avForm" method="post" action="{% url 'gamification:avatar_editor' %}" data-enhance-root data-live-url="{% url 'gamification:avatar_preview' %}" data-live-target="#preview">
+  {% csrf_token %}
+  <aside class="av-side">
+    <div class="av-preview" id="preview" role="region" aria-label="Vista previa" aria-live="polite">
+      <div class="av-big">{{ preview|safe }}</div>
+    </div>
+    {% if unsaved %}<p class="av-note" role="status">Vista previa sin guardar. Pulsa «Guardar avatar» para quedarte con este.</p>{% endif %}
+    <div class="av-actions">
+      <button class="btn" type="submit">Guardar avatar</button>
+      <a class="btn ghost" href="{% url 'gamification:avatar_editor' %}?azar=1">Sorpréndeme</a>
+      <a class="btn ghost" href="{% url 'gamification:avatar_editor' %}?restablecer=1">Restablecer</a>
+    </div>
+  </aside>
+
+  <div class="av-main">
+    {% for section in sections %}
+    <section class="av-section">
+      <h2>{{ section.title }}</h2>
+      {% for group in section.groups %}
+      <fieldset class="av-group">
+        <legend>{{ group.label }}</legend>
+        <div class="{% if group.tiles %}av-tiles{% else %}av-swatches{% endif %}">
+          {% for opt in group.options %}
+          <label class="av-opt{% if opt.locked %} locked{% endif %}" title="{% if opt.locked %}Se desbloquea con «{{ opt.need }}»{% else %}{{ opt.label }}{% endif %}">
+            <input type="radio" name="{{ group.key }}" value="{{ opt.id }}"{% if opt.selected %} checked{% endif %}{% if opt.locked %} disabled{% endif %}>
+            {% if group.tiles %}
+            <span class="tile"><span class="px">{{ opt.svg|safe }}</span><b>{{ opt.label }}</b>{% if opt.locked %}<small>🔒 {{ opt.need }}</small>{% endif %}</span>
+            {% elif opt.color %}
+            <span class="sw" style="background:{{ opt.color }}"><span class="vh">{{ opt.label }}</span></span>
+            {% if group.key == "frame" %}<b class="swl">{{ opt.label }}{% if opt.locked %} 🔒{% endif %}</b>{% endif %}
+            {% endif %}
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+      {% endfor %}
+    </section>
+    {% endfor %}
+  </div>
+</form>
+{% endblock %}

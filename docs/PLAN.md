@@ -123,6 +123,10 @@ funciona sin JS para lectura; coincide visualmente con `legacy/ruta-forma-revit/
 **Acepta si:** marcar y desmarcar no duplica XP; rechazar o editar una credencial verificada revoca su XP e insignia; cada tipo de regla tiene prueba; el nivel coincide con la tabla de GAMIFICACION.
 
 ## Bloque 14 · Hoja de personaje `[ ]`
+
+> **Adelanto:** el generador de avatares pixel-art ya existe (`apps/gamification/avatars.py`, con pruebas) y su
+> galería está en `design/avatares/`. Este bloque lo conecta: componente `{% avatar person size=32 %}`,
+> editor de la hoja y validación de piezas desbloqueadas con `clean_config(..., unlocked=...)`. Ver `docs/AVATARES_PIXEL.md`.
 - Perfil editable: titular, bio, disciplina, clase, título elegido (solo entre desbloqueados), enlaces y avatar 8-bit por capas (solo items desbloqueados).
 - Vista profesional y vista de juego (GAMIFICACION): atributos en hexágono, vitrina de insignias, árbol de habilidades por vendor, línea de actividad.
 - Directorio del equipo con tarjetas de personaje.

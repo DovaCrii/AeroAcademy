@@ -36,3 +36,6 @@ select = ["E", "F", "I", "B", "UP", "DJ"]
 [tool.ruff.lint.per-file-ignores]
 "config/settings/*.py" = ["F403", "F405"]
 "apps/core/modules.py" = ["E501"]  # textos de la portada
+"apps/gamification/avatar/**/*.py" = ["E501"]  # arte ASCII y SVG
+"tools/*.py" = ["E501"]
+"tests/test_avatar*.py" = ["E501"]

@@ -51,6 +51,14 @@ Regla de fondo (`docs/FLUJO_GITHUB.md`): **el agente construye, sube y deja el P
    - `gh pr checks` y corregir si el CI falla;
    - informar en el chat: enlace del PR, resultado del CI y qué debe decidir la persona.
 
+## Paralelizar con subagentes
+
+Cuando un bloque tiene partes independientes (arte, semillas, módulos que no se tocan entre sí), define primero el
+**contrato** (formato, rangos, ids, un validador en `tools/`) y lanza subagentes de `.claude/agents/` en segundo plano, uno por
+archivo. Mientras trabajan, construye lo que no depende de ellos. Al terminar: corre el validador y las pruebas, **mira el
+resultado** (hojas de preview, navegador) y corrige tú lo que falle. Ejemplo real: los avatares de 32×32
+(`docs/AVATARES_PIXEL.md`), con 4 artistas en paralelo y un validador común.
+
 ## Trampas conocidas en este entorno (Windows + PowerShell)
 
 - El entorno bloquea comandos con `Remove-Item` y con textos largos que contienen `'\n'` o muchas rutas

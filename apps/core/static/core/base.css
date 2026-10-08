@@ -41,12 +41,19 @@ h3{font-weight:700;font-stretch:85%;font-size:19px;line-height:1.2;margin:0}
 .term{font-style:normal;font-weight:600;font-stretch:92%;padding:0 4px;border:1px solid var(--line);border-radius:2px;background:var(--sheet-2);white-space:nowrap}
 .foot{padding-top:30px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));color:var(--ink-2);font-size:13.5px}
 
+.top .userchip{flex-direction:row;align-items:center;gap:10px}
+.userchip .who svg{display:block;image-rendering:pixelated}
+.userchip .txt{display:flex;flex-direction:column;justify-content:center}
+.userchip:hover .uname{text-decoration:underline}
+.msgs{list-style:none;margin:16px 0 0;padding:0}
+.msgs li{padding:10px 14px;border:1px solid var(--ok);border-left-width:5px;background:var(--sheet);font-weight:600}
+.msgs li.error{border-color:var(--red)}
 .userchip .uname{font-size:14px;font-weight:600;font-stretch:90%;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
 .waiting{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
 .teo-px{image-rendering:pixelated;width:96px;height:96px}
 
 @media (max-width:640px){
-  .userchip{display:none}
+  .userchip .txt{display:none}
   .waiting{grid-template-columns:1fr}
   .wrap{padding:0 16px}
   .sheet-in{padding:20px 16px}

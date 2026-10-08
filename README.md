@@ -48,6 +48,12 @@ Cuando una licitación pide acreditar competencias, nadie sabe qué credencial e
 
 > Los conceptos navegables están en [`design/`](design/): [`mundos/civil.html`](design/mundos/civil.html) y [`perfil/hoja-personaje.html`](design/perfil/hoja-personaje.html).
 
+## Las figuritas del equipo
+
+Cada persona **arma su propio avatar pixel-art** de 32×32 en `/perfil/avatar/`: hombre, mujer o neutro; piel; cara; **14 peinados** con 12 colores; barba o sin barba; **lentes**; **gorros y sombreros**; ropa del oficio; fondo y un marco de rareza. Parte con una figurita distinta y estable desde su primer ingreso, hay vista previa en vivo y algunas piezas (casco de obra, gafas de piloto, hélice de dron) se **desbloquean con insignias**. Se genera con un motor propio, sin dependencias: [`apps/gamification/avatar/`](apps/gamification/avatar/). El arte se dibujó con **subagentes en paralelo** (ver [`.claude/agents/`](.claude/agents/)). Más en [`docs/AVATARES_PIXEL.md`](docs/AVATARES_PIXEL.md).
+
+<img src="docs/img/avatares.jpg" alt="Figuritas del equipo: cinco clases, accesorios y marcos" width="760">
+
 ## Cómo funciona
 
 ```mermaid
@@ -128,9 +134,11 @@ En PowerShell: `$env:DEV_REMOTE_USER="tu@correo.cl"; $env:BOOTSTRAP_ADMINS="tu@c
 |---|---|
 | [`docs/`](docs/) | Visión, PRD, arquitectura, modelo de datos, taxonomía, mundos, juego, bot, moderación, plan y decisiones |
 | [`seed/`](seed/) | Empresas, plataformas, habilidades, rutas, insignias y títulos en JSON |
-| [`design/`](design/) | Portada de referencia, conceptos de mundos y de la hoja de personaje, sprites de Teo |
+| [`design/`](design/) | Portada de referencia, conceptos de mundos y de la hoja de personaje, galería de avatares, sprites de Teo |
 | [`legacy/`](legacy/) | El prototipo de la ruta Forma + Revit (referencia del primer mundo) |
 | [`.claude/skills/`](.claude/skills/) | Skills del proyecto: `bloque`, `nueva-ruta`, `nuevo-mundo`, `nueva-insignia`, `sprite-8bit` |
+| [`.claude/agents/`](.claude/agents/) | Subagentes del proyecto: `bloque-dev`, `artista-pixel`, `curador-semillas`, `revisor-bloque` |
+| [`tools/`](tools/) | Validador de piezas de avatar, hojas de vista previa en PNG y mapa de coordenadas |
 
 ## Suite Aero
 
