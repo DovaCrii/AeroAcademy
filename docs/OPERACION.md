@@ -69,6 +69,10 @@ Importa personas (quedan aprobadas), avance y meta de certificación, notas (con
 | Ver el servicio | `systemctl status centro` · `journalctl -u centro -f` |
 | Estado de las tareas | `systemctl list-timers 'centro-*'` |
 
+## Semillas y lo creado en el admin
+
+`seed_catalog` (que corre el instalador en cada actualización) **retira** las insignias, títulos y categorías del foro que no estén en `seed/`. Si creas alguno desde el admin de Django, agrégalo también a su JSON en `seed/` o se retirará en la próxima actualización.
+
 ## Seguridad en pocas líneas
 
 - La identidad viene del encabezado de Tailscale y solo se acepta desde `127.0.0.1` (el proxy local). Cualquier otro origen recibe 403.

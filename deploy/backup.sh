@@ -8,8 +8,10 @@ STAMP="$(date +%F)"
 mkdir -p "$DEST"
 umask 077   # los respaldos contienen datos personales
 
-sqlite3 "$STATE/db.sqlite3" ".backup '$DEST/db-$STAMP.sqlite3'"
-tar -C "$STATE" -czf "$DEST/media-$STAMP.tar.gz" media
+# Con el servicio escribiendo, SQLite puede estar ocupado un instante: se espera hasta 10 s.
+sqlite3 -cmd ".timeout 10000" "$STATE/db.sqlite3" ".backup '$DEST/db-$STAMP.sqlite3'"
+# tar sale con 1 si un archivo cambió mientras se leía: no es un fallo del respaldo.
+tar -C "$STATE" -czf "$DEST/media-$STAMP.tar.gz" media || [ $? -eq 1 ]
 
 find "$DEST" -name 'db-*.sqlite3' -mtime +30 -delete
 find "$DEST" -name 'media-*.tar.gz' -mtime +30 -delete

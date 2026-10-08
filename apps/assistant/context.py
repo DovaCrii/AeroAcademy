@@ -34,10 +34,13 @@ def clean_question(text):
 def pending_titles(person):
     """Misión sugerida y hasta 5 misiones pendientes de esa ruta (solo títulos)."""
     mission = dashboard.suggested_mission(person)
-    if mission is None:
-        return []
-    titles = [mission["title"]]
+    if mission is None or not mission["path"].is_published:
+        return []  # ni borradores ni rutas sin publicar viajan al proveedor
     path = mission["path"]
+    if path.kind == LearningPath.Kind.EXTERNAL_TRACK:
+        # El detalle (qué cursos faltan) sale de las credenciales de la persona: no se envía.
+        return [f"{path.title}: sigue con los cursos de la ruta"]
+    titles = [mission["title"]]
     if path.kind == LearningPath.Kind.STRUCTURED:
         done = set(
             MilestoneCheck.objects.filter(person=person, milestone__path=path).values_list(
@@ -53,6 +56,11 @@ def pending_titles(person):
     return [f"{path.title}: {t}" for t in titles[:PENDING_LIMIT]]
 
 
+def _visible_name(person):
+    """Solo el nombre que la persona eligió: si no hay, nunca el correo de Tailscale."""
+    return (person.display_name or "").strip() or "la persona"
+
+
 def build(person, question, *, extra=None):
     """Devuelve (mensajes, fuentes). `extra` es texto ya visible para el equipo (ej.: un hilo a resumir)."""
     hits = search.search(question)
@@ -66,7 +74,7 @@ def build(person, question, *, extra=None):
     progress = "\n".join(f"- {t}" for t in pending_titles(person)) or "(sin misiones pendientes)"
     user = (
         f"CONTEXTO:\n{context}\n\n"
-        f"MISIONES PENDIENTES DE {person.name}:\n{progress}\n\n"
+        f"MISIONES PENDIENTES DE {_visible_name(person)}:\n{progress}\n\n"
         f"PREGUNTA:\n{question}"
     )
     return [

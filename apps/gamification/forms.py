@@ -53,8 +53,14 @@ class SheetForm(forms.Form):
             return ""
         parsed = urlparse(value)
         host = (parsed.hostname or "").lower()
+        # Un navegador lee `\` como `/` y `usuario@` como credenciales: el sitio real sería otro.
+        clean = (
+            "\\" not in value
+            and not any(c.isspace() for c in value)
+            and parsed.netloc.lower() == host
+        )
         ok = any(host == h or host.endswith("." + h) for h in LINK_HOSTS[name])
-        if parsed.scheme != "https" or not ok:
+        if parsed.scheme != "https" or not ok or not clean:
             raise forms.ValidationError(f"Debe ser un enlace https de {LINK_HOSTS[name][0]}.")
         return value
 

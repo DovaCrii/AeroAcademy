@@ -51,7 +51,7 @@ def visible_paths(viewer):
 # --- avance por ruta y persona ------------------------------------------------------------------------------------
 
 
-def path_percentages(people, paths):
+def path_percentages(people, paths, viewer=None):
     """{(person_id, path_id): % de avance}. Misma regla que las pantallas de cada mundo, calculada en lote."""
     ids = [p.pk for p in people]
     out = {(pid, path.pk): 0 for pid in ids for path in paths}
@@ -103,9 +103,12 @@ def path_percentages(people, paths):
             ExternalCourse.objects.filter(path__in=external, retired=False).select_related("level")
         )
         verified = defaultdict(set)  # person_id -> resource_ids con credencial verificada
-        rows = Credential.objects.filter(
+        creds = Credential.objects.filter(
             owner__in=ids, status=Credential.Status.VERIFIED, resource__isnull=False
-        ).values_list("owner_id", "resource_id")
+        )
+        if viewer is not None:  # lo privado de otras personas no se refleja ni en un porcentaje
+            creds = creds.filter(credential_services.visible_filter(viewer))
+        rows = creds.values_list("owner_id", "resource_id")
         for owner, resource in rows:
             verified[owner].add(resource)
         by_level = defaultdict(list)
@@ -131,7 +134,7 @@ def path_percentages(people, paths):
 
 def progress_table(viewer):
     people, paths = approved_people(), visible_paths(viewer)
-    pct = path_percentages(people, paths)
+    pct = path_percentages(people, paths, viewer)
     rows = [{"person": p, "cells": [pct[(p.pk, path.pk)] for path in paths]} for p in people]
     return {"paths": paths, "rows": rows}
 
@@ -139,15 +142,16 @@ def progress_table(viewer):
 # --- tablero -------------------------------------------------------------------------------------------------------
 
 
-def recent_notes(limit=RECENT):
-    return list(
-        Note.objects.filter(
-            is_deleted=False,
-            is_hidden=False,
-            parent__isnull=True,
-            author__status=PersonStatus.APPROVED,
-        ).select_related("author", "path")[:limit]
+def recent_notes(viewer, limit=RECENT):
+    qs = Note.objects.filter(
+        is_deleted=False,
+        is_hidden=False,
+        parent__isnull=True,
+        author__status=PersonStatus.APPROVED,
     )
+    if not viewer.is_lead:
+        qs = qs.filter(path__is_published=True)  # los borradores no se ven
+    return list(qs.select_related("author", "path")[:limit])
 
 
 def recent_credentials(viewer, limit=RECENT):

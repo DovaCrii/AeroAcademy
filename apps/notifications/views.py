@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_POST
 
 from . import services
@@ -19,6 +20,6 @@ def read(request, pk=None):
     notification = get_object_or_404(Notification, pk=pk, recipient=request.user)
     services.mark_read(request.user, pk)
     target = notification.url
-    if target.startswith("/") and not target.startswith("//"):
+    if target.startswith("/") and url_has_allowed_host_and_scheme(target, {request.get_host()}):
         return redirect(target)
     return redirect("notifications:inbox")

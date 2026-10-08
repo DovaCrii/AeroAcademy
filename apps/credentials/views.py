@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.http import FileResponse, Http404, HttpResponse
+from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -267,12 +267,16 @@ def export_view(request):
         raise PermissionDenied
     if request.method == "POST":
         try:
-            data, _ = export.build_zip(request.user, _export_selection(request.POST))
+            handle, _ = export.build_zip_file(request.user, _export_selection(request.POST))
         except ValueError as exc:
             messages.error(request, str(exc))
             return redirect(reverse("credentials:export"))
-        response = HttpResponse(data, content_type="application/zip")
-        response["Content-Disposition"] = f'attachment; filename="{export.filename()}"'
+        response = FileResponse(
+            handle,
+            as_attachment=True,
+            filename=export.filename(),
+            content_type="application/zip",
+        )
         response["Cache-Control"] = "no-store"
         response["X-Content-Type-Options"] = "nosniff"
         return response

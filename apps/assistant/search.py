@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from django.db import connection, transaction
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 
@@ -62,7 +63,10 @@ def _rows():
     for r in Resource.objects.all():
         url = reverse("catalog:resources") + "?q=" + quote(r.title)
         yield ("resource", f"resource:{r.pk}", r.title, r.description, url)
-    for n in Note.objects.filter(is_deleted=False, is_hidden=False).select_related("path"):
+    visible_notes = Note.objects.filter(
+        is_deleted=False, is_hidden=False, path__is_published=True
+    ).exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
+    for n in visible_notes.select_related("path"):
         yield (
             "note",
             f"note:{n.pk}",
@@ -132,7 +136,13 @@ def _still_visible(ref):
     kind, _, pk = ref.partition(":")
     pk = int(pk) if pk.isdigit() else 0
     if kind == "note":
-        return Note.objects.filter(pk=pk, is_deleted=False, is_hidden=False).exists()
+        return (
+            Note.objects.filter(pk=pk, is_deleted=False, is_hidden=False, path__is_published=True)
+            .exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
+            .exists()
+        )
+    if kind == "glossary":
+        return PathExtra.objects.filter(pk=pk, path__is_published=True).exists()
     if kind == "thread":
         return Thread.objects.filter(pk=pk, is_hidden=False).exists()
     if kind == "post":

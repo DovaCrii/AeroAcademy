@@ -5,12 +5,14 @@ from django.db.models import Count, Q
 from django.utils import timezone
 
 from apps.gamification import game
+from apps.gamification.models import XPEvent
 from apps.notifications import services as notifications
 
 from . import moderation
 from .models import BODY_MAX, THREAD_TITLE_MAX, Post, Thread
 
 ACCEPT_XP_KIND = "accepted_answer"
+DAILY_ACCEPTED_XP = 5  # respuestas aceptadas por día que dan XP (antitrampa, D13)
 
 
 def can_manage(person, thread) -> bool:
@@ -75,19 +77,29 @@ def _revoke_accepted(thread):
 @transaction.atomic
 def accept(thread, post, by):
     """Marca la respuesta aceptada. Da XP a quien respondió (no si se respondió a sí mismo)."""
+    thread = Thread.objects.select_for_update().get(
+        pk=thread.pk
+    )  # estado actual, no el de la carga
     if not can_manage(by, thread):
         raise PermissionError("Solo quien abrió la consulta o un responsable acepta respuestas.")
     if thread.kind != Thread.Kind.QUESTION:
         raise ValueError("Solo las consultas tienen respuesta aceptada.")
-    if post.thread_id != thread.pk or post.is_deleted:
+    if post.thread_id != thread.pk or post.is_deleted or post.is_hidden:
         raise ValueError("Esa respuesta no es válida.")
+    if thread.is_hidden and not by.is_lead:
+        raise ValueError("El hilo no está disponible.")
     if thread.accepted_post_id == post.pk:
         return thread
     _revoke_accepted(thread)
     thread.accepted_post = post
     thread.save(update_fields=["accepted_post", "updated_at"])
     if post.author_id != thread.author_id:
-        game.award(post.author, _source(thread), ACCEPT_XP_KIND, label=thread.title)
+        today = timezone.localtime().replace(hour=0, minute=0, second=0, microsecond=0)
+        earned = XPEvent.objects.filter(
+            person=post.author, kind=ACCEPT_XP_KIND, points__gt=0, created_at__gte=today
+        ).count()
+        points = game.POINTS[ACCEPT_XP_KIND] if earned < DAILY_ACCEPTED_XP else 0  # tope diario
+        game.award(post.author, _source(thread), ACCEPT_XP_KIND, points, label=thread.title)
         game.evaluate(post.author)
         notifications.notify(
             post.author,
@@ -104,6 +116,7 @@ def accept(thread, post, by):
 
 @transaction.atomic
 def unaccept(thread, by):
+    thread = Thread.objects.select_for_update().get(pk=thread.pk)
     if not can_manage(by, thread):
         raise PermissionError("Solo quien abrió la consulta o un responsable puede quitarla.")
     _revoke_accepted(thread)
@@ -115,7 +128,7 @@ def unaccept(thread, by):
 def delete_post(post, by):
     if post.author_id != by.pk or post.is_deleted:
         raise PermissionError("Solo quien escribió el mensaje puede borrarlo.")
-    thread = post.thread
+    thread = Thread.objects.select_for_update().get(pk=post.thread_id)  # estado actual
     if thread.accepted_post_id == post.pk:
         _revoke_accepted(thread)
         thread.accepted_post = None

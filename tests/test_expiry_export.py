@@ -240,7 +240,7 @@ def test_http_download_and_audit_log(client_for, member, lead):
     assert (
         "attachment" in response["Content-Disposition"] and response["Cache-Control"] == "no-store"
     )
-    zf, _ = open_zip(response.content)
+    zf, _ = open_zip(b"".join(response.streaming_content))
     assert len(zf.namelist()) == 2
     assert ModerationLog.objects.filter(
         action="export_credentials", actor=lead, summary="1 credenciales"
@@ -254,7 +254,7 @@ def test_http_filtered_download(client_for, member, lead, make_person):
     response = client_for(lead.login).post(
         "/certificados/exportar/", {"persona": [other.pk], "estado": "verified"}
     )
-    _, wb = open_zip(response.content)
+    _, wb = open_zip(b"".join(response.streaming_content))
     assert [r[1].value for r in wb["Credenciales"].iter_rows(min_row=2)] == ["De otra"]
 
 
