@@ -195,9 +195,9 @@ def test_only_get_is_allowed_on_the_preview(member_client):
     assert member_client.post(PREVIEW, {"hair": "bun"}).status_code == 405
 
 
-def test_header_shows_my_avatar_and_links_to_the_editor(member_client, member):
+def test_header_shows_my_avatar_and_links_to_my_sheet(member_client, member):
     html = member_client.get("/").content.decode()
-    assert 'href="/perfil/avatar/"' in html and "Editar mi avatar" in html
+    assert 'href="/perfil/"' in html
     assert f'aria-label="Avatar de {member.name}"' in html
 
 

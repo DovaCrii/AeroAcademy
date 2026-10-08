@@ -1,9 +1,14 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.db.models import Sum
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from apps.accounts.models import Person, PersonStatus
+
 from . import game, services
+from . import sheet as sheet_data
+from .forms import SheetForm
 
 
 def _page(request, cfg, *, unsaved=False):
@@ -68,3 +73,58 @@ def seen(request):
     if not ok or not url_has_allowed_host_and_scheme(target, {request.get_host()}):
         target = "/"
     return redirect(target)
+
+
+def _render_sheet(request, person):
+    view = request.GET.get("vista") or ("juego" if person.show_game_view else "pro")
+    ctx = sheet_data.build(person, request.user)
+    ctx["view"] = "pro" if view == "pro" else "juego"
+    ctx["avatar_big"] = services.svg_sized(
+        services.person_config(person), 160, title=f"Avatar de {person.name}", view="full"
+    )
+    return render(request, "gamification/sheet.html", ctx)
+
+
+def my_sheet(request):
+    return _render_sheet(request, request.user)
+
+
+def sheet(request, pk):
+    person = get_object_or_404(Person, pk=pk, status=PersonStatus.APPROVED, is_active=True)
+    return _render_sheet(request, person)
+
+
+@require_http_methods(["GET", "POST"])
+def edit_sheet(request):
+    """Solo la persona edita su hoja (la ruta no recibe un id)."""
+    person = request.user
+    form = SheetForm(request.POST or None, person=person, initial=SheetForm.initial_for(person))
+    if request.method == "POST" and form.is_valid():
+        data = form.cleaned_data
+        person.headline, person.bio = data["headline"].strip(), data["bio"].strip()
+        person.selected_title = data["selected_title"]
+        person.show_game_view = data["show_game_view"]
+        person.links = {k: data[k] for k in ("linkedin", "credly") if data[k]}
+        if data["character_class"] != person.character_class:
+            person.character_class = data["character_class"]
+            if person.avatar_config and data["character_class"]:
+                person.avatar_config = {**person.avatar_config, "class": data["character_class"]}
+        person.save()
+        sheet_data.sync_profile(person)
+        messages.success(request, "Tu hoja de personaje quedó guardada.")
+        return redirect("gamification:my_sheet")
+    return render(request, "gamification/sheet_edit.html", {"form": form})
+
+
+def directory(request):
+    """Tarjetas de personaje del equipo, en orden alfabético: no hay ranking individual (D17)."""
+    people = list(
+        Person.objects.filter(status=PersonStatus.APPROVED, is_active=True)
+        .select_related("selected_title")
+        .annotate(total=Sum("xp_events__points"))
+        .order_by("display_name", "login")
+    )
+    game.prefetch_badges(people)
+    for person in people:
+        person.level = game.level_for(person.total or 0)
+    return render(request, "gamification/directory.html", {"people": people})

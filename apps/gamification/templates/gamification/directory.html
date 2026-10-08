@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+{% load static avatar_tags %}
+
+{% block title %}El gremio{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'gamification/sheet.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>El gremio</h1>
+  <p>Las personas del equipo y sus hojas de personaje, en orden alfabético.</p>
+</div>
+<ul class="people">
+  {% for p in people %}
+  <li class="person-card">
+    <a href="{% url 'gamification:sheet' p.pk %}">
+      {% avatar p 64 %}
+      <b>{{ p.name }}</b>
+      <span class="muted">{% if p.character_class %}{{ p.get_character_class_display }} · {% endif %}NV {{ p.level }}</span>
+      {% if p.selected_title %}<span class="ttl">{{ p.selected_title.name }}</span>{% endif %}
+      {% if p.headline %}<span class="muted small">{{ p.headline }}</span>{% endif %}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

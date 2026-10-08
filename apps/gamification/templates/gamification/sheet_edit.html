@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Editar mi hoja{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'gamification/sheet.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Mi hoja de personaje</h1>
+  <p>Solo tú puedes editarla. El avatar se arma en <a href="{% url 'gamification:avatar_editor' %}">Mi avatar</a>.</p>
+</div>
+<form method="post" class="form sheet-form">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="field{% if field.errors %} has-error{% endif %}">
+    {{ field.label_tag }}
+    {{ field }}
+    {% for e in field.errors %}<p class="err">{{ e }}</p>{% endfor %}
+  </div>
+  {% endfor %}
+  <p><button class="btn primary" type="submit">Guardar</button> <a class="btn" href="{% url 'gamification:my_sheet' %}">Cancelar</a></p>
+</form>
+{% endblock %}
