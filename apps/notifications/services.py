@@ -1,6 +1,7 @@
 """Avisos dentro de la app. `notify()` es el único punto de entrada: el canal `in_app` guarda la fila y
 deja un gancho para el correo (Bloque 8)."""
 
+import logging
 from datetime import date
 
 from django.db import IntegrityError, transaction
@@ -10,6 +11,7 @@ from apps.accounts.models import Person, PersonStatus
 
 from .models import Announcement, Notification
 
+log = logging.getLogger(__name__)
 LIST_LIMIT = 50
 BELL_LIMIT = 6
 
@@ -20,7 +22,7 @@ def notify(person, kind, title, body="", url="", key=""):
         return None
     fields = {"kind": kind, "title": title[:200], "body": body[:300], "url": url[:300]}
     if not key:
-        return Notification.objects.create(recipient=person, **fields)
+        return _email_hook(Notification.objects.create(recipient=person, **fields))
     try:
         with transaction.atomic():
             obj, created = Notification.objects.get_or_create(
@@ -28,7 +30,15 @@ def notify(person, kind, title, body="", url="", key=""):
             )
     except IntegrityError:  # carrera entre dos procesos: ya existe
         return None
-    return obj if created else None
+    return _email_hook(obj) if created else None
+
+
+def _email_hook(notification):
+    """Gancho del canal `email` (fuera del MVP): por ahora solo deja constancia en el log, sin el contenido."""
+    log.info(
+        "notify[email-hook] kind=%s recipient=%s", notification.kind, notification.recipient_id
+    )
+    return notification
 
 
 def leads():

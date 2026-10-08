@@ -109,7 +109,7 @@ El avance se sigue en la pestaña [**Pull requests**](https://github.com/DovaCri
 
 ## Stack
 
-Python 3.12 + Django 5.2 (monolito modular) · SQLite en modo WAL · plantillas + HTMX, sin build de frontend ·
+Python 3.12 + Django 5.2 (monolito modular) · SQLite en modo WAL · plantillas + un ayudante JS propio (`enhance.js`, sin HTMX por ahora; ver D23), sin build de frontend ·
 `uv`, `pytest`, `ruff` · identidad por **Tailscale** (sin contraseñas) · asistente sobre **NVIDIA NIM**.
 Pensado para vivir en una sola VM y publicarse solo dentro de la tailnet.
 

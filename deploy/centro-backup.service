@@ -1,0 +1,8 @@
+[Unit]
+Description=AeroAcademy · respaldo diario (base + archivos)
+
+[Service]
+Type=oneshot
+User=centro
+Group=centro
+ExecStart=/opt/aeroacademy/deploy/backup.sh

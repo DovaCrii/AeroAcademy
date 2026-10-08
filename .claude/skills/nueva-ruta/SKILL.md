@@ -37,7 +37,7 @@ Taxonomía en `docs/TAXONOMIA.md`.
 7. **Validar:**
    ```bash
    python -m json.tool seed/rutas/<slug>.json > NUL
-   uv run python manage.py seed_catalog --dry-run   # cuando exista (Bloque 2)
+   uv run python manage.py seed_catalog --dry-run   # valida rutas, insignias, títulos y foro; usar una base migrada
    ```
    Revisar además: keys únicas por ruta; productos, disciplinas y plataforma existentes; `world` válido (`architecture`, `civil`, `survey`, `mechanical`, `aero`).
 8. **Si el mundo aún no existe**, avisar y sugerir la skill `nuevo-mundo`.

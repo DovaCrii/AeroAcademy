@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 from apps.core.models import TimeStampedModel
 
@@ -30,12 +31,18 @@ class Note(TimeStampedModel):
     )
     is_deleted = models.BooleanField("borrada", default=False)
     is_hidden = models.BooleanField("oculta por moderación", default=False)
+    legacy_id = models.CharField(max_length=40, blank=True)  # id en el prototipo (import_legacy)
 
     class Meta:
         verbose_name = "nota"
         verbose_name_plural = "notas"
         ordering = ["-created_at", "-id"]
         indexes = [models.Index(fields=["path", "level", "is_deleted"])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["legacy_id"], condition=~Q(legacy_id=""), name="uniq_note_legacy_id"
+            )
+        ]
 
     def __str__(self):
         return f"{self.get_type_display()} · {self.author}"

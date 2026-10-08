@@ -1,0 +1,21 @@
+[Unit]
+Description=AeroAcademy · Academia LEV Digital 101
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=centro
+Group=centro
+WorkingDirectory=/opt/aeroacademy
+EnvironmentFile=/etc/centro/env
+ExecStart=/opt/aeroacademy/.venv/bin/gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 3 --timeout 60
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/centro /opt/aeroacademy/staticfiles
+
+[Install]
+WantedBy=multi-user.target

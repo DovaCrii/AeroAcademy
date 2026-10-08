@@ -7,7 +7,7 @@ navegador (tailnet) ─HTTPS─> tailscale serve ─> 127.0.0.1:8000 gunicorn �
                               └ Tailscale-User-Login / -Name / -Profile-Pic        └─> /var/lib/centro/media (certificados)
 ```
 
-Monolito modular en Django, sin frontend separado. HTMX para interacciones (marcar hitos, quiz, notas,
+Monolito modular en Django, sin frontend separado. Mejora progresiva con un ayudante propio (`core/static/core/enhance.js`, D23; HTMX queda como opción) para las interacciones (marcar hitos, quiz, notas,
 filtros) sin recargar la página.
 
 ## Módulos (apps de Django)

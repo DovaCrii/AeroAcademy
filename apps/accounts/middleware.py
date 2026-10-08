@@ -12,6 +12,7 @@ from .models import PersonStatus
 LOGIN_HEADER = "HTTP_TAILSCALE_USER_LOGIN"
 NAME_HEADER = "HTTP_TAILSCALE_USER_NAME"
 PIC_HEADER = "HTTP_TAILSCALE_USER_PROFILE_PIC"
+HEALTH_PATH = "/healthz"
 
 
 def _is_trusted(remote_addr: str) -> bool:
@@ -43,6 +44,11 @@ class TailscaleRemoteUserMiddleware(RemoteUserMiddleware):
     def process_request(self, request):
         if not _is_trusted(request.META.get("REMOTE_ADDR", "")):
             return HttpResponseForbidden("Acceso no permitido.")
+
+        if (
+            request.path == HEALTH_PATH
+        ):  # solo desde el proxy local: lo usa el instalador y el monitoreo
+            return None
 
         if not request.META.get(LOGIN_HEADER, "").strip():
             dev_user = settings.DEV_REMOTE_USER if settings.DEBUG else ""

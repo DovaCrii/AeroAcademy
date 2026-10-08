@@ -21,11 +21,13 @@ Regla de fondo (`docs/FLUJO_GITHUB.md`): **el agente construye, sube y deja el P
    la propuesta por defecto.
 5. **Implementar** respetando las convenciones:
    - lógica en `services.py`;
-   - XP solo con `gamification.services.award/revoke`;
+   - XP, insignias y títulos solo con `gamification.game` (`award`, `revoke`, `refresh`, `evaluate`; nada de signals ocultos);
+   - avisos solo con `notifications.services.notify(..., key=...)` (idempotente);
    - archivos privados por una vista con permiso;
    - nada de `credentials` hacia `assistant`;
    - cambios de modelo con su migración, y las semillas nuevas con `seed_catalog --dry-run` en verde.
-6. **Pruebas primero** para los criterios de aceptación. Luego correr, desde la carpeta del proyecto,
+6. **Pruebas primero** para los criterios de aceptación **y** para la lista de `AGENTS.md` «Reglas que salieron de las revisiones»
+   (autorización, privacidad, POST/CSRF y `next` seguro, texto escapado, idempotencia, archivos, consultas acotadas). Luego correr, desde la carpeta del proyecto,
    **lo mismo que corre el CI** (`.github/workflows/ci.yml`):
    ```bash
    uv run ruff check . && uv run ruff format --check .
@@ -60,6 +62,20 @@ resultado** (hojas de preview, navegador) y corrige tú lo que falle. Ejemplo re
 (`docs/AVATARES_PIXEL.md`), con 4 artistas en paralelo y un validador común.
 
 ## Trampas conocidas en este entorno (Windows + PowerShell)
+
+- **Parchear archivos:** escribe un script Python en el directorio de trabajo temporal y córrelo con `python -I`
+  (reemplazos con `assert old in texto`); evita `-replace` o `"`n"` dentro de comillas simples en PowerShell.
+  Nunca reescribas un archivo existente con `Write` sin leerlo antes (se perdió `.env.example` una vez).
+- **Pruebas de contenido:** la campana y el widget de Teo muestran texto en toda página; cuando una prueba busca
+  que algo *no* aparezca, acota con `html.split("<main")[1]`.
+- **Un módulo nuevo** exige: `url_name` en `core/modules.py`, enlace en `base.html`, `INSTALLED_APPS`, `config/urls.py`,
+  migración, y ajustar `tests/test_welcome.py`.
+- **Las claves** (NVIDIA, etc.) solo en `.env` o `/etc/centro/env`; nunca en el repositorio ni en el chat. Antes de subir:
+  `git grep -n "nvapi-"`.
+- **Subagentes:** los de `.claude/agents/` solo existen si el harness los registró al iniciar la sesión; si
+  `Agent` no los encuentra, lanza uno `general-purpose` y dile que lea primero su definición en `.claude/agents/`.
+- Encadenar comandos con `;` sigue adelante aunque fallen las pruebas: condiciona el commit al resultado
+  (`if ($r -match "failed") { ... }`).
 
 - El entorno bloquea comandos con `Remove-Item` y con textos largos que contienen `'\n'` o muchas rutas
   `/algo/`. Para borrar una base usa `DATABASE_PATH` apuntando a un archivo temporal nuevo; para texto
