@@ -530,3 +530,73 @@ def test_the_diagnostic_script_checks_everything_and_changes_nothing():
         " up --",
     ):
         assert forbidden not in text, forbidden
+
+
+# --- errores reales en p340: el nodo sin --statedir y modelos listados pero no habilitados ----------------------------
+
+
+def test_the_own_node_uses_statedir_so_it_can_store_certificates():
+    unit = (ROOT / "deploy" / "tailscaled-aeroacademy.service").read_text(encoding="utf-8")
+    exec_line = next(line for line in unit.splitlines() if line.startswith("ExecStart="))
+    assert "--statedir=/var/lib/tailscale-aeroacademy" in exec_line and "--state=" not in exec_line
+    install = (ROOT / "deploy" / "install.sh").read_text(encoding="utf-8")
+    assert "systemctl restart tailscaled-aeroacademy.service" in install
+
+
+def test_gunicorn_can_write_its_control_socket():
+    service = (ROOT / "deploy" / "centro.service").read_text(encoding="utf-8")
+    assert "/opt/aeroacademy/.gunicorn" in service
+    install = (ROOT / "deploy" / "install.sh").read_text(encoding="utf-8")
+    assert 'mkdir -p "$APP/.gunicorn"' in install and '--exclude ".gunicorn"' in install
+
+
+def test_the_error_names_every_model_tried(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL, settings.NIM_MODEL_FALLBACKS = "a/1", ["b/2"]
+    client.TRANSPORT = _router({"a/1": 410, "b/2": 404}, [])
+    with pytest.raises(client.BotError) as exc:
+        client.chat([{"role": "user", "content": "hola"}])
+    assert "a/1 → HTTP 410" in exc.value.detail and "b/2 → HTTP 404" in exc.value.detail
+
+
+def test_teo_probar_buscar_finds_models_that_really_answer(settings, capsys):
+    import json
+
+    settings.NIM_API_KEY = "nvapi-X"
+    listed = ["meta/llama-3.2-90b-vision-instruct", "mistralai/mistral-large-2-instruct", "nvidia/llama-3.1-nemotron-70b-instruct",
+              "nvidia/llama-3.1-nemotron-51b-instruct", "mistralai/mistral-7b-instruct-v0.3", "ibm/granite-8b-code-instruct"]  # fmt: skip
+    blocked = {
+        "mistralai/mistral-large-2-instruct"
+    }  # aparece en la lista pero la cuenta no lo tiene
+
+    def handler(request):
+        if request.url.path.endswith("/models"):
+            return httpx.Response(200, json={"data": [{"id": m} for m in listed]})
+        model = json.loads(request.content)["model"]
+        if model in blocked:
+            return httpx.Response(404, json={"detail": "Function not found for account"})
+        return httpx.Response(200, json={"choices": [{"message": {"content": "hola"}}]})
+
+    client.TRANSPORT = httpx.MockTransport(handler)
+    call_command("teo_probar", "--buscar")
+    out = capsys.readouterr().out
+    assert "✘ mistralai/mistral-large-2-instruct" in out
+    assert "NIM_MODEL=nvidia/llama-3.1-nemotron-70b-instruct" in out
+    assert (
+        "NIM_MODEL_FALLBACKS=nvidia/llama-3.1-nemotron-51b-instruct,mistralai/mistral-7b-instruct-v0.3"
+        in out
+    )
+    assert "vision" not in out and "code-instruct" not in out and "nvapi-X" not in out
+
+
+def test_teo_probar_buscar_fails_clearly_when_nothing_answers(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+
+    def handler(request):
+        if request.url.path.endswith("/models"):
+            return httpx.Response(200, json={"data": [{"id": "a/x-instruct"}]})
+        return httpx.Response(404, json={"detail": "Function not found for account"})
+
+    client.TRANSPORT = httpx.MockTransport(handler)
+    with pytest.raises(CommandError, match="Ningún modelo"):
+        call_command("teo_probar", "--buscar")

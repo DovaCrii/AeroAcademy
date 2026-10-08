@@ -377,7 +377,7 @@ def test_the_default_is_its_own_tailscale_node_not_the_main_one():
     )  # el nodo propio sirve en su 443, no en el de AeroControl
     assert "up --hostname=" in install and "AEROACADEMY_TS_AUTHKEY" in install
     unit = (DEPLOY / "tailscaled-aeroacademy.service").read_text(encoding="utf-8")
-    assert "--state=/var/lib/tailscale-aeroacademy/tailscaled.state" in unit
+    assert "--statedir=/var/lib/tailscale-aeroacademy" in unit  # guarda estado y certificados
     assert "--socket=/run/tailscale-aeroacademy/tailscaled.sock" in unit
     assert (
         "--tun=userspace-networking" in unit and "--port=41642" in unit

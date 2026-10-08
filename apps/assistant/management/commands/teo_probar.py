@@ -18,6 +18,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
+            "--buscar",
+            action="store_true",
+            help="Prueba de verdad los modelos instruct (una llamada corta a cada uno) hasta encontrar los que responden con esta cuenta.",
+        )
+        parser.add_argument(
             "--modelos",
             action="store_true",
             help="Lista los modelos que ofrece la API, para elegir NIM_MODEL (los «instruct» primero).",
@@ -29,6 +34,8 @@ class Command(BaseCommand):
         if not settings.NIM_API_KEY:
             raise CommandError("Falta NIM_API_KEY (ver deploy/centro.env.plantilla).")
         self.stdout.write(f"Modelo: {settings.NIM_MODEL} · {settings.NIM_BASE_URL}")
+        if options["buscar"]:
+            return self._search()
         if options["modelos"]:
             return self._models()
         messages = [
@@ -68,3 +75,56 @@ class Command(BaseCommand):
             self.stdout.write(
                 "Cambia NIM_MODEL en deploy/centro.env (o en /etc/centro/env) y reinicia: sudo systemctl restart centro"
             )
+
+    def _search(self, wanted=3):
+        """La lista de NIM trae modelos que la cuenta no puede usar («Function not found for account»): se prueban."""
+        try:
+            models = client.list_models()
+        except client.BotError as exc:
+            raise CommandError(
+                f"No se pudo listar ({exc.code}). {HINTS.get(exc.code, '')}"
+            ) from exc
+        ranked = sorted(
+            (m for m in models if "instruct" in m.lower() or "chat" in m.lower()),
+            key=lambda m: (
+                min((i for i, p in enumerate(PREFERRED) if p in m), default=len(PREFERRED)),
+                m,
+            ),
+        )
+        ranked = [m for m in ranked if not any(skip in m for skip in SKIP)]
+        probe = [{"role": "user", "content": "Responde solo: hola"}]
+        working = []
+        for model in ranked:
+            try:
+                _, _, latency = client.chat_with(model, probe, max_tokens=5)
+            except client.BotError as exc:
+                self.stdout.write(f"  ✘ {model}  ({exc.status or exc.code})")
+                continue
+            self.stdout.write(self.style.SUCCESS(f"  ✔ {model}  ({latency} ms)"))
+            working.append(model)
+            if len(working) >= wanted:
+                break
+        if not working:
+            raise CommandError(
+                "Ningún modelo instruct respondió con esta cuenta: revisa la clave en build.nvidia.com."
+            )
+        self.stdout.write(
+            "\nPon esto en deploy/centro.env (o en /etc/centro/env) y reinicia con  sudo systemctl restart centro :"
+        )
+        self.stdout.write(f"NIM_MODEL={working[0]}")
+        self.stdout.write(f"NIM_MODEL_FALLBACKS={','.join(working[1:])}")
+
+
+# Orden de preferencia (buen español y tamaño) y modelos que no sirven para conversar.
+PREFERRED = [
+    "mistral-large",
+    "nemotron-70b",
+    "llama-3.1-70b",
+    "nemotron-51b",
+    "mixtral",
+    "mistral-nemo",
+    "llama-3.1-8b",
+    "mistral-7b",
+    "phi-3.5",
+]
+SKIP = ["vision", "code", "coder", "translate", "guard", "reward", "embed"]
