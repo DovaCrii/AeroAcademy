@@ -43,7 +43,9 @@ class Command(BaseCommand):
         except client.BotError as exc:
             extra = f" HTTP {exc.status}: {exc.detail}." if exc.status else ""
             raise CommandError(f"Falló ({exc.code}).{extra} {HINTS.get(exc.code, '')}") from exc
-        self.stdout.write(self.style.SUCCESS(f"OK en {latency} ms · {tokens} tokens"))
+        self.stdout.write(
+            self.style.SUCCESS(f"OK en {latency} ms · {tokens} tokens · modelo {client.last_model}")
+        )
         self.stdout.write(f"Respuesta de prueba: {text}")
 
     def _models(self):

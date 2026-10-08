@@ -141,7 +141,12 @@ BRAND_ACADEMY = "Academia LEV Digital 101"
 # Teo (asistente). La clave va en `.env` o en /etc/centro/env; nunca en el repositorio.
 NIM_API_KEY = os.environ.get("NIM_API_KEY", "").strip()
 NIM_BASE_URL = os.environ.get("NIM_BASE_URL", "https://integrate.api.nvidia.com/v1").rstrip("/")
-NIM_MODEL = os.environ.get("NIM_MODEL", "meta/llama-3.3-70b-instruct")
+NIM_MODEL = os.environ.get("NIM_MODEL", "mistralai/mistral-large-2-instruct")
+# Si NIM retira el modelo (404/410), Teo prueba estos en orden: un modelo que cumple su ciclo de vida no lo deja mudo.
+NIM_MODEL_FALLBACKS = env_list(
+    "NIM_MODEL_FALLBACKS",
+    "nvidia/llama-3.1-nemotron-70b-instruct,nvidia/llama-3.1-nemotron-51b-instruct",
+)
 BOT_ENABLED = env_bool("BOT_ENABLED", True)
 BOT_DAILY_LIMIT = int(os.environ.get("BOT_DAILY_LIMIT", "40"))
 TEO_NUDGES = env_bool("TEO_NUDGES", True)  # empujón semanal de Teo (local, sin API)

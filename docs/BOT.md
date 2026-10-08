@@ -39,7 +39,7 @@ widget HTMX (esquina, sprite de Teo) → POST /teo/ask → assistant.services.an
 - **Variables:**
   - `NIM_API_KEY` (empieza con `nvapi-`), solo en `/etc/centro/env` o `.env` local.
   - `NIM_BASE_URL`, por defecto `https://integrate.api.nvidia.com/v1`.
-  - `NIM_MODEL`: elegir tras probar el español, p. ej. `meta/llama-3.3-70b-instruct` o un Nemotron *instruct*. Verificar el nombre exacto en el catálogo de NIM.
+  - `NIM_MODEL`: elegir tras probar el español, p. ej. `mistralai/mistral-large-2-instruct` o un Nemotron *instruct*. Verificar el nombre exacto en el catálogo de NIM.
   - `BOT_ENABLED`, `BOT_DAILY_LIMIT` y `BOT_TIMEOUT_S` (por defecto 20).
 - **Alternativa local:** como el cliente es compatible con OpenAI, se puede apuntar `NIM_BASE_URL` a un Ollama en la VM sin cambiar código.
 - **Sin dependencias nuevas** más allá de `httpx` (D16). FTS5 viene con SQLite.
