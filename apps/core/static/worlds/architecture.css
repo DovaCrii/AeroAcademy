@@ -1,31 +1,6 @@
 /* Mundo Arquitectura (docs/MUNDOS.md): plano, corte del edificio y Project Browser. Portado del prototipo. */
 body.world-architecture{--fill:#FFB000}
 
-/* portada con nube de puntos */
-.ar-cover{position:relative;margin:0 calc(50% - 50vw);min-height:min(70vh,640px);background:var(--night);color:#fff;overflow:hidden;display:flex;align-items:flex-end;border-bottom:4px solid var(--scan)}
-.ar-cover canvas{position:absolute;inset:0;width:100%;height:100%}
-.ar-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,8,16,.9) 0%,rgba(1,8,16,.62) 40%,rgba(1,8,16,0) 70%),linear-gradient(0deg,rgba(1,8,16,.85) 0%,transparent 45%);pointer-events:none}
-.ar-cover-in{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:60px 20px 34px}
-.ar-kicker{display:inline-grid;grid-auto-flow:column;border:1.5px solid #fff;margin-bottom:18px}
-.ar-kicker span{padding:4px 12px;font-size:14px;font-weight:600;font-stretch:90%}
-.ar-kicker .code{background:var(--scan);color:#fff;font-weight:800;font-stretch:75%;font-size:18px;letter-spacing:.5px}
-.ar-cover h1{color:#fff;font-size:clamp(48px,9vw,120px);max-width:none;margin:0 0 14px;line-height:.86}
-.ar-lead{color:#E9F2FC;max-width:58ch;font-size:clamp(16px,1.6vw,20px);margin:0}
-.ar-flow{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;max-width:1000px}
-.ar-flow::before{content:"";position:absolute;left:24px;right:24px;top:24px;border-top:1.5px dashed rgba(255,255,255,.7)}
-.ar-flow li{position:relative;padding-right:12px}
-.ar-flow .ic{width:48px;height:48px;border:1.5px solid #fff;background:var(--night);display:grid;place-items:center;position:relative;z-index:1}
-.ar-flow li:first-child .ic{background:var(--scan);border-color:var(--scan)}
-.ar-flow svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.6}
-.ar-flow b{display:block;font-stretch:80%;font-size:19px;margin-top:10px;line-height:1.1}
-.ar-flow small{display:block;font-size:13.5px;color:#C9DCF0;line-height:1.35;margin-top:3px}
-.ar-flow .n{font-size:12px;font-weight:700;color:var(--fill)}
-.ar-north{position:absolute;right:28px;top:22px;z-index:2;width:100px;height:auto}
-.ar-north *{stroke:#fff;fill:none;stroke-width:1.5}
-.ar-north .needle{fill:#fff}
-.ar-north text{fill:#fff;stroke:none;font-family:var(--font);font-weight:700}
-.ar-cover-cap{position:absolute;right:28px;bottom:14px;z-index:2;font-size:12px;color:#BFD3E8}
-
 /* lámina con el corte */
 .ar-sheet{margin-top:26px}
 .ar-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:30px;align-items:end}
@@ -130,14 +105,6 @@ body.world-architecture{--fill:#FFB000}
   .ar-cols{grid-template-columns:1fr}
   .ar-col+.ar-col{border-left:0;border-top:1px solid var(--hair)}
 }
-@media (max-width:860px){
-  .ar-flow{grid-template-columns:1fr;gap:14px}
-  .ar-flow::before{left:24px;right:auto;top:24px;bottom:24px;border-top:0;border-left:1.5px dashed rgba(255,255,255,.7)}
-  .ar-flow li{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start}
-  .ar-flow b{margin-top:0}
-  .ar-north{width:70px;right:14px}
-  .ar-cover::after{background:linear-gradient(0deg,rgba(1,8,16,.94) 0%,rgba(1,8,16,.7) 60%,rgba(1,8,16,.35) 100%)}
-}
 @media (max-width:560px){
   .ar-phead{grid-template-columns:auto 1fr;padding:18px 16px 12px}
   .pnav{grid-column:1/-1}
@@ -145,5 +112,4 @@ body.world-architecture{--fill:#FFB000}
   .ar-goal{margin:14px 16px 0}
   .ar-sub{margin-left:0}
   .ar-meta{grid-template-columns:repeat(3,1fr)}
-  .ar-cover-in{padding-bottom:48px}
 }

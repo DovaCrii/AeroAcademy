@@ -1,0 +1,66 @@
+/* Estilo "Levantamiento": arte de presentación para captura y levantamiento digital.
+   Referencia: Aerotop (docs/REFERENCIAS_DISENO.md). Azul noche con grilla técnica, acento ámbar, títulos en
+   serif cursiva, etiquetas monoespaciadas "CLAVE · valor", recuadros de anotación y nube de puntos.
+   Lo usan las portadas de los mundos architecture y aero. Los datos que muestra son datos reales de la ruta. */
+:root{
+  --lv-bg:#0A0E1A; --lv-bg-2:#0C1630; --lv-grid:rgba(110,150,255,.09); --lv-grid-2:rgba(110,150,255,.18);
+  --lv-line:rgba(170,195,255,.38); --lv-amber:#F4A62A; --lv-amber-2:#FFC25C; --lv-white:#EAF0FF; --lv-dim:#8FA3C8;
+  --font-serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --font-mono:ui-monospace,"Cascadia Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+
+.lv-cover{position:relative;margin:0 calc(50% - 50vw);min-height:min(78vh,700px);color:var(--lv-white);overflow:hidden;
+  display:flex;align-items:flex-end;border-bottom:3px solid var(--lv-amber);
+  background:radial-gradient(120% 90% at 78% 30%,var(--lv-bg-2) 0%,var(--lv-bg) 62%)}
+.lv-cover canvas{position:absolute;inset:0;width:100%;height:100%}
+.lv-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--lv-grid) 1px,transparent 1px),linear-gradient(90deg,var(--lv-grid) 1px,transparent 1px),
+  linear-gradient(var(--lv-grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--lv-grid-2) 1px,transparent 1px);
+  background-size:24px 24px,24px 24px,120px 120px,120px 120px}
+.lv-cover::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(10,14,26,.94) 0%,rgba(10,14,26,.66) 42%,rgba(10,14,26,0) 72%),linear-gradient(0deg,rgba(10,14,26,.9) 0%,transparent 40%)}
+.lv-reticle{position:absolute;right:-4%;top:6%;width:min(62vw,720px);height:auto;pointer-events:none;opacity:.8}
+.lv-reticle *{fill:none;stroke:var(--lv-line);stroke-width:1}
+.lv-reticle .tick{stroke:var(--lv-amber)}
+
+/* recuadro de anotación: etiqueta mono + título serif cursiva ámbar + subtítulo mono */
+.lv-frame{position:absolute;z-index:3;top:26px;left:max(20px,calc(50vw - 600px));display:grid;gap:6px;min-width:min(86vw,340px);
+  padding:14px 18px;border:1px solid var(--lv-line);background:rgba(10,14,26,.62);backdrop-filter:blur(2px)}
+.lv-cap{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--lv-dim)}
+.lv-title{font-family:var(--font-serif);font-style:italic;font-weight:600;font-size:clamp(26px,3.4vw,40px);line-height:1.05;color:var(--lv-amber)}
+
+.lv-in{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:130px 20px 70px}
+.lv-cover h1{font-weight:800;font-stretch:65%;color:var(--lv-white);font-size:clamp(46px,8.4vw,112px);max-width:none;margin:0 0 14px;line-height:.88}
+.lv-cover h1 em{font-family:var(--font-serif);font-style:italic;font-weight:600;font-stretch:100%;color:var(--lv-amber)}
+.lv-lead{color:#D5E0F7;max-width:58ch;font-size:clamp(16px,1.5vw,19px);margin:0}
+.lv-label{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--lv-amber)}
+
+/* pasos del flujo, numerados como secciones de consola */
+.lv-flow{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;max-width:1000px;
+  border-top:1px solid var(--lv-line)}
+.lv-flow li{padding:12px 14px 4px 0;position:relative}
+.lv-flow li::before{content:"";position:absolute;left:0;top:-4px;width:7px;height:7px;background:var(--lv-amber)}
+.lv-flow .n{display:block;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;color:var(--lv-amber);padding-left:14px}
+.lv-flow b{display:block;font-family:var(--font-serif);font-style:italic;font-weight:600;font-size:21px;line-height:1.1;margin:4px 0 2px;padding-left:14px;color:var(--lv-white)}
+.lv-flow small{display:block;font-family:var(--font-mono);font-size:11.5px;line-height:1.4;color:var(--lv-dim);padding-left:14px}
+
+/* lecturas de telemetría: datos reales de la ruta */
+.lv-readouts{position:absolute;z-index:3;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:6px 26px;justify-content:center;
+  padding:9px 20px;border-top:1px solid var(--lv-line);background:rgba(10,14,26,.78);
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--lv-dim)}
+.lv-readouts b{color:var(--lv-amber);font-weight:600;margin-left:6px}
+.lv-scale{position:absolute;z-index:3;left:max(20px,calc(50vw - 600px));bottom:44px;font-family:var(--font-mono);font-size:10.5px;color:var(--lv-dim);letter-spacing:.08em}
+.lv-scale i{display:block;width:96px;height:7px;margin-top:4px;border:1px solid var(--lv-line);border-top:0;
+  background:repeating-linear-gradient(90deg,var(--lv-line) 0 1px,transparent 1px 24px)}
+
+@media (max-width:860px){
+  .lv-flow{grid-template-columns:1fr;border-top:0;border-left:1px solid var(--lv-line)}
+  .lv-flow li{padding:8px 0 8px 0}
+  .lv-flow li::before{left:-4px;top:14px}
+  .lv-in{padding:150px 16px 90px}
+  .lv-frame{left:16px;right:16px;top:16px}
+  .lv-scale{display:none}
+  .lv-reticle{width:120vw;right:-30%}
+  .lv-cover::after{background:linear-gradient(0deg,rgba(10,14,26,.95) 0%,rgba(10,14,26,.72) 58%,rgba(10,14,26,.4) 100%)}
+}
+@media (prefers-reduced-motion:reduce){.lv-cover *{animation:none!important}}
