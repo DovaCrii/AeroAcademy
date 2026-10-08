@@ -1,3 +1,5 @@
+import os
+
 from django.core.exceptions import ImproperlyConfigured
 
 from .base import *
@@ -13,7 +15,12 @@ if not ALLOWED_HOSTS:
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if not host.startswith(".")]
+# Con un puerto HTTPS propio en la tailnet (VM compartida) el navegador envía el origen con ese puerto.
+PUBLIC_HTTPS_PORT = int(os.environ.get("PUBLIC_HTTPS_PORT", "443"))
+_PORT_SUFFIX = "" if PUBLIC_HTTPS_PORT == 443 else f":{PUBLIC_HTTPS_PORT}"
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}{_PORT_SUFFIX}" for host in ALLOWED_HOSTS if not host.startswith(".")
+]
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 STORAGES = {

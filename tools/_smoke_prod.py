@@ -92,6 +92,11 @@ check(
     django.conf.settings.SESSION_COOKIE_SECURE and django.conf.settings.CSRF_COOKIE_SECURE,
 )
 check("DEBUG apagado", not django.conf.settings.DEBUG)
+check(
+    "el origen CSRF incluye el puerto HTTPS propio",
+    f"https://{HOST}:8443" in django.conf.settings.CSRF_TRUSTED_ORIGINS,
+    django.conf.settings.CSRF_TRUSTED_ORIGINS,
+)
 check("sin identidad simulada", django.conf.settings.DEV_REMOTE_USER == "")
 page = home.content.decode()
 check("sale el auspicio de Suite Aero", "Suite Aero" in page)

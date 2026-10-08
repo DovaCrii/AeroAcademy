@@ -90,6 +90,7 @@ def main(argv=None):
             "DJANGO_SETTINGS_MODULE": "config.settings.prod",
             "SECRET_KEY": secrets.token_urlsafe(64),
             "ALLOWED_HOSTS": "preflight.tailnet.ts.net",
+            "PUBLIC_HTTPS_PORT": "8443",
             "BOOTSTRAP_ADMINS": "admin@preflight.cl",
             "DATABASE_PATH": str(tmp / "db.sqlite3"),
             "MEDIA_ROOT": str(tmp / "media"),
