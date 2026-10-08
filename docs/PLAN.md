@@ -21,8 +21,14 @@ certificado, que el moderador los valide y ver crecer XP, insignias y la hoja de
 
 ---
 
-## Bloque 0 · Base del repositorio `[ ]`
+## Bloque 0 · Base del repositorio `[x]`
 
+> **Hecho (2026-10-08).** Notas:
+> - Proyecto `config/` (settings `base`/`dev`/`prod`) y las 11 apps bajo `apps/`. `prod` exige `SECRET_KEY` y `ALLOWED_HOSTS`; SQLite en modo WAL.
+> - `core`: `base.html` con cajetín, huecos `player`/`bell`/`teo` (parciales vacíos; se ocultan solas), `tokens.css` claro/oscuro con capa de juego, `theme.js` y Archivo local.
+> - 10 pruebas en `tests/test_bloque0.py`; `ruff` y migraciones en verde; sin desborde a 390 px en claro y oscuro (medido en navegador).
+> - **Pendiente:** el archivo `PressStart2P.woff2` (OFL) no está en el repositorio, así que el `@font-face` queda comentado en `tokens.css` y se usa una monoespaciada de respaldo. Ver A10 en DECISIONES.
+> - WhiteNoise solo corre en producción; en dev lo reemplaza `runserver`.
 - Proyecto Django con `uv`, settings por entorno (`settings/base.py`, `dev.py`, `prod.py`), `ruff`, `pytest`.
 - Apps vacías: `core`, `accounts`, `catalog`, `paths`, `progress`, `community`, `credentials`, `team`, `gamification`, `notifications`, `assistant`.
 - `core`:
