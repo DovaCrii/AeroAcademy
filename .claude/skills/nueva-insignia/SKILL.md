@@ -16,8 +16,9 @@ Leer `docs/GAMIFICACION.md`: vocabulario, XP, rarezas y tipos de regla.
    - `legendary`: una campaña larga completa o un logro excepcional.
 2. Elegir el tipo de regla que ya existe: `count`, `path_complete`, `distinct_vendors`, `streak`, `credential_kind` o `manual`. Si ninguno sirve, proponer el tipo nuevo en DECISIONES antes de implementarlo.
 3. Agregar la insignia **al final** de `seed/insignias.json`.
-4. Sprite: skill `sprite-8bit`, 32×32, con el marco del color de la rareza; guardarlo en `core/static/game/badges/<slug>.svg`.
-5. Prueba: un caso que la otorga, un caso al límite que no la otorga y, si depende de credenciales, la revocación al rechazar.
+4. Sprite: skill `sprite-8bit` (subagente `artista-pixel`), 16×16 en el estilo de los existentes (marco de la rareza: común `#8D9CAD`, rara `#1E8CFF`, épica `#8B5CF6`, legendaria `#FFC21A`); guardarlo en `apps/core/static/game/badges/` con el nombre del campo `sprite`.
+5. Validar: `uv run python manage.py seed_catalog --dry-run` falla si la regla es desconocida, le faltan campos, el slug se repite o no existe el sprite. Eventos de `count`: son los `kind` de `XPEvent` (`milestone`, `note`, `accepted_answer`, `free_course_promoted`, `profile_completed`); un módulo nuevo los entrega con `game.award(person, source, kind)`.
+6. Prueba (en `tests/test_game.py`): un caso que la otorga, un caso al límite que no la otorga y, si depende de credenciales, la revocación al rechazar.
 
 ## Título
 
@@ -26,8 +27,8 @@ Leer `docs/GAMIFICACION.md`: vocabulario, XP, rarezas y tipos de regla.
 
 ## Accesorio de avatar
 
-- `AvatarItem` con `layer` y `unlock_rule` (mismo formato que las reglas de insignia).
-- El sprite debe calzar en la grilla del avatar base de 32×32.
+- Las piezas del avatar piden una insignia en `engine.UNLOCKS` (`apps/gamification/avatar/`); `clean_config(unlocked=)` valida en el servidor.
+- Usar la skill `sprite-8bit` y `tools/audit_avatar.py`.
 
 ## Antitrampa (D13)
 

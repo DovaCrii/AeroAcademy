@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_GET, require_http_methods
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-from . import services
+from . import game, services
 
 
 def _page(request, cfg, *, unsaved=False):
@@ -56,3 +57,14 @@ def avatar_preview(request):
             "bust": services.svg_sized(cfg, 32, view="bust"),
         },
     )
+
+
+@require_POST
+def seen(request):
+    """La persona vio sus celebraciones (insignias nuevas y subida de nivel)."""
+    game.mark_seen(request.user, game.level_info(request.user)["level"])
+    target = request.POST.get("next", "")
+    ok = target.startswith("/") and not target.startswith("//")
+    if not ok or not url_has_allowed_host_and_scheme(target, {request.get_host()}):
+        target = "/"
+    return redirect(target)

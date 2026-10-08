@@ -1,1 +1,7 @@
-{# Hueco de nivel, barra de XP y título. Lo llena gamification (Bloque 13). #}
+{% if player %}
+<a class="player" href="{% url 'gamification:avatar_editor' %}" title="{{ player.xp }} XP · te faltan {{ player.to_next }} para el nivel {{ player.level|add:1 }}">
+  <span class="lvl" aria-label="Nivel {{ player.level }}">NV {{ player.level }}</span>
+  <span class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ player.pct }}"><i style="width:{{ player.pct }}%"></i></span>
+  <span class="ttl">{% if player.title %}{{ player.title.name }}{% else %}Sin título{% endif %}</span>
+</a>
+{% endif %}

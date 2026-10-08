@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from apps.catalog.seeding import SeedError, load_catalog
+from apps.gamification.seeding import load_game
 from apps.paths.seeding import load_route
 
 
@@ -44,6 +45,9 @@ class Command(BaseCommand):
                     _read(seed_dir / "plataformas.json"),
                     _read(seed_dir / "skills.json"),
                 )
+                game = load_game(
+                    _read(seed_dir / "insignias.json"), _read(seed_dir / "titulos.json")
+                )
                 paths = []
                 for file in sorted((seed_dir / "rutas").glob("*.json")):
                     paths.append(load_route(_read(file), name=file.name).slug)
@@ -59,3 +63,4 @@ class Command(BaseCommand):
         prefix = "[dry-run] " if dry else ""
         self.stdout.write(self.style.SUCCESS(f"{prefix}Catálogo: {counts}"))
         self.stdout.write(self.style.SUCCESS(f"{prefix}Rutas: {', '.join(paths) or '—'}"))
+        self.stdout.write(self.style.SUCCESS(f"{prefix}Juego: {game}"))
