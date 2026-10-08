@@ -360,7 +360,10 @@ def test_the_installer_is_safe_for_a_shared_vm():
     assert "UV_PYTHON_INSTALL_DIR" in install  # el intérprete de uv no queda en /root
     assert "ya lo usa otro servicio" in install and "ya sirve otra cosa" in install
     assert "127.0.0.1:8010" in (DEPLOY / "centro.service").read_text(encoding="utf-8")
-    assert "8000" not in install.replace("127.0.0.1:8000 y la raíz", "")
+    code = [line for line in install.splitlines() if not line.strip().startswith("#")]
+    assert not any(
+        "8000" in line for line in code
+    )  # el 8000 es de AeroControl: solo se nombra en comentarios
 
 
 def test_the_env_template_carries_no_secret_and_the_real_file_is_ignored():
