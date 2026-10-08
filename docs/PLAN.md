@@ -234,7 +234,16 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** un miembro no puede moderar (403); cada acción de moderación queda en ModerationLog; los anuncios llegan a todos los `approved`; las notificaciones de la tabla de MODERACION se generan.
 
-## Bloque 15 · Teo (asistente) `[ ]`
+## Bloque 15 · Teo (asistente) `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `apps/assistant`: cliente `httpx` contra NVIDIA NIM (`client.py`, con transporte inyectable para pruebas), búsqueda FTS5 (`search.py`, migración `0002_fts_index`), lista blanca de contexto (`context.py`) y `services.answer()` con límite diario atómico (`BOT_DAILY_LIMIT`) y respuestas de respaldo.
+> - Contexto que viaja: la pregunta, fragmentos visibles para todo el equipo (rutas publicadas, recursos, glosarios, notas, hilos y mensajes no ocultos ni borrados, ayuda), el nombre visible y títulos de misiones pendientes. **Nunca** credenciales, correos/logins ni archivos; una prueba lo verifica sobre el payload real. Los resultados se revalidan contra la base, así que lo ocultado después de indexar no sale.
+> - El log guarda solo metadatos (persona, tipo, latencia, tokens, código de error): el modelo ni siquiera tiene campos para la pregunta o la respuesta.
+> - Teo: widget en la esquina (despierto/durmiendo), página `/teo/` que funciona sin JS, botón «Resumir con Teo» en hilos de 5+ mensajes, botón para abrir una consulta en el foro con la pregunta prellenada, y ayuda en `/ayuda/` (5 guías). 4 sprites nuevos (idle, happy, thinking, sleep).
+> - La respuesta del modelo se muestra como texto escapado: no hay Markdown ni enlaces generados por el modelo; los únicos enlaces son las fuentes internas que pone el servidor.
+> - `.env` se lee sin dependencias (`config/settings/base.py`), `.env.example` documenta las variables; la clave no se versiona.
+> - **Pendiente:** probar con una clave real (la crea la persona en build.nvidia.com y rota la que se pegó en el chat), elegir `NIM_MODEL` tras probar el español, accesorio de Teo por mundo y la expresión «celebra».
 - App `assistant` según BOT.md: widget HTMX con sprite, `/teo/ask`, índice FTS5 (`rebuild_teo_index`), cliente `httpx` a NIM, lista blanca de contexto, límite diario y modo dormido.
 - Sprites de Teo: base, 4 expresiones y atuendos de los mundos existentes (skill `sprite-8bit`).
 - Botones "Resumir con Teo" en hilos y "Abrir consulta" cuando no sabe.

@@ -35,6 +35,7 @@
 | D27 | Una credencial verificada que **vence** sigue contando para el avance y se muestra con una marca de vencida | El curso se hizo; la vigencia es información, no borra el progreso |
 | D28 | Motor de juego en `apps/gamification/game.py` + `rules.py`: el XP se **reconcilia** (`sync_*`) con lo que debe existir, no se acumula a ciegas; se llama desde `progress` y `credentials` sin signals. Las insignias se recalculan y se quitan si la condición deja de cumplirse, salvo `manual` y las de racha (cuentan la mejor racha histórica). La racha da 20 × semanas seguidas (máx. 100) por semana con actividad | Marcar/desmarcar, verificar/rechazar y repetir no duplican ni dejan XP de más |
 | D29 | Ocultar contenido exige motivo, no borra, avisa a la autora o al autor y queda en la bitácora; los miembros no ven lo oculto y los responsables sí. Un aviso (`Notification`) lleva `key` y no se repite | Moderar sin perder evidencia, y que reintentar una acción no inunde la campana |
+| D30 | El contexto de Teo sale solo de una lista blanca (`assistant/context.py` + `search.py`) y el log de Teo no tiene campos para texto; la respuesta del modelo se muestra escapada, sin Markdown ni enlaces propios | Que ni un error de código pueda mandar datos de credenciales al proveedor, ni el modelo pueda inyectar enlaces |
 
 ## Abiertas (no resolver sin confirmar)
 

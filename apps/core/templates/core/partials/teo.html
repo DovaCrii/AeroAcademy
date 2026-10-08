@@ -1,1 +1,22 @@
-{# Hueco del widget de Teo. Lo llena assistant (Bloque 15). #}
+{% load static %}{% if teo_awake is not None %}
+<aside class="teo-widget" aria-label="Teo, el asistente">
+  <details>
+    <summary aria-label="Hablar con Teo"><img src="{% static 'game/teo/' %}{% if teo_awake %}teo-idle.svg{% else %}teo-sleep.svg{% endif %}" width="48" height="48" alt=""></summary>
+    <div class="teo-pop">
+      {% if teo_awake %}
+      <form method="post" action="{% url 'assistant:page' %}" data-teo-form data-endpoint="{% url 'assistant:ask' %}">
+        {% csrf_token %}
+        <label for="teo-q">Pregúntale a Teo</label>
+        <textarea id="teo-q" name="question" rows="2" maxlength="500" required placeholder="¿Qué me falta en mi ruta?"></textarea>
+        <button class="btn primary" type="submit">Preguntar</button>
+      </form>
+      <div class="teo-answer" data-teo-answer aria-live="polite"></div>
+      {% else %}
+      <p>Estoy durmiendo por ahora. Mira la <a href="{% url 'assistant:help_index' %}">ayuda</a> o pregunta en el <a href="{% url 'community:forum' %}">foro</a>.</p>
+      {% endif %}
+      <a href="{% url 'assistant:page' %}">Abrir a Teo en una página</a>
+    </div>
+  </details>
+</aside>
+<script src="{% static 'assistant/teo.js' %}" defer></script>
+{% endif %}
