@@ -1,0 +1,10 @@
+[Unit]
+Description=AeroAcademy · avisos de credenciales por vencer o vencidas
+
+[Service]
+Type=oneshot
+User=centro
+Group=centro
+WorkingDirectory=/opt/aeroacademy
+EnvironmentFile=/etc/centro/env
+ExecStart=/opt/aeroacademy/.venv/bin/python manage.py check_expirations

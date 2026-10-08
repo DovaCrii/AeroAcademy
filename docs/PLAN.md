@@ -307,7 +307,16 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** el Markdown sale sin HTML peligroso; hay tablero de mejoras por etapa.
 
-## Bloque 8 · Despliegue y migración `[ ]`
+## Bloque 8 · Despliegue y migración `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `deploy/install.sh` (idempotente): usuario `centro`, código en `/opt/aeroacademy`, `uv sync`, `/etc/centro/env` con `SECRET_KEY` aleatoria (solo la primera vez, permisos 640), `collectstatic`, `migrate`, `seed_catalog`, servicio `centro.service` (gunicorn en `127.0.0.1:8000`, con endurecimiento de systemd), comprobación de `/healthz` y `tailscale serve --bg 8000`. Nunca usa `funnel` (una prueba lo vigila).
+> - Tareas diarias con timers de systemd: respaldo (`sqlite3 .backup` + `tar` de los archivos privados, 30 días, permisos 077) y `check_expirations` (Bloque 6).
+> - `/healthz`: responde sin identidad **solo** desde el proxy local; lo demás sigue exigiendo Tailscale.
+> - `manage.py import_legacy --db ruta.db [--dry-run]`: importa personas (aprobadas), avance, meta, notas (con su fecha original, sin XP ni avisos) y casillas del kit y plan desde el prototipo. Idempotente (`Note.legacy_id`), en una transacción, con la base de origen abierta en solo lectura y un resumen de lo omitido.
+> - `notify()` deja el gancho `email-hook` que solo escribe una línea en el log, sin contenido.
+> - `docs/OPERACION.md`: instalación, primera administradora, respaldos y cómo restaurar, importación y tareas.
+> - **Pendiente:** probar `install.sh` en una VM real (aquí solo se validó su contenido) y activar el correo cuando se decida.
 - `deploy/install.sh`, `centro.service`, respaldo diario (DB + media), `README` de operación.
 - `import_legacy` desde el `ruta.db` del prototipo.
 - Gancho de correo en `notify()` (solo registra en log).
