@@ -18,10 +18,10 @@ El script es **idempotente**: sirve para instalar y para actualizar.
    - `BOOTSTRAP_ADMINS`: tu correo de Tailscale; quien figure ahí queda como administrador al entrar.
    - `NIM_API_KEY` (opcional): la clave de NVIDIA para Teo, creada en build.nvidia.com. **Nunca en el repositorio.**
 3. Corre `collectstatic`, `migrate`, `seed_catalog` y `reindex_assistant`.
-4. Instala y activa `centro.service` (gunicorn en `127.0.0.1:8000`) y dos tareas diarias:
+4. Instala y activa `centro.service` (gunicorn en `127.0.0.1:8010`; el 8000 es de AeroControl) y dos tareas diarias:
    - `centro-backup.timer` (03:30): respaldo de la base y de los archivos privados.
    - `centro-expiry.timer` (07:00): `manage.py check_expirations`, que avisa de credenciales por vencer o vencidas y apaga las insignias que exigen vigencia.
-5. Comprueba `http://127.0.0.1:8000/healthz` y publica con `tailscale serve --bg 8000`.
+5. Comprueba `http://127.0.0.1:8010/healthz` y publica en un puerto HTTPS propio de la tailnet (`tailscale serve --bg --https=8443 http://127.0.0.1:8010`), sin tocar lo que ya sirva la VM.
 
 Después de editar `/etc/centro/env`: `sudo systemctl restart centro`.
 

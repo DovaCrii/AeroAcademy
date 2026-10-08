@@ -40,7 +40,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
   - **Capa de juego:** `core/static/game.css`, con sprites SVG 8-bit.
 - Tipografías locales (OFL): Archivo para todo el texto; Press Start 2P solo para niveles, insignias y títulos de juego.
 - Pruebas con `pytest` + `pytest-django`. Lint con `ruff`.
-- Producción: VM Linux, `gunicorn` en `127.0.0.1:8000`, publicado solo en la tailnet con `tailscale serve`.
+- Producción: VM Linux, `gunicorn` en `127.0.0.1:8010` (el 8000 es de AeroControl en la misma VM), publicado solo en la tailnet con `tailscale serve` en el puerto HTTPS 8443.
 
 ## Comandos
 

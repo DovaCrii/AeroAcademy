@@ -3,8 +3,14 @@
 # Uso: sudo ./deploy/install.sh [nombre-magicdns.tailnet.ts.net]
 #
 # Qué hace: usuario de sistema, código en /opt/aeroacademy, entorno con uv, /etc/centro/env (solo la primera vez),
-# migraciones, semillas, archivos estáticos, servicio systemd (gunicorn en 127.0.0.1:8000), tareas diarias
-# (respaldo y vencimientos) y publicación en la tailnet con `tailscale serve`. NUNCA usa `tailscale funnel`.
+# migraciones, semillas, archivos estáticos, servicio systemd (gunicorn en 127.0.0.1:8010), tareas diarias
+# (respaldo, vencimientos y seguimiento de Teo) y publicación en la tailnet con `tailscale serve`.
+#
+# PENSADO PARA UNA VM COMPARTIDA (p. ej. con AeroControl, que usa 127.0.0.1:8000 y la raíz de `tailscale serve`):
+#   · gunicorn escucha en 127.0.0.1:8010 (AEROACADEMY_PORT) y NO toca el puerto 8000;
+#   · se publica en https://<host>:8443 (AEROACADEMY_TS_PORT): nunca se reemplaza lo que ya sirva Tailscale;
+#   · usuario, carpetas, servicios y archivos propios (`centro`, /opt/aeroacademy, /etc/centro, centro-*.service).
+# NUNCA usa `tailscale funnel`.
 set -euo pipefail
 
 SRC="$(cd "$(dirname "$0")/.." && pwd)"
@@ -13,7 +19,8 @@ USER_NAME=centro
 ENV_DIR=/etc/centro
 ENV_FILE="$ENV_DIR/env"
 STATE=/var/lib/centro
-PORT=8000
+PORT="${AEROACADEMY_PORT:-8010}"          # gunicorn, solo en 127.0.0.1
+TS_PORT="${AEROACADEMY_TS_PORT:-8443}"   # puerto HTTPS de la tailnet (la raíz 443 es de otra app)
 HOST="${1:-}"
 
 if [ "$(id -u)" -ne 0 ]; then echo "Ejecuta con sudo." >&2; exit 1; fi
@@ -25,6 +32,12 @@ apt-get install -y -qq python3 python3-venv rsync sqlite3 curl ca-certificates >
 echo "==> uv"
 if ! command -v uv >/dev/null; then
   curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh >/dev/null
+fi
+
+echo "==> Comprobando que el puerto $PORT es nuestro o está libre"
+if ss -ltnH "sport = :$PORT" 2>/dev/null | grep -q . && ! systemctl is-active --quiet centro.service; then
+  echo "El puerto $PORT ya lo usa otro servicio. Elige otro: AEROACADEMY_PORT=8011 sudo -E ./deploy/install.sh" >&2
+  exit 1
 fi
 
 echo "==> Usuario de servicio y carpetas"
@@ -63,6 +76,8 @@ DATABASE_PATH=$STATE/db.sqlite3
 MEDIA_ROOT=$STATE/media
 STATIC_ROOT=$APP/staticfiles
 TRUSTED_PROXY_IPS=127.0.0.1,::1
+# Puerto HTTPS por el que la tailnet llega al sitio (https://<host>:PUERTO)
+PUBLIC_HTTPS_PORT=$TS_PORT
 # Quién queda como administrador la primera vez (correo de Tailscale, separados por coma):
 BOOTSTRAP_ADMINS=
 # Teo (opcional): la clave se crea en https://build.nvidia.com
@@ -89,6 +104,8 @@ fi
 
 echo "==> Entorno Python (uv)"
 cd "$APP"
+# Python 3.12 lo instala uv dentro de /opt/aeroacademy (no en /root): así el usuario `centro` puede leerlo.
+export UV_PYTHON_INSTALL_DIR="$APP/.uv-python"
 UV_PROJECT_ENVIRONMENT="$APP/.venv" uv sync --frozen --no-dev
 chown -R "$USER_NAME:$USER_NAME" "$APP"
 
@@ -104,6 +121,7 @@ run_manage reindex_assistant || true
 
 echo "==> Servicios systemd"
 install -m 644 deploy/centro.service /etc/systemd/system/centro.service
+sed -i "s|127.0.0.1:8010|127.0.0.1:$PORT|" /etc/systemd/system/centro.service
 install -m 644 deploy/centro-backup.service /etc/systemd/system/centro-backup.service
 install -m 644 deploy/centro-backup.timer /etc/systemd/system/centro-backup.timer
 install -m 644 deploy/centro-expiry.service /etc/systemd/system/centro-expiry.service
@@ -126,8 +144,15 @@ done
 
 echo "==> Publicando en la tailnet (tailscale serve, solo HTTPS interno)"
 if command -v tailscale >/dev/null; then
-  tailscale serve --bg "$PORT" || echo "    Revisa que MagicDNS y HTTPS Certificates estén activos en la consola de Tailscale."
+  CURRENT="$(tailscale serve status 2>/dev/null || true)"
+  if echo "$CURRENT" | grep -q ":$TS_PORT " && ! echo "$CURRENT" | grep -q "127.0.0.1:$PORT"; then
+    echo "    El puerto HTTPS $TS_PORT de la tailnet ya sirve otra cosa: no se toca. Usa otro: AEROACADEMY_TS_PORT=10000 sudo -E ./deploy/install.sh" >&2
+    exit 1
+  fi
+  # Un puerto HTTPS propio: la raíz (443) y lo que ya publique la VM quedan intactos.
+  tailscale serve --bg --https="$TS_PORT" "http://127.0.0.1:$PORT" || echo "    Revisa que MagicDNS y HTTPS Certificates estén activos en la consola de Tailscale."
   tailscale serve status || true
+  echo "    Dirección: https://$HC_HOST:$TS_PORT"
 else
   echo "    tailscale no está instalado en esta VM."
 fi

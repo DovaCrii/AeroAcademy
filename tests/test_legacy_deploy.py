@@ -322,7 +322,7 @@ def test_systemd_units_parse_and_match_the_architecture():
         assert cp.sections(), name
     service = (DEPLOY / "centro.service").read_text(encoding="utf-8")
     assert (
-        "127.0.0.1:8000" in service
+        "127.0.0.1:8010" in service
         and "EnvironmentFile=/etc/centro/env" in service
         and "NoNewPrivileges=true" in service
     )
@@ -338,7 +338,35 @@ def test_systemd_units_parse_and_match_the_architecture():
 
 def test_no_secret_in_the_deploy_files():
     for path in DEPLOY.iterdir():
+        if (
+            path.name == "centro.env"
+        ):  # la configuración real de la persona: ignorada por git, sí lleva la clave
+            continue
         text = path.read_text(encoding="utf-8")
         assert "nvapi-" not in text
     install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
     assert "NIM_API_KEY=\n" in install  # la clave queda vacía: la pone la persona
+
+
+def test_the_installer_is_safe_for_a_shared_vm():
+    """La VM también corre AeroControl (127.0.0.1:8000 y la raíz de `tailscale serve`): no se les toca."""
+    install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
+    assert (
+        'PORT="${AEROACADEMY_PORT:-8010}"' in install
+        and 'TS_PORT="${AEROACADEMY_TS_PORT:-8443}"' in install
+    )
+    assert '--https="$TS_PORT"' in install and 'tailscale serve --bg "$PORT"' not in install
+    assert "tailscale serve reset" not in install and "tailscale serve off" not in install
+    assert "UV_PYTHON_INSTALL_DIR" in install  # el intérprete de uv no queda en /root
+    assert "ya lo usa otro servicio" in install and "ya sirve otra cosa" in install
+    assert "127.0.0.1:8010" in (DEPLOY / "centro.service").read_text(encoding="utf-8")
+    code = [line for line in install.splitlines() if not line.strip().startswith("#")]
+    assert not any(
+        "8000" in line for line in code
+    )  # el 8000 es de AeroControl: solo se nombra en comentarios
+
+
+def test_the_env_template_carries_no_secret_and_the_real_file_is_ignored():
+    text = (DEPLOY / "centro.env.plantilla").read_text(encoding="utf-8")
+    assert "\nNIM_API_KEY=\n" in text and "nvapi-" not in text
+    assert "PUBLIC_HTTPS_PORT=8443" in text and "p340.tailccd107.ts.net" in text

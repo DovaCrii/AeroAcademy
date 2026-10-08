@@ -3,7 +3,7 @@
 ## Vista general
 
 ```
-navegador (tailnet) ─HTTPS─> tailscale serve ─> 127.0.0.1:8000 gunicorn ─> Django ─┬─> SQLite (WAL)
+navegador (tailnet) ─HTTPS─> tailscale serve (https :8443) ─> 127.0.0.1:8010 gunicorn ─> Django ─┬─> SQLite (WAL)
                               └ Tailscale-User-Login / -Name / -Profile-Pic        └─> /var/lib/centro/media (certificados)
 ```
 
@@ -86,7 +86,7 @@ Cualquier otra requiere una entrada en `DECISIONES.md`.
 ## Despliegue
 
 - `deploy/install.sh` idempotente (patrón del prototipo): usuario de sistema, `uv sync`, `collectstatic`,
-  `migrate`, servicio systemd `centro.service`, `tailscale serve --bg 8000`.
+  `migrate`, servicio systemd `centro.service`, `tailscale serve --bg --https=8443 http://127.0.0.1:8010` (puerto propio: la VM se comparte con AeroControl).
 - Variables en `/etc/centro/env`: `SECRET_KEY`, `ALLOWED_HOSTS` (nombre MagicDNS), `MEDIA_ROOT`,
   `DATABASE_PATH`, `BOOTSTRAP_ADMINS`, `TRUSTED_PROXY_IPS`, `NIM_API_KEY`, `NIM_BASE_URL`, `NIM_MODEL`, `BOT_ENABLED`, `BOT_DAILY_LIMIT`.
 - Respaldo diario: `sqlite3 .backup` + `tar` de `media/`, retención 30 días.
