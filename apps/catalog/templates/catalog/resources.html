@@ -1,0 +1,59 @@
+{% extends "core/base.html" %}
+
+{% block title %}Catálogo de recursos{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Catálogo</h1>
+  <p>Cursos, módulos, tutoriales y exámenes de todas las plataformas. Filtra por plataforma, tipo, gratuito o certificado.</p>
+</div>
+
+<form class="filters" method="get" action="{% url 'catalog:resources' %}">
+  <label>Buscar<input type="search" name="q" value="{{ f.q }}" placeholder="Título o descripción"></label>
+  <label>Plataforma
+    <select name="platform">
+      <option value="">Todas</option>
+      {% for p in platforms %}<option value="{{ p.slug }}"{% if p.slug == f.platform %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Tipo
+    <select name="kind">
+      <option value="">Todos</option>
+      {% for value, label in kinds %}<option value="{{ value }}"{% if value == f.kind %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="check"><input type="checkbox" name="free" value="1"{% if f.free %} checked{% endif %}> Gratuito</label>
+  <label class="check"><input type="checkbox" name="cert" value="1"{% if f.cert %} checked{% endif %}> Entrega certificado</label>
+  <button class="btn" type="submit">Filtrar</button>
+  <a class="btn ghost" href="{% url 'catalog:resources' %}">Limpiar</a>
+</form>
+
+<p class="sub">{{ page.paginator.count }} recurso{{ page.paginator.count|pluralize }}</p>
+<div class="cards">
+  {% for r in page %}
+  <article class="card">
+    <span class="sub">{{ r.platform.name }} · {{ r.get_kind_display }}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</span>
+    <h3>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}</a>{% else %}{{ r.title }}{% endif %}</h3>
+    {% if r.description %}<p>{{ r.description|truncatechars:140 }}</p>{% endif %}
+    <div class="foot-row">
+      <span class="chips">
+        {% if r.is_official %}<span class="chip off">Oficial</span>{% endif %}
+        {% if r.is_free %}<span class="chip">Gratuito</span>{% endif %}
+        {% if r.grants_completion_certificate %}<span class="chip cert">Certificado</span>{% endif %}
+        {% for s in r.skills.all %}<span class="chip">{{ s.name }}</span>{% endfor %}
+      </span>
+    </div>
+  </article>
+  {% empty %}
+  <p class="empty">No hay recursos con esos filtros.</p>
+  {% endfor %}
+</div>
+
+{% if page.has_other_pages %}
+<nav class="pager" aria-label="Páginas">
+  {% if page.has_previous %}<a class="btn ghost" href="?{{ querystring }}&page={{ page.previous_page_number }}">← Anterior</a>{% endif %}
+  <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a class="btn ghost" href="?{{ querystring }}&page={{ page.next_page_number }}">Siguiente →</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

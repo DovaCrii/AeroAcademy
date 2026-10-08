@@ -48,8 +48,9 @@ class Person(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     display_name = models.CharField("nombre", max_length=150, blank=True)
     avatar_url = models.URLField("foto", max_length=500, blank=True)
     role_title = models.CharField("cargo", max_length=120, blank=True)
-    # Texto libre por ahora; pasa a M2M con catalog.Discipline en el Bloque 2.
-    discipline = models.CharField("disciplina", max_length=40, blank=True)
+    disciplines = models.ManyToManyField(
+        "catalog.Discipline", verbose_name="disciplinas", blank=True, related_name="people"
+    )
 
     is_active = models.BooleanField("activa", default=True)
     is_staff = models.BooleanField("acceso al admin", default=False)

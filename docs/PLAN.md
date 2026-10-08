@@ -56,8 +56,16 @@ certificado, que el moderador los valide y ver crecer XP, insignias y la hoja de
 - `DEV_REMOTE_USER` se ignora con `DEBUG=False`;
 - `pending` no ve contenido; `BOOTSTRAP_ADMINS` entra aprobado como admin.
 
-## Bloque 2 · Catálogo, vendors y rutas `[ ]`
+## Bloque 2 · Catálogo, vendors y rutas `[x]`
 
+> **Hecho (2026-10-08).** Notas:
+> - Modelos de `catalog` y `paths` con admin. `Person.discipline` pasó a M2M `disciplines`.
+> - `seed_catalog` carga `vendors.json`, `plataformas.json`, `skills.json` (nuevo) y `rutas/*.json`; valida antes de escribir, es idempotente, acepta `--dry-run` y `--seed-dir`, y es atómico.
+> - D7: lo que sale de un JSON se marca `retired`, no se borra. `Milestone.completed_by_resource` se llena desde la semilla (`n1-t0`, `n1-t4`, `n2-t5`).
+> - **`insignias.json` y `titulos.json` los carga el Bloque 13**, cuando existan sus modelos.
+> - Vistas: `/rutas/` (vendor → producto, filtros por disciplina y habilidad), `/rutas/<slug>/` y `/catalogo/` (filtros, búsqueda y paginación). Las rutas sin publicar solo las ve un lead.
+> - Las URLs de Bentley marcadas `verify_url` apuntan al catálogo y siguen pendientes de confirmar con una cuenta Bentley.
+> - 79 pruebas del bloque en verde.
 - Modelos de `catalog` (Discipline, Vendor, Product, Platform, Skill, Resource) y `paths` (LearningPath con `kind` y `world`, Level, Milestone, QuizQuestion, ExternalCourse, PathExtra, SharedItem). Admin de Django para todo.
 - Comando `seed_catalog`:
   - carga `seed/plataformas.json`, `seed/vendors.json`, `seed/rutas/*.json`, `seed/insignias.json` y `seed/titulos.json`;

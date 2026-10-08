@@ -1,0 +1,89 @@
+{% extends "core/base.html" %}
+{% load core_extras %}
+
+{% block title %}{{ path.title }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <span class="cap">{{ path.vendor.name }} · {{ path.program }}</span>
+  <h1>{{ path.title }}</h1>
+  <div class="chips">
+    <span class="chip off">{{ path.get_kind_display }}</span>
+    {% if path.world %}<span class="chip">Mundo: {{ path.get_world_display }}</span>{% endif %}
+    {% for p in products %}<span class="chip">{{ p.name }}</span>{% endfor %}
+    {% for d in disciplines %}<span class="chip">{{ d.name }}</span>{% endfor %}
+  </div>
+  {% if path.description %}<p>{{ path.description }}</p>{% endif %}
+  <div class="facts">
+    <div><b>{{ chapters|length }}</b><span>capítulos</span></div>
+    {% if path.is_external %}
+    <div><b>{{ path.external_courses.count }}</b><span>cursos con certificado</span></div>
+    {% else %}
+    <div><b>{{ path.milestones.count }}</b><span>misiones</span></div>
+    <div><b>{{ path.quiz_questions.count }}</b><span>preguntas</span></div>
+    {% endif %}
+  </div>
+</div>
+
+{% for ch in chapters %}
+<section class="chapter" id="{{ ch.level.code }}">
+  <header>
+    <span class="code">{{ ch.level.code|upper }}</span>
+    <div>
+      <h2 style="font-size:clamp(22px,3vw,30px)">{{ ch.level.title }}</h2>
+      <div class="meta">{{ ch.level.estimated_hours }}{% if ch.level.audience %} · {{ ch.level.audience }}{% endif %}</div>
+    </div>
+  </header>
+  {% if ch.level.goal %}<div class="goal"><b>Meta:</b> {{ ch.level.goal|terms }}</div>{% endif %}
+
+  <div class="cols">
+    <div class="col">
+      {% if ch.courses %}
+      <h4>Cursos con certificado</h4>
+      <ul class="reslist">
+        {% for c in ch.courses %}
+        <li>
+          <a href="{{ c.resource.url }}" target="_blank" rel="noopener">{{ c.resource.title }}</a>
+          <div class="chips" style="margin-top:4px">
+            <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span>
+            {% if c.resource.duration_text %}<span class="chip">{{ c.resource.duration_text }}</span>{% endif %}
+            {% if not c.is_required %}<span class="chip">Opcional</span>{% endif %}
+            {% if c.resource.verify_url %}<span class="chip warn" title="La URL apunta al catálogo; falta el enlace exacto">Confirmar enlace</span>{% endif %}
+          </div>
+          {% if c.contains %}
+          <details class="contains"><summary>Qué incluye</summary><ol>{% for item in c.contains %}<li>{{ item }}</li>{% endfor %}</ol></details>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if ch.resources %}
+      <h4{% if ch.courses %} style="margin-top:16px"{% endif %}>Recursos</h4>
+      <ul class="reslist">
+        {% for lr in ch.resources %}
+        <li>
+          <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
+          {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
+          <div class="chips" style="margin-top:4px">
+            {% for t in lr.resource.tags %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endfor %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if not ch.courses and not ch.resources %}<p class="empty">Sin recursos todavía.</p>{% endif %}
+    </div>
+
+    <div class="col">
+      {% if ch.milestones %}
+      <h4>Misiones</h4>
+      <ul class="mslist">{% for m in ch.milestones %}<li>{{ m.text|terms }}</li>{% endfor %}</ul>
+      {% endif %}
+      {% if ch.quiz %}<p class="sub" style="margin:12px 0 0">Mini quiz: {{ ch.quiz|length }} pregunta{{ ch.quiz|length|pluralize }}.</p>{% endif %}
+      {% if ch.level.is_free_courses %}<p class="sub">Aquí aparecen los cursos libres que el equipo registra y el moderador aprueba.</p>{% endif %}
+      {% if not ch.milestones and not ch.quiz and not ch.level.is_free_courses %}<p class="empty">El avance de este capítulo se registra al subir los certificados.</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

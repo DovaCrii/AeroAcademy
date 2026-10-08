@@ -1,0 +1,71 @@
+/* Componentes compartidos: pestañas, filtros, tarjetas, chips y listas de capítulos. Cada mundo les pone su piel. */
+.page-head{margin:30px 0 8px}
+.page-head p{color:var(--ink-2);max-width:70ch;margin:6px 0 0}
+
+.tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:3px solid var(--poche);margin:18px 0 14px}
+.tabs a{padding:8px 16px;border:1px solid var(--line);border-bottom:0;background:var(--sheet-2);color:var(--ink-2);text-decoration:none;font-weight:700;font-stretch:85%;margin-right:-1px}
+.tabs a[aria-current="page"]{background:var(--poche);color:var(--sheet);border-color:var(--poche)}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:end;margin:0 0 16px}
+.filters label{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--ink-2)}
+.filters select,.filters input[type=search]{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:6px 8px;min-height:34px;font-size:14px;min-width:0;max-width:100%}
+.filters .check{flex-direction:row;align-items:center;gap:6px;min-height:34px}
+.btn{border:1px solid var(--poche);background:var(--poche);color:var(--sheet);border-radius:var(--r);padding:6px 14px;font-size:14px;font-weight:600;cursor:pointer;min-height:34px;text-decoration:none;display:inline-flex;align-items:center}
+.btn.ghost{background:var(--sheet);color:var(--ink)}
+
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:11.5px;line-height:18px;padding:0 7px;border:1px solid var(--line);border-radius:2px;color:var(--ink-2);white-space:nowrap}
+.chip.cert{border-color:var(--fill);color:var(--ink);background:color-mix(in srgb,var(--fill) 22%,transparent)}
+.chip.off{border-color:var(--level);color:var(--level);font-weight:600}
+.chip.relic{border-color:var(--rarity-epic);color:var(--rarity-epic);font-weight:700}
+.chip.trophy{border-color:var(--rarity-rare);color:var(--rarity-rare);font-weight:700}
+.chip.warn{border-color:var(--red);color:var(--red)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--sheet);border:1px solid var(--poche);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card h3{margin:0}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card .sub{font-size:13px;color:var(--ink-2)}
+.card p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.card .foot-row{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between}
+
+.empty{padding:14px 0;color:var(--ink-2)}
+.pager{display:flex;gap:10px;align-items:center;margin:18px 0;font-size:14px}
+
+/* detalle de ruta */
+.facts{display:flex;flex-wrap:wrap;gap:18px;margin:16px 0 0}
+.facts div{border-left:2px solid var(--level);padding-left:10px}
+.facts b{display:block;font-stretch:75%;font-size:24px;line-height:1}
+.facts span{font-size:13px;color:var(--ink-2)}
+.chapter{background:var(--sheet);border:1px solid var(--poche);margin:18px 0}
+.chapter>header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:end;padding:16px 20px;border-bottom:1px solid var(--line)}
+.chapter .code{font-weight:800;font-stretch:62%;font-size:44px;line-height:.85;color:var(--level)}
+.chapter .meta{font-size:13.5px;color:var(--ink-2)}
+.chapter .goal{margin:14px 20px 0;padding:8px 12px;border:1px solid var(--level);border-left-width:4px;font-size:15px}
+.chapter .cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.chapter .col{padding:14px 20px 18px;min-width:0}
+.chapter .col+.col{border-left:1px solid var(--hair)}
+.chapter h4{margin:0 0 8px;font-weight:700;font-stretch:90%;font-size:15px}
+.reslist,.mslist{list-style:none;margin:0;padding:0}
+.reslist li{padding:9px 0;border-bottom:1px solid var(--hair)}
+.reslist li:last-child{border-bottom:0}
+.reslist a{font-weight:600;font-stretch:92%}
+.reslist .d{font-size:14px;color:var(--ink-2);margin-top:2px}
+.mslist li{padding:6px 0;font-size:15px;display:grid;grid-template-columns:18px 1fr;gap:10px}
+.mslist li::before{content:"";width:14px;height:14px;margin-top:4px;border:1.5px solid var(--poche)}
+.contains{font-size:13.5px;margin-top:6px}
+.contains summary{cursor:pointer;color:var(--level)}
+.contains ol{margin:6px 0 0;padding-left:20px;color:var(--ink-2)}
+
+@media (max-width:860px){
+  .chapter .cols{grid-template-columns:1fr}
+  .chapter .col+.col{border-left:0;border-top:1px solid var(--hair)}
+}
+@media (max-width:560px){
+  .chapter>header{grid-template-columns:1fr}
+  .chapter .col,.chapter .goal{margin-left:0;margin-right:0}
+  .chapter .goal{margin:12px 16px 0}
+  .chapter .col{padding:14px 16px}
+  .tabs a{padding:8px 12px}
+}

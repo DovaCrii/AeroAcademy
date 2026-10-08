@@ -36,5 +36,9 @@ jobs:
           uv run python manage.py check
           uv run python manage.py makemigrations --check --dry-run
 
+      - name: Semillas válidas
+        run: uv run python manage.py seed_catalog --dry-run
+        continue-on-error: false
+
       - name: Pruebas
         run: uv run pytest
