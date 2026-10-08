@@ -5,6 +5,8 @@ import time
 import httpx
 from django.conf import settings
 
+MODEL_GONE = {404, 410}  # el modelo ya no existe (p. ej. fin de vida): se prueba el siguiente
+last_model = ""  # modelo que respondió la última vez (para el diagnóstico)
 TRANSPORT = None  # las pruebas inyectan un httpx.MockTransport
 
 
@@ -63,8 +65,24 @@ def is_configured() -> bool:
 
 def chat(messages, *, max_tokens=500):
     """Devuelve (texto, tokens, latencia_ms). Lanza BotError con un código, sin exponer la clave ni el contenido."""
+    models = [
+        settings.NIM_MODEL,
+        *[m for m in settings.NIM_MODEL_FALLBACKS if m != settings.NIM_MODEL],
+    ]
+    for index, model in enumerate(models):
+        try:
+            return _chat_once(model, messages, max_tokens)
+        except BotError as exc:
+            gone = exc.code == "http" and exc.status in MODEL_GONE
+            if not gone or index == len(models) - 1:
+                raise
+    raise BotError("http")  # inalcanzable: el bucle siempre retorna o lanza
+
+
+def _chat_once(model, messages, max_tokens):
+    global last_model
     payload = {
-        "model": settings.NIM_MODEL,
+        "model": model,
         "messages": messages,
         "temperature": 0.3,
         "max_tokens": max_tokens,
@@ -98,4 +116,5 @@ def chat(messages, *, max_tokens=500):
         raise BotError("bad_response") from exc
     if not isinstance(text, str) or not text.strip():
         raise BotError("bad_response")
+    last_model = model
     return text.strip(), tokens, latency

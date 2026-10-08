@@ -421,3 +421,112 @@ def test_listing_models_reports_auth_errors(settings):
     client.TRANSPORT = httpx.MockTransport(lambda r: httpx.Response(401, json={}))
     with pytest.raises(CommandError, match="rechazada"):
         call_command("teo_probar", "--modelos")
+
+
+# --- modelos retirados por NIM (error real en p340: HTTP 410, fin de vida de llama-3.3-70b) ------------------------------
+
+
+def _router(statuses, seen):
+    """Transporte que responde según el modelo pedido: {modelo: código}; lo demás, 200."""
+    import json
+
+    def handler(request):
+        model = json.loads(request.content)["model"]
+        seen.append(model)
+        code = statuses.get(model, 200)
+        if code != 200:
+            return httpx.Response(
+                code, json={"detail": f"The model '{model}' has reached its end of life"}
+            )
+        return httpx.Response(
+            200,
+            json={
+                "choices": [{"message": {"content": f"hola desde {model}"}}],
+                "usage": {"total_tokens": 5},
+            },
+        )
+
+    return httpx.MockTransport(handler)
+
+
+def test_a_retired_model_falls_back_to_the_next_one(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL, settings.NIM_MODEL_FALLBACKS = "viejo/uno", ["viejo/dos", "vigente/tres"]
+    seen = []
+    client.TRANSPORT = _router({"viejo/uno": 410, "viejo/dos": 404}, seen)
+    text, _, _ = client.chat([{"role": "user", "content": "hola"}])
+    assert seen == ["viejo/uno", "viejo/dos", "vigente/tres"] and text == "hola desde vigente/tres"
+    assert client.last_model == "vigente/tres"
+
+
+def test_teo_keeps_answering_when_the_main_model_is_gone(member, settings):
+    from apps.assistant import services
+
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL, settings.NIM_MODEL_FALLBACKS = "viejo/uno", ["vigente/dos"]
+    client.TRANSPORT = _router({"viejo/uno": 410}, [])
+    answer = services.answer(member, "hola teo")
+    assert answer.status == "ok" and "vigente/dos" in answer.text
+
+
+@pytest.mark.parametrize("status", [401, 403, 429, 500])
+def test_other_errors_do_not_try_other_models(settings, status):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL, settings.NIM_MODEL_FALLBACKS = "uno/a", ["dos/b"]
+    seen = []
+    client.TRANSPORT = _router({"uno/a": status}, seen)
+    with pytest.raises(client.BotError):
+        client.chat([{"role": "user", "content": "hola"}])
+    assert seen == ["uno/a"]
+
+
+def test_when_every_model_is_gone_the_error_is_reported(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL, settings.NIM_MODEL_FALLBACKS = "a/1", ["b/2"]
+    client.TRANSPORT = _router({"a/1": 410, "b/2": 410}, [])
+    with pytest.raises(client.BotError) as exc:
+        client.chat([{"role": "user", "content": "hola"}])
+    assert exc.value.status == 410
+
+
+def test_the_default_model_is_not_the_retired_one():
+    assert settings.NIM_MODEL != "meta/llama-3.3-70b-instruct"
+    assert "meta/llama-3.3-70b-instruct" not in settings.NIM_MODEL_FALLBACKS
+    text = (ROOT / "deploy" / "centro.env.plantilla").read_text(encoding="utf-8")
+    assert "llama-3.3" not in text and "NIM_MODEL_FALLBACKS=" in text
+
+
+def test_teo_probar_reports_which_model_answered(settings, capsys):
+    settings.NIM_API_KEY = "nvapi-X"
+    settings.NIM_MODEL, settings.NIM_MODEL_FALLBACKS = "viejo/uno", ["vigente/dos"]
+    client.TRANSPORT = _router({"viejo/uno": 410}, [])
+    call_command("teo_probar")
+    assert "modelo vigente/dos" in capsys.readouterr().out
+
+
+# --- diagnóstico en la VM -------------------------------------------------------------------------------------------------
+
+
+def test_the_diagnostic_script_checks_everything_and_changes_nothing():
+    text = (ROOT / "deploy" / "diagnostico.sh").read_text(encoding="utf-8")
+    assert text.startswith("#!/usr/bin/env bash") and "\r" not in text
+    for needle in (
+        "tailscaled-aeroacademy",
+        "serve status",
+        "CertDomains",
+        "cert --cert-file",
+        "healthz",
+        "journalctl",
+        "HTTPS Certificates",
+        "Machines",
+    ):
+        assert needle in text, needle
+    for forbidden in (
+        "systemctl restart",
+        "systemctl stop",
+        "rm -rf /",
+        "serve reset",
+        "funnel",
+        " up --",
+    ):
+        assert forbidden not in text, forbidden
