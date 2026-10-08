@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}{{ path.title }}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'core/levantamiento.css' %}">
+<link rel="stylesheet" href="{% static 'worlds/civil.css' %}">
+<script src="{% static 'core/levantamiento.js' %}" defer></script>
+{% endblock %}
+{% block body_attrs %} class="world-civil"{% endblock %}
+
+{% block content %}
+{% include "worlds/civil/cover.html" %}
+<div id="path-app">
+  {% include "worlds/civil/_app.html" %}
+</div>
+{% endblock %}

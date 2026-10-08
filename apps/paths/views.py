@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 
+from apps.progress import external as progress_external
 from apps.progress import services as progress_services
 from apps.progress.views import world_template
 
@@ -27,11 +28,16 @@ def detail(request, slug):
     if path is None:
         raise Http404
 
-    # Las rutas estructuradas con mundo propio se muestran con su diseño (docs/MUNDOS.md).
-    if path.kind == LearningPath.Kind.STRUCTURED and path.world:
+    # Las rutas con mundo propio se muestran con su diseño (docs/MUNDOS.md).
+    if path.world:
         full = world_template(path.world, "path.html")
         if full:
-            ctx = progress_services.world_context(request.user, path, request.GET.get("nivel"))
+            builder = (
+                progress_external.external_context
+                if path.kind == LearningPath.Kind.EXTERNAL_TRACK
+                else progress_services.world_context
+            )
+            ctx = builder(request.user, path, request.GET.get("nivel"))
             template = (
                 world_template(path.world, "_app.html")
                 if request.headers.get("X-Partial")

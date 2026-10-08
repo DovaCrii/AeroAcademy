@@ -1,0 +1,37 @@
+{% load core_extras %}
+<div class="sheet cv-sheet" id="corte">
+  <div class="sheet-in">
+    <div class="cv-head">
+      <div>
+        <h2 class="cv-h2">Planta y perfil</h2>
+        <p class="lead">Cada curso que terminas en {{ path.platform.name|default:"la plataforma" }} es una estaca; cada acreditación levanta un pilar del puente. El tramo pavimentado es tu avance verificado.</p>
+      </div>
+      <div class="cv-meta">
+        <div><b>{{ stats.chapters_done }}/{{ stats.chapters }}</b><span>corredores completos</span></div>
+        <div><b>{{ stats.pct }} %</b><span>tu avance</span></div>
+        <div><b>{{ stats.relics_verified }}/{{ stats.relics }}</b><span>pilares en pie</span></div>
+      </div>
+    </div>
+    {% include "worlds/civil/journey.html" %}
+    <div class="cv-legend">
+      <span><i class="k ok"></i>Verificado</span><span><i class="k pend"></i>En revisión</span><span><i class="k none"></i>Por hacer</span>
+      <span><i class="k relic"></i>Pilar = acreditación</span><span><i class="k road"></i>Tramo pavimentado</span>
+    </div>
+  </div>
+  <div class="tb">
+    <div><span class="cap">Proyecto</span><b>{{ path.title }} · {{ path.program|default:path.vendor.name }}</b></div>
+    <div><span class="cap">Contenido</span><b>Planta-perfil · avance verificado</b></div>
+    <div><span class="cap">Escala</span><b>A tu ritmo</b></div>
+    <div><span class="cap">Lámina</span><b>C-101</b></div>
+  </div>
+</div>
+
+<div class="shead" id="niveles">
+  <svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">2</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">C-201</text></svg>
+  <h2>Corredores</h2>
+</div>
+<p class="cv-sub">Los cursos se toman en {{ path.platform.name|default:"la plataforma" }}; aquí registras el nombre y el certificado, y un responsable lo verifica.</p>
+<div class="cv-viewer">
+  {% include "worlds/civil/browser.html" %}
+  {% include "worlds/civil/_panel.html" %}
+</div>

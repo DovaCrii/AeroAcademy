@@ -31,6 +31,8 @@
 
 | D24 | Avatares **32×32** con motor propio sin dependencias (`apps/gamification/avatar/`), editables por la persona (cuerpo hombre/mujer/neutro, piel, cara, pelo, barba, lentes, gorro, ropa, colores, fondo y marco). Se descartó DiceBear (build de Node) y el generador LPC (licencias mixtas) | Más variedad y detalle que 16×16, sin dependencias ni datos a terceros |
 | D25 | Se trabaja con **subagentes del proyecto** (`.claude/agents/`) alineados con las skills; cada uno edita solo lo asignado y quien lo lanza verifica antes de integrar | Paralelizar arte, semillas y bloques independientes sin pisarse |
+| D26 | Un responsable **no revisa sus propias credenciales**; el administrador sí (el equipo puede ser de una persona). La revisión lleva una huella de versión: si la credencial cambió mientras se revisaba, se rechaza | Evita el autoaval y la carrera entre editar y verificar |
+| D27 | Una credencial verificada que **vence** sigue contando para el avance y se muestra con una marca de vencida | El curso se hizo; la vigencia es información, no borra el progreso |
 
 ## Abiertas (no resolver sin confirmar)
 

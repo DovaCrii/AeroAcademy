@@ -96,7 +96,20 @@ certificado, que el moderador los valide y ver crecer XP, insignias y la hoja de
 **Acepta si:** marcar/desmarcar y responder persisten por persona; los porcentajes coinciden con la regla de MODELO_DATOS;
 funciona sin JS para lectura; coincide visualmente con `legacy/ruta-forma-revit/static/index.html` en escritorio y a 390 px.
 
-## Bloque 5 · Repositorio de credenciales + Ruta Bentley (mundo Civil) `[ ]`
+## Bloque 5 · Repositorio de credenciales + Ruta Bentley (mundo Civil) `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - `Credential` con archivo **privado** (`PrivateStorage`, sin URL pública; nombre generado `credentials/<persona>/<uuid>.<ext>`), tipo real por firma (PDF/PNG/JPG), máx. 10 MB y SHA-256. Se descarga solo por `credentials:download` (dueño, leads y admin; `attachment`, `nosniff`, `no-store`).
+> - Revisión `pending` → `verified`/`rejected` por un lead (rechazar exige comentario). Editar archivo, fechas o emisor de una credencial verificada o rechazada la devuelve a `pending`.
+> - Verificar una credencial con `resource` marca las misiones que ese recurso completa (`MilestoneCheck.source="credential"`); esa marca no se deshace a mano y se quita sola si la credencial deja de estar verificada o se borra. Una marca manual previa no se reemplaza.
+> - Páginas: mis credenciales, subir/editar/eliminar, detalle, **credenciales del equipo** (solo `verified` + `team`, sin abrir archivos), cola **por revisar**, y **registrar curso + certificado** en rutas externas (curso de la lista o curso libre). Un lead puede **promover** un curso libre al catálogo (queda en el capítulo `lib` con clave `lib-cN`).
+> - **Mundo Civil** (`worlds/civil/`): portada en estilo Levantamiento, planta-perfil con una estaca por curso y un pilar del puente por reliquia, *Explorer · Corridors* y panel con estados (verificado, en revisión, rechazado, por registrar). Avance = cursos obligatorios verificados (`any_one` completa con uno).
+> - Bug encontrado: con el idioma en español Django escribe `12,5` y rompe las coordenadas del SVG; ahora van como texto con punto (`_n()`), con prueba de regresión.
+> - Lint: `E501` desactivado en general (el formateador parte el código; las frases largas en español se permiten).
+> - Endurecido tras revisión independiente: sin redirección abierta en 
+ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, archivos borrados con la fila (señal + on_commit), rechazar una de dos credenciales del mismo curso no quita la marca, promover exige verificada, registro duplicado bloqueado, topes de consultas.
+> - 353 pruebas en verde; revisado a escritorio y 390 px.
+> - **Pendiente:** XP/insignias al verificar (Bloque 13); avisos al moderador y al dueño (Bloque 16); vencimientos con aviso y exportación (Bloque 6); equipo en el recorrido civil (Bloque 7).
 - Alta/edición de credencial con archivo privado; validación de tipo real y tamaño.
 - Flujo de revisión: `pending` → `verified`/`rejected` por lead, con comentario. Reglas de MODELO_DATOS (vuelve a pending al editar).
 - Vínculo con recurso/ruta y marcado automático de hitos y cursos externos.

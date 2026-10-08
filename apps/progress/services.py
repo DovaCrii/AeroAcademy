@@ -23,14 +23,24 @@ def percent(done: int, total: int) -> int:
 # --- escritura ---
 
 
-def set_milestone(person, milestone, checked: bool) -> bool:
-    """Marca o desmarca una misión. Idempotente: devuelve si cambió algo."""
+def set_milestone(person, milestone, checked: bool, *, credential=None) -> bool:
+    """Marca o desmarca una misión. Idempotente: devuelve si cambió algo.
+
+    Con `credential`, la marca queda respaldada por esa credencial verificada. Esa marca no se puede
+    deshacer a mano: la evidencia manda (se quita sola si la credencial deja de estar verificada).
+    """
     if milestone.retired:
         raise ValueError("La misión está retirada.")
     if checked:
-        _, created = MilestoneCheck.objects.get_or_create(person=person, milestone=milestone)
+        defaults = {"source": "credential", "credential": credential} if credential else {}
+        _, created = MilestoneCheck.objects.get_or_create(
+            person=person, milestone=milestone, defaults=defaults
+        )
         return created
-    deleted, _ = MilestoneCheck.objects.filter(person=person, milestone=milestone).delete()
+    existing = MilestoneCheck.objects.filter(person=person, milestone=milestone)
+    if existing.filter(source="credential").exists():
+        return False
+    deleted, _ = existing.delete()
     return bool(deleted)
 
 
