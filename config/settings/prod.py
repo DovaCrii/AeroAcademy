@@ -1,0 +1,22 @@
+from django.core.exceptions import ImproperlyConfigured
+
+from .base import *
+
+DEBUG = False
+
+if not SECRET_KEY:
+    raise ImproperlyConfigured("SECRET_KEY es obligatoria en producción.")
+if not ALLOWED_HOSTS:
+    raise ImproperlyConfigured("ALLOWED_HOSTS es obligatoria en producción (nombre MagicDNS).")
+
+# Detrás de `tailscale serve` (HTTPS terminado en el proxy local).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if not host.startswith(".")]
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
