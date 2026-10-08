@@ -30,7 +30,7 @@ Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revis
 
 ## Fusiones
 
-La regla completa está en **`docs/FUSIONES.md`**: fusiona la persona, de abajo hacia arriba, solo con *merge commit* (nunca squash ni rebase) y con `tools/fusionar_cadena.py`. Después, `python tools/preflight.py` y `docs/PRODUCCION.md`.
+La regla completa está en **`docs/FUSIONES.md`**: fusiona la persona (o el agente, si ella se lo pide en el chat), de abajo hacia arriba, solo con *merge commit* (nunca squash ni rebase) y con `tools/fusionar_cadena.py`. Después, `python tools/preflight.py` y `docs/PRODUCCION.md`.
 
 ## Qué NO hace sin que se lo pidan
 

@@ -85,7 +85,7 @@ resultado** (hojas de preview, navegador) y corrige tú lo que falle. Ejemplo re
 - `.claude/launch.json` del navegador vive en la carpeta **padre** del proyecto, con `--directory`.
 - Redondeo: `round()` de Python redondea la mitad al par; para porcentajes usar `int(x + 0.5)`.
 
-**Fusiones:** las hace la persona con `tools/fusionar_cadena.py` (`docs/FUSIONES.md`); el agente solo deja los PR en verde, apilados y con el cuerpo completo. Antes de pedir producción: `python tools/preflight.py` en verde.
+**Fusiones:** por defecto las decide la persona; si ella le pide al agente que fusione, este usa `tools/fusionar_cadena.py` (`docs/FUSIONES.md`) y verifica `main` después. El agente siempre deja los PR en verde, apilados y con el cuerpo completo. Antes de pedir producción: `python tools/preflight.py` en verde.
 
 **No hacer sin que se pida:** fusionar PR, forzar `push`, subir secretos o datos reales, cambiar la visibilidad
 o los *settings* del repositorio.

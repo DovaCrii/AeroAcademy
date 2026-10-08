@@ -1,10 +1,10 @@
 # Regla de fusiones
 
-Complementa `docs/FLUJO_GITHUB.md`. **La persona fusiona; el agente no.** Esta regla dice cómo.
+Complementa `docs/FLUJO_GITHUB.md`. **Por defecto el agente construye y deja los PR listos; fusionar es una decisión de la persona.** Si la persona le pide explícitamente en el chat que fusione (autorización por ronda, no permanente), el agente fusiona **con esta regla y con el script**, y deja `main` listo para producción. Esta regla dice cómo.
 
 ## Reglas
 
-1. **Quién:** solo la persona dueña del repositorio. El agente construye, sube y deja el PR listo; nunca ejecuta `gh pr merge`.
+1. **Quién:** la persona dueña del repositorio, o el agente **solo si ella se lo pide en el chat** (cada ronda). Sin ese pedido, el agente no ejecuta `gh pr merge`.
 2. **Orden:** de abajo hacia arriba en la cadena apilada. El PR #1 (`bloque-0-base`) apunta a `main`; cada PR siguiente apunta a la rama del anterior.
 3. **Método:** siempre **merge commit** (`gh pr merge N --merge`). **Nunca** *squash* ni *rebase*: reescriben los commits de los que depende el PR de arriba y lo dejan con conflictos.
 4. **No borrar la rama** al fusionar (`--delete-branch` apagado) hasta haber fusionado todos los de arriba.
@@ -16,7 +16,7 @@ Complementa `docs/FLUJO_GITHUB.md`. **La persona fusiona; el agente no.** Esta r
 6. **El PR de correcciones de revisión va al final** (#21 hoy), porque corrige código de los bloques de abajo.
 7. **Si un PR falla o genera conflictos:** se detiene toda la cadena; se corrige en la rama de ese PR y se vuelve a empezar desde él. Nunca se fuerza.
 8. **`main` siempre despliega:** después de la última fusión, `main` debe pasar `python tools/preflight.py` (ver `docs/PRODUCCION.md`).
-9. **Prohibido para el agente** (sin pedido explícito de la persona): fusionar, `push --force`, borrar ramas remotas, cambiar la protección de `main`, publicar *releases*.
+9. **Prohibido para el agente** (sin pedido explícito de la persona): fusionar, `push --force`, borrar ramas remotas, cambiar la protección de `main`, publicar *releases*. Aun con el pedido de fusionar, el agente **nunca** fuerza ni salta el CI.
 
 ## Cómo fusionar la cadena
 
