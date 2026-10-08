@@ -67,7 +67,7 @@ MODULES = [
         "subtitle": "Manuales, guías, planos tipo y normativas.",
         "description": "Biblioteca técnica con versiones, por disciplina y tipo de documento.",
         "items": ["Versión vigente e historial", "Plantillas y familias del estándar"],
-        "url_name": None,
+        "url_name": "library:index",
         "block": "Bloque 9",
     },
     {

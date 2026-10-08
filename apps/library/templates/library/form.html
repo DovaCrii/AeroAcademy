@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}{% if editing %}Editar documento{% else %}Subir documento{% endif %}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'library/library.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head"><h1>{% if editing %}Editar documento{% else %}Subir documento{% endif %}</h1>
+  <p>{% if not editing %}Hasta {{ max_mb }} MB. Formatos: {{ extensions }}. {% endif %}No subas datos personales ni de clientes.</p></div>
+<form method="post" class="doc-form"{% if not editing %} enctype="multipart/form-data"{% endif %}>
+  {% csrf_token %}
+  <label>Título <input name="title" maxlength="200" value="{{ v.title }}" required></label>
+  <label>Tipo <select name="doc_type">{% for value, label in types %}<option value="{{ value }}"{% if v.doc_type == value %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  <label>Descripción <textarea name="description" rows="4">{{ v.description }}</textarea></label>
+  <label>Etiquetas (separadas por comas) <input name="tags" value="{{ v.tags }}"></label>
+  <fieldset><legend>Disciplinas</legend>{% for d in disciplines %}<label class="inline"><input type="checkbox" name="disciplines" value="{{ d.slug }}"{% if d.slug in chosen %} checked{% endif %}> {{ d.name }}</label>{% endfor %}</fieldset>
+  <label class="inline"><input type="checkbox" name="restricted"{% if v.restricted %} checked{% endif %}> Restringido (solo yo y los responsables)</label>
+  {% if not editing %}
+  <label>Archivo <input type="file" name="file" required></label>
+  <label>Versión (opcional) <input name="version_label" maxlength="40" placeholder="v1"></label>
+  <label>Notas de la versión <input name="notes" maxlength="300"></label>
+  {% endif %}
+  <p><button class="btn primary" type="submit">Guardar</button> <a class="btn" href="{% if editing %}{% url 'library:detail' doc.pk %}{% else %}{% url 'library:index' %}{% endif %}">Cancelar</a></p>
+</form>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}{{ doc.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'library/library.css' %}">{% endblock %}
+
+{% block content %}
+<p class="crumb"><a href="{% url 'library:index' %}">Documentos</a></p>
+<article class="doc-main">
+  <h1>{{ doc.title }}</h1>
+  <p class="meta"><span class="chip">{{ doc.get_doc_type_display }}</span>{% if doc.is_restricted %}<span class="chip warn">Restringido</span>{% endif %}{% for d in disciplines %}<span class="chip">{{ d.name }}</span>{% endfor %}{% for t in doc.tags %}<span class="chip">#{{ t }}</span>{% endfor %} · {{ doc.owner.name }}</p>
+  {% if doc.description %}<div class="body">{{ doc.description|linebreaks }}</div>{% endif %}
+  {% for v in versions %}{% if v.is_current %}<p><a class="btn primary" href="{% url 'library:download' doc.pk %}">Descargar {{ v.version_label }} (.{{ v.file_ext }}, {{ v.file_size|filesizeformat }})</a></p>{% endif %}{% endfor %}
+  {% if can_edit %}<p><a class="btn" href="{% url 'library:edit' doc.pk %}">Editar</a>
+    <form class="inline" method="post" action="{% url 'library:delete' doc.pk %}">{% csrf_token %}<button class="btn" type="submit" onclick="return confirm('¿Eliminar el documento y todas sus versiones?')">Eliminar</button></form></p>{% endif %}
+</article>
+
+<section aria-labelledby="d-versions">
+  <h2 id="d-versions">Versiones</h2>
+  <ol class="versions">
+    {% for v in versions %}
+    <li class="{% if v.is_current %}current{% endif %}">
+      <b>{{ v.version_label }}</b>{% if v.is_current %} <span class="chip ok">Vigente</span>{% endif %}
+      <span class="muted">{{ v.created_at|date:"d/m/Y H:i" }} · {{ v.uploaded_by.name|default:"—" }} · {{ v.file_size|filesizeformat }}</span>
+      {% if v.notes %}<br>{{ v.notes }}{% endif %}
+      <a href="{% url 'library:download_version' doc.pk v.pk %}">Descargar</a>
+      {% if can_edit and not v.is_current %}<form class="inline" method="post" action="{% url 'library:make_current' doc.pk v.pk %}">{% csrf_token %}<button class="link-btn" type="submit">Marcar como vigente</button></form>{% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+  {% if can_edit %}
+  <form method="post" action="{% url 'library:upload' doc.pk %}" enctype="multipart/form-data" class="doc-form">
+    {% csrf_token %}
+    <h3>Subir versión nueva</h3>
+    <label>Archivo (hasta {{ max_mb }} MB) <input type="file" name="file" required></label>
+    <label>Versión (opcional) <input name="version_label" maxlength="40"></label>
+    <label>Notas <input name="notes" maxlength="300"></label>
+    <button class="btn primary" type="submit">Subir</button>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}
