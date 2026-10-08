@@ -6,6 +6,7 @@
 <title>{% block title %}{{ BRAND_ACADEMY }}{% endblock %} · {{ BRAND_PLATFORM }}</title>
 <link rel="stylesheet" href="{% static 'core/tokens.css' %}">
 <link rel="stylesheet" href="{% static 'core/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/components.css' %}">
 <script src="{% static 'core/theme.js' %}"></script>
 {% block extra_head %}{% endblock %}
 </head>
@@ -19,7 +20,7 @@
       <span class="brand">LEV DIGITAL <i>101</i></span>
     </a>
     <nav class="nav" aria-label="Secciones">
-      {% block nav %}<a href="{% url 'core:home' %}">Inicio</a>{% endblock %}
+      {% block nav %}<a href="{% url 'core:home' %}">Inicio</a><a href="{% url 'paths:index' %}">Rutas</a><a href="{% url 'catalog:resources' %}">Catálogo</a>{% endblock %}
     </nav>
     {# Huecos: se llenan en los bloques 13 (nivel/XP), 16 (campana) y 15 (Teo). #}
     <div class="cell slot" data-slot="player">{% block slot_player %}{% include "core/partials/player.html" %}{% endblock %}</div>

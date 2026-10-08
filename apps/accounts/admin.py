@@ -6,7 +6,7 @@ from .models import Person, PersonStatus
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ("name", "login", "status", "role_label", "discipline", "created_at")
+    list_display = ("name", "login", "status", "role_label", "created_at")
     list_filter = ("status", "character_class")
     search_fields = ("login", "display_name")
     ordering = ("status", "-created_at")
@@ -23,6 +23,7 @@ class PersonAdmin(admin.ModelAdmin):
         "updated_at",
     )
     exclude = ("password", "user_permissions")
+    filter_horizontal = ("disciplines",)
     actions = ["approve_people", "suspend_people", "make_member", "make_lead", "make_admin"]
 
     @admin.display(description="rol")
