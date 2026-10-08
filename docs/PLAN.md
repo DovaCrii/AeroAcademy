@@ -218,7 +218,15 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** solo el autor o un lead aceptan la respuesta; texto escapado; paginación de hilos.
 
-## Bloque 16 · Moderación y notificaciones `[ ]`
+## Bloque 16 · Moderación y notificaciones `[x]`
+
+> **Hecho (2026-10-08).** Notas:
+> - App `notifications`: `Notification` (con `key` para no repetir avisos), `Announcement`, `notify()` / `notify_leads()` y campana en la cabecera (contador, últimos 6, «Ver todos»; sin JS, con `<details>`). Bandeja en `/avisos/`.
+> - Avisos: persona nueva pendiente y credencial enviada a revisión (a responsables); credencial verificada o rechazada, insignia, subida de nivel, respuesta a tu hilo o nota, respuesta aceptada, contenido ocultado y bienvenida (a la persona); anuncios (a todas las personas aprobadas, más banda en la portada hasta su fecha de vencimiento).
+> - **Moderación** (`/moderacion/`, solo responsables): personas por aprobar (rol, disciplina y clase; solo el administrador nombra responsables), cola de certificados, reportes, anuncios y **bitácora** (`ModerationLog`). Rechazar a una persona la suspende.
+> - Foro y notas: fijar, ocultar con motivo obligatorio (no se borra; los miembros dejan de verlo, los responsables sí), mover, cambiar el título, cerrar y aceptar respuesta con registro; cualquier miembro reporta un mensaje o una nota (no los propios, sin duplicar) y un responsable lo oculta o lo descarta.
+> - Las normas del foro van como panel en `/foro/` (no como hilo fijado: evita un hilo con autor inventado).
+> - **Pendiente:** avisos de credencial por vencer/vencida (Bloque 6) y el canal de correo (Bloque 8).
 - Pantalla **Moderación**: personas por aprobar, certificados por revisar, reportes y bitácora (MODERACION.md).
 - Foro: fijar, cerrar, ocultar, mover, reportar.
 - App `notifications`: campana con contador, lista y marcar como leída; anuncios globales; `notify()` con canal `in_app`.

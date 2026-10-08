@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from apps.catalog.models import Resource
 from apps.gamification import game
+from apps.notifications import services as notifications
 from apps.paths.models import ExternalCourse, Level, Milestone
 from apps.progress import services as progress
 
@@ -124,6 +125,7 @@ def create_credential(owner, data, upload):
         if cred.file and cred.file.name:
             cred.file.storage.delete(cred.file.name)
         raise
+    _notify_review(cred)
     return cred
 
 
@@ -150,10 +152,23 @@ def update_credential(cred, data, upload=None) -> bool:
     cred.save()
     if "skills" in data:
         cred.skills.set(data["skills"])
+    if needs_review and cred.status == Credential.Status.PENDING:
+        _notify_review(cred)
     if was_verified and cred.status != Credential.Status.VERIFIED:
         _unapply(cred)
         game.refresh(cred.owner)
     return needs_review and cred.status == Credential.Status.PENDING
+
+
+def _notify_review(cred):
+    notifications.notify_leads(
+        "credential_submitted",
+        f"{cred.owner.name} envió una credencial a revisión",
+        cred.display_title,
+        url="/certificados/revisar/",
+        key=f"cred-review:{cred.pk}:{cred.updated_at.timestamp():.6f}",
+        exclude=cred.owner,
+    )
 
 
 def _back_to_pending(cred, *, save=True):
@@ -197,6 +212,13 @@ def verify(cred, by, comment="", *, version=None):
     )
     _apply_verified(cred)
     game.refresh(cred.owner)
+    notifications.notify(
+        cred.owner,
+        "credential_verified",
+        f"Tu credencial «{cred.display_title}» fue verificada",
+        url=f"/certificados/{cred.pk}/",
+        key=f"cred-verified:{cred.pk}:{cred.reviewed_at.timestamp():.6f}",
+    )
     return cred
 
 
@@ -218,6 +240,14 @@ def reject(cred, by, comment, *, version=None):
     if was_verified:
         _unapply(cred)
         game.refresh(cred.owner)
+    notifications.notify(
+        cred.owner,
+        "credential_rejected",
+        f"Tu credencial «{cred.display_title}» fue rechazada",
+        cred.review_comment,
+        url=f"/certificados/{cred.pk}/",
+        key=f"cred-rejected:{cred.pk}:{cred.reviewed_at.timestamp():.6f}",
+    )
     return cred
 
 

@@ -11,6 +11,7 @@ from django.db import transaction
 from django.db.models import Sum
 
 from apps.credentials.models import Credential
+from apps.notifications import services as notifications
 from apps.paths.models import LearningPath, Milestone, QuizQuestion
 from apps.progress.models import MilestoneCheck, QuizAnswer
 
@@ -282,6 +283,24 @@ def evaluate(person, today: date | None = None) -> list:
             gained.append(PersonBadge.objects.create(person=person, badge=badge))
         elif not ok and badge.pk in held:
             held[badge.pk].delete()
+    for pb in gained:
+        notifications.notify(
+            person,
+            "badge",
+            f"Ganaste la insignia {pb.badge.name}",
+            pb.badge.description,
+            url="/perfil/",
+            key=f"badge:{pb.badge.slug}",
+        )
+    level = level_for(total_xp(person))
+    if level > 1:
+        notifications.notify(
+            person,
+            "level_up",
+            f"¡Subiste al nivel {level}!",
+            url="/perfil/",
+            key=f"level:{level}",
+        )
     return gained
 
 

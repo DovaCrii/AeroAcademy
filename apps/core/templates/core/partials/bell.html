@@ -1,1 +1,13 @@
-{# Hueco de la campana de notificaciones. Lo llena notifications (Bloque 16). #}
+{% if bell %}
+<details class="bell">
+  <summary aria-label="Avisos{% if bell.unread %}: {{ bell.unread }} sin leer{% endif %}">🔔{% if bell.unread %}<b class="count">{{ bell.unread }}</b>{% endif %}</summary>
+  <div class="bell-pop">
+    <ul>
+      {% for n in bell.items %}
+      <li class="{% if not n.is_read %}unread{% endif %}"><form method="post" action="{% url 'notifications:read' n.pk %}">{% csrf_token %}<button type="submit"><b>{{ n.title }}</b>{% if n.body %}<span>{{ n.body|truncatechars:80 }}</span>{% endif %}</button></form></li>
+      {% empty %}<li class="muted">Sin avisos.</li>{% endfor %}
+    </ul>
+    <a href="{% url 'notifications:inbox' %}">Ver todos</a>
+  </div>
+</details>
+{% endif %}

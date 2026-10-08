@@ -8,6 +8,8 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.utils import timezone
 
+from apps.notifications import services as notifications
+
 from .models import Person, PersonStatus
 
 ROLES = ("member", "lead", "admin")
@@ -61,6 +63,14 @@ def approve(person: Person, by: Person | None = None) -> Person:
     person.approved_by = by
     person.approved_at = timezone.now()
     person.save(update_fields=["status", "approved_by", "approved_at", "updated_at"])
+    notifications.notify(
+        person,
+        "welcome",
+        "¡Te damos la bienvenida al gremio!",
+        "Completa tu hoja de personaje para ganar tu primera insignia.",
+        url="/perfil/editar/",
+        key="welcome",
+    )
     return person
 
 
@@ -90,6 +100,14 @@ def init_new_person(person: Person) -> Person:
     person.save(update_fields=["password", "updated_at"])
     set_role(person, "member")
     ensure_bootstrap(person)
+    if person.status == PersonStatus.PENDING:
+        notifications.notify_leads(
+            "person_pending",
+            f"{person.name} pidió acceso",
+            person.login,
+            url="/moderacion/",
+            key=f"pending:{person.pk}",
+        )
     return person
 
 

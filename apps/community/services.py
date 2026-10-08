@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from apps.gamification import game
 from apps.gamification.models import XPEvent
+from apps.notifications import services as notifications
 
 from .models import NOTE_MAX, Note
 
@@ -53,6 +54,15 @@ def create_note(author, path, text, type, *, level=None, resource=None, parent=N
     )
     _award(note)
     game.evaluate(author)
+    if parent is not None and parent.author_id != author.pk:
+        notifications.notify(
+            parent.author,
+            "note_reply",
+            f"{author.name} respondió tu nota",
+            note.text[:120],
+            url=f"/rutas/{path.slug}/notas/",
+            key=f"note-reply:{note.pk}",
+        )
     return note
 
 
@@ -67,10 +77,12 @@ def delete_note(note, by):
     game.evaluate(note.author)
 
 
-def notes_for(path, *, level=None, type=None, resource=None):
+def notes_for(path, *, level=None, type=None, resource=None, show_hidden=False):
     qs = Note.objects.filter(path=path, is_deleted=False, parent__isnull=True).select_related(
         "author", "level", "resource"
     )
+    if not show_hidden:
+        qs = qs.filter(is_hidden=False)
     if level is not None:
         qs = qs.filter(level=level)
     if type:
@@ -80,15 +92,14 @@ def notes_for(path, *, level=None, type=None, resource=None):
     return qs
 
 
-def with_replies(notes):
+def with_replies(notes, show_hidden=False):
     """Anexa a cada nota sus respuestas visibles (una consulta para todas)."""
     notes = list(notes)
     replies = {}
-    for r in (
-        Note.objects.filter(parent__in=notes, is_deleted=False)
-        .select_related("author")
-        .order_by("created_at", "id")
-    ):
+    visible = Note.objects.filter(parent__in=notes, is_deleted=False)
+    if not show_hidden:
+        visible = visible.filter(is_hidden=False)
+    for r in visible.select_related("author").order_by("created_at", "id"):
         replies.setdefault(r.parent_id, []).append(r)
     for n in notes:
         n.visible_replies = replies.get(n.pk, [])
