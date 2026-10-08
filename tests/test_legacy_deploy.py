@@ -349,13 +349,13 @@ def test_no_secret_in_the_deploy_files():
 
 
 def test_the_installer_is_safe_for_a_shared_vm():
-    """La VM también corre AeroControl (127.0.0.1:8000 y la raíz de `tailscale serve`): no se les toca."""
+    """La VM también corre AeroControl (127.0.0.1:8000 y los puertos HTTPS con Funnel): no se les toca."""
     install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
     assert (
         'PORT="${AEROACADEMY_PORT:-8010}"' in install
-        and 'TS_PORT="${AEROACADEMY_TS_PORT:-8443}"' in install
+        and 'PUBLISH="${AEROACADEMY_PUBLISH:-node}"' in install
     )
-    assert '--https="$TS_PORT"' in install and 'tailscale serve --bg "$PORT"' not in install
+    assert 'tailscale serve --bg "$PORT"' not in install
     assert "tailscale serve reset" not in install and "tailscale serve off" not in install
     assert "UV_PYTHON_INSTALL_DIR" in install  # el intérprete de uv no queda en /root
     assert "ya lo usa otro servicio" in install and "ya sirve otra cosa" in install
@@ -366,7 +366,33 @@ def test_the_installer_is_safe_for_a_shared_vm():
     )  # el 8000 es de AeroControl: solo se nombra en comentarios
 
 
+def test_the_default_is_its_own_tailscale_node_not_the_main_one():
+    install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
+    assert (
+        'TS=(tailscale --socket="$NODE_SOCK")' in install
+        and "/run/tailscale-aeroacademy/tailscaled.sock" in install
+    )
+    assert (
+        '"${TS[@]}" serve --bg --https=443' in install
+    )  # el nodo propio sirve en su 443, no en el de AeroControl
+    assert "up --hostname=" in install and "AEROACADEMY_TS_AUTHKEY" in install
+    unit = (DEPLOY / "tailscaled-aeroacademy.service").read_text(encoding="utf-8")
+    assert "--state=/var/lib/tailscale-aeroacademy/tailscaled.state" in unit
+    assert "--socket=/run/tailscale-aeroacademy/tailscaled.sock" in unit
+    assert (
+        "--tun=userspace-networking" in unit and "--port=41642" in unit
+    )  # no choca con el tailscaled del sistema
+    assert "tailscale-aeroacademy" in unit and "funnel" not in unit.lower()
+
+
+def test_the_env_file_in_the_repo_wins_and_keeps_the_secret_key():
+    install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
+    assert 'cp "$SRC/deploy/centro.env" "$ENV_FILE"' in install and '"$ENV_FILE.bak"' in install
+    assert 'set_env SECRET_KEY "${OLD_SECRET:-$(new_secret)}"' in install
+    assert 'set_env ALLOWED_HOSTS "$DNSNAME"' in install  # el nombre real del nodo manda
+
+
 def test_the_env_template_carries_no_secret_and_the_real_file_is_ignored():
     text = (DEPLOY / "centro.env.plantilla").read_text(encoding="utf-8")
     assert "\nNIM_API_KEY=\n" in text and "nvapi-" not in text
-    assert "PUBLIC_HTTPS_PORT=8443" in text and "p340.tailccd107.ts.net" in text
+    assert "PUBLIC_HTTPS_PORT=443" in text and "aeroacademy.tailccd107.ts.net" in text

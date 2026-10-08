@@ -1,0 +1,17 @@
+[Unit]
+Description=Tailscale (nodo propio de AeroAcademy, solo tailnet)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Una segunda instancia de tailscaled, con su propio estado, socket y nombre: no toca la del sistema ni lo que
+# publique AeroControl. Va en modo «userspace» (sin interfaz de red nueva) y con otro puerto de WireGuard.
+ExecStart=/usr/sbin/tailscaled --state=/var/lib/tailscale-aeroacademy/tailscaled.state --socket=/run/tailscale-aeroacademy/tailscaled.sock --tun=userspace-networking --port=41642
+Restart=on-failure
+RestartSec=3
+RuntimeDirectory=tailscale-aeroacademy
+StateDirectory=tailscale-aeroacademy
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

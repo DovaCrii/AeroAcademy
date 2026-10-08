@@ -384,7 +384,9 @@ def test_finding2_the_health_check_sends_an_allowed_host():
 def test_finding12_deploy_details():
     install = (Path(settings.BASE_DIR) / "deploy" / "install.sh").read_text(encoding="utf-8")
     assert install.index("umask 077") < install.index('cat > "$ENV_FILE"')
-    assert "completado con" in install  # el nombre pasado al volver a correr se aplica
+    assert (
+        'set_env ALLOWED_HOSTS "$DNSNAME"' in install
+    )  # el nombre real del nodo se aplica al volver a correr
     backup = (Path(settings.BASE_DIR) / "deploy" / "backup.sh").read_text(encoding="utf-8")
     assert ".timeout 10000" in backup and "[ $? -eq 1 ]" in backup
 

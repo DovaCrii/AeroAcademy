@@ -21,7 +21,7 @@ El script es **idempotente**: sirve para instalar y para actualizar.
 4. Instala y activa `centro.service` (gunicorn en `127.0.0.1:8010`; el 8000 es de AeroControl) y dos tareas diarias:
    - `centro-backup.timer` (03:30): respaldo de la base y de los archivos privados.
    - `centro-expiry.timer` (07:00): `manage.py check_expirations`, que avisa de credenciales por vencer o vencidas y apaga las insignias que exigen vigencia.
-5. Comprueba `http://127.0.0.1:8010/healthz` y publica en un puerto HTTPS propio de la tailnet (`tailscale serve --bg --https=8443 http://127.0.0.1:8010`), sin tocar lo que ya sirva la VM.
+5. Comprueba `http://127.0.0.1:8010/healthz` y publica desde un **nodo Tailscale propio** (`aeroacademy.<tailnet>.ts.net`), sin tocar lo que ya sirva la VM.
 
 Después de editar `/etc/centro/env`: `sudo systemctl restart centro`.
 
