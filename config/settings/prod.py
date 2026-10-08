@@ -20,3 +20,6 @@ STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
+
+# Defensa extra: nunca se acepta identidad simulada en producción.
+DEV_REMOTE_USER = ""

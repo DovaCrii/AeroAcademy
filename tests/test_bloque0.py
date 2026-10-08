@@ -5,7 +5,6 @@ from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import connection
-from django.test import Client
 
 EXPECTED_APPS = {
     "core",
@@ -30,24 +29,24 @@ def test_all_project_apps_are_installed():
     assert EXPECTED_APPS <= {config.label for config in apps.get_app_configs()}
 
 
-def test_home_renders_with_brand():
-    response = Client().get("/")
+def test_home_renders_with_brand(member_client):
+    response = member_client.get("/")
     html = response.content.decode()
     assert response.status_code == 200
     assert "AeroAcademy" in html
     assert "Academia LEV Digital 101" in html
 
 
-def test_base_template_has_responsive_and_theme_hooks():
-    html = Client().get("/").content.decode()
+def test_base_template_has_responsive_and_theme_hooks(member_client):
+    html = member_client.get("/").content.decode()
     assert 'name="viewport"' in html
     assert 'id="themeBtn"' in html
     assert "core/tokens.css" in html
     assert 'lang="es"' in html
 
 
-def test_base_template_has_empty_slots_for_later_blocks():
-    html = Client().get("/").content.decode()
+def test_base_template_has_empty_slots_for_later_blocks(member_client):
+    html = member_client.get("/").content.decode()
     for slot in ("player", "bell"):
         assert f'data-slot="{slot}"' in html
 

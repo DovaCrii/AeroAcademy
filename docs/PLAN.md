@@ -38,8 +38,15 @@ certificado, que el moderador los valide y ver crecer XP, insignias y la hoja de
 
 **Acepta si:** `uv run pytest` pasa con una prueba de humo; la página base renderiza en claro y oscuro sin desborde a 390 px.
 
-## Bloque 1 · Identidad, roles y aprobación `[ ]`
+## Bloque 1 · Identidad, roles y aprobación `[x]`
 
+> **Hecho (2026-10-08).** Notas:
+> - `Person` (login de Tailscale, sin contraseña) con estado `pending`/`approved`/`suspended` y los campos de la hoja de personaje. Roles con grupos `member`/`lead`/`admin` (migración `0002`); el admin es superusuario y `lead` es el grupo.
+> - `TailscaleRemoteUserMiddleware`: IP no confiable → 403 (con o sin encabezado); sin encabezado → 401; `DEV_REMOTE_USER` solo con `DEBUG`. Django 5.2 ignora la respuesta de `process_request` en `__call__`, por eso se sobrescribe `__call__`.
+> - `ApprovalMiddleware`: `pending` solo ve `/espera/`; `suspended` recibe 403. Cola de aprobación en el admin (acciones aprobar, suspender y asignar rol; el rol solo cambia por `services.set_role`).
+> - **Todos** los de `BOOTSTRAP_ADMINS` quedan admin y aprobados (la doc decía "el primero").
+> - 45 pruebas en verde; `ruff` y migraciones desde cero en verde.
+> - **Pendiente:** `Person.discipline` es texto hasta el Bloque 2 (pasa a M2M con `Discipline`); el título elegido (`selected_title`) llega con gamification (Bloque 13/14); el aviso al moderador por persona nueva llega con notificaciones (Bloque 16).
 - `TailscaleRemoteUserMiddleware` según ARQUITECTURA (confianza solo desde `TRUSTED_PROXY_IPS`).
 - Modelo Person (con `status` y campos de hoja de personaje, ver MODELO_DATOS), grupos `member`/`lead`/`admin`, `BOOTSTRAP_ADMINS`, `DEV_REMOTE_USER` solo en dev.
 - Flujo `pending` → `approved`: página `/espera/` y cola mínima de aprobación en el admin de Django. La pantalla propia llega en el Bloque 16.

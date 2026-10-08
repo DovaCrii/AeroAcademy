@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Esperando aprobación{% endblock %}
+{% block nav %}{% endblock %}
+
+{% block content %}
+<section class="sheet">
+  <div class="sheet-in waiting">
+    <img class="teo-px" src="{% static 'game/teo/teo-neutral.svg' %}" width="96" height="96" alt="Teo, el asistente de la academia, saludando">
+    <div>
+      <h1>Esperando aprobación</h1>
+      <p class="lead">Hola, {{ user.name }}. Entraste a {{ BRAND_ACADEMY }} por la red del equipo, pero el moderador todavía no te aprueba.</p>
+      <p class="lead">Cuando lo haga, vas a ver las rutas, tu hoja de personaje y tu primera misión. Esta página se actualiza al recargar.</p>
+    </div>
+  </div>
+  <div class="tb">
+    <div><span class="cap">Persona</span><b>{{ user.login }}</b></div>
+    <div><span class="cap">Estado</span><b>{{ user.get_status_display }}</b></div>
+    <div><span class="cap">Rol</span><b>{{ user.role }}</b></div>
+    <div><span class="cap">Lámina</span><b>A-001</b></div>
+  </div>
+</section>
+{% endblock %}

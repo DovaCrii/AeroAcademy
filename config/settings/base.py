@@ -31,6 +31,7 @@ PROJECT_APPS = [
 ]
 
 INSTALLED_APPS = [
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -47,6 +48,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.accounts.middleware.TailscaleRemoteUserMiddleware",
+    "apps.accounts.middleware.ApprovalMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -82,7 +85,17 @@ DATABASES = {
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = []  # no hay contraseñas: la identidad viene de Tailscale (D2)
+# Identidad: Tailscale (D2). No hay contraseñas ni login propio.
+AUTH_USER_MODEL = "accounts.Person"
+AUTHENTICATION_BACKENDS = ["apps.accounts.backends.TailscaleBackend"]
+AUTH_PASSWORD_VALIDATORS = []
+
+# Solo estas IP pueden presentar el encabezado Tailscale-User-Login (proxy de `tailscale serve`).
+TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
+# Quien figure aquí entra aprobada y como admin (el moderador del proyecto).
+BOOTSTRAP_ADMINS = [e.lower() for e in env_list("BOOTSTRAP_ADMINS")]
+# Solo para desarrollo: simula la identidad. Se ignora si DEBUG es False.
+DEV_REMOTE_USER = os.environ.get("DEV_REMOTE_USER", "").strip().lower()
 
 LANGUAGE_CODE = "es"
 TIME_ZONE = "America/Santiago"
