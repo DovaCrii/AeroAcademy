@@ -176,6 +176,20 @@ case "$PUBLISH" in
   node)
     "${TS[@]}" serve --bg --https=443 "http://127.0.0.1:$PORT"
     "${TS[@]}" serve status || true
+    # El certificado se pide ahora y no en la primera visita: si falla, el navegador solo ve «conexión cerrada».
+    echo "==> Certificado HTTPS del nodo"
+    CERT_TMP="$(mktemp -d)"
+    if "${TS[@]}" cert --cert-file "$CERT_TMP/c.crt" --key-file "$CERT_TMP/c.key" "$HC_HOST" >"$CERT_TMP/out" 2>&1; then
+      echo "    certificado listo para $HC_HOST"
+    else
+      echo "    No se pudo emitir el certificado de $HC_HOST:" >&2
+      sed 's/^/      /' "$CERT_TMP/out" >&2
+      echo "    Revisa en la consola de Tailscale: DNS > HTTPS Certificates activado, y Machines > «aeroacademy» aprobada." >&2
+      echo "    Luego corre de nuevo el instalador, o  sudo ./deploy/diagnostico.sh  para ver el detalle." >&2
+      rm -rf "$CERT_TMP"
+      exit 1
+    fi
+    rm -rf "$CERT_TMP"
     echo "    Dirección: https://$HC_HOST"
     ;;
   serve)

@@ -408,3 +408,12 @@ def test_the_installer_does_not_copy_a_file_onto_itself_and_pins_python():
     for line in install.splitlines():
         if line.strip().startswith("install ") and "deploy/" in line:
             assert "/etc/systemd/system" in line or "$unit" in line, line
+
+
+def test_the_installer_issues_the_certificate_up_front():
+    """Error real en p340: el navegador veía ERR_CONNECTION_CLOSED en el nodo nuevo; el certificado se emite al instalar."""
+    install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
+    serve = install.index('"${TS[@]}" serve --bg --https=443')
+    cert = install.index('"${TS[@]}" cert --cert-file')
+    assert serve < cert < install.index('echo "    Dirección: https://$HC_HOST"\n    ;;')
+    assert "HTTPS Certificates" in install and "diagnostico.sh" in install
