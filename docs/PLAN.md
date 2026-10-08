@@ -166,13 +166,20 @@ ext, revisión con bloqueo y huella de versión (D26), no se revisa lo propio, a
 
 **Acepta si:** solo el dueño edita su hoja; no se puede elegir un título o un accesorio bloqueado (validación en el servidor); los atributos coinciden con las credenciales verificadas; no hay desborde a 390 px.
 
-## Bloque 12 · Portada Academia `[~]`
+## Bloque 12 · Portada Academia `[x]`
 
 > **12a · Bienvenida: hecha (2026-10-08).** Ventana de inicio según `design/academia/index.html`: hero con las
 > cinco disciplinas, saludo con el nombre, 7 módulos (con estado según su bloque), rutas por disciplina desde la
 > base, banda del equipo, **auspicio de Suite Aero** y valores. El auspicio también va en el pie de todas las páginas.
-> Pruebas en `tests/test_welcome.py`. **12b (pendiente):** XP y nivel en la cabecera, misión sugerida, Teo,
-> tablón del gremio y contadores vivos, cuando existan los bloques 13, 15 y 16.
+> Pruebas en `tests/test_welcome.py`.
+>
+> **12b · Datos vivos: hecha (2026-10-08).** Nivel, XP y título en la cabecera (Bloque 13) y, en la portada, la banda
+> «Tu misión sugerida» (sigue la campaña con más avance: próxima misión de una ruta estructurada, o el próximo curso
+> obligatorio sin certificado en una externa, saltando lo que está en revisión), Teo estático con su globo, el
+> **tablón del gremio** (insignias, campañas y certificados visibles al equipo de los últimos 7 días; nada privado) y
+> contadores (certificados por revisar para responsables; credenciales propias por vencer). Código en
+> `apps/core/dashboard.py`, pruebas en `tests/test_dashboard.py`. **Pendiente:** consultas abiertas (Bloque 10),
+> campana (Bloque 16) y el widget de Teo (Bloque 15).
 - Portada según `design/academia/index.html`:
   - disciplinas con fotos;
   - módulos enlazando a cada app;

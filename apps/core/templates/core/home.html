@@ -38,6 +38,34 @@
   </ul>
 </section>
 
+<section class="w-quest" id="mision" aria-labelledby="quest-h">
+  <div class="w-teo">
+    <img src="{% static 'game/teo/teo-idle.svg' %}" width="96" height="96" alt="Teo, el teodolito">
+    <p class="w-bubble">{% if mission %}¡Hola! Yo te sigo el paso. Esto es lo que te conviene hacer ahora.{% else %}¡Hola! Ya terminaste todas las campañas disponibles. Cuando haya rutas nuevas, te aviso.{% endif %}</p>
+  </div>
+  <div class="w-card w-mission">
+    <h2 id="quest-h" class="w-h3">Tu misión sugerida</h2>
+    {% if mission %}
+    <p class="w-mtitle"><a href="{{ mission.url }}">{{ mission.title }}</a></p>
+    <p class="w-mdetail">{{ mission.detail }}</p>
+    <div class="w-mbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ mission.pct }}"><i style="width:{{ mission.pct }}%"></i></div>
+    <small>{{ mission.pct }} % de la campaña</small>
+    {% else %}<p class="w-mdetail">No hay misiones pendientes.</p>{% endif %}
+    {% if player %}<p class="w-lvl"><b>NV {{ player.level }}</b> · {{ player.xp }} XP · faltan {{ player.to_next }} para el nivel {{ player.level|add:1 }}</p>{% endif %}
+  </div>
+  <div class="w-card w-board">
+    <h2 class="w-h3">Tablón del gremio <small>últimos {{ board.days }} días</small></h2>
+    {% if board.items %}
+    <ul>{% for it in board.items %}<li><time datetime="{{ it.when|date:'c' }}">{{ it.when|date:"d/m" }}</time> {{ it.text }}</li>{% endfor %}</ul>
+    {% else %}<p class="w-mdetail">Aún no hay logros esta semana. ¡Puedes abrir el tablón tú!</p>{% endif %}
+    <small>{{ board.weekly_xp }} XP ganados entre todos esta semana.</small>
+  </div>
+  <ul class="w-counters" aria-label="Pendientes">
+    {% if counters.to_review is not None %}<li><a href="{% url 'credentials:review_queue' %}"><b>{{ counters.to_review }}</b> certificados por revisar</a></li>{% endif %}
+    <li><a href="{% url 'credentials:mine' %}"><b>{{ counters.expiring }}</b> de tus credenciales por vencer</a></li>
+  </ul>
+</section>
+
 <section id="modulos" aria-labelledby="mod-h">
   <h2 id="mod-h" class="w-h2">Módulos</h2>
   <div class="w-mods">
