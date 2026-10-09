@@ -111,6 +111,31 @@ def init_new_person(person: Person) -> Person:
     return person
 
 
+def grant_access(login: str, role: str = "member") -> tuple[Person, bool]:
+    """Aprueba a una persona con un rol desde la consola de la VM (`manage.py aprobar`). Si aún no entra nunca,
+    queda creada y aprobada: al llegar por Tailscale con ese login entra directo. Devuelve (persona, creada)."""
+    login = normalize_login(login)
+    if "@" not in login or len(login) > 254:
+        raise ValueError(f"«{login}» no parece un login de Tailscale (correo).")
+    if role not in ROLES:
+        raise ValueError(f"Rol desconocido: {role}. Usa {', '.join(ROLES)}.")
+    person = Person.objects.filter(login=login).first()
+    created = person is None
+    if (
+        created
+    ):  # sin init_new_person: no hace falta avisar a los responsables de una solicitud ya resuelta
+        person = set_role(Person.objects.create_user(login=login), "member")
+    if person.status != PersonStatus.APPROVED:
+        approve(person)
+    if is_bootstrap_admin(login):
+        ensure_bootstrap(
+            person
+        )  # BOOTSTRAP_ADMINS siempre queda admin, pida lo que pida el comando
+    elif person.role != role:
+        set_role(person, role)
+    return person, created
+
+
 def sync_identity(person: Person, *, display_name: str = "", avatar_url: str = "") -> Person:
     """Actualiza nombre y foto desde los encabezados de Tailscale y reaplica BOOTSTRAP_ADMINS."""
     changed = []

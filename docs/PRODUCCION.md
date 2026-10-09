@@ -64,13 +64,32 @@ tailscale serve status                                           # lo de AeroCon
 
 Abre `https://aeroacademy.tailccd107.ts.net` desde un equipo de la tailnet: entras con tu correo y quedas como administradora. Las demás personas quedan pendientes hasta que las apruebes en **Moderación**.
 
+## 1b. Primer día: entrar, aprobar y dejarlo ordenado
+
+El instalador deja el atajo `sudo aeroacademy <comando>` (corre `manage.py` como `centro` con `/etc/centro/env`).
+
+**Quién eres para la academia.** La identidad es el **correo con que entras a Tailscale** (arriba a la derecha en la consola de Tailscale), no otro. Si la pantalla dice «Esperando aprobación» con tu correo, ese correo no está en `BOOTSTRAP_ADMINS`. Arréglalo desde la VM sin reinstalar:
+```bash
+sudo aeroacademy aprobar                                  # quién espera aprobación
+sudo aeroacademy aprobar tu@correo --rol admin            # aprobar y dar rol (member | lead | admin)
+```
+Sirve también **antes** de que alguien entre: queda aprobado y al llegar entra directo. Para que un correo nuevo (p. ej. `cmunoz@jej.cl`) pueda entrar, primero tiene que estar en la tailnet: consola de Tailscale → **Users → Invite users**, o comparte solo el equipo `aeroacademy` (**Machines → aeroacademy → Share**) con quien no deba ver el resto de la tailnet.
+
+**Dejarlo ordenado.** El instalador corre `puesta_en_marcha`: fija en el foro el hilo «Bienvenida… cómo empezar» (una sola vez) y muestra una lista de lo que falta (admins que aún no entran, pendientes, rutas publicadas, Teo). Puedes repetirlo cuando quieras:
+```bash
+sudo aeroacademy puesta_en_marcha
+```
+Cada persona ve en la portada **Primeros pasos** (hoja de personaje, primera misión, primer certificado, presentarse en el foro) hasta completarlos.
+
+**Ícono y acceso directo.** El sitio trae ícono y manifiesto de app: en Chrome/Edge, menú → **Instalar AeroAcademy** (o «Crear acceso directo»); en el celular, **Agregar a pantalla de inicio**. Abre como app, con el ícono de la academia, siempre que el equipo esté conectado a Tailscale.
+
 ## 2. Teo (el asistente)
 
 ```bash
-sudo -u centro bash -c 'set -a; . /etc/centro/env; set +a; cd /opt/aeroacademy; exec .venv/bin/python manage.py teo_probar'
+sudo aeroacademy teo_probar
 ```
 
-Muestra modelo, latencia y una respuesta de prueba, o explica el fallo (clave, límite, red o modelo). Si el español no sale bien, cambia `NIM_MODEL` en `/etc/centro/env` y `sudo systemctl restart centro`. El seguimiento semanal corre solo los lunes 09:00; para verlo ya: `manage.py teo_seguimiento` en el mismo comando.
+Muestra modelo, latencia y una respuesta de prueba, o explica el fallo (clave, límite, red o modelo). Teo pide a los modelos «de razonamiento» (Nemotron 3, Qwen 3) que no piensen en voz alta (`enable_thinking: false`) y descarta el razonamiento que se cuele; si un modelo solo devuelve razonamiento, pasa al siguiente de `NIM_MODEL_FALLBACKS`. Si la respuesta de prueba sale en inglés o con pasos («Here's a thinking process…»), corre `sudo aeroacademy teo_probar --buscar` y usa los modelos que marque. Si el español no sale bien, cambia `NIM_MODEL` en `/etc/centro/env` y `sudo systemctl restart centro`. El seguimiento semanal corre solo los lunes 09:00; para verlo ya: `manage.py teo_seguimiento` en el mismo comando.
 
 **La clave nunca va al repositorio.** Si se expuso (por ejemplo, pegada en un chat), créala de nuevo en build.nvidia.com, cámbiala en `deploy/centro.env` y vuelve a copiarlo y a correr el instalador (o edita `/etc/centro/env` y `sudo systemctl restart centro`), y revoca la vieja.
 
@@ -98,6 +117,8 @@ Ver «Importar los datos del prototipo» en `docs/OPERACION.md` (primero con `--
 | 400 «Invalid HTTP_HOST» | El nombre usado no está en `ALLOWED_HOSTS` (el instalador lo ajusta al nombre real del nodo) |
 | 403 «CSRF» al enviar un formulario | `PUBLIC_HTTPS_PORT` debe ser `443` en `/etc/centro/env` |
 | Teo «durmiendo» | Falta `NIM_API_KEY` o `BOT_ENABLED=false` |
+| Te quedas en «Esperando aprobación» | Tu correo de Tailscale no está en `BOOTSTRAP_ADMINS`: `sudo aeroacademy aprobar <correo> --rol admin` y recarga |
+| Teo responde en inglés o muestra «thinking process» | Actualiza (`git pull` + instalador) y `sudo aeroacademy teo_probar --buscar` |
 | Quieres quitar la publicación | `sudo tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve reset` (solo afecta al nodo propio) |
 | Volver atrás | `docs/OPERACION.md` → Respaldos → Restaurar |
 
@@ -107,7 +128,9 @@ Ver «Importar los datos del prototipo» en `docs/OPERACION.md` (primero con `--
 - [ ] `deploy/centro.env` revisado y copiado a la VM **antes** de instalar.
 - [ ] `sudo ./deploy/install.sh` terminó con «servicio OK» y `Dirección: https://aeroacademy…`.
 - [ ] `aerocontrol` sigue `active` y su dirección sigue funcionando.
-- [ ] Entras por `https://aeroacademy.tailccd107.ts.net` como administradora.
+- [ ] Entras por `https://aeroacademy.tailccd107.ts.net` como administradora (si no: `sudo aeroacademy aprobar <tu correo de Tailscale> --rol admin`).
+- [ ] `sudo aeroacademy puesta_en_marcha` sin avisos «!» que no esperabas; el hilo de bienvenida está fijado en el foro.
+- [ ] El equipo está invitado a la tailnet (o tiene compartido el equipo `aeroacademy`) y aprobado.
 - [ ] `teo_probar` en verde (o Teo durmiendo a propósito).
 - [ ] Un respaldo a mano: `sudo -u centro /opt/aeroacademy/deploy/backup.sh`.
 - [ ] Probaste restaurarlo en una copia (una vez, antes de confiar en él).

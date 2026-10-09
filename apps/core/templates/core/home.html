@@ -40,6 +40,15 @@
   </ul>
 </section>
 
+{% if first_steps %}
+<section class="w-steps" aria-labelledby="steps-h">
+  <h2 id="steps-h" class="w-h3">Primeros pasos</h2>
+  <ol>
+    {% for s in first_steps %}<li{% if s.done %} class="done"{% endif %}><a href="{{ s.url }}">{{ s.text }}</a>{% if s.done %}<span class="w-status">Listo</span>{% endif %}</li>{% endfor %}
+  </ol>
+</section>
+{% endif %}
+
 <section class="w-quest" id="mision" aria-labelledby="quest-h">
   <div class="w-teo">
     <img src="{% static 'game/teo/teo-idle.svg' %}" width="96" height="96" alt="Teo, el teodolito">
@@ -123,9 +132,13 @@
   </div>
   <ul class="w-suite-list">
     {% for s in suite %}
-    <li>
-      {% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener"><b>{{ s.name }}</b></a>{% else %}<b>{{ s.name }}</b>{% endif %}
-      <span>{{ s.blurb }}</span>
+    <li class="w-app {{ s.status }}">
+      <svg class="i" aria-hidden="true"><use href="#{{ s.icon }}"/></svg>
+      <div>
+        {% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener"><b>{{ s.name }}</b></a>{% else %}<b>{{ s.name }}</b>{% endif %}
+        <em class="w-status">{% if s.status == "active" %}Activa{% else %}En desarrollo{% endif %}</em>
+        <span>{{ s.blurb }}</span>
+      </div>
     </li>
     {% endfor %}
   </ul>

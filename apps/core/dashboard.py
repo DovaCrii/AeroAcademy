@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from apps.accounts.models import Person, PersonStatus
 from apps.community import forum, moderation
+from apps.community.models import Post, Thread
 from apps.credentials import services as credential_services
 from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
@@ -152,3 +153,31 @@ def counters(person):
         out["pending_people"] = Person.objects.filter(status=PersonStatus.PENDING).count()
         out["open_reports"] = moderation.open_reports().count()
     return out
+
+
+def first_steps(person):
+    """Lista de primeros pasos para quien recién llega. Desaparece cuando cumple los cuatro."""
+    steps = [
+        {
+            "text": "Completa tu hoja de personaje",
+            "url": reverse("gamification:edit_sheet"),
+            "done": bool(person.headline or person.character_class),
+        },
+        {
+            "text": "Marca tu primera misión en una ruta",
+            "url": reverse("paths:index"),
+            "done": MilestoneCheck.objects.filter(person=person).exists(),
+        },
+        {
+            "text": "Sube tu primer certificado",
+            "url": reverse("credentials:create"),
+            "done": Credential.objects.filter(owner=person).exists(),
+        },
+        {
+            "text": "Preséntate en el foro",
+            "url": reverse("community:forum"),
+            "done": Thread.objects.filter(author=person).exists()
+            or Post.objects.filter(author=person).exists(),
+        },
+    ]
+    return None if all(s["done"] for s in steps) else steps

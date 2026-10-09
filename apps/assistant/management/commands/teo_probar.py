@@ -39,14 +39,17 @@ class Command(BaseCommand):
         if options["modelos"]:
             return self._models()
         messages = [
-            {"role": "system", "content": "Responde en español, en una frase corta."},
+            {
+                "role": "system",
+                "content": "Responde en español, en una frase corta. Entrega solo la respuesta final, sin tu razonamiento.",
+            },
             {
                 "role": "user",
                 "content": "Preséntate como Teo, el asistente de una academia de ingeniería.",
             },
         ]
         try:
-            text, tokens, latency = client.chat(messages, max_tokens=80)
+            text, tokens, latency = client.chat(messages, max_tokens=300)
         except client.BotError as exc:
             extra = f" HTTP {exc.status}: {exc.detail}." if exc.status else ""
             raise CommandError(f"Falló ({exc.code}).{extra} {HINTS.get(exc.code, '')}") from exc
@@ -95,11 +98,15 @@ class Command(BaseCommand):
             ),
         )[:MAX_PROBES]
         self.stdout.write(f"Probando hasta {len(ranked)} modelos de conversación…")
-        probe = [{"role": "user", "content": "Responde solo: hola"}]
+        # Con espacio para una frase: así se descartan los que solo devuelven razonamiento (bad_response).
+        probe = [
+            {"role": "system", "content": "Responde en español, sin mostrar tu razonamiento."},
+            {"role": "user", "content": "Responde solo: hola"},
+        ]
         working = []
         for model in ranked:
             try:
-                _, _, latency = client.chat_with(model, probe, max_tokens=5)
+                _, _, latency = client.chat_with(model, probe, max_tokens=60)
             except client.BotError as exc:
                 self.stdout.write(f"  ✘ {model}  ({exc.status or exc.code})")
                 continue

@@ -26,7 +26,8 @@
       ],
       "external_courses": [
         {"key": "ms-c0", "order": 0, "title": "Bentley Accredited MicroStation User", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/learning-plans/519/bentley-accredited-microstation-user", "duration_text": "9 h 30 min · 13 cursos", "reward": "relic", "is_required": true, "skills": ["dibujo-2d", "celdas", "anotacion", "laminas"], "contains": ["Ch. 1: Introduction to MicroStation CONNECT Edition", "Ch. 2: Controlling the Display of Designs for Civil Designers", "Ch. 3: Using General Tools in MicroStation CONNECT Edition for the Civil Designer", "Ch. 4: Drawing with MicroStation for Civil Designers", "Ch. 5: Additional Drawing Tools", "Ch. 6: Manipulating and Modifying Elements for Civil Designers", "Ch. 7: Working with Cells for Civil Designers", "Ch. 8: Annotating Designs for Civil Designers", "Ch. 9: Composing Sheets for Civil Designers", "Ch. 10: Printing and Publishing for Civil Designers", "Bentley Accredited MicroStation User - Assessment"]},
-        {"key": "ms-c1", "order": 1, "title": "Bentley Accredited MicroStation Professional", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "33 h · 2 cursos", "reward": "relic", "is_required": false, "skills": ["modelado-3d", "dibujo-2d"]}
+        {"key": "ms-c1", "order": 1, "title": "Bentley Accredited MicroStation Professional", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "33 h · 2 cursos", "reward": "relic", "is_required": false, "skills": ["modelado-3d", "dibujo-2d"]},
+        {"key": "ms-c2", "order": 2, "title": "MicroStation Basics", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/11", "verify_url": true, "duration_text": "7,5 CEU", "reward": "trophy", "is_required": false, "skills": ["dibujo-2d"]}
       ]
     },
     {

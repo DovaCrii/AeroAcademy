@@ -61,12 +61,28 @@ def list_models():
 
 
 _THINK = re.compile(r"<think>.*?(</think>|$)", re.S | re.I)
+_UP_TO_CLOSE = re.compile(r"^.*</think>", re.S | re.I)
+# Razonamiento sin etiquetas (visto en p340 con Nemotron 3.5: «Here's a thinking process: 1. Analyze…»).
+_LEAKED = re.compile(
+    r"^\W*(here'?s (a|my) thinking process|thinking process|okay,? (so )?(the user|let me|i need)|let me think"
+    r"|we need to|the user (is asking|wants|asks|said)|analy[sz]e the (user|request))",
+    re.I,
+)
+NO_THINK = {
+    "chat_template_kwargs": {"enable_thinking": False}
+}  # apaga el razonamiento de Nemotron 3 y Qwen 3
+_no_think_rejected = (
+    set()
+)  # modelos que respondieron 400/422 a NO_THINK: se les pregunta sin la opción
 
 
 def strip_reasoning(text):
     """Los modelos de «razonamiento» (p. ej. Nemotron 3) pueden devolver su pensamiento entre <think>…</think>:
-    a la persona solo le llega la respuesta final. Un <think> sin cerrar se descarta entero."""
-    return _THINK.sub("", text).strip()
+    a la persona solo le llega la respuesta final. Un <think> sin cerrar se descarta entero; un </think> suelto
+    (la plantilla abrió el <think> en el prompt) descarta todo lo anterior; y un razonamiento sin etiquetas deja la
+    respuesta vacía, para que `chat` pruebe el siguiente modelo."""
+    text = _UP_TO_CLOSE.sub("", _THINK.sub("", text)).strip()
+    return "" if _LEAKED.match(text) else text
 
 
 def is_configured() -> bool:
@@ -84,7 +100,8 @@ def chat(messages, *, max_tokens=500):
         try:
             return _chat_once(model, messages, max_tokens)
         except BotError as exc:
-            gone = exc.code == "http" and exc.status in MODEL_GONE
+            # Modelo retirado, o respuesta inservible (vacía o solo razonamiento): se prueba el siguiente.
+            gone = (exc.code == "http" and exc.status in MODEL_GONE) or exc.code == "bad_response"
             tried.append(f"{model} → HTTP {exc.status}" if exc.status else f"{model} → {exc.code}")
             if not gone or index == len(models) - 1:
                 if len(tried) > 1:
@@ -100,11 +117,13 @@ def chat_with(model, messages, *, max_tokens=500):
 
 def _chat_once(model, messages, max_tokens):
     global last_model
+    with_option = model not in _no_think_rejected
     payload = {
         "model": model,
         "messages": messages,
         "temperature": 0.3,
         "max_tokens": max_tokens,
+        **(NO_THINK if with_option else {}),
     }
     headers = {
         "Authorization": f"Bearer {settings.NIM_API_KEY}",
@@ -125,6 +144,11 @@ def _chat_once(model, messages, max_tokens):
         raise BotError("auth")
     if response.status_code == 429:
         raise BotError("rate")
+    if response.status_code in (400, 422) and with_option:
+        _no_think_rejected.add(
+            model
+        )  # el modelo no acepta la opción: se repite la pregunta sin ella
+        return _chat_once(model, messages, max_tokens)
     if response.status_code >= 400:
         raise BotError("http", response.status_code, _error_detail(response))
     try:
