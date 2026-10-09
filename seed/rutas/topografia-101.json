@@ -738,7 +738,8 @@
         "Entiendes por qué se cierra una poligonal"
       ],
       "images": [
-        "core/img/topo/estacion-total.svg"
+        "core/img/topo/estacion-total.svg",
+        "core/img/topo/nivel-poligonal.svg"
       ]
     },
     {
@@ -897,7 +898,8 @@
         "Identificas al menos tres fuentes de error GNSS"
       ],
       "images": [
-        "core/img/topo/gnss-rtk.svg"
+        "core/img/topo/gnss-rtk.svg",
+        "core/img/topo/gnss-metodos.svg"
       ]
     },
     {
@@ -1109,7 +1111,8 @@
       ],
       "images": [
         "core/img/topo/tls-slam-dron.svg",
-        "core/img/topo/flujo-fotogrametria.svg"
+        "core/img/topo/flujo-fotogrametria.svg",
+        "core/img/topo/captura-foto-lidar.svg"
       ]
     },
     {
@@ -1817,9 +1820,9 @@
         "Lees un informe de fotogrametría y detectas lo que falta"
       ],
       "images": [
-        "core/img/topo/flujo-fotogrametria.svg",
         "core/img/topo/gsd-traslape.svg",
-        "core/img/topo/puntos-control.svg"
+        "core/img/topo/puntos-control.svg",
+        "core/img/topo/aerotriangulacion.svg"
       ]
     },
     {

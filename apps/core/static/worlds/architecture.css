@@ -204,3 +204,96 @@ body.world-architecture.fl-tra{--acc:#8793A6;--fill:#8793A6}
 @media (max-width:860px){.ar-cover .lv-in{padding-top:230px}}
 
 .ar-cover .lv-in{padding-top:186px}
+
+/* ===== Panel de nivel: ritmo vertical, secciones numeradas y acordeones (sin JS) ===== */
+.ar-hero>*{min-width:0}
+.ar-viewer{align-items:start}
+@media (max-width:980px){.ar-hero{grid-template-columns:minmax(0,1fr)}}
+.ar-browser{position:sticky;top:72px;max-height:calc(100vh - 88px);overflow-y:auto;align-self:start}
+.ar-lv{padding:14px 16px;gap:6px 12px;transition:background .15s}
+.ar-lv[aria-current="page"]{background:color-mix(in srgb,var(--acc) 11%,var(--sheet));box-shadow:inset 5px 0 0 var(--acc)}
+.ar-lv[aria-current="page"] .nm{font-weight:800}
+.ar-lv .bar{height:4px;margin-top:2px}
+.ar-lv:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+
+.ar-phead{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"elev title nav" "prog prog prog";gap:14px 22px;align-items:center;padding:28px 32px 22px}
+.ar-phead .elev{grid-area:elev;align-self:start}
+.ar-ptitle{grid-area:title;min-width:0}
+.ar-phead h3{font-size:clamp(22px,2.4vw,28px);line-height:1.15;margin:0 0 8px}
+.ar-phead .meta{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--ink-2)}
+.ar-phead .meta .k{font:600 11px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--acc) 70%,var(--ink));margin-right:4px}
+.pnav{grid-area:nav;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.ar-prog{grid-area:prog;height:8px;border:1px solid var(--line);background:var(--sheet-2);border-radius:99px;overflow:hidden}
+.ar-prog i{display:block;height:100%;background:var(--acc);border-radius:99px;min-width:0}
+.ar-panel.complete .ar-prog i{background:var(--ok)}
+
+.ar-stack{display:grid;gap:28px;padding:28px 32px 40px}
+.ar-stack>*{min-width:0}
+.ar-sec,.ar-acc{border:1px solid var(--line);background:var(--sheet);position:relative}
+.ar-sec{padding:20px 24px 22px}
+.ar-sh{display:flex;align-items:center;gap:10px;margin:0;font-weight:700;font-stretch:92%;font-size:18px;line-height:1.2}
+.ar-sh .sn{font:600 12px var(--font-mono);letter-spacing:.1em;color:color-mix(in srgb,var(--acc) 75%,var(--ink))}
+.ar-sh .ic{width:20px;height:20px;flex:none;color:color-mix(in srgb,var(--acc) 75%,var(--ink))}
+.ar-sh .cnt{margin-left:auto;min-width:26px;text-align:center;padding:2px 9px;border:1px solid var(--acc);border-radius:99px;font:700 12px var(--font-mono);color:var(--ink);background:color-mix(in srgb,var(--acc) 14%,transparent)}
+.ar-sec>.ar-sh{margin-bottom:14px}
+.ar-goal{margin:0;padding:14px 18px;font-size:16px;line-height:1.55;max-width:70ch;background:color-mix(in srgb,var(--acc) 8%,var(--sheet-2))}
+.ar-sub-h{margin:20px 0 8px;font:600 11.5px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.ar-look{margin:0;padding-left:20px;font-size:15px;line-height:1.55;max-width:70ch}
+.ar-look li{margin:6px 0}
+
+.ar-acc>summary{list-style:none;cursor:pointer;padding:16px 24px;min-height:44px}
+.ar-acc>summary::-webkit-details-marker{display:none}
+.ar-acc>summary::after{content:"+";flex:none;width:22px;text-align:center;font:700 18px var(--font-mono);color:var(--ink-2)}
+.ar-acc[open]>summary::after{content:"\2212"}
+.ar-acc>summary:hover{background:var(--sheet-2)}
+.ar-acc>summary:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.ar-acc[open]>summary{border-bottom:1px solid var(--hair)}
+.ar-acc-body{padding:18px 24px 22px}
+.ar-acc-body .ar-res,.ar-acc-body .ar-checks,.ar-acc-body .ar-quiz{max-width:70ch}
+
+.ar-res li{padding:14px 0}
+.ar-res .d{font-size:14.5px;line-height:1.5;margin-top:4px}
+.ar-res .chips{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.ar-r{gap:16px}
+.ar-more{margin-top:6px;border-top:1px dashed var(--line);max-width:70ch}
+.ar-more>summary{cursor:pointer;list-style:none;padding:12px 0;font:600 13px var(--font-mono);letter-spacing:.05em;color:color-mix(in srgb,var(--acc) 75%,var(--ink));min-height:44px;display:flex;align-items:center}
+.ar-more>summary::-webkit-details-marker{display:none}
+.ar-more .m-out,.ar-more[open] .m-in{display:none}
+.ar-more[open] .m-out{display:inline}
+.ar-more>summary::before{content:"+ ";margin-right:6px}
+.ar-more[open]>summary::before{content:"\2212 "}
+
+.ar-checks{padding:8px 16px;border-radius:0}
+.ar-checks li+li{border-top:1px solid var(--hair)}
+.ar-check{padding:11px 0;font-size:15.5px;line-height:1.45;min-height:44px}
+.ar-check .box{margin-top:1px}
+.ar-q{margin:0 0 22px;padding-bottom:20px;border-bottom:1px dashed var(--line)}
+.ar-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
+.ar-q p{font-size:16px;line-height:1.45;margin:0 0 10px;display:flex;gap:10px}
+.ar-q .qn{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#10161F;font:700 12px var(--font-mono)}
+.ar-opts{gap:8px}
+.ar-opts button{font-size:15px;padding:9px 14px;min-height:40px;line-height:1.35}
+.ar-fb{font-size:14.5px;line-height:1.5;margin-top:10px;padding:10px 14px;border-left:3px solid var(--acc);background:var(--sheet-2)}
+.ar-badge{margin:0;padding:12px 18px;border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.ar-notes .notes-mini{margin:0;border:0;padding:0}
+.ar-stack .gd{margin:0}
+
+@media (max-width:980px){
+  .ar-browser{position:static;max-height:none;overflow-y:visible}
+  .ar-lv{min-width:170px}
+  .ar-lv[aria-current="page"]{box-shadow:inset 0 -4px 0 var(--acc)}
+  .ar-phead{padding:22px 22px 18px}
+  .ar-stack{padding:22px 22px 32px}
+}
+@media (max-width:560px){
+  .ar-phead{grid-template-columns:auto minmax(0,1fr);grid-template-areas:"elev title" "nav nav" "prog prog";padding:18px 16px 14px;gap:12px 14px}
+  .ar-phead .elev{font-size:46px}
+  .ar-phead .meta{flex-direction:column;gap:3px}
+  .pnav .btn{flex:1 1 130px;justify-content:center;text-align:center;min-height:44px}
+  .ar-stack{padding:18px 10px 28px;gap:22px}
+  .ar-sec{padding:16px 16px 18px}
+  .ar-acc>summary{padding:14px 16px}
+  .ar-acc-body{padding:14px 16px 18px}
+  .ar-sh{font-size:16.5px;gap:8px}
+  .ar-r{grid-template-columns:1fr;gap:8px}
+}

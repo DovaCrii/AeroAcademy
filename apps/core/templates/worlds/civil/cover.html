@@ -9,11 +9,12 @@
   <div class="lv-frame">
     <span class="lv-cap">Infraestructura digital · {{ path.vendor.name }}</span>
     <b class="lv-title">{{ path.title }}</b>
-    <span class="lv-cap">km 0+000 → puente · {{ stats.chapters }} corredores</span>
-    {% vendor_family path as vf %}<span class="lv-tiles vf-{{ vf }}">{% path_tiles path "md" %}</span>
+    <span class="lv-cap">{% if path.slug == "bentley-learn" %}km 0+000 → puente · {% endif %}{{ stats.chapters }} corredor{{ stats.chapters|pluralize:"es" }}</span>
   </div>
   <div class="lv-in">
-    <h1>Del km 0+000 <em>al puente</em></h1>
+    {% vendor_family path as vf %}<span class="lv-tiles lv-tiles-in vf-{{ vf }}">{% path_tiles path "md" %}</span>
+    {# La metáfora del puente es de la ruta troncal (MicroStation → OpenRoads → OpenBridge); el resto usa su nombre. #}
+    {% if path.slug == "bentley-learn" %}<h1>Del km 0+000 <em>al puente</em></h1>{% else %}<h1>{{ path.title|cut:"Ruta " }} <em>paso a paso</em></h1>{% endif %}
     <p class="lv-lead">{{ path.description }}</p>
   </div>
   <div class="lv-scale">ESCALA 1:1000<i></i></div>

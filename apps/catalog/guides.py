@@ -50,12 +50,40 @@ def guide_context(path, current):
         if lr.resource.title == target and lr.resource.url:
             link = lr.resource
             break
+    images = images_for(path.slug, current["level"].code)
     return {
         "guide": guide,
         "essential": link,
         "code": current["level"].code,
-        "images": images_for(path.slug, current["level"].code),
+        "images": images,
+        "figures": [{"src": i, "caption": image_title(i)} for i in images],
     }
+
+
+_TITLE = re.compile(r"<title[^>]*>(.*?)</title>", re.S | re.I)
+_TITLES = {}
+
+
+def image_title(image):
+    """Texto del <title> del SVG (pie de figura y alt); vacío si no hay o no se encuentra."""
+    if image in _TITLES:
+        return _TITLES[image]
+    text = ""
+    try:
+        from django.contrib.staticfiles import finders
+
+        found = finders.find(image)
+        if found:
+            head = Path(found).read_text(encoding="utf-8")[:4000]
+            m = _TITLE.search(head)
+            if m:
+                text = re.sub(r"\s+", " ", m.group(1)).strip()
+                if len(text) > 150:
+                    text = text[:150].rsplit(" ", 1)[0].rstrip(",;:. ") + "…"
+    except (OSError, ValueError):
+        text = ""
+    _TITLES[image] = text
+    return text
 
 
 def images_for(path_slug, level_code):

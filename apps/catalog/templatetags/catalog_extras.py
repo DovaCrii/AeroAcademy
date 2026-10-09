@@ -24,10 +24,11 @@ def vendor_family(path):
 
 
 @register.inclusion_tag("catalog/partials/guide.html")
-def level_guide(path, current):
+def level_guide(path, current, num=""):
     """Tarjeta «Guía rápida» del nivel (vacía si la ruta no trae guía para ese nivel)."""
     ctx = guides.guide_context(path, current) or {}
     ctx["flavour"] = software.discipline_key(path)
+    ctx["num"] = num
     return ctx
 
 
