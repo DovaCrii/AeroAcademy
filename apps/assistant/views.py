@@ -7,7 +7,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.community.models import Thread
 
-from . import context, quick, services
+from . import context, faq, quick, services
 from . import search as search_module
 from .search import HELP_DIR
 
@@ -94,17 +94,23 @@ HELP_KINDS = {"help", "path", "glossary", "resource", "article", "document"}
 
 def help_index(request):
     query = request.GET.get("q", "").strip()[:100]
+    faq_hits, guide_hits = faq.search(query) if query else ([], [])
     results = (
         [h for h in search_module.search(query, limit=12) if h["kind"] in HELP_KINDS]
         if query
         else []
     )
-    items = []
-    for p in sorted(HELP_DIR.glob("*.md")):
-        title = p.read_text(encoding="utf-8").splitlines()[0].lstrip("# ").strip()
-        items.append({"slug": p.stem, "title": title})
     return render(
         request,
         "assistant/help_index.html",
-        {"items": items, "q": query, "results": results, "awake": services.enabled()},
+        {
+            "topics": faq.topics(),
+            "items": faq.guides(),
+            "q": query,
+            "faq_hits": faq_hits,
+            "guide_hits": guide_hits,
+            "results": results,
+            "no_results": bool(query) and not (faq_hits or guide_hits or results),
+            "awake": services.enabled(),
+        },
     )

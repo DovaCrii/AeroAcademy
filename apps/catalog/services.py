@@ -1,8 +1,12 @@
+from django.conf import settings
 from django.db.models import Case, IntegerField, Prefetch, Q, Value, When
 
 from .models import Resource
 
 ESSENTIAL = "Esencial"
+GENERAL_TAG = "Conocimiento general"
+GENERAL_VENDOR = "aeroacademy"
+GENERAL_DISCIPLINE = "transversal"
 
 
 def essential_ids():
@@ -10,6 +14,36 @@ def essential_ids():
     return [
         pk for pk, tags in Resource.objects.values_list("pk", "tags") if ESSENTIAL in (tags or [])
     ]
+
+
+def general_ids():
+    """Recursos con la etiqueta «Conocimiento general» (cultura base de BIM y topografía, para todo el equipo)."""
+    return [
+        pk for pk, tags in Resource.objects.values_list("pk", "tags") if GENERAL_TAG in (tags or [])
+    ]
+
+
+def general_paths_queryset():
+    """Rutas de conocimiento general: estructuradas y publicadas, de la plataforma interna, vendor `aeroacademy`
+    y disciplina transversal. Es la única definición: insignias y catálogo la comparten (docs/GAMIFICACION.md)."""
+    from apps.paths.models import LearningPath
+
+    return LearningPath.objects.filter(
+        is_published=True,
+        kind=LearningPath.Kind.STRUCTURED,
+        platform__slug__in=list(getattr(settings, "INTERNAL_PLATFORMS", ())),
+        vendor__slug=GENERAL_VENDOR,
+        disciplines__slug=GENERAL_DISCIPLINE,
+    ).distinct()
+
+
+def general_paths():
+    return list(
+        general_paths_queryset()
+        .select_related("vendor", "platform")
+        .prefetch_related("products", "disciplines")
+        .order_by("title")
+    )
 
 
 def published_paths_for(resource_ids):
@@ -34,11 +68,13 @@ def published_paths_for(resource_ids):
 
 def resource_queryset(
     *, platform="", kind="", free=False, cert=False, q="", product="", path="", essential=False,
-    ids=None,
+    general=False, ids=None,
 ):  # fmt: skip
     qs = Resource.objects.select_related("platform__vendor").prefetch_related(
         Prefetch("skills"), "products"
     )
+    # Solo lo que sigue en alguna ruta: lo quitado de una semilla queda en la base, pero ya no se ofrece.
+    qs = qs.filter(Q(level_links__isnull=False) | Q(external_courses__retired=False))
     if ids is not None:
         qs = qs.filter(pk__in=ids)
     if platform:
@@ -59,6 +95,8 @@ def resource_queryset(
     ess_ids = essential_ids()
     if essential:
         qs = qs.filter(pk__in=ess_ids)
+    if general:
+        qs = qs.filter(pk__in=general_ids())
     if q:
         words = q.split()[:6]
         for word in words:  # cada palabra debe aparecer en algún campo: «revit familias» encuentra más que la frase exacta

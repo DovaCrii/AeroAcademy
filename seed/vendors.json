@@ -5,7 +5,8 @@
     {"slug": "civil-estructural", "name": "Civil-Estructural", "default_world": "civil", "order": 1},
     {"slug": "topografia", "name": "Topografía", "default_world": "survey", "order": 2},
     {"slug": "mecanica", "name": "Mecánica", "default_world": "mechanical", "order": 3},
-    {"slug": "captura-rpa", "name": "Captura / RPA", "default_world": "aero", "order": 4}
+    {"slug": "captura-rpa", "name": "Captura / RPA", "default_world": "aero", "order": 4},
+    {"slug": "transversal", "name": "Transversal", "default_world": "civil", "order": 5}
   ],
   "vendors": [
     {
@@ -15,7 +16,9 @@
         {"slug": "forma", "name": "Forma", "disciplines": ["arquitectura"]},
         {"slug": "civil-3d", "name": "Civil 3D", "disciplines": ["civil-estructural", "topografia"]},
         {"slug": "recap", "name": "ReCap Pro", "disciplines": ["topografia", "captura-rpa"]},
-        {"slug": "navisworks", "name": "Navisworks", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]}
+        {"slug": "navisworks", "name": "Navisworks", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]},
+        {"slug": "autocad", "name": "AutoCAD", "disciplines": ["transversal"]},
+        {"slug": "plant-3d", "name": "AutoCAD Plant 3D", "disciplines": ["mecanica"]}
       ]
     },
     {
@@ -30,7 +33,10 @@
         {"slug": "staad", "name": "STAAD", "disciplines": ["civil-estructural"]},
         {"slug": "synchro", "name": "SYNCHRO", "disciplines": ["civil-estructural", "arquitectura"]},
         {"slug": "projectwise", "name": "ProjectWise", "disciplines": ["arquitectura", "civil-estructural", "mecanica"]},
-        {"slug": "itwin-capture", "name": "iTwin Capture Modeler", "disciplines": ["topografia", "captura-rpa"]}
+        {"slug": "itwin-capture", "name": "iTwin Capture Modeler", "disciplines": ["topografia", "captura-rpa"]},
+        {"slug": "openplant", "name": "OpenPlant", "disciplines": ["mecanica"]},
+        {"slug": "itwin", "name": "iTwin", "disciplines": ["civil-estructural", "arquitectura", "mecanica"]},
+        {"slug": "lumenrt", "name": "LumenRT", "disciplines": ["arquitectura", "civil-estructural"]}
       ]
     },
     {
@@ -45,6 +51,10 @@
       "products": [
         {"slug": "arcgis-pro", "name": "ArcGIS Pro", "disciplines": ["topografia", "civil-estructural"]}
       ]
+    },
+    {
+      "slug": "aeroacademy", "name": "AeroAcademy (cursos internos)", "url": "", "order": 9,
+      "products": []
     },
     {
       "slug": "dji", "name": "DJI", "url": "https://www.dji.com/", "order": 4,

@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 from types import SimpleNamespace
+from xml.etree import ElementTree
 
 import pytest
 from django.conf import settings
@@ -41,6 +42,18 @@ def fake(title, kind="module", tags=()):
         ("Bentley Accredited BIM Modeler: Basic Architectural Modeling with OpenBuildings", ["openbuildings"]),
         ("Catálogo MicroStation en Bentley Learn", ["microstation"]),
         ("Introduction to BIM for civil design and engineering", ["civil3d"]),
+        ("Using ProjectWise Explorer", ["projectwise"]),
+        ("OpenFlows WaterGEMS basics", ["openflows"]),
+        ("STAAD structural analysis", ["staad"]),
+        ("iTwin Capture Modeler for reality meshes", ["itwin-capture"]),
+        ("Getting started with iTwin", ["itwin"]),
+        ("SYNCHRO 4D scheduling", ["synchro"]),
+        ("LumenRT renders", ["lumenrt"]),
+        ("OpenPlant piping", ["openplant"]),
+        ("InfraWorks conceptual design", ["infraworks"]),
+        ("Operaciones con drones RPAS", ["dgac"]),
+        ("AutoCAD Plant 3D piping", ["plant-3d"]),
+        ("AutoCAD basics", ["autocad"]),
         ("Algo sin software", []),
     ],
 )  # fmt: skip
@@ -50,10 +63,68 @@ def test_title_keywords_map_to_tiles(title, expected):
 
 def test_every_tile_has_an_svg_file():
     root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
-    assert len(software.TILES) == 14
+    assert len(software.TILES) == 26
     for tile in software.TILES.values():
         assert (root / tile.static_path).is_file(), tile.slug
         assert static(tile.static_path)
+        ElementTree.parse(root / tile.static_path)  # SVG bien formado (sin atributos duplicados)
+
+
+def test_tiles_have_a_family_and_every_tile_has_a_row():
+    by_family = {}
+    for t in software.TILES.values():
+        by_family.setdefault(t.family, set()).add(t.slug)
+    assert by_family[software.AUTODESK] == {
+        "revit", "civil3d", "autocad", "forma", "acc", "navisworks", "recap", "dynamo", "infraworks", "plant-3d",
+    }  # fmt: skip
+    assert by_family[software.BENTLEY] == {
+        "microstation", "openroads", "openbridge", "openbuildings", "openplant", "openflows", "staad",
+        "itwin", "lumenrt", "projectwise", "itwin-capture", "synchro", "descartes",
+    }  # fmt: skip
+    assert by_family[software.INTERNAL] == {"tbc", "gis", "dgac"}
+    assert set(software.ROW_ORDER) == set(software.TILES)
+
+
+def test_autodesk_tiles_have_letter_and_code_and_bentley_are_pictograms():
+    root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
+    for t in software.TILES.values():
+        svg = (root / t.static_path).read_text(encoding="utf-8")
+        if t.family == software.AUTODESK:
+            assert (
+                f">{t.code}</text>" in svg and svg.count("<text") == 3
+            )  # letra (con sombra) + código
+        elif t.family == software.BENTLEY:
+            assert "<text" not in svg  # pictograma blanco, sin texto
+
+
+def test_vendor_sections_split_rows_by_family(seeded):
+    resources = list(
+        Resource.objects.select_related("platform__vendor").prefetch_related("products")
+    )
+    sections = software.vendor_sections(software.group_by_software(resources))
+    keys = [s["key"] for s in sections]
+    order = [software.AUTODESK, software.BENTLEY, software.INTERNAL]
+    assert keys == sorted(keys, key=order.index)
+    assert "autodesk" in keys and "bentley" in keys
+    bentley = next(s for s in sections if s["key"] == "bentley")
+    assert all(r["tile"].family == "bentley" for r in bentley["rows"])
+    assert [title for title, _ in bentley["shelves"]] == ["Destacados", "Nuevos", "Más usados"]
+    autodesk = next(s for s in sections if s["key"] == "autodesk")
+    assert autodesk["shelves"] == [] and len(autodesk["pack"]) == 10
+
+
+def test_transversal_discipline_and_new_products_map():
+    assert software.TILES["autocad"].discipline == software.TRA
+    assert software.TILES["microstation"].discipline == software.TRA
+    assert software.PRODUCT_TILE["plant-3d"] == "plant-3d"
+    assert software.DISCIPLINE_BY_SLUG["transversal"] == software.TRA
+
+
+def test_vendor_key_and_path_tiles_fall_back_to_title():
+    assert software.vendor_key(SimpleNamespace(vendor=SimpleNamespace(slug="bentley"))) == "bentley"
+    assert software.vendor_key(SimpleNamespace(vendor=None)) == "internal"
+    rpas = SimpleNamespace(title="Diploma interno RPAS", products=SimpleNamespace(all=list))
+    assert [t.slug for t in software.software_for_path(rpas)] == ["dgac"]
 
 
 def test_products_beat_title_then_platform(seeded):
@@ -138,7 +209,9 @@ def test_discipline_key_by_route(seeded):
 # ---- guías --------------------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("slug", ["forma-revit", "civil-3d"])
+@pytest.mark.parametrize(
+    "slug", ["forma-revit", "civil-3d", "forma-coordinacion", "autocad", "plant-3d"]
+)
 def test_every_level_has_a_guide_with_an_existing_essential_course(slug):
     data = json.loads((SEED / f"{slug}.json").read_text(encoding="utf-8"))
     for level in data["levels"]:
@@ -193,6 +266,7 @@ def test_civil_cover_uses_route_data_not_cc410(seeded, member_client):
     assert "Del km 0 a la certificación".lower() in html.lower()  # intro de la ruta
     assert "lv-profile" in html
     assert 'alt="Civil 3D"' in html  # mosaico de la portada
+    assert "lv-tiles vf-autodesk" in html
 
 
 def test_architecture_cover_keeps_its_data(seeded, member_client):
@@ -215,6 +289,8 @@ def test_catalog_shows_rows_per_software_then_grid_when_filtered(seeded, member_
     html = member_client.get("/catalogo/").content.decode()
     assert 'class="cat-row d-arq"' in html and 'id="sw-civil3d"' in html
     assert "data-rail" in html and "cat-lvl lvl-" in html
+    assert 'class="vs vs-autodesk"' in html and 'class="vs vs-bentley"' in html
+    assert "vs-pack" in html and "Destacados" in html and "Más usados" in html
     assert "// 02" in html
     grid = member_client.get("/catalogo/?software=civil3d").content.decode()
     assert "cat-grid" in grid and 'class="cat-row' not in grid

@@ -9,11 +9,12 @@
 <link rel="apple-touch-icon" href="{% static 'core/app/apple-touch-icon.png' %}">
 <link rel="manifest" href="{% static 'core/app/manifest.webmanifest' %}">
 <meta name="theme-color" content="#041126">
-<meta name="apple-mobile-web-app-title" content="LEV Digital 101">
+<meta name="apple-mobile-web-app-title" content="Levantamiento Digital 101">
 <link rel="stylesheet" href="{% static 'core/tokens.css' %}">
 <link rel="stylesheet" href="{% static 'core/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/components.css' %}">
 <link rel="stylesheet" href="{% static 'core/decor.css' %}">
+<link rel="stylesheet" href="{% static 'core/brand.css' %}">
 <link rel="stylesheet" href="{% static 'gamification/game.css' %}">
 <link rel="stylesheet" href="{% static 'community/notes.css' %}">
 <link rel="stylesheet" href="{% static 'notifications/bell.css' %}">
@@ -26,12 +27,12 @@
 
 <header class="top">
   <div class="wrap">
-    <a class="cell brandcell" href="{% url 'core:home' %}">
-      <span class="cap">{{ BRAND_PLATFORM }}</span>
-      <span class="brand">LEV DIGITAL <i>101</i></span>
+    <a class="cell brandcell" href="{% url 'core:home' %}" aria-label="Levantamiento Digital 101, {{ BRAND_PLATFORM }}: inicio">
+      {% include "core/partials/mark.html" with cls="mark" %}
+      <span class="brandtxt"><span class="cap">{{ BRAND_PLATFORM }}</span><span class="badge101"><span><span class="bf">Levantamiento </span>Digital</span><b>101</b></span></span>
     </a>
     {# Principales en la cinta; secundarias en "Más" (details: funciona sin JS). #}
-    <nav class="nav" aria-label="Secciones">{% block nav %}{% with ns=request.resolver_match.app_name un=request.resolver_match.url_name %}<div class="nav-main"><a href="{% url 'core:home' %}"{% if ns == 'core' and un == 'home' %} aria-current="page"{% endif %}>Inicio</a><a href="{% url 'paths:index' %}"{% if ns == 'paths' %} aria-current="page"{% endif %}>Rutas</a><a href="{% url 'catalog:resources' %}"{% if ns == 'catalog' %} aria-current="page"{% endif %}>Catálogo</a><a href="{% url 'credentials:mine' %}"{% if ns == 'credentials' %} aria-current="page"{% endif %}>Certificados</a><a href="{% url 'community:forum' %}"{% if ns == 'community' and un != 'moderation' %} aria-current="page"{% endif %}>Foro</a><a href="{% url 'team:board' %}"{% if ns == 'team' %} aria-current="page"{% endif %}>Equipo</a></div><details class="nav-more"><summary{% if ns == 'library' or ns == 'knowledge' or ns == 'gamification' or ns == 'dgac' or un == 'moderation' %} class="on"{% endif %}>Más</summary><div class="nav-pop"><a href="{% url 'library:index' %}"{% if ns == 'library' %} aria-current="page"{% endif %}>Documentos</a><a href="{% url 'knowledge:index' %}"{% if ns == 'knowledge' %} aria-current="page"{% endif %}>Conocimiento</a><a href="{% url 'gamification:directory' %}"{% if ns == 'gamification' and un == 'directory' %} aria-current="page"{% endif %}>Gremio</a><a href="{% url 'dgac:home' %}"{% if ns == 'dgac' %} aria-current="page"{% endif %}>DGAC</a>{% if user.is_lead %}<a href="{% url 'community:moderation' %}"{% if un == 'moderation' %} aria-current="page"{% endif %}>Moderación</a>{% endif %}</div></details>{% endwith %}{% endblock %}</nav>
+    <nav class="nav" aria-label="Secciones">{% block nav %}{% with ns=request.resolver_match.app_name un=request.resolver_match.url_name %}<div class="nav-main"><a href="{% url 'core:home' %}"{% if ns == 'core' and un == 'home' %} aria-current="page"{% endif %}>Inicio</a><a href="{% url 'paths:index' %}"{% if ns == 'paths' %} aria-current="page"{% endif %}>Rutas</a><a href="{% url 'catalog:resources' %}"{% if ns == 'catalog' %} aria-current="page"{% endif %}>Catálogo</a><a href="{% url 'credentials:mine' %}"{% if ns == 'credentials' %} aria-current="page"{% endif %}>Certificados</a><a href="{% url 'community:forum' %}"{% if ns == 'community' and un != 'moderation' %} aria-current="page"{% endif %}>Foro</a><a href="{% url 'team:board' %}"{% if ns == 'team' %} aria-current="page"{% endif %}>Equipo</a></div><details class="nav-more"><summary{% if ns == 'library' or ns == 'knowledge' or ns == 'gamification' or ns == 'dgac' or un == 'help_index' or un == 'help' or un == 'moderation' %} class="on"{% endif %}>Más</summary><div class="nav-pop"><a href="{% url 'library:index' %}"{% if ns == 'library' %} aria-current="page"{% endif %}>Documentos</a><a href="{% url 'knowledge:index' %}"{% if ns == 'knowledge' %} aria-current="page"{% endif %}>Conocimiento</a><a href="{% url 'gamification:directory' %}"{% if ns == 'gamification' and un == 'directory' %} aria-current="page"{% endif %}>Gremio</a><a href="{% url 'dgac:home' %}"{% if ns == 'dgac' %} aria-current="page"{% endif %}>DGAC</a><a href="{% url 'assistant:help_index' %}"{% if un == 'help_index' or un == 'help' %} aria-current="page"{% endif %}>Ayuda</a>{% if user.is_lead %}<a href="{% url 'community:moderation' %}"{% if un == 'moderation' %} aria-current="page"{% endif %}>Moderación</a>{% endif %}</div></details>{% endwith %}{% endblock %}</nav>
     {# Huecos: se llenan en los bloques 13 (nivel/XP), 16 (campana) y 15 (Teo). #}
     <div class="cell slot" data-slot="player">{% block slot_player %}{% include "core/partials/player.html" %}{% endblock %}</div>
     <div class="cell slot" data-slot="bell">{% block slot_bell %}{% include "core/partials/bell.html" %}{% endblock %}</div>
@@ -41,8 +42,9 @@
       <span class="txt"><span class="cap">{{ user.role }}</span><span class="uname">{{ user.name }}</span></span>
     </a>
     {% endif %}
-    <div class="cell">
+    <div class="cell cell-actions">
       <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
+      {% if user.is_authenticated %}<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="iconbtn" type="submit" title="Salir" aria-label="Salir">⏻</button></form>{% endif %}
     </div>
   </div>
   <script>
@@ -68,3 +70,5 @@
 {% block slot_teo %}{% include "core/partials/teo.html" %}{% endblock %}
 </body>
 </html>
+
+

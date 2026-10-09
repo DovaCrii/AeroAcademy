@@ -18,7 +18,7 @@ from .suite import SPONSOR_TEXT, SUITE_AERO
 
 
 def _visible_paths(person):
-    qs = LearningPath.objects.select_related("vendor").prefetch_related("disciplines")
+    qs = LearningPath.objects.select_related("vendor").prefetch_related("disciplines", "products")
     return qs if person.is_lead else qs.filter(is_published=True)
 
 
@@ -32,9 +32,21 @@ def _software_icons():
     return {p.stem for p in _SOFTWARE_DIR.glob("*.svg")} if _SOFTWARE_DIR.is_dir() else set()
 
 
+def _path_icon(path, icons):
+    """Ficha de software (img/software/<producto>.svg) del primer producto de la ruta que tenga una."""
+    for product in path.products.all():
+        for stem in sorted(icons):
+            if product.slug == stem or product.slug.startswith(stem + "-"):
+                return stem
+    return ""
+
+
 def _overview(person, paths, pcts):
     """Mi avance: rutas por empezar / en progreso / completadas y credenciales por vencer (consultas acotadas)."""
-    rows = [{"path": p, "pct": pcts[p.pk]} for p in paths[:MY_PATHS_LIMIT]]
+    icons = _software_icons()
+    rows = [
+        {"path": p, "pct": pcts[p.pk], "icon": _path_icon(p, icons)} for p in paths[:MY_PATHS_LIMIT]
+    ]
     today = timezone.localdate()
     expiring = list(
         Credential.objects.filter(
@@ -106,6 +118,9 @@ def _featured():
 def home_context(person):
     """Todo lo que necesita la ventana de bienvenida."""
     paths = list(_visible_paths(person))
+    icons = _software_icons()
+    for p in paths:
+        p.icon = _path_icon(p, icons)  # ficha de software para las filas de la portada
     disciplines = []
     for d in Discipline.objects.all():
         visual = DISCIPLINE_VISUALS.get(d.slug, {"icon": "i-arq", "img": "", "label": d.name})
@@ -123,8 +138,9 @@ def home_context(person):
             {"slug": s, "label": v["label"], "icon": v["icon"], "img": v["img"], "paths": []}
             for s, v in DISCIPLINE_VISUALS.items()
         ]
+    disciplines.sort(key=lambda d: d["slug"] != "transversal")  # la base de todo va primero
 
-    pcts = {p.pk: game.path_percent(person, p) for p in paths}
+    pcts = game.path_percents(person, paths)  # consultas fijas, no una tanda por ruta
     modules = [
         {**m, "url": reverse(m["url_name"]) if m["url_name"] else None, "live": bool(m["url_name"])}
         for m in MODULES

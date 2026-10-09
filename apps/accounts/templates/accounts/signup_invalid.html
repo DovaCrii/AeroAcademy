@@ -1,0 +1,14 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}Enlace no válido{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }} · invitación</p>
+    <h1>Este enlace ya no sirve</h1>
+    <p class="pub-lead">Puede haber vencido (duran 7 días), ya se usó, o el administrador generó uno más nuevo. Pídele al administrador un enlace de registro nuevo.</p>
+    <p><a class="btn pub-btn" href="{% url 'accounts:welcome' %}">Ir a la bienvenida</a></p>
+  </div>
+</section>
+{% endblock %}

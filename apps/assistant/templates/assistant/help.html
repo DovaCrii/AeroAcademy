@@ -1,6 +1,10 @@
 {% extends "core/base.html" %}
+{% load static core_extras %}
 {% block title %}{{ title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'assistant/help.css' %}">{% endblock %}
 {% block content %}
 <p class="crumb"><a href="{% url 'assistant:help_index' %}">Ayuda</a></p>
-<article class="help"><h1>{{ title }}</h1>{% for line in paragraphs %}{% if line %}<p>{{ line }}</p>{% endif %}{% endfor %}</article>
+<article class="help h-article">{% doodle "doodle-sparks" class="dd h-article-dd" %}<h1>{{ title }}</h1>{% for line in paragraphs %}{% if line %}<p>{{ line }}</p>{% endif %}{% endfor %}
+  <p class="h-back"><a class="btn ghost" href="{% url 'assistant:help_index' %}">← Volver a la ayuda</a></p>
+</article>
 {% endblock %}

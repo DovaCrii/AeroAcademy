@@ -278,7 +278,8 @@ def test_pending_people_get_no_access(client_for, make_person):
 
 
 def test_no_identity_no_access(client_for):
-    assert client_for("").get("/dgac/").status_code == 401
+    response = client_for("").get("/dgac/")
+    assert response.status_code == 302 and response.url.startswith("/bienvenida/")
 
 
 def test_history_queries_do_not_grow_with_attempts(client_for, member):
@@ -384,7 +385,12 @@ def test_dgac_content_is_not_in_nala_index_or_context(member):
     blob = json.dumps(indexed, ensure_ascii=False)
     assert "dgac-rpas" not in blob and "Ruta de práctica" not in blob
     assert "Misión uno" not in blob and "secreto" not in blob
-    assert search.search("sintética") == [] and search.search("procedimiento interno secreto") == []
+    # Otras rutas públicas (p. ej. Topografía 101) pueden compartir palabras sueltas: lo que importa es que ningún
+    # resultado venga de la ruta DGAC ni traiga su contenido.
+    for query in ("sintética", "procedimiento interno secreto"):
+        for hit in search.search(query):
+            text = f"{hit['title']} {hit['body']} {hit['url']}"
+            assert "dgac-rpas" not in text and "secreto" not in text and "Misión uno" not in text
     assert any(r[0] == "path" for r in indexed)  # control: las demás rutas sí se indexan
 
 

@@ -101,12 +101,11 @@ def test_missing_email_column_and_semicolon_delimiter(disciplines, admin_person)
     assert ok.rows[0].action == "created"
 
 
-def test_lead_cannot_grant_lead_or_touch_leads(disciplines, lead, make_person):
+def test_lead_cannot_import_people_at_all(disciplines, lead, make_person):
+    """D34: agregar personas es solo del admin."""
     report = onboarding.import_team(CSV, by=lead)
-    assert [r.action for r in report.rows] == ["created", "error"]
-    assert not Person.objects.filter(login="luis@empresa.cl").exists()
-    again = onboarding.import_team("correo,rol\nluis@lev.cl,member\n", by=lead)
-    assert again.rows[0].action == "error"  # luis@lev.cl es lead: un lead no lo degrada
+    assert report.fatal and not report.rows
+    assert not Person.objects.filter(login__endswith="@empresa.cl").exists()
 
 
 def test_suspended_person_is_not_reactivated_by_import(disciplines, admin_person, make_person):
@@ -167,14 +166,14 @@ def test_member_sees_areas_but_no_management_links(
     assert "ana@empresa.cl" not in html  # el correo no se muestra a los miembros
 
 
-def test_lead_imports_from_ui_with_dry_run_then_real(disciplines, lead, client_for):
-    c = client_for(lead.login)
+def test_admin_imports_from_ui_with_dry_run_then_real(disciplines, admin_person, client_for):
+    c = client_for(admin_person.login)
     r = c.post("/equipo/personas/agregar/", {"csv": CSV, "action": "dry"})
     assert r.status_code == 200 and "No se escribió nada" in r.content.decode()
     assert not Person.objects.filter(login="ana@empresa.cl").exists()
     c.post("/equipo/personas/agregar/", {"csv": CSV, "action": "import"})
     assert Person.objects.filter(login="ana@empresa.cl").exists()
-    assert not Person.objects.filter(login="luis@empresa.cl").exists()  # lead no da lead
+    assert Person.objects.filter(login="luis@empresa.cl").exists()  # el admin sí da lead
 
 
 def test_csrf_is_enforced_on_changes(disciplines, admin_person, member):
@@ -272,3 +271,30 @@ def test_people_page_escapes_text_and_queries_are_bounded(
     assert len(many) <= len(few) + 1
     assert "<script>alert(1)" not in html
     assert "&lt;script&gt;" in html
+
+
+def test_simple_mode_accepts_only_emails_one_per_line_or_separated(db):
+    """Pedido del dueño: «tengo los mails; ellos se crean sus cuentas y se van editando»."""
+    from apps.accounts.models import Person, PersonStatus
+    from apps.team import onboarding
+
+    text = "uno.persona@empresa.cl\ndos.persona@empresa.cl, tres.persona@empresa.cl\n\n"
+    report = onboarding.import_team(text, dry_run=True)
+    assert (
+        not report.fatal
+        and len(report.rows) == 3
+        and not Person.objects.filter(login__endswith="@empresa.cl").exists()
+    )
+    report = onboarding.import_team(text)
+    people = Person.objects.filter(login__endswith="@empresa.cl")
+    assert people.count() == 3 and all(
+        p.status == PersonStatus.APPROVED and p.role == "member" for p in people
+    )
+    assert onboarding.import_team(text).count_created == 0  # repetir no duplica
+
+
+def test_simple_mode_reports_bad_emails(db):
+    from apps.team import onboarding
+
+    report = onboarding.import_team("bien@empresa.cl\nmal@\n")
+    assert len(report.errors) == 1

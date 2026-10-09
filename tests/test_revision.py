@@ -123,9 +123,9 @@ def test_finding3_nobody_replies_to_a_hidden_note(member, lead):
 
 def test_finding3_glossary_of_an_unpublished_path_is_not_served(member):
     search.reindex()
-    assert any(h["kind"] == "glossary" for h in search.search("Forma Home"))
+    assert any(h["kind"] == "glossary" for h in search.search("Family Editor"))
     draft_path()
-    assert not any(h["kind"] == "glossary" for h in search.search("Forma Home"))
+    assert not any(h["kind"] == "glossary" for h in search.search("Family Editor"))
 
 
 # 4 y 5 · tablero --------------------------------------------------------------------------------------------------------

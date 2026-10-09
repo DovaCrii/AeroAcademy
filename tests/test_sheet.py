@@ -251,5 +251,7 @@ def test_header_links_to_my_sheet_and_gremio(member_client):
 
 def test_sheet_page_is_small_on_queries(client_for, member, lead, django_assert_max_num_queries):
     verified(member, lead, skills=["lidar"])
-    with django_assert_max_num_queries(45):
+    with django_assert_max_num_queries(
+        65
+    ):  # incluye «Próximo logro» (avance de las rutas generales)
         assert client_for(member.login).get("/perfil/").status_code == 200

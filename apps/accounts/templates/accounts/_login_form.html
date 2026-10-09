@@ -1,0 +1,19 @@
+{# Formulario de entrada (lo usan la bienvenida y /entrar/). Siempre por POST, con CSRF. #}
+<form class="pub-form" method="post" action="{% url 'accounts:login' %}" novalidate>
+  {% csrf_token %}
+  {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+  {% if error %}<p class="pub-error" role="alert">{{ error }}</p>{% endif %}
+  <div class="field">
+    <label for="id_email">Correo</label>
+    <input id="id_email" name="email" type="email" autocomplete="username" inputmode="email" maxlength="254" required value="{{ email|default:'' }}"{% if error %} aria-invalid="true"{% endif %}>
+  </div>
+  <div class="field">
+    <label for="id_password">Contraseña</label>
+    <input id="id_password" name="password" type="password" autocomplete="current-password" maxlength="256" required>
+  </div>
+  <button class="btn pub-btn" type="submit">Entrar</button>
+  <details class="pub-forgot">
+    <summary>¿Olvidaste tu contraseña?</summary>
+    <p>No hay correo automático: pídele al administrador un enlace nuevo. Al abrirlo eliges otra contraseña.</p>
+  </details>
+</form>

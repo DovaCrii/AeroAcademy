@@ -1,0 +1,203 @@
+{
+  "_nota": "Ruta separada de 'bentley-learn' el 2026-10-09 (decisión del dueño: un producto Bentley por ruta y por disciplina). Los cursos movidos desde 'bentley-learn' perderán el avance que tuvieran registrado allí (se registran de nuevo en esta ruta). Producto transversal (coordinación/CDE). Bentley Infrastructure Cloud es la versión en la nube del CDE; su plan de aprendizaje está como pw-c2. Las keys son estables: agregar siempre al final; los títulos de recurso son la clave en la base: no cambiarlos. URLs verificadas el 2026-10-09 contra la API pública de Bentley Learn (id + slug + título coinciden).",
+  "slug": "bentley-projectwise",
+  "title": "Ruta ProjectWise",
+  "program": "Coordinación · ProjectWise y CDE",
+  "platform": "bentley-learn",
+  "kind": "external_track",
+  "vendor": "bentley",
+  "products": [
+    "projectwise"
+  ],
+  "disciplines": [
+    "transversal"
+  ],
+  "world": "civil",
+  "allow_free_courses": false,
+  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. ProjectWise como entorno común de datos (CDE): transversal a todas las disciplinas.",
+  "levels": [
+    {
+      "code": "pw",
+      "order": 0,
+      "short": "ProjectWise",
+      "title": "km 0+000 · ProjectWise: el entorno común de datos",
+      "estimated_hours": "3 a 8 h",
+      "audience": "Todo el equipo (cliente Explorer); administradores para las acreditaciones",
+      "goal": "Trabajar los archivos del proyecto desde ProjectWise Explorer (carpetas, check-out, búsqueda, flujos) y entender el CDE bajo ISO 19650. Las acreditaciones de administrador son opcionales.",
+      "guide": {
+        "title": "Guía rápida · ProjectWise",
+        "software": "projectwise",
+        "do": [
+          "Abre y guarda los archivos del proyecto desde *ProjectWise Explorer*: no trabajes sobre copias sueltas en el disco.",
+          "Usa *Check Out* para editar y *Check In* al terminar; si no editas, *Copy Out* o abrir en solo lectura.",
+          "Encuentra lo que necesitas con la búsqueda y las *Saved Searches* del proyecto.",
+          "Respeta el estado del documento en el flujo (*Workflow* / *State*): WIP, compartido, publicado."
+        ],
+        "commands": [
+          "*Check Out*",
+          "*Check In*",
+          "*Copy Out*",
+          "*Free*",
+          "*Saved Searches*",
+          "*Workflow State*"
+        ],
+        "mistakes": [
+          "Dejar documentos en *Check Out* al irse: nadie más puede editarlos.",
+          "Editar una copia local fuera de ProjectWise y subirla después encima: se pisan cambios.",
+          "Ignorar la convención de nombres y metadatos del proyecto: la búsqueda no encuentra nada."
+        ],
+        "essential": "Working with Project Folders and Documents"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Working with Project Folders and Documents",
+          "url": "https://learning.bentley.com/learn/learning-plans/354/working-with-project-folders-and-documents",
+          "kind": "learning_plan",
+          "description": "Curso esencial del capítulo: Explorer, carpetas, documentos y búsqueda (2 h 40 min).",
+          "duration_text": "2 h 40 min · 3 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Catálogo ProjectWise en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/22",
+          "kind": "collection",
+          "description": "Unas 55 piezas: Explorer, Design Integration, administración e Infrastructure Cloud.",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Adopting ISO 19650 in ProjectWise & Bentley Infrastructure Cloud: Streamlined Data Management for Digital Projects",
+          "url": "https://learning.bentley.com/learn/course/4217/adopting-iso-19650-in-projectwise-bentley-infrastructure-cloud-streamlined-data-management-for-digital-projects",
+          "kind": "course",
+          "description": "18 minutos: cómo aplicar ISO 19650 en el CDE.",
+          "duration_text": "18 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "external_courses": [
+        {
+          "key": "pw-c0",
+          "order": 0,
+          "title": "Working with Project Folders and Documents",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/354/working-with-project-folders-and-documents",
+          "description": "Curso esencial del capítulo: Explorer, carpetas, documentos y búsqueda (2 h 40 min).",
+          "duration_text": "2 h 40 min · 3 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ],
+          "reward": "trophy",
+          "is_required": true,
+          "skills": [
+            "cde",
+            "entregables"
+          ],
+          "contains": [
+            "ProjectWise Explorer Mastery: Streamline Engineering Data & Collaboration",
+            "Using ProjectWise Explorer",
+            "Searching in ProjectWise Explorer"
+          ]
+        },
+        {
+          "key": "pw-c1",
+          "order": 1,
+          "title": "ProjectWise Design Integration",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/739/projectwise-design-integration",
+          "duration_text": "Curso on demand",
+          "reward": "trophy",
+          "is_required": true,
+          "skills": [
+            "cde",
+            "coordinacion"
+          ]
+        },
+        {
+          "key": "pw-c2",
+          "order": 2,
+          "title": "Getting Started with Bentley Infrastructure Cloud",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/743/getting-started-with-bentley-infrastructure-cloud",
+          "duration_text": "3 h 35 min · 4 cursos",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "cde",
+            "coordinacion"
+          ],
+          "contains": [
+            "Mastering Bentley Infrastructure Cloud: Streamline Project Collaboration & Design Review",
+            "Running Clash Jobs Within Bentley Infrastructure Cloud: A Quick Start",
+            "Admin Mastery: A Comprehensive Guide to Bentley Infrastructure Cloud",
+            "Optimizing Construction Projects: Effectively Manage Your Construction Over the Cloud"
+          ]
+        },
+        {
+          "key": "pw-c3",
+          "order": 3,
+          "title": "Bentley Accredited ProjectWise Fundamentals Administrator",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/588/bentley-accredited-projectwise-fundamentals-administrator",
+          "duration_text": "1 h · 8 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "skills": [
+            "cde",
+            "iso-19650"
+          ],
+          "contains": [
+            "Program Overview",
+            "Introduction",
+            "Module 1: Getting Started with ProjectWise (Overview)",
+            "Module 2: Overview (Users, Groups & User Lists)",
+            "Module 3: Overview (Environments & Interfaces)",
+            "Module 4: Overview (Workflow & States)",
+            "Module 5: Overview (ProjectWise Security & Access Rights)",
+            "Assessment"
+          ]
+        },
+        {
+          "key": "pw-c4",
+          "order": 4,
+          "title": "Bentley Accredited ProjectWise Advanced Administrator",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/520/bentley-accredited-projectwise-advanced-administrator",
+          "duration_text": "1 h · 8 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "skills": [
+            "cde",
+            "estandares-bim"
+          ],
+          "contains": [
+            "Program Overview",
+            "Introduction",
+            "Module 1 - Enhanced Environments",
+            "Module 2 - Advanced Workflow",
+            "Module 3 - Managed Workspaces",
+            "Module 4 - i-Model Composition Server (iCS) for PDF",
+            "ProjectWise Workflows and a Common Data Environment",
+            "Assessment"
+          ]
+        }
+      ]
+    }
+  ]
+}

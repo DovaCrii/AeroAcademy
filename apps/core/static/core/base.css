@@ -149,3 +149,5 @@ code,kbd,samp,pre{font-family:var(--font-mono);font-size:.92em}
 @media (max-width:380px){
   .top .player .bar{display:none}
 }
+.top .wrap > .cell.cell-actions{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;align-items:center;width:auto}
+.top .wrap > .cell.cell-actions form{margin:0}

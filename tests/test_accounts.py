@@ -55,8 +55,9 @@ def test_other_ip_without_header_is_403(client_for):
     assert client_for("", remote_addr="192.168.1.20").get("/").status_code == 403
 
 
-def test_missing_header_is_401(client_for):
-    assert client_for("").get("/").status_code == 401
+def test_missing_header_goes_to_welcome(client_for):
+    response = client_for("").get("/")
+    assert response.status_code == 302 and response.url.startswith("/bienvenida/")
 
 
 @pytest.mark.parametrize("addr", ["::1", "::ffff:127.0.0.1"])
@@ -84,7 +85,7 @@ def test_other_identity_in_same_session_switches_person(client_for, make_person)
 
 @override_settings(DEBUG=False, DEV_REMOTE_USER="dev@lev.cl")
 def test_dev_remote_user_is_ignored_when_debug_is_false(client_for):
-    assert client_for("").get("/").status_code == 401
+    assert client_for("").get("/").status_code == 302  # a la bienvenida, sin identidad
     assert not Person.objects.exists()
 
 

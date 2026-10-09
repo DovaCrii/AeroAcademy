@@ -1,0 +1,176 @@
+{
+  "_nota": "Ruta separada de 'bentley-learn' el 2026-10-09 (decisión del dueño: un producto Bentley por ruta y por disciplina). Los cursos movidos desde 'bentley-learn' perderán el avance que tuvieran registrado allí (se registran de nuevo en esta ruta). opl-c3 es el plan mecánico de OpenBuildings (antes obd-c2 en bentley-learn), que el dueño asignó a Mecánica. Las keys son estables: agregar siempre al final; los títulos de recurso son la clave en la base: no cambiarlos. URLs verificadas el 2026-10-09 contra la API pública de Bentley Learn (id + slug + título coinciden).",
+  "slug": "bentley-openplant",
+  "title": "Ruta OpenPlant",
+  "program": "Planta industrial · OpenPlant",
+  "platform": "bentley-learn",
+  "kind": "external_track",
+  "vendor": "bentley",
+  "products": [
+    "openplant",
+    "openbuildings"
+  ],
+  "disciplines": [
+    "mecanica"
+  ],
+  "world": "civil",
+  "allow_free_courses": false,
+  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. Tuberías, equipos y planta industrial con OpenPlant; incluye la acreditación mecánica de OpenBuildings.",
+  "levels": [
+    {
+      "code": "opl",
+      "order": 0,
+      "short": "OpenPlant",
+      "title": "km 0+000 · OpenPlant: tuberías y planta industrial",
+      "estimated_hours": "1 h 30 min a 4 h",
+      "audience": "Mecánica, piping y procesos",
+      "goal": "Modelar equipos, líneas de tubería y soportes en 3D con OpenPlant Modeler y sacar isométricos y vistas de producción. Meta: Bentley Accredited OpenPlant 3D User. Opcional: la acreditación mecánica de OpenBuildings (ductos y equipos de edificio).",
+      "guide": {
+        "title": "Guía rápida · OpenPlant",
+        "software": "openplant",
+        "do": [
+          "Parte de un *WorkSet* y un *Seed file* de la planta (unidades métricas o imperiales: no mezclar).",
+          "Coloca primero los equipos (*Equipment*) y luego tiende las líneas (*Pipelines*) conectadas a las boquillas.",
+          "Agrega componentes en línea (válvulas, reductores) sobre la línea; no dibujes tramos sueltos.",
+          "Cierra con soportes (*Supports*) y genera los isométricos con *Isometrics Manager* y las vistas con *Orthographics Manager*."
+        ],
+        "commands": [
+          "*Equipment*",
+          "*Pipelines*",
+          "*In-line Components*",
+          "*Supports*",
+          "*Isometrics Manager*",
+          "*Orthographics Manager*"
+        ],
+        "mistakes": [
+          "Mezclar catálogos métrico e imperial en la misma planta.",
+          "Dibujar la tubería como líneas simples: el isométrico y el listado salen vacíos.",
+          "Sacar el isométrico sin revisar el estilo (*Isometric Style*) y el archivo semilla de la lámina."
+        ],
+        "essential": "Bentley Accredited OpenPlant 3D User"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Bentley Accredited OpenPlant 3D User",
+          "url": "https://learning.bentley.com/learn/learning-plans/710/bentley-accredited-openplant-3d-user",
+          "kind": "learning_plan",
+          "description": "Curso esencial del capítulo: resumen, videos de entrenamiento, modelado de piping y evaluación (1 h 30 min).",
+          "duration_text": "1 h 30 min · 4 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Catálogo OpenPlant en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/17",
+          "kind": "collection",
+          "description": "Unas 80 piezas: modelado, isométricos, P&ID, soportes y administración.",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "OpenPlant Training Videos",
+          "url": "https://learning.bentley.com/learn/course/2035/openplant-training-videos",
+          "kind": "course",
+          "description": "45 minutos de videos de modelado; parte del plan de acreditación.",
+          "duration_text": "45 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "external_courses": [
+        {
+          "key": "opl-c0",
+          "order": 0,
+          "title": "Bentley Accredited OpenPlant 3D User",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/710/bentley-accredited-openplant-3d-user",
+          "description": "Curso esencial del capítulo: resumen, videos de entrenamiento, modelado de piping y evaluación (1 h 30 min).",
+          "duration_text": "1 h 30 min · 4 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ],
+          "reward": "relic",
+          "is_required": true,
+          "skills": [
+            "modelado-3d",
+            "modelado-mecanico"
+          ],
+          "contains": [
+            "Program Overview",
+            "OpenPlant Training Videos",
+            "Live Bundle - Model Construction for Piping Designers using OpenPlant Modeler CONNECT Edition",
+            "Assessment"
+          ]
+        },
+        {
+          "key": "opl-c1",
+          "order": 1,
+          "title": "Creating an Isometric Drawing",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/259/creating-an-isometric-drawing",
+          "duration_text": "Curso on demand",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "modelado-mecanico",
+            "laminas"
+          ]
+        },
+        {
+          "key": "opl-c2",
+          "order": 2,
+          "title": "Production Views and Layouts OpenPlant Modeler CONNECT Edition (Metric)",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/278/production-views-and-layouts-openplant-modeler-connect-edition-metric",
+          "duration_text": "Curso on demand",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "modelado-mecanico",
+            "entregables"
+          ]
+        },
+        {
+          "key": "opl-c3",
+          "order": 3,
+          "title": "Bentley Accredited BIM Modeler: Basic Mechanical Modeling with OpenBuildings",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/369/bentley-accredited-bim-modeler-basic-mechanical-modeling-with-openbuildings",
+          "duration_text": "17 h 58 min · 6 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "disciplines": [
+            "mecanica"
+          ],
+          "skills": [
+            "modelado-bim",
+            "modelado-mecanico"
+          ],
+          "contains": [
+            "Program Overview",
+            "BIM QuickStart M101: Modeling Equipment and Ductwork",
+            "BIM QuickStart M102: Modeling Diffusers, Grilles, and Branches",
+            "BIM QuickStart M103: Creating Mechanical Drawings",
+            "Basic AccuDraw",
+            "Project Submission"
+          ]
+        }
+      ]
+    }
+  ]
+}

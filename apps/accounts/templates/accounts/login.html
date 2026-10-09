@@ -1,0 +1,17 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }}</p>
+    <h1>Entrar</h1>
+    {% if via_tailscale %}
+    <p class="pub-note">Ya entraste con tu identidad de Tailscale. Si quieres entrar como otra persona (por ejemplo desde un equipo compartido), usa su correo y contraseña.</p>
+    {% endif %}
+    {% include "accounts/_login_form.html" %}
+    <p class="pub-invite"><b>¿Te invitaron?</b> Abre el enlace que te mandó el admin.</p>
+  </div>
+</section>
+{% endblock %}

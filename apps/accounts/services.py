@@ -1,12 +1,18 @@
 """Identidad, roles y aprobación. La lógica vive aquí; las vistas y el admin solo la llaman."""
 
+import hashlib
+import secrets
 from email.header import decode_header as _decode_header
 from email.header import make_header
 from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core import signing
+from django.core.cache import cache
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.crypto import constant_time_compare, salted_hmac
 
 from apps.notifications import services as notifications
 
@@ -152,3 +158,106 @@ def sync_identity(person: Person, *, display_name: str = "", avatar_url: str = "
         person.save(update_fields=[*changed, "updated_at"])
     ensure_bootstrap(person)
     return person
+
+
+# --- invitación + contraseña (D34) ----------------------------------------------------------------------------
+# El admin genera un enlace de registro firmado (7 días, un solo uso) para una persona ya aprobada. La persona
+# elige su contraseña y queda dentro aunque su login de Tailscale no coincida o llegue desde un equipo compartido.
+
+DEFAULT_ACADEMY_URL = "https://aeroacademy.tailccd107.ts.net"
+SIGNUP_SALT = "accounts.signup.v1"
+SIGNUP_MAX_AGE = 7 * 24 * 3600
+PASSWORD_BACKEND = "django.contrib.auth.backends.ModelBackend"
+
+LOGIN_MAX_FAILURES = 5
+LOGIN_WINDOW_SECONDS = 15 * 60
+
+
+def academy_url() -> str:
+    return getattr(settings, "ACADEMY_URL", DEFAULT_ACADEMY_URL).rstrip("/")
+
+
+def _fingerprint(person: Person) -> str:
+    """Huella del hash de la contraseña vigente: si la contraseña cambia por otro camino, el enlace deja de valer."""
+    return salted_hmac(SIGNUP_SALT, f"{person.pk}:{person.password}").hexdigest()[:16]
+
+
+def can_receive_link(person: Person) -> bool:
+    return person.is_active and person.status == PersonStatus.APPROVED
+
+
+def issue_signup_token(person: Person) -> str:
+    """Genera un enlace nuevo (invalida los anteriores). Solo para personas aprobadas y activas."""
+    if not can_receive_link(person):
+        raise ValueError("Solo se puede invitar a una persona aprobada (apruébala primero).")
+    person.invite_nonce = secrets.token_hex(8)
+    person.save(update_fields=["invite_nonce", "updated_at"])
+    payload = f"{person.pk}.{person.invite_nonce}.{_fingerprint(person)}"
+    return signing.TimestampSigner(salt=SIGNUP_SALT).sign(payload)
+
+
+def signup_url(person: Person) -> str:
+    """Genera un enlace nuevo y lo devuelve completo (con la dirección de la academia en la tailnet)."""
+    return academy_url() + reverse("accounts:signup", args=[issue_signup_token(person)])
+
+
+def resolve_signup_token(token: str) -> Person | None:
+    """La persona dueña del enlace, o None si es inválido, venció, ya se usó o fue reemplazado. Un solo resultado
+    para todos los fallos: no revela nada sobre correos ni personas."""
+    try:
+        payload = signing.TimestampSigner(salt=SIGNUP_SALT).unsign(
+            token or "", max_age=SIGNUP_MAX_AGE
+        )
+        pk, nonce, fingerprint = payload.split(".")
+        person = Person.objects.filter(pk=int(pk)).first()
+    except (signing.BadSignature, ValueError):
+        return None
+    if person is None or not can_receive_link(person) or not person.invite_nonce:
+        return None
+    if not (
+        constant_time_compare(nonce, person.invite_nonce)
+        and constant_time_compare(fingerprint, _fingerprint(person))
+    ):
+        return None
+    return person
+
+
+def complete_signup(
+    person: Person, *, display_name: str, password: str, character_class: str = ""
+) -> Person:
+    """Fija la contraseña y consume el enlace (borra el nonce). Se llama dentro de una transacción."""
+    person.set_password(password)
+    person.display_name = display_name.strip()[:150]
+    if character_class:
+        person.character_class = character_class
+    person.invite_nonce = ""
+    person.save(
+        update_fields=["password", "display_name", "character_class", "invite_nonce", "updated_at"]
+    )
+    return person
+
+
+# --- límite de intentos de entrada ----------------------------------------------------------------------------
+
+
+def _attempt_key(ip: str, email: str) -> str:
+    digest = hashlib.sha256(f"{ip}|{normalize_login(email)}".encode()).hexdigest()[:32]
+    return f"login-fail:{digest}"
+
+
+def login_blocked(ip: str, email: str) -> bool:
+    return cache.get(_attempt_key(ip, email), 0) >= LOGIN_MAX_FAILURES
+
+
+def register_login_failure(ip: str, email: str) -> None:
+    key = _attempt_key(ip, email)
+    if cache.add(key, 1, LOGIN_WINDOW_SECONDS):
+        return
+    try:
+        cache.incr(key)
+    except ValueError:  # venció entre add e incr
+        cache.add(key, 1, LOGIN_WINDOW_SECONDS)
+
+
+def clear_login_failures(ip: str, email: str) -> None:
+    cache.delete(_attempt_key(ip, email))

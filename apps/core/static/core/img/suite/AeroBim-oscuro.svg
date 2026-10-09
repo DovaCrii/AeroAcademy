@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-labelledby="title desc">
+  <title id="title">AeroBim model mark</title>
+  <desc id="desc">Violet drone above an isometric model cube, for AeroBim on dark surfaces</desc>
+  <!--
+    La misma geometria que `aerobim-mark.svg`, para fondo oscuro. Dos diferencias, y las dos estan
+    medidas.
+
+    1. Los rellenos son `none` y no `#1B2A4A`. Ese hexadecimal es el mismo que la barra del portal
+       (el token `ab-navy`), asi que el cuerpo del dron y las caras del cubo daban 1,00:1 y
+       desaparecian; en la cinta del visor, 1,15:1. Transparentes se adaptan a cualquier superficie
+       y el dibujo se lee como lo que es: linea.
+
+    2. El trazo es `#C3A6F0` y no `#9B5DE5`. Es el acento que el sistema ya usa en oscuro para
+       enlaces e iconos activos. Medido sobre las tres superficies oscuras donde aparece la marca
+       (barra del portal, cinta del visor y tarjeta de ingreso), el violeta de marca da 3,45 / 3,96
+       / 3,79:1 y este da 6,79 / 7,80 / 7,46:1. El minimo de un grafico no textual es 3:1, asi que
+       los dos pasan, pero uno se ve y el otro se adivina.
+
+    La alternativa que se descarto: la marca original sobre una placa blanca. Se probo y es un
+    parche que no pertenece a la paleta; lo dijo el usuario mirandolo en la pantalla.
+
+    3. El trazo sube de 6 a 8 y los dos cuerpos llevan un relleno del propio acento al 18 %. Es por
+       el tamaño al que se usa de verdad: en la cinta del visor la marca mide 27 px de alto, asi que
+       el trazo de 6 sobre un lienzo de 160x120 se pinta a poco mas de un pixel y el dibujo se lee
+       como un boceto a lapiz. Con cuerpo se reconoce a 27 px y sigue limpio a 52.
+
+    Y un aviso para quien edite este comentario: XML prohibe el doble guion dentro de un comentario,
+    asi que un nombre de token escrito con sus dos guiones delante deja el archivo invalido y la
+    imagen sale rota. Paso.
+  -->
+  <g fill="none" stroke="#C3A6F0" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+    <path d="M68 25 52 17M92 25l16-8M68 35 52 46M92 35l16 11"/>
+    <circle cx="42" cy="13" r="8" fill="#C3A6F0" fill-opacity="0.18"/>
+    <circle cx="118" cy="13" r="8" fill="#C3A6F0" fill-opacity="0.18"/>
+    <circle cx="42" cy="46" r="8" fill="#C3A6F0" fill-opacity="0.18"/>
+    <circle cx="118" cy="46" r="8" fill="#C3A6F0" fill-opacity="0.18"/>
+    <rect x="64" y="21" width="32" height="18" rx="8" fill="#C3A6F0" fill-opacity="0.18"/>
+    <circle cx="74" cy="30" r="3.5" fill="#C3A6F0" stroke="none"/>
+    <circle cx="86" cy="30" r="3.5" fill="#C3A6F0" stroke="none"/>
+    <path d="M80 58 106 72v26l-26 14-26-14V72z" fill="#C3A6F0" fill-opacity="0.18"/>
+    <path d="M80 86 54 72m26 14 26-14m-26 14v26" stroke-width="6"/>
+  </g>
+</svg>

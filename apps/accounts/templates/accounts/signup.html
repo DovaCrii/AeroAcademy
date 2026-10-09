@@ -1,0 +1,30 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}{% if is_reset %}Nueva contraseña{% else %}Crea tu cuenta{% endif %}{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }} · invitación</p>
+    <h1>{% if is_reset %}Elige una contraseña nueva{% else %}Crea tu cuenta{% endif %}</h1>
+    <p class="pub-lead">{% if is_reset %}El admin te mandó este enlace para restablecer tu contraseña.{% else %}El admin te invitó a la academia. Elige tu nombre y una contraseña.{% endif %} Este enlace sirve una sola vez.</p>
+    <form class="pub-form" method="post" novalidate>
+      {% csrf_token %}
+      <div class="field">
+        <label for="id_login">Correo</label>
+        <input id="id_login" type="email" value="{{ person.login }}" readonly tabindex="-1" aria-readonly="true">
+      </div>
+      {% for field in form %}
+      <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% for err in field.errors %}<p class="pub-error" role="alert">{{ err }}</p>{% endfor %}
+        {% if field.name == "password1" %}<p class="pub-hint">Al menos 10 caracteres; evita tu correo, tu nombre y claves comunes.</p>{% endif %}
+      </div>
+      {% endfor %}
+      {% for err in form.non_field_errors %}<p class="pub-error" role="alert">{{ err }}</p>{% endfor %}
+      <button class="btn pub-btn" type="submit">{% if is_reset %}Guardar contraseña{% else %}Crear cuenta y entrar{% endif %}</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

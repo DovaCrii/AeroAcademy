@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load static avatar_tags %}
+{% load static avatar_tags goal_tags %}
 
 {% block title %}{{ person.name }} · Hoja de personaje{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="{% static 'gamification/sheet.css' %}">{% endblock %}
@@ -38,6 +38,8 @@
   </div>
   {% endif %}
 </section>
+
+{% if is_owner and view != "pro" %}{% next_goal limit=2 %}{% endif %}
 
 <div class="sheet-grid">
   {% if view != "pro" %}

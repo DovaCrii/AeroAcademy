@@ -74,10 +74,18 @@ def _lead_only(request):
         raise PermissionDenied
 
 
+def _admin_only(request):
+    """Agregar personas, enlaces de registro y cambios de rol son solo del admin (D34)."""
+    if not request.user.is_admin:
+        raise PermissionDenied
+
+
 @require_GET
 def people(request):
     _lead_only(request)
-    rows = onboarding.roster()
+    # El enlace recién generado se muestra una sola vez (queda en la sesión del admin, no en la base).
+    links = {int(k): v for k, v in request.session.pop("signup_links", {}).items()}
+    rows = onboarding.roster(links=links)
     return render(
         request,
         "team/people.html",
@@ -85,6 +93,8 @@ def people(request):
             "areas": onboarding.groups_by_area(rows),
             "disciplines": Discipline.objects.all(),
             "can_name_leads": request.user.is_admin,
+            "is_admin": request.user.is_admin,
+            "fresh_links": [(r["person"], r["fresh_link"]) for r in rows if r["fresh_link"]],
             "invitation": onboarding.invitation_text(),
             "academy_url": onboarding.academy_url(),
             "step_labels": onboarding.STEP_LABELS,
@@ -123,9 +133,28 @@ def person_invited(request, pk):
     return redirect(f"/equipo/personas/#p{person.pk}")
 
 
+@require_POST
+def person_signup_link(request, pk):
+    _admin_only(request)
+    person = get_object_or_404(Person, pk=pk)
+    try:
+        url = onboarding.create_signup_link(person, request.user)
+    except (PermissionError, ValueError) as exc:
+        messages.error(request, str(exc))
+    else:
+        links = request.session.get("signup_links", {})
+        links[str(person.pk)] = url
+        request.session["signup_links"] = links
+        messages.success(
+            request,
+            f"Enlace de registro para {person.name}: cópialo ahora (se muestra una sola vez).",
+        )
+    return redirect(f"/equipo/personas/#p{person.pk}")
+
+
 @require_http_methods(["GET", "POST"])
 def people_add(request):
-    _lead_only(request)
+    _admin_only(request)
     text, report = "", None
     if request.method == "POST":
         upload = request.FILES.get("file")

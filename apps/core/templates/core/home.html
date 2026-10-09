@@ -17,6 +17,7 @@
     <a href="{% url 'community:forum' %}">Foro</a>
     <a href="{% url 'team:board' %}">Equipo</a>
     <a href="#avance">Mi avance</a>
+    <a href="{% url 'assistant:help_index' %}">Ayuda</a>
   </div>
 </nav>
 
@@ -27,7 +28,10 @@
   {% doodle "hero-ideas" class="dd w-hero-doodle" %}
   <div class="w-hero-in">
     <p class="w-hand" aria-hidden="true">¡aquí nacen las buenas ideas!</p>
-    <div class="w-wordmark"><span class="a">ACADEMIA</span><span class="l">LEV DIGITAL <b>101</b></span></div>
+    <div class="w-brand">
+      {% include "core/partials/mark.html" with cls="mark" %}
+      <h1 class="w-wordmark"><span class="a">ACADEMIA · AEROACADEMY</span><span class="l"><span class="w1">Levantamiento</span> <span class="w2">Digital <b>101</b></span></span></h1>
+    </div>
     <p class="w-tag">APRENDER <i>·</i> COMPARTIR <i>·</i> COLABORAR <i>·</i> AVANZAR</p>
     <p class="w-cta"><a class="btn" href="#mision">Ver mi misión</a><a class="btn ghost" href="{% url 'paths:index' %}">Explorar rutas</a></p>
     <p class="w-coords" aria-hidden="true"><span>LEVANTAMIENTO · DIGITAL</span><span>EMPRESAS · {{ stats.vendors }}</span><span>RUTAS · {{ stats.paths }}</span><span>RECURSOS · {{ stats.resources }}</span></p>
@@ -165,8 +169,8 @@
   </header>
   <div class="w-mods">
     {% for m in modules %}
-    {% if m.live %}<a class="w-mod live" href="{{ m.url }}">{% else %}<div class="w-mod soon" aria-disabled="true">{% endif %}
-      <svg class="i" aria-hidden="true"><use href="#{{ m.icon }}"/></svg>
+    {% if m.live %}<a class="w-mod live" data-m="{{ m.id }}" href="{{ m.url }}">{% else %}<div class="w-mod soon" data-m="{{ m.id }}" aria-disabled="true">{% endif %}
+      <span class="w-mod-ill">{% doodle m.doodle class="dd" %}</span>
       <b>{{ m.title }}</b>
       <span>{{ m.subtitle }}</span>
       <em class="w-status">{% if m.live %}Disponible{% else %}En construcción · {{ m.block }}{% endif %}</em>
@@ -217,22 +221,27 @@
     <h2 id="rut-h" class="w-h2">Rutas por disciplina</h2>
     <p class="w-lead">Cada disciplina tiene sus rutas de aprendizaje con recursos oficiales, misiones y certificaciones.</p>
   </header>
+  {% for d in disciplines %}{% if d.slug == "transversal" %}
+  <article class="w-base" data-d="transversal" aria-labelledby="base-h">
+    <span class="w-base-ill">{% doodle "transversal" class="dd" %}</span>
+    <div class="w-base-txt">
+      <span class="w-kicker">Base de todo</span>
+      <h3 id="base-h">{{ d.label }}</h3>
+      <p>El software sobre el que se apoya el resto: dibujo, modelado y datos de proyecto. Parte por aquí y todo lo demás se vuelve más fácil.</p>
+    </div>
+    {% include "core/partials/route_rows.html" with d=d %}
+  </article>
+  {% endif %}{% endfor %}
   <div class="w-routes">
-    {% for d in disciplines %}
+    {% for d in disciplines %}{% if d.slug != "transversal" %}
     <article class="w-rc" data-d="{{ d.slug }}">
-      <div class="w-ph{% if not d.img %} w-dp-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}</div>
+      <div class="w-ph{% if not d.img %} w-dp-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}</div>
       <div class="w-bd">
         <h3><svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg>{{ d.label }}</h3>
-        <ul class="w-rl">
-          {% for p in d.paths %}
-          <li><div><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a><small>{{ p.vendor.name }}</small></div><span class="w-pill on">Activa</span></li>
-          {% empty %}
-          <li class="w-rl-empty"><div>Ruta por definir con el equipo<small><a href="{% url 'community:thread_new' %}">Propón la primera ruta de {{ d.label }} en el foro →</a><a href="{% url 'catalog:resources' %}?q={{ d.label|urlencode }}">Ver cursos en el catálogo</a></small></div><span class="w-pill soon">Próxima</span></li>
-          {% endfor %}
-        </ul>
+        {% include "core/partials/route_rows.html" with d=d %}
       </div>
     </article>
-    {% endfor %}
+    {% endif %}{% endfor %}
   </div>
 </section>
 
@@ -254,11 +263,13 @@
   <ul class="w-suite-list">
     {% for s in suite %}
     <li class="w-app {{ s.status }}">
-      <svg class="i" aria-hidden="true"><use href="#{{ s.icon }}"/></svg>
+      {% if s.logo %}<span class="w-logo"><img class="sl-l" src="{% static 'core/img/suite/'|add:s.logo|add:'.svg' %}" alt="" width="64" height="48"><img class="sl-d" src="{% static 'core/img/suite/'|add:s.logo|add:'-oscuro.svg' %}" alt="" width="64" height="48"></span>
+      {% else %}<svg class="i" aria-hidden="true"><use href="#{{ s.icon }}"/></svg>{% endif %}
       <div>
-        {% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener"><b>{{ s.name }}</b></a>{% else %}<b>{{ s.name }}</b>{% endif %}
+        {% if s.app_url %}<a class="w-app-go" href="{{ s.app_url }}" target="_blank" rel="noopener" aria-label="Abrir {{ s.name }} (se abre en otra pestaña)"><b>{{ s.name }}</b></a>{% else %}<b>{{ s.name }}</b>{% endif %}
         <em class="w-status">{% if s.status == "active" %}Activa{% else %}En desarrollo{% endif %}</em>
         <span>{{ s.blurb }}</span>
+        {% if s.app_url %}<span class="w-open" aria-hidden="true">Abrir {{ s.name }} ↗</span>{% endif %}
       </div>
     </li>
     {% endfor %}
@@ -271,3 +282,4 @@
   {% endfor %}
 </section>
 {% endblock %}
+

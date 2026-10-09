@@ -1,0 +1,89 @@
+{
+  "_nota": "Ruta separada de 'bentley-learn' el 2026-10-09 (decisión del dueño: un producto Bentley por ruta y por disciplina). Los cursos movidos desde 'bentley-learn' perderán el avance que tuvieran registrado allí (se registran de nuevo en esta ruta). LumenRT no tiene learning plan ni acreditación propios en Bentley Learn: se ancla al curso 'Civil Visualization and Animation Using MicroStation and LumenRT' (vis-c0). Si Bentley publica un curso específico, se suma al final como vis-c1. Las keys son estables: agregar siempre al final; los títulos de recurso son la clave en la base: no cambiarlos. URLs verificadas el 2026-10-09 contra la API pública de Bentley Learn (id + slug + título coinciden).",
+  "slug": "bentley-lumenrt",
+  "title": "Ruta LumenRT",
+  "program": "Visualización · LumenRT",
+  "platform": "bentley-learn",
+  "kind": "external_track",
+  "vendor": "bentley",
+  "products": [
+    "lumenrt"
+  ],
+  "disciplines": [
+    "arquitectura"
+  ],
+  "world": "civil",
+  "allow_free_courses": false,
+  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. Visualización y animación de proyectos con LumenRT (Arquitectura).",
+  "levels": [
+    {
+      "code": "vis",
+      "order": 0,
+      "short": "LumenRT",
+      "title": "km 0+000 · LumenRT: visualizar el proyecto",
+      "estimated_hours": "1 a 2 h",
+      "audience": "Quien presenta proyectos: civil, arquitectura y captura",
+      "goal": "Animar y presentar un modelo con LumenRT. Meta: terminar el curso de visualización civil con su certificado.",
+      "guide": {
+        "title": "Guía rápida · LumenRT y realidad",
+        "software": "lumenrt",
+        "do": [
+          "Exporta el modelo de diseño a *LumenRT* ya con materiales y niveles ordenados.",
+          "Monta la escena: terreno, vegetación, tráfico y luz del día; añade cámaras.",
+          "Si tienes una malla de realidad (*Reality Mesh*) úsala como contexto del terreno (ver Ruta iTwin).",
+          "Graba la animación (*Animation*) y exporta una imagen o video para la revisión."
+        ],
+        "commands": [
+          "*LumenRT*",
+          "*Reality Mesh*",
+          "*Animation*",
+          "*Scene*"
+        ],
+        "mistakes": [
+          "Exportar sin revisar los materiales: la escena sale gris y plana.",
+          "Usar una malla de realidad enorme sin recortar: la escena va lenta.",
+          "Presentar la animación como si fuera el diseño final: es una comunicación, no un plano."
+        ],
+        "essential": "Civil Visualization and Animation Using MicroStation and LumenRT"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Civil Visualization and Animation Using MicroStation and LumenRT",
+          "url": "https://learning.bentley.com/learn/course/571/civil-visualization-and-animation-using-microstation-and-lumenrt",
+          "kind": "course",
+          "description": "Curso esencial del ramal: visualización y animación de proyectos civiles.",
+          "duration_text": "Curso on demand",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        }
+      ],
+      "external_courses": [
+        {
+          "key": "vis-c0",
+          "order": 0,
+          "title": "Civil Visualization and Animation Using MicroStation and LumenRT",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/571/civil-visualization-and-animation-using-microstation-and-lumenrt",
+          "description": "Curso esencial del ramal: visualización y animación de proyectos civiles.",
+          "duration_text": "Curso on demand",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ],
+          "reward": "trophy",
+          "is_required": true,
+          "skills": [
+            "modelado-3d"
+          ]
+        }
+      ]
+    }
+  ]
+}

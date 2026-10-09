@@ -14,7 +14,9 @@ from apps.accounts.models import Person, PersonStatus
 from apps.catalog.models import Platform
 from apps.credentials import services as credential_services
 from apps.credentials.models import Credential
+from apps.diplomas import services as diplomas
 from apps.gamification import game
+from apps.notifications import services as notifications
 from apps.paths.models import LearningPath
 
 from . import assessment, constants, data
@@ -77,7 +79,7 @@ def issue_credential(person, attempt, today: date):
     path = LearningPath.objects.filter(slug=constants.ROUTE_SLUG).first()
     platform = Platform.objects.filter(slug="interna").first()
     title = diploma_title()
-    return credential_services.issue_system_credential(
+    cred = credential_services.issue_system_credential(
         person,
         constants.CREDENTIAL_ID,
         {
@@ -91,6 +93,15 @@ def issue_credential(person, attempt, today: date):
             "visibility": Credential.Visibility.TEAM,
         },
     )
+    notifications.notify(
+        person,
+        "diploma",
+        f"Tu diploma «{title}» está listo",
+        "Lámina D-101, revisó Nala. Puedes imprimirlo o guardarlo como PDF.",
+        url=f"/dgac/diploma/{attempt.pk}/",
+        key=f"diploma:{constants.CREDENTIAL_ID}:{attempt.pk}",
+    )
+    return cred
 
 
 def diploma_title():
@@ -101,6 +112,26 @@ def diploma_title():
 def diploma_text():
     overview = data.load_overview() or {}
     return (overview.get("diploma") or {}).get("text", "")
+
+
+def diploma_context(attempt):
+    """Contexto del diploma de un intento aprobado, con el diseño común de apps.diplomas."""
+    path = LearningPath.objects.filter(slug=constants.ROUTE_SLUG).select_related("platform").first()
+    cred = attempt.credential or (path and diplomas.credential_for(attempt.person, path)) or None
+    extra = [
+        ("Puntaje", f"{attempt.score_percent} %"),
+        ("Vigente hasta", attempt.expires_on.strftime("%d-%m-%Y") if attempt.expires_on else "—"),
+    ]
+    return diplomas.build_context(
+        attempt.person,
+        path,
+        cred,
+        issued_on=timezone.localtime(attempt.taken_at).date(),
+        title=diploma_title(),
+        extra_facts=extra,
+        body=diploma_text()
+        or "Prueba interna de conocimientos sobre operaciones con drones (RPAS) y los requisitos de la DGAC.",
+    ) | {"issuer": constants.DEFAULT_ISSUER, "reference": attempt.code}
 
 
 # --- permisos y consultas --------------------------------------------------------------------------------------

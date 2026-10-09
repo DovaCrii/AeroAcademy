@@ -1,6 +1,6 @@
-{% if rows %}<ul class="w-ovl">{% for r in rows %}
+{% load static %}{% if rows %}<ul class="w-ovl">{% for r in rows %}
   <li>
-    <a class="w-th" href="{% url 'paths:detail' r.path.slug %}" aria-hidden="true" tabindex="-1"><span>{{ r.path.vendor.name|slice:":2"|upper }}</span><i style="width:{{ r.pct }}%"></i></a>
+    <a class="w-th{% if r.icon %} w-th-img{% endif %}" href="{% url 'paths:detail' r.path.slug %}" aria-hidden="true" tabindex="-1">{% if r.icon %}<img src="{% static 'core/img/software/'|add:r.icon|add:'.svg' %}" alt="" width="48" height="48">{% else %}<span>{{ r.path.vendor.name|slice:":2"|upper }}</span>{% endif %}<i style="width:{{ r.pct }}%"></i></a>
     <div>
       <a href="{% url 'paths:detail' r.path.slug %}">{{ r.path.title }}</a>
       <small>{{ r.path.vendor.name }} · {% if r.path.kind == "external_track" %}Cursos oficiales{% else %}Ruta guiada{% endif %} · {{ r.pct }} %</small>

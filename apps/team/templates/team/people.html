@@ -7,12 +7,21 @@
 {% block content %}
 <div class="page-head">
   <h1>Personas del equipo</h1>
-  <p>Invitación, aprobación y área de cada persona. <a href="{% url 'team:people_add' %}">Agregar personas</a> · <a href="{% url 'team:board' %}">Tablero del equipo</a> · <a href="{% url 'community:moderation' %}">Moderación</a></p>
+  <p>Invitación, aprobación y área de cada persona. {% if is_admin %}<a href="{% url 'team:people_add' %}">Agregar personas</a> · {% endif %}<a href="{% url 'team:board' %}">Tablero del equipo</a> · <a href="{% url 'community:moderation' %}">Moderación</a></p>
 </div>
+
+{% for person, link in fresh_links %}
+<section class="mod-sec" aria-labelledby="fl-{{ person.pk }}">
+  <h2 id="fl-{{ person.pk }}">Enlace de registro de {{ person.name }}</h2>
+  <p class="muted">De un solo uso y vence en 7 días. Se muestra esta vez: cópialo y mándalo por un canal privado. Si lo pierdes, genera otro (el anterior deja de servir). Ya viene dentro del texto de invitación de su fila.</p>
+  <input id="fl-in-{{ person.pk }}" class="copy-box" type="text" value="{{ link }}" readonly>
+  <p><button class="btn" type="button" data-copy="fl-in-{{ person.pk }}">Copiar enlace</button></p>
+</section>
+{% endfor %}
 
 <section class="mod-sec" aria-labelledby="inv-h">
   <h2 id="inv-h">Texto de invitación</h2>
-  <p class="muted">Cópialo y envíalo por correo o chat. No lleva claves; cada persona entra con su correo de Tailscale en <b>{{ academy_url }}</b>. Cada fila de abajo trae el mismo texto con su nombre y correo.</p>
+  <p class="muted">Cópialo y envíalo por correo o chat. No lleva claves; quien tiene su correo de Tailscale entra directo en <b>{{ academy_url }}</b>.{% if is_admin %} Para quien no, genera su enlace de registro en la fila (<b>Copiar enlace de registro</b>): trae contraseña propia.{% endif %} Cada fila de abajo trae el mismo texto con su nombre y correo.</p>
   <textarea id="inv-generic" class="copy-box" rows="11" readonly>{{ invitation }}</textarea>
   <p><button class="btn" type="button" data-copy="inv-generic">Copiar texto</button></p>
 </section>
@@ -53,12 +62,17 @@
           <details><summary>Invitación</summary>
             <textarea id="inv-{{ row.person.pk }}" class="copy-box" rows="10" readonly>{{ row.invitation }}</textarea>
             <button class="btn" type="button" data-copy="inv-{{ row.person.pk }}">Copiar</button>
-          </details></td>
+          </details>
+          {% if is_admin %}{% if row.can_link %}
+          <form method="post" action="{% url 'team:person_signup_link' row.person.pk %}">{% csrf_token %}
+            <button class="btn" type="submit" title="Genera un enlace nuevo de un solo uso (7 días); el anterior deja de servir">Copiar enlace de registro</button>
+          </form>
+          {% else %}<small class="muted">Aprueba a la persona para invitarla con contraseña.</small>{% endif %}{% endif %}</td>
       </tr>
     {% endfor %}
     </tbody>
   </table></div>
 </section>
-{% empty %}<p class="muted">Aún no hay personas. <a href="{% url 'team:people_add' %}">Agrega al equipo</a>.</p>{% endfor %}
+{% empty %}<p class="muted">Aún no hay personas. {% if is_admin %}<a href="{% url 'team:people_add' %}">Agrega al equipo</a>.{% endif %}</p>{% endfor %}
 <script src="{% static 'team/team.js' %}" defer></script>
 {% endblock %}

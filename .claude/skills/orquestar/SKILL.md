@@ -32,6 +32,10 @@ su definición: si el tipo no está disponible y se usa `general-purpose`, sin `
    375 px, claro y oscuro).
 6. **Verificar (Haiku).** `verificador-enlaces` al final de toda ronda que tocó rutas, catálogo o plantillas.
 7. **Publicar (Opus).** Rama, PR, CI en verde, fusión con merge commit (`docs/FUSIONES.md`), comandos para la VM.
+   Ojo: `gh pr checks --watch` termina al instante con «no checks reported» si el CI aún no arrancó; espera a que
+   aparezca el check (o vigila la corrida con `gh run watch <id> --exit-status`) antes de fusionar.
+8. **Revisión visual en claro y oscuro.** El dueño usa el sitio en **modo oscuro**: toda pantalla nueva se revisa en los
+   dos temas antes de publicar.
 
 ## Ahorro de tokens
 

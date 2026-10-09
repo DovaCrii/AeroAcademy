@@ -10,7 +10,6 @@ import re
 import unicodedata
 from dataclasses import dataclass, field
 
-from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -27,7 +26,7 @@ from .models import TeamMember
 
 MAX_ROWS = 500
 MAX_BYTES = 200_000
-DEFAULT_URL = "https://aeroacademy.tailccd107.ts.net"
+DEFAULT_URL = accounts.DEFAULT_ACADEMY_URL
 EMAIL_RE = re.compile(r"^[^@\s,;]+@[^@\s,;]+\.[^@\s,;]+$")
 
 ROLE_ALIASES = {
@@ -121,7 +120,18 @@ def _read_rows(text: str):
         return [], "El archivo es demasiado grande (máximo 200 KB)."
     if not text.strip():
         return [], "El archivo está vacío."
-    first = text.splitlines()[0]
+    first = text.strip().splitlines()[0]
+    if "@" in first:
+        # Modo simple: sin fila de títulos, solo correos (uno por línea, o separados por coma, punto y coma o espacio).
+        # Cada persona entra como member; su nombre y su hoja los completa ella al entrar.
+        rows = []
+        for number, line in enumerate(text.splitlines(), start=1):
+            for token in re.split(r"[\s,;]+", line.strip()):
+                if token:
+                    rows.append((number, {"email": token}))
+        if len(rows) > MAX_ROWS:
+            return [], f"Demasiadas filas ({len(rows)}); el máximo es {MAX_ROWS} por archivo."
+        return rows, ""
     delimiter = ";" if first.count(";") > first.count(",") else ","
     reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     try:
@@ -193,6 +203,9 @@ def import_team(text: str, by: Person | None = None, dry_run: bool = False) -> I
     """Pre-aprueba a las personas del CSV. Idempotente: repetirlo actualiza, nunca duplica.
     Con `dry_run` calcula y valida todo igual, pero no escribe nada."""
     report = ImportReport(dry_run=dry_run)
+    if by is not None and not by.is_admin:
+        report.fatal = "Solo un admin puede agregar personas."
+        return report
     rows, fatal = _read_rows(text)
     if fatal:
         report.fatal = fatal
@@ -295,8 +308,10 @@ def _first_steps_done(ids):
     return {pk: sum(pk in s for s in (sheet, mission, cert, forum)) for pk in ids}
 
 
-def roster(with_steps=True):
-    """Todas las personas no suspendidas con su estado de incorporación (consultas constantes)."""
+def roster(with_steps=True, links=None):
+    """Todas las personas no suspendidas con su estado de incorporación (consultas constantes).
+    `links` = {person_id: enlace de registro recién generado}: solo esa fila lo lleva en su texto de invitación."""
+    links = links or {}
     people = list(
         Person.objects.exclude(status=PersonStatus.SUSPENDED)
         .select_related("team_member")
@@ -322,7 +337,9 @@ def roster(with_steps=True):
                 "entered": p.last_login is not None,
                 "steps": steps[p.pk],
                 "steps_done": steps[p.pk] == len(STEP_LABELS),
-                "invitation": invitation_text(p),
+                "invitation": invitation_text(p, signup_url=links.get(p.pk, "")),
+                "fresh_link": links.get(p.pk, ""),
+                "can_link": accounts.can_receive_link(p),
             }
         )
     return rows
@@ -403,11 +420,28 @@ def update_person(person: Person, by: Person, *, role="", discipline_slugs=None,
 
 
 def academy_url() -> str:
-    return getattr(settings, "ACADEMY_URL", DEFAULT_URL).rstrip("/")
+    return accounts.academy_url()
 
 
-def invitation_text(person: Person | None = None) -> str:
-    """Mensaje listo para copiar. No lleva claves ni tokens: solo la dirección y los pasos."""
+def _require_admin(by):
+    if not by.is_admin:
+        raise PermissionError("Solo un admin puede generar enlaces de registro.")
+
+
+@transaction.atomic
+def create_signup_link(person: Person, by: Person) -> str:
+    """Enlace de registro (o de restablecimiento) de un solo uso y 7 días. Solo un admin. Invalida el anterior.
+    Se devuelve completo para mostrarlo una vez; en la base solo queda un valor que invalida los enlaces viejos y
+    en el registro de moderación, quién lo generó y para quién (nunca el enlace)."""
+    _require_admin(by)
+    url = accounts.signup_url(person)  # ValueError si la persona no está aprobada
+    moderation.log(by, "signup_link", person, person.name)
+    return url
+
+
+def invitation_text(person: Person | None = None, signup_url: str = "") -> str:
+    """Mensaje listo para copiar. Lleva la dirección, los pasos y, si el admin la generó, el enlace de registro de
+    esa persona (de un solo uso, vence en 7 días). Ninguna otra clave."""
     url = academy_url()
     hello = f"Hola {person.name}," if person is not None else "Hola,"
     who = (
@@ -415,13 +449,24 @@ def invitation_text(person: Person | None = None) -> str:
         if person is not None
         else " (con el correo que te indicaron)"
     )
+    if signup_url:
+        step3 = (
+            f"3. Con Tailscale conectado, abre este enlace para crear tu contraseña: {signup_url}\n"
+            "   Sirve una sola vez y vence en 7 días; si no abre, pídele otro al administrador.\n"
+            f"   Después entras desde {url}/entrar/ con tu correo y esa contraseña.\n"
+        )
+    else:
+        step3 = (
+            f"3. Con Tailscale conectado, abre {url} en el navegador. Si tu correo de Tailscale es el mismo, "
+            "entras directo; si no, el administrador te manda un enlace de registro.\n"
+        )
     return (
         f"{hello}\n\n"
         "Te sumamos a AeroAcademy, la academia interna del equipo. Para entrar:\n\n"
         "1. Revisa tu correo: te llegó una invitación a nuestra red de Tailscale. Acéptala.\n"
         "2. Instala Tailscale desde https://tailscale.com/download e inicia sesión"
         f"{who}.\n"
-        f"3. Con Tailscale conectado, abre {url} en el navegador. Quedas dentro sin contraseña.\n"
+        f"{step3}"
         "4. Para tenerla como app: en Chrome o Edge, menú (⋮) → Instalar AeroAcademy; en el celular, "
         "«Agregar a pantalla de inicio».\n"
         "5. En la portada sigue los «Primeros pasos»: completa tu hoja de personaje y preséntate en el foro.\n\n"

@@ -1,0 +1,239 @@
+{
+  "_nota": "Ruta separada de 'bentley-learn' el 2026-10-09 (decisión del dueño: un producto Bentley por ruta y por disciplina). Los cursos movidos desde 'bentley-learn' perderán el avance que tuvieran registrado allí (se registran de nuevo en esta ruta). Trae iTwin (itw-*) y el capítulo de realidad (rea-*). HUECO: iTwin Capture Modeler e iTwin Experience no tienen learning plan ni acreditación en los catálogos públicos de Bentley Learn; el único plan 'iTwin' acreditado es el de Developer (itw-c3, API). Se anclan a los cursos de iModel y de Reality Modeling que sí existen. Las keys son estables: agregar siempre al final; los títulos de recurso son la clave en la base: no cambiarlos. URLs verificadas el 2026-10-09 contra la API pública de Bentley Learn (id + slug + título coinciden).",
+  "slug": "bentley-itwin",
+  "title": "Ruta iTwin",
+  "program": "Gemelo digital y captura · iTwin",
+  "platform": "bentley-learn",
+  "kind": "external_track",
+  "vendor": "bentley",
+  "products": [
+    "itwin",
+    "itwin-capture"
+  ],
+  "disciplines": [
+    "captura-rpa"
+  ],
+  "world": "civil",
+  "allow_free_courses": false,
+  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. iTwin (iModel y gemelo digital) y el modelado de realidad que alimenta el gemelo: Captura · RPA.",
+  "levels": [
+    {
+      "code": "itw",
+      "order": 0,
+      "short": "iTwin",
+      "title": "km 0+000 · iTwin y gemelo digital: del modelo al iModel",
+      "estimated_hours": "2 a 5 h",
+      "audience": "Coordinación BIM, diseño y gestión de activos",
+      "goal": "Publicar un iModel desde el diseño y revisarlo en Bentley Infrastructure Cloud (iTwin) con buenas prácticas de calidad. La acreditación de iTwin Developer es opcional y para quien programa con la API.",
+      "guide": {
+        "title": "Guía rápida · iTwin",
+        "software": "itwin",
+        "do": [
+          "Prepara el modelo antes de publicarlo: niveles limpios, referencias resueltas y propiedades (*Item Types*) completas.",
+          "Publica a un *iModel* desde MicroStation u OpenRoads/OpenBuildings y comprueba la *Synchronization*.",
+          "Revisa en el navegador con *Design Review*: marca, mide y deja comentarios sobre el iModel.",
+          "Usa los *Named Versions* para congelar cada entrega."
+        ],
+        "commands": [
+          "*iModel*",
+          "*Synchronization*",
+          "*Named Version*",
+          "*Design Review*",
+          "*Clash Detection*"
+        ],
+        "mistakes": [
+          "Publicar sin limpiar el diseño: el iModel hereda errores y peso innecesario.",
+          "Tratar el iModel como fuente editable: se edita el diseño y se vuelve a publicar.",
+          "No versionar las entregas: nadie sabe qué se revisó."
+        ],
+        "essential": "Preparing Model for Design Review: Mastering iModel Creation & Collaboration in Bentley Infrastructure Cloud"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Preparing Model for Design Review: Mastering iModel Creation & Collaboration in Bentley Infrastructure Cloud",
+          "url": "https://learning.bentley.com/learn/course/3488/preparing-model-for-design-review-mastering-imodel-creation-amp-collaboration-in-bentley-infrastructure-cloud",
+          "kind": "course",
+          "description": "Curso esencial del capítulo: crear el iModel y colaborar sobre él (22 min).",
+          "duration_text": "22 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Catálogo OpenRoads en Bentley Learn: gemelos digitales",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/19",
+          "kind": "collection",
+          "description": "El catálogo de OpenRoads incluye los cursos de flujos civiles con iTwin.",
+          "tags": [
+            "Catalog",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "external_courses": [
+        {
+          "key": "itw-c0",
+          "order": 0,
+          "title": "Preparing Model for Design Review: Mastering iModel Creation & Collaboration in Bentley Infrastructure Cloud",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/3488/preparing-model-for-design-review-mastering-imodel-creation-amp-collaboration-in-bentley-infrastructure-cloud",
+          "description": "Curso esencial del capítulo: crear el iModel y colaborar sobre él (22 min).",
+          "duration_text": "22 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ],
+          "reward": "trophy",
+          "is_required": true,
+          "skills": [
+            "coordinacion",
+            "cde"
+          ]
+        },
+        {
+          "key": "itw-c1",
+          "order": 1,
+          "title": "Publishing iModels A Best Practices Checklist for High-Fidelity Digital Twins",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/6051/publishing-imodels-a-best-practices-checklist-for-high-fidelity-digital-twins",
+          "duration_text": "1 h",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "coordinacion",
+            "estandares-bim"
+          ]
+        },
+        {
+          "key": "itw-c2",
+          "order": 2,
+          "title": "Civil Workflows with Digital Twins",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/626/civil-workflows-with-digital-twins",
+          "duration_text": "Curso on demand",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "coordinacion",
+            "diseno-vial"
+          ]
+        },
+        {
+          "key": "itw-c3",
+          "order": 3,
+          "title": "Bentley Accredited Developer: iTwin Platform - Associate",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/651/bentley-accredited-developer-itwin-platform-associate",
+          "duration_text": "2 h 15 min · 2 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "skills": [
+            "coordinacion"
+          ],
+          "contains": [
+            "Program Overview",
+            "Assessment"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "rea",
+      "order": 1,
+      "short": "Realidad",
+      "title": "km 1+000 · Reality modeling: de la captura a la malla",
+      "estimated_hours": "2 a 5 h",
+      "audience": "Captura, topografía y diseño que usa modelos de realidad",
+      "goal": "Entender cómo entra una malla o nube de puntos al diseño (iTwin Capture Modeler produce las mallas) y usarla como contexto. Capítulo complementario: no cuenta para el porcentaje.",
+      "guide": {
+        "title": "Guía rápida · Reality modeling",
+        "software": "itwin-capture",
+        "do": [
+          "Captura con fotos de dron (RPA) o escáner y procesa en *iTwin Capture Modeler* hasta obtener una *Reality Mesh*.",
+          "Revisa la georreferenciación con puntos de control (*Ground Control Points*) antes de entregar.",
+          "Entrega la malla como escena y cárgala en MicroStation como *Reality Mesh* de contexto.",
+          "Recorta el área de trabajo: una malla sin recortar vuelve lenta la sesión."
+        ],
+        "commands": [
+          "*Reality Mesh*",
+          "*Ground Control Points*",
+          "*Aerotriangulation*",
+          "*Reconstruction*"
+        ],
+        "mistakes": [
+          "Entregar la malla sin puntos de control: queda bien al ojo y mal en coordenadas.",
+          "Cargar la malla completa en el diseño: el archivo se vuelve inmanejable.",
+          "Confundir malla (para ver y medir) con nube de puntos (para extraer geometría)."
+        ],
+        "essential": "MicroStation MasterClass – Reality Modelling Essentials"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "MicroStation MasterClass – Reality Modelling Essentials",
+          "url": "https://learning.bentley.com/learn/course/2912/microstation-masterclass-reality-modelling-essentials",
+          "kind": "course",
+          "description": "Curso esencial del capítulo: modelos de realidad dentro de MicroStation (2 h 30 min).",
+          "duration_text": "2 h 30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        }
+      ],
+      "external_courses": [
+        {
+          "key": "rea-c0",
+          "order": 0,
+          "title": "MicroStation MasterClass – Reality Modelling Essentials",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/course/2912/microstation-masterclass-reality-modelling-essentials",
+          "description": "Curso esencial del capítulo: modelos de realidad dentro de MicroStation (2 h 30 min).",
+          "duration_text": "2 h 30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "nubes-de-puntos",
+            "fotogrametria"
+          ]
+        },
+        {
+          "key": "rea-c1",
+          "order": 1,
+          "title": "14 - Reality Modeling (Visualization)",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/323/14-reality-modeling-visualization",
+          "duration_text": "1 h 47 min · 4 cursos",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "nubes-de-puntos",
+            "fotogrametria"
+          ],
+          "contains": [
+            "OpenRoads Best Practice - Making the Model More Visual",
+            "Civil and Reality Modeling Integration",
+            "Using Reality Models During Your Design Process",
+            "Civil Visualization and Animation Using MicroStation and LumenRT"
+          ]
+        }
+      ]
+    }
+  ]
+}

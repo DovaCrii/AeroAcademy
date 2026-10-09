@@ -1,4 +1,4 @@
-<section class="lv-cover ao-cover" id="inicio" aria-label="{{ program_title }}">
+{% load catalog_extras %}<section class="lv-cover ao-cover" id="inicio" aria-label="{{ program_title }}">
   <canvas id="cloudCv" data-scene="terrain" aria-hidden="true"></canvas>
   <div class="lv-grid" aria-hidden="true"></div>
   <svg class="lv-reticle" viewBox="0 0 600 600" aria-hidden="true">
@@ -11,6 +11,7 @@
     <span class="lv-cap">Captura / RPA{% if program_code %} · {{ program_code }}{% endif %}</span>
     <b class="lv-title">{{ path.title }}</b>
     <span class="lv-cap">{{ stats.levels_total }} waypoints · plan de vuelo</span>
+    {% vendor_family path as vf %}<span class="lv-tiles vf-{{ vf }}">{% path_tiles path "md" %}</span>
   </div>
 
   <div class="lv-in">

@@ -1,0 +1,2361 @@
+{
+  "_nota": "Ruta general de topografía, pública y sin documentos internos. Las URLs se abrieron el 2026-10-09; las marcadas verify_url quedan por confirmar. Los niveles n9 a n12 son conceptos generales, sin marcas ni equipos. Las keys son estables: agregar siempre al final.",
+  "slug": "topografia-101",
+  "title": "Topografía 101 · Entender el territorio",
+  "program": "Curso interno · Entender el territorio",
+  "platform": "interna",
+  "kind": "structured",
+  "vendor": "aeroacademy",
+  "products": [],
+  "disciplines": [
+    "topografia",
+    "transversal"
+  ],
+  "world": "survey",
+  "description": "Curso general para entender la topografía sin ser topógrafo: coordenadas, geodesia, equipos clásicos, GNSS, escáneres y drones, fotogrametría paso a paso, modelos de elevación, escaneo 3D, vuelo seguro, productos y aplicaciones. Con esquemas, misiones prácticas y quiz con casos reales de Chile.",
+  "intro": {
+    "title": "De la huincha al gemelo digital",
+    "text": "Una ruta para conversar de igual a igual con topografía. Cada nivel mezcla lo técnico con ejemplos cercanos: por qué un plano 'cae en el mar', qué equipo conviene y qué pedir al terreno."
+  },
+  "flow": [
+    {
+      "title": "Geodesia",
+      "text": "Elipsoide, geoide y datum"
+    },
+    {
+      "title": "Coordenadas",
+      "text": "UTM 18S y 19S"
+    },
+    {
+      "title": "Equipos",
+      "text": "Total, GNSS, TLS, SLAM y dron"
+    },
+    {
+      "title": "Productos",
+      "text": "Nube, MDT, curvas y plano"
+    },
+    {
+      "title": "Aplicaciones",
+      "text": "Arquitectura a minería"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Geoide",
+      "location": "Geodesia",
+      "meaning": "Superficie de gravedad que sigue al nivel medio del mar; referencia de las alturas ortométricas."
+    },
+    {
+      "term": "Elipsoide",
+      "location": "Geodesia",
+      "meaning": "Forma matemática achatada que aproxima la Tierra; referencia de las coordenadas y alturas elipsoidales."
+    },
+    {
+      "term": "Datum",
+      "location": "Geodesia",
+      "meaning": "Forma de amarrar un elipsoide a la Tierra. En Chile, SIRGAS-Chile."
+    },
+    {
+      "term": "UTM",
+      "location": "Coordenadas",
+      "meaning": "Grilla plana en husos de 6° con este y norte en metros. Chile usa los husos 18S y 19S."
+    },
+    {
+      "term": "RTK",
+      "location": "GNSS",
+      "meaning": "Corrección GNSS en tiempo real que da precisión de centímetros."
+    },
+    {
+      "term": "PPK",
+      "location": "GNSS",
+      "meaning": "Corrección GNSS posterior a la medición; muy usada en drones."
+    },
+    {
+      "term": "TLS",
+      "location": "Captura masiva",
+      "meaning": "Escáner láser terrestre; captura por estaciones."
+    },
+    {
+      "term": "SLAM",
+      "location": "Captura masiva",
+      "meaning": "Escáner portátil que se ubica y captura mientras se camina."
+    },
+    {
+      "term": "MDT",
+      "location": "Productos",
+      "meaning": "Modelo digital del terreno: el suelo sin árboles ni edificios."
+    },
+    {
+      "term": "GSD",
+      "location": "Fotogrametría",
+      "meaning": "Tamaño de un píxel proyectado en el suelo, en cm por píxel; define el detalle de una imagen aérea."
+    },
+    {
+      "term": "GCP",
+      "location": "Fotogrametría",
+      "meaning": "Punto de control en terreno con coordenadas medidas; ancla el levantamiento al sistema de referencia."
+    },
+    {
+      "term": "Aerotriangulación",
+      "location": "Fotogrametría",
+      "meaning": "Ajuste en bloque que calcula la posición y orientación de cada foto usando puntos comunes."
+    },
+    {
+      "term": "Ortomosaico",
+      "location": "Fotogrametría",
+      "meaning": "Mosaico de fotos corregido para tener escala uniforme; se mide sobre él como en un plano."
+    },
+    {
+      "term": "TIN",
+      "location": "Elevación",
+      "meaning": "Red de triángulos entre puntos medidos que representa un terreno adaptándose al relieve."
+    },
+    {
+      "term": "Ráster",
+      "location": "Elevación",
+      "meaning": "Grilla de celdas con una cota por celda; liviana y apta para análisis."
+    },
+    {
+      "term": "Registro",
+      "location": "Escaneo 3D",
+      "meaning": "Unión de varias nubes de puntos en un solo sistema usando zonas u objetos comunes."
+    },
+    {
+      "term": "Georradar",
+      "location": "Aplicaciones",
+      "meaning": "Equipo que emite ondas al subsuelo y registra reflejos para ubicar redes y cambios de material enterrados."
+    }
+  ],
+  "certification_goals": [
+    "Explicar qué es un datum, el geoide y la diferencia entre h y H",
+    "Leer una coordenada UTM 18S o 19S y diagnosticar un archivo mal ubicado",
+    "Elegir el equipo de captura según entorno, precisión y costo",
+    "Planificar un vuelo fotogramétrico (GSD, traslape, control) y revisar su informe",
+    "Distinguir MDT, MDS, TIN y ráster y calcular un volumen simple",
+    "Explicar el flujo de un escaneo 3D: registro, georreferenciación, filtrado y modelo",
+    "Aplicar un checklist general de seguridad de drones"
+  ],
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Para qué sirve",
+      "title": "1 · ¿Qué es la topografía y para qué sirve?",
+      "estimated_hours": "2 h",
+      "audience": "Todo el equipo, sin importar su especialidad",
+      "goal": "Entender qué mide la topografía, la diferencia entre planimetría y altimetría, y por qué precisión, exactitud y tolerancia no son lo mismo. Meta: poder explicarle a un colega de otra área qué le entrega un topógrafo.",
+      "guide": {
+        "title": "Guía rápida · Para qué sirve",
+        "software": "gis",
+        "do": [
+          "Piensa la topografía como *la base de todo lo que se construye*: sin saber dónde y a qué altura está algo, no hay plano que valga.",
+          "Separa siempre dos preguntas: *¿dónde?* (planimetría: este y norte) y *¿a qué altura?* (altimetría: cota).",
+          "Antes de medir, pregunta la *tolerancia*: cuánto error acepta el proyecto. Una cancha de pasto y un eje de fundación no piden lo mismo.",
+          "Anota el sistema de referencia desde el día uno: coordenadas sin sistema son números sueltos."
+        ],
+        "commands": [
+          "*Planimetría*",
+          "*Altimetría*",
+          "*Precisión*",
+          "*Exactitud*",
+          "*Tolerancia*"
+        ],
+        "mistakes": [
+          "Confundir precisión con exactitud: medir muy parejo pero todo corrido sigue siendo un error.",
+          "Pedir la máxima precisión posible sin preguntar para qué: sube el costo y el tiempo sin mejorar el proyecto.",
+          "Entregar coordenadas sin decir en qué sistema y con qué altura (elipsoidal u ortométrica)."
+        ],
+        "essential": "Geodesy tutorial (NOAA National Ocean Service)"
+      },
+      "resources": [
+        {
+          "title": "Geodesy tutorial (NOAA National Ocean Service)",
+          "url": "https://oceanservice.noaa.gov/education/tutorial_geodesy/",
+          "description": "Mini curso de 12 lecciones: qué es la geodesia, el geoide, el datum horizontal y vertical, gravedad y GPS. Ideal para partir sin fórmulas.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "SIRGAS-CHILE (portal del IGM)",
+          "url": "https://www.sirgaschile.cl/",
+          "description": "Portal del Instituto Geográfico Militar: redes geodésicas (GNSS, nivelación, gravedad), conversor de coordenadas, transformación de datum y datos de estaciones CORS. Algunas funciones piden cuenta.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Dibujar a mano el croquis de tu oficina o de una plaza cercana y marcar qué parte es planimetría (planta) y cuál es altimetría (cotas o niveles)"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Buscar dos situaciones de tu trabajo donde la tolerancia es muy distinta (por ejemplo, ubicar una fundación y estimar la superficie de un terreno) y escribir cuánto error aceptarías en cada una"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Medir cinco veces el largo de una mesa con huincha y calcular el promedio: ¿qué tan parejas salen las medidas (precisión) y qué tan cerca están del valor real (exactitud)?"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Explicar en tres frases a alguien de otra área qué entrega un levantamiento topográfico"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Mides cinco veces la misma pared con láser y siempre da 4,32 m, pero la pared real mide 4,40 m. ¿Qué pasó?",
+          "options": [
+            "Es muy preciso pero poco exacto",
+            "Es muy exacto pero poco preciso",
+            "Es preciso y exacto",
+            "El láser no sirve para paredes"
+          ],
+          "answer": 0,
+          "explanation": "Las medidas son parejas (preciso) pero están corridas respecto del valor verdadero (poco exacto). Pasa con un equipo mal calibrado."
+        },
+        {
+          "key": "n0-q1",
+          "question": "Un arquitecto pide 'precisión de milímetro' para medir la superficie de un potrero de 80 hectáreas. ¿Qué le dirías?",
+          "options": [
+            "Perfecto, hagámoslo con el escáner más caro",
+            "Ese nivel no aporta: la tolerancia debe ir con el uso del dato",
+            "Imposible: la topografía solo llega a metros",
+            "Solo se puede con dron"
+          ],
+          "answer": 1,
+          "explanation": "La tolerancia se define según el uso. Para una superficie grande basta una precisión mucho menor y más barata."
+        },
+        {
+          "key": "n0-q2",
+          "question": "En un plano, la 'cota' de un punto describe...",
+          "options": [
+            "Su posición este y norte",
+            "Su ángulo respecto del norte",
+            "Su altura",
+            "Su distancia al eje"
+          ],
+          "answer": 2,
+          "explanation": "La cota es la altura: es la parte altimétrica. El este y el norte son la parte planimétrica."
+        },
+        {
+          "key": "n0-q3",
+          "question": "¿Cuál de estas preguntas es planimétrica?",
+          "options": [
+            "¿Cuánta pendiente tiene la calle?",
+            "¿A qué cota queda el piso terminado?",
+            "¿Cuánto hay que rebajar el terreno?",
+            "¿Dónde cae el deslinde del terreno?"
+          ],
+          "answer": 3,
+          "explanation": "El deslinde es una posición en planta. Pendiente, cota y rebaje son altimétricos."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas la diferencia entre planimetría y altimetría con un ejemplo propio",
+        "Sabes por qué hay que preguntar la tolerancia antes de elegir equipo"
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Geodesia",
+      "title": "2 · La Tierra no es plana: geodesia básica",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Todo el equipo; clave para quien recibe datos GNSS o de otros países",
+      "goal": "Distinguir elipsoide, geoide y datum, saber por qué WGS 84 y SIRGAS-Chile casi coinciden y por qué la altura que entrega el GNSS no es la altura sobre el nivel del mar.",
+      "guide": {
+        "title": "Guía rápida · Geodesia básica",
+        "software": "gis",
+        "do": [
+          "Piensa en tres superficies: el *terreno* real, el *geoide* (nivel del mar prolongado) y el *elipsoide* (una pelota achatada matemática).",
+          "Recuerda la relación *h ≈ H + N*: la altura elipsoidal que mide el GNSS (h) es la altura sobre el mar (H) más la ondulación del geoide (N).",
+          "Un *datum* es la forma de amarrar el elipsoide a la Tierra. En Chile se usa SIRGAS-Chile; el GPS entrega WGS 84, prácticamente igual para fines de obra.",
+          "Fíjate en la *época*: Chile se mueve por la subducción, y el marco de referencia lleva una fecha."
+        ],
+        "commands": [
+          "*Elipsoide*",
+          "*Geoide*",
+          "*Datum*",
+          "*WGS 84*",
+          "*SIRGAS-Chile*",
+          "*Altura elipsoidal*"
+        ],
+        "mistakes": [
+          "Usar la altura elipsoidal del GNSS como si fuera cota sobre el nivel del mar: puede errar decenas de metros.",
+          "Mezclar datums antiguos (PSAD-56, SAD-69) con SIRGAS sin transformar: el plano se corre varios metros.",
+          "Creer que 'WGS 84' y 'SIRGAS' son lo mismo sin mirar la época ni el marco."
+        ],
+        "essential": "Geodesy tutorial (NOAA National Ocean Service)"
+      },
+      "resources": [
+        {
+          "title": "Geodesy tutorial (NOAA National Ocean Service)",
+          "url": "https://oceanservice.noaa.gov/education/tutorial_geodesy/",
+          "description": "Mini curso de 12 lecciones: qué es la geodesia, el geoide, el datum horizontal y vertical, gravedad y GPS. Ideal para partir sin fórmulas.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "What is the geoid? (NOAA National Ocean Service)",
+          "url": "https://oceanservice.noaa.gov/facts/geoid.html",
+          "description": "Una página corta: el geoide es la superficie de gravedad que define la altura cero.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Datums and Reference Frames (NOAA National Geodetic Survey)",
+          "url": "https://geodesy.noaa.gov/datums/",
+          "description": "Qué es un datum y qué es un marco de referencia. Ejemplos de EE. UU., pero la idea es la misma que en SIRGAS.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "EPSG:5359 · SIRGAS-Chile 2002 (epsg.io)",
+          "url": "https://epsg.io/5359",
+          "description": "Ficha del sistema geográfico 3D oficial de Chile: datum, elipsoide y área de uso (Chile continental e insular).",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 3
+        },
+        {
+          "title": "EPSG:4326 · WGS 84 (epsg.io)",
+          "url": "https://epsg.io/4326",
+          "description": "Ficha del sistema geográfico que usa el GPS y casi toda la web (latitud y longitud).",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 4
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Ver el esquema *elipsoide-geoide* y marcar con colores h, H y N en tu propia copia dibujada"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Abrir la ficha EPSG:5359 (SIRGAS-Chile 2002) y la EPSG:4326 (WGS 84) y anotar qué las diferencia: nombre, área de uso y tipo"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Leer la lección 'The Geoid' del tutorial de NOAA y explicar con tus palabras por qué el nivel del mar no es una esfera lisa"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Buscar en el portal del IGM (sirgaschile.cl) la sección de redes geodésicas y anotar qué red usarías para amarrar un levantamiento en tu zona"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Tu receptor GNSS dice que el punto está a 560 m de altura elipsoidal. ¿Puedes escribir 'cota 560 m' en el plano?",
+          "options": [
+            "Sí, es la altura sobre el mar",
+            "No: falta pasar de altura elipsoidal a ortométrica con un modelo de geoide",
+            "Sí, si es WGS 84",
+            "No, el GNSS no mide alturas"
+          ],
+          "answer": 1,
+          "explanation": "La altura elipsoidal es respecto del elipsoide, no del mar. Hay que restar la ondulación del geoide para obtener la altura ortométrica."
+        },
+        {
+          "key": "n1-q1",
+          "question": "El geoide es la superficie que mejor representa...",
+          "options": [
+            "La forma del relieve de Chile",
+            "El elipsoide de la Tierra",
+            "El nivel medio del mar prolongado bajo los continentes",
+            "La capa de atmósfera"
+          ],
+          "answer": 2,
+          "explanation": "Es una superficie de gravedad que sigue al nivel medio del mar. Es irregular, por eso no coincide con el elipsoide."
+        },
+        {
+          "key": "n1-q2",
+          "question": "¿Por qué se dice que Chile 'se mueve' y SIRGAS-Chile lleva una época?",
+          "options": [
+            "Porque el GPS se desajusta solo",
+            "Porque cambia el nivel del mar",
+            "Porque los mapas se encogen",
+            "Porque las placas tectónicas desplazan las estaciones con los años y los terremotos"
+          ],
+          "answer": 3,
+          "explanation": "La subducción de Nazca desplaza el territorio cada año, y terremotos como el de 2010 lo movieron varios metros. Por eso las coordenadas se asocian a una época."
+        },
+        {
+          "key": "n1-q3",
+          "question": "Un archivo viene en PSAD-56 y tu proyecto está en SIRGAS-Chile. ¿Qué haces?",
+          "options": [
+            "Aplicas una transformación de datum (por ejemplo con la herramienta del IGM)",
+            "Los superpones: son iguales",
+            "Borras los datos",
+            "Sumas 100 m al este"
+          ],
+          "answer": 0,
+          "explanation": "Los datums antiguos difieren por metros. Se transforman con parámetros oficiales; superponerlos sin más produce corrimientos."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas qué mide realmente un GNSS en altura",
+        "Sabes qué datum usa Chile y que existen datums antiguos"
+      ],
+      "images": [
+        "core/img/topo/elipsoide-geoide.svg",
+        "core/img/topo/alturas.svg"
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Coordenadas",
+      "title": "3 · Sistemas de coordenadas: geográficas, UTM y locales",
+      "estimated_hours": "3 h",
+      "audience": "Todo el equipo que reciba o entregue planos georreferenciados",
+      "goal": "Leer y convertir coordenadas geográficas y UTM, saber qué husos tiene Chile (18S y 19S), entender el factor de escala y diagnosticar por qué un archivo 'cae en el mar'.",
+      "guide": {
+        "title": "Guía rápida · Sistemas de coordenadas",
+        "software": "gis",
+        "do": [
+          "Revisa tres cosas en cada archivo: *datum*, *proyección* (huso) y *unidad*. Anótalas en el nombre o en un LEEME.",
+          "En Chile, casi todo el norte y centro va en *UTM 19S* (EPSG:32719 o SIRGAS) y el sur y la costa del centro-sur en *UTM 18S* (EPSG:32718).",
+          "Para convertir y probar, usa *epsg.io* o el conversor del IGM: pega coordenadas y mira dónde caen.",
+          "Si el proyecto usa coordenadas *locales o topográficas*, guarda los parámetros que las enlazan con UTM (origen, giro, escala)."
+        ],
+        "commands": [
+          "*UTM 18S*",
+          "*UTM 19S*",
+          "*Coordenadas locales*",
+          "*Factor de escala*",
+          "*EPSG*",
+          "*Falso este / norte*"
+        ],
+        "mistakes": [
+          "Abrir en 19S un archivo hecho en 18S: queda corrido cientos de kilómetros.",
+          "Intercambiar este y norte, o perder el hemisferio: el punto aparece en otro continente o en el océano.",
+          "Medir distancias sobre una proyección sin aplicar factor de escala en obras donde importa el centímetro."
+        ],
+        "essential": "What does the term UTM mean? (USGS)"
+      },
+      "resources": [
+        {
+          "title": "What does the term UTM mean? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-does-term-utm-mean",
+          "description": "Preguntas frecuentes del USGS: UTM como grilla plana en husos de 6°, con este y norte en metros.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "EPSG:32719 · WGS 84 / UTM zone 19S (epsg.io)",
+          "url": "https://epsg.io/32719",
+          "description": "Huso 19S: de 72°O a 66°O. Cubre el norte y el centro de Chile (Santiago, Antofagasta).",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "EPSG:32718 · WGS 84 / UTM zone 18S (epsg.io)",
+          "url": "https://epsg.io/32718",
+          "description": "Huso 18S: de 78°O a 72°O. Cubre el sur de Chile y la costa del centro-sur.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "EPSG:5361 · SIRGAS-Chile 2002 / UTM zone 19S (epsg.io)",
+          "url": "https://epsg.io/5361",
+          "description": "La versión proyectada UTM 19S sobre el datum SIRGAS-Chile 2002.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 3
+        },
+        {
+          "title": "SIRGAS-CHILE (portal del IGM)",
+          "url": "https://www.sirgaschile.cl/",
+          "description": "Portal del Instituto Geográfico Militar: redes geodésicas (GNSS, nivelación, gravedad), conversor de coordenadas, transformación de datum y datos de estaciones CORS. Algunas funciones piden cuenta.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 4
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Mirar el esquema *utm-zonas-chile* y ubicar en qué huso están tu ciudad, Antofagasta y Puerto Montt"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Usar epsg.io para pasar las coordenadas de un punto conocido (por ejemplo tu oficina) de latitud y longitud a UTM 19S y anotar este y norte"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Provocar a propósito un error: cambiar el huso de 19S a 18S en una conversión y ver cuántos kilómetros se corre el punto"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Escribir el 'carnet de coordenadas' de un proyecto: datum, huso, unidades, tipo de altura y quién lo definió"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Un plano de Santiago abre en el mapa y el punto aparece frente a la costa de África. ¿Cuál es la sospecha más probable?",
+          "options": [
+            "El plano está bien, el mapa se equivocó",
+            "La batería del equipo estaba baja",
+            "Falta el sistema de coordenadas y se leyó como si fueran grados (cerca de 0,0)",
+            "Hubo marea alta"
+          ],
+          "answer": 2,
+          "explanation": "Cuando no se declara el sistema, el programa interpreta números UTM como grados o como (0,0) y el punto cae en el golfo de Guinea o en el mar."
+        },
+        {
+          "key": "n2-q1",
+          "question": "Santiago está en la zona UTM...",
+          "options": [
+            "18S",
+            "17S",
+            "20S",
+            "19S"
+          ],
+          "answer": 3,
+          "explanation": "Santiago está a unos 70,6°O, dentro del huso 19S (72°O a 66°O)."
+        },
+        {
+          "key": "n2-q2",
+          "question": "Puerto Montt (≈73°O) queda en el huso...",
+          "options": [
+            "18S",
+            "19S",
+            "20S",
+            "17N"
+          ],
+          "answer": 0,
+          "explanation": "El huso 18S abarca de 78°O a 72°O, que incluye gran parte del sur de Chile y la costa."
+        },
+        {
+          "key": "n2-q3",
+          "question": "El factor de escala de UTM en el meridiano central vale 0,9996. Eso significa que...",
+          "options": [
+            "El huso mide 0,9996 grados",
+            "Todas las distancias de la grilla son un 0,04 % más cortas que en el terreno sobre el elipsoide en ese meridiano",
+            "El equipo mide mal",
+            "Las cotas se multiplican por ese valor"
+          ],
+          "answer": 1,
+          "explanation": "La proyección impone un pequeño factor para repartir la deformación. Por eso para obras muy precisas se combinan factores de escala y de altura."
+        }
+      ],
+      "mastery_signals": [
+        "Convierte entre geográficas y UTM con una herramienta confiable",
+        "Diagnosticas por qué un archivo cae en el lugar equivocado"
+      ],
+      "images": [
+        "core/img/topo/utm-zonas-chile.svg"
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Equipos clásicos",
+      "title": "4 · Equipos clásicos: estación total, nivel y poligonales",
+      "estimated_hours": "3 h",
+      "audience": "Todo el equipo; imprescindible para quien replantea en obra",
+      "goal": "Entender cómo una estación total, un nivel y una poligonal llegan a coordenadas y cotas, qué errores cometen y cómo se compensan.",
+      "guide": {
+        "title": "Guía rápida · Equipos clásicos",
+        "software": "tbc",
+        "do": [
+          "La *estación total* mide ángulo horizontal, ángulo vertical y distancia a un *prisma*; con eso calcula coordenadas desde un punto conocido.",
+          "Para *orientarla* necesita un punto de referencia (*backsight*): sin eso las coordenadas salen giradas.",
+          "El *nivel* entrega diferencias de altura: cota del punto = cota del BM + lectura atrás − lectura adelante.",
+          "Una *poligonal* cerrada permite calcular el *error de cierre* y repartirlo (compensación) antes de usar las coordenadas."
+        ],
+        "commands": [
+          "*Estación total*",
+          "*Prisma*",
+          "*Backsight*",
+          "*Poligonal*",
+          "*Nivelación*",
+          "*Error de cierre*"
+        ],
+        "mistakes": [
+          "Armar mal el trípode o no centrar sobre el punto: todo el levantamiento queda corrido.",
+          "No medir la altura del instrumento y del prisma, o anotarla mal.",
+          "Nivelar en una sola dirección sin cerrar contra otro punto conocido: no hay forma de detectar errores."
+        ],
+        "essential": "Estación total (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "SIRGAS-CHILE (portal del IGM)",
+          "url": "https://www.sirgaschile.cl/",
+          "description": "Portal del Instituto Geográfico Militar: redes geodésicas (GNSS, nivelación, gravedad), conversor de coordenadas, transformación de datum y datos de estaciones CORS. Algunas funciones piden cuenta.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Estación total (Wikipedia)",
+          "url": "https://es.wikipedia.org/wiki/Estaci%C3%B3n_total",
+          "description": "Qué mide una estación total, sus partes y cómo se usa en poligonales y replanteo.",
+          "kind": "article",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 1
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Revisar el esquema *estación total* y nombrar con tus palabras las tres cosas que mide el equipo"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Hacer una nivelación de práctica con un nivel óptico, láser o app, en un pasillo o patio, siguiendo la fórmula atrás menos adelante"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Dibujar una poligonal cerrada de cuatro vértices en papel y marcar dónde aparecería el error de cierre"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Preguntar al topógrafo o a la topógrafa de tu equipo qué punto usa como *backsight* en su obra y por qué"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Estacionas la total sobre un punto conocido, pero olvidas orientarla a otro punto de referencia. ¿Qué pasa?",
+          "options": [
+            "Nada, mide igual de bien",
+            "La distancia sale doble",
+            "El prisma no responde",
+            "Los ángulos y por ende las coordenadas quedan girados respecto del sistema"
+          ],
+          "answer": 3,
+          "explanation": "Sin orientación el instrumento no sabe hacia dónde está el norte del sistema: las coordenadas salen rotadas."
+        },
+        {
+          "key": "n3-q1",
+          "question": "Lectura atrás 1,52 m sobre un BM de cota 100,00. Lectura adelante 0,80 m sobre un punto nuevo. ¿Cuál es su cota?",
+          "options": [
+            "100,72 m",
+            "98,48 m",
+            "101,52 m",
+            "102,32 m"
+          ],
+          "answer": 0,
+          "explanation": "Cota instrumental = 100,00 + 1,52 = 101,52. Cota del punto = 101,52 − 0,80 = 100,72."
+        },
+        {
+          "key": "n3-q2",
+          "question": "¿Para qué sirve cerrar una poligonal?",
+          "options": [
+            "Para que el dibujo se vea más prolijo",
+            "Para calcular el error de cierre y compensarlo",
+            "Para usar menos puntos",
+            "Para evitar usar prisma"
+          ],
+          "answer": 1,
+          "explanation": "Volver al punto de partida deja ver cuánto error acumulamos; se reparte matemáticamente en los vértices."
+        },
+        {
+          "key": "n3-q3",
+          "question": "Un prisma sobre un jalón está a 1,80 m, pero en el equipo quedó configurado 1,50 m. ¿Qué error produce?",
+          "options": [
+            "Un error de 30 cm en el norte",
+            "Ninguno",
+            "Un error en la cota de 30 cm",
+            "Cambia el huso"
+          ],
+          "answer": 2,
+          "explanation": "La altura del prisma afecta directamente la cota. Siempre hay que configurarla igual que en terreno."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas cómo se obtiene una cota con nivel",
+        "Entiendes por qué se cierra una poligonal"
+      ],
+      "images": [
+        "core/img/topo/estacion-total.svg"
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "GNSS",
+      "title": "5 · GNSS: estático, RTK, NTRIP y PPK",
+      "estimated_hours": "3 h",
+      "audience": "Todo el equipo; clave para campo, drones y control de obra",
+      "goal": "Distinguir los métodos GNSS (estático, RTK, NTRIP/red, PPK), saber qué esperar de cada uno y reconocer las fuentes de error más comunes.",
+      "guide": {
+        "title": "Guía rápida · GNSS",
+        "software": "tbc",
+        "do": [
+          "*Estático*: horas de observación y postproceso; el método de más calidad para puntos de control.",
+          "*RTK*: corrección en tiempo real desde una base propia o por internet (*NTRIP*); da centímetros al instante.",
+          "*PPK*: se guarda todo y se corrige después; muy usado en drones porque no depende de un enlace de radio.",
+          "Revisa siempre que la solución esté en *Fixed* y no en *Float*, y mide la altura de antena."
+        ],
+        "commands": [
+          "*RTK*",
+          "*NTRIP*",
+          "*PPK*",
+          "*Fixed / Float*",
+          "*Multipath*",
+          "*DOP*"
+        ],
+        "mistakes": [
+          "Medir bajo árboles o junto a un edificio alto y confiar igual en la solución: *multipath* y poco cielo.",
+          "Anotar mal la altura de antena: la cota queda corrida.",
+          "Mezclar un NTRIP en un sistema y trabajar el proyecto en otro sin transformar."
+        ],
+        "essential": "RTK: posicionamiento cinemático en tiempo real (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "SIRGAS-CHILE (portal del IGM)",
+          "url": "https://www.sirgaschile.cl/",
+          "description": "Portal del Instituto Geográfico Militar: redes geodésicas (GNSS, nivelación, gravedad), conversor de coordenadas, transformación de datum y datos de estaciones CORS. Algunas funciones piden cuenta.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "SIRGAS-Chile (Iturriaga, 2015, Boletín SIRGAS)",
+          "url": "https://www.sirgas.org/fileadmin/docs/Boletines/Bol20/14_Iturriaga_2015_SIRGAS-Chile.pdf",
+          "description": "Presentación técnica de la red SIRGAS-Chile en el boletín de SIRGAS. Lectura avanzada, opcional.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "verify_url": true,
+          "order": 1
+        },
+        {
+          "title": "RTK: posicionamiento cinemático en tiempo real (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Real-time_kinematic_positioning",
+          "description": "Cómo una base y un móvil corrigen la señal GNSS para llegar a precisión centimétrica.",
+          "kind": "article",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "NTRIP: correcciones GNSS por internet (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Networked_Transport_of_RTCM_via_Internet_Protocol",
+          "description": "El protocolo con que llegan las correcciones de una red de estaciones al receptor en terreno.",
+          "kind": "article",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 3
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Ver el esquema *gnss-rtk* y explicar quién es la base, quién el rover y por qué hacen falta correcciones"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Leer sobre NTRIP (recurso del nivel) y anotar qué es un *mountpoint*"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Comparar en una tabla estático, RTK y PPK: tiempo en terreno, precisión esperada y cuándo conviene cada uno"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Medir con GNSS un punto bajo cielo abierto y otro pegado a un muro alto, y comparar cuánto cambian las coordenadas"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "Estás levantando junto a una torre de vidrio y el equipo dice 'Fixed', pero las coordenadas saltan 3 cm entre mediciones. ¿Qué sospechas?",
+          "options": [
+            "Poco cielo y señales rebotando: multipath",
+            "El factor de escala",
+            "El huso equivocado",
+            "Está desactualizado el geoide"
+          ],
+          "answer": 0,
+          "explanation": "Los rebotes de señal (multipath) y el bloqueo de cielo degradan la solución aunque diga Fixed."
+        },
+        {
+          "key": "n4-q1",
+          "question": "Un dron sin radio al piloto necesita coordenadas centimétricas. ¿Qué método se usa con frecuencia?",
+          "options": [
+            "RTK en tiempo real por radio obligatoria",
+            "PPK: corregir después con los datos de la base",
+            "Solo puntos de control sin GNSS",
+            "Navegación por brújula"
+          ],
+          "answer": 1,
+          "explanation": "PPK registra todo y corrige después, sin depender de enlace en vuelo."
+        },
+        {
+          "key": "n4-q2",
+          "question": "¿Qué es NTRIP?",
+          "options": [
+            "Un tipo de láser",
+            "Un formato de nube de puntos",
+            "Un protocolo para recibir correcciones GNSS por internet",
+            "Una norma de la DGAC"
+          ],
+          "answer": 2,
+          "explanation": "NTRIP transmite correcciones (por ejemplo desde una red VRS) a través de internet hacia el rover."
+        },
+        {
+          "key": "n4-q3",
+          "question": "Un punto de control para un proyecto grande debe tener la mejor calidad posible. ¿Qué método eliges?",
+          "options": [
+            "Autónomo de celular",
+            "RTK de 5 segundos",
+            "Altímetro barométrico",
+            "Estático con postproceso y buena sesión"
+          ],
+          "answer": 3,
+          "explanation": "El estático con varias horas de observación y postproceso es el método clásico para puntos de control de alta calidad."
+        }
+      ],
+      "mastery_signals": [
+        "Describes con tus palabras cuándo usar estático, RTK y PPK",
+        "Identificas al menos tres fuentes de error GNSS"
+      ],
+      "images": [
+        "core/img/topo/gnss-rtk.svg"
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Captura masiva",
+      "title": "6 · Captura masiva: TLS, SLAM, fotogrametría y LiDAR con drones",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Todo el equipo; clave para quien contrata o usa nubes de puntos",
+      "goal": "Conocer el abanico de equipos de captura masiva y comparar escáner terrestre (TLS), SLAM móvil, fotogrametría y LiDAR con drones según precisión, rendimiento y costo.",
+      "guide": {
+        "title": "Guía rápida · Captura masiva",
+        "software": "dgac",
+        "do": [
+          "*TLS*: escáner láser sobre trípode, por estaciones; la mejor precisión en interiores y detalle fino.",
+          "*SLAM*: escáner portátil que se camina; rapidísimo en interiores y pasillos, con menos precisión que el TLS.",
+          "*Fotogrametría con dron*: fotos que se convierten en nube de puntos y ortofoto; económica, para grandes superficies abiertas.",
+          "*LiDAR aerotransportado*: láser desde dron o avión; atraviesa vegetación gracias a los retornos múltiples.",
+          "Si el proyecto implica volar, revisa las reglas en la sección DGAC de AeroAcademy.",
+          "*Fotogrametría* es medir con fotos: si un detalle aparece en varias imágenes tomadas desde puntos distintos, se calcula su posición en 3D. Es una medición *indirecta* (se mide sobre las imágenes, no sobre el objeto) y necesita luz y visibilidad.",
+          "*LiDAR* mide *directo*: el pulso láser toca el objeto y vuelve. Por eso funciona con poca luz y entre follaje, a cambio de un sensor más caro y pesado que una cámara.",
+          "Sensores de dron: *RGB* para topografía y modelos 3D, *multiespectral* para salud de la vegetación y agricultura, *térmico* para inspección y mantenimiento.",
+          "*Ala fija* cubre mucha superficie por vuelo y aguanta mejor el viento; *multirrotor* despega vertical, sirve en espacios reducidos y para inspección visual."
+        ],
+        "commands": [
+          "*TLS*",
+          "*SLAM*",
+          "*LiDAR*",
+          "*Fotogrametría*",
+          "*GSD*",
+          "*Puntos de control (GCP)*",
+          "*Ala fija*",
+          "*Multirrotor*",
+          "*Multiespectral*"
+        ],
+        "mistakes": [
+          "Escoger el equipo por moda y no por la precisión que pide el entregable.",
+          "Volar un dron sin revisar permisos y reglas de DGAC.",
+          "Entregar una nube enorme sin dejar claro en qué sistema de coordenadas está.",
+          "Creer que más megapíxeles reemplazan a los puntos de control: la cámara mide en el aire, el control ancla al mundo."
+        ],
+        "essential": "Escaneo láser (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "What is Lidar? (OpenTopography)",
+          "url": "https://opentopography.org/lidar_basics",
+          "description": "Explicación clara de LiDAR, retornos, nube de puntos y la diferencia entre DSM, DTM y CHM.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "What is Lidar data and where can I download it? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-lidar-data-and-where-can-i-download-it",
+          "description": "Cómo un láser, un GPS y un sistema inercial generan una nube de puntos y de ahí un modelo de elevación del suelo desnudo.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Sección DGAC de AeroAcademy: reglas para volar drones en Chile",
+          "url": "/dgac/",
+          "description": "Material interno de AeroAcademy sobre normativa DGAC y prueba de conocimientos para pilotos de drones.",
+          "tags": [
+            "Guide",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "Escaneo láser (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Laser_scanning",
+          "description": "Principios del escaneo láser terrestre y móvil: medición por tiempo de vuelo y fase.",
+          "kind": "article",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 3
+        },
+        {
+          "title": "SLAM: localización y mapeo simultáneos (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping",
+          "description": "La técnica que permite a un escáner móvil ubicarse mientras mapea.",
+          "kind": "article",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 4
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Ver el esquema *tls-slam-dron* y completar una tabla propia con precisión, ritmo y costo de cada equipo"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Leer el artículo de OpenTopography y explicar qué es un retorno de LiDAR y por qué sirve para ver el suelo bajo árboles"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Pensar un edificio, un camino y una cantera: elegir un equipo para cada uno y justificar"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Entrar a la sección DGAC de AeroAcademy y anotar qué debes tener para volar un dron en Chile"
+        },
+        {
+          "key": "n5-t4",
+          "text": "Armar un cuadro con tres sensores de dron (RGB, multiespectral, térmico): qué mide cada uno y en qué trabajo lo usarías"
+        },
+        {
+          "key": "n5-t5",
+          "text": "Explicar con tus palabras por qué la fotogrametría es medición indirecta y el LiDAR directa, y qué consecuencia tiene cada una"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "Hay que levantar el interior de un edificio patrimonial de tres pisos con salas pequeñas y mucho detalle. ¿Qué equipo parece más adecuado?",
+          "options": [
+            "Dron con fotogrametría",
+            "Escáner láser terrestre o SLAM portátil",
+            "GNSS RTK",
+            "Solo huincha"
+          ],
+          "answer": 1,
+          "explanation": "Dentro de un edificio no hay señal GNSS ni vuelo de dron: TLS y SLAM son los indicados, según el detalle que se requiera."
+        },
+        {
+          "key": "n5-q1",
+          "question": "Una cantera de 60 hectáreas necesita un modelo del terreno en dos días. ¿Qué es lo más razonable?",
+          "options": [
+            "TLS con cien estaciones",
+            "Solo estación total con prisma",
+            "Dron con fotogrametría o LiDAR",
+            "Imagen satelital gratuita sin control"
+          ],
+          "answer": 2,
+          "explanation": "El dron cubre grandes superficies abiertas en poco tiempo; se apoya con puntos de control."
+        },
+        {
+          "key": "n5-q2",
+          "question": "¿Cuál es la ventaja clave del SLAM portátil frente al TLS?",
+          "options": [
+            "Mayor precisión en todo",
+            "No necesita escáner",
+            "No genera nube",
+            "Captura continua caminando, sin armar estaciones"
+          ],
+          "answer": 3,
+          "explanation": "El SLAM captura en movimiento y reduce el tiempo en terreno, aunque suele ser menos preciso que el TLS."
+        },
+        {
+          "key": "n5-q3",
+          "question": "El LiDAR de un dron puede 'ver' el suelo bajo un bosque porque...",
+          "options": [
+            "Algunos pulsos pasan entre las hojas y generan retornos más abajo",
+            "Los árboles son transparentes",
+            "Usa rayos X",
+            "Se apaga la vegetación"
+          ],
+          "answer": 0,
+          "explanation": "Los retornos múltiples permiten separar copa y suelo, algo que la fotogrametría solo hace donde ve el suelo."
+        },
+        {
+          "key": "n5-q4",
+          "question": "Un viñedo quiere saber qué sectores tienen plantas con estrés hídrico antes de que se note a simple vista. ¿Qué sensor de dron conviene?",
+          "options": [
+            "Solo cámara RGB estándar",
+            "Escáner láser terrestre",
+            "Multiespectral o térmico",
+            "Estación total"
+          ],
+          "answer": 2,
+          "explanation": "Los índices de vegetación salen de bandas que el ojo no ve (multiespectral) y el térmico muestra diferencias de temperatura de las hojas."
+        },
+        {
+          "key": "n5-q5",
+          "question": "Debes sacar el suelo de una ladera con bosque denso, pero la fotogrametría solo te entrega el 'techo' de los árboles. ¿Qué técnica cambia el resultado?",
+          "options": [
+            "LiDAR aerotransportado",
+            "Subir el traslape al 95 %",
+            "Volar de noche con la misma cámara",
+            "Usar un lente más grande"
+          ],
+          "answer": 0,
+          "explanation": "El LiDAR genera retornos múltiples: algunos pulsos pasan entre las hojas y llegan al suelo; la fotogrametría no ve lo que la cámara no ve."
+        }
+      ],
+      "mastery_signals": [
+        "Comparas equipos con criterios de precisión, rendimiento y costo",
+        "Sabes dónde mirar las reglas DGAC antes de volar",
+        "Distingues medición directa (LiDAR) de indirecta (fotogrametría)"
+      ],
+      "images": [
+        "core/img/topo/tls-slam-dron.svg",
+        "core/img/topo/flujo-fotogrametria.svg"
+      ]
+    },
+    {
+      "code": "n6",
+      "order": 6,
+      "short": "Productos",
+      "title": "7 · Productos: nube de puntos, MDT, curvas, ortofoto y modelos",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Todo el equipo; clave para quien recibe entregables",
+      "goal": "Reconocer los productos que entrega un levantamiento (nube de puntos, MDT/MDE/MDS, curvas de nivel, ortofoto, planos, BIM as-built) y saber qué pedir y qué esperar.",
+      "guide": {
+        "title": "Guía rápida · Productos",
+        "software": "recap",
+        "do": [
+          "Parte de la *nube de puntos* (LAS, LAZ, E57, RCP): es el dato bruto.",
+          "De ahí salen modelos: *MDT* (suelo desnudo), *MDS* (superficie con edificios y árboles) y *MDE* (término general).",
+          "Las *curvas de nivel* son líneas de igual altura; la *equidistancia* es la diferencia de altura entre ellas.",
+          "La *ortofoto* es una foto corregida a escala; el *plano* y el modelo *BIM as-built* son la interpretación final.",
+          "*TIN* y *ráster* son dos formas de guardar un modelo de elevación: el TIN une puntos reales con triángulos (se adapta al relieve); el ráster es una grilla de celdas con una cota cada una (liviano y bueno para análisis).",
+          "Una nube se *clasifica*: suelo, vegetación, edificios, ruido. El MDT sale de quedarse solo con los puntos de suelo.",
+          "La *equidistancia* de las curvas de nivel se elige según escala y relieve: curvas muy juntas significan pendiente fuerte; separadas, terreno suave."
+        ],
+        "commands": [
+          "*Nube de puntos*",
+          "*MDT*",
+          "*MDS*",
+          "*Curvas de nivel*",
+          "*Ortofoto*",
+          "*As-built*",
+          "*TIN*",
+          "*Ráster*",
+          "*Clasificación de nube*"
+        ],
+        "mistakes": [
+          "Pedir 'un plano' sin definir escala, equidistancia, sistema y tolerancia.",
+          "Confundir MDT con MDS: calcular movimientos de tierra con árboles y edificios incluidos.",
+          "Aceptar entregas sin informe de control de calidad.",
+          "Entregar curvas de nivel como único producto: el modelo (TIN o ráster) es el dato; las curvas son un dibujo derivado."
+        ],
+        "essential": "What is Lidar? (OpenTopography)"
+      },
+      "resources": [
+        {
+          "title": "What is Lidar? (OpenTopography)",
+          "url": "https://opentopography.org/lidar_basics",
+          "description": "Explicación clara de LiDAR, retornos, nube de puntos y la diferencia entre DSM, DTM y CHM.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "What is Lidar data and where can I download it? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-lidar-data-and-where-can-i-download-it",
+          "description": "Cómo un láser, un GPS y un sistema inercial generan una nube de puntos y de ahí un modelo de elevación del suelo desnudo.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n6-t0",
+          "text": "Ver el esquema *productos* y escribir debajo de cada paso qué le pedirías al topógrafo"
+        },
+        {
+          "key": "n6-t1",
+          "text": "Leer la sección de modelos digitales de elevación de OpenTopography y explicar con tus palabras DSM, DTM y CHM"
+        },
+        {
+          "key": "n6-t2",
+          "text": "Dibujar curvas de nivel de una loma con equidistancia de 1 m y marcar dónde está la pendiente más fuerte"
+        },
+        {
+          "key": "n6-t3",
+          "text": "Escribir una 'solicitud de levantamiento' de diez líneas con productos, sistema de coordenadas, tolerancias y formatos"
+        },
+        {
+          "key": "n6-t4",
+          "text": "Dibujar a mano un perfil con árboles y una casa, y marcar la línea del MDS y la línea del MDT"
+        },
+        {
+          "key": "n6-t5",
+          "text": "Abrir el esquema *tin-raster* y explicar cuándo preferirías un TIN y cuándo un ráster"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n6-q0",
+          "question": "Para calcular el movimiento de tierra de una explanada necesitas...",
+          "options": [
+            "Un modelo de superficie con árboles incluidos",
+            "Una foto aérea sin corregir",
+            "Un MDT del suelo desnudo",
+            "Solo curvas de la ciudad"
+          ],
+          "answer": 2,
+          "explanation": "El MDT representa el suelo; con árboles o edificios, los volúmenes saldrían inflados."
+        },
+        {
+          "key": "n6-q1",
+          "question": "Dos curvas de nivel consecutivas muy juntas indican...",
+          "options": [
+            "Terreno plano",
+            "Un río",
+            "Error del dron",
+            "Pendiente fuerte"
+          ],
+          "answer": 3,
+          "explanation": "Curvas juntas significa que la altura cambia rápido en poco espacio: mucha pendiente."
+        },
+        {
+          "key": "n6-q2",
+          "question": "Una ortofoto es...",
+          "options": [
+            "Una imagen aérea corregida geométricamente para poder medir sobre ella",
+            "Una foto con filtro",
+            "Un modelo 3D",
+            "Una nube de puntos coloreada"
+          ],
+          "answer": 0,
+          "explanation": "La ortofoto elimina la deformación de perspectiva y relieve, así que se puede usar como mapa."
+        },
+        {
+          "key": "n6-q3",
+          "question": "¿Qué formato suele usarse para intercambiar nubes de puntos grandes?",
+          "options": [
+            "PNG",
+            "LAS o LAZ",
+            "DOCX",
+            "MP3"
+          ],
+          "answer": 1,
+          "explanation": "LAS y LAZ (comprimido) son estándares comunes; E57 y RCP aparecen en flujos con escáneres y software de diseño."
+        },
+        {
+          "key": "n6-q4",
+          "question": "En un plano, las curvas de nivel se ven muy tupidas en un sector del cerro. ¿Qué indica?",
+          "options": [
+            "Terreno plano",
+            "Pendiente fuerte",
+            "Error del equipo",
+            "Presencia de agua"
+          ],
+          "answer": 1,
+          "explanation": "Entre curvas consecutivas la diferencia de altura es fija: si están juntas, el terreno sube o baja rápido."
+        },
+        {
+          "key": "n6-q5",
+          "question": "Para el anteproyecto de un camino de 40 km necesitas un modelo de elevación ya, sin presupuesto de terreno. ¿Con qué fuente razonable partes?",
+          "options": [
+            "Escanear todo con láser terrestre",
+            "Un modelo global gratuito de unos 30 m de malla, densificando después donde el trazado se complica",
+            "Solo imágenes de un mapa web sin altura",
+            "Esperar la topografía completa"
+          ],
+          "answer": 1,
+          "explanation": "Un modelo global gratuito tiene error de altura de metros: sirve para prefactibilidad, no para diseño de detalle."
+        }
+      ],
+      "mastery_signals": [
+        "Distingues MDT de MDS",
+        "Sabes qué productos pedir para cada necesidad",
+        "Explicas la diferencia entre TIN y ráster"
+      ],
+      "images": [
+        "core/img/topo/productos.svg",
+        "core/img/topo/mdt-mds.svg",
+        "core/img/topo/tin-raster.svg"
+      ]
+    },
+    {
+      "code": "n7",
+      "order": 7,
+      "short": "Aplicaciones",
+      "title": "8 · Aplicaciones: arquitectura, civil, minería, industria y ciudad",
+      "estimated_hours": "3 h",
+      "audience": "Todo el equipo; clave para hablar con otras especialidades",
+      "goal": "Ver cómo la topografía sirve a cada especialidad y saber explicar a arquitectos, ingenieros civiles, mineros y planificadores qué les puede entregar y cómo pedirlo.",
+      "guide": {
+        "title": "Guía rápida · Aplicaciones",
+        "software": "tbc",
+        "do": [
+          "*Arquitectura*: levantamiento as-built de edificios existentes para remodelar o documentar.",
+          "*Civil*: levantamiento, replanteo de ejes y cálculo de movimientos de tierra para caminos, redes y fundaciones.",
+          "*Minería*: volumetría de acopios y botaderos, control de rajos y monitoreo de taludes; ojo con altitud y escala en proyectos altos.",
+          "*Ingeniería industrial*: levantamiento de plantas para modelar tuberías y equipos.",
+          "*Ciudad*: catastro, mapas base y gemelos digitales.",
+          "*Brownfield*: intervenir o ampliar una instalación que ya existe y suele estar operando. El riesgo está en lo desconocido: por eso el levantamiento *as-built* manda.",
+          "Para un as-built se combinan técnicas: escáner láser para lo visible, fotogrametría con dron para el contexto y *georradar* para las redes enterradas."
+        ],
+        "commands": [
+          "*As-built*",
+          "*Replanteo*",
+          "*Volumetría*",
+          "*Catastro*",
+          "*Gemelo digital*",
+          "*Brownfield*",
+          "*Georradar*"
+        ],
+        "mistakes": [
+          "Hablar con lenguaje solo técnico y perder a la contraparte: traduce a su necesidad.",
+          "Usar un levantamiento viejo para una obra nueva sin verificar cambios.",
+          "No acordar la altura de referencia (cota local o sobre el mar) entre especialidades.",
+          "Confiar en planos antiguos sin verificar en terreno antes de diseñar una intervención."
+        ],
+        "essential": "Nube de puntos (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "What is Lidar? (OpenTopography)",
+          "url": "https://opentopography.org/lidar_basics",
+          "description": "Explicación clara de LiDAR, retornos, nube de puntos y la diferencia entre DSM, DTM y CHM.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "What is Lidar data and where can I download it? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-lidar-data-and-where-can-i-download-it",
+          "description": "Cómo un láser, un GPS y un sistema inercial generan una nube de puntos y de ahí un modelo de elevación del suelo desnudo.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Nube de puntos (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Point_cloud",
+          "description": "Qué es una nube de puntos y cómo se convierte en mallas, superficies y modelos.",
+          "kind": "article",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n7-t0",
+          "text": "Ver el esquema *aplicaciones* y escribir al lado de cada una cuál sería el entregable principal"
+        },
+        {
+          "key": "n7-t1",
+          "text": "Elegir una de las cinco aplicaciones y explicarla en un minuto a alguien de otra área, sin jerga"
+        },
+        {
+          "key": "n7-t2",
+          "text": "Pensar un proyecto real tuyo y listar qué datos topográficos necesitaría cada especialidad involucrada"
+        },
+        {
+          "key": "n7-t3",
+          "text": "Investigar un caso de gemelo digital de ciudad o catastro y anotar qué datos topográficos lo alimentan"
+        },
+        {
+          "key": "n7-t4",
+          "text": "Mirar el esquema *brownfield-asbuilt* y anotar qué dato le pedirías a cada una de las tres capturas"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n7-q0",
+          "question": "Una constructora necesita saber cuánto material hay en un acopio. ¿Qué producto pide?",
+          "options": [
+            "Una ortofoto sin escala",
+            "Un plano de planta del edificio",
+            "El cuaderno de campo",
+            "Un modelo de superficie y la volumetría"
+          ],
+          "answer": 3,
+          "explanation": "La volumetría se calcula comparando la superficie del acopio con una base de referencia."
+        },
+        {
+          "key": "n7-q1",
+          "question": "Un arquitecto quiere remodelar un edificio de 1950 sin planos. ¿Qué levantamiento le sirve?",
+          "options": [
+            "As-built con escáner láser",
+            "Solo GNSS",
+            "Imagen satelital",
+            "Un croquis de memoria"
+          ],
+          "answer": 0,
+          "explanation": "El as-built con escáner entrega la geometría real del edificio como nube de puntos o modelo."
+        },
+        {
+          "key": "n7-q2",
+          "question": "En un proyecto minero a 3.000 m de altitud, ¿por qué importa el factor de escala por altura?",
+          "options": [
+            "Porque el aire es más delgado",
+            "Porque a mayor altura las distancias del terreno se diferencian de las de la proyección",
+            "Porque el GNSS no funciona",
+            "Porque cambia el huso"
+          ],
+          "answer": 1,
+          "explanation": "A gran altitud las distancias de terreno son mayores que las del elipsoide. Se corrige con factores o con una proyección local."
+        },
+        {
+          "key": "n7-q3",
+          "question": "¿Qué aporta la topografía a un gemelo digital de ciudad?",
+          "options": [
+            "Solo estética",
+            "Los nombres de las calles",
+            "El modelo geométrico real y georreferenciado sobre el cual se asocian datos",
+            "Nada"
+          ],
+          "answer": 2,
+          "explanation": "El gemelo necesita una base geométrica fiel y ubicada correctamente para integrar sensores, redes y datos."
+        },
+        {
+          "key": "n7-q4",
+          "question": "Antes de excavar una zanja junto a una planta antigua no hay planos confiables de las redes enterradas. ¿Qué conviene sumar al levantamiento?",
+          "options": [
+            "Una ortofoto más reciente",
+            "Fotos oblicuas del techo",
+            "Cálculo de volúmenes",
+            "Georradar, contrastado con planos y verificado con calicatas donde sea crítico"
+          ],
+          "answer": 3,
+          "explanation": "El georradar ve reflejos bajo el suelo; no da certeza total (depende de humedad y tipo de suelo), por eso se verifica donde un error sería grave."
+        },
+        {
+          "key": "n7-q5",
+          "question": "Debes empalmar una tubería nueva a la existente en una detención de pocos días. ¿Qué dato reduce más el riesgo de que no calce?",
+          "options": [
+            "Un as-built escaneado y georreferenciado de la zona del empalme",
+            "Fotos tomadas con el celular",
+            "Planos originales de hace 30 años sin verificar",
+            "Medir con huincha durante la detención"
+          ],
+          "answer": 0,
+          "explanation": "Con la nube se prefabrica antes de la detención; medir a última hora gasta el tiempo más caro."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas la utilidad de la topografía a otra especialidad",
+        "Sabes qué producto pedir para cada aplicación"
+      ],
+      "images": [
+        "core/img/topo/aplicaciones.svg",
+        "core/img/bim/brownfield-asbuilt.svg"
+      ]
+    },
+    {
+      "code": "n8",
+      "order": 8,
+      "short": "Elige el equipo",
+      "title": "9 · Final: elige el equipo correcto",
+      "estimated_hours": "2 h",
+      "audience": "Todo el equipo; cierre de la ruta",
+      "goal": "Aplicar todo lo aprendido eligiendo equipo, método, sistema de coordenadas y productos para casos reales. Meta: justificar cada decisión en una frase.",
+      "guide": {
+        "title": "Guía rápida · Elige el equipo",
+        "software": "tbc",
+        "do": [
+          "Parte por el *entregable* y la *tolerancia*, no por el equipo.",
+          "Pregunta por el *entorno*: interior o exterior, cielo abierto o cerrado, extensión, vegetación, acceso.",
+          "Define *sistema de coordenadas* y *tipo de altura* antes de salir a terreno.",
+          "Si hay vuelo, revisa DGAC; si hay datos oficiales, apóyate en SIRGAS-Chile.",
+          "Piensa en *mezclas*, no en un solo equipo: dron para el contexto, escáner para los detalles, GNSS o estación total para el control. La nube sin control flota.",
+          "Pide siempre un *informe de calidad*: error en puntos de chequeo, sistema de coordenadas, fecha y método."
+        ],
+        "commands": [
+          "*Tolerancia*",
+          "*Entorno*",
+          "*SIRGAS-Chile*",
+          "*Entregable*"
+        ],
+        "mistakes": [
+          "Resolver con el equipo que uno tiene en vez del que pide el problema.",
+          "Olvidar el control (puntos conocidos) y entregar una nube bonita pero flotando.",
+          "No dejar documentación del método y la calidad."
+        ],
+        "essential": "SIRGAS-CHILE (portal del IGM)"
+      },
+      "resources": [
+        {
+          "title": "SIRGAS-CHILE (portal del IGM)",
+          "url": "https://www.sirgaschile.cl/",
+          "description": "Portal del Instituto Geográfico Militar: redes geodésicas (GNSS, nivelación, gravedad), conversor de coordenadas, transformación de datum y datos de estaciones CORS. Algunas funciones piden cuenta.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Sección DGAC de AeroAcademy: reglas para volar drones en Chile",
+          "url": "/dgac/",
+          "description": "Material interno de AeroAcademy sobre normativa DGAC y prueba de conocimientos para pilotos de drones.",
+          "tags": [
+            "Guide",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n8-t0",
+          "text": "Resolver los cuatro casos del quiz final sin mirar tus apuntes y anotar cuáles dudaste"
+        },
+        {
+          "key": "n8-t1",
+          "text": "Inventar un caso con tu proyecto actual y escribir equipo, método, sistema y productos en cinco líneas"
+        },
+        {
+          "key": "n8-t2",
+          "text": "Presentarle tu caso a un colega y pedirle que encuentre qué falta definir"
+        },
+        {
+          "key": "n8-t3",
+          "text": "Elegir un tema de la ruta para profundizar (GNSS, nube de puntos, SIG o minería) y buscar un curso en el catálogo"
+        },
+        {
+          "key": "n8-t4",
+          "text": "Armar tu propia tabla de decisión: entregable, entorno, tolerancia, equipo, control y riesgos, con tres casos de tu trabajo"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n8-q0",
+          "question": "Hay que levantar la fachada y el techo de una iglesia colonial para restauración, con riesgo de caída y detalles ornamentales. ¿Cuál es la combinación más razonable?",
+          "options": [
+            "Escáner láser terrestre más fotogrametría con dron para el techo",
+            "Solo estación total de a una",
+            "GNSS RTK en la fachada",
+            "Una huincha"
+          ],
+          "answer": 0,
+          "explanation": "TLS captura el detalle y el dron cubre techos de forma segura. Se amarran con puntos de control."
+        },
+        {
+          "key": "n8-q1",
+          "question": "Debes replantear los ejes de fundaciones de un edificio con tolerancia de 5 mm. ¿Qué equipo es el más adecuado?",
+          "options": [
+            "Dron con fotogrametría sin control",
+            "Estación total sobre una red de control",
+            "Celular con GPS",
+            "SLAM portátil"
+          ],
+          "answer": 1,
+          "explanation": "El replanteo de fundaciones exige precisión milimétrica: lo resuelve la estación total sobre puntos de control."
+        },
+        {
+          "key": "n8-q2",
+          "question": "Una carretera de 40 km necesita un MDT para anteproyecto en tres semanas. ¿Qué eliges?",
+          "options": [
+            "TLS en todo el trazado",
+            "Solo curvas de la carta",
+            "LiDAR o fotogrametría con dron, con puntos de control GNSS",
+            "Cinta métrica"
+          ],
+          "answer": 2,
+          "explanation": "Para corredores largos, el dron con control es eficiente. Se verifica con puntos medidos con GNSS."
+        },
+        {
+          "key": "n8-q3",
+          "question": "Un archivo de ingeniería viene sin sistema de coordenadas y debe entrar a un proyecto SIRGAS-Chile UTM 19S. ¿Qué haces primero?",
+          "options": [
+            "Lo importo y lo muevo a ojo",
+            "Lo borro",
+            "Le sumo 500.000 al este",
+            "Averiguo su origen (datum, huso y unidades) y lo transformo con parámetros oficiales"
+          ],
+          "answer": 3,
+          "explanation": "Primero hay que saber qué es el dato. Mover a ojo introduce errores difíciles de detectar."
+        },
+        {
+          "key": "n8-q4",
+          "question": "Hay que controlar la sobreexcavación de un túnel de 2 km respecto al diseño. ¿Qué parece más adecuado?",
+          "options": [
+            "Dron con fotogrametría desde el exterior",
+            "Un escáner móvil o terrestre dentro del túnel y comparar la nube contra el diseño",
+            "Solo GNSS RTK",
+            "Imágenes satelitales"
+          ],
+          "answer": 1,
+          "explanation": "Dentro de un túnel no hay GNSS ni vuelo; la nube comparada con el diseño entrega un mapa de desviaciones."
+        },
+        {
+          "key": "n8-q5",
+          "question": "Un predio de 15 ha necesita un modelo para anteproyecto, con tolerancia de 10 cm en altura, y no hay presupuesto para comprar equipo. ¿Qué opción es más razonable?",
+          "options": [
+            "Escaneo con 200 estaciones",
+            "Satelital gratuito",
+            "Levantar con huincha y plomada",
+            "Contratar fotogrametría con dron y puntos de control bien repartidos"
+          ],
+          "answer": 3,
+          "explanation": "Para esa extensión y tolerancia, la fotogrametría con control es eficiente; los modelos gratuitos tienen errores de metros."
+        }
+      ],
+      "mastery_signals": [
+        "Eliges un equipo y lo justificas en una frase",
+        "Sabes qué preguntar antes de contratar un levantamiento",
+        "Propones una mezcla de capturas y pides el informe de calidad"
+      ],
+      "images": [
+        "core/img/topo/aplicaciones.svg"
+      ]
+    },
+    {
+      "code": "n9",
+      "order": 9,
+      "short": "Fotogrametría",
+      "title": "10 · Fotogrametría paso a paso: GSD, traslape, control y ortomosaico",
+      "estimated_hours": "3 h",
+      "audience": "Quien planifica, contrata o revisa levantamientos con dron",
+      "goal": "Planificar un vuelo fotogramétrico con criterio (GSD, traslape, puntos de control) y entender qué hace la aerotriangulación para llegar a la nube, el MDS y el ortomosaico.",
+      "guide": {
+        "title": "Guía rápida · Fotogrametría",
+        "software": "dgac",
+        "do": [
+          "*Planificar*: fija el área, la altura de vuelo, el *GSD* que necesita el entregable y los traslapes. Altura y GSD van de la mano: más alto cubre más por foto, pero cada píxel abarca más suelo.",
+          "*GSD* es el tamaño de un píxel proyectado en el suelo (cm por píxel). Sin control, el error típico queda en el orden de 1 a 3 veces el GSD; con control bien hecho se acerca a 1 o 2.",
+          "*Traslape*: se suele volar con unos 75 a 80 % frontal (en la línea) y 60 a 70 % lateral (entre líneas); más en vegetación o superficies lisas. Más traslape da más puntos comunes y más precisión, pero más tiempo de vuelo y de proceso.",
+          "*Puntos de control (GCP)*: marcadores con coordenadas medidas con GNSS. Con referenciación indirecta usa al menos cinco por bloque, rodeando el área e incluyendo la parte más alta y la más baja. Aparte, deja *puntos de chequeo* que no uses para ajustar.",
+          "*Aerotriangulación*: calcula la posición y orientación (*pose*) de cada foto a partir de puntos de amarre comunes; es un ajuste en bloque y sensible a la geometría.",
+          "*Referenciación*: indirecta (con GCP), directa con GNSS (RTK o PPK) o GNSS más sensor inercial. Con posicionamiento directo se necesitan menos GCP, pero conviene dejar puntos de chequeo.",
+          "Después vienen la *nube densa*, la *malla*, el *MDS* o *MDT* y el *ortomosaico* (fotos corregidas para tener escala uniforme)."
+        ],
+        "commands": [
+          "*GSD*",
+          "*Traslape frontal*",
+          "*Traslape lateral*",
+          "*GCP*",
+          "*Punto de chequeo*",
+          "*Aerotriangulación*",
+          "*Ortomosaico*",
+          "*PPK*"
+        ],
+        "mistakes": [
+          "Poner todos los GCP en un borde o a la misma cota: el modelo se pandea.",
+          "Usar todos los puntos medidos para ajustar y ninguno para chequear: no sabrás cuánto error tienes.",
+          "Volar con sombras largas, luz cambiante o sobre agua y vidrio sin plan: la fotogrametría necesita textura y luz estable.",
+          "Creer que el posicionamiento directo (RTK o PPK) elimina toda verificación en terreno."
+        ],
+        "essential": "Photogrammetry (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "Photogrammetry (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Photogrammetry",
+          "description": "Definición, historia y flujo de la fotogrametría: puntos de amarre, orientación de cámaras y productos. Enciclopedia abierta: úsala como mapa y contrasta con fuentes técnicas.",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Ground sample distance (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Ground_sample_distance",
+          "description": "Qué es el GSD, de qué depende (altura, sensor, distancia focal) y por qué define el detalle de una imagen aérea.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Learn (OpenTopography)",
+          "url": "https://opentopography.org/learn",
+          "description": "Recursos educativos sobre LiDAR, fotogrametría, modelos de elevación y su procesamiento.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "Sección DGAC de AeroAcademy: reglas para volar drones en Chile",
+          "url": "/dgac/",
+          "description": "Material interno de AeroAcademy sobre normativa DGAC y prueba de conocimientos para pilotos de drones.",
+          "tags": [
+            "Guide",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 3
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n9-t0",
+          "text": "Elegir un GSD para tres trabajos (un plano de loteo, un volumen de acopio y una ortofoto de camino) y justificar la altura de vuelo"
+        },
+        {
+          "key": "n9-t1",
+          "text": "Dibujar un área irregular y ubicar seis GCP y dos puntos de chequeo siguiendo las reglas de reparto; revisar con el esquema *puntos-control*"
+        },
+        {
+          "key": "n9-t2",
+          "text": "Con el esquema *aerotriangulacion*, explicar qué son los puntos de amarre y qué pasaría con poco traslape"
+        },
+        {
+          "key": "n9-t3",
+          "text": "Comparar referenciación indirecta, directa con GNSS y GNSS más sensor inercial en una tabla: qué necesita en terreno cada una y qué ventaja da"
+        },
+        {
+          "key": "n9-t4",
+          "text": "Escribir seis datos que pedirías en el informe de un levantamiento (GSD, error en chequeo, sistema, traslape, fecha y método)"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n9-q0",
+          "question": "El dron voló a 120 m y el cliente reclama que no se distinguen las tapas de cámaras de alcantarillado. ¿Qué ajuste de planificación ataca el problema?",
+          "options": [
+            "Subir la altura de vuelo",
+            "Bajar la altura para lograr un GSD más fino",
+            "Quitar los puntos de control",
+            "Disminuir el traslape"
+          ],
+          "answer": 1,
+          "explanation": "Un GSD menor (más centímetros finos por píxel) se logra volando más bajo o con una cámara de mayor resolución."
+        },
+        {
+          "key": "n9-q1",
+          "question": "Tu bloque queda 'combado': el centro aparece 40 cm sobre el terreno, aunque los GCP del borde cierran bien. ¿Qué causa es probable?",
+          "options": [
+            "Los GCP solo están en el borde: faltan puntos hacia el centro y a distintas cotas",
+            "Hubo demasiados puntos de chequeo",
+            "Se exportó el ortomosaico en JPG",
+            "Las fotos eran de formato horizontal"
+          ],
+          "answer": 0,
+          "explanation": "Un ajuste en bloque sin control interior puede deformarse como un cojín; hay que repartir bien el control."
+        },
+        {
+          "key": "n9-q2",
+          "question": "¿Para qué sirven los puntos de chequeo?",
+          "options": [
+            "Para anclar el modelo al sistema de coordenadas",
+            "Para reemplazar al GNSS",
+            "Para medir el error del modelo con datos que no participaron en el ajuste",
+            "Para calibrar la batería"
+          ],
+          "answer": 2,
+          "explanation": "Si se usaran para ajustar, ya no serían independientes y no podrían demostrar la precisión."
+        },
+        {
+          "key": "n9-q3",
+          "question": "El equipo del dron trae GNSS de buena calidad con posicionamiento directo y alguien dice: 'entonces no hace falta ningún punto en terreno'. ¿Qué respuesta es más sensata?",
+          "options": [
+            "Correcto: nunca más hay que medir nada",
+            "Hay que poner 50 GCP igual",
+            "Mejor cambiar a LiDAR",
+            "Se puede reducir el control, pero conviene dejar algunos puntos de chequeo para respaldar la precisión"
+          ],
+          "answer": 3,
+          "explanation": "El posicionamiento directo reduce la dependencia de GCP, pero un informe serio demuestra el error con puntos independientes."
+        },
+        {
+          "key": "n9-q4",
+          "question": "Al sobrevolar un lago y un techo de vidrio, el programa no logra reconstruir esas zonas. ¿Por qué?",
+          "options": [
+            "Faltó batería",
+            "Faltan texturas reconocibles: agua y vidrio reflejan y cambian entre fotos",
+            "Hubo demasiado traslape",
+            "El GNSS estaba apagado"
+          ],
+          "answer": 1,
+          "explanation": "La fotogrametría busca los mismos detalles en varias fotos; superficies lisas, brillantes o móviles los esconden."
+        },
+        {
+          "key": "n9-q5",
+          "question": "¿Qué es un ortomosaico?",
+          "options": [
+            "Una nube de puntos coloreada",
+            "Un modelo 3D de triángulos",
+            "Un mosaico de fotos corregido para tener escala uniforme, sobre el que se puede medir como en un plano",
+            "Un tipo de curva de nivel"
+          ],
+          "answer": 2,
+          "explanation": "Corrige la perspectiva y el relieve; por eso se puede medir distancias y áreas sobre él."
+        }
+      ],
+      "mastery_signals": [
+        "Eliges GSD y altura de vuelo según el entregable",
+        "Repartes puntos de control y de chequeo con criterio",
+        "Lees un informe de fotogrametría y detectas lo que falta"
+      ],
+      "images": [
+        "core/img/topo/flujo-fotogrametria.svg",
+        "core/img/topo/gsd-traslape.svg",
+        "core/img/topo/puntos-control.svg"
+      ]
+    },
+    {
+      "code": "n10",
+      "order": 10,
+      "short": "Elevación",
+      "title": "11 · Modelos de elevación: MDT, MDS, TIN, ráster y volúmenes",
+      "estimated_hours": "3 h",
+      "audience": "Quien diseña, calcula movimientos de tierra o contrata levantamientos",
+      "goal": "Distinguir MDE, MDT y MDS, entender cómo se interpola un TIN o un ráster, y usar el modelo correcto según la etapa de ingeniería para curvas, perfiles y volúmenes de corte y relleno.",
+      "guide": {
+        "title": "Guía rápida · Modelos de elevación",
+        "software": "gis",
+        "do": [
+          "*MDE* es el nombre general; el *MDS* incluye lo que está sobre el suelo (árboles, techos); el *MDT* es el suelo desnudo. Para movimientos de tierra, drenaje y trazados se usa el MDT.",
+          "*TIN*: triángulos unidos entre puntos medidos (triangulación de Delaunay). Interpola de forma lineal dentro de cada triángulo y conserva los puntos reales; es preferible guardar el TIN que solo las curvas de nivel.",
+          "*Ráster*: grilla de celdas con una cota por celda. Es liviana y buena para análisis (pendientes, cuencas, sombras); el tamaño de celda marca el detalle.",
+          "Un TIN muy grande tarda en generarse y cargarse: se simplifica sin perder las *líneas de quiebre* (*breaklines*) que definen canales, quebradas y bordes de plataforma.",
+          "*Volúmenes*: por secciones (áreas medias: V ≈ (A₁ + A₂) / 2 × distancia) o restando dos superficies, existente menos diseño. Lo que sobra es *corte*, lo que falta es *relleno*.",
+          "La fuente manda: un modelo global gratuito de unos 30 m de malla sirve en prefactibilidad (error de altura de metros); fotogrametría o láser con control sirven en detalle (centímetros).",
+          "Las etapas de ingeniería (perfil, prefactibilidad, factibilidad, detalle y construcción) piden precisión creciente: no uses el dato fino cuando basta el grueso, ni el grueso cuando se necesita el fino."
+        ],
+        "commands": [
+          "*MDT*",
+          "*MDS*",
+          "*TIN*",
+          "*Ráster*",
+          "*Breakline*",
+          "*Equidistancia*",
+          "*Corte y relleno*"
+        ],
+        "mistakes": [
+          "Calcular movimientos de tierra con el MDS: los árboles y techos se cuentan como si fueran suelo.",
+          "Interpolar sobre huecos de datos (agua, sombras, zonas sin cobertura) sin avisar que ahí no hay medición.",
+          "Mezclar alturas elipsoidales con ortométricas entre el modelo y el diseño.",
+          "Pedir el modelo más fino 'por si acaso': pesa, demora y no mejora la decisión."
+        ],
+        "essential": "What is a digital elevation model (DEM)? (USGS)"
+      },
+      "resources": [
+        {
+          "title": "What is a digital elevation model (DEM)? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-a-digital-elevation-model-dem",
+          "description": "Explica qué es un modelo digital de elevación de suelo desnudo y cómo se están generando hoy a partir de LiDAR.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "What is Lidar? (OpenTopography)",
+          "url": "https://opentopography.org/lidar_basics",
+          "description": "Explicación clara de LiDAR, retornos, nube de puntos y la diferencia entre DSM, DTM y CHM.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Triangulated irregular network (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Triangulated_irregular_network",
+          "description": "Qué es un TIN, cómo se construye por triangulación y en qué se diferencia de una grilla regular.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "ALOS Global Digital Surface Model AW3D30 (JAXA)",
+          "url": "https://www.eorc.jaxa.jp/ALOS/en/dataset/aw3d30/aw3d30_e.htm",
+          "description": "Modelo de superficie global de malla de unos 30 m, de acceso gratuito: sirve de punto de partida en prefactibilidad; la precisión de altura es de metros.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 3
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n10-t0",
+          "text": "Dibujar un perfil de terreno con árboles y una casa y marcar el MDS y el MDT; revisar con el esquema *mdt-mds*"
+        },
+        {
+          "key": "n10-t1",
+          "text": "Con el esquema *tin-raster*, armar a mano un mini TIN con seis puntos y trazar una curva de nivel a una cota a elección"
+        },
+        {
+          "key": "n10-t2",
+          "text": "Calcular un volumen simple: secciones de 120 m² y 80 m² separadas 20 m (promedio de áreas por la distancia)"
+        },
+        {
+          "key": "n10-t3",
+          "text": "Elegir qué fuente de elevación usarías en perfil, prefactibilidad y detalle, y explicar el porqué en una frase cada una"
+        },
+        {
+          "key": "n10-t4",
+          "text": "Explicar a un compañero por qué el volumen de un acopio con pasto alto no se calcula con el MDS"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n10-q0",
+          "question": "El sistema de diseño calculó un movimiento de tierra enorme en un predio con plantación de eucaliptos. Al revisar, usaron el modelo de superficie. ¿Qué pasó?",
+          "options": [
+            "El MDS incluye las copas, así que contó los árboles como si fueran suelo",
+            "El MDT estaba en otro datum",
+            "Faltó la ortofoto",
+            "Se usó un TIN"
+          ],
+          "answer": 0,
+          "explanation": "El MDS describe lo que se ve desde arriba; para mover tierra se necesita el suelo desnudo (MDT)."
+        },
+        {
+          "key": "n10-q1",
+          "question": "Debes modelar un tramo con quebradas y un canal muy marcado. ¿Qué cuidado tienes con la interpolación?",
+          "options": [
+            "Ninguno, el programa lo resuelve",
+            "Incluir líneas de quiebre para que los triángulos respeten canal y quebrada",
+            "Usar celdas de 100 m",
+            "Quitar los puntos más bajos"
+          ],
+          "answer": 1,
+          "explanation": "Sin breaklines los triángulos pueden cruzar el canal y suavizar justo lo que importa."
+        },
+        {
+          "key": "n10-q2",
+          "question": "Anteproyecto de un camino largo, sin levantamiento aún. ¿Qué fuente de elevación es razonable para empezar?",
+          "options": [
+            "Escaneo terrestre de todo el trazado",
+            "Fotogrametría de todo el corredor con GCP cada 100 m",
+            "Un modelo global gratuito de unos 30 m, densificado donde el trazado se complica",
+            "Esperar a tener la topografía final"
+          ],
+          "answer": 2,
+          "explanation": "Para comparar alternativas basta el dato grueso; el fino se paga solo donde cambia la decisión."
+        },
+        {
+          "key": "n10-q3",
+          "question": "Dos secciones consecutivas separadas 25 m tienen 100 m² y 60 m² de corte. ¿Cuál es el volumen aproximado por áreas medias?",
+          "options": [
+            "160 m³",
+            "1.500 m³",
+            "4.000 m³",
+            "2.000 m³"
+          ],
+          "answer": 3,
+          "explanation": "(100 + 60) / 2 × 25 = 2.000 m³."
+        },
+        {
+          "key": "n10-q4",
+          "question": "Un TIN de cientos de millones de puntos tarda una eternidad en abrir. ¿Qué es lo más razonable?",
+          "options": [
+            "Simplificarlo conservando quiebres y forma del terreno, o pasarlo a ráster para el análisis",
+            "Borrar la mitad de los puntos al azar",
+            "Comprar una pantalla más grande",
+            "Imprimirlo"
+          ],
+          "answer": 0,
+          "explanation": "Se reduce densidad donde el terreno es suave y se mantiene donde cambia, sin perder la forma."
+        },
+        {
+          "key": "n10-q5",
+          "question": "Comparas un ráster de celda de 1 m con uno de 10 m del mismo cerro. ¿Qué cambia?",
+          "options": [
+            "Solo el color",
+            "El de 1 m muestra detalles finos como terraplenes; el de 10 m los suaviza",
+            "El de 10 m es más preciso",
+            "Nada"
+          ],
+          "answer": 1,
+          "explanation": "El tamaño de celda marca el detalle que se puede representar."
+        }
+      ],
+      "mastery_signals": [
+        "Distingues MDE, MDT y MDS y eliges el correcto",
+        "Calculas un volumen por áreas medias",
+        "Eliges la fuente de elevación según la etapa"
+      ],
+      "images": [
+        "core/img/topo/mdt-mds.svg",
+        "core/img/topo/tin-raster.svg",
+        "core/img/topo/volumenes.svg"
+      ]
+    },
+    {
+      "code": "n11",
+      "order": 11,
+      "short": "Escaneo 3D",
+      "title": "12 · Escaneo 3D: registro, georreferenciación y modelo",
+      "estimated_hours": "3 h",
+      "audience": "Quien contrata, procesa o revisa nubes de puntos",
+      "goal": "Seguir el flujo de un escaneo 3D desde la planificación de estaciones hasta la nube registrada, georreferenciada, limpia y convertida en superficie o modelo, con control de calidad.",
+      "guide": {
+        "title": "Guía rápida · Escaneo 3D",
+        "software": "recap",
+        "do": [
+          "Flujo: planificar estaciones, medir, *registrar*, *georreferenciar* (si se necesita), filtrar y clasificar, y generar superficies o modelos.",
+          "*Planificar*: estaciones con vista a zonas comunes, traslape suficiente entre escaneos y, en interiores, un recorrido que cierre el circuito.",
+          "*Registro*: unir las nubes en un solo sistema, con objetos comunes (esferas o tablas de referencia) o con ajuste automático por superficies (tipo *ICP*), que exige traslape y geometría variada.",
+          "*Georreferenciación*: amarrar la nube a puntos con coordenadas medidos con topografía; sin ella la nube queda en un sistema local.",
+          "*Filtrar y clasificar*: eliminar ruido, personas y vehículos, y separar suelo, vegetación, edificios y estructuras.",
+          "*Mallas y modelos*: superficies 3D, secciones, mapas de desviaciones contra el diseño y volúmenes.",
+          "Usos típicos: inspección de túneles (sobreexcavación y subexcavación), estanques (verticalidad y deformaciones) y plantas industriales (modelar tuberías y estructuras para revisar interferencias).",
+          "Una nube *bonita* no es una nube *precisa*: pide error de registro, cobertura y densidad."
+        ],
+        "commands": [
+          "*Registro*",
+          "*Target*",
+          "*Georreferenciación*",
+          "*Filtrado*",
+          "*Clasificación*",
+          "*Malla*",
+          "*Mapa de desviaciones*"
+        ],
+        "mistakes": [
+          "Registrar con pocas esferas mal repartidas o sobre planos casi paralelos: la nube 'resbala' a lo largo.",
+          "Georreferenciar con puntos de control movidos o de otro tipo de altura.",
+          "Entregar cientos de millones de puntos sin recortes, sin formatos útiles y sin informe de error.",
+          "Escanear sin pensar en el uso: el nivel de detalle define el tiempo en terreno y el tamaño de los datos."
+        ],
+        "essential": "Point cloud (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "Point cloud (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Point_cloud",
+          "description": "Qué es una nube de puntos, cómo se captura y para qué se usa en topografía, ingeniería y BIM.",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Iterative closest point (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Iterative_closest_point",
+          "description": "Idea del algoritmo que alinea dos nubes de puntos por superficies; base del registro automático de escaneos. Es técnico: basta con la introducción.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "What is Lidar data and where can I download it? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-lidar-data-and-where-can-i-download-it",
+          "description": "Cómo un láser, un GPS y un sistema inercial generan una nube de puntos y de ahí un modelo de elevación del suelo desnudo.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n11-t0",
+          "text": "Dibujar el plano de una sala y ubicar cinco estaciones de escáner con traslape; marcar dónde pondrías las esferas"
+        },
+        {
+          "key": "n11-t1",
+          "text": "Explicar con el esquema *registro-nubes* la diferencia entre registrar y georreferenciar"
+        },
+        {
+          "key": "n11-t2",
+          "text": "Listar seis cosas que filtrarías o clasificarías en la nube de una nave industrial"
+        },
+        {
+          "key": "n11-t3",
+          "text": "Escribir los cinco datos del informe de calidad de un escaneo"
+        },
+        {
+          "key": "n11-t4",
+          "text": "Plantear cómo comprobarías con una nube si un túnel quedó sobreexcavado respecto del diseño"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n11-q0",
+          "question": "Dos nubes de un pasillo largo, liso y sin objetos no calzan: una 'se desliza' a lo largo. ¿Qué ayuda más?",
+          "options": [
+            "Agregar esferas o elementos con geometría variada en la zona común",
+            "Subir el contraste",
+            "Escanear más rápido",
+            "Cambiar el color de las paredes"
+          ],
+          "answer": 0,
+          "explanation": "Sin forma distintiva en la dirección del pasillo, el ajuste no encuentra dónde 'engancharse'."
+        },
+        {
+          "key": "n11-q1",
+          "question": "Tienes la nube perfecta, pero al abrirla junto al modelo BIM queda 3 km al sur. ¿Qué falta?",
+          "options": [
+            "Registro",
+            "Georreferenciación a las coordenadas del proyecto",
+            "Filtro de ruido",
+            "Malla"
+          ],
+          "answer": 1,
+          "explanation": "Registrar une escaneos entre sí; georreferenciar ubica el conjunto en el sistema del proyecto."
+        },
+        {
+          "key": "n11-q2",
+          "question": "¿Cuál es una buena señal de calidad al recibir un escaneo?",
+          "options": [
+            "Que pese mucho",
+            "Que se vea colorido",
+            "Que traiga informe con error de registro, cobertura y sistema de coordenadas",
+            "Que tenga muchos puntos duplicados"
+          ],
+          "answer": 2,
+          "explanation": "La calidad se demuestra con números y metadatos, no con la vista."
+        },
+        {
+          "key": "n11-q3",
+          "question": "Una persona caminó por la nave durante el escaneo y quedaron 'fantasmas' en la nube. ¿Qué paso corresponde?",
+          "options": [
+            "Georreferenciar",
+            "Mallar",
+            "Calcular volumen",
+            "Filtrar y limpiar objetos móviles y ruido"
+          ],
+          "answer": 3,
+          "explanation": "Los objetos que se movían no son parte de la geometría que quieres entregar."
+        },
+        {
+          "key": "n11-q4",
+          "question": "Para saber si un estanque se deformó, ¿qué sale de comparar su nube contra la forma ideal?",
+          "options": [
+            "Un mapa de desviaciones en colores que muestra dónde se aparta",
+            "Una ortofoto",
+            "Una curva de nivel",
+            "Nada"
+          ],
+          "answer": 0,
+          "explanation": "El mapa de colores permite ver y medir la deformación completa, no solo unos puntos."
+        },
+        {
+          "key": "n11-q5",
+          "question": "Escaneo dentro de un edificio sin señal de GNSS. ¿Cómo se georreferencia?",
+          "options": [
+            "Es imposible",
+            "Midiendo puntos de control con estación total y trasladándolos al interior por poligonal o por targets visibles",
+            "Con el GPS del celular",
+            "Con un dron dentro"
+          ],
+          "answer": 1,
+          "explanation": "El control se lleva desde afuera con instrumentos que no dependen del GNSS."
+        }
+      ],
+      "mastery_signals": [
+        "Distingues registro de georreferenciación",
+        "Pides y lees un informe de calidad de escaneo",
+        "Sabes qué limpiar y qué clasificar en una nube"
+      ],
+      "images": [
+        "core/img/topo/registro-nubes.svg",
+        "core/img/topo/tls-slam-dron.svg"
+      ]
+    },
+    {
+      "code": "n12",
+      "order": 12,
+      "short": "Seguridad",
+      "title": "13 · Operación segura de drones: checklist general",
+      "estimated_hours": "2 h",
+      "audience": "Todo el equipo que participe en un vuelo",
+      "goal": "Aplicar un protocolo general de seguridad antes, durante y después del vuelo, y dejar cada operación ordenada y registrable. Las reglas legales vigentes están en la sección DGAC de AeroAcademy.",
+      "guide": {
+        "title": "Guía rápida · Vuelo seguro",
+        "software": "dgac",
+        "do": [
+          "*Antes*: visita el sitio (idealmente el día anterior), elige y prepara la zona de despegue y aterrizaje, y revisa que el sistema esté completo y las baterías cargadas.",
+          "*Revisión visual*: cuerpo, tren de aterrizaje, antenas, hélices y cámara sin grietas; motores que giran libres; baterías sin daños. Una hélice dañada no se repara: se cambia.",
+          "*Frío*: bajo unos 5 °C las baterías rinden menos; revisa la carga justo antes de despegar.",
+          "*Calibraciones y estado*: calibra sensores cuando corresponda, revisa las advertencias de la aplicación antes de despegar y mantén actualizados el aparato y el software de vuelo.",
+          "*Viento*: mídelo en el sitio con anemómetro y respeta el límite del fabricante. Si la aplicación insiste con avisos de viento fuerte, cancela y aterriza.",
+          "*Reserva*: planifica el regreso para aterrizar con al menos 30 % de batería.",
+          "*Dos personas*: quien pilota atiende el aparato, la trayectoria y la telemetría; el observador mantiene contacto visual con el dron y el entorno y avisa de riesgos.",
+          "*Registro*: bitácora de cada vuelo (fecha, lugar, condiciones, duración, ciclos de batería, observaciones) y video del despegue y del aterrizaje.",
+          "*Después*: respalda los datos, revisa el equipo, ordena y guarda la tarjeta de memoria.",
+          "Los sistemas automáticos de evasión y seguimiento de terreno ayudan, pero no ven cables finos, agua ni sitios con poca luz: no te confíes."
+        ],
+        "commands": [
+          "*Bitácora de vuelo*",
+          "*Observador*",
+          "*Anemómetro*",
+          "*Retorno automático (RTH)*",
+          "*Zona de despegue*"
+        ],
+        "mistakes": [
+          "Despegar sin leer las advertencias del sistema o sin calibrar cuando corresponde.",
+          "Seguir volando con ráfagas sostenidas o con batería baja 'para terminar la línea'.",
+          "Confiar solo en la evasión de obstáculos: no detecta cables delgados.",
+          "Perder datos por no respaldar la tarjeta ni ordenar los archivos de cada vuelo."
+        ],
+        "essential": "Sección DGAC de AeroAcademy: reglas para volar drones en Chile"
+      },
+      "resources": [
+        {
+          "title": "Sección DGAC de AeroAcademy: reglas para volar drones en Chile",
+          "url": "/dgac/",
+          "description": "Material interno de AeroAcademy sobre normativa DGAC y prueba de conocimientos para pilotos de drones.",
+          "tags": [
+            "Guide",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "DGAC Chile · Dirección General de Aeronáutica Civil",
+          "url": "https://www.dgac.gob.cl/",
+          "description": "Sitio oficial de la autoridad aeronáutica de Chile, con la normativa vigente para operar drones.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n12-t0",
+          "text": "Armar tu propio checklist de una página con tres columnas: antes, durante y después del vuelo"
+        },
+        {
+          "key": "n12-t1",
+          "text": "Simular un día de vuelo con viento sostenido de 10 m/s, 4 °C y batería al 100 %: qué decides y por qué"
+        },
+        {
+          "key": "n12-t2",
+          "text": "Entrar a la sección DGAC y anotar qué debe tener un piloto y qué debe tener el aparato para operar en Chile"
+        },
+        {
+          "key": "n12-t3",
+          "text": "Diseñar una bitácora de vuelo con ocho campos y probarla con un vuelo imaginario"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n12-q0",
+          "question": "Amanece a 3 °C y las baterías pasaron la noche en el auto. ¿Qué haces?",
+          "options": [
+            "Despegar de inmediato porque marcan 100 %",
+            "Revisar la carga justo antes de despegar y confirmar que no se descargaron con el frío",
+            "Cambiar a un dron más grande",
+            "Desactivar las alertas"
+          ],
+          "answer": 1,
+          "explanation": "El frío reduce la capacidad útil; hay que verificar el estado real antes del vuelo."
+        },
+        {
+          "key": "n12-q1",
+          "question": "El viento marca ráfagas sobre el límite del fabricante y el aviso en pantalla no se quita. ¿Qué haces?",
+          "options": [
+            "Subir para escapar del viento",
+            "Aumentar la velocidad para terminar antes",
+            "Cancelar la misión y aterrizar con seguridad",
+            "Apagar el aviso"
+          ],
+          "answer": 2,
+          "explanation": "Los límites existen por estabilidad y control; perder un vuelo es mejor que perder el aparato o a alguien."
+        },
+        {
+          "key": "n12-q2",
+          "question": "Una hélice tiene una pequeña grieta. ¿Qué corresponde?",
+          "options": [
+            "Pegarla con adhesivo",
+            "Volar solo a baja velocidad",
+            "Rebalancearla con cinta",
+            "Cambiarla por una nueva antes de volar"
+          ],
+          "answer": 3,
+          "explanation": "Las hélices dañadas no se reparan: una falla en vuelo es una caída."
+        },
+        {
+          "key": "n12-q3",
+          "question": "¿Qué función cumple la persona observadora?",
+          "options": [
+            "Mantener contacto visual con el dron y el entorno y avisar de cualquier riesgo",
+            "Procesar las fotos en terreno",
+            "Cargar las baterías",
+            "Dar los permisos"
+          ],
+          "answer": 0,
+          "explanation": "Mientras quien pilota mira pantalla y telemetría, el observador cuida el espacio real."
+        },
+        {
+          "key": "n12-q4",
+          "question": "A mitad del plan, la batería marca 35 % y el dron está lejos. ¿Qué haces?",
+          "options": [
+            "Iniciar el retorno ahora para aterrizar con reserva",
+            "Terminar una línea más",
+            "Apagar el GNSS",
+            "Subir a gran altura"
+          ],
+          "answer": 0,
+          "explanation": "La reserva se planifica antes de despegar y se respeta durante el vuelo."
+        },
+        {
+          "key": "n12-q5",
+          "question": "El seguimiento automático de terreno promete mantener la altura. ¿Qué limitación debes recordar?",
+          "options": [
+            "No tiene ninguna",
+            "No detecta bien cables delgados ni agua, y no funciona con poca luz",
+            "Solo sirve de noche",
+            "Necesita dos pilotos"
+          ],
+          "answer": 1,
+          "explanation": "Los sensores de visión tienen límites; la planificación y el observador siguen siendo necesarios."
+        }
+      ],
+      "mastery_signals": [
+        "Aplicas un checklist antes, durante y después del vuelo",
+        "Llevas una bitácora ordenada",
+        "Sabes dónde mirar la normativa vigente"
+      ],
+      "images": [
+        "core/img/topo/seguridad-vuelo.svg"
+      ]
+    }
+  ]
+}

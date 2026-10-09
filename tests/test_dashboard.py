@@ -176,5 +176,112 @@ def test_home_still_has_the_sponsor_and_modules(client_for, member):
 
 
 def test_home_query_count_is_bounded(client_for, member, django_assert_max_num_queries):
-    with django_assert_max_num_queries(70):  # la portada sumó perfil, avance y destacados
+    with django_assert_max_num_queries(55):  # primera visita; no crece con las rutas
         assert client_for(member.login).get("/").status_code == 200
+
+
+# --- consultas acotadas: no crecen con rutas, capítulos, hitos ni cursos --------------------------------------------
+
+
+def _add_routes(person, n, start=0):
+    """`n` rutas nuevas (mitad estructuradas, mitad externas) con capítulos, hitos, preguntas, cursos y productos."""
+    from apps.catalog.models import Discipline, Platform, Product, Resource, Vendor
+    from apps.paths.models import ExternalCourse, Level
+
+    vendor = Vendor.objects.first()
+    platform = Platform.objects.first()
+    product = Product.objects.first()
+    disc = Discipline.objects.first()
+    for i in range(start, start + n):
+        external = i % 2 == 1
+        path = LearningPath.objects.create(
+            slug=f"extra-{i}",
+            title=f"Ruta extra {i}",
+            vendor=vendor,
+            kind=LearningPath.Kind.EXTERNAL_TRACK if external else LearningPath.Kind.STRUCTURED,
+            is_published=True,
+        )
+        path.products.add(product)
+        path.disciplines.add(disc)
+        for j in range(2):
+            level = Level.objects.create(
+                path=path,
+                code=f"L{j}",
+                order=j,
+                short=f"N{j}",
+                title=f"Nivel {j}",
+                completion_rule="any_one" if (external and j) else "all_required",
+            )
+            if external:
+                for k in range(2):
+                    res = Resource.objects.create(
+                        platform=platform, title=f"Curso {i}-{j}-{k}", kind="course"
+                    )
+                    ExternalCourse.objects.create(
+                        path=path,
+                        level=level,
+                        key=f"c{j}{k}",
+                        order=k,
+                        resource=res,
+                        reward="trophy",
+                    )
+                    if k == 0:
+                        make_cred(person, resource=res, path=path)
+            else:
+                for k in range(3):
+                    m = Milestone.objects.create(
+                        path=path, level=level, key=f"m{j}{k}", order=k, text=f"Hito {k}"
+                    )
+                    if k == 0:
+                        progress.set_milestone(person, m, True)
+                QuizQuestion.objects.create(
+                    path=path,
+                    level=level,
+                    key=f"q{j}",
+                    question="¿?",
+                    options=["a", "b"],
+                    answer_index=0,
+                )
+
+
+def _queries(client, url):
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    with CaptureQueriesContext(connection) as ctx:
+        assert client.get(url).status_code == 200
+    return len(ctx)
+
+
+@pytest.mark.parametrize("url", ["/", "/rutas/", "/catalogo/"])
+def test_listing_query_count_does_not_grow_with_routes(client_for, member, url):
+    client = client_for(member.login)
+    client.get(url)  # la primera visita crea el estado de la persona: no se mide
+    _add_routes(member, 2)
+    few = _queries(client, url)
+    _add_routes(member, 5, start=2)
+    many = _queries(client, url)
+    assert many == few, f"{url}: {few} consultas con 2 rutas extra, {many} con 7"
+
+
+def test_path_percents_match_the_per_path_state(member):
+    from apps.progress import external
+
+    _add_routes(member, 4)
+    paths = list(LearningPath.objects.all())
+    batch = game.path_percents(member, paths)
+    for p in paths:
+        expected = (
+            external.external_context(member, p)["stats"]["pct"]
+            if p.kind == LearningPath.Kind.EXTERNAL_TRACK
+            else game._structured_state(member, p)["pct"]
+        )
+        assert batch[p.pk] == expected, p.slug
+    assert any(0 < v for v in batch.values())
+
+
+def test_path_percents_use_a_fixed_number_of_queries(member, django_assert_max_num_queries):
+    _add_routes(member, 8)
+    paths = list(LearningPath.objects.all())
+    with django_assert_max_num_queries(6):
+        game.path_percents(member, paths)

@@ -63,7 +63,7 @@
 
 /* ===== Estilo Aerotop: secciones diferenciadas, acentos por disciplina, filas por software ===== */
 :root{--d-arq:#2F7BFF;--d-civ:#F5A524;--d-top:#2FB36D;--d-mec:#E5483F;--d-cap:#2CC4F0}
-.d-arq{--acc:var(--d-arq)}.d-civ{--acc:var(--d-civ)}.d-top{--acc:var(--d-top)}.d-mec{--acc:var(--d-mec)}.d-cap{--acc:var(--d-cap)}
+.d-arq{--acc:var(--d-arq)}.d-civ{--acc:var(--d-civ)}.d-top{--acc:var(--d-top)}.d-mec{--acc:var(--d-mec)}.d-cap{--acc:var(--d-cap)}.d-tra{--acc:var(--d-tra)}
 
 /* 00 · cabecera: banda de fotografía con grilla técnica y barra de escala */
 .cat-head{position:relative;margin:8px 0 22px;padding:30px clamp(18px,3vw,36px) 26px;border-radius:var(--r-card,16px);overflow:hidden;
@@ -151,7 +151,7 @@
 
 
 /* ===== Dirección «cuaderno cuadriculado»: claro, trazo a mano, acentos nuevos por disciplina ===== */
-:root{--d-arq:#4CC9F0;--d-civ:#FFC93C;--d-top:#8AC926;--d-mec:#E63946;--d-cap:#2EC4B6}
+:root{--d-arq:#4CC9F0;--d-civ:#FFC93C;--d-top:#8AC926;--d-mec:#E63946;--d-cap:#2EC4B6;--d-tra:#8793A6}
 .cat-head{color:var(--ink);background:
   linear-gradient(var(--grid-major) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,var(--grid-major) 1px,transparent 1px) 0 0/26px 26px,var(--sheet);
   border:2px solid var(--ink);border-bottom-width:4px;border-radius:18px 14px 20px 12px / 12px 20px 14px 18px}
@@ -175,3 +175,101 @@
 .cat-all{border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
 
 .sw-tiles .sw-tile{border-radius:0}
+
+
+/* ===== Secciones por fabricante: Autodesk (icon pack vivo) · Bentley (descargas de software) ===== */
+.vs{margin:0 0 44px;--vs-a:#2F7BFF}
+.vs-band{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr);gap:4px;margin:0 0 18px;padding:22px clamp(18px,3vw,32px) 20px;border-radius:18px;color:#fff;isolation:isolate}
+.vs-band::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.55;pointer-events:none;
+  background:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px) 0 0/22px 22px}
+.vs-band::after{content:"";position:absolute;right:-40px;top:-60px;width:240px;height:240px;border-radius:50%;z-index:-1;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 68%)}
+.vs-kick{font:600 11.5px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.vs-band h3{margin:2px 0 0;font:800 clamp(28px,4vw,40px)/1.05 var(--font-display);font-style:normal;color:#fff;letter-spacing:-.01em}
+.vs-sub{margin:4px 0 0;font:13px var(--font-mono);letter-spacing:.04em;opacity:.92}
+.vs-sub b{font-weight:700}
+
+.vs-autodesk{--vs-a:#B13BE0}
+.vs-autodesk .vs-band{background:linear-gradient(105deg,#0B3FD0 0%,#6A2CD8 52%,#E2459F 100%);box-shadow:0 10px 26px -12px rgba(106,44,216,.6)}
+.vs-bentley{--vs-a:#2A86F0}
+.vs-bentley .vs-band{background:linear-gradient(105deg,#0A55C9 0%,#0A3A92 60%,#08285F 100%);border-bottom:4px solid #5CC8FF;box-shadow:0 10px 26px -12px rgba(10,58,146,.7)}
+.vs-internal{--vs-a:#2CC4B6}
+.vs-internal .vs-band{background:linear-gradient(105deg,#0F6E64 0%,#0B4F73 100%);border-bottom:4px solid #F5B02E}
+
+/* icon pack: baldosas en rejilla regular */
+.vs-pack,.vs-cards{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:12px}
+.vs-pack{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+.vs-item{display:grid;justify-items:center;align-content:start;gap:4px;height:100%;box-sizing:border-box;padding:14px 8px 12px;text-align:center;text-decoration:none;color:var(--ink);
+  background:var(--sheet);border:1px solid var(--hair);border-radius:16px;transition:transform .2s var(--ease,ease),border-color .2s,box-shadow .2s}
+a.vs-item:hover{transform:translateY(-3px);border-color:var(--vs-a);box-shadow:0 10px 22px -10px var(--vs-a)}
+a.vs-item:focus-visible{outline:2px solid var(--vs-a);outline-offset:2px}
+.vs-item .sw-tile{width:64px;height:64px;border-radius:0;box-shadow:none}
+.vs-item b{font:700 13.5px/1.2 var(--font);min-height:2.4em;display:flex;align-items:center;justify-content:center}
+.vs-item small{font:11px var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2)}
+.vs-item.is-empty{opacity:.72}
+.vs-card.is-empty{opacity:1;background:#EDF1F9}
+
+/* vitrinas estilo «descargas»: tarjetas blancas con baldosa centrada y título */
+.vs-bentley .vs-shelf{margin:0 0 22px;padding:16px clamp(12px,2vw,20px) 4px;border:1px solid var(--hair);border-radius:16px;background:var(--sheet-2)}
+.vs-shelf h4{margin:0 0 12px;display:flex;align-items:center;gap:10px;font:700 12px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.vs-shelf h4::before{content:"";width:18px;height:4px;border-radius:2px;background:var(--vs-a)}
+.vs-cards{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:14px}
+.vs-card{padding:18px 10px 14px;background:#fff;color:#14213A;border-color:#D5DEEE;box-shadow:0 1px 2px rgba(10,40,95,.08)}
+.vs-card small{color:#51607A}
+.vs-card .sw-tile{width:72px;height:72px}
+a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
+
+/* filas: cabecera en rejilla (baldosa | título | acción) y tarjetas alineadas */
+.cat-row-h{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center}
+.cat-row-h .sw-row-tile{width:52px;height:52px;border-radius:0;box-shadow:none}
+.cat-row-h h3{min-width:0}
+.cat-card h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
+.cat-meta{min-height:1.4em}
+
+/* miniaturas de tarjeta con el sello del fabricante */
+.vs-autodesk .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);
+  background:linear-gradient(135deg,#0B2A8A,#6A2CD8 70%,#C23BAA)}
+.vs-bentley .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);
+  background:linear-gradient(135deg,#0A55C9,#08285F)}
+.vs-internal .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);background:linear-gradient(135deg,#0F6E64,#0B3F63)}
+.vs-autodesk .cat-thumb::before,.vs-bentley .cat-thumb::before,.vs-internal .cat-thumb::before{opacity:.5;
+  background:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px) 0 0/16px 16px,linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px) 0 0/16px 16px}
+.vs .cat-prod{color:#fff}
+.vs .cat-row{border-left-color:var(--vs-a)}
+.vs .cat-row:nth-child(odd){background:linear-gradient(90deg,color-mix(in srgb,var(--vs-a) 12%,transparent),transparent 45%)}
+
+@media (max-width:640px){
+  .vs-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vs-pack{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+  .cat-row-h{grid-template-columns:44px minmax(0,1fr)}
+  .cat-row-h .sw-row-tile{width:44px;height:44px}
+  .cat-row-h .cat-all{grid-column:1/-1;justify-self:start}
+}
+
+/* ── Conocimiento general · transversal (grafito #8793A6): rutas 101 y recursos con la etiqueta ───────────── */
+.cat-gen{position:relative;margin:0 0 22px;padding:16px 18px 14px;border:1.5px solid var(--line);border-left:5px solid var(--d-tra,#8793A6);border-radius:0 16px 16px 0;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--d-tra,#8793A6) 14%,transparent),transparent 55%),var(--sheet)}
+.cat-gen .cat-sh{background:none;padding-right:0}
+.cat-gen .cat-sh span{color:var(--d-tra,#8793A6)}
+.cat-gen-lead{margin:0 0 14px;max-width:72ch;color:var(--ink-2)}
+.cat-gen-lead b{color:var(--ink)}
+.gen-routes{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
+.gen-route{display:flex;gap:14px;align-items:center;height:100%;box-sizing:border-box;padding:14px 16px;color:var(--ink);text-decoration:none;background:var(--sheet);
+  border:1.5px solid var(--ink);border-radius:16px 14px 18px 12px / 12px 18px 14px 16px;box-shadow:3px 3px 0 var(--d-tra,#8793A6);transition:transform .15s,box-shadow .15s}
+.gen-route:hover,.gen-route:focus-visible{transform:translate(-1px,-2px);box-shadow:5px 5px 0 var(--d-tra,#8793A6)}
+.gen-route:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.gen-art{flex:none;width:84px;height:84px;display:grid;place-items:center;border-radius:12px;border:1.5px dashed var(--d-tra,#8793A6);background:color-mix(in srgb,var(--d-tra,#8793A6) 16%,var(--sheet))}
+.gen-art svg{width:72px;height:72px}
+.gen-body{min-width:0;display:grid;gap:5px}
+.gen-tag{font:600 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.gen-title{font-family:var(--font-display);font-size:19px;line-height:1.2}
+.gen-desc{font-size:13.5px;line-height:1.4;color:var(--ink-2)}
+.gen-bar{display:block;height:8px;border-radius:99px;border:1px solid var(--line);background:var(--sheet-2,var(--sheet));overflow:hidden}
+.gen-bar i{display:block;height:100%;background:var(--d-tra,#8793A6)}
+.gen-pct{font:600 12px var(--font-mono);letter-spacing:.04em;color:var(--ink)}
+.gen-cards{margin-top:4px}
+.cat-gen .cat-card{--acc:var(--d-tra,#8793A6)}
+.gen-more{margin:12px 0 0}
+.chip.gen{border-color:var(--d-tra,#8793A6)}
+.chip.gen.on{background:var(--d-tra,#8793A6);color:#10161f}
+@media (max-width:560px){.gen-art{width:64px;height:64px}.gen-art svg{width:54px;height:54px}.cat-gen{padding:14px 12px}}
+@media (prefers-reduced-motion:reduce){.gen-route{transition:none}.gen-route:hover{transform:none}}

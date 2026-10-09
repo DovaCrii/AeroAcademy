@@ -22,7 +22,7 @@
     <p class="dg-badge ok">Aprobada</p>
     <h2>¡Despegue autorizado!</h2>
     <p>Acertaste {{ attempt.correct_count }} de {{ attempt.question_count }}. Tu resultado vale hasta el {{ attempt.expires_on|date:"d-m-Y" }}.</p>
-    <div class="actions"><a class="btn" href="{% url 'dgac:diploma' attempt.pk %}">Ver e imprimir diploma</a>{% if own %}<a class="btn ghost" href="{% url 'dgac:test' %}">Mi historial</a>{% endif %}</div>
+    <div class="actions"><a class="btn" href="{% url 'dgac:diploma' attempt.pk %}">Ver mi diploma ✦</a>{% if own %}<a class="btn ghost" href="{% url 'dgac:test' %}">Mi historial</a>{% endif %}</div>
     {% else %}
     <p class="dg-badge warn">A reforzar</p>
     <h2>Aún no despegas</h2>

@@ -78,24 +78,31 @@ def test_forma_revit_has_7_levels_and_all_keys(seeded):
     assert set(path.quiz_questions.values_list("key", flat=True)) == {
         q["key"] for level in data["levels"] for q in level["quiz"]
     }
-    assert path.milestones.count() == 34 and path.quiz_questions.count() == 10
+    assert path.milestones.count() == 25 and path.quiz_questions.count() == 7
 
 
 def test_bentley_route_is_external_with_courses(seeded):
     path = LearningPath.objects.get(slug="bentley-learn")
     assert path.is_external and path.world == "civil" and path.allow_free_courses
-    assert path.levels.count() == 5
+    assert path.levels.count() == 4
     keys = set(path.external_courses.values_list("key", flat=True))
-    assert {"ms-c0", "ord-c0", "obr-c0", "obd-c2"} <= keys
+    assert {"ms-c0", "ord-c0", "obr-c0"} <= keys
     assert path.levels.get(code="lib").is_free_courses
-    assert path.levels.get(code="obd").completion_rule == "any_one"
+    obd = LearningPath.objects.get(slug="bentley-openbuildings")
+    assert obd.levels.get(code="obd").completion_rule == "any_one"
+    assert obd.external_courses.filter(key__in=["obd-c0", "obd-c1"]).count() == 2
+    assert (
+        LearningPath.objects.get(slug="bentley-openplant")
+        .external_courses.filter(key="opl-c3")
+        .exists()
+    )
     course = path.external_courses.get(key="ord-c0")
     assert course.resource.grants_completion_certificate and course.reward == "relic"
     assert {s.slug for s in course.resource.skills.all()} >= {"corredores-viales", "earthwork"}
 
 
 def test_milestones_link_to_certificate_resources(seeded):
-    milestone = Milestone.objects.get(path__slug="forma-revit", key="n2-t5")
+    milestone = Milestone.objects.get(path__slug="forma-coordinacion", key="n1-t5")
     assert milestone.completed_by_resource.title == "Learn Forma Site Design in 90 minutes"
     assert milestone.completed_by_resource.grants_completion_certificate
 
@@ -104,7 +111,11 @@ def test_extras_and_shared_items_loaded(seeded):
     forma = LearningPath.objects.get(slug="forma-revit")
     kinds = set(forma.extras.values_list("kind", flat=True))
     assert {"capability", "glossary", "team_kit", "rollout_phase", "certification_goal"} <= kinds
-    assert forma.shared_items.filter(key="kit0-1").exists()
+    assert (
+        LearningPath.objects.get(slug="forma-coordinacion")
+        .shared_items.filter(key="kit0-1")
+        .exists()
+    )
     assert (
         LearningPath.objects.get(slug="bentley-learn")
         .extras.filter(kind="certification_step")
@@ -161,13 +172,13 @@ def test_removed_items_are_retired_not_deleted_and_come_back(seed_copy):
 
     edit_json(path_file, lambda d: d["levels"][0]["milestones"].pop(0))
     seed("--seed-dir", str(seed_copy))
-    gone = Milestone.objects.get(path__slug="forma-revit", key="n0-t0")
+    gone = Milestone.objects.get(path__slug="forma-revit", key="n0-t4")
     assert gone.retired
-    assert Milestone.objects.filter(path__slug="forma-revit").count() == 34
+    assert Milestone.objects.filter(path__slug="forma-revit").count() == 25
 
     edit_json(
         path_file,
-        lambda d: d["levels"][0]["milestones"].insert(0, {"key": "n0-t0", "text": "de vuelta"}),
+        lambda d: d["levels"][0]["milestones"].insert(0, {"key": "n0-t4", "text": "de vuelta"}),
     )
     seed("--seed-dir", str(seed_copy))
     gone.refresh_from_db()
@@ -196,7 +207,7 @@ def test_unique_keys_per_path_are_enforced_by_the_database(seeded):
 
     level = Level.objects.filter(path__slug="forma-revit").first()
     with pytest.raises(IntegrityError), transaction.atomic():
-        Milestone.objects.create(path=level.path, level=level, key="n0-t0", text="duplicada")
+        Milestone.objects.create(path=level.path, level=level, key="n0-t4", text="duplicada")
 
 
 # --- Person.disciplines -------------------------------------------------------------------------
@@ -214,12 +225,12 @@ def test_person_can_have_disciplines(seeded, member):
 def test_paths_index_lists_vendor_tabs_and_paths(seeded, member_client):
     html = member_client.get("/rutas/").content.decode()
     assert "Autodesk" in html and "Bentley Systems" in html
-    assert "Ruta Forma + Revit" in html  # primer vendor por orden
+    assert "Ruta Revit" in html  # primer vendor por orden
 
 
 def test_paths_index_vendor_tab_switches(seeded, member_client):
     html = member_client.get("/rutas/?vendor=bentley").content.decode()
-    assert "Ruta Bentley" in html and "Ruta Forma + Revit" not in html
+    assert "Ruta Bentley" in html and "Ruta Revit" not in html
 
 
 def test_paths_index_filters_by_product_and_discipline(seeded, member_client):
@@ -231,12 +242,16 @@ def test_paths_index_filters_by_product_and_discipline(seeded, member_client):
         "No hay rutas" in member_client.get("/rutas/?vendor=bentley&product=staad").content.decode()
     )
     assert (
-        "Ruta Bentley"
+        "Ruta OpenPlant"
         in member_client.get("/rutas/?vendor=bentley&discipline=mecanica").content.decode()
     )
     assert (
-        "No hay rutas"
+        "Ruta iTwin"
         in member_client.get("/rutas/?vendor=bentley&discipline=captura-rpa").content.decode()
+    )
+    assert (
+        "Ruta Bentley"
+        in member_client.get("/rutas/?vendor=bentley&discipline=transversal").content.decode()
     )
 
 
@@ -252,22 +267,24 @@ def test_paths_index_empty_without_seed(member_client):
 
 
 def test_path_detail_structured_uses_its_world(seeded, member_client):
-    response = member_client.get("/rutas/forma-revit/?nivel=n3")
+    response = member_client.get("/rutas/forma-coordinacion/?nivel=n2")
     html = response.content.decode()
     assert response.status_code == 200
     assert "Levantamiento Digital" in html and "CC 410" in html
-    assert 'aria-label="Nivel N3' in html
+    assert 'aria-label="Nivel N2' in html
     assert '<em class="term">Send to Revit</em>' in html
     assert (
         "Learn Forma Site Design in 90 minutes"
-        in member_client.get("/rutas/forma-revit/?nivel=n2").content.decode()
+        in member_client.get("/rutas/forma-coordinacion/?nivel=n1").content.decode()
     )
 
 
-def test_path_detail_generic_for_worlds_not_built_yet(seeded, member_client):
-    LearningPath.objects.filter(slug="forma-revit").update(world="mechanical")
-    html = member_client.get("/rutas/forma-revit/").content.decode()
-    assert 'id="n3"' in html and '<em class="term">Send to Revit</em>' in html
+def test_path_detail_falls_back_to_the_architecture_world_when_world_not_built(
+    seeded, member_client
+):
+    LearningPath.objects.filter(slug="forma-coordinacion").update(world="mechanical")
+    html = member_client.get("/rutas/forma-coordinacion/?nivel=n2").content.decode()
+    assert "ar-cover" in html and '<em class="term">Send to Revit</em>' in html
 
 
 def test_path_detail_external(seeded, member_client):
@@ -303,7 +320,9 @@ def test_catalog_lists_and_filters(seeded, member_client):
     html = member_client.get("/catalogo/?q=hub").content.decode()
     assert "Forma Learning Hub" in html
 
-    only_bentley = member_client.get("/catalogo/?platform=bentley-learn").content.decode()
+    only_bentley = member_client.get(
+        "/catalogo/?platform=bentley-learn&q=Navigating"
+    ).content.decode()
     assert "Navigating Bentley Learn" in only_bentley and "Forma Learning Hub" not in only_bentley
 
     exams = member_client.get("/catalogo/?kind=exam").content.decode()
@@ -422,3 +441,18 @@ def test_a_structured_route_in_a_world_without_support_still_shows_its_missions(
     html = member_client.get("/rutas/civil-3d/").content.decode()
     first = Milestone.objects.filter(path=path, retired=False).first()
     assert first.text.split("*")[0][:20] in html and "no tiene cursos con certificado" not in html
+
+
+# --- recarga de semillas: casillas compartidas que salen del JSON --------------------------------------------------
+
+
+def test_shared_items_removed_from_the_seed_are_deleted_on_reseed(db):
+    from django.core.management import call_command
+
+    from apps.paths.models import LearningPath, SharedItem
+
+    call_command("seed_catalog", verbosity=0)
+    path = LearningPath.objects.get(slug="forma-revit")
+    SharedItem.objects.create(path=path, key="kit-viejo", text="ya no está en la semilla")
+    call_command("seed_catalog", verbosity=0)
+    assert not SharedItem.objects.filter(path=path, key="kit-viejo").exists()

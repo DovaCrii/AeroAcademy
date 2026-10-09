@@ -1,4 +1,4 @@
-<section class="lv-cover cv-cover" id="inicio" aria-label="{{ path.title }}">
+{% load catalog_extras %}<section class="lv-cover cv-cover" id="inicio" aria-label="{{ path.title }}">
   <canvas id="cloudCv" data-scene="terrain" aria-hidden="true"></canvas>
   <div class="lv-grid" aria-hidden="true"></div>
   <svg class="lv-reticle" viewBox="0 0 600 600" aria-hidden="true">
@@ -10,6 +10,7 @@
     <span class="lv-cap">Infraestructura digital · {{ path.vendor.name }}</span>
     <b class="lv-title">{{ path.title }}</b>
     <span class="lv-cap">km 0+000 → puente · {{ stats.chapters }} corredores</span>
+    {% vendor_family path as vf %}<span class="lv-tiles vf-{{ vf }}">{% path_tiles path "md" %}</span>
   </div>
   <div class="lv-in">
     <h1>Del km 0+000 <em>al puente</em></h1>

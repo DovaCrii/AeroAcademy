@@ -48,6 +48,7 @@ PROJECT_APPS = [
     "apps.notifications",
     "apps.assistant",
     "apps.dgac",
+    "apps.diplomas",
 ]
 
 INSTALLED_APPS = [
@@ -108,10 +109,31 @@ DATABASES = {
     }
 }
 
-# Identidad: Tailscale (D2). No hay contraseñas ni login propio.
+# Identidad: Tailscale (D2) y, para quien no coincide o entra desde un equipo compartido, invitación + contraseña
+# dentro de la tailnet (D34). Primero se prueba el encabezado; ModelBackend atiende /entrar/ y el registro.
 AUTH_USER_MODEL = "accounts.Person"
-AUTHENTICATION_BACKENDS = ["apps.accounts.backends.TailscaleBackend"]
-AUTH_PASSWORD_VALIDATORS = []
+AUTHENTICATION_BACKENDS = [
+    "apps.accounts.backends.TailscaleBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "OPTIONS": {"user_attributes": ("login", "display_name")},
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 10},
+    },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+LOGIN_URL = "accounts:welcome"  # bienvenida pública: ahí está el formulario de entrada
+LOGIN_REDIRECT_URL = "core:home"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # la sesión por contraseña dura 30 días
 
 # Solo estas IP pueden presentar el encabezado Tailscale-User-Login (proxy de `tailscale serve`).
 TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
@@ -156,3 +178,8 @@ BOT_ENABLED = env_bool("BOT_ENABLED", True)
 BOT_DAILY_LIMIT = int(os.environ.get("BOT_DAILY_LIMIT", "40"))
 TEO_NUDGES = env_bool("TEO_NUDGES", True)  # empujón semanal de Teo (local, sin API)
 BOT_TIMEOUT_S = float(os.environ.get("BOT_TIMEOUT_S", "20"))
+
+
+# Diplomas internos (apps/diplomas): solo las rutas de estas plataformas emiten diploma propio. Lo de Autodesk, Bentley, etc.
+# entrega su propio certificado, que se registra como credencial.
+INTERNAL_PLATFORMS = {"interna"}

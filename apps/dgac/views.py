@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods
 
-from . import assessment, constants, data, services
+from . import assessment, data, services
 from .models import KnowledgeAttempt
 
 
@@ -138,12 +138,11 @@ def diploma(request, pk):
         raise Http404
     return render(
         request,
-        "dgac/diploma.html",
-        _context(
-            attempt=attempt,
-            title=services.diploma_title(),
-            text=services.diploma_text(),
-            issuer=constants.DEFAULT_ISSUER,
-            back=reverse("dgac:result", args=[attempt.pk]),
-        ),
+        "diplomas/diploma.html",
+        {
+            **services.diploma_context(attempt),
+            "back": reverse("dgac:result", args=[attempt.pk]),
+            "own": attempt.person_id == request.user.pk,
+            "page_title": "Diploma interno RPAS",
+        },
     )

@@ -395,3 +395,24 @@ def test_pending_titles_are_titles_only(member):
     assert (
         titles and all(isinstance(t, str) for t in titles) and len(titles) <= context.PENDING_LIMIT
     )
+
+
+def test_help_center_topics_and_faq_search(client_for, member):
+    c = client_for(member.login)
+    html = c.get("/ayuda/").content.decode()
+    for topic in (
+        "Empezar",
+        "Rutas y misiones",
+        "Certificados",
+        "XP y niveles",
+        "Foro y notas",
+        "Nala",
+        "DGAC",
+        "Cuenta y acceso",
+    ):
+        assert topic in html
+    assert 'role="search"' in html and "Guías paso a paso" in html
+    hit = c.get("/ayuda/?q=cuanto xp gano").content.decode()
+    assert "Resultados para" in hit and "¿Cuánto XP gano?" in hit
+    assert "No encontré nada" in c.get("/ayuda/?q=zzzxqy").content.decode()
+    assert "&lt;script&gt;" in c.get("/ayuda/?q=<script>").content.decode()

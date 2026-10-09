@@ -232,3 +232,24 @@ def test_manifest_icons_exist():
     assert manifest["start_url"] == "/" and manifest["display"] == "standalone"
     assert all((folder / icon["src"]).is_file() for icon in manifest["icons"])
     assert any(icon.get("purpose") == "maskable" for icon in manifest["icons"])
+
+
+# --- Nala: atuendo según dónde estás y quién eres -----------------------------------------------------------------
+
+
+def test_nala_dresses_for_the_career_outside_routes_and_for_drones_in_dgac(
+    client_for, member, settings
+):
+    settings.NIM_API_KEY = "nvapi-X"  # despierta
+    member.character_class = "cartographer"  # Geomensor/a → topografía
+    member.save()
+    client = client_for(member.login)
+    assert client.get("/").context["teo_sprite"] == "teo-survey.svg"
+    assert client.get("/dgac/").context["teo_sprite"] == "teo-aero.svg"
+    assert "soy Nala" in client.get("/").context["nala_greeting"]
+
+
+def test_nala_sleeps_and_still_says_hello_when_off(client_for, member, settings):
+    settings.NIM_API_KEY = ""
+    ctx = client_for(member.login).get("/").context
+    assert ctx["teo_sprite"] == "teo-sleep.svg" and "durmiendo" in ctx["nala_greeting"]

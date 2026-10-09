@@ -1,0 +1,89 @@
+{% extends "core/base.html" %}
+{% load static core_extras %}
+{% block title %}{{ page_title|default:"Diploma interno" }}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'diplomas/diploma.css' %}">
+<script src="{% static 'diplomas/print.js' %}" defer></script>
+{% endblock %}
+{% block body_attrs %} class="dp-page"{% endblock %}
+
+{% block content %}
+<div class="dp-bar">
+  <a class="btn ghost" href="{{ back }}">← Volver</a>
+  <p class="hint">Se imprime en A4 apaisado. En el diálogo de impresión elige «Guardar como PDF».</p>
+  <div class="actions"><button class="btn" type="button" data-print>Imprimir / Guardar PDF</button></div>
+</div>
+{% if not own %}<p class="dp-viewing">Estás viendo el diploma de <b>{{ name }}</b>.</p>{% endif %}
+
+<div class="dp-scroll"><div class="dp-stage">
+<article class="dp-sheet" aria-label="Diploma interno de {{ name }}: {{ course }}">
+  <svg class="dp-frame" viewBox="0 0 297 210" aria-hidden="true" focusable="false">{{ frame }}</svg>
+
+  <header class="dp-brand">
+    {% include "core/partials/mark.html" with cls="dp-mark" %}
+    <h2 class="w-wordmark"><span class="a">AEROACADEMY</span><span class="l"><span class="w1">Levantamiento</span><span class="w2">Digital <b>101</b></span></span></h2>
+  </header>
+  <div class="dp-kind"><span class="k">Diploma de aprobación</span></div>
+  <svg class="dp-north" viewBox="0 0 30 40" aria-hidden="true"><circle cx="15" cy="22" r="13" fill="none" stroke="currentColor" stroke-width=".8"/><path d="M15 4 23 33 15 27Z" fill="#16243F"/><path d="M15 4 7 33 15 27Z" fill="none" stroke="#16243F" stroke-width=".9"/><text x="15" y="3.4" text-anchor="middle" font-size="5">N</text></svg>
+
+  <section class="dp-body">
+    <p class="to">Se otorga a</p>
+    <p class="name{% if name|length > 24 %} long{% endif %}">{{ name }}</p>
+    <p class="what">por completar con éxito</p>
+    <h1 class="course{% if course|length > 34 %} long{% endif %}">{{ course }}</h1>
+    <p class="desc">{% if body %}{{ body }}{% else %}Curso interno de la Academia LEV Digital 101: misiones cumplidas, preguntas acertadas y la bendición de Nala.{% endif %}</p>
+  </section>
+
+  <svg class="dp-relief" viewBox="0 4 64 76" aria-hidden="true">
+    <path class="c" d="M3 46C0 24 18 5 38 8c20 3 24 22 22 38-2 17-16 32-33 28C12 71 5 60 3 46Z"/>
+    <path class="c" d="M10 46c-1-17 11-30 26-28 15 2 21 14 19 28-2 14-14 25-27 22C17 66 11 58 10 46Z"/>
+    <path class="c m" d="M17 46c0-10 8-18 18-17s15 9 13 17c-2 9-9 16-18 14-8-2-13-6-13-14Z"/>
+    <path class="c" d="M25 45c0-6 4-10 10-9 5 1 8 5 7 10-1 5-5 8-10 7-5-1-7-4-7-8Z"/>
+    <path class="c m" d="M30 44c0-3 2-5 5-5s5 3 4 6-3 4-5 4-4-2-4-5Z"/>
+    <path class="pt" d="M34 41 38 48H30Z"/>
+    <text x="3" y="78">BM-101 · cota 101,00 m</text>
+  </svg>
+  {% doodle "doodle-sparks" class="dp-sparks" %}
+
+  <dl class="dp-facts">{% for label, value in facts %}<div><dt>{{ label }}</dt><dd>{{ value }}</dd></div>{% endfor %}</dl>
+
+  <svg class="dp-scale" viewBox="0 0 82 10" aria-hidden="true">
+    <rect x="2" y="2.5" width="60" height="2.4" fill="none" stroke="#16243F" stroke-width=".35"/>
+    <path fill="#16243F" d="M2 2.5h12v2.4H2zM26 2.5h12v2.4H26zM50 2.5h12v2.4H50z"/>
+    <text x="2" y="8.6" text-anchor="middle">0</text><text x="14" y="8.6" text-anchor="middle">1</text><text x="26" y="8.6" text-anchor="middle">2</text><text x="38" y="8.6" text-anchor="middle">3</text><text x="50" y="8.6" text-anchor="middle">4</text><text x="62" y="8.6" text-anchor="middle">5 m</text>
+    <text x="66" y="4.9">ESCALA 1:1</text>
+  </svg>
+
+  <div class="dp-block">
+    <div class="s6"><span class="k">Documento</span><span class="v">Diploma interno · {{ course }}</span></div>
+    <div class="s3"><span class="k">Lámina</span><span class="v">{{ sheet }}</span></div>
+    <div class="s3"><span class="k">Escala</span><span class="v">1:1 <small>(a tu ritmo)</small></span></div>
+    <div class="s3"><span class="k">Revisó</span><span class="v">Nala</span></div>
+    <div class="s3"><span class="k">Aprobó</span><span class="v">{{ approver }}</span></div>
+    <div class="s2"><span class="k">Fecha</span><span class="v">{{ when|date:"d-m-Y" }}</span></div>
+    <div class="s4"><span class="k">Código de verificación</span><span class="v mono">{{ code }}</span>{% if reference %}<span class="k">Ref. {{ reference }}</span>{% endif %}</div>
+  </div>
+  <p class="dp-fine"><span>Documento interno de capacitación · UTM 19S · E {{ coords.east }} · N {{ coords.north }} · no reemplaza certificados de fabricantes ni de la DGAC.</span></p>
+
+  <svg class="dp-stamp" viewBox="0 0 200 200" role="img" aria-label="Sello de aprobado: Nala">
+    <defs>
+      <filter id="ink" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3.2 2.55" result="speck"/>
+        <feComposite in="SourceGraphic" in2="speck" operator="in"/>
+      </filter>
+      <path id="dpRing" d="M100 100m-73 0a73 73 0 1 1 146 0a73 73 0 1 1-146 0"/>
+    </defs>
+    <g filter="url(#ink)">
+      <circle class="ring" cx="100" cy="100" r="96" stroke-width="4.5"/>
+      <circle class="ring" cx="100" cy="100" r="89" stroke-width="1.4"/>
+      <circle class="ring" cx="100" cy="100" r="55" stroke-width="2.6"/>
+      <text font-size="17" letter-spacing="1" transform="rotate(53 100 100)"><textPath href="#dpRing" textLength="452" lengthAdjust="spacing">APROBADO · LEVANTAMIENTO DIGITAL 101 · </textPath></text>
+      <rect x="56" y="127" width="88" height="21" rx="3" fill="currentColor"/>
+      <text x="100" y="142.5" text-anchor="middle" font-size="14.5" letter-spacing="1.4" style="fill:#FFFEF9">REVISÓ NALA</text>
+    </g>
+    <image href="{% static 'game/teo/teo-celebra.svg' %}" x="68" y="55" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+  </svg>
+</article>
+</div></div>
+{% endblock %}

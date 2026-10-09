@@ -1,0 +1,111 @@
+/* Diploma interno · lámina D-101.
+   La hoja es papel: siempre clara, con tinta azul noche, en tema claro u oscuro (así se imprime en blanco).
+   Solo la barra de herramientas y el fondo siguen el tema. Todo se dibuja en milímetros: 1em = 1 mm de la hoja A4
+   apaisada (297 × 210), así que la hoja escala entera en pantalla y sale exacta al imprimir. */
+
+.dp-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:6px 0 18px}
+.dp-bar .hint{margin:0;color:var(--ink-2);font-size:var(--fs-small)}
+.dp-bar .actions{display:flex;gap:10px;flex-wrap:wrap}
+.dp-viewing{margin:0 0 14px;padding:8px 12px;border:1px dashed var(--line);border-radius:var(--r);color:var(--ink-2);font-size:var(--fs-small)}
+
+.dp-scroll{overflow-x:auto;padding:4px 2px 18px;-webkit-overflow-scrolling:touch}
+.dp-stage{container-type:inline-size;width:100%;min-width:760px;max-width:1180px;margin:0 auto}
+
+.dp-sheet{
+  --ink:#16243F;--ink-2:#41506B;--line:#8C97AB;--amber:#FFC93C;--blue:#0B5BD3;--blue-2:#0A47A8;--red:#C4262E;--paper:#FFFEF9;
+  position:relative;width:100%;aspect-ratio:297/210;overflow:hidden;
+  font-size:calc(100cqw/297);line-height:1.2;color:var(--ink);font-family:var(--font);
+  background-color:var(--paper);
+  background-image:linear-gradient(rgba(11,91,211,.07) .08em,transparent .08em),linear-gradient(90deg,rgba(11,91,211,.07) .08em,transparent .08em);
+  background-size:5em 5em;background-position:11em 11em;
+  border-radius:.8em;box-shadow:0 .6em 3em rgba(0,0,0,.35);
+}
+@supports not (width:1cqw){.dp-sheet{font-size:3.4px}}
+.dp-sheet>*{position:absolute;margin:0}
+.dp-sheet .dp-frame{inset:0;width:100%;height:100%}
+.dp-frame text{font-family:var(--font-mono);fill:var(--ink-2);font-size:2.3px;letter-spacing:.2px}
+.dp-frame .t{stroke:var(--ink);stroke-width:.25;fill:none}
+.dp-frame .box{fill:none;stroke:var(--ink)}
+.dp-frame .b1{stroke-width:.35}.dp-frame .b2{stroke-width:1.1}
+
+/* encabezado: marca del sitio */
+.dp-brand{left:17em;top:16em;display:flex;align-items:flex-start;gap:5em}
+.dp-brand .dp-mark{width:19em;height:auto;margin-top:5.5em;color:var(--ink)}
+.dp-sheet .w-wordmark{max-width:none;margin:0;font-size:1em;line-height:1;letter-spacing:0}
+.dp-sheet .w-wordmark .a{margin:0 0 1.6em;font-size:2.5em;letter-spacing:.34em;color:var(--ink-2)}
+.dp-sheet .w-wordmark .l{font-size:7.6em;border-width:.07em;border-radius:.2em;box-shadow:.1em .1em 0 var(--amber);padding:.14em .26em .18em}
+.dp-sheet .w-wordmark .l b{color:#1F2430}
+.dp-kind{left:118em;top:31em;display:flex;flex-direction:column;gap:1.4em;max-width:130em}
+.dp-kind .k{font-family:var(--font-mono);font-size:2.5em;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2)}
+.dp-kind .t{font-family:var(--font-serif);font-style:italic;font-size:6.6em;line-height:1;color:var(--ink)}
+.dp-north{right:19em;top:15em;width:15em;height:auto}
+.dp-north text{font-family:var(--font-mono);font-weight:700;fill:var(--ink)}
+
+/* cuerpo */
+.dp-body{left:18em;top:60em;width:196em}
+.dp-body>*{margin:0}
+.dp-body .to{font-family:var(--font-mono);font-size:2.7em;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-2)}
+.dp-body .name{margin:.16em 0 0;font-family:var(--font-serif);font-style:italic;font-weight:600;font-size:15em;line-height:1.05;color:var(--blue-2);
+  background:linear-gradient(transparent 76%,rgba(255,201,60,.7) 76%,rgba(255,201,60,.7) 92%,transparent 92%);display:inline-block;padding:0 .12em;max-width:100%}
+.dp-body .name.long{font-size:10.5em}
+.dp-body .what{margin:1.6em 0 0;font-size:4.2em;color:var(--ink-2)}
+.dp-body .course{margin:.12em 0 0;font-family:var(--font-display);font-stretch:84%;font-weight:900;font-size:9em;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
+.dp-body .course.long{font-size:6.8em}
+.dp-body .desc{margin:.9em 0 0;font-size:3.9em;line-height:1.35;color:var(--ink-2);max-width:150em}
+
+/* decoración: curvas de nivel + chispas */
+.dp-relief{left:218em;top:50em;width:64em;height:auto;color:var(--blue)}
+.dp-relief .c{fill:none;stroke:currentColor;stroke-width:.5;opacity:.55}
+.dp-relief .c.m{stroke-width:.9;opacity:.8}
+.dp-relief text{font-family:var(--font-mono);font-size:3px;fill:var(--ink-2)}
+.dp-relief .pt{fill:var(--red)}
+.dp-sparks{left:236em;top:62em;width:38em;height:auto;color:var(--ink);opacity:.9;transform:rotate(-8deg)}
+
+/* datos */
+.dp-facts{left:17em;top:127em;width:196em;height:15em;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border:.35em solid var(--ink);background:rgba(255,254,249,.85)}
+.dp-facts div{padding:2em 3em;border-left:.25em dashed var(--line);display:flex;flex-direction:column;justify-content:center;gap:1.2em;min-width:0}
+.dp-facts div:first-child{border-left:0}
+.dp-facts dt{font-family:var(--font-mono);font-size:2.1em;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.dp-facts dd{margin:0;font-weight:800;font-size:5.4em;line-height:1;color:var(--ink);white-space:nowrap}
+
+/* barra de escala */
+.dp-scale{left:18em;top:146em;width:82em;height:auto}
+.dp-scale text{font-family:var(--font-mono);font-size:2.4px;fill:var(--ink-2)}
+
+/* cajetín */
+.dp-block{left:17em;top:160em;width:196em;height:32em;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:1fr 1fr;border:.6em solid var(--ink);background:var(--paper)}
+.dp-block>div{padding:1.8em 2.6em;border-top:.3em solid var(--ink);border-left:.3em solid var(--ink);display:flex;flex-direction:column;justify-content:center;gap:1em;min-width:0}
+.dp-block .s6{grid-column:span 6}.dp-block .s3{grid-column:span 3}.dp-block .s4{grid-column:span 4}.dp-block .s2{grid-column:span 2}
+.dp-block>div:nth-child(1),.dp-block>div:nth-child(2),.dp-block>div:nth-child(3){border-top:0}
+.dp-block>div:nth-child(1),.dp-block>div:nth-child(4){border-left:0}
+.dp-block .k{font-family:var(--font-mono);font-size:1.9em;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.dp-block .v{font-weight:800;font-size:3.9em;line-height:1.1;color:var(--ink);overflow-wrap:anywhere}
+.dp-block .v.mono{font-family:var(--font-mono);font-weight:700;font-size:3.5em;letter-spacing:.04em}
+.dp-block .v small{font-weight:600;font-size:.62em;color:var(--ink-2)}
+.dp-fine{left:18em;top:193.3em;width:194em}
+.dp-fine span{font-size:1.9em;color:var(--ink-2);white-space:nowrap}
+
+/* sello de aprobado: Nala */
+.dp-stamp{left:221em;top:134em;width:60em;height:60em;transform:rotate(-12deg);color:var(--red);mix-blend-mode:multiply}
+.dp-stamp text{font-family:var(--font-display);font-weight:900;fill:currentColor}
+.dp-stamp .ring{fill:none;stroke:currentColor}
+.dp-stamp image{image-rendering:pixelated}
+
+/* pendiente */
+.dp-pending{max-width:560px;margin:30px auto;text-align:center}
+.dp-pending img{width:96px;height:96px;image-rendering:pixelated}
+
+@media (max-width:760px){.dp-bar .hint{flex-basis:100%}}
+
+@page{size:A4 landscape;margin:0}
+@media print{
+  html,body{background:#fff!important}
+  .dp-page .top,.dp-page .foot,.dp-page .skip,.dp-page .dp-bar,.dp-page .dp-viewing,.dp-page .msgs,.dp-page [data-slot],.dp-page .teo-widget,.dp-page aside,.dp-page .cheer,.dp-page main>:not(.dp-scroll){display:none!important}
+  .dp-page main,.dp-page .wrap{max-width:none!important;width:auto!important;margin:0!important;padding:0!important;background:none!important}
+  .dp-page{background-image:none!important}
+  .dp-scroll{overflow:visible;padding:0}
+  .dp-stage{width:297mm;min-width:0;max-width:none;margin:0}
+  .dp-sheet{width:297mm;height:209mm;aspect-ratio:auto;border-radius:0;box-shadow:none;break-inside:avoid;page-break-inside:avoid;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .dp-stamp{mix-blend-mode:normal}
+}

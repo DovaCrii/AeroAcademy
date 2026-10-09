@@ -33,3 +33,14 @@ td small{font-size:.72rem;opacity:.75}
 .onb th[scope=row]{min-width:9rem}
 .add-form label{display:block;margin:.6rem 0}.add-form textarea{display:block;width:100%;box-sizing:border-box;font-family:ui-monospace,monospace;font-size:.85rem}.add-form .btn{margin:.3rem .3rem 0 0}
 .onb .edit label{display:block}.onb .edit input:not([type=checkbox]),.onb .edit select{width:100%;box-sizing:border-box}
+/* Agregar personas: modo simple (correos) y avanzado (CSV); campos legibles en claro y oscuro */
+.add-form{display:grid;gap:14px}
+.add-form textarea{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:var(--r,12px);border:1px solid var(--line);background:var(--sheet);color:var(--ink);font:15px/1.6 var(--font-mono,ui-monospace,monospace)}
+.add-form textarea::placeholder{color:var(--ink-2);opacity:.75}
+.add-form textarea:focus{outline:none;border-color:var(--amber,var(--level));box-shadow:0 0 0 4px color-mix(in srgb,var(--amber,var(--level)) 22%,transparent)}
+.add-actions{display:flex;flex-wrap:wrap;gap:10px}
+.add-advanced summary{cursor:pointer;color:var(--ink-2);font-size:14px}
+.add-advanced[open]{padding:12px 14px;border:1px dashed var(--line);border-radius:var(--r,12px)}
+.add-example{white-space:pre-wrap;padding:10px 12px;border-radius:10px;background:var(--surface-tint,var(--sheet));color:var(--ink);font-size:13px;overflow:auto}
+.add-form input[type=file]{color:var(--ink)}
+.add-form input[type=file]::file-selector-button{margin-right:10px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);cursor:pointer}

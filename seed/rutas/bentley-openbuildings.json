@@ -1,0 +1,78 @@
+{
+  "_nota": "Ruta separada de 'bentley-learn' el 2026-10-09 (decisión del dueño: un producto Bentley por ruta y por disciplina). Los cursos movidos desde 'bentley-learn' perderán el avance que tuvieran registrado allí (se registran de nuevo en esta ruta). Trae obd-c0 (estructural) y obd-c1 (arquitectónico) con completion_rule any_one. El plan mecánico (antes obd-c2) vive en bentley-openplant como opl-c3. Pendientes conocidos: OpenBuildings eléctrico (plan 360) y GenerativeComponents (plan 632) existen en Bentley Learn y se pueden sumar al final como obd-c2/obd-c3 si el equipo los pide. Las keys son estables: agregar siempre al final; los títulos de recurso son la clave en la base: no cambiarlos. URLs verificadas el 2026-10-09 contra la API pública de Bentley Learn (id + slug + título coinciden).",
+  "slug": "bentley-openbuildings",
+  "title": "Ruta OpenBuildings",
+  "program": "Edificación · OpenBuildings Designer",
+  "platform": "bentley-learn",
+  "kind": "external_track",
+  "vendor": "bentley",
+  "products": [
+    "openbuildings"
+  ],
+  "disciplines": [
+    "arquitectura",
+    "civil-estructural"
+  ],
+  "world": "civil",
+  "allow_free_courses": false,
+  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. Modelado BIM de edificios en OpenBuildings Designer para Arquitectura y Civil-Estructural.",
+  "levels": [
+    {
+      "code": "obd",
+      "order": 0,
+      "short": "OpenBuildings",
+      "title": "km 0+000 · OpenBuildings: edificios en Bentley",
+      "estimated_hours": "15 a 18 h por disciplina",
+      "audience": "Arquitectura y estructura (elegir según disciplina)",
+      "goal": "Modelado BIM básico por disciplina en OpenBuildings Designer (arquitectura o estructura). Basta una acreditación para completar el capítulo. La acreditación mecánica está en la Ruta OpenPlant.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Catálogo OpenBuildings en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/14",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        }
+      ],
+      "external_courses": [
+        {
+          "key": "obd-c0",
+          "order": 0,
+          "title": "Bentley Accredited BIM Modeler: Basic Structural Modeling with OpenBuildings",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/370/bentley-accredited-bim-modeler-basic-structural-modeling-with-openbuildings",
+          "duration_text": "17 h 05 min · 5 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "disciplines": [
+            "civil-estructural"
+          ],
+          "skills": [
+            "modelado-bim",
+            "modelado-estructural"
+          ]
+        },
+        {
+          "key": "obd-c1",
+          "order": 1,
+          "title": "Bentley Accredited BIM Modeler: Basic Architectural Modeling with OpenBuildings",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/359/bentley-accredited-bim-modeler-basic-architectural-modeling-with-openbuildings",
+          "duration_text": "15 h · 5 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "disciplines": [
+            "arquitectura"
+          ],
+          "skills": [
+            "modelado-bim"
+          ]
+        }
+      ],
+      "completion_rule": "any_one"
+    }
+  ]
+}

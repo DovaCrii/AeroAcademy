@@ -112,9 +112,68 @@ def _matching(facts, rule):
     return rows
 
 
-def check(rule, facts, path_pct):
+# Reglas de avance en rutas (rutas de conocimiento general, docs/GAMIFICACION.md): dan (hecho, total).
+PROGRESS_TYPES = {
+    "path_complete",
+    "level_complete",
+    "quiz_correct",
+    "paths_complete",
+    "general_complete",
+}
+GENERAL_MIN = (
+    2  # «Sabio transversal» no se otorga con una sola ruta general: hacen falta al menos dos
+)
+
+
+def progress(rule, path_pct, ctx):
+    """(hecho, total) de una regla de avance, o None si el tipo no es de avance.
+
+    `ctx` ofrece `status(slug)` (avance por capítulo de una ruta) y `general()` (slugs de las rutas generales).
+    Si falta lo que se necesita, la regla queda en (0, 1): nunca se otorga por omisión.
+    """
+    kind = rule.get("type")
+    if kind == "path_complete":
+        return min(path_pct(rule["path"]), 100), 100
+    if ctx is None or kind not in PROGRESS_TYPES:
+        return (0, 1) if kind in PROGRESS_TYPES else None
+    if kind == "level_complete":
+        level = ctx.status(rule["path"])["levels"].get(rule["level"])
+        if not level or not (level["total"]):
+            return 0, 1
+        return level["done"], level["total"]
+    if kind == "quiz_correct":
+        levels = ctx.status(rule["path"])["levels"]
+        picked = [levels[c] for c in rule["levels"] if c in levels]
+        total = sum(lv["quiz_total"] for lv in picked)
+        if not total or len(picked) < len(rule["levels"]):
+            return 0, 1
+        return sum(lv["quiz_done"] for lv in picked), total
+    if kind == "paths_complete":
+        slugs = rule["paths"]
+        return sum(1 for s in slugs if path_pct(s) >= 100), max(len(slugs), 1)
+    slugs = (
+        ctx.general()
+    )  # general_complete: toda ruta general publicada, incluidas las que se sumen después
+    need = max(rule.get("min", GENERAL_MIN), len(slugs))
+    return sum(1 for s in slugs if path_pct(s) >= 100), need
+
+
+def touches(rule, slug, ctx):
+    """¿La regla depende de la ruta `slug`? (para mostrar solo los logros de esa ruta)"""
+    kind = rule.get("type")
+    if kind in ("path_complete", "level_complete", "quiz_correct"):
+        return rule.get("path") == slug
+    if kind == "paths_complete":
+        return slug in rule.get("paths", [])
+    return kind == "general_complete" and slug in ctx.general()
+
+
+def check(rule, facts, path_pct, ctx=None):
     """¿Se cumple la regla? `path_pct(slug)` da el avance de la persona en una ruta."""
     kind = rule.get("type")
+    if kind in PROGRESS_TYPES and kind != "path_complete":
+        done, total = progress(rule, path_pct, ctx)
+        return done >= total
     if kind == "count":
         return facts.count(rule["event"]) >= rule["min"]
     if kind == "path_complete":

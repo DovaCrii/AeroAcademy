@@ -1,16 +1,23 @@
 {
-  "_nota": "Ruta externa: el contenido y el certificado los entrega Bentley Learn. Aquí se registra cada curso con su certificado y el moderador lo verifica. URLs revisadas el 2026-10-08 en el catálogo público; las marcadas 'verify_url': true apuntan al catálogo y deben reemplazarse por el learning plan exacto. Las keys son estables: agregar siempre al final.",
+  "_nota": "Ruta externa: el contenido y el certificado los entrega Bentley Learn. URLs verificadas el 2026-10-09 contra la API pública de Bentley Learn (id + slug + título coinciden); las marcadas 'verify_url': true apuntan al catálogo y deben reemplazarse por el learning plan exacto. Las keys son estables: agregar siempre al final; los títulos de recurso son la clave en la base: no cambiarlos. ESTRUCTURA (decisión del dueño, 2026-10-09): la suite Bentley se reparte en rutas por producto/disciplina. Esta conserva el slug 'bentley-learn' y las keys ms-*, ord-*, obr-* y lib-* (MicroStation = transversal; OpenRoads/OpenBridge = Civil-Estructural). Salieron a rutas propias: OpenBuildings (obd-c0, obd-c1) -> bentley-openbuildings; OpenBuildings mecánico (obd-c2) -> bentley-openplant como opl-c3; OpenPlant -> bentley-openplant; ProjectWise -> bentley-projectwise; iTwin y realidad -> bentley-itwin; LumenRT -> bentley-lumenrt. Quien tuviera cursos registrados con las keys obd-* en esta ruta pierde ese avance y debe registrarlos en la ruta nueva. 'Cursos libres' (lib) pasa a order 3 y sigue siendo el último ramal.",
   "slug": "bentley-learn",
   "title": "Ruta Bentley",
   "program": "Infraestructura digital · Bentley Learn",
   "platform": "bentley-learn",
   "kind": "external_track",
   "vendor": "bentley",
-  "products": ["microstation", "openroads-designer", "openbridge", "openbuildings"],
-  "disciplines": ["civil-estructural", "arquitectura", "mecanica"],
+  "products": [
+    "microstation",
+    "openroads-designer",
+    "openbridge"
+  ],
+  "disciplines": [
+    "transversal",
+    "civil-estructural"
+  ],
   "world": "civil",
   "allow_free_courses": true,
-  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia.",
+  "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. Esta ruta reúne MicroStation (base transversal de todo Bentley) y la línea de infraestructura civil: OpenRoads y OpenBridge. El resto de la suite tiene su propia ruta: OpenBuildings, OpenPlant, ProjectWise, iTwin y LumenRT.",
   "levels": [
     {
       "code": "ms",
@@ -20,14 +27,132 @@
       "estimated_hours": "9 h 30 min",
       "audience": "Todo el equipo que use productos Bentley",
       "goal": "Dominar la interfaz, el dibujo, las celdas, la anotación y las láminas. Meta: Bentley Accredited MicroStation User.",
+      "guide": {
+        "title": "Guía rápida · MicroStation",
+        "software": "microstation",
+        "do": [
+          "Abre cada trabajo desde el archivo semilla (.dgn) del equipo y revisa unidades de trabajo y *Models*.",
+          "Dibuja con *AccuDraw* y *AccuSnap*: escribe la distancia, no mires el cursor.",
+          "Organiza el dibujo con *Levels* y *Reference*; nunca copies geometría de otro archivo.",
+          "Termina cada lámina en un *Sheet* model con escala y anotación (*Cells* para símbolos repetidos)."
+        ],
+        "commands": [
+          "*AccuDraw*",
+          "*AccuSnap*",
+          "*Level Manager*",
+          "*Reference*",
+          "*Place Cell*",
+          "*Sheet*"
+        ],
+        "mistakes": [
+          "Dibujar en un archivo sin semilla: unidades y estilos quedan al azar.",
+          "Pegar geometría en vez de referenciarla: el cambio no se propaga.",
+          "Dejar todo en el *Default* level: no hay forma de apagar ni filtrar."
+        ],
+        "essential": "Bentley Accredited MicroStation User"
+      },
       "resources": [
-        {"order": 0, "title": "Catálogo MicroStation en Bentley Learn", "url": "https://learning.bentley.com/learn/public/catalog/view/11", "kind": "collection", "tags": ["Catalog", "Oficial"]},
-        {"order": 1, "title": "Navigating Bentley Learn", "url": "https://learning.bentley.com/learn/public/catalog/view/128", "kind": "course", "description": "20 minutos: cómo inscribirse, encontrar cursos y descargar certificados.", "tags": ["On Demand", "Oficial"]}
+        {
+          "order": 0,
+          "title": "Catálogo MicroStation en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/11",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Navigating Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/128",
+          "kind": "course",
+          "description": "20 minutos: cómo inscribirse, encontrar cursos y descargar certificados.",
+          "tags": [
+            "On Demand",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Bentley Accredited MicroStation User",
+          "url": "https://learning.bentley.com/learn/learning-plans/519/bentley-accredited-microstation-user",
+          "kind": "learning_plan",
+          "description": "Curso esencial del capítulo: 13 cursos y una evaluación final.",
+          "duration_text": "9 h 30 min · 13 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        }
       ],
       "external_courses": [
-        {"key": "ms-c0", "order": 0, "title": "Bentley Accredited MicroStation User", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/learning-plans/519/bentley-accredited-microstation-user", "duration_text": "9 h 30 min · 13 cursos", "reward": "relic", "is_required": true, "skills": ["dibujo-2d", "celdas", "anotacion", "laminas"], "contains": ["Ch. 1: Introduction to MicroStation CONNECT Edition", "Ch. 2: Controlling the Display of Designs for Civil Designers", "Ch. 3: Using General Tools in MicroStation CONNECT Edition for the Civil Designer", "Ch. 4: Drawing with MicroStation for Civil Designers", "Ch. 5: Additional Drawing Tools", "Ch. 6: Manipulating and Modifying Elements for Civil Designers", "Ch. 7: Working with Cells for Civil Designers", "Ch. 8: Annotating Designs for Civil Designers", "Ch. 9: Composing Sheets for Civil Designers", "Ch. 10: Printing and Publishing for Civil Designers", "Bentley Accredited MicroStation User - Assessment"]},
-        {"key": "ms-c1", "order": 1, "title": "Bentley Accredited MicroStation Professional", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "33 h · 2 cursos", "reward": "relic", "is_required": false, "skills": ["modelado-3d", "dibujo-2d"]},
-        {"key": "ms-c2", "order": 2, "title": "MicroStation Basics", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/11", "verify_url": true, "duration_text": "7,5 CEU", "reward": "trophy", "is_required": false, "skills": ["dibujo-2d"]}
+        {
+          "key": "ms-c0",
+          "order": 0,
+          "title": "Bentley Accredited MicroStation User",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/519/bentley-accredited-microstation-user",
+          "description": "Curso esencial del capítulo: 13 cursos y una evaluación final.",
+          "duration_text": "9 h 30 min · 13 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ],
+          "reward": "relic",
+          "is_required": true,
+          "skills": [
+            "dibujo-2d",
+            "celdas",
+            "anotacion",
+            "laminas"
+          ],
+          "contains": [
+            "Ch. 1: Introduction to MicroStation CONNECT Edition",
+            "Ch. 2: Controlling the Display of Designs for Civil Designers",
+            "Ch. 3: Using General Tools in MicroStation CONNECT Edition for the Civil Designer",
+            "Ch. 4: Drawing with MicroStation for Civil Designers",
+            "Ch. 5: Additional Drawing Tools",
+            "Ch. 6: Manipulating and Modifying Elements for Civil Designers",
+            "Ch. 7: Working with Cells for Civil Designers",
+            "Ch. 8: Annotating Designs for Civil Designers",
+            "Ch. 9: Composing Sheets for Civil Designers",
+            "Ch. 10: Printing and Publishing for Civil Designers",
+            "Bentley Accredited MicroStation User - Assessment"
+          ]
+        },
+        {
+          "key": "ms-c1",
+          "order": 1,
+          "title": "Bentley Accredited MicroStation Professional",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/539/bentley-accredited-microstation-professional",
+          "duration_text": "33 h · 2 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "skills": [
+            "modelado-3d",
+            "dibujo-2d"
+          ]
+        },
+        {
+          "key": "ms-c2",
+          "order": 2,
+          "title": "MicroStation Basics",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/11",
+          "verify_url": true,
+          "duration_text": "7,5 CEU",
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "dibujo-2d"
+          ]
+        }
       ]
     },
     {
@@ -39,12 +164,74 @@
       "audience": "Civil y topografía",
       "goal": "Terreno, geometría, peraltes, plantillas, corredores, cubicación y láminas de planta-perfil. Meta: Bentley Accredited Road Modeler.",
       "resources": [
-        {"order": 0, "title": "Catálogo OpenRoads en Bentley Learn", "url": "https://learning.bentley.com/learn/public/catalog/view/19", "kind": "collection", "tags": ["Catalog", "Oficial"]},
-        {"order": 1, "title": "QuickStarts en Bentley Learn", "url": "https://learning.bentley.com/learn/public/catalog/view/46", "kind": "collection", "description": "Cursos cortos de arranque por tema.", "tags": ["Catalog", "Oficial"]}
+        {
+          "order": 0,
+          "title": "Catálogo OpenRoads en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/19",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "QuickStarts en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/46",
+          "kind": "collection",
+          "description": "Cursos cortos de arranque por tema.",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        }
       ],
       "external_courses": [
-        {"key": "ord-c0", "order": 0, "title": "Bentley Accredited Road Modeler: OpenRoads Modeling Core Skills", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/learning-plans/516/bentley-accredited-road-modeler-openroads-modeling-core-skills", "duration_text": "7 h 55 min · 11 cursos", "reward": "relic", "is_required": true, "skills": ["terreno", "geometria-vial", "corredores-viales", "earthwork", "planos-perfil"], "contains": ["Program Overview", "Navigating the Interface", "QuickStart for Terrain Display", "QuickStart for Geometry - Road", "Beyond Centerline Geometry", "Using and Editing Templates", "QuickStart for Corridor Modeling - Road", "Quantities and Earthwork", "Drawing Production - Creating Plan and Profile Sheets", "Drawing Production - Creating Cross Section Sheets", "Assessment"]},
-        {"key": "ord-c1", "order": 1, "title": "Bentley Accredited Road Designer: Road Design Modeling with OpenRoads Designer", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "24 h 45 min · 12 cursos", "reward": "relic", "is_required": false, "skills": ["corredores-viales", "peraltes", "diseno-vial"]}
+        {
+          "key": "ord-c0",
+          "order": 0,
+          "title": "Bentley Accredited Road Modeler: OpenRoads Modeling Core Skills",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/516/bentley-accredited-road-modeler-openroads-modeling-core-skills",
+          "duration_text": "7 h 55 min · 11 cursos",
+          "reward": "relic",
+          "is_required": true,
+          "skills": [
+            "terreno",
+            "geometria-vial",
+            "corredores-viales",
+            "earthwork",
+            "planos-perfil"
+          ],
+          "contains": [
+            "Program Overview",
+            "Navigating the Interface",
+            "QuickStart for Terrain Display",
+            "QuickStart for Geometry - Road",
+            "Beyond Centerline Geometry",
+            "Using and Editing Templates",
+            "QuickStart for Corridor Modeling - Road",
+            "Quantities and Earthwork",
+            "Drawing Production - Creating Plan and Profile Sheets",
+            "Drawing Production - Creating Cross Section Sheets",
+            "Assessment"
+          ]
+        },
+        {
+          "key": "ord-c1",
+          "order": 1,
+          "title": "Bentley Accredited Road Designer: Road Design Modeling with OpenRoads Designer",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/615/bentley-accredited-road-designer-road-design-modeling-with-openroads-designer",
+          "duration_text": "24 h 45 min · 12 cursos",
+          "reward": "relic",
+          "is_required": false,
+          "skills": [
+            "corredores-viales",
+            "peraltes",
+            "diseno-vial"
+          ]
+        }
       ]
     },
     {
@@ -56,53 +243,123 @@
       "audience": "Civil-estructural",
       "goal": "Modelar un puente básico con OpenBridge Modeler. Meta: Bentley Accredited Bridge Modeler.",
       "resources": [
-        {"order": 0, "title": "Catálogo OpenBridge en Bentley Learn", "url": "https://learning.bentley.com/learn/public/catalog/view/13", "kind": "collection", "tags": ["Catalog", "Oficial"]}
+        {
+          "order": 0,
+          "title": "Catálogo OpenBridge en Bentley Learn",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/13",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        }
       ],
       "external_courses": [
-        {"key": "obr-c0", "order": 0, "title": "Bentley Accredited Bridge Modeler: Basic Bridge Modeling with OpenBridge Modeler", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "1 h · 3 cursos", "reward": "relic", "is_required": true, "skills": ["modelado-puentes"]}
+        {
+          "key": "obr-c0",
+          "order": 0,
+          "title": "Bentley Accredited Bridge Modeler: Basic Bridge Modeling with OpenBridge Modeler",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/517/bentley-accredited-bridge-modeler-basic-bridge-modeling-with-openbridge-modeler",
+          "duration_text": "1 h · 3 cursos",
+          "reward": "relic",
+          "is_required": true,
+          "skills": [
+            "modelado-puentes"
+          ]
+        }
       ]
     },
     {
-      "code": "obd",
-      "order": 3,
-      "short": "OpenBuildings",
-      "title": "km 3+000 · OpenBuildings: edificios en Bentley",
-      "estimated_hours": "15 a 18 h por disciplina",
-      "audience": "Arquitectura, estructura y mecánica (elegir según disciplina)",
-      "goal": "Modelado BIM básico por disciplina en OpenBuildings Designer. Basta una acreditación para completar el capítulo.",
-      "resources": [
-        {"order": 0, "title": "Catálogo OpenBuildings en Bentley Learn", "url": "https://learning.bentley.com/learn/public/catalog/view/14", "kind": "collection", "tags": ["Catalog", "Oficial"]}
-      ],
-      "external_courses": [
-        {"key": "obd-c0", "order": 0, "title": "Bentley Accredited BIM Modeler: Basic Structural Modeling with OpenBuildings", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "17 h 05 min · 5 cursos", "reward": "relic", "is_required": false, "disciplines": ["civil-estructural"], "skills": ["modelado-bim", "modelado-estructural"]},
-        {"key": "obd-c1", "order": 1, "title": "Bentley Accredited BIM Modeler: Basic Architectural Modeling with OpenBuildings", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "verify_url": true, "duration_text": "15 h · 5 cursos", "reward": "relic", "is_required": false, "disciplines": ["arquitectura"], "skills": ["modelado-bim"]},
-        {"key": "obd-c2", "order": 2, "title": "Bentley Accredited BIM Modeler: Basic Mechanical Modeling with OpenBuildings", "kind": "learning_plan", "url": "https://learning.bentley.com/learn/learning-plans/369/bentley-accredited-bim-modeler-basic-mechanical-modeling-with-openbuildings", "duration_text": "17 h 58 min · 6 cursos", "reward": "relic", "is_required": false, "disciplines": ["mecanica"], "skills": ["modelado-bim", "modelado-mecanico"], "contains": ["Program Overview", "BIM QuickStart M101: Modeling Equipment and Ductwork", "BIM QuickStart M102: Modeling Diffusers, Grilles, and Branches", "BIM QuickStart M103: Creating Mechanical Drawings", "Basic AccuDraw", "Project Submission"]}
-      ],
-      "completion_rule": "any_one"
-    },
-    {
       "code": "lib",
-      "order": 4,
+      "order": 3,
       "short": "Cursos libres",
       "title": "Ramales · Cursos libres del equipo",
       "estimated_hours": "a tu ritmo",
       "audience": "Todo el equipo",
-      "goal": "Cualquier otro curso de Bentley Learn con certificado (STAAD, OpenFlows, SYNCHRO, ProjectWise, OpenRail…). Regístralo con su nombre y certificado; si el moderador lo aprueba, se suma a la ruta para todos.",
+      "goal": "Cualquier otro curso de Bentley Learn con certificado (STAAD, OpenFlows, SYNCHRO, OpenRail, OpenBuildings eléctrico…). Regístralo con su nombre y certificado; si el moderador lo aprueba, se suma a la ruta para todos.",
       "resources": [
-        {"order": 0, "title": "Acreditaciones Bentley (todas)", "url": "https://learning.bentley.com/learn/public/catalog/view/43", "kind": "collection", "description": "18 learning plans de acreditación.", "tags": ["Catalog", "Oficial"]},
-        {"order": 1, "title": "STAAD", "url": "https://learning.bentley.com/learn/public/catalog/view/26", "kind": "collection", "tags": ["Catalog", "Oficial"]},
-        {"order": 2, "title": "OpenFlows", "url": "https://learning.bentley.com/learn/public/catalog/view/16", "kind": "collection", "tags": ["Catalog", "Oficial"]},
-        {"order": 3, "title": "SYNCHRO", "url": "https://learning.bentley.com/learn/public/catalog/view/27", "kind": "collection", "tags": ["Catalog", "Oficial"]},
-        {"order": 4, "title": "ProjectWise", "url": "https://learning.bentley.com/learn/public/catalog/view/22", "kind": "collection", "tags": ["Catalog", "Oficial"]},
-        {"order": 5, "title": "OpenRail", "url": "https://learning.bentley.com/learn/public/catalog/view/18", "kind": "collection", "tags": ["Catalog", "Oficial"]}
+        {
+          "order": 0,
+          "title": "Acreditaciones Bentley (todas)",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/43",
+          "kind": "collection",
+          "description": "18 learning plans de acreditación.",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "STAAD",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/26",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "OpenFlows",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/16",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "SYNCHRO",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/27",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "ProjectWise",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/22",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        },
+        {
+          "order": 5,
+          "title": "OpenRail",
+          "url": "https://learning.bentley.com/learn/public/catalog/view/18",
+          "kind": "collection",
+          "tags": [
+            "Catalog",
+            "Oficial"
+          ]
+        }
       ],
       "external_courses": [],
       "free_courses_land_here": true
     }
   ],
   "certification_ladder": [
-    {"step": 1, "title": "Bentley Accredited MicroStation User", "note": "Entrada a todo el ecosistema Bentley."},
-    {"step": 2, "title": "Bentley Accredited Road Modeler · Core Skills", "note": "Primera acreditación de infraestructura vial."},
-    {"step": 3, "title": "Road Designer · Bridge Modeler · BIM Modeler", "note": "Especialización según disciplina."}
+    {
+      "step": 1,
+      "title": "Bentley Accredited MicroStation User",
+      "note": "Entrada a todo el ecosistema Bentley."
+    },
+    {
+      "step": 2,
+      "title": "Bentley Accredited Road Modeler · Core Skills",
+      "note": "Primera acreditación de infraestructura vial."
+    },
+    {
+      "step": 3,
+      "title": "Road Designer · Bridge Modeler · BIM Modeler",
+      "note": "Especialización según disciplina."
+    }
   ]
 }

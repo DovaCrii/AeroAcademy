@@ -1,3 +1,4 @@
+import json
 from datetime import UTC, date, datetime, timedelta
 
 import pytest
@@ -322,7 +323,9 @@ def test_special_titles_come_from_badges(member):
 
 def test_seed_is_idempotent_and_retires_what_leaves(settings):
     call_command("seed_catalog", verbosity=0)
-    assert Badge.objects.filter(retired=False).count() == 19
+    assert Badge.objects.filter(retired=False).count() == len(
+        json.loads((settings.BASE_DIR / "seed" / "insignias.json").read_text("utf-8"))["badges"]
+    )
     data = {
         "badges": [
             {

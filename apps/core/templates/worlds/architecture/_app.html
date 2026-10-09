@@ -1,4 +1,4 @@
-{% load core_extras catalog_extras %}{% route_flavour path as fl %}
+{% load goal_tags core_extras catalog_extras %}{% route_flavour path as fl %}
 <div class="sheet ar-sheet fl-{{ fl.key }}" id="corte">
   <p class="ar-sn"><span>// 01</span> Recorrido</p>
   <div class="sheet-in ar-hero">
@@ -10,6 +10,7 @@
         <div><b>{{ stats.pct }} %</b><span>tu avance</span></div>
         <div><b>{{ stats.participants }}</b><span>personas en la ruta</span></div>
       </div>
+      {% if diploma_url %}<p class="diploma-link"><a class="btn" href="{{ diploma_url }}">Ver mi diploma ✦</a></p>{% endif %}{% next_goal path %}
       {% if goals %}
       <form class="ar-goal-form" method="post" action="{% url 'progress:set_goal' path.slug %}" data-enhance>
         {% csrf_token %}

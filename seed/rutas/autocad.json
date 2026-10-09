@@ -1,0 +1,746 @@
+{
+  "_nota": "Ruta AutoCAD: la base de Autodesk para todas las disciplinas (transversal). Solo lo esencial: interfaz, dibujo y edicion, capas, bloques y XREF, anotacion, salida e impresion, y certificacion. URLs revisadas el 2026-10-09 en el navegador (autodesk.com responde 403 a scripts; una pagina inexistente muestra «We can't seem to find that page»). Ojo: el modulo 'Manage documentation...' de Revit distingue mayusculas en la URL. Los titulos de recurso son la clave en la base: no cambiarlos. Las keys son estables: agregar siempre al final. Mundo 'mechanical' provisorio: no hay mundo transversal; AutoCAD es la baldosa CAD de la familia mecanica.",
+  "slug": "autocad",
+  "title": "Ruta AutoCAD · la base",
+  "program": "Base Autodesk · AutoCAD",
+  "platform": "autodesk-learning",
+  "kind": "structured",
+  "vendor": "autodesk",
+  "products": [
+    "autocad"
+  ],
+  "disciplines": [
+    "transversal"
+  ],
+  "world": "mechanical",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Interfaz",
+      "title": "Interfaz y plantillas",
+      "estimated_hours": "1 a 2 h",
+      "audience": "Todo el equipo, sin importar la disciplina",
+      "goal": "Moverte por la interfaz, navegar el dibujo y partir siempre desde la plantilla (.dwt) del equipo.",
+      "guide": {
+        "title": "Guía rápida · Interfaz",
+        "software": "autocad",
+        "do": [
+          "Recorre el *Ribbon*, la *Command line* y la *Navigation bar* con el tutorial de interfaz.",
+          "Aprende a navegar con el *ViewCube* y las herramientas de *Zoom* y *Pan*.",
+          "Crea cada dibujo desde la plantilla (.dwt) del equipo, no desde uno en blanco."
+        ],
+        "commands": [
+          "*Ribbon*",
+          "*Command line*",
+          "*Navigation bar*",
+          "*ViewCube*",
+          "*QNEW*"
+        ],
+        "mistakes": [
+          "Empezar desde un dibujo en blanco: capas, unidades y estilos quedan al azar.",
+          "Ignorar la *Command line*: casi todo se resuelve más rápido escribiendo el comando."
+        ],
+        "essential": "AutoCAD Interface"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AutoCAD Interface",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/navigating-the-autocad-interface",
+          "description": "Lista curada de 4 tutoriales: interfaz, barra de navegación y *ViewCube*.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "AutoCAD Quick Start Guide",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/autocad-quick-start-guide",
+          "description": "Lista curada de 17 tutoriales cortos: interfaz, plantillas, capas, bloques, texto y cotas. Es el hilo de toda la ruta.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        },
+        {
+          "order": 2,
+          "title": "Drawing templates in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/drawing-templates-in-autocad",
+          "description": "Tutorial de 2 minutos: partir de una plantilla (.dwt).",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 3,
+          "title": "Introducing AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/introducing-autocad",
+          "description": "Tutorial de 1 minuto: qué es AutoCAD.",
+          "tags": ["Tutorial", "Oficial", "Complementario"]
+        },
+        {
+          "order": 4,
+          "title": "Get started with AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/collection/get-started-with-autocad",
+          "description": "Colección con las guías de inicio y los toolsets (Architecture, Mechanical, Map 3D, MEP, Plant 3D…).",
+          "tags": ["Collection", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Recorrer el *Ribbon*, la *Command line* y la *Navigation bar*"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Navegar un dibujo con el *ViewCube*, *Zoom* y *Pan*"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Crear un dibujo desde la plantilla (.dwt) del equipo"
+        }
+      ],
+      "mastery_signals": [
+        "Abres un dibujo nuevo siempre desde la plantilla del equipo",
+        "Resuelves comandos habituales escribiéndolos en la *Command line*"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "¿Desde qué tipo de archivo conviene partir cada dibujo nuevo?",
+          "options": [
+            "Un dibujo en blanco",
+            "Una plantilla (.dwt) con capas, unidades y estilos del equipo",
+            "Cualquier .dwg anterior"
+          ],
+          "answer": 1,
+          "explanation": "La plantilla fija capas, unidades y estilos desde el primer trazo."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Dibujo y edición",
+      "title": "Dibujo y edición con precisión",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Todo el equipo",
+      "goal": "Dibujar y editar con exactitud: *Object Snap*, selección, polilíneas, *UCS* y entrada dinámica.",
+      "guide": {
+        "title": "Guía rápida · Dibujo y edición",
+        "software": "autocad",
+        "do": [
+          "Activa *Object Snap* y *Dynamic Input* y dibuja con coordenadas, no a ojo.",
+          "Domina la selección (*Window*, *Crossing*, *Selection Cycling*) antes de editar.",
+          "Dibuja con *Polyline* y edítala con *PEDIT* y *Grips*.",
+          "Usa *UCS* para trabajar en otras orientaciones sin mover el dibujo."
+        ],
+        "commands": [
+          "*OSNAP*",
+          "*Dynamic Input*",
+          "*PLINE*",
+          "*PEDIT*",
+          "*UCS*",
+          "*TRIM*",
+          "*OFFSET*"
+        ],
+        "mistakes": [
+          "Dibujar a ojo, sin *Object Snap*: las líneas parecen unidas y no lo están.",
+          "Dibujar con líneas sueltas lo que debía ser una *Polyline*.",
+          "Mover el dibujo para orientarlo en vez de usar el *UCS*."
+        ],
+        "essential": "AutoCAD drawings"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AutoCAD drawings",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/getting-started-with-drawing-in-autocad",
+          "description": "Lista curada de 10 tutoriales: plantillas, entrada dinámica, capas, rectángulos, arcos, *Object Snap*, selección, polilíneas y bloques.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Drawing with accuracy in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/drawing-with-accuracy-in-autocad",
+          "description": "Lista curada de 11 tutoriales: *Object Snap*, *Polar Tracking*, entrada dinámica, selección, *ID* y *LIST*, *UCS*.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        },
+        {
+          "order": 2,
+          "title": "Object Snap in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/object-snap-in-autocad",
+          "description": "Tutorial de *Object Snap*, la base de la precisión.",
+          "tags": ["Tutorial", "Oficial", "Complementario"]
+        },
+        {
+          "order": 3,
+          "title": "Select objects in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/select-objects-in-autocad",
+          "description": "Tutorial de selección de objetos.",
+          "tags": ["Tutorial", "Oficial", "Complementario"]
+        },
+        {
+          "order": 4,
+          "title": "Polylines in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/polylines-in-autocad",
+          "description": "Tutorial de 4 minutos sobre polilíneas.",
+          "tags": ["Tutorial", "Oficial", "Complementario"]
+        },
+        {
+          "order": 5,
+          "title": "Creating advanced AutoCAD objects",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/creating-advanced-autocad-objects",
+          "description": "Lista curada de 14 tutoriales: polilíneas, splines, multilíneas, arcos y nubes de revisión.",
+          "tags": ["Collection", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Dibujar una planta simple con coordenadas, *Object Snap* y *Dynamic Input*"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Seleccionar y editar objetos con *Window*, *Crossing* y *Grips*"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Dibujar y editar una *Polyline* con *PEDIT*"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Cambiar el *UCS* para trabajar en otra orientación y volver al *World*"
+        }
+      ],
+      "mastery_signals": [
+        "Tus líneas cierran exacto, sin huecos ni solapes",
+        "Editas con *Grips* y comandos en vez de redibujar"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "¿Qué herramienta asegura que una línea parta exactamente del extremo de otra?",
+          "options": [
+            "Object Snap",
+            "Hatch",
+            "Annotative scale"
+          ],
+          "answer": 0,
+          "explanation": "*Object Snap* engancha el cursor a extremos, puntos medios, intersecciones y más."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Capas",
+      "title": "Capas y propiedades",
+      "estimated_hours": "1 a 2 h",
+      "audience": "Todo el equipo",
+      "goal": "Organizar el dibujo con capas, tipos de línea y propiedades por capa según el estándar del equipo.",
+      "guide": {
+        "title": "Guía rápida · Capas",
+        "software": "autocad",
+        "do": [
+          "Crea las capas desde el *Layer Properties Manager* siguiendo el estándar del equipo.",
+          "Deja color, tipo de línea y grosor *ByLayer*, no por objeto.",
+          "Usa *Layer Filters* y *Layer States* para controlar qué se ve."
+        ],
+        "commands": [
+          "*LAYER*",
+          "*Layer Properties Manager*",
+          "*Layer States*",
+          "*LAYISO*",
+          "*LTSCALE*"
+        ],
+        "mistakes": [
+          "Dibujar todo en la capa 0.",
+          "Forzar color o tipo de línea por objeto en vez de *ByLayer*.",
+          "Inventar nombres de capa fuera del estándar del equipo."
+        ],
+        "essential": "AutoCAD layers"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AutoCAD layers",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/autocad-layers",
+          "description": "Tutorial de capas: crear, ordenar y controlar.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Layer linetypes in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/layer-linetypes-in-autocad",
+          "description": "Tutorial de tipos de línea por capa.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 2,
+          "title": "Layer management",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/autocad-drawing-management-professional-layer-management",
+          "description": "Tutorial largo (48 minutos) del curso de preparación profesional: gestión avanzada de capas.",
+          "tags": ["Tutorial", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Crear capas en el *Layer Properties Manager* según el estándar del equipo"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Dejar color, tipo de línea y grosor *ByLayer* en un dibujo real"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Guardar y restaurar un *Layer State*"
+        }
+      ],
+      "mastery_signals": [
+        "Un dibujo ajeno se entiende solo por sus capas",
+        "No hay objetos con color forzado"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "¿Qué significa que un objeto sea *ByLayer*?",
+          "options": [
+            "Que hereda color, tipo de línea y grosor de su capa",
+            "Que está bloqueado",
+            "Que está en la capa 0"
+          ],
+          "answer": 0,
+          "explanation": "*ByLayer* hace que las propiedades se controlen desde la capa y no objeto por objeto."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Bloques y XREF",
+      "title": "Bloques y referencias externas (XREF)",
+      "estimated_hours": "2 a 4 h",
+      "audience": "Todo el equipo",
+      "goal": "Reutilizar contenido con bloques y compartir geometría entre dibujos con XREF, sin duplicarla.",
+      "guide": {
+        "title": "Guía rápida · Bloques y XREF",
+        "software": "autocad",
+        "do": [
+          "Crea un bloque con *BLOCK* y insértalo con *INSERT*.",
+          "Prueba un bloque dinámico con estados de visibilidad y atributos.",
+          "Adjunta dibujos con el *External References* palette: *Attach* o *Overlay*.",
+          "Controla el origen de la geometría: la editas en el dibujo fuente, no en el host."
+        ],
+        "commands": [
+          "*BLOCK*",
+          "*INSERT*",
+          "*Block Editor*",
+          "*XREF*",
+          "*XATTACH*",
+          "*Attach*",
+          "*Overlay*"
+        ],
+        "mistakes": [
+          "Copiar geometría entre dibujos en vez de referenciarla con *XREF*.",
+          "Usar *Attach* donde correspondía *Overlay*: se arrastran referencias anidadas.",
+          "Borrar un XREF en vez de usar *Detach*: quedan capas huérfanas."
+        ],
+        "essential": "Working with external references in AutoCAD"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Block creation in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/block-creation-in-autocad",
+          "description": "Tutorial de 3 minutos: crear bloques.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Working with external references in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/working-with-external-references-in-autocad",
+          "description": "Lista curada de 4 tutoriales sobre referencias externas.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        },
+        {
+          "order": 2,
+          "title": "Create external references in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/create-external-references-in-autocad",
+          "description": "Tutorial de 4 minutos: crear referencias externas.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 3,
+          "title": "Attach or overlay an xref in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/attach-or-overlay-an-xref-in-autocad",
+          "description": "Tutorial de 5 minutos: cuándo usar *Attach* y cuándo *Overlay*.",
+          "tags": ["Tutorial", "Oficial", "Complementario"]
+        },
+        {
+          "order": 4,
+          "title": "Dynamic blocks",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/dynamic-blocks",
+          "description": "Lista curada de 8 tutoriales: bloques dinámicos, estados de visibilidad y atributos.",
+          "tags": ["Collection", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Crear un bloque con *BLOCK* e insertarlo con *INSERT*"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Adjuntar un dibujo con *XREF* y probar *Attach* frente a *Overlay*"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Editar el dibujo fuente y ver el cambio al recargar el XREF"
+        },
+        {
+          "key": "n3-t3",
+          "text": "(Opcional) Crear un bloque dinámico con estados de visibilidad"
+        }
+      ],
+      "mastery_signals": [
+        "Ningún dibujo del proyecto copia geometría de otro: la referencia",
+        "Sabes de qué dibujos depende el que tienes abierto"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "¿Cómo se quita bien un XREF de un dibujo?",
+          "options": [
+            "Borrándolo con ERASE",
+            "Con Detach",
+            "Congelando su capa"
+          ],
+          "answer": 1,
+          "explanation": "ERASE deja datos asociados, como las capas del XREF; *Detach* lo retira por completo."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Anotación",
+      "title": "Anotación y láminas (layouts)",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Todo el equipo",
+      "goal": "Anotar con texto, sombreados y cotas, y armar láminas (layouts) con viewports a escala.",
+      "guide": {
+        "title": "Guía rápida · Anotación y láminas",
+        "software": "autocad",
+        "do": [
+          "Agrega texto con *MTEXT* y estilos de texto del equipo.",
+          "Sombrea con *HATCH* y acota con *DIMENSION* y un *Dimension Style* del equipo.",
+          "Crea un *Layout* con *Viewport* y fija su escala.",
+          "Bloquea la escala del viewport y controla qué capas ve cada uno."
+        ],
+        "commands": [
+          "*MTEXT*",
+          "*HATCH*",
+          "*DIM*",
+          "*Dimension Style*",
+          "*Layout*",
+          "*MVIEW*",
+          "*Viewport*"
+        ],
+        "mistakes": [
+          "Dibujar texto a mano alzada con una altura que no corresponde a la escala de salida.",
+          "Hacer zoom dentro de un viewport sin bloquear su escala.",
+          "Armar la lámina en *Model* en vez de en un *Layout*."
+        ],
+        "essential": "Dimensioning in AutoCAD"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Multiline text in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/multiline-text-in-autocad",
+          "description": "Tutorial de texto multilínea.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Hatch objects in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/hatch-objects-in-autocad",
+          "description": "Tutorial de sombreados.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 2,
+          "title": "Dimensioning in AutoCAD",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/dimensioning-in-autocad",
+          "description": "Tutorial de cotas.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 3,
+          "title": "Working with sheet sets",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/working-with-sheet-sets",
+          "description": "Lista curada para proyectos con muchas láminas: *Sheet Set Manager*, listas de láminas, publicación y transmittals.",
+          "tags": ["Collection", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Agregar texto con *MTEXT* y un estilo de texto del equipo"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Sombrear un área con *HATCH*"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Acotar un dibujo con un *Dimension Style* del equipo"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Crear un *Layout* con un *Viewport* y fijar su escala"
+        }
+      ],
+      "mastery_signals": [
+        "El texto y las cotas se leen bien a la escala de impresión",
+        "Cada lámina sale de un *Layout*, no del espacio *Model*"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "¿Dónde se arma la lámina que se va a imprimir?",
+          "options": [
+            "En el espacio Model",
+            "En un Layout con Viewports",
+            "En un bloque"
+          ],
+          "answer": 1,
+          "explanation": "El *Layout* es el papel; los *Viewports* muestran el modelo a una escala fija."
+        }
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Impresión",
+      "title": "Impresión y publicación (plot)",
+      "estimated_hours": "1 a 2 h",
+      "audience": "Todo el equipo",
+      "goal": "Imprimir y publicar con *Page Setup* y *Plot Style Tables*, para que la lámina salga igual en cualquier equipo.",
+      "guide": {
+        "title": "Guía rápida · Impresión",
+        "software": "autocad",
+        "do": [
+          "Crea un *Page Setup* con impresora, papel y *Plot Style Table* y asígnalo al *Layout*.",
+          "Revisa con *Preview* antes de imprimir.",
+          "Publica a PDF con *Plot to a file* o con *PUBLISH*."
+        ],
+        "commands": [
+          "*PLOT*",
+          "*Page Setup Manager*",
+          "*Plot Style Table*",
+          "*PUBLISH*",
+          "*Preview*"
+        ],
+        "mistakes": [
+          "Imprimir sin revisar *Preview*: grosores y escala salen distintos.",
+          "Cambiar de *Plot Style Table* en cada lámina en vez de usar el estándar del equipo."
+        ],
+        "essential": "Plotting your drawing"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Plotting your drawing",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/plotting-your-drawing",
+          "description": "Lista curada con *Page Setup*, viewports, *Plot Style Tables* y plot a archivo.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Crear un *Page Setup* con *Plot Style Table* y asignarlo al *Layout*"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Revisar con *Preview* y publicar un PDF de la lámina"
+        }
+      ],
+      "mastery_signals": [
+        "El PDF sale igual en tu equipo y en el de un colega"
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "¿Qué define con qué grosor y color sale cada objeto al imprimir?",
+          "options": [
+            "El Plot Style Table",
+            "El nombre del archivo",
+            "El UCS"
+          ],
+          "answer": 0,
+          "explanation": "El *Plot Style Table* mapea colores o estilos a grosores y tonos de impresión."
+        }
+      ]
+    },
+    {
+      "code": "n6",
+      "order": 6,
+      "short": "Certificación",
+      "title": "Certificación AutoCAD",
+      "estimated_hours": "10 a 30 h",
+      "audience": "Quien quiera validar su nivel de AutoCAD",
+      "goal": "Preparar y rendir Autodesk Certified Professional en AutoCAD for Design and Drafting.",
+      "guide": {
+        "title": "Guía rápida · Certificación",
+        "software": "autocad",
+        "do": [
+          "Revisa los *exam objectives* y marca los dominios más débiles.",
+          "Completa el curso de preparación con su dataset y el *Practice test*.",
+          "Agenda el examen una vez que apruebes el *Practice test* sin ayuda."
+        ],
+        "commands": [
+          "*exam objectives*",
+          "*Practice test*"
+        ],
+        "mistakes": [
+          "Rendir el examen sin pasar antes el *Practice test*.",
+          "Estudiar solo la teoría: la certificación pide práctica real en AutoCAD."
+        ],
+        "essential": "AutoCAD for Design and Drafting Professional Certification Prep"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AutoCAD for Design and Drafting Professional Certification Prep",
+          "url": "https://www.autodesk.com/learn/ondemand/course/autocad-design-drafting-cert-prep",
+          "description": "Curso de 7 h por dominio del examen: gestión de dibujos, edición, anotación, bloques y XREF, layouts e impresión, colaboración. Con dataset y *Practice test*.",
+          "tags": ["Cert prep", "Oficial", "Prepara certificación", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Autodesk Certified Professional in AutoCAD for Design and Drafting",
+          "url": "https://www.autodesk.com/certification/all-certifications/autocad-design-drafting-professional",
+          "description": "Ficha oficial de la certificación profesional: temas requeridos y objetivos del examen.",
+          "tags": ["cert", "Oficial", "Esencial"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n6-t0",
+          "text": "Revisar los *exam objectives* y marcar los dominios más débiles"
+        },
+        {
+          "key": "n6-t1",
+          "text": "Completar el curso de preparación",
+          "completed_by_resource": "AutoCAD for Design and Drafting Professional Certification Prep"
+        },
+        {
+          "key": "n6-t2",
+          "text": "Aprobar el *Practice test*"
+        },
+        {
+          "key": "n6-t3",
+          "text": "Agendar y rendir el examen",
+          "completed_by_resource": "Autodesk Certified Professional in AutoCAD for Design and Drafting"
+        }
+      ],
+      "mastery_signals": [
+        "Resuelves los ejercicios del curso sin mirar la solución",
+        "Te sobra tiempo en el *Practice test*"
+      ],
+      "quiz": [
+        {
+          "key": "n6-q0",
+          "question": "¿Qué debes hacer antes de agendar el examen?",
+          "options": [
+            "Nada: se rinde sin preparación",
+            "Aprobar el Practice test del curso de preparación",
+            "Comprar un nuevo plano"
+          ],
+          "answer": 1,
+          "explanation": "El *Practice test* del curso de preparación mide si estás listo para el examen real."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Ribbon",
+      "location": "AutoCAD",
+      "meaning": "Cinta de herramientas organizada en pestañas y paneles."
+    },
+    {
+      "term": "Command line",
+      "location": "AutoCAD",
+      "meaning": "Línea donde se escriben los comandos y se responden sus opciones."
+    },
+    {
+      "term": "Template (.dwt)",
+      "location": "AutoCAD → QNEW",
+      "meaning": "Plantilla de dibujo con capas, unidades y estilos del equipo."
+    },
+    {
+      "term": "Object Snap",
+      "location": "Barra de estado",
+      "meaning": "Engancha el cursor a extremos, puntos medios e intersecciones."
+    },
+    {
+      "term": "UCS",
+      "location": "AutoCAD",
+      "meaning": "Sistema de coordenadas del usuario: orienta el trabajo sin mover el dibujo."
+    },
+    {
+      "term": "ByLayer",
+      "location": "Propiedades",
+      "meaning": "El objeto hereda color, tipo de línea y grosor de su capa."
+    },
+    {
+      "term": "XREF",
+      "location": "External References palette",
+      "meaning": "Referencia externa: muestra otro dibujo sin copiarlo."
+    },
+    {
+      "term": "Attach / Overlay",
+      "location": "External References palette",
+      "meaning": "Attach arrastra las referencias anidadas; Overlay no."
+    },
+    {
+      "term": "Layout / Viewport",
+      "location": "Pestañas del dibujo",
+      "meaning": "El Layout es la lámina; el Viewport muestra el modelo a una escala."
+    },
+    {
+      "term": "Plot Style Table",
+      "location": "Page Setup",
+      "meaning": "Tabla que define grosores y tonos de impresión."
+    }
+  ],
+  "certification_goals": [
+    "ACP AutoCAD for Design and Drafting"
+  ],
+  "description": "La base de Autodesk para todas las disciplinas: lo esencial de AutoCAD, de la interfaz y el dibujo preciso a capas, bloques, XREF, anotación, láminas e impresión. Cierra con la certificación profesional.",
+  "intro": {
+    "title": "La base de todo dibujo",
+    "text": "Ruta corta de AutoCAD con solo los recursos oficiales que importan, para cualquier disciplina. Cada nivel es una etapa: lo Esencial primero, lo Complementario si quieres practicar más. Después de esta base, sigue por Revit, Civil 3D o Plant 3D."
+  },
+  "flow": [
+    {
+      "title": "Interfaz",
+      "text": "Plantilla y navegación"
+    },
+    {
+      "title": "Dibujo",
+      "text": "Precisión y edición"
+    },
+    {
+      "title": "Orden",
+      "text": "Capas, bloques y XREF"
+    },
+    {
+      "title": "Anotación",
+      "text": "Texto, cotas y layouts"
+    },
+    {
+      "title": "Entrega",
+      "text": "Impresión y publicación"
+    }
+  ]
+}

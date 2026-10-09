@@ -1,4 +1,4 @@
-{% load core_extras %}
+{% load goal_tags core_extras %}
 <div class="ao-sheet" id="plan">
   <div class="ao-hero">
     <div>
@@ -27,6 +27,7 @@
         </div>
       </div>
 
+      {% if diploma_url %}<p class="diploma-link"><a class="btn" href="{{ diploma_url }}">Ver mi diploma ✦</a></p>{% endif %}{% next_goal path %}
       {% if goals %}
       <form class="ao-goal-form" method="post" action="{% url 'progress:set_goal' path.slug %}" data-enhance>
         {% csrf_token %}
