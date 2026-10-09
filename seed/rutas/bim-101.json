@@ -1,0 +1,1576 @@
+{
+  "_nota": "Ruta general de BIM, pública y sin documentos internos. Contenido propio y genérico (sin marcas ni equipos). Las URLs se abrieron el 2026-10-09; las marcadas verify_url quedan por confirmar. Las keys son estables: agregar siempre al final.",
+  "slug": "bim-101",
+  "title": "BIM 101 · Pensar en modelos",
+  "program": "Curso interno · Pensar en modelos",
+  "platform": "interna",
+  "kind": "structured",
+  "vendor": "aeroacademy",
+  "products": [],
+  "disciplines": [
+    "transversal",
+    "arquitectura"
+  ],
+  "world": "architecture",
+  "description": "Curso general para entender BIM como proceso y no solo como 3D: madurez y dimensiones, roles y entregables, ISO 19650 y CDE, IFC y BCF, datos geoespaciales en el modelo, coordinación, as-built, gemelo digital, ciclo de vida y un caso de intervención en una instalación existente. Con esquemas, misiones y quiz con casos.",
+  "intro": {
+    "title": "Del plano al activo digital",
+    "text": "Una ruta para conversar de igual a igual con quien modela, coordina u opera. Cada nivel mezcla concepto, un esquema y casos cercanos: por qué un modelo 'flota', qué se le pide a un proveedor y qué datos deja la obra."
+  },
+  "flow": [
+    {
+      "title": "Madurez",
+      "text": "De dibujar a integrar"
+    },
+    {
+      "title": "Estándares",
+      "text": "ISO 19650, CDE, IFC y BCF"
+    },
+    {
+      "title": "Geo + BIM",
+      "text": "Coordenadas, nube y terreno"
+    },
+    {
+      "title": "Coordinar",
+      "text": "Federar y resolver choques"
+    },
+    {
+      "title": "Operar",
+      "text": "As-built, gemelo y ciclo de vida"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "BIM",
+      "location": "Qué es BIM",
+      "meaning": "Modelar la información de una obra: objetos con geometría y datos, y un proceso para trabajar con ellos."
+    },
+    {
+      "term": "Nivel de madurez",
+      "location": "Qué es BIM",
+      "meaning": "Escala de 0 a 3 que va del dibujo 2D suelto a datos integrados e interoperables."
+    },
+    {
+      "term": "BEP",
+      "location": "Roles y entregables",
+      "meaning": "Plan de ejecución BIM: reglas, roles y estándares acordados por el equipo."
+    },
+    {
+      "term": "LOIN",
+      "location": "Roles y entregables",
+      "meaning": "Nivel de información necesario: geometría, información y documentación según el propósito."
+    },
+    {
+      "term": "CDE",
+      "location": "ISO 19650 y CDE",
+      "meaning": "Entorno común de datos: lugar único con estados, versiones, permisos y trazabilidad."
+    },
+    {
+      "term": "IFC",
+      "location": "Interoperabilidad",
+      "meaning": "Formato abierto para intercambiar modelos BIM entre programas."
+    },
+    {
+      "term": "BCF",
+      "location": "Interoperabilidad",
+      "meaning": "Formato abierto para intercambiar incidencias y comentarios con vista del modelo."
+    },
+    {
+      "term": "Punto base",
+      "location": "Geo + BIM",
+      "meaning": "Origen del proyecto con coordenadas conocidas, común a todos los modelos."
+    },
+    {
+      "term": "Interferencia",
+      "location": "Coordinación",
+      "meaning": "Conflicto entre elementos: por geometría (dura), por holgura o acceso (blanda) o por tiempo (4D)."
+    },
+    {
+      "term": "As-built",
+      "location": "Modelo a obra",
+      "meaning": "Registro de lo realmente construido, verificado con mediciones."
+    },
+    {
+      "term": "Gemelo digital",
+      "location": "Modelo a obra",
+      "meaning": "Modelo conectado a datos reales del activo y mantenido al día durante su vida."
+    },
+    {
+      "term": "CAPEX / OPEX",
+      "location": "Ciclo de vida",
+      "meaning": "Costo de construir y costo de operar y mantener un activo."
+    },
+    {
+      "term": "Brownfield",
+      "location": "Brownfield",
+      "meaning": "Intervención sobre una instalación existente, normalmente operando."
+    }
+  ],
+  "certification_goals": [
+    "Explicar BIM como proceso y distinguir madurez y dimensiones",
+    "Describir un CDE con sus estados y definir una convención de nombres",
+    "Ubicar un modelo con punto base y sistema de coordenadas usando nube y MDT",
+    "Planificar la captura de un as-built para intervenir una instalación existente"
+  ],
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Qué es BIM",
+      "title": "1 · ¿Qué es BIM? Más que un modelo 3D",
+      "estimated_hours": "2 h",
+      "audience": "Todo el equipo",
+      "goal": "Entender BIM como un proceso de información y no solo un software o un 3D: niveles de madurez, dimensiones de 3D a 7D, y cómo se pasó de dibujar a modelar, integrar y automatizar.",
+      "guide": {
+        "title": "Guía rápida · Qué es BIM",
+        "software": "revit",
+        "do": [
+          "BIM es *modelar la información* de una obra: cada objeto lleva geometría y datos (material, resistencia al fuego, fabricante, costo, mantención). Es un *producto* (el modelo) y un *proceso* (cómo se trabaja con él).",
+          "*Niveles de madurez*: 0 dibujos 2D sueltos; 1 modelos 2D y 3D con datos poco coordinados; 2 modelos por especialidad que colaboran e intercambian información; 3 datos integrados e interoperables durante todo el ciclo de vida.",
+          "*Dimensiones*: 3D forma, 4D tiempo (programación), 5D costo, 6D sostenibilidad y energía, 7D operación y mantenimiento. Cada una exige datos que alguien debe mantener.",
+          "*Evolución*: el *CAD* dibuja líneas; el *BIM* modela objetos con datos; el *gemelo digital* conecta el modelo con datos reales del activo durante su vida; la *IA y la automatización* ayudan a generar alternativas, revisar normas y analizar.",
+          "Cada etapa depende de que la anterior tenga datos confiables: una IA sobre datos desordenados solo acelera los errores.",
+          "En ingeniería civil ya se 'hace BIM' hace tiempo (modelar terreno y trazado, reutilizar, coordinar). Lo nuevo es hacerlo con estándar y entre disciplinas."
+        ],
+        "commands": [
+          "*Modelo*",
+          "*Nivel de madurez*",
+          "*4D*",
+          "*5D*",
+          "*Gemelo digital*",
+          "*Objeto paramétrico*"
+        ],
+        "mistakes": [
+          "Pensar que BIM es 'hacer un 3D bonito' sin datos ni proceso.",
+          "Querer 5D o 7D sin tener los datos de base ordenados.",
+          "Entregar el modelo y las láminas 2D desconectados: las láminas deben salir del modelo, no al revés."
+        ],
+        "essential": "What is BIM? (NBS)"
+      },
+      "resources": [
+        {
+          "title": "What is BIM? (NBS)",
+          "url": "https://www.thenbs.com/knowledge/what-is-building-information-modelling-bim",
+          "description": "Explicación clara de qué es BIM, sus beneficios y cómo se organiza el trabajo. Es de una organización de estándares del Reino Unido.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Building information modeling (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Building_information_modeling",
+          "description": "Panorama general de BIM: historia, usos, dimensiones y estándares. Enciclopedia abierta: úsala como mapa.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "buildingSMART International",
+          "url": "https://www.buildingsmart.org/",
+          "description": "Organización que mantiene los estándares abiertos de BIM, como IFC y BCF. Punto de partida para entender la interoperabilidad.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Dibujar tu propia escalera de madurez con ejemplos de tu trabajo: ¿en qué nivel está tu oficina?"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Elegir un proyecto y escribir una pregunta que cada dimensión (3D a 7D) debería poder responder"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Tomar un plano 2D cualquiera y listar cinco datos que un objeto BIM tendría y el plano no"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Explicar en tres frases, a alguien que no es técnico, la diferencia entre CAD, BIM y gemelo digital"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "El jefe dice: 'Ya hacemos BIM, tenemos un 3D lindo'. Pero el modelo no tiene datos y nadie más lo usa. ¿Qué falta?",
+          "options": [
+            "Un render mejor",
+            "Información estructurada y un proceso de trabajo compartido, no solo geometría",
+            "Más colores",
+            "Un computador más rápido"
+          ],
+          "answer": 1,
+          "explanation": "BIM es información y proceso; la geometría sola es apenas el comienzo."
+        },
+        {
+          "key": "n0-q1",
+          "question": "Un proyecto vincula cada elemento del modelo con su fecha de ejecución para ver la secuencia de obra. ¿Qué dimensión es?",
+          "options": [
+            "3D",
+            "5D",
+            "4D",
+            "7D"
+          ],
+          "answer": 2,
+          "explanation": "El tiempo es la cuarta dimensión: modelo más programación."
+        },
+        {
+          "key": "n0-q2",
+          "question": "La administración de un edificio quiere usar el modelo para planificar la mantención de equipos. ¿Qué dimensión?",
+          "options": [
+            "7D, operación y mantenimiento",
+            "4D",
+            "5D",
+            "2D"
+          ],
+          "answer": 0,
+          "explanation": "La séptima dimensión es la gestión del activo en operación."
+        },
+        {
+          "key": "n0-q3",
+          "question": "¿Qué distingue al nivel 2 de madurez?",
+          "options": [
+            "Todo se dibuja a mano",
+            "Hay un único archivo sin versiones",
+            "Se usa IA para generar el proyecto",
+            "Modelos por especialidad que se intercambian y coordinan"
+          ],
+          "answer": 3,
+          "explanation": "El nivel 2 trabaja con modelos colaborativos; el 3 integra todo en un entorno interoperable."
+        },
+        {
+          "key": "n0-q4",
+          "question": "Quieren que una IA revise el modelo contra la norma. ¿Qué deben asegurar primero?",
+          "options": [
+            "Datos del modelo ordenados y confiables, con nombres y parámetros consistentes",
+            "Comprar más licencias",
+            "Hacer un render",
+            "Cambiar el color de las capas"
+          ],
+          "answer": 0,
+          "explanation": "La automatización se apoya en datos consistentes; sin ellos revisa mal o no revisa."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas BIM como proceso y producto",
+        "Distingues CAD, BIM, gemelo digital e IA",
+        "Asocias cada dimensión con una pregunta de proyecto"
+      ],
+      "images": [
+        "core/img/bim/evolucion-cad-bim-gemelo-ia.svg",
+        "core/img/bim/dimensiones-bim.svg"
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Roles y entregables",
+      "title": "2 · Roles y entregables: quién hace qué y qué se entrega",
+      "estimated_hours": "2 h",
+      "audience": "Quien coordina, modela o contrata proyectos con BIM",
+      "goal": "Conocer los roles de un equipo BIM, el plan de ejecución (BEP), los requisitos de información y cómo definir el nivel de detalle y de información necesario sin pedir de más.",
+      "guide": {
+        "title": "Guía rápida · Roles y entregables",
+        "software": "revit",
+        "do": [
+          "*Roles* típicos: quien encarga (mandante), *gestor BIM*, *coordinador*, *modeladores* por especialidad y *gestor de la información*. Un modelo sin dueño se descompone.",
+          "*Requisitos de información*: el mandante dice qué necesita saber para operar el activo (*OIR/AIR*) y qué quiere recibir en cada hito (*EIR*).",
+          "*Plan de ejecución BIM* (*BEP*): documento vivo del equipo con objetivos, roles, convención de nombres, software y versiones, frecuencia de intercambio, control de calidad y sistema de coordenadas.",
+          "*LOD* habla de cuánta geometría; el *nivel de información necesario* (*LOIN*) define geometría, información y documentación según el uso del modelo. Menos es más: pide lo que se usará.",
+          "*Entregables*: modelos, planos derivados, listados de cantidades, informes de coordinación y, al cierre, el modelo as-built.",
+          "*Hitos*: define qué debe poder responderse en cada etapa (anteproyecto, proyecto, licitación, obra y cierre)."
+        ],
+        "commands": [
+          "*BEP*",
+          "*EIR*",
+          "*LOIN*",
+          "*LOD*",
+          "*Gestor BIM*",
+          "*Matriz de responsabilidades*"
+        ],
+        "mistakes": [
+          "Modelar al máximo detalle desde el primer día: cuesta y se desactualiza.",
+          "No fijar origen y sistema de coordenadas comunes en el BEP.",
+          "No dejar por escrito quién es responsable de cada modelo."
+        ],
+        "essential": "IMI Framework · estándares y guías BIM"
+      },
+      "resources": [
+        {
+          "title": "IMI Framework · estándares y guías BIM",
+          "url": "https://imiframework.org/",
+          "description": "Marco británico (antes UK BIM Framework) con guías para aplicar ISO 19650 en la práctica. En inglés; sirve de ejemplo de buenas prácticas.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "ISO 19650-1:2018 (ISO)",
+          "url": "https://www.iso.org/standard/68078.html",
+          "description": "Ficha oficial de la parte 1 de ISO 19650: conceptos y principios de la gestión de información con BIM. La norma completa es de pago; la ficha resume el alcance.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Planbim · programa nacional de adopción BIM de Chile",
+          "url": "https://planbim.cl/",
+          "description": "Programa chileno de adopción BIM en proyectos públicos, con estándares y guías nacionales. El sitio no cargó al verificar: confirma la URL.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "verify_url": true,
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Escribir una matriz de responsabilidades para un proyecto pequeño: quién modela qué, quién coordina y quién aprueba"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Redactar la página de convenciones de un BEP: nombres de archivo, unidades, origen y sistema de coordenadas"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Con el esquema *lod*, decidir qué nivel de detalle e información pedirías para un permiso, una licitación de estructuras y la operación de un edificio"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Leer la ficha de ISO 19650-1 y anotar tres términos que aún no domines"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "En la reunión de arranque nadie sabe quién actualiza el modelo de instalaciones. ¿Qué documento debía aclararlo?",
+          "options": [
+            "Plan de ejecución BIM (BEP)",
+            "Un render",
+            "La cubicación",
+            "El permiso municipal"
+          ],
+          "answer": 0,
+          "explanation": "El BEP fija roles, responsabilidades y reglas de trabajo del equipo."
+        },
+        {
+          "key": "n1-q1",
+          "question": "El mandante pide 'el máximo detalle para todo, de una vez'. ¿Qué respuesta es sensata?",
+          "options": [
+            "Aceptar sin preguntar",
+            "Preguntar para qué uso y definir el nivel de información necesario por hito y por elemento",
+            "Subir los honorarios al doble",
+            "Entregar solo 2D"
+          ],
+          "answer": 1,
+          "explanation": "El detalle se justifica por el uso; modelar de más encarece sin mejorar decisiones."
+        },
+        {
+          "key": "n1-q2",
+          "question": "¿Qué es el LOIN?",
+          "options": [
+            "Un software de modelado",
+            "Un tipo de archivo",
+            "Un formato de plano",
+            "La definición de cuánta geometría, información y documentación se necesita para un propósito"
+          ],
+          "answer": 3,
+          "explanation": "Es el nivel de información necesario: se pide por uso, no 'por si acaso'."
+        },
+        {
+          "key": "n1-q3",
+          "question": "Un modelo llega con el origen a 300 m del resto y nadie sabe por qué. ¿Qué causa es probable?",
+          "options": [
+            "No se acordó un origen y sistema de coordenadas común desde el inicio",
+            "Mala impresora",
+            "El color de las líneas",
+            "Pocos usuarios"
+          ],
+          "answer": 0,
+          "explanation": "Es lo primero que debe fijar un BEP; si no, cada modelo nace en su propio mundo."
+        },
+        {
+          "key": "n1-q4",
+          "question": "¿Quién debería poder responder 'cuál es la versión vigente'?",
+          "options": [
+            "Cualquiera, adivinando",
+            "La persona que gestiona la información, apoyada en el entorno común de datos",
+            "El cliente, al azar",
+            "Nadie"
+          ],
+          "answer": 1,
+          "explanation": "La gestión de información es un rol: sin él, circulan versiones paralelas."
+        }
+      ],
+      "mastery_signals": [
+        "Describes los roles de un equipo BIM",
+        "Sabes qué contiene un BEP",
+        "Pides nivel de información por uso"
+      ],
+      "images": [
+        "core/img/bim/lod.svg"
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "ISO 19650 y CDE",
+      "title": "3 · ISO 19650 y el entorno común de datos",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Quien gestiona información de proyectos",
+      "goal": "Entender para qué sirve ISO 19650, qué es un entorno común de datos (CDE), sus estados y puertas de revisión, y cómo ordenar nombres, versiones y permisos.",
+      "guide": {
+        "title": "Guía rápida · ISO 19650 y CDE",
+        "software": "projectwise",
+        "do": [
+          "*ISO 19650* es el estándar internacional para *gestionar la información* durante todo el ciclo de vida de un activo con BIM. No es un software: es un modo ordenado de pedir, producir, revisar y entregar información.",
+          "*CDE* (entorno común de datos): un único lugar donde vive la información del proyecto, con control de acceso, versiones y trazabilidad.",
+          "*Estados* de la información: *en curso* (del equipo que la produce), *compartido* (listo para coordinar), *publicado* (autorizado para usar o construir) y *archivo* (historial).",
+          "Entre estados hay *puertas*: revisión, autorización y archivado, cada una con responsable y registro.",
+          "*Nombres y códigos* acordados: un archivo debe reconocerse sin abrirlo (proyecto, autor, ubicación, tipo, rol, número).",
+          "*Planes de entrega*: el equipo responde al mandante con un plan de qué información entrega, cuándo y quién la responde."
+        ],
+        "commands": [
+          "*CDE*",
+          "*En curso*",
+          "*Compartido*",
+          "*Publicado*",
+          "*Archivo*",
+          "*Convención de nombres*"
+        ],
+        "mistakes": [
+          "Llamar 'CDE' al correo y a carpetas sueltas sin control de estados ni versiones.",
+          "Publicar sin revisar ni autorizar.",
+          "Mover archivos entre estados sin dejar registro de quién y cuándo."
+        ],
+        "essential": "ISO 19650-1:2018 (ISO)"
+      },
+      "resources": [
+        {
+          "title": "ISO 19650-1:2018 (ISO)",
+          "url": "https://www.iso.org/standard/68078.html",
+          "description": "Ficha oficial de la parte 1 de ISO 19650: conceptos y principios de la gestión de información con BIM. La norma completa es de pago; la ficha resume el alcance.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "IMI Framework · estándares y guías BIM",
+          "url": "https://imiframework.org/",
+          "description": "Marco británico (antes UK BIM Framework) con guías para aplicar ISO 19650 en la práctica. En inglés; sirve de ejemplo de buenas prácticas.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Planbim · programa nacional de adopción BIM de Chile",
+          "url": "https://planbim.cl/",
+          "description": "Programa chileno de adopción BIM en proyectos públicos, con estándares y guías nacionales. El sitio no cargó al verificar: confirma la URL.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "verify_url": true,
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Diseñar tu CDE en papel: cuatro cajas (estados) y quién autoriza cada paso"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Inventar cinco nombres de archivo siguiendo una convención con campos separados"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Revisar un caso real (propio) donde se usó un plano desactualizado: qué estado o puerta faltó"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Escribir cómo responderías a la pregunta del mandante: '¿esta es la versión válida?'"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Estructuras subió un modelo a la carpeta de trabajo de arquitectura sin avisar y se usó en una licitación. ¿Qué principio falló?",
+          "options": [
+            "Los colores",
+            "El control de estados y la autorización antes de compartir o publicar",
+            "La escala",
+            "El costo"
+          ],
+          "answer": 1,
+          "explanation": "Sin puertas de revisión, lo que está en borrador se confunde con lo vigente."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Qué estado corresponde a información que solo está viendo el equipo que la produce?",
+          "options": [
+            "Archivo",
+            "Compartido",
+            "En curso",
+            "Publicado"
+          ],
+          "answer": 2,
+          "explanation": "Es el trabajo en progreso: aún no se ofrece a otros equipos."
+        },
+        {
+          "key": "n2-q2",
+          "question": "Se sigue usando en obra un plano impreso que ya fue reemplazado. ¿Qué mejora aporta un CDE?",
+          "options": [
+            "Imprimir en colores",
+            "Más reuniones",
+            "Menos personas",
+            "Que todos consulten la versión publicada con trazabilidad, no copias sueltas"
+          ],
+          "answer": 3,
+          "explanation": "La versión vigente vive en un solo lugar y todos saben cuál es."
+        },
+        {
+          "key": "n2-q3",
+          "question": "ISO 19650 sirve principalmente para...",
+          "options": [
+            "Gestionar la información del activo durante su ciclo de vida de forma ordenada",
+            "Dibujar planos",
+            "Calcular estructuras",
+            "Renderizar"
+          ],
+          "answer": 0,
+          "explanation": "Es una norma de gestión de información, no de modelado."
+        },
+        {
+          "key": "n2-q4",
+          "question": "¿Para qué sirve un código en el nombre de archivo?",
+          "options": [
+            "Adornar",
+            "Identificar proyecto, autor, ubicación, tipo y rol sin abrir el archivo",
+            "Ocupar menos espacio",
+            "Cifrar el archivo"
+          ],
+          "answer": 1,
+          "explanation": "Un nombre bien armado permite ordenar, filtrar y auditar."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas los cuatro estados de un CDE",
+        "Defines una convención de nombres",
+        "Distingues gestionar información de modelar"
+      ],
+      "images": [
+        "core/img/bim/cde-iso19650.svg"
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Interoperabilidad",
+      "title": "4 · Interoperabilidad: IFC, BCF y otros formatos",
+      "estimated_hours": "2 h",
+      "audience": "Quien intercambia modelos entre programas y equipos",
+      "goal": "Entender para qué sirven los formatos abiertos IFC y BCF, qué revisar al exportar y cómo elegir el formato correcto para modelo, dibujo, nube de puntos y comunicación.",
+      "guide": {
+        "title": "Guía rápida · IFC y BCF",
+        "software": "openbuildings",
+        "do": [
+          "*Interoperabilidad*: que los modelos viajen entre programas sin perder lo importante.",
+          "*Formatos nativos* conservan todo dentro de su programa, pero atan a un fabricante; los *formatos abiertos* permiten intercambiar y archivar a largo plazo.",
+          "*IFC* (Industry Foundation Classes) es el formato abierto del modelo BIM: describe objetos, tipos y propiedades. Se exporta con una *vista de modelo* (qué subconjunto de datos se intercambia).",
+          "Al exportar IFC revisa unidades, ubicación y coordenadas, que cada objeto esté bien clasificado (un muro debe ser un muro) y que viajen las propiedades pedidas.",
+          "*BCF* es el formato abierto para *conversar*: una incidencia lleva título, comentario, vista del modelo, responsable y estado, y viaja sin el modelo.",
+          "Otros formatos útiles: DWG o DGN para dibujo, LandXML y GeoTIFF para terreno, LAS o E57 para nubes de puntos y COBie para datos de operación.",
+          "Flujo sano: nativo para modelar, IFC para intercambiar y archivar, BCF para coordinar."
+        ],
+        "commands": [
+          "*IFC*",
+          "*BCF*",
+          "*Vista de modelo*",
+          "*Formato nativo*",
+          "*Incidencia*"
+        ],
+        "mistakes": [
+          "Exportar IFC sin abrirlo en otro visor para comprobar que llegó bien.",
+          "Tratar el IFC como reemplazo del modelo nativo para seguir editando.",
+          "Mandar capturas de pantalla por correo en vez de incidencias BCF con vista y responsable."
+        ],
+        "essential": "Industry Foundation Classes (IFC) · buildingSMART"
+      },
+      "resources": [
+        {
+          "title": "Industry Foundation Classes (IFC) · buildingSMART",
+          "url": "https://www.buildingsmart.org/standards/bsi-standards/industry-foundation-classes/",
+          "description": "Ficha oficial del formato abierto IFC: para qué sirve, versiones y cómo se certifica el software.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "BIM Collaboration Format · buildingSMART",
+          "url": "https://www.buildingsmart.org/standards/bsi-standards/bim-collaboration-format/",
+          "description": "Ficha oficial de BCF, el formato abierto para intercambiar incidencias y comentarios entre programas de BIM.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "IFC 4.3 Documentation (buildingSMART)",
+          "url": "https://ifc43-docs.standards.buildingsmart.org/",
+          "description": "Documentación técnica de IFC 4.3, que amplía el estándar a infraestructura. Es de referencia: no hay que leerla entera.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Abrir el esquema *ifc-bcf* y explicar con tus palabras qué viaja por IFC y qué por BCF"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Hacer una lista de verificación de seis puntos para exportar IFC"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Redactar tres incidencias BCF de ejemplo con título claro, ubicación, responsable y estado"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Elegir el formato correcto para entregar planos, intercambiar un modelo, enviar una nube de puntos e informar un problema"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Arquitectura trabaja con un programa y estructuras con otro. ¿Qué formato abierto conviene para intercambiar los modelos?",
+          "options": [
+            "IFC",
+            "Captura de pantalla",
+            "Una hoja de cálculo",
+            "Un PDF"
+          ],
+          "answer": 0,
+          "explanation": "IFC conserva objetos y propiedades; el PDF y la captura solo muestran."
+        },
+        {
+          "key": "n3-q1",
+          "question": "Un colega escribe: 'hay un choque en el segundo piso'. Nada más. ¿Qué formato evitaría la ambigüedad?",
+          "options": [
+            "DWG",
+            "BCF, con vista del modelo, responsable y estado",
+            "Un JPG",
+            "Un archivo de texto"
+          ],
+          "answer": 1,
+          "explanation": "La incidencia BCF apunta al lugar exacto y al responsable."
+        },
+        {
+          "key": "n3-q2",
+          "question": "Abres un IFC y los muros aparecen como 'objeto genérico'. ¿Qué causa es probable?",
+          "options": [
+            "Tiene demasiado color",
+            "Falta internet",
+            "El visor es lento",
+            "La exportación no clasificó bien los objetos"
+          ],
+          "answer": 3,
+          "explanation": "El mapeo de categorías en la exportación decide qué 'es' cada objeto."
+        },
+        {
+          "key": "n3-q3",
+          "question": "¿Para qué NO conviene usar IFC?",
+          "options": [
+            "Intercambiar modelos",
+            "Archivar una versión",
+            "Seguir editando el modelo como si fuera el nativo",
+            "Revisar en un visor"
+          ],
+          "answer": 2,
+          "explanation": "IFC sirve para intercambio y archivo, no como sustituto del modelo de trabajo."
+        },
+        {
+          "key": "n3-q4",
+          "question": "Un modelo llega bien, pero en otra unidad (milímetros en vez de metros) y el edificio mide mil veces más. ¿Qué faltó?",
+          "options": [
+            "Revisar y acordar unidades y coordenadas al exportar",
+            "Cambiar el color",
+            "Más memoria RAM",
+            "Un render"
+          ],
+          "answer": 0,
+          "explanation": "Unidades y ubicación son parte del contrato de intercambio."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas IFC y BCF con ejemplos",
+        "Revisas un IFC antes de enviarlo",
+        "Eliges formato según el uso"
+      ],
+      "images": [
+        "core/img/bim/ifc-bcf.svg"
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Geo + BIM",
+      "title": "5 · Datos geoespaciales en BIM: coordenadas, nubes y terreno",
+      "estimated_hours": "3 h",
+      "audience": "Quien modela o coordina proyectos que se apoyan en un sitio real",
+      "goal": "Ubicar un modelo en el mundo real: punto base, sistema de coordenadas, nube de puntos como base de lo existente y MDT como base del terreno, apoyándote en la ruta Topografía 101.",
+      "guide": {
+        "title": "Guía rápida · Geo + BIM",
+        "software": "gis",
+        "do": [
+          "Un BIM sin ubicación flota. Define un *punto base del proyecto* y un *sistema de coordenadas* (global, como UTM con SIRGAS-Chile, o local) y úsalos en todos los modelos.",
+          "*Georreferenciar* es relacionar el sistema del modelo con el del mundo: origen, rotación (norte verdadero frente a norte de proyecto) y escala o factor de elevación.",
+          "La *nube de puntos* captura lo existente: sirve para modelar sobre ella (*scan-to-BIM*), verificar y controlar avance.",
+          "El *MDT* es la base del terreno: de él salen plataformas, cortes y rellenos y drenaje. El *MDS* sirve como contexto.",
+          "La *ortofoto* y las mallas de realidad dan contexto visual. Formatos: LAS o E57 para nubes, GeoTIFF o LandXML para terreno; IFC 4.3 amplió el estándar hacia infraestructura.",
+          "El modelo no puede ser más preciso que su dato de origen: registra *fuente, fecha, sistema y precisión*.",
+          "Esta ruta se apoya en Topografía 101: geodesia, UTM, GNSS y productos."
+        ],
+        "commands": [
+          "*Punto base*",
+          "*Georreferenciación*",
+          "*Nube de puntos*",
+          "*MDT*",
+          "*Scan-to-BIM*",
+          "*Metadatos*"
+        ],
+        "mistakes": [
+          "Modelar en un origen arbitrario y luego 'acomodar a ojo' el sitio.",
+          "Mezclar alturas elipsoidales con ortométricas.",
+          "Usar un MDS donde se necesita el terreno desnudo.",
+          "Perder la fuente y la fecha del dato geoespacial."
+        ],
+        "essential": "Topografía 101 · Entender el territorio"
+      },
+      "resources": [
+        {
+          "title": "Topografía 101 · Entender el territorio",
+          "url": "/rutas/topografia-101/",
+          "description": "Ruta general de AeroAcademy: geodesia, coordenadas, equipos, captura masiva y productos. Es la base de datos geoespaciales de este curso.",
+          "tags": [
+            "Guide",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Point cloud (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Point_cloud",
+          "description": "Qué es una nube de puntos, cómo se captura y para qué se usa en topografía, ingeniería y BIM.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "What is a digital elevation model (DEM)? (USGS)",
+          "url": "https://www.usgs.gov/faqs/what-a-digital-elevation-model-dem",
+          "description": "Explica qué es un modelo digital de elevación de suelo desnudo y cómo se están generando hoy a partir de LiDAR.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        },
+        {
+          "title": "SIRGAS-CHILE (portal del IGM)",
+          "url": "https://www.sirgaschile.cl/",
+          "description": "Portal del marco de referencia geodésico oficial de Chile, que usan los proyectos para ubicarse en coordenadas.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 3
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Escoger un predio real y anotar sistema de coordenadas, punto base y qué datos geoespaciales pedirías (nube, MDT y ortofoto)"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Con el esquema *geo-bim*, explicar qué ocurre si el modelo y la nube tienen orígenes distintos"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Completar en Topografía 101 los niveles de coordenadas y productos"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Escribir la ficha de metadatos de un dato: fuente, fecha, sistema, precisión y responsable"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "La nube de puntos del sitio y tu modelo BIM aparecen separados 2 km. ¿Cuál es el primer paso?",
+          "options": [
+            "Escalar el modelo",
+            "Verificar el sistema de coordenadas y el punto base de ambos",
+            "Borrar la nube",
+            "Cambiar de programa"
+          ],
+          "answer": 1,
+          "explanation": "Casi siempre es un problema de sistemas u orígenes, no de forma."
+        },
+        {
+          "key": "n4-q1",
+          "question": "Quieres calcular cuánta tierra hay que mover para una plataforma. ¿Qué superficie usas como base?",
+          "options": [
+            "Una ortofoto",
+            "El MDS, que incluye árboles",
+            "El MDT, el suelo desnudo",
+            "El plano de planta"
+          ],
+          "answer": 2,
+          "explanation": "Los árboles y techos no se excavan: el cálculo parte del suelo."
+        },
+        {
+          "key": "n4-q2",
+          "question": "Una nube de milímetros de precisión se georreferenció con puntos medidos con un GNSS poco preciso. ¿Qué resultado esperas?",
+          "options": [
+            "La nube conserva su forma, pero queda ubicada con el error de los puntos usados",
+            "Todo queda perfecto",
+            "Pesa menos",
+            "Se ve más nítida"
+          ],
+          "answer": 0,
+          "explanation": "La forma interna sigue buena; la posición absoluta hereda el error del control."
+        },
+        {
+          "key": "n4-q3",
+          "question": "¿Qué es scan-to-BIM?",
+          "options": [
+            "Imprimir en 3D",
+            "Convertir planos a PDF",
+            "Escanear papel",
+            "Modelar objetos BIM a partir de la nube de puntos de lo existente"
+          ],
+          "answer": 3,
+          "explanation": "Se usa la nube como fondo medible para modelar lo que ya está construido."
+        },
+        {
+          "key": "n4-q4",
+          "question": "Te entregan un MDT. ¿Qué metadatos mínimos pides?",
+          "options": [
+            "Solo el color",
+            "Fuente, fecha, sistema de coordenadas y altura, y precisión",
+            "El nombre del dron",
+            "Ninguno"
+          ],
+          "answer": 1,
+          "explanation": "Sin metadatos no se sabe para qué etapa sirve el dato."
+        }
+      ],
+      "mastery_signals": [
+        "Ubicas un modelo con punto base y sistema de coordenadas",
+        "Usas nube y MDT como base del modelo",
+        "Documentas la fuente y la precisión de cada dato"
+      ],
+      "images": [
+        "core/img/bim/geo-bim.svg"
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Coordinación",
+      "title": "6 · Coordinación e interferencias",
+      "estimated_hours": "2 h",
+      "audience": "Quien coordina modelos de varias especialidades",
+      "goal": "Federar modelos, definir reglas de detección de interferencias, priorizar, informar con BCF y cerrar el ciclo corrigiendo en el modelo de origen.",
+      "guide": {
+        "title": "Guía rápida · Coordinación",
+        "software": "navisworks",
+        "do": [
+          "*Federar* modelos: reunir los de cada especialidad en uno de coordinación, sin mezclarlos en un solo archivo editable.",
+          "*Detección de interferencias*: reglas que buscan elementos que se cruzan (*duras*), que no dejan holgura o acceso (*blandas*) o que coinciden en el tiempo (*4D*).",
+          "Reglas con *tolerancias* y *selecciones* (por ejemplo, ductos contra vigas). No revises todo contra todo: genera miles de falsos positivos.",
+          "*Priorizar y agrupar*: muchos choques son el mismo problema; asigna responsable y plazo.",
+          "El resultado va a un *informe* y a incidencias *BCF*; se corrige en el modelo de origen y se vuelve a correr la prueba.",
+          "En proyectos con instalaciones existentes, la nube de puntos es una especialidad más: se federa para ver choques contra lo que ya está."
+        ],
+        "commands": [
+          "*Federar*",
+          "*Clash*",
+          "*Tolerancia*",
+          "*Interferencia dura*",
+          "*Interferencia blanda*",
+          "*BCF*"
+        ],
+        "mistakes": [
+          "Correr la prueba cuando los modelos no comparten el mismo origen.",
+          "Intentar resolver los choques dentro del modelo federado en vez del modelo de origen.",
+          "Revisar 'todo contra todo' y ahogarse en falsos positivos."
+        ],
+        "essential": "BIM Collaboration Format · buildingSMART"
+      },
+      "resources": [
+        {
+          "title": "BIM Collaboration Format · buildingSMART",
+          "url": "https://www.buildingsmart.org/standards/bsi-standards/bim-collaboration-format/",
+          "description": "Ficha oficial de BCF, el formato abierto para intercambiar incidencias y comentarios entre programas de BIM.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Building information modeling (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Building_information_modeling",
+          "description": "Panorama general de BIM: historia, usos, dimensiones y estándares. Enciclopedia abierta: úsala como mapa.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Escribir cuatro reglas de coordinación (qué contra qué y con qué tolerancia) para un edificio de cinco pisos"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Clasificar seis choques inventados en duros, blandos y de tiempo"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Redactar el informe de un choque: ubicación, elementos, responsables y propuesta"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Explicar por qué un choque no se corrige dentro del modelo federado"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "Un ducto pasa por donde luego irá una escalera de mantención: nada se toca, pero no cabe una persona. ¿Qué tipo de interferencia es?",
+          "options": [
+            "Dura",
+            "Blanda",
+            "De tiempo",
+            "Falso positivo"
+          ],
+          "answer": 1,
+          "explanation": "Es una falta de holgura o acceso, aunque la geometría no se cruce."
+        },
+        {
+          "key": "n5-q1",
+          "question": "La prueba arroja 3.000 choques, 2.200 son el mismo muro mal posicionado. ¿Qué haces?",
+          "options": [
+            "Agrupar por causa, resolver la raíz y volver a correr la prueba",
+            "Ignorar todo",
+            "Borrar el muro",
+            "Subir la tolerancia a 10 m"
+          ],
+          "answer": 0,
+          "explanation": "Un solo error puede explicar cientos de choques."
+        },
+        {
+          "key": "n5-q2",
+          "question": "Dos cuadrillas necesitan la misma grúa el mismo día. ¿Qué análisis lo anticipa?",
+          "options": [
+            "Un render",
+            "IFC",
+            "Una simulación 4D que cruza modelo y programa",
+            "Solo planos"
+          ],
+          "answer": 2,
+          "explanation": "El 4D detecta conflictos de tiempo y espacio."
+        },
+        {
+          "key": "n5-q3",
+          "question": "¿Dónde se corrige un choque?",
+          "options": [
+            "En el modelo federado",
+            "En el modelo de la especialidad responsable, y luego se vuelve a federar",
+            "En el PDF del informe",
+            "En el correo"
+          ],
+          "answer": 1,
+          "explanation": "El federado es solo para revisar; la verdad vive en cada modelo de origen."
+        },
+        {
+          "key": "n5-q4",
+          "question": "Al federar, el modelo estructural aparece desplazado 5 m. ¿Qué revisas primero?",
+          "options": [
+            "Las licencias",
+            "Los colores",
+            "La escala de impresión",
+            "El origen y el sistema de coordenadas compartidos"
+          ],
+          "answer": 3,
+          "explanation": "Un desplazamiento global casi siempre es de origen, no de diseño."
+        }
+      ],
+      "mastery_signals": [
+        "Defines reglas de coordinación razonables",
+        "Clasificas interferencias duras, blandas y de tiempo",
+        "Cierras el ciclo corrigiendo en el modelo de origen"
+      ],
+      "images": [
+        "core/img/bim/interferencias.svg"
+      ]
+    },
+    {
+      "code": "n6",
+      "order": 6,
+      "short": "Modelo a obra",
+      "title": "7 · Del modelo a la obra: as-built y gemelo digital",
+      "estimated_hours": "3 h",
+      "audience": "Quien construye, inspecciona u opera",
+      "goal": "Entender la diferencia entre diseño y as-built, cómo se verifica lo construido contra el modelo y qué necesita un gemelo digital para ser útil.",
+      "guide": {
+        "title": "Guía rápida · Modelo a obra",
+        "software": "itwin",
+        "do": [
+          "*Modelo de diseño*: lo que se pretende construir. *As-built*: lo que realmente quedó, con sus tolerancias. Entre ambos hay cambios de obra.",
+          "El as-built se levanta con *escáner, fotogrametría y topografía*, y se compara contra el diseño con un *mapa de desviaciones*.",
+          "*Seguimiento de avance*: fotos o nubes periódicas contra el modelo 4D para ver qué está hecho y qué no.",
+          "*Activo digital*: modelo, datos y documentos que el operador usa; se entregan con plantillas de datos como *COBie* u otras acordadas.",
+          "*Gemelo digital*: el modelo conectado con datos reales (sensores, órdenes de mantención, energía) que se actualiza junto con el activo.",
+          "Un gemelo no es 'un 3D con luces': necesita datos vivos, dueños y un propósito claro (ahorrar energía, prevenir fallas, planificar ampliaciones)."
+        ],
+        "commands": [
+          "*As-built*",
+          "*Mapa de desviaciones*",
+          "*Activo digital*",
+          "*COBie*",
+          "*Gemelo digital*"
+        ],
+        "mistakes": [
+          "Entregar el modelo de diseño como si fuera el as-built.",
+          "Armar un gemelo sin definir qué decisión va a mejorar.",
+          "No actualizar: un gemelo desactualizado es peor que ninguno."
+        ],
+        "essential": "Digital twin (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "Digital twin (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Digital_twin",
+          "description": "Qué es un gemelo digital, qué lo distingue de un modelo estático y ejemplos en construcción, industria y ciudad.",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Building information modeling (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Building_information_modeling",
+          "description": "Panorama general de BIM: historia, usos, dimensiones y estándares. Enciclopedia abierta: úsala como mapa.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Point cloud (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Point_cloud",
+          "description": "Qué es una nube de puntos, cómo se captura y para qué se usa en topografía, ingeniería y BIM.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n6-t0",
+          "text": "Describir cómo verificarías que una losa quedó en la cota de diseño: técnica, tolerancia e informe"
+        },
+        {
+          "key": "n6-t1",
+          "text": "Listar cinco datos de un edificio que un gemelo podría recibir de sensores y qué decisión mejoraría cada uno"
+        },
+        {
+          "key": "n6-t2",
+          "text": "Dibujar el flujo diseño, obra, as-built y operación indicando quién actualiza el modelo en cada paso"
+        },
+        {
+          "key": "n6-t3",
+          "text": "Con el esquema *gemelo-digital*, explicar qué flecha es 'captura' y cuál es 'decisión'"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n6-q0",
+          "question": "Terminada la obra, el modelo de diseño no coincide con lo construido. ¿Qué entrega pedirías?",
+          "options": [
+            "Más renders",
+            "Un modelo as-built actualizado con levantamiento verificable",
+            "Nada",
+            "Un diseño nuevo"
+          ],
+          "answer": 1,
+          "explanation": "El as-built documenta la realidad y se respalda con mediciones."
+        },
+        {
+          "key": "n6-q1",
+          "question": "El mandante pide 'un gemelo digital' pero no sabe para qué. ¿Qué respondes?",
+          "options": [
+            "Comprar sensores sin plan",
+            "Hacer un video",
+            "Definir qué decisión se quiere mejorar y qué datos vivos la alimentarán",
+            "Pedir un render"
+          ],
+          "answer": 2,
+          "explanation": "Sin propósito y datos vivos, el gemelo es una maqueta cara."
+        },
+        {
+          "key": "n6-q2",
+          "question": "Comparas la nube de la losa terminada con el modelo. ¿Qué producto muestra dónde se aparta?",
+          "options": [
+            "Un mapa de desviaciones",
+            "Una ortofoto",
+            "Una curva de nivel",
+            "Un IFC"
+          ],
+          "answer": 0,
+          "explanation": "Los colores de desviación muestran el error con su valor y ubicación."
+        },
+        {
+          "key": "n6-q3",
+          "question": "¿Qué distingue a un gemelo digital del modelo BIM de diseño?",
+          "options": [
+            "Más colores",
+            "Es 2D",
+            "Es un PDF",
+            "Se conecta a datos reales del activo y se mantiene actualizado"
+          ],
+          "answer": 3,
+          "explanation": "La conexión con datos reales y la actualización continua lo hacen 'gemelo'."
+        },
+        {
+          "key": "n6-q4",
+          "question": "Seguimiento semanal de obra con fotos de dron contra el modelo. ¿Qué dimensión suma?",
+          "options": [
+            "4D, tiempo",
+            "7D",
+            "2D",
+            "6D"
+          ],
+          "answer": 0,
+          "explanation": "Es el modelo cruzado con el avance en el tiempo."
+        }
+      ],
+      "mastery_signals": [
+        "Distingues diseño de as-built",
+        "Describes cómo verificar lo construido",
+        "Defines propósito y datos para un gemelo"
+      ],
+      "images": [
+        "core/img/bim/gemelo-digital.svg"
+      ]
+    },
+    {
+      "code": "n7",
+      "order": 7,
+      "short": "Ciclo de vida",
+      "title": "8 · Ciclo de vida del activo: del CAPEX al OPEX",
+      "estimated_hours": "2 h",
+      "audience": "Quien decide qué datos se piden en un proyecto",
+      "goal": "Ver el activo como un ciclo (diseño, construcción, operación, renovación), entender por qué operar suele pesar más que construir y cómo un as-built confiable y la IA se apoyan en datos ordenados.",
+      "guide": {
+        "title": "Guía rápida · Ciclo de vida",
+        "software": "acc",
+        "do": [
+          "Un *activo* (edificio, planta, camino o red) pasa por *diseño, construcción, operación y renovación*, y vuelve a empezar. La mayor parte de su vida es operación.",
+          "*CAPEX* es lo que cuesta construirlo; *OPEX* es lo que cuesta operarlo y mantenerlo. En muchos activos, acumulado a lo largo de décadas, el OPEX termina pesando más (el orden de magnitud depende del tipo de activo).",
+          "Datos *as-built* confiables bajan el OPEX: menos tiempo buscando planos, menos errores al intervenir y mantenimiento planificado.",
+          "Lo que no se registra se paga dos veces: modificaciones sin actualizar el modelo vuelven a generar inexactitud.",
+          "La *IA y la automatización* sirven para generar alternativas de diseño, revisar el modelo contra reglas y detectar anomalías en operación; funcionan mejor sobre modelos ordenados.",
+          "Habla con quien opera: pregunta qué datos necesitará desde el primer día (*requisitos de información del activo*)."
+        ],
+        "commands": [
+          "*CAPEX*",
+          "*OPEX*",
+          "*Ciclo de vida*",
+          "*Requisitos de información*",
+          "*As-built*"
+        ],
+        "mistakes": [
+          "Optimizar solo el costo de construir.",
+          "Entregar modelos sin los datos que el operador necesita.",
+          "Confiar en la IA sobre datos desordenados."
+        ],
+        "essential": "ISO 19650-1:2018 (ISO)"
+      },
+      "resources": [
+        {
+          "title": "ISO 19650-1:2018 (ISO)",
+          "url": "https://www.iso.org/standard/68078.html",
+          "description": "Ficha oficial de la parte 1 de ISO 19650: conceptos y principios de la gestión de información con BIM. La norma completa es de pago; la ficha resume el alcance.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Digital twin (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Digital_twin",
+          "description": "Qué es un gemelo digital, qué lo distingue de un modelo estático y ejemplos en construcción, industria y ciudad.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "IMI Framework · estándares y guías BIM",
+          "url": "https://imiframework.org/",
+          "description": "Marco británico (antes UK BIM Framework) con guías para aplicar ISO 19650 en la práctica. En inglés; sirve de ejemplo de buenas prácticas.",
+          "tags": [
+            "Article",
+            "Oficial",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n7-t0",
+          "text": "Dibujar el ciclo de vida de un activo cercano (edificio, camino o planta) y marcar dónde se genera y dónde se pierde información"
+        },
+        {
+          "key": "n7-t1",
+          "text": "Hacer dos columnas, CAPEX y OPEX, para un edificio: qué ítems incluye cada una"
+        },
+        {
+          "key": "n7-t2",
+          "text": "Entrevistar (o imaginar) al operador de un edificio: cinco datos que querría recibir al recibir la obra"
+        },
+        {
+          "key": "n7-t3",
+          "text": "Escribir un caso en que un as-built malo causó un costo extra en una intervención"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n7-q0",
+          "question": "Un edificio tuvo un diseño excelente, pero los planos de instalaciones no coinciden con lo construido. A los cinco años se rompe una cañería oculta. ¿Qué costo apareció?",
+          "options": [
+            "De construcción",
+            "De operación, por falta de un as-built confiable",
+            "De diseño",
+            "De terreno"
+          ],
+          "answer": 1,
+          "explanation": "El error de información no se pagó al construir, se pagó al operar."
+        },
+        {
+          "key": "n7-q1",
+          "question": "¿Cuál afirmación sobre CAPEX y OPEX es la más prudente?",
+          "options": [
+            "El CAPEX siempre es mayor",
+            "Son siempre iguales",
+            "No importan en un proyecto",
+            "En muchos activos el costo acumulado de operar y mantener supera al de construir, por eso importa el dato para operar"
+          ],
+          "answer": 3,
+          "explanation": "Depende del activo, pero obliga a diseñar pensando en la operación."
+        },
+        {
+          "key": "n7-q2",
+          "question": "Quieren que una IA revise cada modelo contra reglas internas. ¿Qué condición ayuda más?",
+          "options": [
+            "Modelos con nombres y parámetros consistentes",
+            "Pantallas más grandes",
+            "Más colores",
+            "Menos personas"
+          ],
+          "answer": 0,
+          "explanation": "La consistencia permite automatizar la revisión."
+        },
+        {
+          "key": "n7-q3",
+          "question": "Al cierre de la obra, ¿qué le preguntas a quien operará?",
+          "options": [
+            "Nada",
+            "Qué datos y formatos necesita para operar y mantener",
+            "Cuánto dinero tiene",
+            "Qué color prefiere"
+          ],
+          "answer": 1,
+          "explanation": "Los requisitos de información del operador definen el entregable."
+        },
+        {
+          "key": "n7-q4",
+          "question": "¿Qué fase del ciclo de vida suele durar más?",
+          "options": [
+            "Diseño",
+            "Construcción",
+            "Operación",
+            "Demolición"
+          ],
+          "answer": 2,
+          "explanation": "Un activo se construye en meses o años y se opera por décadas."
+        }
+      ],
+      "mastery_signals": [
+        "Explicas el ciclo de vida de un activo",
+        "Argumentas por qué importa el dato para operar",
+        "Defines requisitos de información con el operador"
+      ],
+      "images": [
+        "core/img/bim/ciclo-de-vida-activo.svg"
+      ]
+    },
+    {
+      "code": "n8",
+      "order": 8,
+      "short": "Brownfield",
+      "title": "9 · Proyecto brownfield: del escaneo al tie-in",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Quien planifica o ejecuta intervenciones en instalaciones existentes",
+      "goal": "Resolver un caso de intervención en una instalación que ya opera: combinar escáner, fotogrametría y georradar para un as-built confiable, planificar la ventana de detención y preparar el empalme.",
+      "guide": {
+        "title": "Guía rápida · Brownfield",
+        "software": "recap",
+        "do": [
+          "*Brownfield*: ampliar o modificar un activo que ya existe y suele estar operando (lo contrario es terreno virgen). El riesgo está en lo desconocido.",
+          "El *as-built* es la base de todo lo que sigue: diseño, prefabricación, logística, interferencias y seguridad. Si falla, falla lo demás.",
+          "*Captura combinada*: escáner láser para lo visible y el detalle fino, fotogrametría con dron para el contexto y las cubiertas, y *georradar* para las redes enterradas. Ninguna técnica lo hace todo.",
+          "*Georradar*: emite ondas al subsuelo y registra reflejos; la profundidad útil depende del suelo (la arcilla húmeda la limita). Se contrasta con planos y, si es crítico, se verifica con una *calicata*.",
+          "*Tie-in* (empalme): conectar lo nuevo con lo existente, muchas veces en una *ventana de detención* corta. Se prefabrica con el as-built, así que el punto de empalme debe medirse con alta confianza.",
+          "*Seguridad*: trabajar junto a una instalación operando exige permisos, zonas y coordinación; escanear reduce el tiempo de personas en zonas peligrosas.",
+          "El modelado desde la nube puede ser semiautomático en tuberías y estructuras, pero exige revisión humana."
+        ],
+        "commands": [
+          "*As-built*",
+          "*Tie-in*",
+          "*Georradar*",
+          "*Ventana de detención*",
+          "*Scan-to-BIM*",
+          "*Calicata*"
+        ],
+        "mistakes": [
+          "Confiar en planos antiguos sin verificar en terreno.",
+          "Prefabricar sin un as-built del punto de empalme.",
+          "Excavar sin considerar redes enterradas (agua, electricidad, gas) y toparse con una.",
+          "Escanear sin plan: quedan zonas sin datos justo donde se necesitaban."
+        ],
+        "essential": "Ground-penetrating radar (Wikipedia)"
+      },
+      "resources": [
+        {
+          "title": "Ground-penetrating radar (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Ground-penetrating_radar",
+          "description": "Cómo el georradar detecta objetos y cambios de material bajo el suelo, y qué limita su alcance (tipo de suelo, humedad).",
+          "tags": [
+            "Article",
+            "Esencial",
+            "Conocimiento general"
+          ],
+          "order": 0
+        },
+        {
+          "title": "Point cloud (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Point_cloud",
+          "description": "Qué es una nube de puntos, cómo se captura y para qué se usa en topografía, ingeniería y BIM.",
+          "tags": [
+            "Article",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 1
+        },
+        {
+          "title": "Topografía 101 · Entender el territorio",
+          "url": "/rutas/topografia-101/",
+          "description": "Ruta general de AeroAcademy: geodesia, coordenadas, equipos, captura masiva y productos. Es la base de datos geoespaciales de este curso.",
+          "tags": [
+            "Guide",
+            "Complementario",
+            "Conocimiento general"
+          ],
+          "order": 2
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n8-t0",
+          "text": "Escenario: ampliarás una sala de bombas en una planta que opera. Lista qué capturarías (escáner, fotogrametría, georradar) y por qué"
+        },
+        {
+          "key": "n8-t1",
+          "text": "Plan de escaneo: dibuja el plano y ubica estaciones, esferas y puntos de control; marca las zonas de sombra probables"
+        },
+        {
+          "key": "n8-t2",
+          "text": "Define la ventana de detención de 48 horas: qué se hace antes (prefabricar con el as-built), durante (empalme) y después (as-built final)"
+        },
+        {
+          "key": "n8-t3",
+          "text": "Elabora una tabla de riesgos de excavar junto a redes enterradas y qué técnica reduce cada riesgo"
+        },
+        {
+          "key": "n8-t4",
+          "text": "Escribe el entregable final: nube georreferenciada, modelo as-built, informe de calidad y planos"
+        }
+      ],
+      "quiz": [
+        {
+          "key": "n8-q0",
+          "question": "Para ampliar una planta en operación no existen planos confiables de las cañerías. ¿Cuál es el primer entregable?",
+          "options": [
+            "Un render",
+            "Un as-built verificado del área por escaneo y levantamiento",
+            "Un contrato",
+            "Una orden de compra"
+          ],
+          "answer": 1,
+          "explanation": "Todo lo posterior (diseño, prefabricación, interferencias) depende de ese dato."
+        },
+        {
+          "key": "n8-q1",
+          "question": "Se sospecha que hay redes eléctricas enterradas sin registro donde irá una zanja. ¿Qué técnica sumas?",
+          "options": [
+            "Una ortofoto antigua",
+            "Un cálculo de volumen",
+            "Georradar, contrastado con planos y calicatas",
+            "Más fotos oblicuas"
+          ],
+          "answer": 2,
+          "explanation": "El georradar ubica anomalías; la calicata las confirma donde un error sería grave."
+        },
+        {
+          "key": "n8-q2",
+          "question": "La ventana de detención es de 36 horas. Fabricaron un tramo de tubería con medidas de huincha y no calza. ¿Qué faltó?",
+          "options": [
+            "Un as-built escaneado y georreferenciado del punto de empalme",
+            "Más soldadores",
+            "Una grúa más grande",
+            "Otro color de pintura"
+          ],
+          "answer": 0,
+          "explanation": "El empalme exige medición confiable antes de la detención, no durante."
+        },
+        {
+          "key": "n8-q3",
+          "question": "En arcilla húmeda el georradar penetra poco. ¿Qué haces?",
+          "options": [
+            "Ignorar el problema",
+            "Usar solo dron",
+            "Dar por buenos los planos",
+            "Complementar con otros métodos y verificar con calicatas donde sea crítico"
+          ],
+          "answer": 3,
+          "explanation": "Cada técnica tiene límites; se combinan y se verifican donde importa."
+        },
+        {
+          "key": "n8-q4",
+          "question": "El dron captura bien techos y patios, pero no el interior de una sala de máquinas. ¿Qué lo complementa?",
+          "options": [
+            "Un escáner láser terrestre o móvil",
+            "Otro dron",
+            "Una imagen satelital",
+            "Nada"
+          ],
+          "answer": 0,
+          "explanation": "Dentro de la sala no hay vuelo ni GNSS: el escáner es la técnica adecuada."
+        },
+        {
+          "key": "n8-q5",
+          "question": "¿Qué significa 'tie-in'?",
+          "options": [
+            "Un contrato",
+            "Un software",
+            "Un formato",
+            "El empalme de lo nuevo con lo existente"
+          ],
+          "answer": 3,
+          "explanation": "Es el punto donde la obra nueva se conecta con lo que ya opera."
+        }
+      ],
+      "mastery_signals": [
+        "Combinas capturas para un as-built confiable",
+        "Planificas una ventana de detención",
+        "Reconoces los riesgos de las redes enterradas"
+      ],
+      "images": [
+        "core/img/bim/brownfield-asbuilt.svg"
+      ]
+    }
+  ]
+}

@@ -23,7 +23,7 @@
     <span class="lv-cap">{{ fl.kicker }}{% if program_code %} · {{ program_code }}{% endif %}</span>
     <b class="lv-title">{{ path.title }}</b>
     <span class="lv-cap">{{ path.vendor.name }} · {{ stats.levels_total }} niveles</span>
-    <span class="lv-tiles">{% path_tiles path "md" %}</span>
+    {% vendor_family path as vf %}<span class="lv-tiles vf-{{ vf }}">{% path_tiles path "md" %}</span>
   </div>
 
   <div class="lv-in">

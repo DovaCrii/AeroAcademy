@@ -1,0 +1,32 @@
+{% load core_extras %}{% if general %}
+<section class="cat-sec cat-gen d-tra" id="conocimiento-general" aria-labelledby="gen-h">
+  <h2 class="cat-sh" id="gen-h"><span>// 00</span> Conocimiento general · transversal</h2>
+  <p class="cat-gen-lead">Cultura base de <b>BIM</b> y <b>topografía</b> para todo el equipo, sin importar la especialidad ni el software. Cada ruta suma logros y títulos para tu hoja de personaje.</p>
+  {% if general.paths %}
+  <ul class="gen-routes" aria-label="Rutas de conocimiento general">
+    {% for p in general.paths %}
+    <li>
+      <a class="gen-route" href="{% url 'paths:detail' p.slug %}">
+        <span class="gen-art" aria-hidden="true">{% doodle p.doodle class="dd" %}</span>
+        <span class="gen-body">
+          <span class="gen-tag">Ruta 101 · {{ p.get_world_display|default:"General" }}</span>
+          <b class="gen-title">{{ p.title }}</b>
+          {% if p.description %}<span class="gen-desc">{{ p.description|truncatechars:140 }}</span>{% endif %}
+          <span class="gen-bar" role="progressbar" aria-label="Tu avance en {{ p.title }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ p.pct }}"><i style="width:{{ p.pct }}%"></i></span>
+          <span class="gen-pct">{% if p.pct %}{{ p.pct }} % completado{% else %}Empezar la ruta →{% endif %}</span>
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if general.items %}
+  <div class="cat-grid gen-cards">
+    {% for r in general.items %}{% include "catalog/partials/card.html" %}{% endfor %}
+  </div>
+  <p class="gen-more"><a class="cat-all" href="?general=1">{% if general.more %}Ver los {{ general.total }} recursos · +{{ general.more }}{% else %}Ver solo conocimiento general · {{ general.total }}{% endif %}</a></p>
+  {% elif f.general %}
+  <p class="gen-more">{{ general.total }} recurso{{ general.total|pluralize }} con la etiqueta «Conocimiento general».</p>
+  {% endif %}
+</section>
+{% endif %}

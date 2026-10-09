@@ -3,6 +3,7 @@
 MODULES = [
     {
         "id": "rutas",
+        "doodle": "rutas",
         "icon": "i-prog",
         "title": "Rutas",
         "subtitle": "Campañas por empresa de software, con su avance.",
@@ -18,6 +19,7 @@ MODULES = [
     },
     {
         "id": "catalogo",
+        "doodle": "catalogo",
         "icon": "i-book",
         "title": "Catálogo",
         "subtitle": "Cursos, módulos, tutoriales y exámenes.",
@@ -32,6 +34,7 @@ MODULES = [
     },
     {
         "id": "equipo",
+        "doodle": "equipo",
         "icon": "i-team",
         "title": "Equipo",
         "subtitle": "Hojas de personaje: clase, nivel, título e insignias.",
@@ -47,6 +50,7 @@ MODULES = [
     },
     {
         "id": "cert",
+        "doodle": "certificados",
         "icon": "i-cert",
         "title": "Certificaciones",
         "subtitle": "Tus certificados, con evidencia y vencimientos.",
@@ -62,6 +66,7 @@ MODULES = [
     },
     {
         "id": "docs",
+        "doodle": "documentos",
         "icon": "i-docs",
         "title": "Documentos",
         "subtitle": "Manuales, guías, planos tipo y normativas.",
@@ -72,6 +77,7 @@ MODULES = [
     },
     {
         "id": "foro",
+        "doodle": "foro",
         "icon": "i-forum",
         "title": "Foro",
         "subtitle": "Conversa, pregunta y comparte con el equipo.",
@@ -83,6 +89,7 @@ MODULES = [
     },
     {
         "id": "conoc",
+        "doodle": "conocimiento",
         "icon": "i-know",
         "title": "Conocimiento",
         "subtitle": "Lecciones aprendidas y mejoras en marcha.",
@@ -107,5 +114,6 @@ DISCIPLINE_VISUALS = {
     "civil-estructural": {"icon": "i-civ", "img": "civil.jpg", "label": "Civil · Estructural"},
     "topografia": {"icon": "i-top", "img": "topografia.jpg", "label": "Topografía"},
     "mecanica": {"icon": "i-mec", "img": "mecanica.jpg", "label": "Mecánica"},
+    "transversal": {"icon": "i-prog", "img": "", "label": "Transversal"},
     "captura-rpa": {"icon": "i-aero", "img": "", "label": "Captura · RPA"},
 }

@@ -1,16 +1,82 @@
 {% extends "core/base.html" %}
+{% load static core_extras %}
 {% block title %}Ayuda{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'assistant/help.css' %}">{% endblock %}
 {% block content %}
-<div class="page-head"><h1>Ayuda</h1><p>Cómo usar la academia.{% if awake %} También puedes <a href="{% url 'assistant:page' %}">preguntarle a Nala</a>.{% endif %}</p></div>
-<form class="filters" method="get" role="search">
-  <input type="search" name="q" value="{{ q }}" placeholder="Busca en la ayuda, las rutas, los glosarios…" aria-label="Buscar en la ayuda">
-  <button class="btn" type="submit">Buscar</button>
-</form>
+<section class="h-hero" aria-labelledby="h-title">
+  {% doodle "hero-ideas" class="dd h-hero-dd" %}
+  <div class="h-hero-in">
+    <p class="h-hand" aria-hidden="true">¿te trabaste? tranquilo, aquí hay mapa</p>
+    <h1 id="h-title">Centro de ayuda</h1>
+    <p class="h-lead">Todo sobre Levantamiento Digital 101 en pocas líneas.{% if awake %} Y si no lo encuentras, <a href="{% url 'assistant:page' %}">pregúntale a Nala</a>.{% endif %}</p>
+    <form class="h-search" method="get" role="search" action="{% url 'assistant:help_index' %}">
+      <label class="h-search-l" for="h-q">Buscar en la ayuda</label>
+      <input id="h-q" type="search" name="q" value="{{ q }}" maxlength="100" placeholder="Ej.: certificado, XP, foro, vencimiento…" autocomplete="off">
+      <button class="btn" type="submit">Buscar</button>
+    </form>
+    <nav class="h-chips" aria-label="Temas de ayuda">
+      {% for t in topics %}<a href="#t-{{ t.id }}" data-t="{{ t.id }}">{{ t.title }}</a>{% endfor %}
+    </nav>
+  </div>
+</section>
+
 {% if q %}
-<section aria-labelledby="h-res"><h2 id="h-res">Resultados para «{{ q }}»</h2>
-  <ul class="plain">{% for r in results %}<li><a href="{{ r.url }}">{{ r.title }}</a> <span class="muted">({{ r.kind }})</span><br><span class="muted small">{{ r.body|truncatechars:140 }}</span></li>{% empty %}<li class="muted">No encontré nada. Prueba con otras palabras o <a href="{% url 'community:thread_new' %}?titulo={{ q|urlencode }}">abre una consulta en el foro</a>.</li>{% endfor %}</ul>
+<section class="h-res" aria-labelledby="h-res">
+  <h2 id="h-res">Resultados para «{{ q }}»</h2>
+  {% if faq_hits %}
+  <ul class="h-hits">{% for h in faq_hits %}
+    <li data-t="{{ h.topic_id }}"><b>{{ h.q }}</b><span class="h-tag">{{ h.topic }}</span><p>{{ h.a }}</p>{% if h.url %}<a href="{{ h.url }}">{{ h.link }} →</a>{% endif %}</li>{% endfor %}
+  </ul>
+  {% endif %}
+  {% if guide_hits %}
+  <h3 class="h-sub">Guías</h3>
+  <ul class="h-hits h-hits-g">{% for g in guide_hits %}
+    <li><a href="{% url 'assistant:help' g.slug %}"><b>{{ g.title }}</b></a><p>{{ g.body|truncatechars:150 }}</p></li>{% endfor %}
+  </ul>
+  {% endif %}
+  {% if results %}
+  <h3 class="h-sub">También en la academia</h3>
+  <ul class="h-hits h-hits-g">{% for r in results %}
+    <li><a href="{{ r.url }}"><b>{{ r.title }}</b></a> <span class="h-tag">{{ r.kind }}</span><p>{{ r.body|truncatechars:140 }}</p></li>{% endfor %}
+  </ul>
+  {% endif %}
+  {% if no_results %}
+  <p class="h-none">No encontré nada. Prueba con otras palabras o <a href="{% url 'community:thread_new' %}?titulo={{ q|urlencode }}">abre una consulta en el foro</a>.</p>
+  {% endif %}
 </section>
 {% endif %}
-<h2>Guías</h2>
-<ul class="plain">{% for i in items %}<li><a href="{% url 'assistant:help' i.slug %}">{{ i.title }}</a></li>{% endfor %}</ul>
+
+<div class="h-topics">
+  {% for t in topics %}
+  <section class="h-topic" id="t-{{ t.id }}" data-t="{{ t.id }}" aria-labelledby="th-{{ t.id }}">
+    <header>
+      <span class="h-ill">{% doodle t.doodle class="dd" %}</span>
+      <div><h2 id="th-{{ t.id }}">{{ t.title }}</h2><p>{{ t.tagline }}</p></div>
+    </header>
+    <div class="h-qa">
+      {% for i in t.items %}
+      <details{% if forloop.first %} open{% endif %}>
+        <summary>{{ i.q }}</summary>
+        <p>{{ i.a }}</p>
+        {% if i.url %}<a class="h-go" href="{{ i.url }}">{{ i.link }} →</a>{% endif %}
+      </details>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+
+<section class="h-guides" aria-labelledby="h-g">
+  <h2 id="h-g">Guías paso a paso</h2>
+  <ul>{% for i in items %}<li><a href="{% url 'assistant:help' i.slug %}">{{ i.title }}</a></li>{% endfor %}</ul>
+</section>
+
+<aside class="h-cta">
+  <span class="h-ill h-ill-n">{% doodle "nala" class="dd" %}</span>
+  <div>
+    <b>¿Sigues con dudas?</b>
+    <p>{% if awake %}Nala responde con lo que el equipo ya dejó aquí. {% endif %}Y si es algo nuevo, el foro es el lugar: alguien más lo estaba pensando.</p>
+  </div>
+  <p class="h-cta-b">{% if awake %}<a class="btn" href="{% url 'assistant:page' %}">Preguntarle a Nala</a>{% endif %}<a class="btn ghost" href="{% url 'community:thread_new' %}">Abrir una consulta</a></p>
+</aside>
 {% endblock %}

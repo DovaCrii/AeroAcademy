@@ -120,6 +120,7 @@ Hay cuatro rarezas, con su color: **común** (gris), **rara** (azul), **épica**
 Cada insignia es un sprite SVG de 16×16 o 32×32 (skill `sprite-8bit`) con una regla declarativa en `seed/insignias.json`. Tipos de regla:
 - `count`: contar eventos de un tipo con filtros;
 - `path_complete`;
+- `level_complete` (un capítulo de una ruta, por su código), `quiz_correct` (todas las preguntas de ciertos capítulos), `paths_complete` (varias rutas) y `general_complete` (todas las rutas de conocimiento general, ver abajo);
 - `distinct_vendors`;
 - `streak`;
 - `credential_kind`;
@@ -174,3 +175,54 @@ Lo que se gana se tiene que ver:
 
 - **Al subir de nivel:** modal 8-bit con Teo, el nuevo título y un sonido corto. El sonido está apagado por defecto y la animación respeta `prefers-reduced-motion`.
 - **Al ganar una insignia:** *toast* con el sprite y una notificación en la campana (`notifications`).
+
+## Diploma interno (`apps/diplomas`)
+
+- **Solo nuestras rutas.** Una ruta emite diploma si su plataforma está en `INTERNAL_PLATFORMS` (hoy `interna`) y es estructurada y publicada. Autodesk, Bentley y demás entregan su propio certificado, que se sube como credencial.
+- **Cuándo se gana:** ruta al 100 % (misiones sin retirar marcadas y preguntas acertadas al menos una vez). `dgac-rpas` conserva su regla: aprobar la prueba de conocimientos.
+- **Al ganarlo** se emite una vez una credencial interna verificada por el sistema (sin archivo, `DIPLOMA-<ruta>`), así que el XP y las insignias salen del juego normal, y llega un aviso. Quitar una misión después no la borra ni la duplica.
+- **Lámina D-101** en `/diplomas/<ruta>/` (A4 apaisado, imprimible): marca del sitio, cajetín (revisó Nala, aprobó Sistema, código de verificación sin URL externa) y a Nala como sello de aprobado. La ve su dueña o dueño; quien lidera, con `?persona=<pk>`; el resto, 404.
+
+## Rutas de conocimiento general
+
+Rutas transversales de cultura base (hoy **Topografía 101** y **BIM 101**), para todo el equipo sin importar la especialidad.
+No dan certificado de un fabricante: dan diploma interno, logros y títulos, y se muestran juntas en el catálogo.
+
+**Cómo agregar una ruta nueva** (todo es datos; no hay que tocar código):
+
+1. Crear `seed/rutas/<slug>.json` con la skill `nueva-ruta` y estos valores: `platform: "interna"`, `vendor: "aeroacademy"`,
+   `kind: "structured"`, `disciplines` con `"transversal"` (más la de su tema) y `world` a elección.
+2. Etiquetar con `"Conocimiento general"` cada recurso de la ruta (`tags`). Eso los agrupa en la sección
+   *Conocimiento general · transversal* y en `/catalogo/?general=1`. Solo se listan los recursos que siguen vinculados a una ruta.
+3. Ya entra solo en: la sección del catálogo (con su avance y el garabato de su mundo), el diploma interno al 100 %
+   y la insignia **Sabio transversal** (`general_complete`: exige todas las rutas generales publicadas, mínimo 2; al sumar una
+   ruta, quien la tenía completa deja de cumplirla hasta terminar la nueva, como en cualquier regla).
+4. Opcional, en `seed/insignias.json` y `seed/titulos.json` (al final, ver `nueva-insignia`): una insignia por hito de la ruta
+   (`level_complete`, `quiz_correct`, `path_complete`) con su sprite 32×32 y un título que la desbloquee (`badge`, y `character_class`
+   si es de una carrera). Los títulos de insignia no cuentan en la escalera por nivel de cada carrera.
+5. «Próximo logro»: la hoja de personaje lo muestra solo a su dueña o dueño; en la página de una ruta se pone con
+   `{% load goal_tags %}{% next_goal path %}` (qué falta para la siguiente insignia y el título que trae). Sale de las mismas reglas.
+
+| Insignia | Rareza | Regla |
+|---|---|---|
+| *Primer cuadrante* | común | primer capítulo de Topografía 101 |
+| *Datum dominado* | rara | todas las preguntas de geodesia y coordenadas (Topografía 101) |
+| *Cartógrafo de bolsillo* | épica | Topografía 101 completa |
+| *Piensa en modelos* | épica | BIM 101 completa |
+| *Gemelo en marcha* | rara | capítulo «Del modelo a la obra» de BIM 101 |
+| *Doble 101* | épica | ambas rutas |
+| *Sabio transversal* | legendaria | todas las rutas generales |
+
+Títulos: *Aprendiz de Datum*, *Lector de Nubes*, *Modelador Consciente*, *Puente Topo-BIM*, *Sabio Transversal* (para todas las
+carreras) y por carrera *Cartógrafo de Bolsillo* (Geomensor/a), *Guardián del As-Built* (Coordinador/a BIM) y
+*Custodio del Gemelo* (Líder de Levantamiento).
+
+**Crecer con lo que se aprende:** al incorporar material nuevo, revisar qué conceptos faltan, qué preguntas fallan más y qué
+logros no se ganan nunca, y ajustar rutas, insignias y títulos. Lista de control para material fuente nuevo:
+
+- [ ] Reescribir con palabras propias; no copiar párrafos ni preguntas de la fuente.
+- [ ] Esquemas y diagramas originales (SVG propios); sin imágenes de terceros.
+- [ ] Verificar cada URL (y marcar `verify_url` si falta confirmar la exacta); preferir páginas educativas u oficiales.
+- [ ] Nada interno de JEJ (proyectos, clientes, precios, planos): lo interno queda privado y no entra al repositorio.
+- [ ] Preguntas con casos reales de Chile, sin datos personales; `key` estables, agregar siempre al final.
+- [ ] Etiquetar con «Conocimiento general» y correr `seed_catalog --dry-run`, `pytest` y `ruff`.

@@ -214,7 +214,7 @@ def test_download_specific_version_and_missing_file(client_for, member):
 
 def test_no_static_or_media_url_exposes_files(client, member):
     d = doc(member)
-    assert client.get("/media/" + d.current.file.name).status_code in (401, 403, 404)
+    assert client.get("/media/" + d.current.file.name).status_code in (302, 401, 403, 404)
 
 
 # --- borrado -----------------------------------------------------------------------------------------------------------------

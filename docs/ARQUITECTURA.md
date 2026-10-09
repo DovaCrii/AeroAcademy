@@ -36,6 +36,19 @@ Regla: las apps se comunican por `services.py`, no importando vistas entre sí.
   - Lee `Tailscale-User-Login`. Crea o actualiza la persona con `Tailscale-User-Name` y `-Profile-Pic`.
   - **Solo confía en el encabezado si `REMOTE_ADDR` está en `TRUSTED_PROXY_IPS` (por defecto `127.0.0.1`, `::1`).**
     En cualquier otro caso responde 403.
+- **Invitación + contraseña, siempre dentro de la tailnet (D34).** Para quien su login de Tailscale no coincide con su
+  correo, o entra desde un equipo compartido (sin encabezado), el admin genera un **enlace de registro** de un solo uso
+  y 7 días (`TimestampSigner` sobre persona + nonce + huella del hash de la contraseña; el nonce vive en
+  `Person.invite_nonce`, el enlace nunca se guarda). `/registro/<token>/` fija nombre y contraseña (validadores de Django)
+  y deja la sesión iniciada; `/entrar/` (correo + contraseña, máx. 5 fallos por IP+correo en 15 min, error genérico,
+  `next` validado), `/salir/` (solo POST) y `/bienvenida/` (pública; a donde van las peticiones sin identidad).
+  Backends: `TailscaleBackend` y `ModelBackend`. Solo entra por contraseña quien está `approved`.
+  - **Sesión por contraseña manda:** si existe, se conserva aunque falte el encabezado o este identifique a otra persona
+    (no se cambia en silencio; se registra, sin correos). Sin sesión y con encabezado, entra como siempre.
+  - Solo el **admin** agrega personas, genera enlaces (o restablece contraseñas: el enlace nuevo invalida el anterior) y
+    cambia roles. Sin correo saliente: «¿Olvidaste tu contraseña?» remite al admin.
+  - Páginas públicas permitidas sin identidad: `/bienvenida/`, `/entrar/`, `/salir/`, `/registro/…` y `/healthz`
+    (esta última solo desde el proxy local). Todo lo demás redirige a la bienvenida. Fuera de `TRUSTED_PROXY_IPS`, 403 siempre.
 - Desarrollo: variable `DEV_REMOTE_USER=correo@dominio` simula la identidad. Prohibido en producción
   (`DEBUG=False` la ignora).
 - Roles con grupos de Django: `member`, `lead`, `admin`. Quien figure en `BOOTSTRAP_ADMINS` queda admin y aprobada (se reaplica en cada petición).

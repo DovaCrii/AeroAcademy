@@ -17,6 +17,12 @@ def path_tiles(path, size="md", limit=4):
     return {"tiles": software.software_for_path(path, limit), "size": size}
 
 
+@register.simple_tag
+def vendor_family(path):
+    """Familia visual del fabricante de una ruta: autodesk, bentley o internal."""
+    return software.vendor_key(path)
+
+
 @register.inclusion_tag("catalog/partials/guide.html")
 def level_guide(path, current):
     """Tarjeta «Guía rápida» del nivel (vacía si la ruta no trae guía para ese nivel)."""
@@ -95,6 +101,18 @@ FLAVOURS = {
         "levels_title": "Piezas",
         "levels_sub": "Elige una pieza del conjunto para ver sus recursos y misiones.",
         "browser": "Árbol de montaje",
+    },
+    software.TRA: {
+        "kicker": "Herramienta transversal",
+        "scene": "building",
+        "scale": "ESCALA 1:100",
+        "sheet": "X-101",
+        "mark": "X-201",
+        "content": "Dibujo y modelado · avance por etapa",
+        "photo": "mecanica",
+        "levels_title": "Etapas",
+        "levels_sub": "Elige una etapa para ver sus recursos y misiones.",
+        "browser": "Explorador · Etapas",
     },
     software.CAP: {
         "kicker": "Captura y levantamiento",

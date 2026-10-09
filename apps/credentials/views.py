@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.accounts.models import Person, PersonStatus
 from apps.catalog.models import Platform, Skill
+from apps.diplomas.services import diploma_url
 from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
@@ -95,6 +96,7 @@ def detail(request, pk):
             "can_review": services.can_review(request.user),
             "version": services.version_of(cred),
             "is_free_course": not cred.resource_id and bool(cred.course_name_free),
+            "diploma_url": diploma_url(request.user, cred),
         },
     )
 

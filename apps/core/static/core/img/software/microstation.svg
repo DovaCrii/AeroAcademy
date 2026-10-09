@@ -1,7 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="MS">
-  <rect x="5" y="6" width="56" height="56" rx="15" fill="#1B2A41" opacity=".16"/>
-  <path d="M17 3.5 C27 2.2 40 3.2 47 3.4 C57 3.6 60.7 8 60.6 17 C60.9 27 60.2 38 60.5 47 C60.4 56 56 60.6 47 60.6 C38 61 26 60.2 17 60.5 C8 60.7 3.4 56 3.5 47 C3.2 38 3.8 27 3.4 17 C3.6 8 8 3.6 17 3.5 Z" fill="#4ADE80" stroke="#1B2A41" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M9 13 C20 10.5 38 11 55 12.5" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M12 46 V22 L32 40 L52 22 V46" fill="none" stroke="#04200E" stroke-opacity=".28" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="32" y="42.1" text-anchor="middle" font-family="'Segoe Print','Comic Sans MS','Segoe UI',Arial,sans-serif" font-weight="800" font-size="28" letter-spacing="-.5" fill="#04200E">MS</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="microstation">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A86F0"/><stop offset="1" stop-color="#0A3F9E"/></linearGradient>
+    <clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="9"/></clipPath>
+  </defs>
+  <rect x="2" y="4" width="60" height="60" rx="9" fill="#000" opacity=".22"/>
+  <g clip-path="url(#t)">
+    <rect width="64" height="64" fill="url(#g)"/>
+    <path d="M0 0H64V12C40 8 18 12 0 20Z" fill="#fff" opacity=".10"/>
+    <rect y="57" width="64" height="7" fill="#5CC8FF"/>
+  </g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="8.6" fill="none" stroke="#fff" stroke-opacity=".30" stroke-width="1.2"/>
+  <g transform="translate(0 -2.5) scale(1 .96)"><path fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" d="M17 16V48M17 33C17 50 36 50 36 33V16M36 33C36 42 41 46 48 44"/></g>
 </svg>

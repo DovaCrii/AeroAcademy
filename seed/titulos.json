@@ -84,7 +84,15 @@
     {"slug": "leyenda-lev-101", "name": "Leyenda LEV 101", "min_level": 20},
     {"slug": "primera-luz", "name": "Primera Luz", "badge": "primera-luz"},
     {"slug": "constructor-de-puentes", "name": "Constructor de Puentes", "badge": "constructor-de-puentes"},
-    {"slug": "sabio-del-foro", "name": "Sabio del Foro", "badge": "sabio-del-foro"}
+    {"slug": "sabio-del-foro", "name": "Sabio del Foro", "badge": "sabio-del-foro"},
+    {"slug": "aprendiz-de-datum", "name": "Aprendiz de Datum", "badge": "datum-dominado"},
+    {"slug": "lector-de-nubes", "name": "Lector de Nubes", "badge": "cartografo-de-bolsillo"},
+    {"slug": "cartografo-de-bolsillo", "name": "Cartógrafo de Bolsillo", "badge": "cartografo-de-bolsillo", "character_class": "cartographer"},
+    {"slug": "modelador-consciente", "name": "Modelador Consciente", "badge": "piensa-en-modelos"},
+    {"slug": "guardian-del-as-built", "name": "Guardián del As-Built", "badge": "gemelo-en-marcha", "character_class": "bim_coord"},
+    {"slug": "custodio-del-gemelo", "name": "Custodio del Gemelo", "badge": "gemelo-en-marcha", "character_class": "lev_lead"},
+    {"slug": "puente-topo-bim", "name": "Puente Topo-BIM", "badge": "doble-101"},
+    {"slug": "sabio-transversal", "name": "Sabio Transversal", "badge": "sabio-transversal"}
   ]
 }
 

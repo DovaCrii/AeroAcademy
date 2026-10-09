@@ -272,12 +272,18 @@ def _load_extras(path, data):
     add(PathExtra.Kind.FLOW, data.get("flow", []))
     PathExtra.objects.bulk_create(extras)
 
+    shared_keys = set()
     for group in data.get("team_kit", []):
         for i, item in enumerate(group.get("items", [])):
             _shared(path, item, group["title"], None, None, i)
+            shared_keys.add(item["key"])
     for phase in data.get("rollout_phases", []):
         for i, item in enumerate(phase.get("items", [])):
             _shared(path, item, phase["title"], phase.get("start_week"), phase.get("end_week"), i)
+            shared_keys.add(item["key"])
+    # Las casillas compartidas no tienen `retired`: las que salen del JSON (p. ej. al separar Forma de Revit) se borran
+    # para que no queden colgando en la ruta equivocada; sus marcas se van con ellas.
+    SharedItem.objects.filter(path=path).exclude(key__in=shared_keys).delete()
 
 
 def _shared(path, item, group_title, start, end, order):

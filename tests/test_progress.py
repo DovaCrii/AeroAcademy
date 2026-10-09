@@ -9,7 +9,8 @@ from apps.progress.models import MilestoneCheck, PathGoal, QuizAnswer
 
 pytestmark = pytest.mark.django_db
 
-FORMA = "forma-revit"
+REVIT = "forma-revit"
+FORMA = "forma-coordinacion"  # n0 conserva los hitos de la antigua ruta Forma + Revit
 
 
 @pytest.fixture(autouse=True)
@@ -119,10 +120,10 @@ def test_complete_level_shows_badge_and_marks_floor(client_for, member):
 def test_path_percent_and_levels_done_in_stats(client_for, member):
     ctx = services.world_context(member, LearningPath.objects.get(slug=FORMA))
     assert ctx["stats"]["pct"] == 0 and ctx["stats"]["levels_done"] == 0
-    assert ctx["stats"]["levels_total"] == 7
+    assert ctx["stats"]["levels_total"] == 5
     toggle(client_for(member.login), "n0-t0")
     ctx = services.world_context(member, LearningPath.objects.get(slug=FORMA))
-    assert ctx["stats"]["pct"] == round(100 * 1 / (34 + 10))
+    assert ctx["stats"]["pct"] == round(100 * 1 / (24 + 8))
 
 
 def test_retired_items_do_not_count_and_cannot_be_toggled(client_for, member):
@@ -198,14 +199,14 @@ def test_csrf_is_enforced(member):
 def test_goal_can_be_set_changed_and_cleared(client_for, member):
     client = client_for(member.login)
     goal = "Autodesk Certified User: Revit"
-    assert client.post(url("meta"), {"goal": goal, "nivel": "n0"}).status_code == 302
+    assert client.post(url("meta", slug=REVIT), {"goal": goal, "nivel": "n0"}).status_code == 302
     assert PathGoal.objects.get(person=member).certification_goal == goal
-    html = client.get(f"/rutas/{FORMA}/").content.decode()
+    html = client.get(f"/rutas/{REVIT}/").content.decode()
     assert f'<option value="{goal}" selected>' in html
 
-    client.post(url("meta"), {"goal": "ACP Revit Structural Design", "nivel": "n0"})
+    client.post(url("meta", slug=REVIT), {"goal": "ACP Revit Structural Design", "nivel": "n0"})
     assert PathGoal.objects.filter(person=member).count() == 1
-    client.post(url("meta"), {"goal": "", "nivel": "n0"})
+    client.post(url("meta", slug=REVIT), {"goal": "", "nivel": "n0"})
     assert not PathGoal.objects.exists()
 
 
@@ -216,9 +217,9 @@ def test_goal_must_be_one_of_the_path_goals(client_for, member):
 
 def test_goals_are_personal(client_for, make_person):
     ana, luis = make_person("ana@lev.cl"), make_person("luis@lev.cl")
-    client_for(ana.login).post(url("meta"), {"goal": "Autodesk Certified User: Revit"})
+    client_for(ana.login).post(url("meta", slug=REVIT), {"goal": "Autodesk Certified User: Revit"})
     assert not PathGoal.objects.filter(person=luis).exists()
-    html = client_for(luis.login).get(f"/rutas/{FORMA}/").content.decode()
+    html = client_for(luis.login).get(f"/rutas/{REVIT}/").content.decode()
     assert "selected>" not in html.split('id="goal"')[1].split("</select>")[0]
 
 
@@ -226,9 +227,9 @@ def test_goals_are_personal(client_for, make_person):
 
 
 def test_without_js_redirects_back_to_the_level(member_client):
-    response = toggle(member_client, "n2-t0")
+    response = toggle(member_client, "n1-t0")
     assert response.status_code == 302
-    assert response.url == f"/rutas/{FORMA}/?nivel=n2#panel"
+    assert response.url == f"/rutas/{FORMA}/?nivel=n1#panel"
 
 
 def test_partial_response_is_only_the_fragment_and_has_new_percentages(member_client):
@@ -240,15 +241,15 @@ def test_partial_response_is_only_the_fragment_and_has_new_percentages(member_cl
 
 
 def test_partial_get_returns_selected_level_only(member_client):
-    html = member_client.get(f"/rutas/{FORMA}/?nivel=n3", HTTP_X_PARTIAL="1").content.decode()
+    html = member_client.get(f"/rutas/{FORMA}/?nivel=n2", HTTP_X_PARTIAL="1").content.decode()
     assert "<html" not in html and "Send to Revit" in html and "ar-cover" not in html
 
 
 def test_full_page_reads_without_js(member_client):
-    html = member_client.get(f"/rutas/{FORMA}/?nivel=n3").content.decode()
+    html = member_client.get(f"/rutas/{FORMA}/?nivel=n2").content.decode()
     assert "ar-cover" in html and "Levantamiento Digital" in html and "CC 410" in html
-    assert html.count('class="ar-lv') == 7  # Project Browser
-    assert html.count("ar-floor") >= 7  # corte del edificio
+    assert html.count('class="ar-lv') == 5  # Project Browser
+    assert html.count("ar-floor") >= 5  # corte del edificio
     assert '<em class="term">Send to Revit</em>' in html
     assert "<form" in html and 'method="post"' in html  # funciona sin JS: formularios normales
     assert "enhance.js" in html and "architecture.css" in html
@@ -258,10 +259,10 @@ def test_cover_uses_the_levantamiento_style_with_real_data(member_client):
     html = member_client.get(f"/rutas/{FORMA}/").content.decode()
     assert "levantamiento.css" in html and "levantamiento.js" in html
     assert 'data-scene="building"' in html
-    assert 'class="lv-title">Ruta Forma + Revit' in html  # recuadro de anotación
+    assert 'class="lv-title">Ruta Forma · Coordinación' in html  # recuadro de anotación
     assert "// 01" in html and "// 05" in html  # pasos numerados como consola
     readouts = html.split('class="lv-readouts"')[1].split("</div>")[0]
-    for label, value in (("Niveles", 7), ("Misiones", 34), ("Preguntas", 10)):
+    for label, value in (("Niveles", 5), ("Misiones", 24), ("Preguntas", 8)):
         assert f"{label}<b>{value}</b>" in readouts
     assert "Tu avance<b>0 %</b>" in readouts
 
@@ -269,18 +270,18 @@ def test_cover_uses_the_levantamiento_style_with_real_data(member_client):
 def test_cover_readouts_follow_my_progress(client_for, member):
     toggle(client_for(member.login), "n0-t0")
     html = client_for(member.login).get(f"/rutas/{FORMA}/").content.decode()
-    assert "Tu avance<b>2 %</b>" in html and "Equipo<b>1</b>" in html
+    assert "Tu avance<b>3 %</b>" in html and "Equipo<b>1</b>" in html
 
 
 def test_stats_expose_item_counts(member):
     ctx = services.world_context(member, LearningPath.objects.get(slug=FORMA))
-    assert ctx["stats"]["milestones"] == 34 and ctx["stats"]["questions"] == 10
+    assert ctx["stats"]["milestones"] == 24 and ctx["stats"]["questions"] == 8
 
 
-def test_path_without_a_built_world_uses_the_generic_page(member_client):
+def test_path_without_a_built_world_falls_back_to_the_architecture_world(member_client):
     LearningPath.objects.filter(slug=FORMA).update(world="mechanical")
     html = member_client.get(f"/rutas/{FORMA}/").content.decode()
-    assert "chapter" in html and "ar-cover" not in html
+    assert "ar-cover" in html and "ar-lv" in html
 
 
 def test_milestone_text_is_escaped(client_for, member):

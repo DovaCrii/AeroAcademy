@@ -22,7 +22,7 @@ pytestmark = pytest.mark.django_db
 PDF = b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n%%EOF\n" + b"x" * 200
 PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 64
 JPG = b"\xff\xd8\xff\xe0" + b"\x00" * 64
-FORMA, BENTLEY = "forma-revit", "bentley-learn"
+FORMA, BENTLEY = "forma-coordinacion", "bentley-learn"
 COURSE_90 = "Learn Forma Site Design in 90 minutes"
 
 
@@ -514,8 +514,8 @@ def test_verifying_forma_site_design_marks_its_milestone(member, lead):
     cred = make(member, resource=resource(), path=LearningPath.objects.get(slug=FORMA))
     assert checks(member) == set()  # en revisión no cuenta
     services.verify(cred, lead)
-    assert checks(member) == {"n2-t5"}
-    check = MilestoneCheck.objects.get(person=member, milestone__key="n2-t5")
+    assert checks(member) == {"n1-t5"}
+    check = MilestoneCheck.objects.get(person=member, milestone__key="n1-t5")
     assert check.credential == cred and check.source == "credential"
 
 
@@ -524,7 +524,7 @@ def test_the_marked_milestone_shows_in_the_path_and_changes_the_percentage(membe
     before = progress.world_context(member, path)["stats"]["pct"]
     services.verify(make(member, resource=resource()), lead)
     after = progress.world_context(member, path)
-    n2 = next(c for c in after["chapters"] if c["level"].code == "n2")
+    n2 = next(c for c in after["chapters"] if c["level"].code == "n1")
     assert n2["done"] == 1 and after["stats"]["pct"] > before
 
 
@@ -534,7 +534,7 @@ def test_marks_disappear_when_the_credential_stops_being_verified(member, lead):
     services.reject(cred, lead, "se anuló")
     assert checks(member) == set()
     services.verify(cred, lead)
-    assert checks(member) == {"n2-t5"}
+    assert checks(member) == {"n1-t5"}
     services.update_credential(cred, {"issuer": "Cambiado"})
     cred.refresh_from_db()
     assert cred.status == "pending" and checks(member) == set()
@@ -542,14 +542,14 @@ def test_marks_disappear_when_the_credential_stops_being_verified(member, lead):
 
 def test_a_credential_milestone_cannot_be_unchecked_by_hand(client_for, member, lead):
     services.verify(make(member, resource=resource()), lead)
-    milestone = Milestone.objects.get(path__slug=FORMA, key="n2-t5")
+    milestone = Milestone.objects.get(path__slug=FORMA, key="n1-t5")
     assert progress.set_milestone(member, milestone, False) is False
-    client_for(member.login).post(f"/rutas/{FORMA}/hitos/n2-t5/", {"checked": "0"})
+    client_for(member.login).post(f"/rutas/{FORMA}/hitos/n1-t5/", {"checked": "0"})
     assert MilestoneCheck.objects.filter(person=member, milestone=milestone).exists()
 
 
 def test_a_manual_check_is_not_taken_over_by_the_credential(member, lead):
-    milestone = Milestone.objects.get(path__slug=FORMA, key="n2-t5")
+    milestone = Milestone.objects.get(path__slug=FORMA, key="n1-t5")
     progress.set_milestone(member, milestone, True)
     cred = make(member, resource=resource())
     services.verify(cred, lead)
@@ -746,19 +746,19 @@ def test_civil_world_renders_all_its_pieces(member_client):
     html = civil(member_client)
     assert "cv-cover" in html and 'data-scene="terrain"' in html and "civil.css" in html
     assert "PLANTA · eje del corredor" in html and "PERFIL LONGITUDINAL" in html
-    assert html.count('class="cv-cor') == 5  # Explorer · Corridors
-    assert html.count("cv-stake ") == 9 and html.count("cv-pier ") == 8
+    assert html.count('class="cv-cor') == 4  # Explorer · Corridors
+    assert html.count("cv-stake ") == 6 and html.count("cv-pier ") == 5
     assert "Explorer · Corridors" in html and "km 0+000" in html
 
 
 def test_civil_cover_readouts_are_real_numbers(member_client):
     readouts = civil(member_client).split('class="lv-readouts"')[1].split("</div>")[0]
     for label, value in (
-        ("Corredores", "5"),
-        ("Cursos", "9"),
+        ("Corredores", "4"),
+        ("Cursos", "6"),
         ("Estacas verificadas", "0"),
         ("En revisión", "0"),
-        ("Pilares", "0/8"),
+        ("Pilares", "0/5"),
     ):
         assert f"{label}<b>{value}</b>" in readouts
 
@@ -794,7 +794,7 @@ def test_the_road_is_paved_up_to_the_last_verified_stake(client_for, member, lea
 def test_relics_raise_the_piers_of_the_bridge(client_for, member, lead):
     verified_course(member, lead, MS_USER)
     html = civil(client_for(member.login))
-    assert html.count("cv-pier verified") == 1 and "Pilares<b>1/8</b>" in html
+    assert html.count("cv-pier verified") == 1 and "Pilares<b>1/5</b>" in html
 
 
 def test_a_rejected_course_can_be_registered_again(client_for, member, lead):
@@ -824,10 +824,15 @@ def test_chapter_percentages_follow_the_required_courses(member, lead):
 def test_any_one_rule_completes_the_chapter_with_a_single_accreditation(member, lead):
     from apps.progress import external
 
-    path = LearningPath.objects.get(slug=BENTLEY)
-    verified_course(
-        member, lead, "Bentley Accredited BIM Modeler: Basic Mechanical Modeling with OpenBuildings"
+    path = LearningPath.objects.get(slug="bentley-openbuildings")
+    cred = make(
+        member,
+        resource=resource(
+            "Bentley Accredited BIM Modeler: Basic Architectural Modeling with OpenBuildings"
+        ),
+        path=path,
     )
+    services.verify(cred, lead)
     obd = next(
         c for c in external.external_context(member, path)["chapters"] if c["level"].code == "obd"
     )
@@ -862,7 +867,7 @@ def test_a_promoted_course_appears_for_everyone_in_the_free_chapter(
 
 
 def test_unverified_urls_are_flagged_and_text_is_escaped(client_for, member):
-    html = civil(client_for(member.login), "?nivel=obr")
+    html = civil(client_for(member.login), "?nivel=ms")
     assert "Confirmar enlace" in html
     Resource.objects.filter(title="Navigating Bentley Learn").update(
         description="<script>alert(1)</script>"
@@ -942,7 +947,7 @@ def test_rejecting_one_of_two_verified_credentials_keeps_the_mark(member, lead):
     services.verify(first, lead)
     services.verify(second, lead)
     services.reject(first, lead, "duplicada")
-    assert checks(member) == {"n2-t5"}
+    assert checks(member) == {"n1-t5"}
     services.reject(second, lead, "tampoco")
     assert checks(member) == set()
 
@@ -1024,7 +1029,7 @@ def test_the_form_can_link_a_resource_and_the_review_marks_the_milestone(client_
     cred = Credential.objects.get(owner=member)
     assert cred.resource == resource()
     client_for(lead.login).post(f"/certificados/{cred.pk}/revisar/", {"action": "verify"})
-    assert checks(member) == {"n2-t5"}
+    assert checks(member) == {"n1-t5"}
 
 
 def test_query_counts_stay_flat(

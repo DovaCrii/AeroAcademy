@@ -1,0 +1,42 @@
+/* Marca: dron con birrete y lentes + insignia «Levantamiento Digital 101» sobre bloque azul con el 101 resaltado.
+   El azul es el mismo en claro y oscuro (es la marca); el trazo del logo sigue la tinta del tema. */
+:root{--blue-brand:#0B5BD3;--blue-brand-2:#0A47A8}
+.mark{display:block;width:44px;height:auto;flex:none;color:var(--ink)}
+
+/* cabecera */
+.brandcell{flex-direction:row!important;align-items:center;gap:10px}
+.brandcell .mark{width:46px}
+.brandtxt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.badge101{display:inline-flex;align-items:stretch;overflow:hidden;border-radius:9px;background:var(--blue-brand);color:#fff;border:1.5px solid var(--ink);font-weight:800;font-stretch:80%;font-size:15px;line-height:1;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;box-shadow:2px 2px 0 var(--amber)}
+.badge101 span{padding:5px 8px 5px 9px}
+.badge101 b{padding:5px 8px;background:var(--amber);color:#1F2430;font-weight:900;font-stretch:100%;letter-spacing:.04em}
+
+/* progreso de la cabecera: «101 · NV n» */
+.top .player .lvl{display:inline-flex;gap:5px;align-items:center}
+.top .player .lvl i{font-style:normal;padding-right:5px;border-right:1px solid color-mix(in srgb,var(--on-amber) 40%,transparent)}
+
+/* portada: bloque azul grande con el 101 pegado */
+.w-brand{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.w-brand .mark{width:clamp(96px,11vw,150px)}
+.w-wordmark{max-width:none}
+.w-wordmark .a{display:block;margin:0 0 10px;font-family:var(--font-mono);font-weight:600;letter-spacing:.34em;font-size:clamp(11px,1.2vw,15px);line-height:1;color:var(--ink-2)}
+.w-wordmark .l{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.08em;padding:.16em .3em .2em;border-radius:.26em;background:linear-gradient(160deg,var(--blue-brand),var(--blue-brand-2));color:#fff;border:2px solid var(--ink);box-shadow:8px 8px 0 var(--amber);font-family:var(--font-display);font-weight:900;font-stretch:84%;font-size:clamp(2.3rem,1.3rem + 4.4vw,5rem);line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
+.w-wordmark .l .w1{display:block}
+.w-wordmark .l .w2{display:flex;align-items:center;gap:.22em}
+.w-wordmark .l b{display:inline-block;padding:0 .14em;border-radius:.16em;background:var(--amber);color:#1F2430;font-weight:900;font-stretch:100%;letter-spacing:-.04em;margin:0}
+
+@media (max-width:760px){
+  .brandcell .mark{width:36px}
+  .badge101{font-size:12.5px}
+  .badge101 span{padding:4px 6px 4px 7px}
+  .badge101 b{padding:4px 6px}
+  .brandtxt .cap{display:none}
+  .w-wordmark .l{box-shadow:5px 5px 0 var(--amber)}
+}
+@media (max-width:380px){.badge101{font-size:11.5px}.brandcell{gap:6px}.brandcell .mark{width:32px}}
+
+@media (max-width:1380px){.top .player .ttl{display:none}.badge101{font-size:14px}}
+.teo-hello{position:relative;margin:0 0 12px;padding:10px 12px;font-size:.875rem;line-height:1.45;color:var(--ink,#111);background:color-mix(in srgb,var(--amber,#FFC93C) 22%,var(--sheet,#fff));border:1.5px solid var(--ink,#111);border-radius:14px}
+.teo-hello::after{content:"";position:absolute;right:22px;bottom:-8px;width:12px;height:12px;background:inherit;border-right:1.5px solid var(--ink,#111);border-bottom:1.5px solid var(--ink,#111);transform:rotate(45deg)}
+@media (max-width:480px){.badge101 .bf{display:none}.top .brandcell{padding-right:2px!important}}
+@media (max-width:480px){.badge101{font-size:11px;box-shadow:none}.badge101 span{padding:4px 5px}.badge101 b{padding:4px 5px}.brandcell{gap:4px}.brandcell .mark{width:28px}.top .player .lvl i{padding-right:3px}.top .player{padding:4px 6px}}

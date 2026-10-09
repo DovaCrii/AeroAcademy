@@ -68,7 +68,7 @@ body.world-civil{--sign:#FFC21A;--asphalt:#2B2F36;--slope:#3E8E4E;--relic:#8B5CF
 .cv-phead .station small{display:block;font-size:12px;font-stretch:100%;font-weight:600;color:var(--ink-2);letter-spacing:.08em}
 .cv-phead h3{font-size:22px}
 .cv-phead .meta{font-size:14px;color:var(--ink-2);margin-top:4px}
-.cv-goal{margin:14px 0;padding:10px 14px;border:1px solid var(--sign);border-left-width:5px;background:color-mix(in srgb,var(--sign) 10%,transparent)}
+.cv-goal{margin:14px 0;padding:10px 14px;border:1px solid var(--sign);border-left-width:5px;background:color-mix(in srgb,var(--level) 9%,var(--sheet))}
 .cv-rule{margin:0 0 6px;font-size:13.5px;color:var(--ink-2)}
 .cv-courses{list-style:none;margin:0;padding:0}
 .cv-course{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--hair);align-items:start}
@@ -106,3 +106,6 @@ body.world-civil{--sign:#FFC21A;--asphalt:#2B2F36;--slope:#3E8E4E;--relic:#8B5CF
   .cv-course .right{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center}
   .cv-sub{margin-left:0}
 }
+
+.cv-cover .lv-in{padding-top:186px}
+@media (max-width:860px){.cv-cover .lv-in{padding-top:220px}}

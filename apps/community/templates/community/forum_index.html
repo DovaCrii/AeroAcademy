@@ -58,7 +58,7 @@
 <section class="path-notes" aria-labelledby="pn-h">
   <h2 id="pn-h">Notas de las rutas</h2>
   <p class="muted">Lo que el equipo anota mientras avanza en cada ruta.</p>
-  <ul class="chips">{% for p in paths %}<li><a href="{% url 'community:path_notes' p.slug %}">{{ p.title }}</a></li>{% endfor %}</ul>
+  <ul class="pn-grid">{% for p in paths %}<li><a class="pn-card" href="{% url 'community:path_notes' p.slug %}"><b>{{ p.title }}</b><small>{{ p.vendor.name }}</small><span aria-hidden="true">Ver notas →</span></a></li>{% endfor %}</ul>
 </section>
 {% endif %}
 {% endblock %}

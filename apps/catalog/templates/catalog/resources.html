@@ -13,6 +13,8 @@
   </div>
 </header>
 
+{% include "catalog/partials/general.html" %}
+
 <section class="cat-sec cat-sec-filter" aria-label="Buscar y filtrar">
 <h2 class="cat-sh"><span>// 01</span> Buscar y filtrar</h2>
 <form class="cat-search" method="get" action="{% url 'catalog:resources' %}" role="search">
@@ -57,6 +59,7 @@
   <p class="cat-count"><b>{{ page.paginator.count }}</b> resultado{{ page.paginator.count|pluralize }}{% if f.q %} para «{{ f.q }}»{% endif %}</p>
   <p class="cat-quick">
     <a class="chip ess{% if f.essential %} on{% endif %}" href="?esencial={% if f.essential %}0{% else %}1{% endif %}{% if f.path %}&amp;ruta={{ f.path }}{% endif %}">Solo esenciales · {{ essential_count }}</a>
+    <a class="chip gen{% if f.general %} on{% endif %}" href="?general={% if f.general %}0{% else %}1{% endif %}">Conocimiento general</a>
     <a class="chip cert{% if f.cert %} on{% endif %}" href="?cert={% if f.cert %}0{% else %}1{% endif %}{% if f.path %}&amp;ruta={{ f.path }}{% endif %}">Con certificado · {{ cert_count }}</a>
     {% if filtered %}<a class="cat-clear" href="{% url 'catalog:resources' %}">Limpiar filtros</a>{% endif %}
   </p>
@@ -65,26 +68,46 @@
 {% if show_rows %}
 <section class="cat-sec cat-sec-rows" aria-label="Recursos por software">
   <h2 class="cat-sh"><span>// 02</span> Por software</h2>
-  {% for row in rows %}
-  <section class="cat-row d-{{ row.tile.discipline }}" id="sw-{{ row.tile.slug }}" aria-labelledby="rowh-{{ row.tile.slug }}">
-    <header class="cat-row-h">
-      {% include "catalog/partials/sw_row_tile.html" with tile=row.tile %}
-      <h3 id="rowh-{{ row.tile.slug }}"><span class="cat-n">{{ forloop.counter|stringformat:"02d" }}</span> {{ row.tile.name }}</h3>
-      <a class="cat-all" href="?software={{ row.tile.slug }}">Ver todo · {{ row.total }}</a>
+  {% for sec in sections %}
+  <section class="vs vs-{{ sec.key }}" id="vendor-{{ sec.key }}" aria-labelledby="vsh-{{ sec.key }}">
+    <header class="vs-band">
+      <span class="vs-kick">{% if sec.key == "autodesk" %}// Icon pack{% elif sec.key == "bentley" %}// Software{% else %}// Campo y captura{% endif %}</span>
+      <h3 id="vsh-{{ sec.key }}">{{ sec.label }}</h3>
+      <p class="vs-sub"><b>{{ sec.rows|length }}</b> producto{{ sec.rows|length|pluralize }} · <b>{{ sec.total }}</b> recurso{{ sec.total|pluralize }}</p>
     </header>
-    <div class="cat-rail-wrap" data-rail>
-      <ul class="cat-rail" tabindex="0" aria-label="Recursos de {{ row.tile.name }}">
-        {% for r in row.items %}<li>{% include "catalog/partials/card.html" %}</li>{% endfor %}
-        {% if row.more %}<li class="cat-endcard"><a href="?software={{ row.tile.slug }}"><b>+{{ row.more }}</b><span>Ver todo en {{ row.tile.name }}</span></a></li>{% endif %}
+    {% if not sec.shelves %}<ul class="vs-pack" aria-label="Productos de {{ sec.label }}">
+      {% for p in sec.pack %}<li>{% include "catalog/partials/sw_pack_item.html" %}</li>{% endfor %}
+    </ul>{% endif %}
+    {% for title, items in sec.shelves %}
+    <div class="vs-shelf">
+      <h4>{{ title }}</h4>
+      <ul class="vs-cards">
+        {% for p in items %}<li>{% include "catalog/partials/sw_pack_item.html" with card=1 %}</li>{% endfor %}
       </ul>
     </div>
+    {% endfor %}
+    {% for row in sec.rows %}
+    <section class="cat-row d-{{ row.tile.discipline }}" id="sw-{{ row.tile.slug }}" data-family="{{ sec.key }}" aria-labelledby="rowh-{{ row.tile.slug }}">
+      <header class="cat-row-h">
+        {% include "catalog/partials/sw_row_tile.html" with tile=row.tile %}
+        <h3 id="rowh-{{ row.tile.slug }}"><span class="cat-n">{{ forloop.counter|stringformat:"02d" }}</span> {{ row.tile.name }}</h3>
+        <a class="cat-all" href="?software={{ row.tile.slug }}">Ver todo · {{ row.total }}</a>
+      </header>
+      <div class="cat-rail-wrap" data-rail>
+        <ul class="cat-rail" tabindex="0" aria-label="Recursos de {{ row.tile.name }}">
+          {% for r in row.items %}<li>{% include "catalog/partials/card.html" %}</li>{% endfor %}
+          {% if row.more %}<li class="cat-endcard"><a href="?software={{ row.tile.slug }}"><b>+{{ row.more }}</b><span>Ver todo en {{ row.tile.name }}</span></a></li>{% endif %}
+        </ul>
+      </div>
+    </section>
+    {% endfor %}
   </section>
   {% endfor %}
   <p class="cat-todo"><a class="btn ghost" href="?todo=1">Ver todos los recursos en una lista →</a></p>
 </section>
 {% else %}
 <section class="cat-sec" aria-label="Resultados">
-<h2 class="cat-sh"><span>// 02</span> Resultados{% if software_tile %} · {{ software_tile.name }}{% endif %}</h2>
+<h2 class="cat-sh"><span>// 02</span> Resultados{% if software_tile %} · {{ software_tile.name }}{% endif %}{% if f.general %} · Conocimiento general{% endif %}</h2>
 <div class="cat-grid">
   {% for r in page %}
   {% include "catalog/partials/card.html" %}

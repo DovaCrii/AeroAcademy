@@ -41,8 +41,13 @@ def detail(request, slug):
 
     # Las rutas con mundo propio se muestran con su diseño (docs/MUNDOS.md). Si el mundo no sabe mostrar ese tipo de
     # ruta (p. ej. Civil 3D, estructurada, en el mundo civil hecho para Bentley), se usa uno que sí: nunca una ruta vacía.
+    # Lo mismo si el mundo todavía no tiene diseño (p. ej. «survey» en Topografía 101): mejor el de su tipo con guías e
+    # imágenes que la página genérica.
     world = path.world
-    if world and path.kind not in WORLD_KINDS.get(world, {path.kind}):
+    if world and (
+        path.kind not in WORLD_KINDS.get(world, {path.kind})
+        or not world_template(world, "path.html")
+    ):
         world = KIND_FALLBACK_WORLD.get(path.kind, "")
     if world:
         full = world_template(world, "path.html")

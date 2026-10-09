@@ -1,6 +1,6 @@
 {
-  "name": "Academia LEV Digital 101 · AeroAcademy",
-  "short_name": "LEV Digital 101",
+  "name": "Levantamiento Digital 101 · AeroAcademy",
+  "short_name": "Digital 101",
   "description": "Rutas por empresa de software, certificados, foro y Teo, solo para el equipo en la tailnet.",
   "lang": "es",
   "start_url": "/",
@@ -15,3 +15,4 @@
     {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml"}
   ]
 }
+

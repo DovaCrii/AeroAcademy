@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Diploma · {{ path.title }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'diplomas/diploma.css' %}">{% endblock %}
+{% block body_attrs %} class="dp-page"{% endblock %}
+
+{% block content %}
+<section class="dp-pending">
+  <img src="{% static 'game/teo/teo-thinking.svg' %}" alt="">
+  <h1>Aún no hay diploma</h1>
+  {% if own %}<p>Nala lo revisa cuando completes <b>{{ path.title }}</b> al 100 %: todas las misiones marcadas y todas las preguntas acertadas.</p>
+  {% else %}<p><b>{{ owner.name }}</b> todavía no completa <b>{{ path.title }}</b>.</p>{% endif %}
+  <p><a class="btn" href="/rutas/{{ path.slug }}/">Volver a la ruta</a></p>
+</section>
+{% endblock %}

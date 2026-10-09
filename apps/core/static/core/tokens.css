@@ -58,7 +58,7 @@
   --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 
   /* acento por disciplina (texto AA sobre papel; en oscuro se aclaran) */
-  --d-arq:#0B7FAE; --d-civ:#946500; --d-top:#4A7A00; --d-mec:#C92A37; --d-cap:#0F8579;
+  --d-arq:#0B7FAE; --d-civ:#946500; --d-top:#4A7A00; --d-mec:#C92A37; --d-cap:#0F8579; --d-doc:#B4470F; --d-kno:#6B3FD1;
   --f-arq:#4CC9F0; --f-civ:#FFC93C; --f-top:#8AC926; --f-mec:#E63946; --f-cap:#2EC4B6;
   color-scheme:light;
 }
@@ -76,7 +76,7 @@
     --shadow-1:0 1px 2px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.25);
     --shadow-2:0 2px 8px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.4);
     --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
-    --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB;
+    --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB; --d-doc:#FFA66B; --d-kno:#C4B5FD;
   --btn:#F3F6FB; --on-btn:#061325;
     --elev-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
     --surface-tint:linear-gradient(160deg,color-mix(in srgb,var(--sheet) 86%,#1E8CFF),var(--sheet) 60%);
@@ -97,10 +97,11 @@
   --shadow-1:0 1px 2px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.25);
   --shadow-2:0 2px 8px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.4);
   --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
-  --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB;
+  --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB; --d-doc:#FFA66B; --d-kno:#C4B5FD;
   --btn:#F3F6FB; --on-btn:#061325;
   --elev-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
   --surface-tint:linear-gradient(160deg,color-mix(in srgb,var(--sheet) 86%,#1E8CFF),var(--sheet) 60%);
   --shadow-3:0 4px 12px rgba(0,0,0,.45),0 30px 64px rgba(0,0,0,.55);
   color-scheme:dark;
 }
+

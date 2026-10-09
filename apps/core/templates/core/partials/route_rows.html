@@ -1,0 +1,7 @@
+{% load static %}<ul class="w-rl">
+  {% for p in d.paths %}
+  <li{% if p.icon %} class="has-t"{% endif %}>{% if p.icon %}<img class="w-rl-t" src="{% static 'core/img/software/'|add:p.icon|add:'.svg' %}" alt="" width="40" height="40">{% endif %}<div><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a><small>{{ p.vendor.name }}</small></div><span class="w-pill on">Activa</span></li>
+  {% empty %}
+  <li class="w-rl-empty"><div>Ruta por definir con el equipo<small><a href="{% url 'community:thread_new' %}">Propón la primera ruta de {{ d.label }} en el foro →</a><a href="{% url 'catalog:resources' %}?q={{ d.label|urlencode }}">Ver cursos en el catálogo</a></small></div><span class="w-pill soon">Próxima</span></li>
+  {% endfor %}
+</ul>

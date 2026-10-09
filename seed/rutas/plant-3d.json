@@ -1,0 +1,413 @@
+{
+  "_nota": "Ruta AutoCAD Plant 3D para Mecanica: solo lo esencial. Autodesk Learning solo publica tutoriales cortos de Plant 3D (no hay curso largo ni certificacion propia), asi que la ruta es corta. URLs revisadas el 2026-10-09 en el navegador. Los titulos de recurso son la clave en la base: no cambiarlos. Las keys son estables: agregar siempre al final. Mundo 'mechanical'. Las guias usan la baldosa 'autocad' porque no existe baldosa propia de Plant 3D en apps/catalog/software.py.",
+  "slug": "plant-3d",
+  "title": "Ruta AutoCAD Plant 3D",
+  "program": "Plantas de proceso · AutoCAD Plant 3D",
+  "platform": "autodesk-learning",
+  "kind": "structured",
+  "vendor": "autodesk",
+  "products": [
+    "plant-3d"
+  ],
+  "disciplines": [
+    "mecanica"
+  ],
+  "world": "mechanical",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Entorno",
+      "title": "Entorno e instalación",
+      "estimated_hours": "1 h",
+      "audience": "Mecánica; antes, haber hecho la ruta AutoCAD",
+      "goal": "Instalar el toolset, conocer sus partes (P&ID y modelo 3D) y ver cómo se conectan.",
+      "guide": {
+        "title": "Guía rápida · Entorno",
+        "software": "plant-3d",
+        "do": [
+          "Mira el tutorial del toolset para entender cómo se conectan P&ID, modelo 3D y entregables.",
+          "Instala el toolset siguiendo el tutorial de instalación.",
+          "Abre el *Project Manager* y reconoce un proyecto de *Plant 3D*."
+        ],
+        "commands": [
+          "*Project Manager*",
+          "*P&ID*",
+          "*Plant 3D*"
+        ],
+        "mistakes": [
+          "Trabajar sin un proyecto de Plant 3D: los dibujos sueltos no comparten datos.",
+          "Saltarse la ruta AutoCAD: Plant 3D asume capas, XREF y layouts conocidos."
+        ],
+        "essential": "AutoCAD Plant 3D toolset"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AutoCAD Plant 3D toolset",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/autocad-plant-3d-toolset",
+          "description": "Lista curada de 8 tutoriales: instalación, P&ID, accesorios en línea, mapeo de propiedades, tuberías, isométricos y ortográficos. Es el hilo de toda la ruta.",
+          "tags": ["Collection", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Installing the AutoCAD Plant 3D Toolset",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/installing-the-autocad-plant-3d-toolset",
+          "description": "Tutorial de 2 minutos: instalar el toolset.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 2,
+          "title": "The AutoCAD toolsets Quick Start Guides",
+          "url": "https://www.autodesk.com/learn/ondemand/collection/the-autocad-toolsets-quick-start-guides",
+          "description": "Colección de 8 guías de inicio de los toolsets de AutoCAD, incluido Plant 3D.",
+          "tags": ["Collection", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Instalar el toolset de *Plant 3D*"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Abrir un proyecto en el *Project Manager* y reconocer sus dibujos P&ID y 3D"
+        }
+      ],
+      "mastery_signals": [
+        "Explicas qué dibujo pertenece a P&ID y cuál al modelo 3D"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "¿Qué conviene dominar antes de entrar a Plant 3D?",
+          "options": [
+            "La base de AutoCAD (capas, XREF, layouts)",
+            "Solo Civil 3D",
+            "Nada en particular"
+          ],
+          "answer": 0,
+          "explanation": "Plant 3D es un toolset de AutoCAD: parte de su interfaz y de sus conceptos."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "P&ID",
+      "title": "Diagramas P&ID",
+      "estimated_hours": "1 h",
+      "audience": "Mecánica y procesos",
+      "goal": "Entender la simbología del P&ID y enlazar sus propiedades con los objetos del modelo 3D, ingresando los datos una sola vez.",
+      "guide": {
+        "title": "Guía rápida · P&ID",
+        "software": "plant-3d",
+        "do": [
+          "Revisa la simbología del P&ID y cómo la estándar del proyecto cambia los símbolos.",
+          "Dibuja líneas y equipos del P&ID desde la *Tool Palette*.",
+          "Mapea las propiedades del símbolo a los objetos del modelo 3D."
+        ],
+        "commands": [
+          "*P&ID*",
+          "*Tool Palette*",
+          "*Properties*",
+          "*Data Manager*"
+        ],
+        "mistakes": [
+          "Dibujar símbolos como bloques sueltos: no llevan datos.",
+          "Cargar el mismo dato dos veces, en P&ID y en 3D, en vez de mapearlo."
+        ],
+        "essential": "P&ID symbology in Plant 3D"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "P&ID symbology in Plant 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/p-and-id-symbology-in-plant-3d",
+          "description": "Tutorial de 3 minutos: cómo los estándares cambian la apariencia de los símbolos.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Map P&ID symbol properties to Plant 3D objects",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/map-p-and-id-symbol-properties-to-plant-3d-objects",
+          "description": "Tutorial de 3 minutos: ingresar el dato una vez y compartirlo en todo el modelo.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Reconocer la simbología del P&ID del proyecto"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Dibujar un P&ID simple con equipos y líneas"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Mapear propiedades de un símbolo P&ID a un objeto 3D"
+        }
+      ],
+      "mastery_signals": [
+        "Un cambio de dato en el P&ID aparece en el modelo 3D sin reescribirlo"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "¿Para qué se mapean las propiedades de un símbolo P&ID?",
+          "options": [
+            "Para ingresar el dato una vez y compartirlo con el modelo 3D",
+            "Para cambiar el color del símbolo",
+            "Para imprimir más rápido"
+          ],
+          "answer": 0,
+          "explanation": "El mapeo evita duplicar datos entre el P&ID y los objetos 3D."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Tuberías 3D",
+      "title": "Modelo 3D de tuberías",
+      "estimated_hours": "1 h",
+      "audience": "Mecánica y diseño de piping",
+      "goal": "Trazar tuberías en 3D con *Pipe layouts* y colocar accesorios en línea (válvulas, reducciones).",
+      "guide": {
+        "title": "Guía rápida · Tuberías 3D",
+        "software": "plant-3d",
+        "do": [
+          "Traza las líneas de tubería desde la *Tool Palette* con la especificación (*Spec*) del proyecto.",
+          "Agrega accesorios en línea (válvulas y otros) sobre la tubería.",
+          "Revisa el modelo desde varias vistas antes de pasar a isométricos."
+        ],
+        "commands": [
+          "*Spec*",
+          "*Tool Palette*",
+          "*Inline accessories*"
+        ],
+        "mistakes": [
+          "Trazar con una especificación distinta a la del proyecto.",
+          "Colocar accesorios con bloques sueltos: no aparecen en los isométricos."
+        ],
+        "essential": "Pipe layouts in a Plant 3D model"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Pipe layouts in a Plant 3D model",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/pipe-layouts-in-a-plant-3d-model",
+          "description": "Tutorial de 5 minutos: trazado de tuberías en el modelo 3D.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Inline accessories in Plant 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/inline-accessories-in-plant-3d",
+          "description": "Tutorial de 3 minutos: accesorios en línea.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Trazar una línea de tubería 3D con la *Spec* del proyecto"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Agregar accesorios en línea a la tubería"
+        }
+      ],
+      "mastery_signals": [
+        "Todas las tuberías del modelo usan la especificación del proyecto"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "¿Por qué los accesorios deben ser objetos de Plant 3D y no bloques sueltos?",
+          "options": [
+            "Porque así aparecen en los isométricos y listados",
+            "Porque pesan menos",
+            "Por el color"
+          ],
+          "answer": 0,
+          "explanation": "Los objetos de Plant 3D llevan datos y alimentan isométricos y listas de materiales."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Isométricos",
+      "title": "Isométricos y ortográficos",
+      "estimated_hours": "1 h",
+      "audience": "Mecánica y dibujo",
+      "goal": "Generar isométricos de producción y vistas ortográficas en planta desde el modelo, que se actualizan solos cuando el modelo cambia.",
+      "guide": {
+        "title": "Guía rápida · Isométricos y ortográficos",
+        "software": "plant-3d",
+        "do": [
+          "Genera los isométricos de producción desde el modelo con *Isometric*.",
+          "Crea las vistas ortográficas en planta (*Orthographic*) para los planos de ejecución.",
+          "Si el modelo cambia, vuelve a generar o actualizar la vista en vez de editarla a mano."
+        ],
+        "commands": [
+          "*Isometric*",
+          "*Orthographic*",
+          "*Update View*"
+        ],
+        "mistakes": [
+          "Editar a mano un isométrico generado: el siguiente cambio del modelo lo borra.",
+          "Dimensionar sobre un isométrico: no está a escala; se acota en vistas ortográficas."
+        ],
+        "essential": "Production isometric views in Plant 3D"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Production isometric views in Plant 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/production-isometric-views-in-plant-3d",
+          "description": "Tutorial de 3 minutos: cambias el modelo una vez y ves el resultado en varias vistas.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        },
+        {
+          "order": 1,
+          "title": "Orthographic plan views in Plant 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/orthographic-plan-views-in-plant-3d",
+          "description": "Tutorial de 4 minutos: vistas ortográficas para producir planos.",
+          "tags": ["Tutorial", "Oficial", "Esencial"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Generar un isométrico de producción desde el modelo"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Crear una vista ortográfica en planta del modelo"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Cambiar el modelo y actualizar el isométrico y la ortográfica"
+        }
+      ],
+      "mastery_signals": [
+        "Los isométricos y las ortográficas se regeneran sin retocarlos a mano"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "¿Qué pasa si editas a mano un isométrico generado y luego cambia el modelo?",
+          "options": [
+            "El cambio manual se pierde al regenerar",
+            "Se actualiza el modelo",
+            "No pasa nada"
+          ],
+          "answer": 0,
+          "explanation": "Los isométricos son vistas del modelo: la edición se hace en el modelo y se regenera."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Colaboración",
+      "title": "Colaboración entre disciplinas",
+      "estimated_hours": "1 a 2 h",
+      "audience": "Quien coordina Plant 3D con otras disciplinas",
+      "goal": "Compartir el modelo de planta con otras disciplinas sin perder el control de versiones.",
+      "guide": {
+        "title": "Guía rápida · Colaboración",
+        "software": "plant-3d",
+        "do": [
+          "Haz el curso de *Design Collaboration* y revisa cómo se comparte un modelo de Plant 3D.",
+          "Define con el equipo qué se publica y dónde."
+        ],
+        "commands": [
+          "*Design Collaboration*",
+          "*Desktop Connector*"
+        ],
+        "mistakes": [
+          "Compartir copias del proyecto por correo en vez de un entorno común."
+        ],
+        "essential": "An introduction to Design Collaboration"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "An introduction to Design Collaboration",
+          "url": "https://www.autodesk.com/learn/ondemand/course/an-introduction-to-design-collaboration",
+          "description": "Curso de 1 h 10 min que abarca Revit, Civil 3D y Plant 3D con Forma y Desktop Connector.",
+          "tags": ["Course", "Oficial", "Complementario"]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "(Opcional) Completar el curso de Design Collaboration",
+          "completed_by_resource": "An introduction to Design Collaboration"
+        }
+      ],
+      "mastery_signals": [
+        "Sabes dónde vive la versión vigente del proyecto de planta"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "¿Qué conviene usar para compartir un proyecto de planta entre disciplinas?",
+          "options": [
+            "Un entorno común de datos",
+            "Copias por correo",
+            "Un pendrive"
+          ],
+          "answer": 0,
+          "explanation": "Un entorno común mantiene una sola versión vigente."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "P&ID",
+      "location": "Plant 3D",
+      "meaning": "Diagrama de tuberías e instrumentación: el esquema del proceso."
+    },
+    {
+      "term": "Spec",
+      "location": "Plant 3D",
+      "meaning": "Especificación de tuberías del proyecto: define qué piezas se pueden usar."
+    },
+    {
+      "term": "Isometric",
+      "location": "Plant 3D",
+      "meaning": "Dibujo de producción de una línea de tubería; no está a escala."
+    },
+    {
+      "term": "Orthographic",
+      "location": "Plant 3D",
+      "meaning": "Vista en planta, elevación o sección del modelo; sí está a escala y se actualiza con el modelo."
+    }
+  ],
+  "certification_goals": [],
+  "description": "Lo esencial de AutoCAD Plant 3D para Mecánica: del P&ID al modelo 3D de tuberías, y de ahí a isométricos y planos ortográficos. Parte de la base de AutoCAD.",
+  "intro": {
+    "title": "Del P&ID al isométrico",
+    "text": "Ruta corta de Plant 3D con los tutoriales oficiales de Autodesk Learning. Antes, haz la ruta AutoCAD: Plant 3D es un toolset de AutoCAD."
+  },
+  "flow": [
+    {
+      "title": "P&ID",
+      "text": "Esquema de proceso"
+    },
+    {
+      "title": "Modelo 3D",
+      "text": "Tuberías y accesorios"
+    },
+    {
+      "title": "Planos",
+      "text": "Isométricos y ortográficas"
+    }
+  ]
+}

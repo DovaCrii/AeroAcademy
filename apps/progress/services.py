@@ -25,6 +25,15 @@ def percent(done: int, total: int) -> int:
 # --- escritura ---
 
 
+def _diploma(person, path):
+    """Si la ruta es nuestra y quedó al 100 %, emite el diploma interno (idempotente)."""
+    from apps.diplomas import (
+        services as diplomas,
+    )  # import tardío: diplomas usa credentials, que usa progress
+
+    diplomas.on_progress(person, path)
+
+
 def set_milestone(person, milestone, checked: bool, *, credential=None) -> bool:
     """Marca o desmarca una misión. Idempotente: devuelve si cambió algo.
 
@@ -42,6 +51,7 @@ def set_milestone(person, milestone, checked: bool, *, credential=None) -> bool:
             game.on_milestone(
                 person, milestone
             )  # con credencial, la sincronía la hace quien verifica
+            _diploma(person, milestone.path)
         return created
     existing = MilestoneCheck.objects.filter(person=person, milestone=milestone)
     if existing.filter(source="credential").exists():
@@ -49,6 +59,7 @@ def set_milestone(person, milestone, checked: bool, *, credential=None) -> bool:
     deleted, _ = existing.delete()
     if deleted:
         game.on_milestone(person, milestone)
+        _diploma(person, milestone.path)  # no quita el diploma ya emitido
     return bool(deleted)
 
 
@@ -64,6 +75,7 @@ def answer_question(person, question, choice: int) -> QuizAnswer:
         defaults={"selected_index": choice, "answered_at": timezone.now()},
     )
     game.on_quiz(person, question, choice == question.answer_index)
+    _diploma(person, question.path)
     return answer
 
 
@@ -194,6 +206,12 @@ def _waypoints(chapters, marks, me_id):
     return {"width": width, "height": 330, "points": points, "segments": segments}
 
 
+def _diploma_link(person, path):
+    from apps.diplomas import services as diplomas
+
+    return diplomas.route_link(person, path)
+
+
 def world_context(person, path, level_code=None):
     """Todo lo que necesita la ruta interactiva de un mundo (docs/MUNDOS.md)."""
     chapters = path_services.path_detail(path)
@@ -271,4 +289,5 @@ def world_context(person, path, level_code=None):
         "goal": goal.certification_goal if goal else "",
         "products": path.products.all(),
         "disciplines": path.disciplines.all(),
+        "diploma_url": _diploma_link(person, path),
     }

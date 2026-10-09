@@ -1,9 +1,10 @@
-{% load core_extras %}{% if guide %}
+{% load core_extras static %}{% if guide %}
 <section class="gd gd-{{ flavour }}" aria-label="Guía rápida del nivel {{ code|upper }}">
   <header class="gd-head">
     <span class="gd-no">// GUÍA</span>
     <h4>{{ guide.title|default:"Guía rápida" }}</h4>
   </header>
+  {% if images %}<div class="gd-figs">{% for img in images %}<figure class="gd-fig"><img src="{% static img %}" alt="" loading="lazy"></figure>{% endfor %}</div>{% endif %}
   <div class="gd-body">
     <div class="gd-col">
       <h5>Qué hacer</h5>

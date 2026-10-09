@@ -12,7 +12,7 @@ from django.db.models import Sum
 
 from apps.credentials.models import Credential
 from apps.notifications import services as notifications
-from apps.paths.models import LearningPath, Milestone, QuizQuestion
+from apps.paths.models import ExternalCourse, LearningPath, Level, Milestone, QuizQuestion
 from apps.progress.models import MilestoneCheck, QuizAnswer
 
 from . import rules
@@ -162,12 +162,148 @@ def _structured_state(person, path):
     }
 
 
-def path_percent(person, path) -> int:
-    if path.kind == LearningPath.Kind.EXTERNAL_TRACK:
-        from apps.progress import external  # import tardío: external usa progress.services
+def _percent(done: int, total: int) -> int:
+    # Redondeo clásico (12,5 → 13), igual que `progress.services.percent`.
+    return int(100 * done / total + 0.5) if total else 0
 
-        return external.external_context(person, path)["stats"]["pct"]
-    return _structured_state(person, path)["pct"]
+
+def path_percents(person, paths) -> dict:
+    """pk de ruta → avance (%) de la persona, para muchas rutas a la vez.
+
+    Cuesta un número fijo de consultas (4 para las estructuradas, 2 más para las externas) sin importar
+    cuántas rutas, capítulos, misiones o cursos haya: trae todo junto y calcula en Python.
+    Debe coincidir con `_structured_state(...)["pct"]` y con `external_context(...)["stats"]["pct"]`.
+    """
+    paths = list(paths)
+    out = {p.pk: 0 for p in paths}
+    structured = [p.pk for p in paths if p.kind != LearningPath.Kind.EXTERNAL_TRACK]
+    external = [p.pk for p in paths if p.kind == LearningPath.Kind.EXTERNAL_TRACK]
+
+    if structured:
+        checked = set(
+            MilestoneCheck.objects.filter(
+                person=person, milestone__path__in=structured
+            ).values_list("milestone_id", flat=True)
+        )
+        answers = dict(
+            QuizAnswer.objects.filter(person=person, question__path__in=structured).values_list(
+                "question_id", "selected_index"
+            )
+        )
+        totals = {pk: [0, 0] for pk in structured}  # ruta → [hechas, total]
+        for mid, pid in Milestone.objects.filter(path__in=structured, retired=False).values_list(
+            "id", "path_id"
+        ):
+            totals[pid][1] += 1
+            totals[pid][0] += mid in checked
+        for qid, pid, answer in QuizQuestion.objects.filter(
+            path__in=structured, retired=False
+        ).values_list("id", "path_id", "answer_index"):
+            totals[pid][1] += 1
+            totals[pid][0] += answers.get(qid) == answer
+        for pid, (done, total) in totals.items():
+            out[pid] = _percent(done, total)
+
+    if external:
+        from apps.credentials import services as credential_services
+
+        states = credential_services.states_by_resource(person)
+        verified = Credential.Status.VERIFIED
+        by_level = {}  # (ruta, capítulo) → (regla, [(obligatorio, verificado)])
+        for pid, lid, rule, resource_id, required in ExternalCourse.objects.filter(
+            path__in=external, retired=False
+        ).values_list(
+            "path_id", "level_id", "level__completion_rule", "resource_id", "is_required"
+        ):
+            ok = states.get(resource_id, ("",))[0] == verified
+            by_level.setdefault((pid, lid), (rule, []))[1].append((required, ok))
+        totals = {pk: [0, 0] for pk in external}
+        for (pid, _lid), (rule, courses) in by_level.items():
+            if rule == Level.CompletionRule.ANY_ONE:
+                totals[pid][1] += 1
+                totals[pid][0] += any(ok for _, ok in courses)
+            else:
+                required = [ok for req, ok in courses if req]
+                totals[pid][1] += len(required)
+                totals[pid][0] += sum(required)
+        for pid, (done, total) in totals.items():
+            out[pid] = _percent(done, total)
+    return out
+
+
+def path_percent(person, path) -> int:
+    return path_percents(person, [path])[path.pk]
+
+
+def structured_status(person, path) -> dict:
+    """Avance de una ruta estructurada por capítulo (código): misiones y preguntas hechas y totales.
+
+    Cinco consultas fijas. El `pct` coincide con `path_percents` (mismo redondeo; lo retirado no cuenta).
+    """
+    codes = dict(Level.objects.filter(path=path).values_list("id", "code"))
+    rows = {c: {"done": 0, "total": 0, "quiz_done": 0, "quiz_total": 0} for c in codes.values()}
+    checked = set(
+        MilestoneCheck.objects.filter(person=person, milestone__path=path).values_list(
+            "milestone_id", flat=True
+        )
+    )
+    answers = dict(
+        QuizAnswer.objects.filter(person=person, question__path=path).values_list(
+            "question_id", "selected_index"
+        )
+    )
+    for mid, lid in Milestone.objects.filter(path=path, retired=False).values_list(
+        "id", "level_id"
+    ):
+        row = rows[codes[lid]]
+        row["total"] += 1
+        row["done"] += mid in checked
+    for qid, lid, answer in QuizQuestion.objects.filter(path=path, retired=False).values_list(
+        "id", "level_id", "answer_index"
+    ):
+        row = rows[codes[lid]]
+        row["total"] += 1
+        row["quiz_total"] += 1
+        ok = answers.get(qid) == answer
+        row["done"] += ok
+        row["quiz_done"] += ok
+    done = sum(r["done"] for r in rows.values())
+    total = sum(r["total"] for r in rows.values())
+    return {"levels": rows, "pct": _percent(done, total)}
+
+
+class PathContext:
+    """Avance de una persona en las rutas que piden las reglas, con caché (una ruta se consulta una sola vez)."""
+
+    def __init__(self, person):
+        self.person = person
+        self._status = {}
+        self._general = None
+
+    def status(self, slug) -> dict:
+        if slug not in self._status:
+            path = LearningPath.objects.filter(slug=slug).first()
+            if path is None:
+                status = {"levels": {}, "pct": 0}
+            elif path.kind == LearningPath.Kind.EXTERNAL_TRACK:
+                status = {"levels": {}, "pct": path_percent(self.person, path)}
+            else:
+                status = structured_status(self.person, path)
+            self._status[slug] = status
+        return self._status[slug]
+
+    def pct(self, slug) -> int:
+        return self.status(slug)["pct"]
+
+    def general(self) -> list:
+        """Slugs de las rutas de conocimiento general vigentes (datos: una ruta nueva cuenta sola)."""
+        if self._general is None:
+            from apps.catalog import services as catalog
+
+            self._general = list(
+                catalog.general_paths_queryset().order_by("title").values_list("slug", flat=True)
+            )
+        return self._general
 
 
 def sync_progress(person, path):
@@ -281,20 +417,13 @@ def evaluate(person, today: date | None = None) -> list:
     """Recalcula las insignias de la persona. Devuelve las recién ganadas."""
     facts = rules.Facts(person, today)
     _streak_xp(person, facts)
-    paths = {}
-
-    def pct(slug):
-        if slug not in paths:
-            path = LearningPath.objects.filter(slug=slug).first()
-            paths[slug] = path_percent(person, path) if path else 0
-        return paths[slug]
-
+    ctx = PathContext(person)
     held = {pb.badge_id: pb for pb in PersonBadge.objects.filter(person=person)}
     gained = []
     for badge in Badge.objects.filter(retired=False):
         if badge.rule.get("type") == "manual":
             continue
-        ok = rules.check(badge.rule, facts, pct)
+        ok = rules.check(badge.rule, facts, ctx.pct, ctx)
         if ok and badge.pk not in held:
             gained.append(PersonBadge.objects.create(person=person, badge=badge))
         elif not ok and badge.pk in held:
@@ -347,8 +476,10 @@ def available_titles(person, level=None):
     badges = unlocked_badges(person)
     out = []
     for title in Title.objects.filter(retired=False).select_related("badge"):
-        if title.badge_id:
-            if title.badge.slug in badges:
+        if title.badge_id:  # lo da una insignia; si además trae carrera, solo esa carrera lo ve
+            if title.badge.slug in badges and (
+                not title.character_class or title.character_class == person.character_class
+            ):
                 out.append(title)
         elif title.min_level <= level and (
             not title.character_class or title.character_class == person.character_class

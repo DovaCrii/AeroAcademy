@@ -79,12 +79,14 @@ def _next_for_external(person, path):
 def suggested_mission(person, pcts=None):
     """La próxima acción útil: sigue la campaña con más avance que aún no termina; si no hay, la primera."""
     best = None
-    for path in _visible_paths(person):
-        pct = (
-            pcts[path.pk]
-            if pcts is not None and path.pk in pcts
-            else game.path_percent(person, path)
-        )
+    paths = list(_visible_paths(person))
+    if pcts is None:
+        pcts = game.path_percents(person, paths)
+    else:
+        missing = [p for p in paths if p.pk not in pcts]
+        pcts = {**pcts, **(game.path_percents(person, missing) if missing else {})}
+    for path in paths:
+        pct = pcts[path.pk]
         if pct >= 100:
             continue
         key = (pct > 0, pct)

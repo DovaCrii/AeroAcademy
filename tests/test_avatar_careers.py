@@ -328,6 +328,8 @@ def test_every_career_has_a_title_ladder_and_a_class_entry():
     for slug, career in careers.CAREERS.items():
         entry = next(c for c in data["classes"] if c["slug"] == slug)
         assert entry["name"] == career["name"] and entry["archetype"] == career["title"]
-        titles = [t for t in data["titles"] if t.get("character_class") == slug]
+        titles = [  # la escalera es por nivel; los títulos de una insignia con carrera van aparte
+            t for t in data["titles"] if t.get("character_class") == slug and not t.get("badge")
+        ]
         assert len(titles) >= 3, slug
         assert len({t["min_level"] for t in titles}) >= 3, slug

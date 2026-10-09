@@ -17,7 +17,7 @@ from apps.team.models import SharedCheck
 
 pytestmark = pytest.mark.django_db
 PDF = b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n%%EOF\n" + b"x" * 200
-FORMA, BENTLEY = "forma-revit", "bentley-learn"
+FORMA, BENTLEY = "forma-coordinacion", "bentley-learn"
 
 
 @pytest.fixture(autouse=True)

@@ -1,7 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="TBC">
-  <rect x="5" y="6" width="56" height="56" rx="15" fill="#1B2A41" opacity=".16"/>
-  <path d="M17 3.5 C27 2.2 40 3.2 47 3.4 C57 3.6 60.7 8 60.6 17 C60.9 27 60.2 38 60.5 47 C60.4 56 56 60.6 47 60.6 C38 61 26 60.2 17 60.5 C8 60.7 3.4 56 3.5 47 C3.2 38 3.8 27 3.4 17 C3.6 8 8 3.6 17 3.5 Z" fill="#0EA5E9" stroke="#1B2A41" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M9 13 C20 10.5 38 11 55 12.5" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M32 14 L50 48 H14 z M32 24 V40" fill="none" stroke="#FFFFFF" stroke-opacity=".28" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="32" y="39.9" text-anchor="middle" font-family="'Segoe Print','Comic Sans MS','Segoe UI',Arial,sans-serif" font-weight="800" font-size="22" letter-spacing="-.5" fill="#FFFFFF">TBC</text>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F5B02E"/><stop offset="1" stop-color="#B86A06"/></linearGradient>
+    <clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath>
+  </defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <g clip-path="url(#t)"><rect width="64" height="64" fill="url(#g)"/><path d="M0 0H64V22C44 16 20 18 0 28Z" fill="#fff" opacity=".12"/></g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.2"/>
+  <g fill="none" stroke="#2A1A00" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 36L20 54M32 36L44 54M32 36V54"/><rect x="23" y="14" width="18" height="16" rx="3" fill="#2A1A00" fill-opacity=".22"/><circle cx="32" cy="22" r="4"/><path d="M32 30V36"/></g>
 </svg>

@@ -1,0 +1,21 @@
+{% extends "accounts/_public.html" %}
+{% load static %}
+
+{% block title %}Bienvenida{% endblock %}
+
+{% block content %}
+<section class="pub-hero">
+  <div class="pub-copy">
+    <p class="cap">{{ BRAND_PLATFORM }} · academia interna</p>
+    <h1>Levantamiento Digital <em>101</em></h1>
+    <p class="pub-lead">La academia del equipo: rutas de aprendizaje por software (Autodesk, Bentley, Trimble, Esri y más), tu avance, tus certificados guardados con sus vencimientos y un foro para preguntar. Con un toque 8-bit y a Nala, la asistente, como guía.</p>
+    <img class="pub-teo teo-px" src="{% static 'game/teo/teo-neutral.svg' %}" width="88" height="88" alt="Nala, la golden de la academia, saludando">
+  </div>
+
+  <div class="pub-card sheet">
+    <h2>Entrar</h2>
+    {% include "accounts/_login_form.html" %}
+    <p class="pub-invite"><b>¿Te invitaron?</b> Abre el enlace que te mandó el admin.</p>
+  </div>
+</section>
+{% endblock %}

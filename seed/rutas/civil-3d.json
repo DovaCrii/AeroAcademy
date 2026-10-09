@@ -1,5 +1,5 @@
 {
-  "_nota": "Ruta curada de Civil 3D: solo lo importante. Todas las URLs se revisaron el 2026-10-09 en el navegador (autodesk.com responde 403 a scripts). Los recursos 'Esencial' son el mínimo de la ruta; los 'Complementario' son práctica o refuerzo. Los títulos de recurso son la clave en la base: no cambiarlos. Las keys son estables: agregar siempre al final.",
+  "_nota": "Ruta curada de Civil 3D: solo lo importante. Disciplinas (2026-10-09, decision del responsable): Civil-Estructural, Topografia, Arquitectura y Mecanica; no Captura / RPA.Todas las URLs se revisaron el 2026-10-09 en el navegador (autodesk.com responde 403 a scripts). Los recursos 'Esencial' son el mínimo de la ruta; los 'Complementario' son práctica o refuerzo. Los títulos de recurso son la clave en la base: no cambiarlos. Las keys son estables: agregar siempre al final.",
   "slug": "civil-3d",
   "title": "Ruta Civil 3D",
   "program": "Infraestructura vial · Civil 3D",
@@ -12,7 +12,9 @@
   ],
   "disciplines": [
     "civil-estructural",
-    "topografia"
+    "topografia",
+    "arquitectura",
+    "mecanica"
   ],
   "world": "civil",
   "levels": [

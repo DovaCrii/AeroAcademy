@@ -1,6 +1,7 @@
 """Mosaicos de software: a qué producto pertenece un recurso o una ruta.
 
-Los mosaicos son monogramas originales (`core/img/software/<slug>.svg`), no logotipos de fabricantes.
+Los mosaicos son originales (`core/img/software/<slug>.svg`), no logotipos de fabricantes. Hay dos familias:
+Autodesk (baldosa con letra grande y banda de código) y Bentley (baldosa azul con pictograma blanco).
 Cada uno lleva además la disciplina a la que se asocia, que pinta el acento de la tarjeta.
 """
 
@@ -10,13 +11,14 @@ from dataclasses import dataclass
 from .models import Platform, Resource
 
 # Acentos por disciplina (los colores viven en el CSS del catálogo y de los mundos).
-ARQ, CIV, TOP, MEC, CAP = "arq", "civ", "top", "mec", "cap"
+ARQ, CIV, TOP, MEC, CAP, TRA = "arq", "civ", "top", "mec", "cap", "tra"
 DISCIPLINE_LABEL = {
     ARQ: "Arquitectura",
     CIV: "Civil",
     TOP: "Topografía",
     MEC: "Mecánica",
     CAP: "Captura",
+    TRA: "Transversal",
 }
 DISCIPLINE_BY_SLUG = {
     "arquitectura": ARQ,
@@ -24,38 +26,62 @@ DISCIPLINE_BY_SLUG = {
     "topografia": TOP,
     "mecanica": MEC,
     "captura-rpa": CAP,
+    "transversal": TRA,
 }
 
 
 @dataclass(frozen=True)
 class Tile:
-    code: str  # monograma que se ve en el mosaico
+    code: str  # código corto (Autodesk: banda inferior del mosaico)
     slug: str  # nombre del archivo SVG
     name: str
     discipline: str
+    family: str = "internal"  # familia visual: autodesk, bentley o internal
 
     @property
     def static_path(self):
         return f"core/img/software/{self.slug}.svg"
 
 
+AUTODESK, BENTLEY, INTERNAL = "autodesk", "bentley", "internal"
+FAMILY_LABEL = {
+    AUTODESK: "Autodesk",
+    BENTLEY: "Bentley Systems",
+    INTERNAL: "Topografía, GIS y captura",
+}
+
 TILES = {
     t.slug: t
     for t in (
-        Tile("Rv", "revit", "Revit", ARQ),
-        Tile("C3D", "civil3d", "Civil 3D", CIV),
-        Tile("ACAD", "autocad", "AutoCAD", MEC),
-        Tile("Fm", "forma", "Forma", ARQ),
-        Tile("ACC", "acc", "Autodesk Docs / ACC", ARQ),
-        Tile("Dy", "dynamo", "Dynamo", ARQ),
-        Tile("MS", "microstation", "MicroStation", CIV),
-        Tile("ORD", "openroads", "OpenRoads Designer", CIV),
-        Tile("OBr", "openbridge", "OpenBridge", CIV),
-        Tile("OBD", "openbuildings", "OpenBuildings Designer", ARQ),
-        Tile("RC", "recap", "ReCap", CAP),
-        Tile("Nw", "navisworks", "Navisworks", MEC),
+        # Autodesk: baldosa con letra grande y banda de código
+        Tile("RVT", "revit", "Revit", ARQ, AUTODESK),
+        Tile("C3D", "civil3d", "Civil 3D", CIV, AUTODESK),
+        Tile("CAD", "autocad", "AutoCAD", TRA, AUTODESK),
+        Tile("FOR", "forma", "Forma", ARQ, AUTODESK),
+        Tile("DOC", "acc", "Autodesk Docs / ACC", ARQ, AUTODESK),
+        Tile("DYN", "dynamo", "Dynamo", ARQ, AUTODESK),
+        Tile("NAV", "navisworks", "Navisworks", MEC, AUTODESK),
+        Tile("RCP", "recap", "ReCap", CAP, AUTODESK),
+        Tile("INF", "infraworks", "InfraWorks", CIV, AUTODESK),
+        Tile("P3D", "plant-3d", "Plant 3D", MEC, AUTODESK),
+        # Bentley: baldosa azul con pictograma blanco
+        Tile("MS", "microstation", "MicroStation", TRA, BENTLEY),
+        Tile("ORD", "openroads", "OpenRoads Designer", CIV, BENTLEY),
+        Tile("OBR", "openbridge", "OpenBridge", CIV, BENTLEY),
+        Tile("OBD", "openbuildings", "OpenBuildings Designer", ARQ, BENTLEY),
+        Tile("OPL", "openplant", "OpenPlant", MEC, BENTLEY),
+        Tile("OFL", "openflows", "OpenFlows", CIV, BENTLEY),
+        Tile("STD", "staad", "STAAD", CIV, BENTLEY),
+        Tile("ITW", "itwin", "iTwin", CIV, BENTLEY),
+        Tile("LRT", "lumenrt", "LumenRT", ARQ, BENTLEY),
+        Tile("PW", "projectwise", "ProjectWise", ARQ, BENTLEY),
+        Tile("ICM", "itwin-capture", "iTwin Capture", CAP, BENTLEY),
+        Tile("SYN", "synchro", "SYNCHRO", CIV, BENTLEY),
+        Tile("DSC", "descartes", "Descartes", CAP, BENTLEY),
+        # Internos
         Tile("TBC", "tbc", "Trimble Business Center", TOP),
         Tile("GIS", "gis", "ArcGIS / GIS", TOP),
+        Tile("RPA", "dgac", "DGAC / RPAS", CAP),
     )
 }
 
@@ -72,6 +98,18 @@ PRODUCT_TILE = {
     "openbuildings": "openbuildings",
     "tbc": "tbc",
     "arcgis-pro": "gis",
+    "plant-3d": "plant-3d",
+    "autocad": "autocad",
+    "openplant": "openplant",
+    "openflows": "openflows",
+    "staad": "staad",
+    "itwin": "itwin",
+    "lumenrt": "lumenrt",
+    "projectwise": "projectwise",
+    "itwin-capture": "itwin-capture",
+    "synchro": "synchro",
+    "descartes": "descartes",
+    "infraworks": "infraworks",
 }
 
 # Palabras del título (en minúsculas) → mosaico. El orden no importa: se ordena por posición en el título.
@@ -79,7 +117,8 @@ TITLE_KEYWORDS = [
     (r"\brevit\b", "revit"),
     (r"bim for (architectural|mep|structural)|^architectural modeling by|bim foundations", "revit"),
     (r"civil 3d|civil3d|bim for civil", "civil3d"),
-    (r"autocad", "autocad"),
+    (r"plant 3d|plant3d", "plant-3d"),
+    (r"autocad(?! plant)", "autocad"),
     (r"\bforma\b(?! data management)", "forma"),
     (r"forma data management|\bdocs\b|autodesk construction cloud|\bacc\b", "acc"),
     (r"dynamo", "dynamo"),
@@ -87,6 +126,17 @@ TITLE_KEYWORDS = [
     (r"openroads|road (designer|modeler)", "openroads"),
     (r"openbridge|bridge modeler", "openbridge"),
     (r"openbuildings|bim modeler", "openbuildings"),
+    (r"openplant", "openplant"),
+    (r"openflows|watergems|sewergems|stormcad", "openflows"),
+    (r"staad", "staad"),
+    (r"itwin capture|contextcapture|context capture", "itwin-capture"),
+    (r"itwin(?! capture)", "itwin"),
+    (r"lumenrt", "lumenrt"),
+    (r"projectwise", "projectwise"),
+    (r"synchro", "synchro"),
+    (r"descartes", "descartes"),
+    (r"infraworks", "infraworks"),
+    (r"dgac|rpas|\bdrones?\b", "dgac"),
     (r"recap", "recap"),
     (r"navisworks", "navisworks"),
     (r"trimble business center|\btbc\b", "tbc"),
@@ -95,7 +145,7 @@ TITLE_KEYWORDS = [
 _COMPILED = [(re.compile(rx), slug) for rx, slug in TITLE_KEYWORDS]
 
 # Plataformas o vendors con un solo producto de referencia: sirven de último recurso.
-VENDOR_FALLBACK = {"esri": "gis", "trimble": "tbc", "bentley": "microstation"}
+VENDOR_FALLBACK = {"esri": "gis", "trimble": "tbc", "bentley": "microstation", "dji": "dgac"}
 VENDOR_BY_PLATFORM = {"bentley-learn": "bentley"}
 PLATFORM_FALLBACK = {"geocom-cursos": "tbc", "esri-training": "gis", "trimble-learning": "tbc"}
 
@@ -150,6 +200,10 @@ def software_for_resource(resource, limit=2):
 def software_for_path(path, limit=4):
     """Mosaicos de una ruta: sus productos (portada y encabezados)."""
     slugs = [PRODUCT_TILE[p.slug] for p in path.products.all() if p.slug in PRODUCT_TILE]
+    if (
+        not slugs
+    ):  # rutas internas (p. ej. el diploma RPAS) sin productos de catálogo: el título manda
+        return tiles_from_title(path.title, limit)
     return [TILES[s] for s in dict.fromkeys(slugs)][:limit]
 
 
@@ -162,6 +216,11 @@ def discipline_key(path):
         ("tbc", TOP),
         ("revit", ARQ),
         ("forma", ARQ),
+        ("openbuildings", ARQ),
+        ("plant-3d", MEC),
+        ("openplant", MEC),
+        ("autocad", TRA),
+        ("microstation", TRA),
     ):
         if slug in products:
             return key
@@ -222,9 +281,16 @@ def type_label(resource):
 # ---- filas por producto del catálogo ------------------------------------------------------------------------
 
 ROW_ORDER = [
-    "revit", "civil3d", "forma", "autocad", "acc", "dynamo", "microstation", "openroads",
-    "openbridge", "openbuildings", "recap", "navisworks", "tbc", "gis",
+    "revit", "civil3d", "forma", "autocad", "plant-3d", "acc", "dynamo", "navisworks", "recap", "infraworks",
+    "microstation", "openroads", "openbridge", "openbuildings", "openplant", "openflows", "staad",
+    "itwin", "lumenrt", "projectwise", "itwin-capture", "synchro", "descartes",
+    "tbc", "gis", "dgac",
 ]  # fmt: skip
+
+# Vitrinas de cada fabricante (estilo «descargas de software»): destacados y novedades curados;
+# «más usados» sale de cuántos recursos tiene cada producto.
+FEATURED = {BENTLEY: ["microstation", "openroads", "openbridge", "openbuildings"]}
+NEWEST = {BENTLEY: ["itwin", "itwin-capture", "openflows", "lumenrt"]}
 
 
 def group_by_software(resources, per_row=8):
@@ -250,6 +316,51 @@ def group_by_software(resources, per_row=8):
                 }
             )
     return rows
+
+
+def vendor_sections(rows):
+    """Agrupa las filas por fabricante: [{key, label, rows, pack, shelves}].
+
+    `pack` son todos los mosaicos de la familia (con su cantidad de recursos) y `shelves` las vitrinas
+    «Destacados / Nuevos / Más usados» (solo Bentley, como su página de descargas). Sin filas, no hay sección.
+    """
+    totals = {r["tile"].slug: r["total"] for r in rows}
+    sections = []
+    for family in (AUTODESK, BENTLEY, INTERNAL):
+        fam_rows = [r for r in rows if r["tile"].family == family]
+        if not fam_rows:
+            continue
+        pack = [
+            {"tile": TILES[s], "total": totals.get(s, 0)}
+            for s in ROW_ORDER
+            if TILES[s].family == family
+        ]
+        shelves = []
+        if family in FEATURED:
+            used = sorted(pack, key=lambda p: -p["total"])
+            by_slug = {p["tile"].slug: p for p in pack}
+            shelves = [
+                ("Destacados", [by_slug[s] for s in FEATURED[family]]),
+                ("Nuevos", [by_slug[s] for s in NEWEST[family]]),
+                ("Más usados", [p for p in used if p["total"]][:4]),
+            ]
+        sections.append(
+            {
+                "key": family,
+                "label": FAMILY_LABEL[family],
+                "rows": fam_rows,
+                "pack": pack,
+                "shelves": shelves,
+                "total": sum(r["total"] for r in fam_rows),
+            }
+        )
+    return sections
+
+
+def vendor_key(path):
+    """Familia visual de una ruta: la de su fabricante (autodesk, bentley, internal)."""
+    slug = getattr(getattr(path, "vendor", None), "slug", "")
+    return slug if slug in (AUTODESK, BENTLEY) else INTERNAL
 
 
 def resource_ids_for_software(resources, slug):

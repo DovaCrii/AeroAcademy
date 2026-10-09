@@ -60,7 +60,7 @@ def index(request):
             "qs_nosort": nosort.urlencode(),
             "sorts": forum.SORTS,
             "qs": query.urlencode(),
-            "paths": path_services.visible_paths(request.user),
+            "paths": path_services.visible_paths(request.user).select_related("vendor"),
         },
     )
 

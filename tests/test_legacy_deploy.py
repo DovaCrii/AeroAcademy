@@ -108,7 +108,7 @@ def legacy_db(tmp_path):
     con.executemany(
         "INSERT INTO shared VALUES(?,?,?)",
         [
-            ("kit0-1", "ana@lev.cl", 1_700_000_000_000),
+            ("kit0-0", "ana@lev.cl", 1_700_000_000_000),
             ("ph1-0", "luis@lev.cl", 1_700_000_100_000),
             ("kit9-9", "ana@lev.cl", 1),
         ],
@@ -134,7 +134,7 @@ def test_import_creates_people_progress_notes_and_shared(legacy_db):
         QuizAnswer.objects.filter(person=ana).count() == 1
         and PathGoal.objects.filter(person=ana).exists()
     )
-    assert SharedCheck.objects.get(item__key="kit0-1").checked_by == ana
+    assert SharedCheck.objects.get(item__key="kit0-0").checked_by == ana
     skipped = " | ".join(summary["skipped"])
     for expected in ("zz-t99", "zz-q9", "kit9-9", "JSON inválido", "su nota ya no existe", "vacía"):
         assert expected in skipped
@@ -252,7 +252,7 @@ def test_empty_legacy_database_is_fine(tmp_path):
 
 def test_levels_in_legacy_codes_exist():
     assert Level.objects.filter(path__slug=FORMA, code="n0").exists()
-    assert SharedItem.objects.filter(path__slug=FORMA, key="kit0-1").exists()
+    assert SharedItem.objects.filter(path__slug=FORMA, key="kit0-0").exists()
 
 
 # --- salud, correo y despliegue --------------------------------------------------------------------------------------
@@ -263,7 +263,7 @@ def test_healthz_answers_only_from_the_local_proxy_without_identity():
     response = local.get("/healthz")
     assert response.status_code == 200 and response.json() == {"ok": True}
     assert tailscale_client("", remote_addr="10.1.2.3").get("/healthz").status_code == 403
-    assert local.get("/").status_code == 401  # lo demás sigue exigiendo identidad
+    assert local.get("/").status_code == 302  # lo demás exige identidad: va a la bienvenida
 
 
 def test_email_hook_logs_without_content(member, caplog):

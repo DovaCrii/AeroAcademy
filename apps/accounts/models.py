@@ -59,7 +59,7 @@ class PersonManager(BaseUserManager):
 
 
 class Person(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
-    """Persona del equipo. La identidad es el login de Tailscale (D2): no hay contraseña."""
+    """Persona del equipo. La identidad es el login de Tailscale (D2); la contraseña es opcional (D34: invitación + contraseña)."""
 
     login = models.CharField("login de Tailscale", max_length=254, unique=True)
     display_name = models.CharField("nombre", max_length=150, blank=True)
@@ -106,6 +106,10 @@ class Person(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     sheet_view = models.CharField(
         "vista de la hoja", max_length=8, choices=SheetView.choices, blank=True
     )
+
+    # Enlace de registro/restablecimiento (D34): se rota al generar un enlace y se borra al usarlo. El enlace firmado
+    # lleva este valor; si no coincide, el enlace ya no vale. Nunca se guarda el enlace mismo.
+    invite_nonce = models.CharField(max_length=32, blank=True, default="", editable=False)
 
     objects = PersonManager()
 

@@ -1,0 +1,40 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>{% block title %}Levantamiento Digital 101{% endblock %} · {{ BRAND_PLATFORM }}</title>
+<link rel="icon" href="{% static 'core/app/icon.svg' %}" type="image/svg+xml">
+<link rel="icon" href="{% static 'core/app/favicon-32.png' %}" sizes="32x32" type="image/png">
+<meta name="theme-color" content="#041126">
+<link rel="stylesheet" href="{% static 'core/tokens.css' %}">
+<link rel="stylesheet" href="{% static 'core/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/components.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/public.css' %}">
+<script src="{% static 'core/theme.js' %}"></script>
+</head>
+<body class="pub">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+{# Diseño mínimo para quien aún no entró: sin menús, campana ni asistente (nada de eso funciona sin sesión). #}
+<header class="pub-top">
+  <a class="pub-brand" href="{% url 'accounts:welcome' %}" aria-label="Levantamiento Digital 101, {{ BRAND_PLATFORM }}: bienvenida">
+    {% include "core/partials/mark.html" with cls="pub-mark" %}
+    <span class="pub-brandtxt"><span class="cap">{{ BRAND_PLATFORM }}</span><span class="pub-name">Levantamiento Digital <b>101</b></span></span>
+  </a>
+  <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
+</header>
+
+<main id="contenido" class="pub-main">
+  {% if messages %}
+  <ul class="msgs" role="status">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="pub-foot">
+  {{ BRAND_PLATFORM }} · {{ BRAND_ACADEMY }} · Solo dentro de la red del equipo (Tailscale)
+</footer>
+</body>
+</html>

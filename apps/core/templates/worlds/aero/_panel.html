@@ -1,5 +1,5 @@
 {% load community_tags %}
-{% load core_extras %}
+{% load core_extras catalog_extras %}
 {% if current %}
 <div class="ao-panel{% if current.complete %} complete{% endif %}" id="panel" role="region" aria-label="Waypoint {{ current.level.code|upper }}">
   <div class="ao-phead">
@@ -21,9 +21,12 @@
       <h4>Material</h4>
       <ul class="ao-res">
         {% for lr in current.resources %}
-        <li>
+        <li class="ao-r">
+          {% sw_tiles lr.resource "md" 1 %}
+          <div class="ao-rb">
           <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
           {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
+          </div>
         </li>
         {% endfor %}
       </ul>

@@ -1,0 +1,31 @@
+{% load static %}{% if goals %}
+<aside class="next-goal" aria-label="Próximo logro">
+  <p class="ng-kick">// Próximo logro</p>
+  <ul>
+    {% for g in goals %}
+    <li class="ng-item {{ g.badge.rarity }}">
+      {% if g.badge.sprite %}<img src="{% static 'game/badges/' %}{{ g.badge.sprite }}" width="40" height="40" alt="" class="ng-sprite">{% endif %}
+      <div class="ng-body">
+        <b>{{ g.badge.name }}</b>
+        <span>{{ g.badge.description }}</span>
+        <div class="ng-bar" role="progressbar" aria-label="Avance hacia {{ g.badge.name }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ g.pct }}"><i style="width:{{ g.pct }}%"></i></div>
+        <small>{{ g.text }}.{% if g.titles %} Desbloquea {% if g.titles|length > 1 %}los títulos{% else %}el título{% endif %} {% for t in g.titles %}<em>{{ t.name }}</em>{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}</small>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</aside>
+<style>
+.next-goal{margin:0 0 16px;padding:12px 14px;border:1.5px dashed var(--line);border-radius:14px;background:var(--sheet-2,var(--sheet))}
+.next-goal .ng-kick{margin:0 0 8px;font:600 11px/1 var(--font-mono,ui-monospace,monospace);letter-spacing:.12em;text-transform:uppercase;color:var(--amber-ink,var(--ink-2))}
+.next-goal ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.next-goal .ng-item{display:flex;gap:12px;align-items:flex-start}
+.next-goal .ng-sprite{flex:none;image-rendering:pixelated;border-radius:4px}
+.next-goal .ng-body{min-width:0;display:grid;gap:3px}
+.next-goal .ng-body b{color:var(--ink)}
+.next-goal .ng-body span,.next-goal .ng-body small{color:var(--ink-2);font-size:13px;line-height:1.4}
+.next-goal .ng-body em{font-style:normal;font-weight:700;color:var(--ink)}
+.next-goal .ng-bar{height:8px;border-radius:99px;border:1px solid var(--line);background:var(--sheet);overflow:hidden}
+.next-goal .ng-bar i{display:block;height:100%;background:var(--d-tra,#8793A6)}
+</style>
+{% endif %}

@@ -7,18 +7,25 @@
 {% block content %}
 <div class="page-head">
   <h1>Agregar personas</h1>
-  <p>Pre-aprueba a varias personas a la vez. Al entrar por Tailscale con ese correo, quedan dentro con su rol y área. <a href="{% url 'team:people' %}">Volver a Personas</a></p>
+  <p>Pre-aprueba a varias personas a la vez. Al entrar por Tailscale con ese correo, quedan dentro con su rol y área; para quien no coincide, genera su enlace de registro en Personas. <a href="{% url 'team:people' %}">Volver a Personas</a></p>
 </div>
 
 <section class="mod-sec" aria-labelledby="f-h">
-  <h2 id="f-h">Archivo o filas</h2>
-  <p>Columnas: <code>correo, nombre, rol, área/disciplina, cargo</code> (separadas por coma o punto y coma; primera fila con los títulos). Rol: <code>member</code>{% if can_name_leads %}, <code>lead</code> o <code>admin</code>{% else %} (solo un admin da lead o admin){% endif %}; vacío = member. Disciplinas válidas: {% for d in disciplines %}<code>{{ d.name }}</code>{% if not forloop.last %}, {% endif %}{% endfor %}; para varias, sepáralas con <code>|</code>. Repetir la carga actualiza, no duplica.</p>
+  <h2 id="f-h">Pega los correos</h2>
+  <p>Uno por línea (o separados por coma). Cada persona queda <b>aprobada como miembro</b>; cuando entre por Tailscale con ese correo, completa ella misma su nombre, su carrera y su avatar. Repetir la carga no duplica.</p>
   <form method="post" enctype="multipart/form-data" class="mod-card add-form">
     {% csrf_token %}
-    <label>Pegar filas<textarea name="csv" rows="9" placeholder="{{ template_csv }}">{{ text }}</textarea></label>
-    <label>…o subir un CSV <input type="file" name="file" accept=".csv,text/csv,text/plain"></label>
-    <button class="btn" type="submit" name="action" value="dry">Simular (no cambia nada)</button>
-    <button class="btn primary" type="submit" name="action" value="import">Importar</button>
+    <label class="add-emails">Correos<textarea name="csv" rows="7" placeholder="nombre.apellido@empresa.cl&#10;otra.persona@empresa.cl">{{ text }}</textarea></label>
+    <div class="add-actions">
+      <button class="btn" type="submit" name="action" value="dry">Revisar primero</button>
+      <button class="btn primary" type="submit" name="action" value="import">Agregar</button>
+    </div>
+    <details class="add-advanced">
+      <summary>Avanzado: CSV con nombre, rol, área y cargo</summary>
+      <p>Primera fila con los títulos <code>correo, nombre, rol, área/disciplina, cargo</code> (coma o punto y coma). Rol: <code>member</code>{% if can_name_leads %}, <code>lead</code> o <code>admin</code>{% else %} (solo un admin da lead o admin){% endif %}; vacío = member. Disciplinas: {% for d in disciplines %}<code>{{ d.name }}</code>{% if not forloop.last %}, {% endif %}{% endfor %}; varias con <code>|</code>. Ejemplo:</p>
+      <pre class="add-example">{{ template_csv }}</pre>
+      <label>Subir un CSV <input type="file" name="file" accept=".csv,text/csv,text/plain"></label>
+    </details>
   </form>
 </section>
 

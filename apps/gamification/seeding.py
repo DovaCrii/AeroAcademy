@@ -15,6 +15,10 @@ RULE_FIELDS = {
     "distinct_vendors": {"min"},
     "streak": {"weeks"},
     "credential_kind": {"kinds", "min", "vendor", "platform", "products_all", "requires_valid"},
+    "level_complete": {"path", "level"},
+    "quiz_correct": {"path", "levels"},
+    "paths_complete": {"paths"},
+    "general_complete": {"min"},
     "manual": set(),
 }
 REQUIRED = {
@@ -23,6 +27,10 @@ REQUIRED = {
     "distinct_vendors": {"min"},
     "streak": {"weeks"},
     "credential_kind": {"kinds", "min"},
+    "level_complete": {"path", "level"},
+    "quiz_correct": {"path", "levels"},
+    "paths_complete": {"paths"},
+    "general_complete": set(),
     "manual": set(),
 }
 SPRITE_DIR = Path(settings.BASE_DIR) / "apps" / "core" / "static" / "game" / "badges"
@@ -51,6 +59,13 @@ def validate_game(badges_data, titles_data, *, check_sprites=True):
         missing = REQUIRED[kind] - set(rule)
         if missing:
             errors.append(f"insignia {slug}: a la regla le faltan {sorted(missing)}")
+        for field in ("levels", "paths"):
+            if field in rule and not (
+                isinstance(rule[field], list)
+                and rule[field]
+                and all(isinstance(x, str) for x in rule[field])
+            ):
+                errors.append(f"insignia {slug}: «{field}» debe ser una lista de textos")
         if check_sprites and b.get("sprite") and not (SPRITE_DIR / b["sprite"]).is_file():
             errors.append(f"insignia {slug}: no existe el sprite «{b['sprite']}»")
     title_slugs = [t.get("slug") for t in titles_data.get("titles", [])]

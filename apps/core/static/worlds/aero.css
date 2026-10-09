@@ -88,6 +88,8 @@ body.world-aero{--ao-cyan:#4CC6FF;--ao-night:#06142A;--ao-night-2:#0B2440;--ao-l
 .ao-res{list-style:none;margin:0;padding:0}
 .ao-res li{padding:8px 0;border-bottom:1px solid var(--hair)}
 .ao-res .d{font-size:14px;color:var(--ink-2)}
+.ao-r{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start}
+.ao-r .sw-tiles{margin-top:2px}
 .ao-link{margin:8px 0 0;font-size:14.5px}
 .ao-checks{list-style:none;margin:0;padding:0}
 .ao-check{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start;width:100%;text-align:left;background:none;border:0;padding:6px 0;cursor:pointer;font-size:15px}
@@ -128,3 +130,6 @@ body.world-aero{--ao-cyan:#4CC6FF;--ao-night:#06142A;--ao-night-2:#0B2440;--ao-l
   .ao-tb>div:nth-child(2){border-right:0}
   .ao-flight .nm{font-size:15px}
 }
+
+.ao-cover .lv-in{padding-top:186px}
+@media (max-width:860px){.ao-cover .lv-in{padding-top:300px}}
