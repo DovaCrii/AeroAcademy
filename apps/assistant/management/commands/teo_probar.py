@@ -84,14 +84,17 @@ class Command(BaseCommand):
             raise CommandError(
                 f"No se pudo listar ({exc.code}). {HINTS.get(exc.code, '')}"
             ) from exc
+        # Los modelos vigentes de NIM ya no siempre dicen «instruct» (p. ej. nemotron-3-super, qwen3.5, gemma-4-it):
+        # se prueban todos menos los que claramente no conversan.
+        candidates = [m for m in models if not any(skip in m.lower() for skip in SKIP)]
         ranked = sorted(
-            (m for m in models if "instruct" in m.lower() or "chat" in m.lower()),
+            candidates,
             key=lambda m: (
-                min((i for i, p in enumerate(PREFERRED) if p in m), default=len(PREFERRED)),
+                min((i for i, p in enumerate(PREFERRED) if p in m.lower()), default=len(PREFERRED)),
                 m,
             ),
-        )
-        ranked = [m for m in ranked if not any(skip in m for skip in SKIP)]
+        )[:MAX_PROBES]
+        self.stdout.write(f"Probando hasta {len(ranked)} modelos de conversación…")
         probe = [{"role": "user", "content": "Responde solo: hola"}]
         working = []
         for model in ranked:
@@ -106,7 +109,7 @@ class Command(BaseCommand):
                 break
         if not working:
             raise CommandError(
-                "Ningún modelo instruct respondió con esta cuenta: revisa la clave en build.nvidia.com."
+                "Ningún modelo de conversación respondió con esta cuenta. Revisa en build.nvidia.com que la clave sea de la API y que tengas créditos o modelos con «Free Endpoint»; crea una clave nueva si hace falta."
             )
         self.stdout.write(
             "\nPon esto en deploy/centro.env (o en /etc/centro/env) y reinicia con  sudo systemctl restart centro :"
@@ -117,14 +120,27 @@ class Command(BaseCommand):
 
 # Orden de preferencia (buen español y tamaño) y modelos que no sirven para conversar.
 PREFERRED = [
+    "nemotron-3-super",
+    "nemotron-3.5",
+    "nemotron-3-ultra",
+    "qwen3.5",
+    "kimi-k2",
+    "gemma-4",
+    "qwen3",
+    "llama-3.3",
+    "llama-3.1-70b",
     "mistral-large",
     "nemotron-70b",
-    "llama-3.1-70b",
-    "nemotron-51b",
+    "nemotron",
+    "deepseek",
+    "gpt-oss",
     "mixtral",
-    "mistral-nemo",
-    "llama-3.1-8b",
-    "mistral-7b",
-    "phi-3.5",
+    "mistral",
+    "llama",
 ]
-SKIP = ["vision", "code", "coder", "translate", "guard", "reward", "embed"]
+SKIP = [
+    "vision", "code", "coder", "translate", "guard", "safety", "reward", "embed", "rerank", "retriever", "parakeet",
+    "riva", "canary", "whisper", "tts", "asr", "clip", "flux", "sdxl", "stable-diffusion", "cosmos", "esm", "msa",
+    "bge", "nv-embed", "detector", "pii", "ocr", "paligemma", "vila", "neva", "deplot", "kosmos", "fuyu", "audio",
+]  # fmt: skip
+MAX_PROBES = 40
