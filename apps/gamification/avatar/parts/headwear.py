@@ -162,3 +162,59 @@ HEADWEAR = {
         },
     },
 }
+
+# --- gorros de oficio ---------------------------------------------------------------------------------------
+
+LABELS.update(
+    {
+        "bump_cap": "Gorra de seguridad",
+        "legionnaire": "Gorro legionario",
+        "hardhat_lamp": "Casco con linterna",
+    }
+)
+
+
+def _splice(row: str, x: int, text: str) -> str:
+    """Cambia un tramo de una fila ya armada (para variantes de una pieza base)."""
+    return full(row[:x] + text + row[x + len(text) :])
+
+
+# Gorra de seguridad: como la gorra, con casquete duro (franja de refuerzo al centro).
+HEADWEAR["bump_cap"] = {
+    "back": {},
+    "front": {
+        2: sym("..........KKKKKK"),
+        3: sym(".........KTTTTUU"),
+        4: sym("........KTTTTTUU"),
+        5: sym("........KTTTTTUU"),
+        6: sym(".......KKKKKKKKK"),
+        7: sym("......KttttttttT"),
+        8: sym("......KKKttttttt"),
+        9: sym("........KKKKKKKK"),
+    },
+}
+
+# Gorro legionario: gorra con cubreorejas a los lados (nunca sobre la cara).
+HEADWEAR["legionnaire"] = {
+    "back": {},
+    "front": {
+        2: sym("..........KKKKKK"),
+        3: sym(".........KTTTTTT"),
+        4: sym("........KTTTTTTT"),
+        5: sym("........KTTTTTTT"),
+        6: sym(".......KKKKKKKKK"),
+        7: sym("......KttttttttT"),
+        8: sym("......KKKttttttt"),
+        9: sym("......KTTK.KKKKK"),
+        10: sym(".......KTTK....."),
+        11: sym(".......KTTK....."),
+        12: sym(".......KTtK....."),
+        13: sym("........KKK....."),
+    },
+}
+
+# Casco con linterna: el casco de obra con una luz frontal.
+_lamp = dict(HEADWEAR["hardhat"]["front"])
+_lamp[5] = _splice(_lamp[5], 14, "KCCK")
+_lamp[6] = _splice(_lamp[6], 14, "KWWK")
+HEADWEAR["hardhat_lamp"] = {"back": {}, "front": _lamp}

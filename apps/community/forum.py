@@ -1,15 +1,16 @@
 """Foro: hilos, mensajes y consultas con respuesta aceptada (Bloque 10)."""
 
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Exists, OuterRef, Q, Subquery
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 from apps.gamification import game
 from apps.gamification.models import XPEvent
 from apps.notifications import services as notifications
 
-from . import moderation
-from .models import BODY_MAX, THREAD_TITLE_MAX, Post, Thread
+from . import moderation, opinions
+from .models import BODY_MAX, THREAD_TITLE_MAX, PollOption, Post, Reaction, Thread
 
 ACCEPT_XP_KIND = "accepted_answer"
 DAILY_ACCEPTED_XP = 5  # respuestas aceptadas por día que dan XP (antitrampa, D13)
@@ -30,7 +31,10 @@ def _clean(text, limit, what):
 
 
 @transaction.atomic
-def create_thread(author, category, kind, title, body, disciplines=()):
+def create_thread(author, category, kind, title, body, disciplines=(), poll_options=""):
+    options = opinions.parse_options(poll_options)
+    if options and category.slug != opinions.POLL_CATEGORY:
+        raise ValueError("Las encuestas son solo para «Ideas y mejoras».")
     title = _clean(title, THREAD_TITLE_MAX, "un título")
     body = _clean(body, BODY_MAX, "el detalle")
     if kind not in Thread.Kind.values:
@@ -42,6 +46,8 @@ def create_thread(author, category, kind, title, body, disciplines=()):
     )
     if disciplines:
         thread.disciplines.set(disciplines)
+    if options:
+        opinions.add_poll(thread, author, options)
     return thread
 
 
@@ -135,6 +141,7 @@ def delete_post(post, by):
         thread.save(update_fields=["accepted_post", "updated_at"])
     post.is_deleted = True
     post.save(update_fields=["is_deleted", "updated_at"])
+    opinions.resync_xp(post)
 
 
 @transaction.atomic
@@ -147,12 +154,28 @@ def set_closed(thread, by, closed: bool):
         moderation.log(by, "close" if closed else "reopen", thread, thread.title)
 
 
-def listing(*, category=None, kind="", discipline=None, state="", q="", show_hidden=False):
+SORTS = (("recientes", "Recientes"), ("utiles", "Más útiles"), ("sin_respuesta", "Sin respuesta"))
+
+
+def listing(
+    *, category=None, kind="", discipline=None, state="", q="", show_hidden=False, sort="recientes"
+):
+    reactions = (
+        Reaction.objects.filter(thread=OuterRef("pk")).values("thread").annotate(c=Count("id"))
+    )
     qs = (
         Thread.objects.select_related("author", "category", "accepted_post")
-        .annotate(n_posts=Count("posts", filter=Q(posts__is_deleted=False)))
+        .annotate(
+            n_posts=Count("posts", filter=Q(posts__is_deleted=False)),
+            n_reactions=Coalesce(Subquery(reactions.values("c")), 0),
+            has_poll=Exists(PollOption.objects.filter(thread=OuterRef("pk"))),
+        )
         .order_by("-is_pinned", "-last_activity_at", "-id")
     )
+    if sort == "utiles":
+        qs = qs.order_by("-n_reactions", "-n_posts", "-last_activity_at", "-id")
+    elif sort == "sin_respuesta":
+        qs = qs.filter(n_posts=0).order_by("-last_activity_at", "-id")
     if not show_hidden:
         qs = qs.filter(is_hidden=False)
     if category is not None:

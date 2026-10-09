@@ -1,0 +1,20 @@
+{# Perfil longitudinal: una estaca por nivel sobre el terreno; la barra se rellena con el avance y el equipo marca su estación. #}
+<div class="pf" role="group" aria-label="Perfil del camino: {{ stats.levels_total }} etapas. Tu avance es {{ stats.pct }} %.">
+  <svg class="pf-bg" viewBox="0 0 760 120" preserveAspectRatio="none" aria-hidden="true">
+    <path class="pf-ground" d="M0 78 C70 58 120 96 190 72 S300 30 380 52 S520 96 600 56 S720 30 760 40 V120 H0Z"/>
+    <path class="pf-line" d="M0 78 C70 58 120 96 190 72 S300 30 380 52 S520 96 600 56 S720 30 760 40"/>
+  </svg>
+  <ol class="pf-st">
+    {% for f in building.floors reversed %}
+    <li>
+      <a href="{% url 'paths:detail' path.slug %}?nivel={{ f.code }}#panel" data-enhance data-fid="floor-{{ f.code }}"{% if f.code == current.level.code %} aria-current="true"{% endif %} class="{% if f.complete %}done{% endif %}" aria-label="Etapa {{ f.code|upper }} {{ f.short }}: {{ f.pct }} % completo">
+        <span class="pf-km">{{ f.code|upper }}</span>
+        <span class="pf-bar"><i style="height:{{ f.pct }}%"></i></span>
+        <span class="pf-nm">{{ f.short }}</span>
+        <span class="pf-pc">{{ f.pct }} %</span>
+        {% if f.marks %}<span class="pf-marks">{% for m in f.marks %}<b class="{% if m.me %}me{% endif %}" title="{{ m.name }}">{{ m.initials }}</b>{% endfor %}{% if f.extra %}<b>+{{ f.extra }}</b>{% endif %}</span>{% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</div>

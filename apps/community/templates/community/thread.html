@@ -18,6 +18,39 @@
     {% for d in disciplines %}<span class="chip">{{ d.name }}</span>{% endfor %}
   </p>
   <div class="body">{{ thread.body|linebreaks }}</div>
+  <section id="opinar" class="opine" aria-label="Opinar">
+    {% if is_idea and not thread.is_closed %}<p class="opine-cta"><b>¿Qué opinas?</b> Reacciona, vota{% if poll %} en la encuesta{% endif %} o <a href="#responder">cuéntanos tu idea</a>.</p>{% endif %}
+    {% include "community/_reactions.html" with bar=thread_bar kind="thread" obj_pk=thread.pk %}
+  </section>
+  {% if poll or can_add_poll %}
+  <section id="encuesta" class="poll" aria-labelledby="poll-h">
+    <h2 id="poll-h">Encuesta rápida</h2>
+    {% if poll %}
+    <form method="post" action="{% url 'community:poll_vote' thread.pk %}">{% csrf_token %}
+      <ul class="poll-opts">
+        {% for o in poll.options %}
+        <li class="{% if o.mine %}mine{% endif %}">
+          {% if poll.open %}<button class="opt" type="submit" name="option" value="{{ o.id }}" aria-pressed="{% if o.mine %}true{% else %}false{% endif %}">{{ o.text }}{% if o.mine %} <span class="chip ok">Tu voto</span>{% endif %}</button>{% else %}<span class="opt">{{ o.text }}{% if o.mine %} <span class="chip ok">Tu voto</span>{% endif %}</span>{% endif %}
+          <span class="bar" role="img" aria-label="{{ o.pct }} %"><i style="width:{{ o.pct }}%"></i></span>
+          <span class="num">{{ o.n }} voto{{ o.n|pluralize }} · {{ o.pct }} %</span>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="muted">{{ poll.total }} voto{{ poll.total|pluralize }}.{% if poll.open %} Un voto por persona; puedes cambiarlo mientras el hilo esté abierto.{% else %} Encuesta cerrada.{% endif %}
+        {% if poll.open and poll.mine %}<button class="link-btn" type="submit" name="action" value="retract">Quitar mi voto</button>{% endif %}</p>
+    </form>
+    {% endif %}
+    {% if can_add_poll %}
+    <form method="post" action="{% url 'community:poll_add' thread.pk %}" class="thread-form">{% csrf_token %}
+      <label>Agrega una encuesta (2 a 6 opciones, una por línea) <textarea name="poll_options" rows="4" maxlength="600"></textarea></label>
+      <p><button class="btn" type="submit">Agregar encuesta</button></p>
+    </form>
+    {% endif %}
+  </section>
+  {% endif %}
+  {% if user.is_lead and thread.is_hidden %}
+  <form class="inline" method="post" action="{% url 'community:clear_opinions' thread.pk %}">{% csrf_token %}<input type="hidden" name="votes" value="1"><button class="btn" type="submit">Limpiar reacciones y votos</button></form>
+  {% endif %}
   {% if user.is_lead %}
   <details class="mod-tools"><summary>Moderar</summary>
     <form method="post" action="{% url 'community:moderate_thread' thread.pk %}">{% csrf_token %}
@@ -47,6 +80,8 @@
       <p class="meta"><b>{{ p.author.name }}</b> · {{ p.created_at|date:"d/m/Y H:i" }}{% if thread.accepted_post_id == p.pk %} · <span class="chip ok">✔ Respuesta aceptada</span>{% endif %}</p>
       {% if p.is_hidden %}<p class="chip warn">Oculto por moderación: {{ p.hidden_reason }}</p>{% endif %}
       <div class="body">{{ p.body|linebreaks }}</div>
+      {% include "community/_reactions.html" with bar=p.bar kind="post" obj_pk=p.pk %}
+      {% if user.is_lead and p.is_hidden %}<form class="inline" method="post" action="{% url 'community:clear_opinions' thread.pk %}">{% csrf_token %}<input type="hidden" name="post" value="{{ p.pk }}"><button class="link-btn" type="submit">Limpiar reacciones</button></form>{% endif %}
       {% if user.is_lead %}<form class="inline" method="post" action="{% url 'community:moderate_post' p.pk %}">{% csrf_token %}<input name="reason" maxlength="300" placeholder="Motivo" aria-label="Motivo"><button class="link-btn" name="action" value="{% if p.is_hidden %}unhide{% else %}hide{% endif %}">{% if p.is_hidden %}Mostrar{% else %}Ocultar{% endif %}</button></form>{% endif %}
       {% if p.author_id != user.pk %}
         <details class="report"><summary>Reportar</summary>
@@ -66,9 +101,9 @@
 {% if thread.is_closed %}
 <p class="muted">El hilo está cerrado.</p>
 {% else %}
-<form method="post" class="thread-form">
+<form method="post" class="thread-form" id="responder">
   {% csrf_token %}
-  <label>Tu respuesta <textarea name="body" rows="5" maxlength="5000" required></textarea></label>
+  <label>{% if is_idea %}Tu opinión o idea{% else %}Tu respuesta{% endif %} <textarea name="body" rows="5" maxlength="5000" required></textarea></label>
   <p><button class="btn primary" type="submit">Responder</button></p>
 </form>
 {% endif %}

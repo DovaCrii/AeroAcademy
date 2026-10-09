@@ -31,6 +31,13 @@ LABELS_OUTFITS = {
     "shirt_tie": "Camisa",
     "flight_jacket": "Chaqueta de vuelo",
     "sweater": "Sweater",
+    "surveyor_jacket": "Chaqueta de geomensor",
+    "blazer": "Blazer de arquitecto",
+    "overalls": "Overol de mecánico",
+    "bim_hoodie": "Polerón BIM",
+    "hse_vest": "Chaleco HSE",
+    "polo": "Polo corporativo",
+    "cardigan": "Cardigan",
 }
 LABELS_NECKWEAR = {
     "none": "Sin accesorio",
@@ -172,6 +179,92 @@ _sweater = _o(
     ("aaa", "aaaaaaaa"),
 )
 
+# --- ropa de oficio (cada una cuenta qué hace la persona) ------------------------------------------------
+
+# Chaqueta de geomensor: cuello alto, cierre, bolsillo de pecho y franjas reflectantes.
+_surveyor = _o(
+    ("...", "..aaaaaa"),
+    ("...", "...a.o.A"),
+    ("...", ".aaa..oA"),
+    ("...", ".aoa..oA"),
+    ("YYY", "YYYYYYYA"),
+    ("...", "......oA"),
+    ("...", "......oA"),
+    ("aaa", "aaaaaaaA"),
+)
+
+# Blazer de arquitecto: solapas, camisa blanca, pañuelo de bolsillo.
+_blazer = _o(
+    ("...", "..oooWWW"),
+    ("...", "...ooWWW"),
+    ("...", "....ooWW"),
+    ("...", ".oo..ooW"),
+    ("...", "......oK"),
+    ("aa.", "......oo"),
+    ("...", ".oo...oK"),
+    ("...", "oooooooo"),
+)
+
+# Overol de mecánico: camisa debajo, tirantes y peto con bolsillo y llave.
+_overalls = _o(
+    ("AA.", "A.oo...."),
+    ("AA.", "A.oo...."),
+    ("AA.", "A.oY...."),
+    ("AA.", "AAoooooo"),
+    ("aa.", "AAo....."),
+    ("AA.", "AAo.ooo."),
+    ("AA.", "AAo.oZo."),
+    ("aa.", "AAoooooo"),
+)
+
+# Polerón BIM: capucha, cordones y el cubo del modelo en el pecho.
+_bim_hoodie = _o(
+    ("...", ".AAooooo"),
+    ("...", "..AAAoo."),
+    ("...", ".KCCK.W."),
+    ("...", ".KWCK.W."),
+    ("...", "..KK..a."),
+    ("oo.", ".ooooooo"),
+    ("...", ".o.....o"),
+    ("aaa", "aaaaaaaa"),
+)
+
+# Chaleco HSE: reflectante, cruz verde de primeros auxilios y banda blanca.
+_hse_vest = _o(
+    ("aa.", ".YYYYYYY"),
+    ("AA.", ".YYYYYYY"),
+    ("AA.", "YYGYYYYK"),
+    ("AA.", "YGGGYYYK"),
+    ("aa.", "YYGYYYYK"),
+    ("AA.", "WWWWWWWW"),
+    ("AA.", "YYYYYYYK"),
+    ("...", "YYYYYYYK"),
+)
+
+# Polo corporativo: cuello, tapeta y franja de pecho.
+_polo = _o(
+    ("...", "..oo.WWo"),
+    ("...", "...o.WWo"),
+    ("...", "......W."),
+    ("...", ".AAA..W."),
+    ("...", "......W."),
+    ("oo.", "........"),
+    ("...", "........"),
+    ("...", "oooooooo"),
+)
+
+# Cardigan: abierto, con botones y ribetes.
+_cardigan = _o(
+    ("...", "..oo.WWo"),
+    ("...", "..o..WWo"),
+    ("AA.", "..o..oKo"),
+    ("AA.", "..o...Ko"),
+    ("AA.", "..o..oKo"),
+    ("aa.", "..o...Ko"),
+    ("...", "..o..oKo"),
+    ("aaa", "aaoaaaoa"),
+)
+
 # detalles asimétricos
 for _y, _x in ((22, 10), (22, 11), (23, 10), (23, 11)):
     _put(_tshirt, _y, _x, "A")
@@ -186,6 +279,7 @@ _put(_field, 22, 11, "a")
 _put(_apron, 24, 14, "Y")
 _put(_apron, 24, 13, "R")
 _put(_apron, 24, 18, "Z")
+_put(_blazer, 23, 9, "R")
 _put(_lab, 24, 11, "C")
 _put(_lab, 25, 11, "R")
 _put(_flight, 24, 11, "Y")
@@ -203,6 +297,13 @@ OUTFITS = {
     "shirt_tie": _shirt,
     "flight_jacket": _flight,
     "sweater": _sweater,
+    "surveyor_jacket": _surveyor,
+    "blazer": _blazer,
+    "overalls": _overalls,
+    "bim_hoodie": _bim_hoodie,
+    "hse_vest": _hse_vest,
+    "polo": _polo,
+    "cardigan": _cardigan,
 }
 
 # ================================================================ NECKWEAR (y18..25)

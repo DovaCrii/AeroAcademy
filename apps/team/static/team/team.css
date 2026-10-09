@@ -20,3 +20,16 @@ td small{font-size:.72rem;opacity:.75}
 .check{display:flex;gap:.6rem;align-items:flex-start;padding:.3rem .2rem;border-bottom:1px dotted var(--line,#8d9cad)}
 .check .box{width:1.5rem;height:1.5rem;border:2px solid currentColor;background:none;color:inherit;cursor:pointer;line-height:1;font-weight:700}
 .check.done .box{background:#13803c;border-color:#13803c;color:#fff}.check.done .txt{opacity:.75}
+.copy-box{width:100%;font-family:ui-monospace,monospace;font-size:.85rem;box-sizing:border-box}
+.onb th small,.onb td small{display:block}
+.onb button.chip{background:none;cursor:pointer;font:inherit;font-size:.75rem}
+.onb button.chip.ok{color:#13803c}.onb button.chip.pend{color:#d97706}
+.onb details{margin:.2rem 0}.onb .edit{display:grid;gap:.5rem;margin:.4rem 0}
+.onb .edit fieldset{border:1px solid var(--line,#8d9cad)}.onb label.inline{display:inline-block;margin-right:.7rem}
+.area{margin-top:1.5rem}.area h2 small{font-weight:400}
+.roster{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.4rem}
+.roster li small{display:block;opacity:.75}
+.onb th,.onb td{vertical-align:top}
+.onb th[scope=row]{min-width:9rem}
+.add-form label{display:block;margin:.6rem 0}.add-form textarea{display:block;width:100%;box-sizing:border-box;font-family:ui-monospace,monospace;font-size:.85rem}.add-form .btn{margin:.3rem .3rem 0 0}
+.onb .edit label{display:block}.onb .edit input:not([type=checkbox]),.onb .edit select{width:100%;box-sizing:border-box}

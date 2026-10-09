@@ -1,0 +1,85 @@
+{% load community_tags %}
+{% load core_extras %}
+{% if current %}
+<div class="ao-panel{% if current.complete %} complete{% endif %}" id="panel" role="region" aria-label="Waypoint {{ current.level.code|upper }}">
+  <div class="ao-phead">
+    <span class="elev">{{ current.level.code|upper }}</span>
+    <div>
+      <h3>{{ current.level.title }}</h3>
+      <div class="meta">{{ current.level.estimated_hours }}{% if current.level.audience %} · {{ current.level.audience }}{% endif %} · {{ current.done }} de {{ current.total }} · {{ current.pct }} %</div>
+    </div>
+    <div class="pnav">
+      {% if prev_code %}<a class="btn ghost" href="?nivel={{ prev_code }}#panel" data-enhance data-fid="prev">← Anterior</a>{% endif %}
+      {% if next_code %}<a class="btn ghost" href="?nivel={{ next_code }}#panel" data-enhance data-fid="next">Siguiente →</a>{% endif %}
+    </div>
+  </div>
+  {% if current.level.goal %}<div class="ao-goal"><b>Objetivo:</b> {{ current.level.goal|terms }}</div>{% endif %}
+
+  <div class="ao-cols">
+    <div class="ao-col">
+      {% if current.resources %}
+      <h4>Material</h4>
+      <ul class="ao-res">
+        {% for lr in current.resources %}
+        <li>
+          <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
+          {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if path.slug == "dgac-rpas" %}
+      <p class="ao-link"><a href="{% url 'dgac:home' %}#{{ current.level.code }}">Ver la lámina de este waypoint</a></p>
+      {% endif %}
+
+      <h4 class="ao-gap">Misiones</h4>
+      <ul class="ao-checks">
+        {% for m in current.milestones %}
+        <li>
+          <form method="post" action="{% url 'progress:toggle_milestone' path.slug m.obj.key %}" data-enhance>
+            {% csrf_token %}
+            <input type="hidden" name="checked" value="{% if m.checked %}0{% else %}1{% endif %}">
+            <button type="submit" class="ao-check" aria-pressed="{% if m.checked %}true{% else %}false{% endif %}" data-fid="ms-{{ m.obj.key }}">
+              <span class="box" aria-hidden="true"></span><span class="txt">{{ m.obj.text|terms }}</span>
+            </button>
+          </form>
+        </li>
+        {% empty %}<li class="empty">Este waypoint no tiene misiones.</li>{% endfor %}
+      </ul>
+    </div>
+
+    <div class="ao-col">
+      {% if current.level.mastery_signals %}
+      <h4>Cómo se ve dominarlo</h4>
+      <ul class="ao-look">{% for s in current.level.mastery_signals %}<li>{{ s|terms }}</li>{% endfor %}</ul>
+      {% endif %}
+
+      {% if current.quiz %}
+      <h4 class="ao-gap">Simulacro de vuelo · quiz</h4>
+      <div class="ao-quiz">
+        {% for q in current.quiz %}
+        <div class="ao-q">
+          <p>{{ q.obj.question|terms }}</p>
+          <div class="ao-opts">
+            {% for i, opt in q.options %}
+            <form method="post" action="{% url 'progress:answer_quiz' path.slug q.obj.key %}" data-enhance>
+              {% csrf_token %}
+              <input type="hidden" name="choice" value="{{ i }}">
+              <button type="submit" data-fid="q-{{ q.obj.key }}-{{ i }}"{% if q.answered and i == q.obj.answer_index %} class="right"{% elif q.answered and i == q.selected %} class="wrong"{% endif %}>{{ opt|terms }}</button>
+            </form>
+            {% endfor %}
+          </div>
+          {% if q.answered %}
+          <div class="ao-fb" role="status"><b>{% if q.correct %}Correcto.{% else %}Casi.{% endif %}</b> {{ q.obj.explanation|terms }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if current.complete %}<p class="ao-badge" role="status">✔ Waypoint alcanzado</p>{% endif %}
+    </div>
+  </div>
+  {% level_notes path current.level.code %}
+</div>
+{% endif %}

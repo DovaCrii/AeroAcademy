@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}{{ path.title }}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'core/levantamiento.css' %}">
+<link rel="stylesheet" href="{% static 'worlds/aero.css' %}">
+<script src="{% static 'core/enhance.js' %}" defer></script>
+<script src="{% static 'core/levantamiento.js' %}" defer></script>
+{% endblock %}
+{% block body_attrs %} class="world-aero"{% endblock %}
+
+{% block content %}
+{% include "worlds/aero/cover.html" %}
+<div id="path-app" data-enhance-root>
+  {% include "worlds/aero/_app.html" %}
+</div>
+{% endblock %}

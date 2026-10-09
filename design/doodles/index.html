@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doodles AeroAcademy · revisión</title>
+<style>
+  :root { --bg:#fbfaf5; --ink:#1b1b2f; --card:#ffffff; --line:#e4e0d4; }
+  body.dark { --bg:#14171f; --ink:#f2f2ee; --card:#1d212c; --line:#343a4a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { display:flex; gap:16px; align-items:center; padding:16px 24px; position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--line); z-index:2; }
+  h1 { font-size:18px; margin:0; flex:1; }
+  button { font:inherit; padding:8px 14px; border:2px solid var(--ink); background:transparent; color:var(--ink); border-radius:8px; cursor:pointer; }
+  main { padding:24px; max-width:1300px; margin:auto; }
+  h2 { font-size:14px; text-transform:uppercase; letter-spacing:.08em; opacity:.7; margin:32px 0 12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; color:var(--ink); }
+  .card.wide { grid-column:1/-1; }
+  .card svg, .card img { width:100%; height:auto; display:block; }
+  .card small { display:block; margin-top:8px; opacity:.65; font:12px ui-monospace,monospace; }
+  .circle { width:140px; height:140px; border-radius:50%; overflow:hidden; background:#ffe9a8; margin:8px auto 0; padding:10px; }
+  .bgpaper { background-image:url("../../apps/core/static/core/img/doodles/paper-grid.svg"); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  body.dark .bgpaper { filter:none; background-color:#1d212c; }
+  body.dark .bgpaper { background-image:none; background:#1d212c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M.5 0V40M0 .5H40' stroke='%23fff' stroke-opacity='.13' fill='none'/%3E%3C/svg%3E"); }
+  .imgrow { display:flex; gap:12px; flex-wrap:wrap; }
+  .imgrow img { width:120px; height:auto; background:#fff; border:1px solid var(--line); border-radius:8px; }
+</style>
+</head>
+<body>
+<header><h1>Doodles AeroAcademy · currentColor claro / oscuro</h1><button id="t">Modo oscuro</button></header>
+<main>
+  <h2>Archivos directos (&lt;img&gt;, tinta negra por defecto)</h2>
+  <div class="imgrow" id="imgs"></div>
+  <div id="out"></div>
+  <h2>Cuaderno cuadriculado como fondo</h2>
+  <div class="bgpaper"><p>Texto sobre paper-grid.svg (en oscuro se usa la misma rejilla en blanco).</p><div id="paperdemo" style="max-width:240px"></div></div>
+</main>
+<script src="doodles-data.js"></script>
+<script>
+const BASE = "../../apps/core/static/core/img/doodles/";
+const groups = [
+  ["Hero (1200×600)", ["hero-ideas"], "wide"],
+  ["Disciplinas (400×400, sueltas y dentro de círculo)", ["arquitectura","civil","topografia","mecanica","captura-rpa","transversal"], "circ"],
+  ["Secciones (300×300)", ["rutas","catalogo","certificados","foro","equipo","documentos","conocimiento","dgac","nala"], "circ"],
+  ["Partículas", ["doodle-arrows","doodle-sparks","doodle-scribbles"], ""]
+];
+const q = new URLSearchParams(location.search);
+if (q.get("only")) { const dd = DOODLES.find(x => x.name === q.get("only")); document.body.innerHTML = `<div style="width:${q.get("w")||780}px;padding:4px;color:#1b1b2f;background:${q.get("bg")||"#fff"}">${dd.svg}</div>`; document.querySelector("svg").style.width = "100%"; throw 0; }
+const by = Object.fromEntries(DOODLES.map(d => [d.name, d]));
+const out = document.getElementById("out");
+for (const [title, names, mode] of groups) {
+  out.insertAdjacentHTML("beforeend", `<h2>${title}</h2>`);
+  const g = document.createElement("div"); g.className = "grid";
+  for (const n of names) {
+    const d = by[n];
+    const c = document.createElement("div"); c.className = "card" + (mode === "wide" ? " wide" : "");
+    c.innerHTML = d.svg + `<small>${BASE}${n}.svg · ${d.w}×${d.h} · ${(d.svg.length/1024).toFixed(1)} KB</small>`;
+    if (mode === "circ") c.insertAdjacentHTML("beforeend", `<div class="circle">${d.svg}</div>`);
+    g.appendChild(c);
+  }
+  out.appendChild(g);
+}
+document.getElementById("imgs").innerHTML = DOODLES.map(d => `<img src="${BASE}${d.name}.svg" alt="${d.name}">`).join("");
+document.getElementById("paperdemo").innerHTML = by["nala"].svg;
+document.getElementById("t").onclick = e => { document.body.classList.toggle("dark"); e.target.textContent = document.body.classList.contains("dark") ? "Modo claro" : "Modo oscuro"; };
+</script>
+</body>
+</html>
+

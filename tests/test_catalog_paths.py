@@ -322,7 +322,9 @@ def test_catalog_search_and_invalid_kind(seeded, member_client):
 
 
 def test_catalog_paginates(seeded, member_client):
-    html = member_client.get("/catalogo/").content.decode()
+    html = member_client.get(
+        "/catalogo/?todo=1"
+    ).content.decode()  # sin filtros hay filas por software
     assert "Página 1 de " in html
     assert member_client.get("/catalogo/?page=2").status_code == 200
 

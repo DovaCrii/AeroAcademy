@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load static %}
+{% load static avatar_tags core_extras %}
 
 {% block title %}Bienvenida{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="{% static 'core/welcome.css' %}">{% endblock %}
@@ -8,29 +8,48 @@
 {% block content %}
 {% include "core/partials/icons.html" %}
 
-<section class="w-hero" id="inicio" aria-label="Bienvenida">
-  <div class="w-disc">
-    {% for d in disciplines %}
-    <div class="w-dp{% if not d.img %} w-dp-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>
-      <div class="w-lab"><svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg>{{ d.label|upper }}</div>
-    </div>
-    {% endfor %}
+<nav class="w-strip" aria-label="Accesos rápidos">
+  <div class="w-strip-in">
+    <a href="{% url 'paths:index' %}">Rutas</a>
+    <a href="{% url 'catalog:resources' %}">Catálogo</a>
+    <a href="{% url 'credentials:mine' %}">Certificaciones</a>
+    <a href="{% url 'dgac:home' %}">DGAC</a>
+    <a href="{% url 'community:forum' %}">Foro</a>
+    <a href="{% url 'team:board' %}">Equipo</a>
+    <a href="#avance">Mi avance</a>
   </div>
-  <span class="w-scan" aria-hidden="true"></span>
-  <div class="w-logo">
-    <div class="w-logo-row">
-      <svg class="w-mark" viewBox="0 0 150 120" role="img" aria-label="Logotipo"><use href="#logoA"/></svg>
-      <div class="w-wordmark"><span class="a">ACADEMIA</span><span class="l">LEV DIGITAL <b>101</b></span></div>
-    </div>
+</nav>
+
+
+
+<section class="w-hero" id="inicio" aria-label="Bienvenida">
+  <div class="w-hero-ph" style="background-image:url('{% static 'core/img/arquitectura.jpg' %}')"></div>
+  {% doodle "hero-ideas" class="dd w-hero-doodle" %}
+  <div class="w-hero-in">
+    <p class="w-hand" aria-hidden="true">¡aquí nacen las buenas ideas!</p>
+    <div class="w-wordmark"><span class="a">ACADEMIA</span><span class="l">LEV DIGITAL <b>101</b></span></div>
     <p class="w-tag">APRENDER <i>·</i> COMPARTIR <i>·</i> COLABORAR <i>·</i> AVANZAR</p>
+    <p class="w-cta"><a class="btn" href="#mision">Ver mi misión</a><a class="btn ghost" href="{% url 'paths:index' %}">Explorar rutas</a></p>
     <p class="w-coords" aria-hidden="true"><span>LEVANTAMIENTO · DIGITAL</span><span>EMPRESAS · {{ stats.vendors }}</span><span>RUTAS · {{ stats.paths }}</span><span>RECURSOS · {{ stats.resources }}</span></p>
   </div>
 </section>
 
+<nav class="w-circles" aria-label="Disciplinas">
+  <ul>
+    {% for d in disciplines %}
+    <li data-d="{{ d.slug }}"><a href="#rutas">
+      <span class="w-circ{% if not d.img %} w-circ-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}<svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg></span>
+      <b>{{ d.label|upper }}</b>
+    </a></li>
+    {% endfor %}
+    <li data-d="dgac"><a href="{% url 'dgac:home' %}"><span class="w-circ w-circ-hud">{% doodle "dgac" class="dd" %}<svg class="i" aria-hidden="true"><use href="#i-cert"/></svg></span><b>DGAC</b></a></li>
+  </ul>
+</nav>
 {% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
 
 <section class="w-greet decor-contour" aria-labelledby="hola">
-  <div>
+  {% doodle "doodle-sparks" class="dd dd-tr" %}
+  <div class="w-greet-txt">
     <span class="kicker"><span class="reticle" aria-hidden="true"></span> Estación base · {{ BRAND_ACADEMY }}</span>
     <h2 id="hola">Hola, {{ user.name }}</h2>
     <p>Te damos la bienvenida a {{ BRAND_PLATFORM }}: aquí el equipo aprende por empresa de software, guarda sus certificados y sube de nivel junto.
@@ -83,8 +102,67 @@
   </ul>
 </section>
 
-<section id="modulos" aria-labelledby="mod-h">
-  <h2 id="mod-h" class="w-h2">Módulos</h2>
+<section class="w-me" id="avance" aria-label="Mi perfil y mi avance">
+  <div class="w-me-l">
+    <article class="w-prof">
+      <div class="w-prof-top">
+        <span class="w-prof-av">{% avatar user 64 %}</span>
+        <div>
+          <span class="w-h3">Mi perfil de jugador</span>
+          <p class="w-prof-name">{{ user.name }}</p>
+          <p class="w-prof-role">{{ user.role }}{% if player.title %} · {{ player.title.name }}{% endif %}</p>
+        </div>
+      </div>
+      {% if player %}
+      <div class="w-prof-lv"><b>NV {{ player.level }}</b>
+        <span class="w-mbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ player.pct }}"><i style="width:{{ player.pct }}%"></i></span>
+        <small>{{ player.xp }} XP · faltan {{ player.to_next }}</small>
+      </div>
+      {% endif %}
+      <p class="w-prof-links"><a href="{% url 'gamification:my_sheet' %}">Mis actividades</a><a href="{% url 'gamification:edit_sheet' %}">Mi perfil</a></p>
+    </article>
+    <article class="w-card w-badges">
+      <h2 class="w-h3">Insignias</h2>
+      <ul class="w-big3">
+        <li><b>{{ badges.earned }}</b><span>ganadas</span></li>
+        <li><b>{{ badges.left }}</b><span>por ganar</span></li>
+        <li><b>{{ player.xp|default:0 }}</b><span>puntos XP</span></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="w-card w-ov">
+    <h2 class="w-h3">Mi avance</h2>
+    <input class="w-tab-in" type="radio" name="ov" id="ov-todo" {% if not overview.doing %}checked{% endif %}>
+    <input class="w-tab-in" type="radio" name="ov" id="ov-doing" {% if overview.doing %}checked{% endif %}>
+    <input class="w-tab-in" type="radio" name="ov" id="ov-done">
+    <input class="w-tab-in" type="radio" name="ov" id="ov-exp">
+    <div class="w-tabs" role="tablist" aria-label="Estado de mis rutas">
+      <label for="ov-todo">Por empezar <i>{{ overview.todo|length }}</i></label>
+      <label for="ov-doing">En progreso <i>{{ overview.doing|length }}</i></label>
+      <label for="ov-done">Completadas <i>{{ overview.done|length }}</i></label>
+      <label for="ov-exp">Por vencer <i>{{ overview.expiring|length }}</i></label>
+    </div>
+    <div class="w-panels">
+      <div class="w-panel" id="pn-todo">{% include "core/partials/ov_rows.html" with rows=overview.todo empty="Todas tus rutas ya están en marcha." %}</div>
+      <div class="w-panel" id="pn-doing">{% include "core/partials/ov_rows.html" with rows=overview.doing empty="Aún no has avanzado en ninguna ruta. Marca tu primera misión." %}</div>
+      <div class="w-panel" id="pn-done">{% include "core/partials/ov_rows.html" with rows=overview.done empty="Cuando termines una ruta, aparecerá aquí." %}</div>
+      <div class="w-panel" id="pn-exp">
+        {% if overview.expiring %}<ul class="w-ovl">{% for c in overview.expiring %}
+          <li><a class="w-th w-th-warn" href="{% url 'credentials:expirations' %}" aria-hidden="true" tabindex="-1"><svg class="i"><use href="#i-cert"/></svg></a>
+          <div><a href="{% url 'credentials:expirations' %}">{{ c.display_title }}</a><small>Vence el {{ c.expires_on|date:"d/m/Y" }}</small></div></li>{% endfor %}</ul>
+        {% else %}<p class="w-mdetail">Ninguna de tus credenciales vence pronto.</p>{% endif %}
+      </div>
+    </div>
+    <p class="w-ov-cta"><a class="btn" href="{% url 'paths:index' %}">Ver mis rutas</a><a class="btn ghost" href="{% url 'credentials:mine' %}">Mis certificados</a></p>
+  </div>
+</section>
+<section id="modulos" class="w-sec w-sec-mods" aria-labelledby="mod-h">
+  {% doodle "doodle-arrows" class="dd dd-tr" %}
+  <header class="w-sh">
+    <h2 id="mod-h" class="w-h2">Módulos</h2>
+    <p class="w-lead">Todo en el mismo lugar: aprender, certificarse, conversar y medir el avance del equipo.</p>
+  </header>
   <div class="w-mods">
     {% for m in modules %}
     {% if m.live %}<a class="w-mod live" href="{{ m.url }}">{% else %}<div class="w-mod soon" aria-disabled="true">{% endif %}
@@ -97,13 +175,52 @@
   </div>
 </section>
 
-<section id="rutas" aria-labelledby="rut-h">
-  <h2 id="rut-h" class="w-h2">Rutas por disciplina</h2>
-  <p class="w-lead">Cada disciplina tiene sus rutas de aprendizaje con recursos oficiales, misiones y certificaciones.</p>
+<section class="w-feat" id="destacados" aria-labelledby="feat-h">
+  <div class="w-feat-in">
+    <header class="w-feat-head">
+      <span class="w-kicker">Catálogo</span>
+      <h2 id="feat-h">Destacados</h2>
+    </header>
+    <form class="w-filter" action="{% url 'catalog:resources' %}" method="get" role="search">
+      <label><span class="cap">Buscar</span><input type="search" name="q" placeholder="Producto, curso o certificación" maxlength="100"></label>
+      <button class="btn" type="submit">Buscar en el catálogo</button>
+      <a class="btn ghost" href="{% url 'catalog:resources' %}">Filtros y orden A–Z</a>
+    </form>
+    {% for row in featured %}
+    <section class="w-prow" aria-labelledby="prow-{{ forloop.counter }}">
+      <header>
+        <span class="w-th w-th-lg">{% if row.icon %}<img src="{% static 'core/img/software/'|add:row.icon|add:'.svg' %}" alt="" width="40" height="40">{% else %}{{ row.name|slice:":2"|upper }}{% endif %}</span>
+        <div><h3 id="prow-{{ forloop.counter }}">{{ row.name }}</h3><small>{{ row.sub }} · {{ row.n }} recurso{{ row.n|pluralize }}</small></div>
+        <a class="w-prow-all" href="{% url 'catalog:resources' %}?q={{ row.name|urlencode }}">Ver todos</a>
+      </header>
+      <ul class="w-rail" tabindex="0" aria-label="Recursos de {{ row.name }}">
+        {% for r in row.resources %}
+        <li class="w-rcard">
+          <a href="{% url 'catalog:resources' %}?q={{ r.title|urlencode }}">
+            <span class="w-rcard-top"><b>{{ row.name }}</b><em>{{ r.get_kind_display }}</em></span>
+            <span class="w-rcard-t">{{ r.title }}</span>
+            <span class="w-rcard-m">{% if r.duration_text %}{{ r.duration_text }}{% else %}Sin duración{% endif %} · {% if r.is_free %}Gratis{% else %}De pago{% endif %}{% if r.is_official %} · Oficial{% endif %}</span>
+          </a>
+        </li>
+        {% endfor %}
+        <li class="w-rcard w-rcard-more"><a href="{% url 'catalog:resources' %}?q={{ row.name|urlencode }}"><span class="w-rcard-t">Cargar más en el catálogo</span></a></li>
+      </ul>
+    </section>
+    {% empty %}
+    <p class="w-feat-empty">Aún no hay recursos destacados. El catálogo se llena con las rutas y las propuestas del equipo.</p>
+    {% endfor %}
+  </div>
+</section>
+<section id="rutas" class="w-sec w-sec-routes" aria-labelledby="rut-h">
+  {% doodle "doodle-scribbles" class="dd dd-tr" %}
+  <header class="w-sh w-sh-lead">
+    <h2 id="rut-h" class="w-h2">Rutas por disciplina</h2>
+    <p class="w-lead">Cada disciplina tiene sus rutas de aprendizaje con recursos oficiales, misiones y certificaciones.</p>
+  </header>
   <div class="w-routes">
     {% for d in disciplines %}
-    <article class="w-rc">
-      <div class="w-ph{% if not d.img %} w-dp-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}></div>
+    <article class="w-rc" data-d="{{ d.slug }}">
+      <div class="w-ph{% if not d.img %} w-dp-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}</div>
       <div class="w-bd">
         <h3><svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg>{{ d.label }}</h3>
         <ul class="w-rl">

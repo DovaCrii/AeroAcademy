@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Agregar personas{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'team/team.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Agregar personas</h1>
+  <p>Pre-aprueba a varias personas a la vez. Al entrar por Tailscale con ese correo, quedan dentro con su rol y área. <a href="{% url 'team:people' %}">Volver a Personas</a></p>
+</div>
+
+<section class="mod-sec" aria-labelledby="f-h">
+  <h2 id="f-h">Archivo o filas</h2>
+  <p>Columnas: <code>correo, nombre, rol, área/disciplina, cargo</code> (separadas por coma o punto y coma; primera fila con los títulos). Rol: <code>member</code>{% if can_name_leads %}, <code>lead</code> o <code>admin</code>{% else %} (solo un admin da lead o admin){% endif %}; vacío = member. Disciplinas válidas: {% for d in disciplines %}<code>{{ d.name }}</code>{% if not forloop.last %}, {% endif %}{% endfor %}; para varias, sepáralas con <code>|</code>. Repetir la carga actualiza, no duplica.</p>
+  <form method="post" enctype="multipart/form-data" class="mod-card add-form">
+    {% csrf_token %}
+    <label>Pegar filas<textarea name="csv" rows="9" placeholder="{{ template_csv }}">{{ text }}</textarea></label>
+    <label>…o subir un CSV <input type="file" name="file" accept=".csv,text/csv,text/plain"></label>
+    <button class="btn" type="submit" name="action" value="dry">Simular (no cambia nada)</button>
+    <button class="btn primary" type="submit" name="action" value="import">Importar</button>
+  </form>
+</section>
+
+{% if report %}
+<section class="mod-sec" aria-labelledby="r-h">
+  <h2 id="r-h">{% if report.dry_run %}Simulación{% else %}Resultado{% endif %}</h2>
+  {% if report.fatal %}
+    <p class="chip warn">{{ report.fatal }}</p>
+  {% else %}
+    <p>{% if report.dry_run %}<b>No se escribió nada.</b> {% endif %}{{ report.rows|length }} fila{{ report.rows|length|pluralize }} · nuevas {{ report.count_created }} · actualizadas {{ report.count_updated }} · con error <b>{{ report.errors|length }}</b>.
+      Si todo se ve bien, pulsa <b>Importar</b> (las filas con error se omiten).</p>
+    <div class="sched"><table class="onb">
+      <thead><tr><th>Línea</th><th>Correo</th><th>Resultado</th><th>Detalle</th></tr></thead>
+      <tbody>{% for r in report.rows %}
+        <tr><td>{{ r.line }}</td><td>{{ r.login|default:"—" }}</td>
+          <td>{% if r.action == "error" %}<span class="chip warn">Error</span>{% elif r.action == "created" %}<span class="chip ok">Nueva</span>{% elif r.action == "updated" %}<span class="chip pend">Actualiza</span>{% else %}<span class="chip">Sin cambios</span>{% endif %}</td>
+          <td>{% if r.errors %}{{ r.errors|join:" " }}{% else %}{{ r.changes|join:", " }}{% endif %}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
+

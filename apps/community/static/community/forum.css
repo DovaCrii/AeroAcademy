@@ -14,3 +14,53 @@
 .crumb{font-size:.85rem;opacity:.8}
 form.inline{display:inline}
 .path-notes{margin-top:2rem}
+
+/* Opinar: reacciones, encuesta rápida y orden de la lista */
+.reactions{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
+.react{font:inherit;font-size:var(--fs-small,.8125rem);display:inline-flex;gap:.3rem;align-items:center;padding:.2rem .65rem;border:1.5px solid var(--line,#8d9cad);border-radius:var(--r-pill,999px);background:var(--sheet,#fff);color:var(--ink,#0b1a2e);cursor:pointer;transition:background .15s var(--ease,ease),border-color .15s var(--ease,ease)}
+button.react:hover{border-color:var(--amber,#f5a524);background:var(--glow,rgba(245,165,36,.2))}
+.react.on{border-color:var(--amber,#f5a524);background:var(--glow,rgba(245,165,36,.28));color:var(--amber-ink,#9a4f00);font-weight:700}
+.react.ro{cursor:default;border-style:dashed}
+.react .n{font-family:var(--font-mono,monospace)}
+.react:focus-visible,.opt:focus-visible{outline:3px solid var(--amber,#f5a524);outline-offset:2px}
+.opine-cta{margin:.8rem 0 .2rem;font-family:var(--font-display);font-style:normal;color:var(--amber-ink,#9a4f00)}
+.opine-cta b{font-style:normal}
+.poll{margin:1rem 0;padding:1rem;border:1.5px solid var(--line,#8d9cad);border-radius:var(--r-card,16px);background:var(--surface-tint,var(--sheet,#fff))}
+.poll h2{margin:0 0 .6rem;font-size:var(--fs-h4,1.25rem)}
+.poll-opts{list-style:none;margin:0 0 .6rem;padding:0;display:grid;gap:.6rem}
+.poll-opts li{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;align-items:center}
+.poll-opts .opt{font:inherit;text-align:left;padding:.35rem .6rem;border:1.5px solid var(--line,#8d9cad);border-radius:var(--r-sm,8px);background:var(--sheet,#fff);color:var(--ink,#0b1a2e);cursor:pointer;overflow-wrap:anywhere}
+.poll-opts span.opt{cursor:default}
+.poll-opts .mine .opt{border-color:var(--amber,#f5a524);font-weight:700}
+.poll-opts .bar{grid-column:1/-1;display:block;height:10px;background:var(--hair,#d3dce7);border-radius:var(--r-pill,999px);overflow:hidden}
+.poll-opts .bar i{display:block;height:100%;background:var(--amber,#f5a524);border-radius:inherit}
+.poll-opts .num{font-family:var(--font-mono,monospace);font-size:var(--fs-small,.8125rem);color:var(--ink-2,#33445a);grid-column:2;grid-row:1;white-space:nowrap}
+.sorts{display:flex;flex-wrap:wrap;gap:.4rem .9rem;align-items:center;margin:.4rem 0 .8rem;font-size:var(--fs-small,.8125rem)}
+.sorts a{padding:.1rem .6rem;border-radius:var(--r-pill,999px);border:1px solid var(--hair,#d3dce7);text-decoration:none}
+.sorts a.on{border-color:var(--amber,#f5a524);background:var(--glow,rgba(245,165,36,.2));font-weight:700}
+.opinion-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;font-size:var(--fs-small,.8125rem)}
+.rsum{font-family:var(--font-mono,monospace)}
+.opine-link{margin-left:auto;font-family:var(--font-display);font-style:normal;color:var(--amber-ink,#9a4f00);font-weight:700}
+.poll-new{margin:.3rem 0}.poll-new summary{cursor:pointer}
+@media (prefers-reduced-motion:reduce){.react{transition:none}}
+
+/* Estilo cuaderno: pegatinas y marcadores (claro por defecto; el oscuro hereda los tokens) */
+:root{--mk-yellow:#FFC93C;--mk-teal:#2EC4B6;--mk-orange:#FF8C42;--mk-red:#E63946;--mk-sky:#4CC9F0}
+.react{border-width:2px;border-color:var(--ink,#0b1a2e);box-shadow:2px 2px 0 var(--ink,#0b1a2e);transform:rotate(-.6deg)}
+.reactions .react:nth-child(even){transform:rotate(.7deg)}
+button.react:hover{transform:translate(-1px,-1px) rotate(0);box-shadow:3px 3px 0 var(--ink,#0b1a2e);background:var(--mk-yellow);color:#1b1204}
+button.react:active{transform:translate(1px,1px);box-shadow:0 0 0 var(--ink,#0b1a2e)}
+.react.on{background:var(--mk-yellow);border-color:var(--ink,#0b1a2e);color:#1b1204}
+.react.ro{box-shadow:none;transform:none;border-style:dashed}
+.poll{border:2px solid var(--ink,#0b1a2e);box-shadow:3px 3px 0 var(--ink,#0b1a2e)}
+.poll-opts .bar{height:14px;border:2px solid var(--ink,#0b1a2e);background:transparent}
+.poll-opts .bar i{background:var(--mk-yellow)}
+.poll-opts li:nth-child(5n+2) .bar i{background:var(--mk-teal)}
+.poll-opts li:nth-child(5n+3) .bar i{background:var(--mk-orange)}
+.poll-opts li:nth-child(5n+4) .bar i{background:var(--mk-sky)}
+.poll-opts li:nth-child(5n+5) .bar i{background:var(--mk-red)}
+.poll-opts .mine .opt{background:color-mix(in srgb,var(--mk-yellow) 35%,var(--sheet,#fff))}
+.sorts a.on{background:var(--mk-yellow);color:#1b1204;border-color:var(--ink,#0b1a2e)}
+.page-head{background:url("../core/img/doodles/foro.svg") right center/auto 90% no-repeat}
+@media (max-width:560px){.page-head{background:none}}
+@media (prefers-reduced-motion:reduce){.react,button.react:hover{transform:none}}

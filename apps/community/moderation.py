@@ -56,6 +56,10 @@ def set_hidden(obj, by, hidden, reason=""):
         fields.append("hidden_reason")
     obj.save(update_fields=fields)
     log(by, "hide" if hidden else "unhide", obj, str(obj)[:150], reason)
+    if isinstance(obj, (Post, Thread)):  # el XP de las reacciones «Útil» sigue a la visibilidad
+        from . import opinions
+
+        opinions.resync_xp(obj)
     if hidden:
         _undo_effects(obj)
         notifications.notify(

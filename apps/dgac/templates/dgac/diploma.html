@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Diploma interno RPAS{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'dgac/dgac.css' %}">
+<script src="{% static 'dgac/print.js' %}" defer></script>
+{% endblock %}
+{% block body_attrs %} class="dg-page dg-print"{% endblock %}
+
+{% block content %}
+<div class="dg-toolbar">
+  <a class="btn ghost" href="{{ back }}">← Volver al resultado</a>
+  <button class="btn" type="button" data-print>Imprimir o guardar como PDF</button>
+</div>
+
+<article class="dg-diploma" aria-label="Diploma interno">
+  <div class="frame">
+    <svg class="corner tl" viewBox="0 0 60 60" aria-hidden="true"><path d="M2 58V2h56M12 58V12h46"/></svg>
+    <svg class="corner tr" viewBox="0 0 60 60" aria-hidden="true"><path d="M2 58V2h56M12 58V12h46"/></svg>
+    <svg class="corner bl" viewBox="0 0 60 60" aria-hidden="true"><path d="M2 58V2h56M12 58V12h46"/></svg>
+    <svg class="corner br" viewBox="0 0 60 60" aria-hidden="true"><path d="M2 58V2h56M12 58V12h46"/></svg>
+
+    <p class="org">{{ issuer }} · J.E.J. Ingeniería</p>
+    <svg class="wings" viewBox="0 0 160 60" aria-hidden="true"><path d="M80 50 L80 14 M80 22 C64 20 44 24 8 36 C40 34 56 36 80 44 M80 22 C96 20 116 24 152 36 C120 34 104 36 80 44"/><circle cx="80" cy="10" r="4"/></svg>
+    <h1>{{ title }}</h1>
+    <p class="to">Se otorga a</p>
+    <p class="name">{{ attempt.person.name }}</p>
+    <p class="body">{% if text %}{{ text }}{% else %}por aprobar la prueba interna de conocimientos sobre operaciones con drones (RPAS) y los requisitos de la DGAC.{% endif %}</p>
+    <dl class="facts">
+      <div><dt>Puntaje</dt><dd>{{ attempt.score_percent }} %</dd></div>
+      <div><dt>Fecha</dt><dd>{{ attempt.taken_at|date:"d-m-Y" }}</dd></div>
+      <div><dt>Vigente hasta</dt><dd>{{ attempt.expires_on|date:"d-m-Y" }}</dd></div>
+      <div><dt>Código</dt><dd>{{ attempt.code }}</dd></div>
+    </dl>
+    <p class="fine">Documento interno de capacitación. No reemplaza la credencial de operador RPAS ni la autorización de la DGAC.</p>
+  </div>
+</article>
+{% endblock %}

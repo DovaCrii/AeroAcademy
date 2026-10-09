@@ -12,6 +12,7 @@ from .models import LearningPath
 WORLD_KINDS = {
     "architecture": {LearningPath.Kind.STRUCTURED},
     "civil": {LearningPath.Kind.EXTERNAL_TRACK},
+    "aero": {LearningPath.Kind.STRUCTURED},
 }
 KIND_FALLBACK_WORLD = {
     LearningPath.Kind.STRUCTURED: "architecture",

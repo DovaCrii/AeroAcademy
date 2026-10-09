@@ -105,18 +105,18 @@ def test_aprobar_lists_pending_people(make_person, capsys):
 
 
 def test_aprobar_approves_and_promotes_an_existing_person(make_person):
-    make_person("cristobal@gmail.com", status=PersonStatus.PENDING)
-    call_command("aprobar", "Cristobal@gmail.com", "--rol", "admin")
-    person = Person.objects.get(login="cristobal@gmail.com")
+    make_person("persona@ejemplo.com", status=PersonStatus.PENDING)
+    call_command("aprobar", "Persona@Ejemplo.com", "--rol", "admin")
+    person = Person.objects.get(login="persona@ejemplo.com")
     assert person.status == PersonStatus.APPROVED and person.role == "admin"
     assert Notification.objects.filter(recipient=person, kind="welcome").count() == 1
 
 
 def test_aprobar_before_first_login_lets_the_person_straight_in(client_for):
-    call_command("aprobar", "cmunoz@jej.cl", "--rol", "lead")
-    response = client_for("cmunoz@jej.cl").get("/")
+    call_command("aprobar", "lider@empresa.cl", "--rol", "lead")
+    response = client_for("lider@empresa.cl").get("/")
     assert response.status_code == 200 and "Esperando aprobación" not in response.content.decode()
-    person = Person.objects.get(login="cmunoz@jej.cl")
+    person = Person.objects.get(login="lider@empresa.cl")
     assert person.role == "lead" and person.last_login is not None
     assert not Notification.objects.filter(
         kind="person_pending"
@@ -147,13 +147,13 @@ def seeded():
 
 
 def test_puesta_en_marcha_pins_one_welcome_thread(seeded, settings, capsys):
-    settings.BOOTSTRAP_ADMINS = ["cmunoz@jej.cl"]
+    settings.BOOTSTRAP_ADMINS = ["lider@empresa.cl"]
     call_command("puesta_en_marcha")
     call_command("puesta_en_marcha")
     thread = Thread.objects.get(title__startswith="Bienvenida a la Academia")
     assert (
         thread.is_pinned
-        and thread.author.login == "cmunoz@jej.cl"
+        and thread.author.login == "lider@empresa.cl"
         and thread.category.slug == "general"
     )
     out = capsys.readouterr().out

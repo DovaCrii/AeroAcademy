@@ -1,0 +1,64 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Personas del equipo{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'team/team.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Personas del equipo</h1>
+  <p>Invitación, aprobación y área de cada persona. <a href="{% url 'team:people_add' %}">Agregar personas</a> · <a href="{% url 'team:board' %}">Tablero del equipo</a> · <a href="{% url 'community:moderation' %}">Moderación</a></p>
+</div>
+
+<section class="mod-sec" aria-labelledby="inv-h">
+  <h2 id="inv-h">Texto de invitación</h2>
+  <p class="muted">Cópialo y envíalo por correo o chat. No lleva claves; cada persona entra con su correo de Tailscale en <b>{{ academy_url }}</b>. Cada fila de abajo trae el mismo texto con su nombre y correo.</p>
+  <textarea id="inv-generic" class="copy-box" rows="11" readonly>{{ invitation }}</textarea>
+  <p><button class="btn" type="button" data-copy="inv-generic">Copiar texto</button></p>
+</section>
+
+<p class="muted">{{ total }} persona{{ total|pluralize }}. Casillas: <b>Tailscale</b> la marcas tú a mano (la academia no puede consultarlo); las demás se calculan solas.</p>
+
+{% for g in areas %}
+<section class="area" aria-labelledby="a-{{ forloop.counter }}">
+  <h2 id="a-{{ forloop.counter }}">{{ g.name }} <small>({{ g.rows|length }})</small></h2>
+  <div class="sched"><table class="onb">
+    <thead><tr><th>Persona</th><th>Invitada a Tailscale</th><th>Aprobada</th><th>Ya entró</th><th>Primeros pasos</th><th>Área, rol y cargo</th></tr></thead>
+    <tbody>
+    {% for row in g.rows %}
+      <tr id="p{{ row.person.pk }}">
+        <th scope="row">{{ row.person.name }}<small class="muted">{{ row.person.login }}</small>
+          {% if row.person.role_title %}<small>{{ row.person.role_title }}</small>{% endif %}
+          <span class="chip">{{ row.role_label }}</span></th>
+        <td>
+          <form method="post" action="{% url 'team:person_invited' row.person.pk %}">{% csrf_token %}
+            <input type="hidden" name="invited" value="{% if row.invited %}0{% else %}1{% endif %}">
+            <button class="chip {% if row.invited %}ok{% else %}pend{% endif %}" type="submit" title="{% if row.invited %}Quitar la marca{% else %}Marcar como invitada{% endif %}">{% if row.invited %}✔ Invitada{% else %}Por invitar{% endif %}</button>
+          </form></td>
+        <td>{% if row.approved %}<span class="chip ok">✔ Aprobada</span>{% else %}<span class="chip pend">Pendiente</span>{% endif %}</td>
+        <td>{% if row.entered %}<span class="chip ok">✔ {{ row.person.last_login|date:"d/m" }}</span>{% else %}<span class="chip pend">Aún no</span>{% endif %}</td>
+        <td><span class="chip {% if row.steps_done %}ok{% else %}pend{% endif %}">{{ row.steps }}/{{ step_labels|length }}</span></td>
+        <td>
+          <details><summary>Editar</summary>
+            <form class="edit" method="post" action="{% url 'team:person_update' row.person.pk %}">{% csrf_token %}
+              <label>Cargo <input name="job" maxlength="120" value="{{ row.person.role_title }}"></label>
+              {% if can_name_leads %}<label>Rol <select name="role">
+                <option value="member"{% if row.role == "member" %} selected{% endif %}>Miembro</option>
+                <option value="lead"{% if row.role == "lead" %} selected{% endif %}>Responsable</option>
+                <option value="admin"{% if row.role == "admin" %} selected{% endif %}>Admin</option></select></label>{% endif %}
+              <fieldset><legend>Disciplinas</legend>{% for d in disciplines %}<label class="inline"><input type="checkbox" name="disciplines" value="{{ d.slug }}"{% if d in row.disciplines %} checked{% endif %}> {{ d.name }}</label>{% endfor %}</fieldset>
+              <button class="btn primary" type="submit">Guardar</button>
+            </form>
+          </details>
+          <details><summary>Invitación</summary>
+            <textarea id="inv-{{ row.person.pk }}" class="copy-box" rows="10" readonly>{{ row.invitation }}</textarea>
+            <button class="btn" type="button" data-copy="inv-{{ row.person.pk }}">Copiar</button>
+          </details></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% empty %}<p class="muted">Aún no hay personas. <a href="{% url 'team:people_add' %}">Agrega al equipo</a>.</p>{% endfor %}
+<script src="{% static 'team/team.js' %}" defer></script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load core_extras %}{% if guide %}
+<section class="gd gd-{{ flavour }}" aria-label="Guía rápida del nivel {{ code|upper }}">
+  <header class="gd-head">
+    <span class="gd-no">// GUÍA</span>
+    <h4>{{ guide.title|default:"Guía rápida" }}</h4>
+  </header>
+  <div class="gd-body">
+    <div class="gd-col">
+      <h5>Qué hacer</h5>
+      <ol class="gd-do">{% for step in guide.do %}<li>{{ step|terms }}</li>{% endfor %}</ol>
+    </div>
+    <div class="gd-col">
+      {% if guide.commands %}
+      <h5>Comandos clave</h5>
+      <ul class="gd-cmd">{% for c in guide.commands %}<li>{{ c|terms }}</li>{% endfor %}</ul>
+      {% endif %}
+      {% if guide.mistakes %}
+      <h5 class="gd-err">Errores comunes</h5>
+      <ul class="gd-mis">{% for m in guide.mistakes %}<li>{{ m|terms }}</li>{% endfor %}</ul>
+      {% endif %}
+    </div>
+  </div>
+  {% if essential %}<p class="gd-foot"><span>CURSO ESENCIAL</span> <a href="{{ essential.url }}" target="_blank" rel="noopener">{{ essential.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a></p>{% endif %}
+</section>{% endif %}

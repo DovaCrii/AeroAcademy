@@ -73,7 +73,7 @@ El instalador deja el atajo `sudo aeroacademy <comando>` (corre `manage.py` como
 sudo aeroacademy aprobar                                  # quién espera aprobación
 sudo aeroacademy aprobar tu@correo --rol admin            # aprobar y dar rol (member | lead | admin)
 ```
-Sirve también **antes** de que alguien entre: queda aprobado y al llegar entra directo. Para que un correo nuevo (p. ej. `cmunoz@jej.cl`) pueda entrar, primero tiene que estar en la tailnet: consola de Tailscale → **Users → Invite users**, o comparte solo el equipo `aeroacademy` (**Machines → aeroacademy → Share**) con quien no deba ver el resto de la tailnet.
+Sirve también **antes** de que alguien entre: queda aprobado y al llegar entra directo. Para que un correo nuevo (p. ej. `tu.correo@empresa.cl`) pueda entrar, primero tiene que estar en la tailnet: consola de Tailscale → **Users → Invite users**, o comparte solo el equipo `aeroacademy` (**Machines → aeroacademy → Share**) con quien no deba ver el resto de la tailnet.
 
 **Dejarlo ordenado.** El instalador corre `puesta_en_marcha`: fija en el foro el hilo «Bienvenida… cómo empezar» (una sola vez) y muestra una lista de lo que falta (admins que aún no entran, pendientes, rutas publicadas, Teo). Puedes repetirlo cuando quieras:
 ```bash
@@ -88,6 +88,12 @@ Cada persona ve en la portada **Primeros pasos** (hoja de personaje, primera mis
 1. **Acceso a la red:** en la consola de Tailscale, **Users → Invite users** con su correo (ve toda la tailnet), o **Machines → aeroacademy → Share** (solo ve la academia). La persona instala Tailscale en su equipo y entra con ese correo.
 2. **Aprobar:** cuando abra `https://aeroacademy.tailccd107.ts.net` queda «pendiente» y te llega un aviso en la campana; apruébala en **Moderación** o desde la VM: `sudo aeroacademy aprobar su@correo` (con `--rol lead` si revisará certificados). Se puede aprobar antes de que entre.
 3. **Su primer día:** ve «Primeros pasos» en la portada y el hilo de bienvenida fijado en el foro; que instale la academia como app (menú del navegador → Instalar).
+**Alta masiva (varias personas a la vez).** Prepara un CSV con `correo, nombre, rol, área/disciplina, cargo` (rol `member|lead|admin`, vacío = member; varias disciplinas separadas con `|`). Dos formas, las dos idempotentes (repetir actualiza, no duplica) y con validación (correos, roles y disciplinas desconocidos se informan fila por fila):
+- **Desde la app** (responsables): **Equipo → Agregar personas** (`/equipo/personas/agregar/`). Pega las filas o sube el archivo, pulsa **Simular** y, si está bien, **Importar**. Un lead solo da el rol member; lead y admin los da un admin.
+- **Desde la VM:** `sudo aeroacademy importar_equipo equipo.csv --dry-run` y luego sin `--dry-run`.
+
+Después, en **Equipo → Gestionar personas** (`/equipo/personas/`) cada persona tiene su lista: *invitada a Tailscale* (la marcas tú, la academia no puede consultarlo) · aprobada · ya entró · primeros pasos (0-4), con el **texto de invitación** listo para copiar (enlace, pasos de Tailscale e instalación como app; sin claves). Ahí mismo se cambia el área (disciplinas), cargo y rol, y todo queda en la bitácora de Moderación. Quien entre con un nombre distinto en Tailscale verá su nombre de Tailscale: ese manda al iniciar sesión.
+
 4. **Salida:** en el admin, marca a la persona como inactiva o suspéndela en Moderación, y quítale el acceso en Tailscale.
 
 ## 2. Nala (la asistente)

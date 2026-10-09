@@ -1,0 +1,20 @@
+{% load core_extras catalog_extras %}{% card_meta r as m %}
+<article class="cat-card d-{{ m.disc }}{% if 'Esencial' in r.tags %} is-ess{% endif %}">
+  <div class="cat-thumb" aria-hidden="false">
+    {% sw_tiles r "lg" %}
+    <span class="cat-prod">{{ m.name|default:r.platform.name }}</span>
+    <span class="cat-lvl lvl-{{ m.level }}">{{ m.level_label }}</span>
+  </div>
+  <div class="cat-body">
+    <p class="cat-meta">{{ m.type }}{% if m.type != r.get_kind_display %} · {{ r.get_kind_display }}{% endif %}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</p>
+    <h3>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a>{% else %}{{ r.title }}{% endif %}</h3>
+    {% if r.description %}<p class="cat-desc">{{ r.description|truncatechars:130|terms }}</p>{% endif %}
+    {% if r.in_paths %}<p class="cat-in">En la ruta {% for p in r.in_paths %}<a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+    <div class="chips">
+      {% course_xp r %}
+      {% if r.is_official %}<span class="chip off">Oficial</span>{% endif %}
+      {% if r.is_free %}<span class="chip">Gratuito</span>{% endif %}
+      {% if r.grants_completion_certificate %}<span class="chip cert">Certificado</span>{% endif %}
+    </div>
+  </div>
+</article>

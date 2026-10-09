@@ -11,6 +11,7 @@ from apps.credentials import services as credential_services
 from apps.credentials.models import Credential
 
 from . import game
+from .avatar.careers import CAREERS
 from .models import Badge, PersonBadge, XPEvent
 
 ATTRIBUTES = [
@@ -56,7 +57,7 @@ def _skills_of(cred):
 
 
 def attributes(person, viewer, creds=None):
-    """Seis atributos de 0 a 20: 2 por credencial verificada con una habilidad de ese atributo (+1 cada 3 respuestas aceptadas en COL)."""
+    """Seis atributos de 0 a 20: 2 por credencial verificada con una habilidad de ese atributo (+1 cada 3 respuestas aceptadas en COL), más el bono de la carrera."""
     creds = visible_credentials(person, viewer) if creds is None else creds
     counts = dict.fromkeys((code for code, _ in ATTRIBUTES), 0)
     for cred in creds:
@@ -66,7 +67,21 @@ def attributes(person, viewer, creds=None):
     answers = XPEvent.objects.filter(person=person, kind="accepted_answer").count()
     values = {code: min(MAX_ATTRIBUTE, 2 * n) for code, n in counts.items()}
     values["COL"] = min(MAX_ATTRIBUTE, values["COL"] + answers // 3)
-    return [{"code": code, "name": name, "value": values[code]} for code, name in ATTRIBUTES]
+    bonus = career_bonus(person)
+    return [
+        {
+            "code": code,
+            "name": name,
+            "value": min(MAX_ATTRIBUTE, values[code] + bonus.get(code, 0)),
+            "bonus": bonus.get(code, 0),
+        }
+        for code, name in ATTRIBUTES
+    ]
+
+
+def career_bonus(person) -> dict:
+    """Bono de la carrera elegida a cada atributo (por ejemplo, Geomensor: CAP +2, ANA +1)."""
+    return CAREERS.get(person.character_class, {}).get("bonus", {})
 
 
 def _fmt(x):

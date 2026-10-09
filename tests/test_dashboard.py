@@ -176,5 +176,5 @@ def test_home_still_has_the_sponsor_and_modules(client_for, member):
 
 
 def test_home_query_count_is_bounded(client_for, member, django_assert_max_num_queries):
-    with django_assert_max_num_queries(60):
+    with django_assert_max_num_queries(70):  # la portada sumó perfil, avance y destacados
         assert client_for(member.login).get("/").status_code == 200

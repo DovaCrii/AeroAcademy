@@ -32,7 +32,7 @@ Todos los bloques de `docs/PLAN.md` están construidos. Esto es lo que queda, or
 | ✔ Hecho | Alertas: aviso a los responsables si el respaldo o un temporizador falla (`centro-alerta@`) |
 | ✔ Hecho | Primer día: `aprobar` y `puesta_en_marcha` desde la VM (`sudo aeroacademy …`), hilo de bienvenida fijado, «Primeros pasos» en la portada, ícono y manifiesto para instalar como app |
 | ✔ Hecho | Teo sin razonamiento a la vista (`enable_thinking: false`, limpieza y paso al modelo siguiente) |
-| ⏳ Tuyo | Entrar como admin (tu correo **de Tailscale** en `BOOTSTRAP_ADMINS`, o `sudo aeroacademy aprobar`); invitar a `cmunoz@jej.cl` y al equipo a la tailnet o compartirles el equipo `aeroacademy` |
+| ⏳ Tuyo | Entrar como admin (tu correo **de Tailscale** en `BOOTSTRAP_ADMINS`, o `sudo aeroacademy aprobar`); invitar a `tu.correo@empresa.cl` y al equipo a la tailnet o compartirles el equipo `aeroacademy` |
 | ⏳ Tuyo | Rotar la clave de NVIDIA (se pegó en el chat) |
 | ⏳ Tuyo | Probar una restauración de respaldo antes de confiar en él |
 
@@ -43,6 +43,6 @@ Todos los bloques de `docs/PLAN.md` están construidos. Esto es lo que queda, or
 - URLs de Bentley marcadas `verify_url`: confirmarlas con una cuenta Bentley.
 - Rutas nuevas (Trimble, Esri, drones/RPA) y sus mundos `survey`, `mechanical`, `aero` (los sprites de Nala ya existen).
 - Exportar la hoja profesional a PDF; vista previa de PDF e imágenes de documentos; historial de ediciones de artículos; matriz exportable.
-- Accesorios de avatar por nivel y expediciones del equipo (insignia *Gremio Unido*).
-- **Avatares y opciones de visualización (pedido 2026-10-09):** más piezas de avatar, vistas alternativas (compacta / juego / profesional) y preferencias de visualización por persona.
+- Accesorios de avatar por nivel: **hecho** (marco de bronce NV 3, pin de casquito NV 5, pin de teodolito dorado NV 10; salen bloqueados con «se desbloquea en NV x»). Falta: expediciones del equipo (insignia *Gremio Unido*).
+- **Avatares y opciones de visualización (pedido 2026-10-09):** más piezas de avatar, vistas alternativas (compacta / juego / profesional) y preferencias de visualización por persona. **Hecho:** 13 carreras con look propio, 17 ropas, 13 herramientas, fondos por disciplina y vista de hoja elegible (`Person.sheet_view`).
 - Sprites de Nala: el teodolito (`teo-survey`) y el dron (`teo-aero`) se leen poco a 48 px; «pensando» se nota solo en los ojos.

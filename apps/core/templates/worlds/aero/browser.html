@@ -1,0 +1,12 @@
+{# Lista de waypoints: los capítulos con su avance. #}
+<nav class="ao-browser" aria-label="Waypoints">
+  <div class="bh">Plan de vuelo · Waypoints</div>
+  {% for ch in chapters %}
+  <a class="ao-lv{% if ch.complete %} done{% endif %}" href="{% url 'paths:detail' path.slug %}?nivel={{ ch.level.code }}#panel" data-enhance data-fid="lv-{{ ch.level.code }}"{% if ch.level.code == current.level.code %} aria-current="page"{% endif %}>
+    <span class="code">{{ ch.level.code|upper }}</span>
+    <span class="nm">{{ ch.level.short }}</span>
+    <span class="pc">{{ ch.pct }} %</span>
+    <span class="bar"><i style="width:{{ ch.pct }}%"></i></span>
+  </a>
+  {% endfor %}
+</nav>

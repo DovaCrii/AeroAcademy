@@ -2,7 +2,7 @@
   "_nota": "Ruta curada de Civil 3D: solo lo importante. Todas las URLs se revisaron el 2026-10-09 en el navegador (autodesk.com responde 403 a scripts). Los recursos 'Esencial' son el mínimo de la ruta; los 'Complementario' son práctica o refuerzo. Los títulos de recurso son la clave en la base: no cambiarlos. Las keys son estables: agregar siempre al final.",
   "slug": "civil-3d",
   "title": "Ruta Civil 3D",
-  "program": "CC 410 · Levantamiento Digital",
+  "program": "Infraestructura vial · Civil 3D",
   "platform": "autodesk-learning",
   "kind": "structured",
   "vendor": "autodesk",
@@ -24,6 +24,30 @@
       "estimated_hours": "2 a 3 h",
       "audience": "Todo el equipo que use Civil 3D",
       "goal": "Moverse en la interfaz, partir cada dibujo desde la plantilla correcta y organizar el proyecto con *Data Shortcuts*. Meta: terminar el curso de 90 minutos con su certificado.",
+      "guide": {
+        "title": "Guía rápida · Entorno",
+        "software": "civil3d",
+        "do": [
+          "Crea cada dibujo desde la plantilla (.dwt) del equipo y revisa *Drawing Settings* (unidades y coordenadas).",
+          "Recorre *Prospector* y *Settings* en el *Toolspace*.",
+          "Fija *Set Working Folder* y crea el proyecto con *New Shortcuts Folder*.",
+          "Base AutoCAD: domina *OSNAP*, *UCS*, *XREF* y las capas; Civil 3D parte de ahí."
+        ],
+        "commands": [
+          "*Toolspace*",
+          "*Drawing Settings*",
+          "*Data Shortcuts*",
+          "*XREF*",
+          "*OSNAP*",
+          "*UCS*"
+        ],
+        "mistakes": [
+          "Empezar desde un dibujo en blanco: estilos y unidades quedan al azar.",
+          "Copiar superficies entre dibujos en vez de compartirlas con *Data Shortcuts*.",
+          "Cambiar la carpeta de trabajo a mitad de proyecto: se rompen las referencias."
+        ],
+        "essential": "Learn Civil 3D in 90 minutes"
+      },
       "resources": [
         {
           "order": 0,
@@ -138,6 +162,29 @@
       "estimated_hours": "3 a 5 h",
       "audience": "Civil y topografía",
       "goal": "Pasar del levantamiento (puntos, LandXML o nube de puntos) a una superficie de terreno confiable, con estilos y etiquetas, y armar el grading de la propuesta.",
+      "guide": {
+        "title": "Guía rápida · Superficies",
+        "software": "civil3d",
+        "do": [
+          "Importa los puntos del levantamiento y ordénalos en *Point Groups*.",
+          "Crea la superficie y revisa triángulos largos y picos con estilos de análisis.",
+          "Procesa la nube en ReCap (.rcp) y crea la superficie desde ella.",
+          "Etiqueta curvas de nivel y arma un *Grading Group* con su *Grading Criteria*."
+        ],
+        "commands": [
+          "*Point Groups*",
+          "*Sites*",
+          "*Grading Group*",
+          "*Grading Criteria*",
+          "*Boundary*"
+        ],
+        "mistakes": [
+          "Dejar triángulos largos en el borde: define un *Boundary* de la superficie.",
+          "Llevar la nube sin limpiar ni registrar en ReCap: la superficie sale con ruido.",
+          "Trabajar una superficie enorme completa en vez de recortarla o decimarla."
+        ],
+        "essential": "Incorporate site data and perform surface modeling in Civil 3D"
+      },
       "resources": [
         {
           "order": 0,
@@ -239,6 +286,26 @@
       "estimated_hours": "2 a 3 h",
       "audience": "Civil",
       "goal": "Definir la geometría horizontal y vertical: alineamientos con estacado, perfil de terreno, rasante y *Profile View* etiquetada.",
+      "guide": {
+        "title": "Guía rápida · Alineamientos",
+        "software": "civil3d",
+        "do": [
+          "Crea el alineamiento con *Alignment Creation Tools* y etiqueta el estacado.",
+          "Genera el perfil de terreno con *Create Surface Profile* y su *Profile View*.",
+          "Diseña la rasante con *Profile Creation Tools* y revisa las curvas verticales."
+        ],
+        "commands": [
+          "*Alignment Creation Tools*",
+          "*Geometry Editor*",
+          "*Create Surface Profile*",
+          "*Profile View*"
+        ],
+        "mistakes": [
+          "Dibujar el perfil a mano en vez de generarlo desde la superficie.",
+          "Editar el alineamiento en una copia del dibujo: el perfil original no se entera."
+        ],
+        "essential": "Define geometry for Civil 3D with alignments, profiles, and profile views"
+      },
       "resources": [
         {
           "order": 0,
@@ -303,6 +370,26 @@
       "estimated_hours": "3 a 4 h",
       "audience": "Civil",
       "goal": "Armar la sección tipo con *Assemblies* y *Subassemblies*, generar el corredor y su superficie, y resolver un camino completo.",
+      "guide": {
+        "title": "Guía rápida · Corredores",
+        "software": "civil3d",
+        "do": [
+          "Arma un *Assembly* con carriles, berma y talud desde la *Tool Palette*.",
+          "Crea el *Corridor* sobre el alineamiento y la rasante, y genera su superficie.",
+          "Completa el proyecto del camino de conexión sin mirar la solución."
+        ],
+        "commands": [
+          "*Assembly*",
+          "*Subassembly*",
+          "*Tool Palette*",
+          "*Corridor*"
+        ],
+        "mistakes": [
+          "Usar un *Subassembly* de relleno donde el terreno pide corte.",
+          "Crear el corredor sin superficie objetivo: el talud no empalma con el terreno."
+        ],
+        "essential": "Create a corridor and a surface for a 3D road model"
+      },
       "resources": [
         {
           "order": 0,
@@ -368,6 +455,26 @@
       "estimated_hours": "3 a 4 h",
       "audience": "Civil y dibujo",
       "goal": "Modelar redes gravitacionales y a presión, etiquetarlas en planta y perfil, y emitir láminas de planta-perfil con *Plan Production*.",
+      "guide": {
+        "title": "Guía rápida · Redes y planos",
+        "software": "civil3d",
+        "do": [
+          "Crea la red gravitacional con *Pipe Network Creation Tools* y llévala al perfil.",
+          "Agrega la red a presión y etiquétala en planta y perfil.",
+          "Genera *View Frames* y las láminas con *Plan Production* y el *Title block* del equipo."
+        ],
+        "commands": [
+          "*Pipe Network Creation Tools*",
+          "*View Frames*",
+          "*Plan Production*",
+          "*Title block*"
+        ],
+        "mistakes": [
+          "Dibujar las tuberías dos veces, en planta y en perfil: son el mismo objeto.",
+          "Generar láminas sin *View Frames* y armarlas a mano."
+        ],
+        "essential": "Create gravity and pressure pipes in Civil 3D"
+      },
       "resources": [
         {
           "order": 0,
@@ -454,6 +561,24 @@
       "estimated_hours": "10 a 30 h",
       "audience": "Profesionales con experiencia en Civil 3D",
       "goal": "Preparar y rendir Autodesk Certified Professional in Civil 3D for Infrastructure Design.",
+      "guide": {
+        "title": "Guía rápida · Certificación",
+        "software": "civil3d",
+        "do": [
+          "Revisa los *exam objectives* y marca los dominios más débiles.",
+          "Completa el curso de preparación y aprueba el *Practice test*.",
+          "Agenda el examen en Pearson o en línea con OnVUE."
+        ],
+        "commands": [
+          "*exam objectives*",
+          "*Practice test*"
+        ],
+        "mistakes": [
+          "Rendir sin resolver antes el proyecto del camino de conexión por tu cuenta.",
+          "Olvidar que el examen es en inglés y dura 120 minutos."
+        ],
+        "essential": "Civil 3D for Infrastructure Design Professional Certification Prep"
+      },
       "resources": [
         {
           "order": 0,

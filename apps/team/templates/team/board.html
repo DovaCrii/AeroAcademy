@@ -7,8 +7,16 @@
 {% block content %}
 <div class="page-head">
   <h1>Tablero del equipo</h1>
-  <p>Cómo va el gremio. <a href="{% url 'team:matrix' %}">Matriz de competencias</a>{% for p in kit_paths %} · <a href="{% url 'team:kit' p.slug %}">Kit y plan · {{ p.title }}</a>{% endfor %}</p>
+  <p>Cómo va el gremio. <a href="{% url 'team:matrix' %}">Matriz de competencias</a>{% for p in kit_paths %} · <a href="{% url 'team:kit' p.slug %}">Kit y plan · {{ p.title }}</a>{% endfor %}{% if user.is_lead %} · <a href="{% url 'team:people' %}">Gestionar personas</a> · <a href="{% url 'team:people_add' %}">Agregar personas</a>{% endif %}</p>
 </div>
+
+<section aria-labelledby="t-areas">
+  <h2 id="t-areas">Personas por área</h2>
+  {% for g in areas %}
+  <h3>{{ g.name }} <small>({{ g.rows|length }})</small></h3>
+  <ul class="roster">{% for row in g.rows %}<li><a href="{% url 'gamification:sheet' row.person.pk %}">{{ row.person.name }}</a>{% if row.person.role_title %}<small>{{ row.person.role_title }}</small>{% endif %}</li>{% endfor %}</ul>
+  {% empty %}<p class="muted">Aún no hay personas.</p>{% endfor %}
+</section>
 
 <section aria-labelledby="t-prog">
   <h2 id="t-prog">Avance por ruta y persona</h2>
@@ -34,3 +42,4 @@
     <ul class="plain">{% for c in expired %}<li><b>{{ c.owner.name }}</b> · {{ c.display_title }} <span class="chip warn">Vencida</span></li>{% empty %}<li class="muted">Ninguna.</li>{% endfor %}</ul></section>
 </div>
 {% endblock %}
+

@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}DGAC · RPAS{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'dgac/dgac.css' %}">{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>DGAC · <em>RPAS</em></h1>
+</div>
+<div class="dg-empty" role="status">
+  <svg viewBox="0 0 120 80" aria-hidden="true"><rect x="2" y="2" width="116" height="76" rx="8"/><path d="M14 58 L38 36 L58 50 L84 24 L106 44"/><circle cx="84" cy="24" r="4"/></svg>
+  <div>
+    <h2>Contenido aún no instalado</h2>
+    <p>Esta sección usa material interno de J.E.J. que no vive en el repositorio. Falta {{ what|default:"el contenido" }}; pide a quien administra la plataforma que lo instale en la carpeta privada del servidor.</p>
+    <p><a class="btn ghost" href="{% url 'core:home' %}">Volver al inicio</a></p>
+  </div>
+</div>
+{% endblock %}

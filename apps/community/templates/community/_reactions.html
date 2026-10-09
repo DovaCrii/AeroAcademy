@@ -1,0 +1,3 @@
+<form class="reactions" method="post" action="{% url 'community:react' kind obj_pk %}" aria-label="Reacciones">{% csrf_token %}
+  {% for r in bar.items %}{% if bar.can_react %}<button class="react{% if r.mine %} on{% endif %}" type="submit" name="reaction" value="{{ r.kind }}" aria-pressed="{% if r.mine %}true{% else %}false{% endif %}" title="{{ r.label }}"><span aria-hidden="true">{{ r.emoji }}</span> {{ r.label }}{% if r.count %} <b class="n">{{ r.count }}</b>{% endif %}</button>{% elif r.count %}<span class="react ro" title="{{ r.label }}"><span aria-hidden="true">{{ r.emoji }}</span> {{ r.label }} <b class="n">{{ r.count }}</b></span>{% endif %}{% endfor %}
+</form>

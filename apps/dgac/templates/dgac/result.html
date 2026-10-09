@@ -1,0 +1,71 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Resultado de la prueba RPAS{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'dgac/dgac.css' %}">{% endblock %}
+{% block body_attrs %} class="dg-page"{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Resultado de la <em>prueba</em></h1>
+  {% if not own %}<p>Intento de <b>{{ attempt.person.name }}</b> · {{ attempt.taken_at|date:"d-m-Y H:i" }}</p>{% else %}<p>{{ attempt.taken_at|date:"d-m-Y H:i" }}</p>{% endif %}
+</div>
+
+<section class="dg-result {% if attempt.passed %}pass{% else %}fail{% endif %}">
+  <svg class="dg-gauge" viewBox="0 0 140 140" role="img" aria-label="Puntaje {{ attempt.score_percent }} por ciento">
+    <circle class="trk" cx="70" cy="70" r="54"/>
+    <circle class="val" cx="70" cy="70" r="54" stroke-dasharray="{{ gauge }} 339.3" transform="rotate(-90 70 70)"/>
+    <text x="70" y="68" text-anchor="middle" class="pct">{{ attempt.score_percent }}</text>
+    <text x="70" y="88" text-anchor="middle" class="u">% · mín. {{ attempt.pass_percent }}</text>
+  </svg>
+  <div class="dg-verdict">
+    {% if attempt.passed %}
+    <p class="dg-badge ok">Aprobada</p>
+    <h2>¡Despegue autorizado!</h2>
+    <p>Acertaste {{ attempt.correct_count }} de {{ attempt.question_count }}. Tu resultado vale hasta el {{ attempt.expires_on|date:"d-m-Y" }}.</p>
+    <div class="actions"><a class="btn" href="{% url 'dgac:diploma' attempt.pk %}">Ver e imprimir diploma</a>{% if own %}<a class="btn ghost" href="{% url 'dgac:test' %}">Mi historial</a>{% endif %}</div>
+    {% else %}
+    <p class="dg-badge warn">A reforzar</p>
+    <h2>Aún no despegas</h2>
+    <p>Acertaste {{ attempt.correct_count }} de {{ attempt.question_count }} y se necesita {{ attempt.pass_percent }} %. Repasa lo de abajo y vuelve a intentarlo: no hay límite de intentos.</p>
+    <div class="actions">{% if own %}<a class="btn" href="{% url 'dgac:take' %}">Intentar de nuevo</a>{% endif %}<a class="btn ghost" href="{% url 'dgac:home' %}#operaciones">Repasar el proceso</a></div>
+    {% endif %}
+  </div>
+</section>
+
+{% if topics %}
+<section class="dg-topics" aria-labelledby="h-topics">
+  <h2 id="h-topics">Qué reforzar</h2>
+  <ul>
+    {% for t in topics %}
+    <li><span class="nm">{{ t.topic }}</span><span class="bar" aria-hidden="true"><i style="width:{{ t.pct }}%"></i></span><span class="ct">{{ t.missed }} de {{ t.total }} falladas</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="dg-review" aria-labelledby="h-wrong">
+  <h2 id="h-wrong">{% if wrong %}En qué te equivocaste{% else %}Sin errores{% endif %}</h2>
+  {% for r in wrong %}
+  <article class="dg-rv bad">
+    <header><span class="dg-qn">{{ forloop.counter|stringformat:"02d" }}</span>{% if r.topic %}<span class="chip">{{ r.topic }}</span>{% endif %}</header>
+    <p class="q">{% for line in r.lines %}<span class="dg-line">{{ line }}</span>{% endfor %}</p>
+    <p class="mine"><span class="k">Tu respuesta</span>{% if r.given %}{{ r.given|upper }} · {{ r.given_text }}{% else %}<i>sin responder</i>{% endif %}</p>
+    <p class="right"><span class="k">Correcta</span>{{ r.answer|upper }} · {{ r.answer_text }}</p>
+  </article>
+  {% empty %}
+  <p class="dg-note">Respondiste todo correctamente. Buen vuelo.</p>
+  {% endfor %}
+</section>
+
+<details class="dg-all">
+  <summary>Ver las {{ attempt.question_count }} preguntas de este intento</summary>
+  {% for r in rows %}
+  <article class="dg-rv {% if r.correct %}ok{% else %}bad{% endif %}">
+    <header><span class="dg-qn">{{ forloop.counter|stringformat:"02d" }}</span><span class="chip {% if r.correct %}ok{% else %}warn{% endif %}">{% if r.correct %}Correcta{% else %}Incorrecta{% endif %}</span></header>
+    <p class="q">{% for line in r.lines %}<span class="dg-line">{{ line }}</span>{% endfor %}</p>
+    <p class="mine"><span class="k">Tu respuesta</span>{% if r.given %}{{ r.given|upper }} · {{ r.given_text }}{% else %}<i>sin responder</i>{% endif %}</p>
+    {% if not r.correct %}<p class="right"><span class="k">Correcta</span>{{ r.answer|upper }} · {{ r.answer_text }}</p>{% endif %}
+  </article>
+  {% endfor %}
+</details>
+{% endblock %}

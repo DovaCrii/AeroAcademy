@@ -17,6 +17,7 @@ from django.utils import timezone
 
 from apps.catalog.models import Resource
 from apps.community.models import Note, Post, Thread
+from apps.dgac.constants import PRIVATE_PATH_SLUGS
 from apps.knowledge.models import Article
 from apps.library.models import Document
 from apps.paths.models import LearningPath, PathExtra
@@ -42,8 +43,13 @@ def _help_rows():
         )
 
 
+def _public_paths():
+    """Rutas publicadas que se pueden indexar: las de contenido interno (sección DGAC) nunca van al índice."""
+    return LearningPath.objects.filter(is_published=True).exclude(slug__in=PRIVATE_PATH_SLUGS)
+
+
 def _rows():
-    for p in LearningPath.objects.filter(is_published=True):
+    for p in _public_paths():
         yield (
             "path",
             f"path:{p.pk}",
@@ -61,14 +67,21 @@ def _rows():
                     f"{d.get('meaning', '')} {d.get('location', '')}".strip(),
                     reverse("paths:detail", args=[p.slug]),
                 )
-    for r in Resource.objects.prefetch_related("skills", "products").all():
+    internal_resources = Resource.objects.filter(levels__path__slug__in=PRIVATE_PATH_SLUGS)
+    for r in (
+        Resource.objects.exclude(pk__in=internal_resources.values("pk"))
+        .prefetch_related("skills", "products")
+        .all()
+    ):
         url = reverse("catalog:resources") + "?q=" + quote(r.title)
         tags = ", ".join([s.name for s in r.skills.all()] + [p.name for p in r.products.all()])
         body = f"{r.description} {('Habilidades y productos: ' + tags) if tags else ''}".strip()
         yield ("resource", f"resource:{r.pk}", r.title, body, url)
-    visible_notes = Note.objects.filter(
-        is_deleted=False, is_hidden=False, path__is_published=True
-    ).exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
+    visible_notes = (
+        Note.objects.filter(is_deleted=False, is_hidden=False, path__is_published=True)
+        .exclude(path__slug__in=PRIVATE_PATH_SLUGS)
+        .exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
+    )
     for n in visible_notes.select_related("path"):
         yield (
             "note",
@@ -150,11 +163,16 @@ def _still_visible(ref):
     if kind == "note":
         return (
             Note.objects.filter(pk=pk, is_deleted=False, is_hidden=False, path__is_published=True)
+            .exclude(path__slug__in=PRIVATE_PATH_SLUGS)
             .exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
             .exists()
         )
     if kind == "glossary":
-        return PathExtra.objects.filter(pk=pk, path__is_published=True).exists()
+        return (
+            PathExtra.objects.filter(pk=pk, path__is_published=True)
+            .exclude(path__slug__in=PRIVATE_PATH_SLUGS)
+            .exists()
+        )
     if kind == "thread":
         return Thread.objects.filter(pk=pk, is_hidden=False).exists()
     if kind == "post":
@@ -166,7 +184,7 @@ def _still_visible(ref):
     if kind == "article":
         return Article.objects.filter(pk=pk, is_published=True).exists()
     if kind == "path":
-        return LearningPath.objects.filter(pk=pk, is_published=True).exists()
+        return _public_paths().filter(pk=pk).exists()
     return True
 
 

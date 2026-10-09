@@ -48,17 +48,39 @@ XP total para alcanzar el nivel `L` = `50 × L × (L − 1)`:
 
 Como referencia, la Ruta Forma + Revit completa con 3 trofeos y una reliquia deja a una persona cerca del nivel 7.
 
-## Clases (por disciplina principal)
+## Carreras (antes «clases»)
 
-| Disciplina | Clase | Arquetipo | Sprite |
-|---|---|---|---|
-| Arquitectura | **Arquitecto-Constructor** | Mago de la forma | Capa con escuadra y lápiz |
-| Civil-Estructural | **Calculista** | Paladín de las cargas | Armadura de viga I y casco |
-| Topografía | **Cartógrafo** | Explorador | Sombrero, bastón-jalón y prisma |
-| Mecánica | **Artífice** | Inventor | Delantal y engranaje |
-| Captura/RPA | **Piloto de Nubes** | Arquero de largo alcance | Gafas y control de dron |
+La persona elige su **carrera** en el editor de avatar (o la sugiere el moderador). Son 13, agrupadas por disciplina; cada
+una trae nombre real, título de juego, frase, look propio (ropa, gorro, lentes, herramienta y fondo que calzan entre sí),
+paletas curadas, bonos a los atributos y una escalera de títulos (`seed/titulos.json`). El detalle vive en
+`apps/gamification/avatar/careers.py`. Los slugs de las cinco clases originales no cambiaron.
 
-La clase la elige la persona en su hoja de personaje. Por defecto se toma de su disciplina.
+| Disciplina | Carrera (slug) | Título de juego | Look | Bonos |
+|---|---|---|---|---|
+| Arquitectura | Arquitecto/a (`architect`) | Mago de la Forma | Blazer, rollo de planos, fondo plano azul | DOC +2, MOD +1 |
+| Arquitectura | Modelador/a BIM (`bim_modeler`) | Tejedor de Familias | Polerón BIM, audífonos, taza de café | MOD +2, COL +1 |
+| Arquitectura | Dibujante Proyectista (`drafter`) | Escriba de Láminas | Cardigan, escalímetro | DOC +2, NOR +1 |
+| Civil | Ingeniero/a Civil-Estructural (`engineer`) | Paladín de las Cargas | Chaleco reflectante, gorra de seguridad, calculadora | ANA +2, NOR +1 |
+| Civil | Inspector/a de Terreno (`inspector`) | Centinela de la Obra | Chaleco de campo, cámara | NOR +2, DOC +1 |
+| Topografía | Geomensor/a (`cartographer`) | Explorador de Poligonales | Chaqueta de geomensor, jalón con prisma, curvas de nivel | CAP +2, ANA +1 |
+| Topografía | Especialista GIS (`gis`) | Cartomante de Capas | Sweater, tablet, mapa SIG | ANA +2, DOC +1 |
+| Mecánica | Ingeniero/a Mecánico/a (`artificer`) | Artífice de Engranajes | Overol, llave inglesa, engranajes | MOD +2, ANA +1 |
+| Captura y RPA | Piloto RPA (`pilot`) | Piloto de Nubes | Chaqueta de vuelo, visor FPV, control de dron, HUD | CAP +2, NOR +1 |
+| Captura y RPA | Especialista en Escaneo 3D (`scanner`) | Domador de Láser | Chaqueta, escáner láser, nube de puntos | CAP +2, MOD +1 |
+| Transversal | Líder de Levantamiento Digital (`lev_lead`) | Gran Maestre del Levantamiento | Chaleco de campo, credencial, tablet, nube de puntos | CAP +2, COL +1 |
+| Transversal | Coordinador/a BIM (`bim_coord`) | Director de la Orquesta BIM | Polo, tablilla, isométrico BIM | COL +2, NOR +1 |
+| Transversal | Prevencionista HSE (`hse`) | Guardián de la Faena | Chaleco HSE, gorra de seguridad, franja de seguridad | NOR +2, COL +1 |
+
+Los bonos se suman a los atributos de la hoja (tope 20). Al cambiar de carrera sin tocar la ropa, el avatar se viste con el
+look de la nueva; lo elegido a mano manda. «Sorpréndeme» arma una combinación al azar con las listas y paletas de la carrera
+(la ropa siempre se distingue del fondo) y nunca usa piezas bloqueadas.
+
+### Piezas del avatar
+
+17 ropas (con la de cada oficio), 13 gorros (cascos, gorras de seguridad, legionario, boina…), 9 lentes (seguridad y visor
+FPV incluidos), 17 peinados, 8 vellos faciales, 13 herramientas en la mano, 4 pines de solapa, 18 fondos (10 con dibujo por
+disciplina) y 5 marcos. Desbloqueos por insignia: casco de obra, gafas de piloto y marcos raro, épico y legendario. Desbloqueos
+por nivel: marco de bronce NV 3, pin de casquito NV 5 y pin de teodolito dorado NV 10.
 
 ## Títulos
 
@@ -122,6 +144,7 @@ Fórmula del MVP: `min(20, 2 × credenciales verificadas con esa habilidad + cam
 
 Concepto navegable: `design/perfil/hoja-personaje.html`.
 
+- **Vistas:** cada persona elige con cuál se abre su hoja (juego, compacta o profesional) en «Editar mi hoja».
 - **Vista profesional:** foto o avatar, nombre, titular, disciplina, bio, enlaces (LinkedIn, Credly), credenciales verificadas y matriz de habilidades. Es sobria y quedará lista para exportarse como PDF de competencias.
 - **Vista de juego:**
   - avatar 8-bit por capas (clase, tono, color, accesorio desbloqueado);

@@ -6,12 +6,14 @@ from .engine import (
     CLASSES,
     DEFAULTS,
     UNLOCKS,
+    apply_career,
     catalog,
     clean_config,
     compose,
     default_config,
     palette_for,
     render_svg,
+    surprise,
 )
 
 __all__ = [
@@ -20,6 +22,8 @@ __all__ = [
     "DEFAULTS",
     "GRID",
     "UNLOCKS",
+    "apply_career",
+    "surprise",
     "catalog",
     "clean_config",
     "compose",

@@ -47,6 +47,7 @@ PROJECT_APPS = [
     "apps.gamification",
     "apps.notifications",
     "apps.assistant",
+    "apps.dgac",
 ]
 
 INSTALLED_APPS = [
@@ -133,6 +134,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Avisar de vencimientos con esta anticipación (docs/PRD.md: 60 días).
 CREDENTIAL_WARNING_DAYS = int(os.environ.get("CREDENTIAL_WARNING_DAYS", "60"))
+
+# Sección DGAC / RPAS (apps/dgac): el contenido de JEJ (ruta, banco de preguntas, infografías) vive FUERA del
+# repositorio público, en esta carpeta. Producción: /var/lib/centro/dgac. Si falta, la sección avisa que no está instalado.
+DGAC_DATA_DIR = Path(os.environ.get("DGAC_DATA_DIR", str(BASE_DIR / "private" / "dgac")))
 
 # Marca (docs/VISION.md)
 BRAND_PLATFORM = "AeroAcademy"

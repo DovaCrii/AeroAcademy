@@ -1,0 +1,83 @@
+{
+ "slug": "dgac-rpas",
+ "title": "Ruta de práctica",
+ "program": "PRUEBA · Ruta sintética",
+ "platform": "interna",
+ "kind": "structured",
+ "vendor": "dji",
+ "products": [],
+ "disciplines": [
+  "captura-rpa",
+  "topografia"
+ ],
+ "world": "aero",
+ "description": "Ruta sintética para las pruebas.",
+ "levels": [
+  {
+   "code": "d0",
+   "order": 0,
+   "short": "Uno",
+   "title": "Nivel uno",
+   "estimated_hours": "1 h",
+   "audience": "Todos",
+   "goal": "Meta de ejemplo.",
+   "mastery_signals": [
+    "Señal de ejemplo"
+   ],
+   "resources": [],
+   "milestones": [
+    {
+     "key": "d0-t0",
+     "text": "Misión uno"
+    },
+    {
+     "key": "d0-t1",
+     "text": "Misión dos"
+    }
+   ],
+   "quiz": [
+    {
+     "key": "d0-q0",
+     "question": "¿Cuánto es 1 + 1?",
+     "options": [
+      "1",
+      "3",
+      "2",
+      "4"
+     ],
+     "answer": 2,
+     "explanation": "Es dos."
+    }
+   ]
+  },
+  {
+   "code": "d1",
+   "order": 1,
+   "short": "Dos",
+   "title": "Nivel dos",
+   "estimated_hours": "1 h",
+   "audience": "Todos",
+   "goal": "Otra meta.",
+   "mastery_signals": [],
+   "resources": [],
+   "milestones": [
+    {
+     "key": "d1-t0",
+     "text": "Misión tres"
+    }
+   ],
+   "quiz": [
+    {
+     "key": "d1-q0",
+     "question": "¿Cuánto es 2 + 2?",
+     "options": [
+      "4",
+      "5"
+     ],
+     "answer": 0,
+     "explanation": "Es cuatro."
+    }
+   ]
+  }
+ ]
+}

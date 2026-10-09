@@ -13,7 +13,7 @@ from apps.credentials import services as credential_services
 from apps.notifications import services as notifications
 from apps.notifications.models import Announcement
 
-from . import moderation
+from . import moderation, opinions
 from .models import Category, ModerationLog, Note, Post, Report, Thread
 
 LOG_LIMIT = 50
@@ -230,3 +230,19 @@ def report(request, kind, pk):
         ok="Gracias: un responsable revisará el reporte.",
     )
     return redirect(back if ok else "community:forum")
+
+
+@require_POST
+def clear_opinions(request, pk):
+    """Limpia reacciones (y votos de la encuesta) de un hilo oculto; con `post` limpia las de un mensaje oculto."""
+    _lead_only(request)
+    post_pk = request.POST.get("post", "")
+    if post_pk:
+        post = get_object_or_404(Post, pk=post_pk, thread_id=pk)
+        _run(request, opinions.clear_reactions, post, request.user, ok="Reacciones limpiadas.")
+    else:
+        thread = get_object_or_404(Thread, pk=pk)
+        _run(request, opinions.clear_reactions, thread, request.user, ok="Reacciones limpiadas.")
+        if request.POST.get("votes"):
+            _run(request, opinions.clear_votes, thread, request.user, ok="Votos limpiados.")
+    return redirect("community:thread", pk=pk)

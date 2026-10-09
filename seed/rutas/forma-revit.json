@@ -27,6 +27,25 @@
       "estimated_hours": "2 h",
       "audience": "Todo el equipo",
       "goal": "Saber qué es cada producto, entrar al hub correcto y tener cuenta activa en Autodesk Learning.",
+      "guide": {
+        "title": "Guía rápida · Orientación",
+        "software": "forma",
+        "do": [
+          "Entra a *Forma Home* con la cuenta corporativa y confirma que estás en el hub de la empresa.",
+          "Crea tu perfil en Autodesk Learning y abre *My dashboard*.",
+          "Haz el *Product tour* de Forma antes de empezar cualquier curso."
+        ],
+        "commands": [
+          "*Forma Home*",
+          "*Product tour*",
+          "*My dashboard*"
+        ],
+        "mistakes": [
+          "Trabajar en el hub o la región equivocados: el proyecto queda fuera del equipo.",
+          "Confundir *Site Design* y *Building Design* con Revit: cada uno resuelve otra etapa."
+        ],
+        "essential": "Conceptual design with Autodesk Forma"
+      },
       "resources": [
         {
           "order": 0,
@@ -128,6 +147,31 @@
       "estimated_hours": "15 a 25 h",
       "audience": "Modeladores nuevos o que vienen de CAD",
       "goal": "Modelar, crear familias simples y documentar. Meta opcional: Autodesk Certified User en Revit.",
+      "guide": {
+        "title": "Guía rápida · Fundamentos de Revit",
+        "software": "revit",
+        "do": [
+          "Parte por el curso de BIM para arquitectura y modela un edificio simple.",
+          "Fija primero *Level* y *Grid*; después *Wall*, *Floor* y *Roof*.",
+          "Crea una familia simple en el *Family Editor* con parámetros de tipo y de instancia.",
+          "Emite una *Sheet* con el *Title block* corporativo."
+        ],
+        "commands": [
+          "*Level*",
+          "*Grid*",
+          "*Wall*",
+          "*Floor*",
+          "*Roof*",
+          "*Family Editor*",
+          "*Sheet*"
+        ],
+        "mistakes": [
+          "Modelar sin *Level* ni *Grid*: después nada se edita ni se documenta bien.",
+          "Dibujar con líneas de detalle lo que debía ser un elemento o una familia.",
+          "Crear tipos con nombres genéricos en vez de seguir el estándar del equipo."
+        ],
+        "essential": "Introduction to BIM for architectural design"
+      },
       "resources": [
         {
           "order": 0,
@@ -235,6 +279,28 @@
       "estimated_hours": "6 a 8 h",
       "audience": "Todo el equipo de diseño",
       "goal": "Crear un sitio real, modelar volúmenes, correr todos los análisis y presentar en Forma Board. Meta: Certificate of completion.",
+      "guide": {
+        "title": "Guía rápida · Site Design",
+        "software": "forma",
+        "do": [
+          "Crea un sitio real con *Create new site* y confirma el área con *Confirm map area*.",
+          "Revisa terreno y edificios del *Data Marketplace* antes de analizar.",
+          "Corre cada análisis del menú *Analyze* al menos una vez.",
+          "Guarda cada idea como *Proposal*, compárelas con *Area metrics* y presenta en *Forma Board*."
+        ],
+        "commands": [
+          "*Create new site*",
+          "*Analyze*",
+          "*Proposals*",
+          "*Area metrics*",
+          "*Forma Board*"
+        ],
+        "mistakes": [
+          "Confirmar el área del mapa mal ubicada: todos los análisis quedan corridos.",
+          "Modificar la única propuesta en vez de duplicarla: pierdes la comparación."
+        ],
+        "essential": "Learn Forma Site Design in 90 minutes"
+      },
       "resources": [
         {
           "order": 0,
@@ -346,6 +412,29 @@
       "estimated_hours": "8 a 10 h",
       "audience": "Modeladores y coordinadores",
       "goal": "Llevar una propuesta de Forma a Revit y volver a Forma con los cambios, sin re-modelar y sin perder la georreferencia.",
+      "guide": {
+        "title": "Guía rápida · Forma a Revit",
+        "software": "revit",
+        "do": [
+          "Instala el add-in con *Download Revit add-in* o activa *Enable Forma Connected Client* si tu Revit lo permite.",
+          "Envía con *Send to Revit* y verifica *Project Base Point* y *Survey Point*.",
+          "Edita en Revit y vuelve con *Update proposal* desde una vista 3D dedicada.",
+          "Vincula la nube de puntos con *Insert* → *Point Cloud* (.rcp) y modela sobre ella."
+        ],
+        "commands": [
+          "*Send to Revit*",
+          "*Update proposal*",
+          "*Project Base Point*",
+          "*Survey Point*",
+          "*Point Cloud*"
+        ],
+        "mistakes": [
+          "Mover el *Survey Point* después de enviar: se pierde la georreferencia.",
+          "Intentar *Update proposal* desde cualquier vista: usa una vista 3D dedicada.",
+          "Esperar que todo se convierta bien: registra qué sí y qué no pasa a Revit."
+        ],
+        "essential": "Iterative design and analysis with Forma and Revit"
+      },
       "resources": [
         {
           "order": 0,
@@ -481,6 +570,28 @@
       "estimated_hours": "4 a 10 h",
       "audience": "Coordinadores BIM y líderes de disciplina",
       "goal": "Operar Forma Data Management como entorno común: carpetas, permisos, revisiones, transmittals y coordinación.",
+      "guide": {
+        "title": "Guía rápida · Colaboración y CDE",
+        "software": "acc",
+        "do": [
+          "Arma un proyecto plantilla en *Data Management* con *Folders* y *Permissions*.",
+          "Haz una *Review* y un *Transmittal* de prueba con otra persona.",
+          "Publica un *cloud model* y revisa interferencias en *Model Coordination*.",
+          "Define y documenta la *naming convention* de archivos del equipo."
+        ],
+        "commands": [
+          "*Folders*",
+          "*Permissions*",
+          "*Review*",
+          "*Transmittal*",
+          "*Model Coordination*"
+        ],
+        "mistakes": [
+          "Dar permisos amplios desde la carpeta raíz: después nadie sabe quién ve qué.",
+          "Subir archivos sin la convención de nombres: la coordinación se vuelve un desorden."
+        ],
+        "essential": "Learn Forma Data Management and Build in 90 minutes"
+      },
       "resources": [
         {
           "order": 0,
@@ -560,6 +671,24 @@
       "estimated_hours": "30 a 60 h",
       "audience": "Profesionales de cada disciplina",
       "goal": "Preparar y rendir la certificación profesional de Revit que corresponda al rol.",
+      "guide": {
+        "title": "Guía rápida · Certificación",
+        "software": "revit",
+        "do": [
+          "Elige la certificación según tu rol y regístrala en la tabla del equipo.",
+          "Completa el curso de preparación y aprueba el *Practice test*.",
+          "Revisa costo, idioma y modalidad antes de agendar el examen."
+        ],
+        "commands": [
+          "*Practice test*",
+          "*Certificate of completion*"
+        ],
+        "mistakes": [
+          "Rendir el examen sin haber aprobado el *Practice test*.",
+          "Elegir la certificación por moda y no por el rol que cumples."
+        ],
+        "essential": "Revit for Architectural Design Professional Certification Prep"
+      },
       "resources": [
         {
           "order": 0,
@@ -657,6 +786,25 @@
       "estimated_hours": "Variable",
       "audience": "Quien programa o automatiza",
       "goal": "Automatizar tareas repetitivas en Forma con Dynamo y evaluar extensiones propias con la Forma API.",
+      "guide": {
+        "title": "Guía rápida · Automatización",
+        "software": "dynamo",
+        "do": [
+          "En Forma abre *Extensions* → *Add extension* → *Dynamo Player* y corre el ejemplo.",
+          "Crea un gráfico simple que lea *Area metrics*.",
+          "Evalúa una extensión propia solo cuando el flujo manual ya sea estable."
+        ],
+        "commands": [
+          "*Extensions*",
+          "*Dynamo Player*",
+          "*Area metrics*"
+        ],
+        "mistakes": [
+          "Automatizar un proceso que aún no dominas a mano.",
+          "Correr gráficos de terceros sin revisar qué datos leen y escriben."
+        ],
+        "essential": "Dynamo in Forma"
+      },
       "resources": [
         {
           "order": 0,

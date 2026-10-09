@@ -55,3 +55,11 @@ FACIAL_HAIR = {
         18: sym("............HHHH"),
     },
 }
+
+LABELS.update({"sideburns": "Patillas", "handlebar": "Bigote manubrio"})
+
+FACIAL_HAIR["sideburns"] = {y: sym("..........H.....") for y in range(10, 15)}
+FACIAL_HAIR["handlebar"] = {
+    13: sym("...........HHHHH"),
+    14: sym("...........H...."),
+}

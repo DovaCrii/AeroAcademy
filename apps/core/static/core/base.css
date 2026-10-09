@@ -11,13 +11,15 @@ body{margin:0;color:var(--ink);font-family:var(--font);font-size:16px;line-heigh
     linear-gradient(90deg,var(--grid-major) 1px,transparent 1px),
     linear-gradient(var(--grid-minor) 1px,transparent 1px),
     linear-gradient(90deg,var(--grid-minor) 1px,transparent 1px);
-  background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+  background-size:140px 140px,140px 140px,28px 28px,28px 28px;
   background-position:-1px -1px}
 a{color:var(--level);text-underline-offset:3px;text-decoration-thickness:1px;transition:color .18s var(--ease)}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
 ::selection{background:var(--amber);color:var(--on-amber)}
 button,input,select,textarea{font:inherit;color:inherit}
 .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+@media (min-width:1600px){.wrap{max-width:1320px;padding:0 28px}}
+body{line-height:var(--lh-body);letter-spacing:.002em}
 .skip{position:absolute;left:-9999px;top:0;background:var(--sheet);color:var(--ink);padding:8px 12px;z-index:100;border-radius:var(--r)}
 .skip:focus{left:8px;top:8px}
 
@@ -34,7 +36,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cap{font-family:var(--font-mono);font-size:10.5px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
 .brandcell{padding-right:14px!important}
 .brand{font-weight:800;font-stretch:75%;font-size:20px;line-height:1.1;letter-spacing:.2px;white-space:nowrap}
-.brand i{font-family:var(--font-serif);font-style:italic;font-weight:600;font-stretch:100%;color:var(--amber-ink);margin-left:2px}
+.brand i{font-style:normal;font-weight:900;font-stretch:100%;color:var(--ink);background:var(--amber);border-radius:6px;padding:0 5px;margin-left:3px}
 
 /* navegación */
 .nav{display:flex;align-items:center;gap:4px;min-width:0;position:relative}
@@ -77,7 +79,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .userchip .uname{font-size:14px;font-weight:600;font-stretch:90%;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
 
 /* ── lámina ─────────────────────────────────────────────────────────────── */
-.sheet{background:var(--sheet);border:1px solid var(--hair);border-radius:var(--r-lg);box-shadow:var(--shadow-1);margin:22px 0;position:relative}
+.sheet{background:var(--surface-tint),var(--sheet);border:1px solid var(--hair);border-radius:var(--r-lg);box-shadow:var(--shadow-1);margin:22px 0;position:relative}
 .sheet-in{padding:28px 30px}
 .tb{display:grid;grid-template-columns:2fr 2.4fr 1fr 1fr;border-top:1px solid var(--hair)}
 .tb>div{padding:9px 14px;border-right:1px solid var(--hair);min-width:0}
@@ -86,19 +88,24 @@ button,input,select,textarea{font:inherit;color:inherit}
 .tb b{display:block;font-size:14px;font-weight:600;font-stretch:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* tipografía: títulos en serif cursiva, rótulos en monoespaciada */
-h1,h2{font-family:var(--font-serif);font-style:italic;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
-h1{font-size:clamp(38px,5vw,68px);overflow-wrap:break-word;line-height:1.02;margin:0 0 14px}
-h2{font-size:clamp(28px,3.4vw,40px);line-height:1.1;margin:0}
+/* Escala modular 1.25 (tokens): display/h1/h2 en serif cursiva y apretados; h3/h4 y UI en sans; datos en mono. */
+h1,h2{font-family:var(--font-display);font-style:normal;font-weight:850;letter-spacing:var(--track-head);text-wrap:balance}
+h1{font-size:var(--fs-h1);overflow-wrap:break-word;line-height:var(--lh-tight);margin:0 0 14px;letter-spacing:-.035em;font-weight:900}
+h2{font-size:var(--fs-h2);line-height:var(--lh-head);margin:0}
 h1 em,h2 em,h1 b,h2 b{color:var(--amber-ink);font-weight:inherit}
-h3{font-weight:700;font-stretch:88%;font-size:19px;line-height:1.25;margin:0}
-.lead{font-size:18px;line-height:1.55;color:var(--ink-2);font-weight:450;max-width:62ch;margin:0 0 12px}
+h3{font-weight:700;font-stretch:88%;font-size:var(--fs-h4);line-height:1.25;margin:0;letter-spacing:-.005em}
+h4{font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;font-weight:600;line-height:1.4}
+main p,main li{text-wrap:pretty}
+.lead{font-size:var(--fs-lead);line-height:1.5;color:var(--ink-2);font-weight:430;max-width:var(--measure);margin:0 0 12px;letter-spacing:-.003em}
+.small{font-size:var(--fs-small);line-height:1.45}
+.display{font-family:var(--font-display);font-style:normal;font-weight:900;font-size:var(--fs-display);line-height:var(--lh-tight);letter-spacing:-.03em}
 .term{font-style:normal;font-weight:600;font-stretch:92%;padding:0 6px;border:1px solid var(--hair);border-radius:6px;background:var(--sheet-2);white-space:nowrap}
 code,kbd,samp,pre{font-family:var(--font-mono);font-size:.92em}
 
 /* pie con barra de escala */
 .foot{position:relative;margin-top:30px;padding-top:30px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));color:var(--ink-2);font-size:13px;font-family:var(--font-mono);letter-spacing:.02em;border-top:1px solid var(--hair)}
 .foot::before{content:"";position:absolute;top:-4px;left:20px;width:120px;height:7px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--amber) 0 30px,transparent 30px 60px);box-shadow:inset 0 0 0 1px var(--amber)}
-.foot b{font-family:var(--font-serif);font-style:italic;font-weight:600;font-size:14.5px;color:var(--ink)}
+.foot b{font-family:var(--font-display);font-style:normal;font-weight:800;font-size:14.5px;color:var(--ink)}
 
 .msgs{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
 .msgs li{padding:11px 16px;border:1px solid color-mix(in srgb,var(--ok) 55%,transparent);border-left:4px solid var(--ok);border-radius:var(--r);background:var(--sheet);font-weight:600;box-shadow:var(--shadow-1)}
