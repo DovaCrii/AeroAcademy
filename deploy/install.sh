@@ -133,7 +133,13 @@ if [ "$PUBLISH" = "node" ]; then
   TS=(tailscale --socket="$NODE_SOCK")
   for _ in 1 2 3 4 5 6 7 8 9 10; do [ -S "$NODE_SOCK" ] && break; sleep 1; done
   # BackendState «Running» = el nodo ya está dado de alta (el texto de `status` cambia entre versiones).
-  BACKEND="$("${TS[@]}" status --json 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin).get("BackendState",""))' 2>/dev/null || true)"
+  # Recién reiniciado pasa unos segundos por NoState/Starting: se espera a un estado definitivo.
+  BACKEND=""
+  for _ in $(seq 1 20); do
+    BACKEND="$("${TS[@]}" status --json 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin).get("BackendState",""))' 2>/dev/null || true)"
+    case "$BACKEND" in Running|NeedsLogin|NeedsMachineAuth|Stopped) break ;; esac
+    sleep 1
+  done
   if [ "$BACKEND" != "Running" ]; then
     echo "    Hay que dar de alta el nodo en tu tailnet (una sola vez)."
     if [ -n "${AEROACADEMY_TS_AUTHKEY:-}" ]; then
