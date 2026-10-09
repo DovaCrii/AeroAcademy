@@ -626,3 +626,42 @@ def test_buscar_also_tries_current_models_without_instruct_in_the_name(settings,
     out = capsys.readouterr().out
     assert "NIM_MODEL=nvidia/nemotron-3-super-120b-a12b" in out and "qwen/qwen3.5-397b-a17b" in out
     assert "nv-embedqa" not in " ".join(seen) and "content-safety" not in " ".join(seen)
+
+
+# --- modelos de razonamiento (Nemotron 3 en p340) ------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("raw", "clean"),
+    [
+        ("<think>pienso en voz alta…</think>Hola, soy Teo.", "Hola, soy Teo."),
+        ("<THINK>\nvarias\nlíneas\n</THINK>\n\nRespuesta final", "Respuesta final"),
+        ("Respuesta sin razonamiento", "Respuesta sin razonamiento"),
+        ("<think>se cortó por max_tokens", ""),
+    ],
+)
+def test_strip_reasoning(raw, clean):
+    assert client.strip_reasoning(raw) == clean
+
+
+def test_teo_never_shows_the_models_reasoning(member, settings):
+    from apps.assistant import services
+
+    settings.NIM_API_KEY = "nvapi-X"
+    content = "<think>El usuario pregunta… debo responder breve.</think>Tu próxima misión es la del capítulo N0."
+    client.TRANSPORT = httpx.MockTransport(
+        lambda r: httpx.Response(200, json={"choices": [{"message": {"content": content}}]})
+    )
+    answer = services.answer(member, "qué me falta")
+    assert answer.status == "ok" and answer.text == "Tu próxima misión es la del capítulo N0."
+
+
+def test_only_reasoning_counts_as_an_empty_answer(settings):
+    settings.NIM_API_KEY = "nvapi-X"
+    client.TRANSPORT = httpx.MockTransport(
+        lambda r: httpx.Response(
+            200, json={"choices": [{"message": {"content": "<think>sin terminar"}}]}
+        )
+    )
+    with pytest.raises(client.BotError, match="bad_response"):
+        client.chat_with("a/b", [{"role": "user", "content": "hola"}])
