@@ -28,10 +28,13 @@ Todos los bloques de `docs/PLAN.md` están construidos. Esto es lo que queda, or
 | ✔ Hecho | `tools/preflight.py` (producción real con base temporal, 25 páginas, secretos, LF, pruebas) |
 | ✔ Hecho | `tools/fusionar_cadena.py` y `docs/FUSIONES.md` (la persona fusiona) |
 | ✔ Hecho | `deploy/install.sh` con `deploy/centro.env`, temporizadores de respaldo, vencimientos y seguimiento de Teo |
-| ⏳ Tuyo | Fusionar la cadena (#1 → #21 y el PR de producción) |
-| ⏳ Tuyo | Correr `install.sh` en la VM por primera vez (no se ha ejecutado en una VM real) |
+| ✔ Hecho | Cadena fusionada (#1 → #34) e instalada en p340 con nodo Tailscale propio (`https://aeroacademy.tailccd107.ts.net`) |
+| ✔ Hecho | Alertas: aviso a los responsables si el respaldo o un temporizador falla (`centro-alerta@`) |
+| ✔ Hecho | Primer día: `aprobar` y `puesta_en_marcha` desde la VM (`sudo aeroacademy …`), hilo de bienvenida fijado, «Primeros pasos» en la portada, ícono y manifiesto para instalar como app |
+| ✔ Hecho | Teo sin razonamiento a la vista (`enable_thinking: false`, limpieza y paso al modelo siguiente) |
+| ⏳ Tuyo | Entrar como admin (tu correo **de Tailscale** en `BOOTSTRAP_ADMINS`, o `sudo aeroacademy aprobar`); invitar a `cmunoz@jej.cl` y al equipo a la tailnet o compartirles el equipo `aeroacademy` |
+| ⏳ Tuyo | Rotar la clave de NVIDIA (se pegó en el chat) |
 | ⏳ Tuyo | Probar una restauración de respaldo antes de confiar en él |
-| Siguiente ronda | Alertas: un aviso si el respaldo o un temporizador falla |
 
 ## Producto (no bloquea la salida)
 

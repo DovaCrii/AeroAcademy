@@ -132,7 +132,9 @@ if [ "$PUBLISH" = "node" ]; then
   systemctl restart tailscaled-aeroacademy.service   # aplica cambios de la unidad (p. ej. --statedir)
   TS=(tailscale --socket="$NODE_SOCK")
   for _ in 1 2 3 4 5 6 7 8 9 10; do [ -S "$NODE_SOCK" ] && break; sleep 1; done
-  if ! "${TS[@]}" status >/dev/null 2>&1 || "${TS[@]}" status 2>&1 | grep -qiE 'logged out|needslogin|Log in at'; then
+  # BackendState «Running» = el nodo ya está dado de alta (el texto de `status` cambia entre versiones).
+  BACKEND="$("${TS[@]}" status --json 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin).get("BackendState",""))' 2>/dev/null || true)"
+  if [ "$BACKEND" != "Running" ]; then
     echo "    Hay que dar de alta el nodo en tu tailnet (una sola vez)."
     if [ -n "${AEROACADEMY_TS_AUTHKEY:-}" ]; then
       "${TS[@]}" up --hostname="$TS_HOSTNAME" --auth-key="$AEROACADEMY_TS_AUTHKEY"
@@ -152,6 +154,7 @@ echo "==> Estáticos, migraciones y semillas"
 run_manage collectstatic --noinput >/dev/null
 run_manage migrate --noinput
 run_manage seed_catalog
+run_manage puesta_en_marcha || true   # hilo de bienvenida (una vez) y lista de lo que falta
 run_manage reindex_assistant || true
 
 echo "==> Servicios systemd"
@@ -160,7 +163,8 @@ sed -i "s|127.0.0.1:8010|127.0.0.1:$PORT|" /etc/systemd/system/centro.service
 for unit in centro-backup.service centro-backup.timer centro-expiry.service centro-expiry.timer centro-teo.service centro-teo.timer centro-alerta@.service; do
   install -m 644 "deploy/$unit" "/etc/systemd/system/$unit"
 done
-chmod 755 "$APP/deploy/backup.sh"   # rsync ya lo copió: aquí solo se le da permiso de ejecución
+chmod 755 "$APP/deploy/backup.sh" "$APP/deploy/manage.sh"   # rsync ya los copió: aquí solo se les da permiso de ejecución
+ln -sf "$APP/deploy/manage.sh" /usr/local/bin/aeroacademy   # atajo: sudo aeroacademy <comando>  (aprobar, teo_probar…)
 systemctl daemon-reload
 systemctl enable --now centro.service centro-backup.timer centro-expiry.timer centro-teo.timer
 systemctl restart centro.service

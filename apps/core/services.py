@@ -55,4 +55,5 @@ def home_context(person):
         "mission": dashboard.suggested_mission(person),
         "board": dashboard.guild_board(person),
         "counters": dashboard.counters(person),
+        "first_steps": dashboard.first_steps(person),
     }

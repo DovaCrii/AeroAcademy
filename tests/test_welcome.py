@@ -96,3 +96,11 @@ def test_welcome_assets_exist():
 def test_pending_person_does_not_see_the_welcome(client_for, make_person):
     pending = make_person("p@lev.cl", status="pending")
     assert client_for(pending.login).get("/").status_code == 302
+
+
+def test_suite_apps_show_icon_and_whether_they_are_live_or_coming(member_client):
+    html = member_client.get("/").content.decode().split('id="suite"')[1]
+    for product in SUITE_AERO:
+        assert f'href="#{product["icon"]}"' in html
+    assert html.count("En desarrollo") == sum(p["status"] == "soon" for p in SUITE_AERO) == 2
+    assert html.count(">Activa<") == sum(p["status"] == "active" for p in SUITE_AERO)
