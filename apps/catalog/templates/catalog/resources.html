@@ -1,59 +1,96 @@
 {% extends "core/base.html" %}
+{% load static core_extras %}
 
 {% block title %}Catálogo de recursos{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'catalog/catalog.css' %}">{% endblock %}
 
 {% block content %}
-<div class="page-head">
-  <h1>Catálogo</h1>
-  <p>Cursos, módulos, tutoriales y exámenes de todas las plataformas. Filtra por plataforma, tipo, gratuito o certificado.</p>
-</div>
+<header class="cat-head">
+  <p class="cat-kicker">// Catálogo · {{ total }} recurso{{ total|pluralize }} · {{ paths|length }} ruta{{ paths|length|pluralize }}</p>
+  <h1>Todo lo que hay para aprender</h1>
+  <p class="cat-lead">Cursos, módulos, tutoriales y exámenes oficiales de cada empresa de software. Lo <b>esencial</b> de cada ruta aparece primero; los que entregan certificado muestran cuánto <b>XP</b> suman al verificarse.</p>
+</header>
 
-<form class="filters" method="get" action="{% url 'catalog:resources' %}">
-  <label>Buscar<input type="search" name="q" value="{{ f.q }}" placeholder="Título o descripción"></label>
-  <label>Plataforma
-    <select name="platform">
-      <option value="">Todas</option>
-      {% for p in platforms %}<option value="{{ p.slug }}"{% if p.slug == f.platform %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
-    </select>
+<form class="cat-search" method="get" action="{% url 'catalog:resources' %}" role="search">
+  {% if f.path %}<input type="hidden" name="ruta" value="{{ f.path }}">{% endif %}
+  {% if f.kind %}<input type="hidden" name="kind" value="{{ f.kind }}">{% endif %}
+  <label class="cat-q"><span class="sr-only">Buscar en el catálogo</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+    <input type="search" name="q" value="{{ f.q }}" placeholder="Busca por software, tema o habilidad: «Revit familias», «OpenRoads corredor»" autocomplete="off">
   </label>
-  <label>Tipo
-    <select name="kind">
-      <option value="">Todos</option>
-      {% for value, label in kinds %}<option value="{{ value }}"{% if value == f.kind %} selected{% endif %}>{{ label }}</option>{% endfor %}
-    </select>
-  </label>
-  <label class="check"><input type="checkbox" name="free" value="1"{% if f.free %} checked{% endif %}> Gratuito</label>
-  <label class="check"><input type="checkbox" name="cert" value="1"{% if f.cert %} checked{% endif %}> Entrega certificado</label>
-  <button class="btn" type="submit">Filtrar</button>
-  <a class="btn ghost" href="{% url 'catalog:resources' %}">Limpiar</a>
+  <button class="btn primary" type="submit">Buscar</button>
+
+  <details class="cat-more"{% if f.platform or f.free %} open{% endif %}>
+    <summary>Más filtros</summary>
+    <div class="cat-more-in">
+      <label>Plataforma
+        <select name="platform">
+          <option value="">Todas</option>
+          {% for p in platforms %}<option value="{{ p.slug }}"{% if p.slug == f.platform %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" name="free" value="1"{% if f.free %} checked{% endif %}> Gratuito</label>
+      <label class="check"><input type="checkbox" name="cert" value="1"{% if f.cert %} checked{% endif %}> Entrega certificado (suma XP)</label>
+      <label class="check"><input type="checkbox" name="esencial" value="1"{% if f.essential %} checked{% endif %}> Solo esenciales</label>
+      <button class="btn" type="submit">Aplicar</button>
+    </div>
+  </details>
 </form>
 
-<p class="sub">{{ page.paginator.count }} recurso{{ page.paginator.count|pluralize }}</p>
-<div class="cards">
+<nav class="cat-routes" aria-label="Filtrar por ruta">
+  <span class="cat-label">Ruta</span>
+  <a class="cat-pill{% if not f.path %} on{% endif %}" href="?{{ route_base }}">Todas</a>
+  {% for p in paths %}<a class="cat-pill{% if p.slug == f.path %} on{% endif %}" href="?{% if route_base %}{{ route_base }}&amp;{% endif %}ruta={{ p.slug }}">{{ p.title }}</a>{% endfor %}
+</nav>
+
+<nav class="cat-tabs" aria-label="Filtrar por tipo">
+  {% for value, label, n in kinds %}<a class="cat-tab{% if value == f.kind %} on{% endif %}" href="?{% if kind_base %}{{ kind_base }}{% if value %}&amp;{% endif %}{% endif %}{% if value %}kind={{ value }}{% endif %}">{{ label }}{% if value %} <small>{{ n }}</small>{% endif %}</a>{% endfor %}
+</nav>
+
+<div class="cat-bar">
+  <p class="cat-count"><b>{{ page.paginator.count }}</b> resultado{{ page.paginator.count|pluralize }}{% if f.q %} para «{{ f.q }}»{% endif %}</p>
+  <p class="cat-quick">
+    <a class="chip ess{% if f.essential %} on{% endif %}" href="?esencial={% if f.essential %}0{% else %}1{% endif %}{% if f.path %}&amp;ruta={{ f.path }}{% endif %}">Solo esenciales · {{ essential_count }}</a>
+    <a class="chip cert{% if f.cert %} on{% endif %}" href="?cert={% if f.cert %}0{% else %}1{% endif %}{% if f.path %}&amp;ruta={{ f.path }}{% endif %}">Con certificado · {{ cert_count }}</a>
+    {% if filtered %}<a class="cat-clear" href="{% url 'catalog:resources' %}">Limpiar filtros</a>{% endif %}
+  </p>
+</div>
+
+<div class="cat-grid">
   {% for r in page %}
-  <article class="card">
-    <span class="sub">{{ r.platform.name }} · {{ r.get_kind_display }}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</span>
-    <h3>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}</a>{% else %}{{ r.title }}{% endif %}</h3>
-    {% if r.description %}<p>{{ r.description|truncatechars:140 }}</p>{% endif %}
-    <div class="foot-row">
-      <span class="chips">
-        {% if r.is_official %}<span class="chip off">Oficial</span>{% endif %}
-        {% if r.is_free %}<span class="chip">Gratuito</span>{% endif %}
-        {% if r.grants_completion_certificate %}<span class="chip cert">Certificado</span>{% endif %}
-        {% for s in r.skills.all %}<span class="chip">{{ s.name }}</span>{% endfor %}
-      </span>
+  <article class="cat-card{% if 'Esencial' in r.tags %} is-ess{% endif %}">
+    <p class="cat-meta">{{ r.platform.name }} · {{ r.get_kind_display }}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</p>
+    <h3>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a>{% else %}{{ r.title }}{% endif %}</h3>
+    {% if r.description %}<p class="cat-desc">{{ r.description|truncatechars:160|terms }}</p>{% endif %}
+    {% if r.in_paths %}<p class="cat-in">En la ruta {% for p in r.in_paths %}<a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+    <div class="chips">
+      {% course_xp r %}
+      {% if r.is_official %}<span class="chip off">Oficial</span>{% endif %}
+      {% if r.is_free %}<span class="chip">Gratuito</span>{% endif %}
+      {% if r.grants_completion_certificate %}<span class="chip cert">Certificado</span>{% endif %}
+      {% for s in r.skills.all|slice:":3" %}<span class="chip">{{ s.name }}</span>{% endfor %}
     </div>
   </article>
   {% empty %}
-  <p class="empty">No hay recursos con esos filtros.</p>
+  <div class="cat-empty">
+    <p><b>No hay recursos con esos filtros.</b></p>
+    <p>Prueba con menos palabras, quita un filtro o <a href="{% url 'catalog:resources' %}">mira todo el catálogo</a>. Si falta un curso, propónlo en el <a href="{% url 'community:forum' %}">foro</a>.</p>
+  </div>
   {% endfor %}
 </div>
 
 {% if page.has_other_pages %}
 <nav class="pager" aria-label="Páginas">
-  {% if page.has_previous %}<a class="btn ghost" href="?{{ querystring }}&page={{ page.previous_page_number }}">← Anterior</a>{% endif %}
+  {% if page.has_previous %}<a class="btn ghost" href="?{{ querystring }}&amp;page={{ page.previous_page_number }}">← Anterior</a>{% endif %}
   <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
-  {% if page.has_next %}<a class="btn ghost" href="?{{ querystring }}&page={{ page.next_page_number }}">Siguiente →</a>{% endif %}
+  {% if page.has_next %}<a class="btn ghost" href="?{{ querystring }}&amp;page={{ page.next_page_number }}">Siguiente →</a>{% endif %}
 </nav>
 {% endif %}
+
+<aside class="cat-legend" aria-label="Qué significa cada etiqueta">
+  <span><span class="chip ess">Esencial</span> lo mínimo de la ruta</span>
+  <span><span class="chip xp">+100 XP</span> sube su certificado (clic) y suma al verificarse</span>
+  <span><span class="chip off">Oficial</span> del fabricante</span>
+  <span><span class="chip cert">Certificado</span> entrega constancia</span>
+</aside>
 {% endblock %}

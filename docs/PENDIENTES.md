@@ -41,6 +41,8 @@ Todos los bloques de `docs/PLAN.md` están construidos. Esto es lo que queda, or
 - Fuente Press Start 2P (A10: necesita tu permiso para descargarla; hoy se usa una monoespaciada).
 - `htmx.min.js` (A11: hoy `enhance.js` hace el trabajo; ver D23).
 - URLs de Bentley marcadas `verify_url`: confirmarlas con una cuenta Bentley.
-- Rutas nuevas (Trimble, Esri, drones/RPA) y sus mundos `survey`, `mechanical`, `aero` (los sprites de Teo ya existen).
+- Rutas nuevas (Trimble, Esri, drones/RPA) y sus mundos `survey`, `mechanical`, `aero` (los sprites de Nala ya existen).
 - Exportar la hoja profesional a PDF; vista previa de PDF e imágenes de documentos; historial de ediciones de artículos; matriz exportable.
 - Accesorios de avatar por nivel y expediciones del equipo (insignia *Gremio Unido*).
+- **Avatares y opciones de visualización (pedido 2026-10-09):** más piezas de avatar, vistas alternativas (compacta / juego / profesional) y preferencias de visualización por persona.
+- Sprites de Nala: el teodolito (`teo-survey`) y el dron (`teo-aero`) se leen poco a 48 px; «pensando» se nota solo en los ojos.

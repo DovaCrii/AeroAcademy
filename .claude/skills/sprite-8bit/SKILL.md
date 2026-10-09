@@ -1,6 +1,6 @@
 ---
 name: sprite-8bit
-description: Dibuja sprites pixel-art como SVG para AeroAcademy (avatares por capas, insignias, Teo y sus atuendos) con la grilla y paleta del proyecto. Usar al crear o modificar cualquier sprite 8-bit.
+description: Dibuja sprites pixel-art como SVG para AeroAcademy (avatares por capas, insignias, Nala (la mascota) y sus atuendos) con la grilla y paleta del proyecto. Usar al crear o modificar cualquier sprite 8-bit.
 ---
 
 # Sprites 8-bit en SVG
@@ -8,7 +8,7 @@ description: Dibuja sprites pixel-art como SVG para AeroAcademy (avatares por ca
 > **Avatares de personas:** no se dibujan a mano como SVG. Viven en `apps/gamification/avatar/parts/` como arte ASCII
 > por capas (grilla **32×32**) y se documentan en `docs/AVATARES_PIXEL.md`. Para una pieza nueva: lanza el subagente
 > `artista-pixel`, valida con `python tools/validate_part.py <categoría>`, míralo con `tools/preview_avatar.py` y regenera
-> `design/avatares/galeria.html`. Esta skill cubre el resto: insignias, Teo y sprites sueltos.
+> `design/avatares/galeria.html`. Esta skill cubre el resto: insignias, Nala y sprites sueltos.
 
 ## Grilla
 
@@ -17,7 +17,7 @@ description: Dibuja sprites pixel-art como SVG para AeroAcademy (avatares por ca
 | Insignia | 32×32 | × 2 o × 3 |
 | Insignia mini (listas) | 16×16 | |
 | Avatar | 32×32 | por capas: base → outfit → accessory → frame |
-| Teo | 32×32 | expresiones: `neutral`, `feliz`, `pensando`, `celebra` |
+| Nala | 32×32 | expresiones: `neutral`, `feliz`, `pensando`, `celebra` |
 
 ## Técnica
 
@@ -53,19 +53,19 @@ Marco por rareza:
 | Épica | `#8B5CF6` |
 | Legendaria | `#FFC21A` |
 
-## Teo
+## Nala (D32)
 
-- Cuerpo: un teodolito con un anteojo horizontal como "ojos" y una base trípode de tres patitas.
-- Casco amarillo arriba y una hélice cian de dos aspas sobre el casco.
+- Cachorrita golden retriever sentada de frente: pelaje dorado `#E0A040`, hocico y pecho crema `#F6D9A0`, sombra ámbar `#B8661A`, contorno café `#2A1606`, lengua `#F27A93`; orejas caídas y cola esponjosa.
+- Archivos en `core/static/game/teo/` (el nombre de archivo se mantiene): `idle`, `happy`, `celebra`, `neutral`, `thinking`, `sleep` y un atuendo por mundo.
 - **Atuendos por mundo** (capa `accessory`, misma grilla):
 
   | Mundo | Atuendo |
   |---|---|
-  | `architecture` | Lápiz tras la oreja |
-  | `civil` | Chaleco reflectante |
-  | `survey` | Sombrero de explorador |
-  | `mechanical` | Llave inglesa |
-  | `aero` | Gafas de piloto |
+  | `architecture` | Casco amarillo y plano enrollado |
+  | `civil` | Casco y chaleco reflectante |
+  | `survey` | Teodolito en trípode a su lado |
+  | `mechanical` | Gafas de seguridad y llave inglesa |
+  | `aero` | Gafas de piloto y dron pequeño |
 
 ## Entrega
 

@@ -36,6 +36,18 @@ CREDENTIAL_POINTS = {
 STREAK_STEP, STREAK_MAX = 20, 100
 
 
+def resource_xp(resource) -> int:
+    """XP que suma un curso cuando su certificado queda verificado (0 si no entrega certificado).
+    Un examen cuenta como certificación; un curso con certificado de término, como curso (D13)."""
+    from apps.catalog.models import Resource  # import tardío: catalog no depende del juego
+
+    if resource.kind == Resource.Kind.EXAM:
+        return CREDENTIAL_POINTS[Credential.Kind.CERTIFICATION]
+    if resource.grants_completion_certificate:
+        return CREDENTIAL_POINTS[Credential.Kind.COMPLETION]
+    return 0
+
+
 # --- niveles ----------------------------------------------------------------------------------------------
 
 

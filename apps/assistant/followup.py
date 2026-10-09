@@ -52,7 +52,7 @@ def run(today=None):
         sent = notifications.notify(
             person,
             "teo_nudge",
-            "Teo: ¿retomamos? Esta es tu próxima misión",
+            "Nala: ¿retomamos? Esta es tu próxima misión",
             f"{mission['title']} · {mission['detail']}"[:300],
             url=mission["url"],
             key=f"teo-week:{week}",
@@ -68,7 +68,7 @@ def run(today=None):
             sent = notifications.notify(
                 lead,
                 "teo_digest",
-                "Teo: resumen de la semana",
+                "Nala: resumen de la semana",
                 f"{idle_total} persona(s) sin avance en {IDLE_DAYS} días · {pending} certificado(s) por revisar"
                 + (f" ({stale} esperan hace más de {IDLE_DAYS} días)" if stale else ""),
                 url="/equipo/",

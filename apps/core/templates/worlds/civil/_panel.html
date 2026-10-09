@@ -25,7 +25,7 @@
         <h4>{% if c.resource.url %}<a href="{{ c.resource.url }}" target="_blank" rel="noopener">{{ c.resource.title }}</a>{% else %}{{ c.resource.title }}{% endif %}</h4>
         <div class="meta">{{ c.resource.get_kind_display }}{% if c.resource.duration_text %} · {{ c.resource.duration_text }}{% endif %}{% if not c.is_required %} · opcional{% endif %}</div>
         <div class="chips" style="margin-top:4px">
-          <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span>
+          <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span><span class="chip xp" title="Al verificarse el certificado">+{{ c.reward|reward_xp }} XP</span>
           {% if c.resource.verify_url %}<span class="chip warn" title="La URL apunta al catálogo; falta el enlace exacto">Confirmar enlace</span>{% endif %}
         </div>
         {% if c.contains %}<details class="contains"><summary>Qué incluye</summary><ol>{% for t in c.contains %}<li>{{ t }}</li>{% endfor %}</ol></details>{% endif %}
@@ -62,7 +62,7 @@
   {% if current.resources %}
   <div class="cv-res">
     <h4>Dónde encontrar los cursos</h4>
-    <ul class="reslist">{% for lr in current.resources %}<li><a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>{% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}</li>{% endfor %}</ul>
+    <ul class="reslist">{% for lr in current.resources %}<li><a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a> {% course_xp lr.resource %}{% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}</li>{% endfor %}</ul>
   </div>
   {% endif %}
   {% level_notes path current.level.code %}

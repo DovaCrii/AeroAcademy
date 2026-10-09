@@ -30,7 +30,7 @@ def make_cred(owner, **extra):
 
 
 def only_forma():
-    LearningPath.objects.filter(slug=BENTLEY).update(is_published=False)
+    LearningPath.objects.exclude(slug=FORMA).update(is_published=False)
 
 
 def forma():

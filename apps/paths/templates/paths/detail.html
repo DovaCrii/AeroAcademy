@@ -45,7 +45,7 @@
         <li>
           <a href="{{ c.resource.url }}" target="_blank" rel="noopener">{{ c.resource.title }}</a>
           <div class="chips" style="margin-top:4px">
-            <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span>
+            <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span><span class="chip xp" title="Al verificarse el certificado">+{{ c.reward|reward_xp }} XP</span>
             {% if c.resource.duration_text %}<span class="chip">{{ c.resource.duration_text }}</span>{% endif %}
             {% if not c.is_required %}<span class="chip">Opcional</span>{% endif %}
             {% if c.resource.verify_url %}<span class="chip warn" title="La URL apunta al catálogo; falta el enlace exacto">Confirmar enlace</span>{% endif %}
@@ -65,7 +65,7 @@
           <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
           {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
           <div class="chips" style="margin-top:4px">
-            {% for t in lr.resource.tags %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endfor %}
+            {% for t in lr.resource.tags %}{% if t != 'Esencial' and t != 'Complementario' %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endif %}{% endfor %}{% course_xp lr.resource %}
           </div>
         </li>
         {% endfor %}

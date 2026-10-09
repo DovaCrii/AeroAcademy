@@ -1,40 +1,72 @@
-/* Tokens de AeroAcademy. Portados del prototipo (legacy/ruta-forma-revit): plano claro + blueprint oscuro. */
+/* Tokens de AeroAcademy. Estilo "Aerotop": plano técnico azul noche, acento ámbar, serif cursiva para títulos,
+   monoespaciada para rótulos. Claro = plano en papel; oscuro = blueprint nocturno. Los nombres heredados del
+   prototipo (legacy/ruta-forma-revit) se mantienen: los usan los mundos y la capa de juego. */
 @font-face{font-family:"ArchivoLocal";src:url("fonts/Archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
 /* Press Start 2P (OFL): solo niveles, insignias y títulos de juego. Se declara cuando el archivo
    core/static/core/fonts/PressStart2P.woff2 esté en el repositorio (ver docs/DECISIONES.md, A10). */
 
 :root{
-  --bg:#EEF2F7; --sheet:#FFFFFF; --sheet-2:#E6EEF8;
-  --ink:#0A0E13; --ink-2:#26323F; --line:#8D9CAD; --hair:#CFD9E4;
-  --poche:#0A0E13; --level:#0A5BD3; --red:#E5322A; --fill:#FFB000; --ok:#13803C;
-  --scan:#FF5A00; --night:#05111F; --night-2:#0B2440;
+  /* superficies y tinta (claro: papel de plano) */
+  --bg:#EEF2F7; --sheet:#FFFFFF; --sheet-2:#E8EEF6;
+  --ink:#0B1A2E; --ink-2:#33445A; --line:#8D9CAD; --hair:#D3DCE7;
+  --poche:#0B1A2E; --level:#0A5BD3; --red:#D42A22; --fill:#FFB000; --ok:#13803C;
+  --scan:#FF5A00; --night:#06142A; --night-2:#0B2440;
   --brand-blue:#1E8CFF; --brand-cyan:#4CC6FF;
+
+  /* acento ámbar: --amber para rellenos y trazos; --amber-ink para texto sobre fondo (AA) */
+  --amber:#F5A524; --amber-ink:#9A4F00; --on-amber:#1B1204;
+  --glow:rgba(245,165,36,.28);
+  --grid-minor:rgba(11,26,46,.045); --grid-major:rgba(11,26,46,.075);
+  --decor:#0A5BD3; --decor-2:#B86400;
+  --header-bg:rgba(255,255,255,.86);
 
   /* capa de juego (docs/GAMIFICACION.md) */
   --rarity-common:#8D9CAD; --rarity-rare:#1E8CFF; --rarity-epic:#8B5CF6; --rarity-legendary:#E0A800;
   --px-ink:#0A0E13; --px-white:#FFFFFF; --px-blue:#1E8CFF; --px-cyan:#4CC6FF; --px-yellow:#FFC21A;
   --px-orange:#FF5A00; --px-red:#E5322A; --px-green:#13803C; --px-steel:#8A99A8; --px-asphalt:#2B2F36;
 
+  /* tipografía: todo local (sin CDN) */
   --font:"ArchivoLocal","Archivo","Arial Narrow",Arial,sans-serif;
+  --font-serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --font-mono:ui-monospace,"Cascadia Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
   --font-px:"Press Start 2P",ui-monospace,Consolas,monospace;
-  --r:4px;
+
+  /* forma: nada de cajas duras */
+  --r:10px; --r-sm:8px; --r-card:16px; --r-lg:20px; --r-pill:999px;
+  --shadow-1:0 1px 2px rgba(11,26,46,.06),0 4px 14px rgba(11,26,46,.06);
+  --shadow-2:0 2px 6px rgba(11,26,46,.08),0 16px 36px rgba(11,26,46,.13);
+  --ease:cubic-bezier(.2,.7,.2,1);
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#021428; --sheet:#05203D; --sheet-2:#0A2D52;
-    --ink:#FFFFFF; --ink-2:#D3E6F8; --line:#4E86BD; --hair:#1D4A78;
-    --poche:#FFFFFF; --level:#4CC9FF; --red:#FF5C4D; --fill:#FFC21A; --ok:#4ADE80;
-    --scan:#FF7A1A; --night:#010B17; --night-2:#04213F;
+    --bg:#061325; --sheet:#0B1E37; --sheet-2:#112A4C;
+    --ink:#F3F6FB; --ink-2:#BCCADC; --line:#4A6A92; --hair:#1C3659;
+    --poche:#F3F6FB; --level:#6CCBFF; --red:#FF6B5E; --fill:#FFC21A; --ok:#4ADE80;
+    --scan:#FF7A1A; --night:#030C19; --night-2:#04213F;
+    --amber:#F5A524; --amber-ink:#FFB547; --on-amber:#1B1204;
+    --glow:rgba(245,165,36,.22);
+    --grid-minor:rgba(108,203,255,.045); --grid-major:rgba(108,203,255,.08);
+    --decor:#6CCBFF; --decor-2:#F5A524;
+    --header-bg:rgba(6,19,37,.82);
+    --shadow-1:0 1px 2px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.25);
+    --shadow-2:0 2px 8px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.4);
     --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#021428; --sheet:#05203D; --sheet-2:#0A2D52;
-  --ink:#FFFFFF; --ink-2:#D3E6F8; --line:#4E86BD; --hair:#1D4A78;
-  --poche:#FFFFFF; --level:#4CC9FF; --red:#FF5C4D; --fill:#FFC21A; --ok:#4ADE80;
-  --scan:#FF7A1A; --night:#010B17; --night-2:#04213F;
+  --bg:#061325; --sheet:#0B1E37; --sheet-2:#112A4C;
+  --ink:#F3F6FB; --ink-2:#BCCADC; --line:#4A6A92; --hair:#1C3659;
+  --poche:#F3F6FB; --level:#6CCBFF; --red:#FF6B5E; --fill:#FFC21A; --ok:#4ADE80;
+  --scan:#FF7A1A; --night:#030C19; --night-2:#04213F;
+  --amber:#F5A524; --amber-ink:#FFB547; --on-amber:#1B1204;
+  --glow:rgba(245,165,36,.22);
+  --grid-minor:rgba(108,203,255,.045); --grid-major:rgba(108,203,255,.08);
+  --decor:#6CCBFF; --decor-2:#F5A524;
+  --header-bg:rgba(6,19,37,.82);
+  --shadow-1:0 1px 2px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.25);
+  --shadow-2:0 2px 8px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.4);
   --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
   color-scheme:dark;
 }

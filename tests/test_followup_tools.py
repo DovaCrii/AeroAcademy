@@ -49,7 +49,7 @@ def test_idle_people_get_one_nudge_per_week_with_their_mission(member):
     old(member)
     assert followup.run()[0] == 1
     n = nudges(member).get()
-    assert n.url.startswith("/rutas/") and "Teo" in n.title
+    assert n.url.startswith("/rutas/") and "Nala" in n.title
     assert followup.run()[0] == 0  # misma semana: no se repite
     assert nudges(member).count() == 1
 
@@ -101,7 +101,7 @@ def test_leads_get_a_weekly_digest_once(member, lead):
 def test_followup_command_runs(member, capsys):
     old(member)
     call_command("teo_seguimiento")
-    assert "Avisos de Teo: 1" in capsys.readouterr().out
+    assert "Avisos de Nala: 1" in capsys.readouterr().out
 
 
 def test_nothing_leaves_the_vm_when_following_up(member):
@@ -182,7 +182,7 @@ def test_new_guides_exist_and_are_indexed(client_for, member):
         "moderacion-y-avisos",
     ):
         assert client_for(member.login).get(f"/ayuda/{slug}/").status_code == 200
-    assert any(h["kind"] == "help" for h in search.search("semana avanzar Teo avisa"))
+    assert any(h["kind"] == "help" for h in search.search("semana avanzar Nala avisa"))
 
 
 def test_resources_are_found_by_their_skills():

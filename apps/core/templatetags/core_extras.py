@@ -26,3 +26,25 @@ def markdown_filter(value):
 @register.filter
 def get_item(mapping, key):
     return mapping.get(key)
+
+
+@register.inclusion_tag("core/partials/course_xp.html")
+def course_xp(resource):
+    """Chip «+N XP» de un curso: enlaza a subir su certificado ya vinculado al curso."""
+    from apps.gamification.game import resource_xp
+
+    return {
+        "resource": resource,
+        "points": resource_xp(resource),
+        "essential": "Esencial" in (resource.tags or []),
+    }
+
+
+@register.filter
+def reward_xp(reward):
+    """XP de un curso externo según su recompensa: trofeo = curso (100), reliquia = certificación (500)."""
+    from apps.credentials.models import Credential
+    from apps.gamification.game import CREDENTIAL_POINTS
+
+    kind = Credential.Kind.CERTIFICATION if reward == "relic" else Credential.Kind.COMPLETION
+    return CREDENTIAL_POINTS[kind]

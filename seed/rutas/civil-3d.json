@@ -1,0 +1,600 @@
+{
+  "_nota": "Ruta curada de Civil 3D: solo lo importante. Todas las URLs se revisaron el 2026-10-09 en el navegador (autodesk.com responde 403 a scripts). Los recursos 'Esencial' son el mínimo de la ruta; los 'Complementario' son práctica o refuerzo. Los títulos de recurso son la clave en la base: no cambiarlos. Las keys son estables: agregar siempre al final.",
+  "slug": "civil-3d",
+  "title": "Ruta Civil 3D",
+  "program": "CC 410 · Levantamiento Digital",
+  "platform": "autodesk-learning",
+  "kind": "structured",
+  "vendor": "autodesk",
+  "products": [
+    "civil-3d",
+    "recap"
+  ],
+  "disciplines": [
+    "civil-estructural",
+    "topografia"
+  ],
+  "world": "civil",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Entorno",
+      "title": "km 0+000 · Entorno y data shortcuts",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Todo el equipo que use Civil 3D",
+      "goal": "Moverse en la interfaz, partir cada dibujo desde la plantilla correcta y organizar el proyecto con *Data Shortcuts*. Meta: terminar el curso de 90 minutos con su certificado.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Learn Civil 3D in 90 minutes",
+          "url": "https://www.autodesk.com/learn/ondemand/course/learn-civil-3d-in-90-minutes",
+          "description": "Curso base: superficies, grading, alineamientos, perfiles y redes de tuberías. El certificado exige recorrer todo el contenido y aprobar la prueba final con 75 %.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Set up the Civil 3D environment",
+          "url": "https://www.autodesk.com/learn/ondemand/module/set-up-the-civil-3d-environment",
+          "description": "Módulo 1 del curso de 90 minutos: plantillas, *Toolspace*, *Drawing Settings* y proyecto de *Data Shortcuts*.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Practice exercise: Create a project drawing in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/practice-exercise-create-a-project-drawing-in-civil-3d",
+          "description": "Ejercicio de 10 minutos con dataset y video de solución.",
+          "tags": [
+            "Exercise",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Assessment: Learn Civil 3D in 90 minutes",
+          "url": "https://www.autodesk.com/learn/ondemand/module/assessment-learn-civil-3d-in-90-minutes",
+          "description": "Prueba final del curso de 90 minutos (10 minutos).",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Autodesk Learning catalog: Civil 3D",
+          "url": "https://www.autodesk.com/learn/catalog/product%7Cdeepdive/Civil%203D%7Cmodules,courses,collections",
+          "description": "Módulos, cursos y colecciones de Civil 3D. Para buscar algo puntual.",
+          "tags": [
+            "Catalog",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Crear un dibujo desde la plantilla (.dwt) del equipo y revisar *Drawing Settings* (unidades y sistema de coordenadas)"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Recorrer las pestañas *Prospector* y *Settings* del *Toolspace*"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Crear una carpeta de trabajo con *Set Working Folder* y un proyecto con *New Shortcuts Folder*"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Completar el curso de 90 minutos y descargar el *Certificate of completion*",
+          "completed_by_resource": "Learn Civil 3D in 90 minutes"
+        }
+      ],
+      "mastery_signals": [
+        "Sabes en qué dibujo vive cada objeto y quién lo referencia",
+        "Nunca copias una superficie entre dibujos: la compartes con *Data Shortcuts*"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "¿Para qué sirven los *Data Shortcuts*?",
+          "options": [
+            "Para atajos de teclado",
+            "Para referenciar objetos (superficies, alineamientos, redes) de un dibujo en otros",
+            "Para exportar a LandXML"
+          ],
+          "answer": 1,
+          "explanation": "Los Data Shortcuts publican objetos de un dibujo fuente para que otros dibujos los referencien sin copiarlos."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Qué nota mínima pide la prueba final del curso de 90 minutos para dar el certificado?",
+          "options": [
+            "50 %",
+            "75 %",
+            "100 %"
+          ],
+          "answer": 1,
+          "explanation": "Hay que recorrer todo el contenido y aprobar la prueba final con 75 %."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Superficies",
+      "title": "km 1+000 · Superficies y puntos del levantamiento",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Civil y topografía",
+      "goal": "Pasar del levantamiento (puntos, LandXML o nube de puntos) a una superficie de terreno confiable, con estilos y etiquetas, y armar el grading de la propuesta.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Incorporate site data and perform surface modeling in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/incorporate-site-data-and-perform-surface-modeling-in-civil-3d",
+          "description": "Módulo 2 del curso de 90 minutos: *Sites*, superficie desde datos de levantamiento, estilos, etiquetas y *Grading*.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Reduce errors by using Point Clouds in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/reduce-errors-by-using-point-clouds-in-civil-3d",
+          "description": "Procesar la nube en ReCap, traerla a Civil 3D y crear la superficie. Clave para el trabajo con dron y escáner.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Practice exercise: Import and analyze a surface and label contours in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/practice-exercise-import-and-analyze-a-surface-and-label-contours-in-civil-3d",
+          "description": "Ejercicio de 10 minutos con dataset y video de solución.",
+          "tags": [
+            "Exercise",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Creating surfaces from Point Cloud data in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/creating-surfaces-from-point-cloud-data-in-civil-3d",
+          "description": "Puntos de control, superficie desde nube clasificada y manejo de superficies grandes.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Introduction to BIM for civil design and engineering",
+          "url": "https://www.autodesk.com/learn/ondemand/course/introduction-to-bim-for-civil-design-and-engineering",
+          "description": "Curso de 3 h 40 min: condiciones existentes desde el levantamiento, grading, redes y vínculo con Revit y Forma.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Importar los puntos del levantamiento y ordenarlos en *Point Groups*"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Crear la superficie de terreno y revisar triángulos largos o picos con estilos de análisis"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Crear una superficie desde una nube de puntos de ReCap (.rcp) de un proyecto real"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Etiquetar curvas de nivel y armar un *Grading Group* con su *Grading Criteria*"
+        }
+      ],
+      "mastery_signals": [
+        "La superficie respeta los quiebres del terreno real",
+        "Sabes cuándo conviene decimar o recortar una superficie grande"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "¿Con qué producto se procesa la nube de puntos antes de llevarla a Civil 3D?",
+          "options": [
+            "ReCap",
+            "Navisworks",
+            "Forma Board"
+          ],
+          "answer": 0,
+          "explanation": "La nube se registra y limpia en ReCap (.rcp / .rcs) y luego se usa en Civil 3D para crear la superficie."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Alineamientos",
+      "title": "km 2+000 · Alineamientos y perfiles",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Civil",
+      "goal": "Definir la geometría horizontal y vertical: alineamientos con estacado, perfil de terreno, rasante y *Profile View* etiquetada.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Define geometry for Civil 3D with alignments, profiles, and profile views",
+          "url": "https://www.autodesk.com/learn/ondemand/module/define-geometry-for-civil-3d-with-alignments-profiles-and-profile-views",
+          "description": "Módulo 3 del curso de 90 minutos: alineamiento desde polilínea, *Geometry Editor*, estacado, perfiles y *Profile Views*.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Practice exercise: Create and label an alignment, a profile, and a profile view in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/practice-exercise-create-and-label-an-alignment-a-profile-and-a-profile-view-in-civil-3d",
+          "description": "Ejercicio de 15 minutos con dataset y video de solución.",
+          "tags": [
+            "Exercise",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Crear un alineamiento con *Alignment Creation Tools* y etiquetar su estacado"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Crear el perfil de terreno desde la superficie (*Create Surface Profile*) y su *Profile View*"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Diseñar la rasante con *Profile Creation Tools* y revisar las curvas verticales"
+        }
+      ],
+      "mastery_signals": [
+        "Editas el alineamiento y el perfil se actualiza solo",
+        "Lees un perfil longitudinal sin ayuda"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Si cambias el alineamiento, ¿qué pasa con el perfil de terreno creado desde la superficie?",
+          "options": [
+            "Hay que volver a crearlo",
+            "Se actualiza solo porque es dinámico",
+            "Se borra"
+          ],
+          "answer": 1,
+          "explanation": "Los objetos de Civil 3D son dinámicos: el perfil de superficie sigue al alineamiento y a la superficie."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Corredores",
+      "title": "km 3+000 · Corredores y ensamblajes",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Civil",
+      "goal": "Armar la sección tipo con *Assemblies* y *Subassemblies*, generar el corredor y su superficie, y resolver un camino completo.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Create a corridor and a surface for a 3D road model",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/create-a-corridor-and-a-surface-for-a-3d-road-model",
+          "description": "Tutorial de 5 minutos: corredor y superficie del camino.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Project | Design a connector road",
+          "url": "https://www.autodesk.com/learn/ondemand/module/course-challenge-civil-2025",
+          "description": "Proyecto de 2 h del curso de preparación ACP: diseñar un camino de conexión completo, con archivos de descarga.",
+          "tags": [
+            "Exercise",
+            "Oficial",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Armar un *Assembly* con carriles, berma y talud desde la *Tool Palette*"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Crear el *Corridor* sobre el alineamiento y la rasante, y su superficie"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Completar el proyecto del camino de conexión",
+          "completed_by_resource": "Project | Design a connector road"
+        }
+      ],
+      "mastery_signals": [
+        "Sabes qué *Subassembly* usar para corte y para relleno",
+        "La superficie del corredor empalma con el terreno sin huecos"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "¿Qué representa un *Assembly* en Civil 3D?",
+          "options": [
+            "La sección tipo del corredor, hecha de subassemblies",
+            "Un conjunto de dibujos referenciados",
+            "Una red de tuberías"
+          ],
+          "answer": 0,
+          "explanation": "El Assembly es la sección tipo: carriles, bermas, cunetas y taludes conectados como subassemblies."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Redes y planos",
+      "title": "km 4+000 · Redes de tuberías y producción de planos",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Civil y dibujo",
+      "goal": "Modelar redes gravitacionales y a presión, etiquetarlas en planta y perfil, y emitir láminas de planta-perfil con *Plan Production*.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Create gravity and pressure pipes in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/create-gravity-and-pressure-pipes-in-civil-3d",
+          "description": "Módulo 4 del curso de 90 minutos: redes gravitacionales y a presión, edición y etiquetas en planta y perfil.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Plan production in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/curated/plan-production-in-civil-3d",
+          "description": "Lista curada de 2 tutoriales: láminas de planta, perfil y secciones para imprimir.",
+          "tags": [
+            "Collection",
+            "Oficial",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Practice exercise: Create, edit, and label a gravity pipe network in Civil 3D",
+          "url": "https://www.autodesk.com/learn/ondemand/module/practice-exercise-create-edit-and-label-a-gravity-pipe-network-in-civil-3d",
+          "description": "Ejercicio de 15 minutos con dataset y video de solución.",
+          "tags": [
+            "Exercise",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Create plan and profile sheets",
+          "url": "https://www.autodesk.com/learn/ondemand/tutorial/create-plan-and-profile-sheets",
+          "description": "Tutorial de 3 minutos: *View Frames* y láminas de planta-perfil.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Crear una red gravitacional con *Pipe Network Creation Tools* y llevarla al perfil"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Crear una red a presión y etiquetarla"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Generar *View Frames* y láminas de planta-perfil con el *Title block* del equipo"
+        }
+      ],
+      "mastery_signals": [
+        "Las tuberías se ven en planta y en perfil sin dibujarlas dos veces",
+        "Las láminas se regeneran cuando cambia el diseño"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "¿Qué se crea antes de generar las láminas de planta-perfil?",
+          "options": [
+            "View Frames a lo largo del alineamiento",
+            "Un Corridor",
+            "Un Point Group"
+          ],
+          "answer": 0,
+          "explanation": "Los View Frames dividen el alineamiento en tramos; cada tramo se convierte en una lámina."
+        }
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Certificación",
+      "title": "km 5+000 · Certificación ACP Civil 3D",
+      "estimated_hours": "10 a 30 h",
+      "audience": "Profesionales con experiencia en Civil 3D",
+      "goal": "Preparar y rendir Autodesk Certified Professional in Civil 3D for Infrastructure Design.",
+      "resources": [
+        {
+          "order": 0,
+          "title": "Civil 3D for Infrastructure Design Professional Certification Prep",
+          "url": "https://www.autodesk.com/learn/ondemand/course/civil3d-infrastructure-design-cert-prep",
+          "description": "Curso de 9 h 30 min por dominio del examen, con ejercicios y *Practice test*. Certificado al obtener 75 % en la prueba final.",
+          "tags": [
+            "Cert prep",
+            "Oficial",
+            "Prepara certificación",
+            "Certificate of completion",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Autodesk Certified Professional in Civil 3D for Infrastructure Design",
+          "url": "https://www.autodesk.com/certification/all-certifications/civil-3d-infrastructure-design-professional",
+          "description": "Ficha oficial: 120 minutos, 45 a 60 preguntas, en inglés, válida por 3 años. Se rinde en Pearson o en línea con OnVUE.",
+          "tags": [
+            "cert",
+            "Oficial",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Revisar los *exam objectives* y marcar los dominios más débiles"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Completar el curso de preparación",
+          "completed_by_resource": "Civil 3D for Infrastructure Design Professional Certification Prep"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Aprobar el *Practice test*"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Agendar y rendir el examen",
+          "completed_by_resource": "Autodesk Certified Professional in Civil 3D for Infrastructure Design"
+        }
+      ],
+      "mastery_signals": [
+        "Resuelves el proyecto del camino de conexión sin mirar la solución",
+        "Te sobra tiempo en el *Practice test*"
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "¿Cuánto dura el examen ACP de Civil 3D for Infrastructure Design?",
+          "options": [
+            "50 minutos",
+            "90 minutos",
+            "120 minutos"
+          ],
+          "answer": 2,
+          "explanation": "El examen dura 120 minutos y tiene entre 45 y 60 preguntas."
+        },
+        {
+          "key": "n5-q1",
+          "question": "¿Por cuánto tiempo es válida la certificación?",
+          "options": [
+            "1 año",
+            "3 años",
+            "De por vida"
+          ],
+          "answer": 1,
+          "explanation": "Vale 3 años; para renovarla hay que volver a rendir el examen."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Toolspace",
+      "location": "Civil 3D",
+      "meaning": "Panel con Prospector (objetos del dibujo) y Settings (estilos y configuración)."
+    },
+    {
+      "term": "Data Shortcuts",
+      "location": "Prospector",
+      "meaning": "Referencias a superficies, alineamientos, perfiles y redes de otro dibujo."
+    },
+    {
+      "term": "Point Group",
+      "location": "Prospector",
+      "meaning": "Conjunto de puntos COGO filtrados por descripción u otro criterio."
+    },
+    {
+      "term": "Grading Group",
+      "location": "Ribbon: Grading",
+      "meaning": "Agrupa gradings que comparten criterio y superficie."
+    },
+    {
+      "term": "Assembly / Subassembly",
+      "location": "Ribbon: Assembly",
+      "meaning": "Sección tipo del corredor y sus piezas (carril, berma, talud)."
+    },
+    {
+      "term": "Corridor",
+      "location": "Ribbon: Corridor",
+      "meaning": "Modelo 3D que barre el assembly a lo largo del alineamiento y la rasante."
+    },
+    {
+      "term": "View Frames",
+      "location": "Output → Plan Production",
+      "meaning": "Tramos del alineamiento que se convierten en láminas."
+    }
+  ],
+  "certification_goals": [
+    "ACP Civil 3D Infrastructure Design"
+  ],
+  "description": "Lo esencial de Civil 3D para el equipo: del levantamiento a la superficie, del alineamiento al corredor, y de las redes a los planos. Cierra con la certificación profesional de Autodesk.",
+  "intro": {
+    "title": "Del km 0 a la certificación",
+    "text": "Ruta corta de Civil 3D con solo los recursos oficiales que importan. Cada kilómetro es una etapa: lo Esencial primero, lo Complementario si quieres practicar más."
+  },
+  "flow": [
+    {
+      "title": "Levantamiento",
+      "text": "Puntos y nube de puntos"
+    },
+    {
+      "title": "Superficie",
+      "text": "Terreno y grading"
+    },
+    {
+      "title": "Geometría",
+      "text": "Alineamientos y perfiles"
+    },
+    {
+      "title": "Corredor",
+      "text": "Sección tipo y modelo 3D"
+    },
+    {
+      "title": "Entrega",
+      "text": "Redes y láminas"
+    }
+  ]
+}

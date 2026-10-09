@@ -16,19 +16,22 @@
     </div>
     {% endfor %}
   </div>
+  <span class="w-scan" aria-hidden="true"></span>
   <div class="w-logo">
     <div class="w-logo-row">
       <svg class="w-mark" viewBox="0 0 150 120" role="img" aria-label="Logotipo"><use href="#logoA"/></svg>
       <div class="w-wordmark"><span class="a">ACADEMIA</span><span class="l">LEV DIGITAL <b>101</b></span></div>
     </div>
     <p class="w-tag">APRENDER <i>·</i> COMPARTIR <i>·</i> COLABORAR <i>·</i> AVANZAR</p>
+    <p class="w-coords" aria-hidden="true"><span>LEVANTAMIENTO · DIGITAL</span><span>EMPRESAS · {{ stats.vendors }}</span><span>RUTAS · {{ stats.paths }}</span><span>RECURSOS · {{ stats.resources }}</span></p>
   </div>
 </section>
 
 {% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
 
-<section class="w-greet" aria-labelledby="hola">
+<section class="w-greet decor-contour" aria-labelledby="hola">
   <div>
+    <span class="kicker"><span class="reticle" aria-hidden="true"></span> Estación base · {{ BRAND_ACADEMY }}</span>
     <h2 id="hola">Hola, {{ user.name }}</h2>
     <p>Te damos la bienvenida a {{ BRAND_PLATFORM }}: aquí el equipo aprende por empresa de software, guarda sus certificados y sube de nivel junto.
     {% if first_path %}Puedes empezar por la <a href="{% url 'paths:detail' first_path.slug %}">{{ first_path.title }}</a>.{% endif %}</p>
@@ -51,7 +54,7 @@
 
 <section class="w-quest" id="mision" aria-labelledby="quest-h">
   <div class="w-teo">
-    <img src="{% static 'game/teo/teo-idle.svg' %}" width="96" height="96" alt="Teo, el teodolito">
+    <img src="{% static 'game/teo/teo-idle.svg' %}" width="96" height="96" alt="Nala, la golden del gremio">
     <p class="w-bubble">{% if mission %}¡Hola! Yo te sigo el paso. Esto es lo que te conviene hacer ahora.{% else %}¡Hola! Ya terminaste todas las campañas disponibles. Cuando haya rutas nuevas, te aviso.{% endif %}</p>
   </div>
   <div class="w-card w-mission">
@@ -107,7 +110,7 @@
           {% for p in d.paths %}
           <li><div><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a><small>{{ p.vendor.name }}</small></div><span class="w-pill on">Activa</span></li>
           {% empty %}
-          <li><div>Ruta por definir con el equipo<small>Propón contenidos en el foro</small></div><span class="w-pill soon">Próxima</span></li>
+          <li class="w-rl-empty"><div>Ruta por definir con el equipo<small><a href="{% url 'community:thread_new' %}">Propón la primera ruta de {{ d.label }} en el foro →</a><a href="{% url 'catalog:resources' %}?q={{ d.label|urlencode }}">Ver cursos en el catálogo</a></small></div><span class="w-pill soon">Próxima</span></li>
           {% endfor %}
         </ul>
       </div>
@@ -118,13 +121,14 @@
 
 <section class="w-team" id="equipo" style="background-image:url('{% static 'core/img/equipo.jpg' %}')">
   <div class="w-team-in">
+    <span class="kicker">Equipo · Proceso</span>
     <h2>Un equipo, un solo lugar para avanzar</h2>
     <p>Arquitectura, estructuras, topografía, mecánica y captura aprendiendo sobre los mismos proyectos. Las ideas se convierten en mejoras con un camino claro.</p>
     <ol class="w-proc"><li><b>Ideas</b></li><li><b>Plan</b></li><li><b>Ejecución</b></li><li><b>Resultados</b></li></ol>
   </div>
 </section>
 
-<section class="w-suite" id="suite" aria-labelledby="suite-h">
+<section class="w-suite decor-contour" id="suite" aria-labelledby="suite-h">
   <div class="w-suite-head">
     <span class="w-kicker">Auspicia</span>
     <h2 id="suite-h">Suite Aero</h2>

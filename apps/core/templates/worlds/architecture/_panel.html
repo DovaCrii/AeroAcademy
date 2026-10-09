@@ -24,7 +24,7 @@
           <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
           {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
           <div class="chips">
-            {% for t in lr.resource.tags %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endfor %}
+            {% for t in lr.resource.tags %}{% if t != 'Esencial' and t != 'Complementario' %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endif %}{% endfor %}{% course_xp lr.resource %}
           </div>
         </li>
         {% empty %}<li class="empty">Sin recursos todavía.</li>{% endfor %}

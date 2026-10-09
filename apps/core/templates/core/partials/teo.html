@@ -1,16 +1,16 @@
 {% load static %}{% if teo_awake is not None %}
-<aside class="teo-widget" aria-label="Teo, el asistente">
+<aside class="teo-widget" aria-label="Nala, la asistente">
   <details>
-    <summary aria-label="Hablar con Teo"><img src="{% static 'game/teo/' %}{{ teo_sprite }}" width="48" height="48" alt=""></summary>
+    <summary aria-label="Hablar con Nala"><img src="{% static 'game/teo/' %}{{ teo_sprite }}" width="48" height="48" alt=""></summary>
     <div class="teo-pop">
-      <form method="post" action="{% url 'assistant:page' %}" class="teo-shortcuts" data-teo-form data-endpoint="{% url 'assistant:ask' %}" aria-label="Atajos de Teo">
+      <form method="post" action="{% url 'assistant:page' %}" class="teo-shortcuts" data-teo-form data-endpoint="{% url 'assistant:ask' %}" aria-label="Atajos de Nala">
         {% csrf_token %}
         {% for key, text in teo_shortcuts %}<button class="btn" type="submit" name="atajo" value="{{ key }}">{{ text }}</button>{% endfor %}
       </form>
       {% if teo_awake %}
       <form method="post" action="{% url 'assistant:page' %}" data-teo-form data-endpoint="{% url 'assistant:ask' %}">
         {% csrf_token %}
-        <label for="teo-q">Pregúntale a Teo</label>
+        <label for="teo-q">Pregúntale a Nala</label>
         <textarea id="teo-q" name="question" rows="2" maxlength="500" required placeholder="¿Qué me falta en mi ruta?"></textarea>
         <button class="btn primary" type="submit">Preguntar</button>
       </form>
@@ -18,7 +18,7 @@
       <p>Estoy durmiendo, pero los atajos de arriba funcionan igual. También puedes mirar la <a href="{% url 'assistant:help_index' %}">ayuda</a> o preguntar en el <a href="{% url 'community:forum' %}">foro</a>.</p>
       {% endif %}
       <div class="teo-answer" data-teo-answer aria-live="polite"></div>
-      <a href="{% url 'assistant:page' %}">Abrir a Teo en una página</a>
+      <a href="{% url 'assistant:page' %}">Abrir a Nala en una página</a>
     </div>
   </details>
 </aside>

@@ -20,9 +20,9 @@ WELCOME_BODY = """¡Hola, gremio! Este es el punto de partida de la academia.
 
 **Cuando tengas dudas**
 
-- Pregúntale a **Teo** (el teodolito de la esquina): conoce las rutas, las notas y el foro.
+- Pregúntale a **Nala** (la cachorrita golden de la esquina): conoce las rutas, las notas y el foro.
 - Abre una **consulta** en la categoría que corresponda; la mejor respuesta se marca como aceptada.
-- Los certificados son privados: solo los ven tú y los responsables, y nunca se envían a Teo.
+- Los certificados son privados: solo los ven tú y los responsables, y nunca se envían a Nala.
 
 ¡Nos vemos en las rutas!"""
 
@@ -86,7 +86,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  {ok if published else warn} rutas publicadas: {published}")
         if client.is_configured():
             self.stdout.write(
-                f"  {ok} Teo despierto con {settings.NIM_MODEL}  (prueba: manage.py teo_probar)"
+                f"  {ok} Nala despierta con {settings.NIM_MODEL}  (prueba: manage.py teo_probar)"
             )
         else:
-            self.stdout.write(f"  {warn} Teo dormido: falta NIM_API_KEY o BOT_ENABLED")
+            self.stdout.write(f"  {warn} Nala dormida: falta NIM_API_KEY o BOT_ENABLED")

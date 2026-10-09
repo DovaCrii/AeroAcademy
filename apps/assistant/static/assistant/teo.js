@@ -13,7 +13,7 @@
       if (submitter && submitter.name) data.append(submitter.name, submitter.value);
       var buttons = form.querySelectorAll("button");
       buttons.forEach(function (b) { b.disabled = true; });
-      out.textContent = "Teo está midiendo…";
+      out.textContent = "Nala está olfateando…";
       fetch(form.getAttribute("data-endpoint"), {
         method: "POST",
         body: data,
