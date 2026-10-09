@@ -28,12 +28,21 @@ def path_listing(person, *, vendor="", product="", discipline="", skill=""):
         )
     paths = paths.distinct().prefetch_related("products", "disciplines")
 
+    # Solo opciones que llevan a algo: un filtro sin rutas detrás es un camino sin nada.
+    of_vendor = base.filter(vendor=selected) if selected else base.none()
     return {
         "vendors": vendors,
         "vendor": selected,
-        "products": Product.objects.filter(vendor=selected) if selected else [],
-        "disciplines": Discipline.objects.all(),
-        "skills": Skill.objects.filter(resources__isnull=False).distinct(),
+        "products": Product.objects.filter(paths__in=of_vendor)
+        .distinct()
+        .order_by("order", "name"),
+        "disciplines": Discipline.objects.filter(paths__in=of_vendor).distinct(),
+        "skills": Skill.objects.filter(
+            Q(resources__levels__path__in=of_vendor)
+            | Q(resources__external_courses__path__in=of_vendor)
+        )
+        .distinct()
+        .order_by("name"),
         "paths": paths,
     }
 

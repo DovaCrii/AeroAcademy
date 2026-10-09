@@ -8,6 +8,16 @@ from apps.progress.views import world_template
 from . import services
 from .models import LearningPath
 
+# Qué tipos de ruta sabe dibujar cada mundo, y a cuál se recurre si el suyo no puede.
+WORLD_KINDS = {
+    "architecture": {LearningPath.Kind.STRUCTURED},
+    "civil": {LearningPath.Kind.EXTERNAL_TRACK},
+}
+KIND_FALLBACK_WORLD = {
+    LearningPath.Kind.STRUCTURED: "architecture",
+    LearningPath.Kind.EXTERNAL_TRACK: "civil",
+}
+
 
 def index(request):
     """Rutas: pestañas por vendor → productos → campañas, con filtros por disciplina y habilidad."""
@@ -28,9 +38,13 @@ def detail(request, slug):
     if path is None:
         raise Http404
 
-    # Las rutas con mundo propio se muestran con su diseño (docs/MUNDOS.md).
-    if path.world:
-        full = world_template(path.world, "path.html")
+    # Las rutas con mundo propio se muestran con su diseño (docs/MUNDOS.md). Si el mundo no sabe mostrar ese tipo de
+    # ruta (p. ej. Civil 3D, estructurada, en el mundo civil hecho para Bentley), se usa uno que sí: nunca una ruta vacía.
+    world = path.world
+    if world and path.kind not in WORLD_KINDS.get(world, {path.kind}):
+        world = KIND_FALLBACK_WORLD.get(path.kind, "")
+    if world:
+        full = world_template(world, "path.html")
         if full:
             builder = (
                 progress_external.external_context
@@ -39,9 +53,7 @@ def detail(request, slug):
             )
             ctx = builder(request.user, path, request.GET.get("nivel"))
             template = (
-                world_template(path.world, "_app.html")
-                if request.headers.get("X-Partial")
-                else full
+                world_template(world, "_app.html") if request.headers.get("X-Partial") else full
             )
             return render(request, template, ctx)
 

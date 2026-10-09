@@ -7,7 +7,7 @@ from apps.notifications import services
 UNITS = {
     "centro-backup.service": "el respaldo diario",
     "centro-expiry.service": "la revisión de vencimientos",
-    "centro-teo.service": "el seguimiento semanal de Teo",
+    "centro-teo.service": "el seguimiento semanal de Nala",
     "centro.service": "el servicio web",
 }
 

@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 {% block title %}Ayuda{% endblock %}
 {% block content %}
-<div class="page-head"><h1>Ayuda</h1><p>Cómo usar la academia.{% if awake %} También puedes <a href="{% url 'assistant:page' %}">preguntarle a Teo</a>.{% endif %}</p></div>
+<div class="page-head"><h1>Ayuda</h1><p>Cómo usar la academia.{% if awake %} También puedes <a href="{% url 'assistant:page' %}">preguntarle a Nala</a>.{% endif %}</p></div>
 <form class="filters" method="get" role="search">
   <input type="search" name="q" value="{{ q }}" placeholder="Busca en la ayuda, las rutas, los glosarios…" aria-label="Buscar en la ayuda">
   <button class="btn" type="submit">Buscar</button>

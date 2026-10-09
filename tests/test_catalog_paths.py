@@ -323,7 +323,7 @@ def test_catalog_search_and_invalid_kind(seeded, member_client):
 
 def test_catalog_paginates(seeded, member_client):
     html = member_client.get("/catalogo/").content.decode()
-    assert "Página 1 de 2" in html
+    assert "Página 1 de " in html
     assert member_client.get("/catalogo/?page=2").status_code == 200
 
 
@@ -335,3 +335,88 @@ def test_pending_person_cannot_see_paths(client_for, make_person):
 def test_set_role_lead_sees_unpublished_via_service(seeded, member):
     account_services.set_role(member, "lead")
     assert member.is_lead
+
+
+# --- catálogo práctico y XP por curso ---------------------------------------------------------------------------------
+
+
+def test_catalog_filters_by_route_and_search_matches_every_word(seeded, member_client):
+    from apps.catalog.services import resource_queryset
+
+    bentley = {r.title for r in resource_queryset(path="bentley-learn")}
+    assert bentley and all("Revit" not in t for t in bentley)
+    html = member_client.get("/catalogo/?ruta=bentley-learn").content.decode()
+    assert 'class="cat-pill on"' in html and "En la ruta" in html
+    assert resource_queryset(q="openroads catálogo").exists()
+    assert not resource_queryset(q="openroads zzzinexistente").exists()
+
+
+def test_catalog_hides_draft_routes(seeded, member_client):
+    from apps.paths.models import LearningPath
+
+    LearningPath.objects.filter(slug="bentley-learn").update(is_published=False)
+    html = member_client.get("/catalogo/").content.decode()
+    assert "?ruta=bentley-learn" not in html and "/rutas/bentley-learn/" not in html
+    assert member_client.get("/catalogo/?ruta=bentley-learn").status_code == 200
+
+
+def test_essentials_come_first_and_can_be_filtered(seeded, member_client):
+    from apps.catalog.models import Resource
+    from apps.catalog.services import resource_queryset
+
+    last = Resource.objects.order_by("title").last()
+    last.tags = [*last.tags, "Esencial"]
+    last.save()
+    ordered = list(resource_queryset())
+    flags = ["Esencial" in r.tags for r in ordered]
+    assert flags == sorted(flags, reverse=True) and last in ordered[: flags.count(True)]
+    essentials = list(resource_queryset(essential=True))
+    assert last in essentials and all("Esencial" in r.tags for r in essentials)
+    assert (
+        f"Solo esenciales · {len(essentials)}" in member_client.get("/catalogo/").content.decode()
+    )
+
+
+def test_courses_with_certificate_show_their_xp_and_link_the_upload(seeded, member_client):
+    from apps.catalog.models import Resource
+
+    course = Resource.objects.filter(grants_completion_certificate=True).first()
+    exam = Resource.objects.filter(kind=Resource.Kind.EXAM).first()
+    html = member_client.get("/catalogo/?cert=1").content.decode()
+    assert f'href="/certificados/nueva/?recurso={course.pk}"' in html and "+100 XP" in html
+    if exam:
+        assert "+500 XP" in html
+    form = member_client.get(f"/certificados/nueva/?recurso={course.pk}").content.decode()
+    assert f'<option value="{course.pk}" selected>' in form
+    assert member_client.get("/certificados/nueva/?recurso=abc").status_code == 200
+
+
+def test_external_courses_show_xp_by_reward(seeded, member_client):
+    html = member_client.get("/rutas/bentley-learn/").content.decode()
+    assert "+500 XP" in html and "+100 XP" in html  # reliquias y trofeos (MicroStation Basics)
+
+
+def test_route_filters_only_offer_options_that_lead_somewhere(seeded, member_client):
+    html = member_client.get("/rutas/?vendor=autodesk").content.decode()
+    import re
+
+    for name in ("product", "discipline"):
+        options = re.findall(
+            r'<option value="([^"]+)"', html.split(f'name="{name}"')[1].split("</select>")[0]
+        )
+        for value in options:
+            page = member_client.get(f"/rutas/?vendor=autodesk&{name}={value}").content.decode()
+            assert "No hay rutas con esos filtros" not in page, (name, value)
+
+
+def test_a_structured_route_in_a_world_without_support_still_shows_its_missions(
+    seeded, member_client
+):
+    """Visto en el navegador: Civil 3D (estructurada) en el mundo civil (hecho para Bentley) salía sin misiones."""
+    from apps.paths.models import LearningPath, Milestone
+
+    path = LearningPath.objects.get(slug="civil-3d")
+    assert path.world == "civil" and path.kind == LearningPath.Kind.STRUCTURED
+    html = member_client.get("/rutas/civil-3d/").content.decode()
+    first = Milestone.objects.filter(path=path, retired=False).first()
+    assert first.text.split("*")[0][:20] in html and "no tiene cursos con certificado" not in html

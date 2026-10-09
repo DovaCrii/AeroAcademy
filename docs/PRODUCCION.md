@@ -83,7 +83,14 @@ Cada persona ve en la portada **Primeros pasos** (hoja de personaje, primera mis
 
 **Ícono y acceso directo.** El sitio trae ícono y manifiesto de app: en Chrome/Edge, menú → **Instalar AeroAcademy** (o «Crear acceso directo»); en el celular, **Agregar a pantalla de inicio**. Abre como app, con el ícono de la academia, siempre que el equipo esté conectado a Tailscale.
 
-## 2. Teo (el asistente)
+## 1c. Incorporar a alguien del equipo (cada vez)
+
+1. **Acceso a la red:** en la consola de Tailscale, **Users → Invite users** con su correo (ve toda la tailnet), o **Machines → aeroacademy → Share** (solo ve la academia). La persona instala Tailscale en su equipo y entra con ese correo.
+2. **Aprobar:** cuando abra `https://aeroacademy.tailccd107.ts.net` queda «pendiente» y te llega un aviso en la campana; apruébala en **Moderación** o desde la VM: `sudo aeroacademy aprobar su@correo` (con `--rol lead` si revisará certificados). Se puede aprobar antes de que entre.
+3. **Su primer día:** ve «Primeros pasos» en la portada y el hilo de bienvenida fijado en el foro; que instale la academia como app (menú del navegador → Instalar).
+4. **Salida:** en el admin, marca a la persona como inactiva o suspéndela en Moderación, y quítale el acceso en Tailscale.
+
+## 2. Nala (la asistente)
 
 ```bash
 sudo aeroacademy teo_probar

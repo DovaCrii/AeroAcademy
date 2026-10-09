@@ -46,7 +46,9 @@ def mine(request):
 
 @require_http_methods(["GET", "POST"])
 def create(request):
-    form = CredentialForm(request.POST or None, request.FILES or None)
+    form = CredentialForm(
+        request.POST or None, request.FILES or None, initial=_initial_for(request)
+    )
     if request.method == "POST" and form.is_valid():
         cred = services.create_credential(
             request.user, form.data_for_service(), form.cleaned_data["file"]
@@ -58,6 +60,27 @@ def create(request):
         "credentials/form.html",
         {"form": form, "title": "Nueva credencial", "editing": False},
     )
+
+
+def _initial_for(request):
+    """`?recurso=<id>` (el chip «+XP» de un curso) deja el formulario ya vinculado a ese curso."""
+    pk = request.GET.get("recurso", "")
+    if not pk.isdigit():
+        return {}
+    resource = CredentialForm.base_fields["resource"].queryset.filter(pk=pk).first()
+    if resource is None:
+        return {}
+    kind = (
+        Credential.Kind.CERTIFICATION
+        if resource.kind == resource.Kind.EXAM
+        else Credential.Kind.COMPLETION
+    )
+    return {
+        "resource": resource,
+        "title": resource.title,
+        "platform": resource.platform_id,
+        "kind": kind,
+    }
 
 
 def detail(request, pk):

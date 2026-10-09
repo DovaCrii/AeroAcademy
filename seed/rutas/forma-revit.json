@@ -31,11 +31,12 @@
         {
           "order": 0,
           "title": "Conceptual design with Autodesk Forma",
-          "url": "https://www.autodesk.com/learn/ondemand/course/conceptual-design-with-autodesk-forma",
-          "description": "Curso introductorio: qué es Forma, estudio de masas y dónde seguir aprendiendo.",
+          "url": "https://www.autodesk.com/learn/ondemand/module/getting-started-with-autodesk-forma-for-conceptual-design",
+          "description": "Módulo introductorio: qué es Forma Site Design, estudio de masas y dónde seguir aprendiendo (Autodesk retiró el curso original; enlace revisado el 2026-10-09).",
           "tags": [
             "Course",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -45,7 +46,8 @@
           "description": "Help Center, webinars en vivo y grabados, y cursos de Customer Success.",
           "tags": [
             "Portal",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -55,7 +57,8 @@
           "description": "Más de 90 módulos, cursos y colecciones. Usa el filtro *Certification prep*.",
           "tags": [
             "Catalog",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -65,7 +68,8 @@
           "description": "Cuándo usar Building Design y cuándo Revit.",
           "tags": [
             "Blog",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         }
       ],
@@ -132,7 +136,8 @@
           "description": "Curso de BIM con Revit; incluye una unidad de modelado conceptual en Forma.",
           "tags": [
             "Course",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -142,7 +147,8 @@
           "description": "Colección de 7 piezas ordenadas por fase de proyecto.",
           "tags": [
             "Collection",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -152,7 +158,8 @@
           "description": "Bases de BIM con Revit, Forma Site Design y Navisworks.",
           "tags": [
             "Collection",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -162,7 +169,8 @@
           "description": "Módulo de 45 minutos sobre *Views*, anotación y *Sheets*.",
           "tags": [
             "Module",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -171,7 +179,8 @@
           "url": "https://certiport.pearsonvue.com/Certifications/Autodesk/Certifications/Certify.aspx#Revit",
           "description": "Examen de entrada, 50 minutos.",
           "tags": [
-            "cert"
+            "cert",
+            "Complementario"
           ]
         }
       ],
@@ -234,7 +243,8 @@
           "description": "Módulo de 45 minutos: interfaz, contexto y masas.",
           "tags": [
             "Module",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -245,7 +255,8 @@
           "tags": [
             "Course",
             "Oficial",
-            "Certificate of completion"
+            "Certificate of completion",
+            "Esencial"
           ]
         },
         {
@@ -255,7 +266,8 @@
           "description": "Paso a paso del menú *Analyze*: Sun hours, Daylight potential, Wind, Microclimate, Operational energy, Noise y Solar energy.",
           "tags": [
             "Tutorial",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -265,7 +277,8 @@
           "description": "Ejercicio con pauta de evaluación.",
           "tags": [
             "Exercise",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         }
       ],
@@ -341,7 +354,8 @@
           "description": "Curso largo (unas 7 h) del flujo completo Forma → Revit con análisis.",
           "tags": [
             "Course",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -351,7 +365,8 @@
           "description": "Guía de ayuda: transferir y actualizar entre Forma y Revit.",
           "tags": [
             "Help",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -361,7 +376,8 @@
           "description": "Gratuito. Compatible con Revit 2022 a 2026.",
           "tags": [
             "Add-in",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -371,7 +387,8 @@
           "description": "Revit como Forma Connected Client (Tech Preview).",
           "tags": [
             "Blog",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -381,7 +398,8 @@
           "description": "Contexto, Wind y Microclimate dentro de Revit.",
           "tags": [
             "Blog",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -391,7 +409,8 @@
           "description": "Building Design → Revit, Site Design ↔ Building Design, y Board.",
           "tags": [
             "Blog",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         }
       ],
@@ -467,10 +486,11 @@
           "order": 0,
           "title": "Learn Forma Data Management and Build in 90 minutes",
           "url": "https://www.autodesk.com/learn/ondemand/course/learn-docs-and-build-in-90-minutes",
-          "description": "Documentación, coordinación y terreno en un solo curso, con datasets.",
+          "description": "Documentación, coordinación y terreno en un solo curso, con datasets. Autodesk lo publica hasta el 15-10-2026: hacerlo antes o buscar su reemplazo.",
           "tags": [
             "Course",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -480,7 +500,8 @@
           "description": "Módulo de 30 minutos con *Revit Cloud Worksharing*.",
           "tags": [
             "Module",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -490,7 +511,8 @@
           "description": "Curso de 8 h con coordinación y detección de interferencias.",
           "tags": [
             "Course",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         }
       ],
@@ -547,7 +569,8 @@
           "tags": [
             "Cert prep",
             "Oficial",
-            "Prepara certificación"
+            "Prepara certificación",
+            "Esencial"
           ]
         },
         {
@@ -558,7 +581,8 @@
           "tags": [
             "Cert prep",
             "Oficial",
-            "Prepara certificación"
+            "Prepara certificación",
+            "Esencial"
           ]
         },
         {
@@ -569,7 +593,8 @@
           "tags": [
             "Cert prep",
             "Oficial",
-            "Prepara certificación"
+            "Prepara certificación",
+            "Complementario"
           ]
         },
         {
@@ -579,7 +604,8 @@
           "description": "Listado oficial, incluidas Mechanical Design y BIM Management.",
           "tags": [
             "Portal",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         }
       ],
@@ -639,7 +665,8 @@
           "description": "Instalar *Dynamo Player* en Forma y correr gráficos.",
           "tags": [
             "Guide",
-            "Oficial"
+            "Oficial",
+            "Esencial"
           ]
         },
         {
@@ -649,7 +676,8 @@
           "description": "Configuración paso a paso.",
           "tags": [
             "Guide",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -659,7 +687,8 @@
           "description": "Extensiones, terreno, propuestas y publicación en el marketplace.",
           "tags": [
             "API",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         },
         {
@@ -669,7 +698,8 @@
           "description": "Preguntas, ejemplos y novedades.",
           "tags": [
             "Forum",
-            "Oficial"
+            "Oficial",
+            "Complementario"
           ]
         }
       ],

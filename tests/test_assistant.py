@@ -353,7 +353,7 @@ def test_summarize_a_thread(client_for, member, lead):
     moderation.set_hidden(hidden, lead, True, "no")
     rec = Recorder().install()
     page = client_for(member.login).get(f"/foro/{t.pk}/").content.decode()
-    assert "Resumir con Teo" in page
+    assert "Resumir con Nala" in page
     response = client_for(member.login).post(f"/teo/resumir/{t.pk}/")
     assert response.status_code == 200 and "Hola, soy Teo" in response.content.decode()
     assert "mensaje número 3" in rec.sent and "texto oculto xyz" not in rec.sent

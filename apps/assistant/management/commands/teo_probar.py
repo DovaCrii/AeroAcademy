@@ -14,7 +14,7 @@ HINTS = {
 
 
 class Command(BaseCommand):
-    help = "Prueba la conexión de Teo con NVIDIA NIM (una llamada corta). Nunca muestra la clave."
+    help = "Prueba la conexión de Nala con NVIDIA NIM (una llamada corta). Nunca muestra la clave."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -45,7 +45,7 @@ class Command(BaseCommand):
             },
             {
                 "role": "user",
-                "content": "Preséntate como Teo, el asistente de una academia de ingeniería.",
+                "content": "Preséntate como Nala, la asistente de una academia de ingeniería (una cachorrita golden retriever).",
             },
         ]
         try:

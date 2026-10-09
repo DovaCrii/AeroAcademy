@@ -1,0 +1,1 @@
+{% if essential %}<span class="chip ess" title="Curso esencial de la ruta">Esencial</span>{% endif %}{% if points %}<a class="chip xp" href="{% url 'credentials:create' %}?recurso={{ resource.pk }}" title="Sube el certificado de este curso: al verificarse suma {{ points }} XP">+{{ points }} XP</a>{% endif %}
