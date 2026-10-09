@@ -600,3 +600,29 @@ def test_teo_probar_buscar_fails_clearly_when_nothing_answers(settings):
     client.TRANSPORT = httpx.MockTransport(handler)
     with pytest.raises(CommandError, match="Ningún modelo"):
         call_command("teo_probar", "--buscar")
+
+
+def test_buscar_also_tries_current_models_without_instruct_in_the_name(settings, capsys):
+    """Error real en p340: todos los «instruct» de la lista daban 404; los vigentes se llaman distinto."""
+    import json
+
+    settings.NIM_API_KEY = "nvapi-X"
+    listed = ["nvidia/nv-embedqa-e5-v5", "mistralai/mistral-7b-instruct-v0.3", "qwen/qwen3.5-397b-a17b",
+              "nvidia/nemotron-3-super-120b-a12b", "nvidia/llama-3.1-nemoguard-8b-content-safety"]  # fmt: skip
+    old = {"mistralai/mistral-7b-instruct-v0.3"}
+    seen = []
+
+    def handler(request):
+        if request.url.path.endswith("/models"):
+            return httpx.Response(200, json={"data": [{"id": m} for m in listed]})
+        model = json.loads(request.content)["model"]
+        seen.append(model)
+        if model in old:
+            return httpx.Response(404, json={"detail": "Function not found for account"})
+        return httpx.Response(200, json={"choices": [{"message": {"content": "hola"}}]})
+
+    client.TRANSPORT = httpx.MockTransport(handler)
+    call_command("teo_probar", "--buscar")
+    out = capsys.readouterr().out
+    assert "NIM_MODEL=nvidia/nemotron-3-super-120b-a12b" in out and "qwen/qwen3.5-397b-a17b" in out
+    assert "nv-embedqa" not in " ".join(seen) and "content-safety" not in " ".join(seen)
