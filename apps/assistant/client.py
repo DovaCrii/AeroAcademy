@@ -1,5 +1,6 @@
 """Cliente de NVIDIA NIM (compatible con OpenAI). Solo hace la llamada: lo que se envía lo decide `context.py`."""
 
+import re
 import time
 
 import httpx
@@ -57,6 +58,15 @@ def list_models():
         return sorted(m["id"] for m in response.json()["data"])
     except (ValueError, KeyError, TypeError) as exc:
         raise BotError("bad_response") from exc
+
+
+_THINK = re.compile(r"<think>.*?(</think>|$)", re.S | re.I)
+
+
+def strip_reasoning(text):
+    """Los modelos de «razonamiento» (p. ej. Nemotron 3) pueden devolver su pensamiento entre <think>…</think>:
+    a la persona solo le llega la respuesta final. Un <think> sin cerrar se descarta entero."""
+    return _THINK.sub("", text).strip()
 
 
 def is_configured() -> bool:
@@ -123,6 +133,8 @@ def _chat_once(model, messages, max_tokens):
         tokens = int(data.get("usage", {}).get("total_tokens", 0))
     except (ValueError, KeyError, IndexError, TypeError) as exc:
         raise BotError("bad_response") from exc
+    if isinstance(text, str):
+        text = strip_reasoning(text)
     if not isinstance(text, str) or not text.strip():
         raise BotError("bad_response")
     last_model = model
