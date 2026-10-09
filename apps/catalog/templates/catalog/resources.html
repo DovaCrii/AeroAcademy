@@ -1,16 +1,20 @@
 {% extends "core/base.html" %}
-{% load static core_extras %}
+{% load static core_extras catalog_extras %}
 
 {% block title %}Catálogo de recursos{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'catalog/catalog.css' %}">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'catalog/catalog.css' %}"><script src="{% static 'catalog/catalog.js' %}" defer></script>{% endblock %}
 
 {% block content %}
 <header class="cat-head">
+  <div class="cat-head-in">
   <p class="cat-kicker">// Catálogo · {{ total }} recurso{{ total|pluralize }} · {{ paths|length }} ruta{{ paths|length|pluralize }}</p>
   <h1>Todo lo que hay para aprender</h1>
   <p class="cat-lead">Cursos, módulos, tutoriales y exámenes oficiales de cada empresa de software. Lo <b>esencial</b> de cada ruta aparece primero; los que entregan certificado muestran cuánto <b>XP</b> suman al verificarse.</p>
+  </div>
 </header>
 
+<section class="cat-sec cat-sec-filter" aria-label="Buscar y filtrar">
+<h2 class="cat-sh"><span>// 01</span> Buscar y filtrar</h2>
 <form class="cat-search" method="get" action="{% url 'catalog:resources' %}" role="search">
   {% if f.path %}<input type="hidden" name="ruta" value="{{ f.path }}">{% endif %}
   {% if f.kind %}<input type="hidden" name="kind" value="{{ f.kind }}">{% endif %}
@@ -47,6 +51,8 @@
   {% for value, label, n in kinds %}<a class="cat-tab{% if value == f.kind %} on{% endif %}" href="?{% if kind_base %}{{ kind_base }}{% if value %}&amp;{% endif %}{% endif %}{% if value %}kind={{ value }}{% endif %}">{{ label }}{% if value %} <small>{{ n }}</small>{% endif %}</a>{% endfor %}
 </nav>
 
+</section>
+
 <div class="cat-bar">
   <p class="cat-count"><b>{{ page.paginator.count }}</b> resultado{{ page.paginator.count|pluralize }}{% if f.q %} para «{{ f.q }}»{% endif %}</p>
   <p class="cat-quick">
@@ -56,21 +62,32 @@
   </p>
 </div>
 
+{% if show_rows %}
+<section class="cat-sec cat-sec-rows" aria-label="Recursos por software">
+  <h2 class="cat-sh"><span>// 02</span> Por software</h2>
+  {% for row in rows %}
+  <section class="cat-row d-{{ row.tile.discipline }}" id="sw-{{ row.tile.slug }}" aria-labelledby="rowh-{{ row.tile.slug }}">
+    <header class="cat-row-h">
+      {% include "catalog/partials/sw_row_tile.html" with tile=row.tile %}
+      <h3 id="rowh-{{ row.tile.slug }}"><span class="cat-n">{{ forloop.counter|stringformat:"02d" }}</span> {{ row.tile.name }}</h3>
+      <a class="cat-all" href="?software={{ row.tile.slug }}">Ver todo · {{ row.total }}</a>
+    </header>
+    <div class="cat-rail-wrap" data-rail>
+      <ul class="cat-rail" tabindex="0" aria-label="Recursos de {{ row.tile.name }}">
+        {% for r in row.items %}<li>{% include "catalog/partials/card.html" %}</li>{% endfor %}
+        {% if row.more %}<li class="cat-endcard"><a href="?software={{ row.tile.slug }}"><b>+{{ row.more }}</b><span>Ver todo en {{ row.tile.name }}</span></a></li>{% endif %}
+      </ul>
+    </div>
+  </section>
+  {% endfor %}
+  <p class="cat-todo"><a class="btn ghost" href="?todo=1">Ver todos los recursos en una lista →</a></p>
+</section>
+{% else %}
+<section class="cat-sec" aria-label="Resultados">
+<h2 class="cat-sh"><span>// 02</span> Resultados{% if software_tile %} · {{ software_tile.name }}{% endif %}</h2>
 <div class="cat-grid">
   {% for r in page %}
-  <article class="cat-card{% if 'Esencial' in r.tags %} is-ess{% endif %}">
-    <p class="cat-meta">{{ r.platform.name }} · {{ r.get_kind_display }}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</p>
-    <h3>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a>{% else %}{{ r.title }}{% endif %}</h3>
-    {% if r.description %}<p class="cat-desc">{{ r.description|truncatechars:160|terms }}</p>{% endif %}
-    {% if r.in_paths %}<p class="cat-in">En la ruta {% for p in r.in_paths %}<a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
-    <div class="chips">
-      {% course_xp r %}
-      {% if r.is_official %}<span class="chip off">Oficial</span>{% endif %}
-      {% if r.is_free %}<span class="chip">Gratuito</span>{% endif %}
-      {% if r.grants_completion_certificate %}<span class="chip cert">Certificado</span>{% endif %}
-      {% for s in r.skills.all|slice:":3" %}<span class="chip">{{ s.name }}</span>{% endfor %}
-    </div>
-  </article>
+  {% include "catalog/partials/card.html" %}
   {% empty %}
   <div class="cat-empty">
     <p><b>No hay recursos con esos filtros.</b></p>
@@ -78,8 +95,9 @@
   </div>
   {% endfor %}
 </div>
-
-{% if page.has_other_pages %}
+</section>
+{% endif %}
+{% if page.has_other_pages and not show_rows %}
 <nav class="pager" aria-label="Páginas">
   {% if page.has_previous %}<a class="btn ghost" href="?{{ querystring }}&amp;page={{ page.previous_page_number }}">← Anterior</a>{% endif %}
   <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>

@@ -11,6 +11,10 @@ urlpatterns = [
     path("foro/<int:pk>/aceptar/<int:post_pk>/", forum_views.accept, name="accept"),
     path("foro/<int:pk>/quitar-aceptada/", forum_views.unaccept, name="unaccept"),
     path("foro/<int:pk>/cerrar/", forum_views.toggle_closed, name="toggle_closed"),
+    path("foro/reaccion/<str:kind>/<int:pk>/", forum_views.react, name="react"),
+    path("foro/<int:pk>/encuesta/votar/", forum_views.poll_vote, name="poll_vote"),
+    path("foro/<int:pk>/encuesta/", forum_views.poll_add, name="poll_add"),
+    path("foro/<int:pk>/moderar/limpiar/", moderation_views.clear_opinions, name="clear_opinions"),
     path("foro/mensaje/<int:pk>/eliminar/", forum_views.delete_post, name="delete_post"),
     path("moderacion/", moderation_views.dashboard, name="moderation"),
     path(

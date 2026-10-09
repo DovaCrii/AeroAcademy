@@ -8,9 +8,9 @@
 
 /* fondo de página: relieve arriba a la derecha y nube de puntos abajo a la izquierda, muy tenues */
 body::before,body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
-body::before{background:var(--decor);opacity:.07;
+body::before{background:var(--decor);opacity:.08;
   -webkit-mask:var(--contour) right -160px top -40px/min(1100px,160vw) auto no-repeat;mask:var(--contour) right -160px top -40px/min(1100px,160vw) auto no-repeat}
-body::after{background:var(--decor-2);opacity:.16;
+body::after{background:var(--decor-2);opacity:.14;
   -webkit-mask-image:var(--cloud),radial-gradient(ellipse at 0% 100%,#000 0,transparent 60%);-webkit-mask-size:320px 240px,100% 100%;-webkit-mask-composite:source-in;
   mask-image:var(--cloud),radial-gradient(ellipse at 0% 100%,#000 0,transparent 60%);mask-size:320px 240px,100% 100%;mask-composite:intersect}
 
@@ -31,6 +31,11 @@ body::after{background:var(--decor-2);opacity:.16;
     linear-gradient(var(--amber),var(--amber)) left top/1.5px 16px no-repeat,
     linear-gradient(var(--amber),var(--amber)) right bottom/16px 1.5px no-repeat,
     linear-gradient(var(--amber),var(--amber)) right bottom/1.5px 16px no-repeat}
+
+/* garabatos (img/doodles/*.svg, tinta negra): decorativos y opcionales; en oscuro se pasan a tiza */
+svg.dd{display:block;color:var(--ink);overflow:visible}
+.dd{pointer-events:none;user-select:none}
+.dd-tr{position:absolute;top:8px;right:12px;width:clamp(70px,9vw,140px);height:auto;opacity:.9;z-index:0}
 
 /* utilidades reutilizables */
 .decor-contour{position:relative;isolation:isolate}

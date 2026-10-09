@@ -1,12 +1,15 @@
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from apps.accounts.models import Person
+from apps.catalog.models import Discipline
 from apps.paths import services as path_services
 from apps.paths.models import SharedItem
 
-from . import services
+from . import onboarding, services
 
 
 @require_GET
@@ -16,6 +19,7 @@ def board(request):
         request,
         "team/board.html",
         {
+            "areas": onboarding.board_areas(),
             "table": services.progress_table(request.user),
             "notes": services.recent_notes(request.user),
             "credentials": services.recent_credentials(request.user),
@@ -60,3 +64,97 @@ def toggle(request, slug, key):
     except PermissionError as exc:
         messages.error(request, str(exc))
     return redirect(f"/equipo/kit/{slug}/#{key}")
+
+
+# --- incorporación del equipo (solo responsables) ---------------------------------------------------------------
+
+
+def _lead_only(request):
+    if not request.user.is_lead:
+        raise PermissionDenied
+
+
+@require_GET
+def people(request):
+    _lead_only(request)
+    rows = onboarding.roster()
+    return render(
+        request,
+        "team/people.html",
+        {
+            "areas": onboarding.groups_by_area(rows),
+            "disciplines": Discipline.objects.all(),
+            "can_name_leads": request.user.is_admin,
+            "invitation": onboarding.invitation_text(),
+            "academy_url": onboarding.academy_url(),
+            "step_labels": onboarding.STEP_LABELS,
+            "total": len(rows),
+        },
+    )
+
+
+@require_POST
+def person_update(request, pk):
+    _lead_only(request)
+    person = get_object_or_404(Person, pk=pk)
+    try:
+        changes = onboarding.update_person(
+            person,
+            request.user,
+            role=request.POST.get("role", ""),
+            discipline_slugs=request.POST.getlist("disciplines"),
+            job=request.POST.get("job", ""),
+        )
+    except (PermissionError, ValueError) as exc:
+        messages.error(request, str(exc))
+    else:
+        messages.success(
+            request,
+            f"{person.name}: {', '.join(changes)}." if changes else f"{person.name}: sin cambios.",
+        )
+    return redirect(f"/equipo/personas/#p{person.pk}")
+
+
+@require_POST
+def person_invited(request, pk):
+    _lead_only(request)
+    person = get_object_or_404(Person, pk=pk)
+    onboarding.set_invited(person, request.user, request.POST.get("invited") == "1")
+    return redirect(f"/equipo/personas/#p{person.pk}")
+
+
+@require_http_methods(["GET", "POST"])
+def people_add(request):
+    _lead_only(request)
+    text, report = "", None
+    if request.method == "POST":
+        upload = request.FILES.get("file")
+        if upload is not None:
+            if upload.size > onboarding.MAX_BYTES:
+                messages.error(request, "El archivo es demasiado grande (máximo 200 KB).")
+            else:
+                text = upload.read().decode("utf-8-sig", errors="replace")
+        else:
+            text = request.POST.get("csv", "")
+        if text:
+            dry_run = request.POST.get("action") != "import"
+            report = onboarding.import_team(text, by=request.user, dry_run=dry_run)
+            if not dry_run and not report.fatal:
+                messages.success(
+                    request,
+                    f"Listo: {report.count('created')} creadas, {report.count('updated')} actualizadas, "
+                    f"{len(report.errors)} con errores.",
+                )
+        elif upload is None:
+            messages.error(request, "Pega las filas o elige un archivo CSV.")
+    return render(
+        request,
+        "team/people_add.html",
+        {
+            "text": text,
+            "report": report,
+            "template_csv": onboarding.TEMPLATE_CSV,
+            "disciplines": Discipline.objects.all(),
+            "can_name_leads": request.user.is_admin,
+        },
+    )

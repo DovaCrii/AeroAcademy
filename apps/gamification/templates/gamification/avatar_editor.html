@@ -5,24 +5,28 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'gamification/editor.css' %}">
 <script src="{% static 'core/enhance.js' %}" defer></script>
+<script src="{% static 'gamification/editor.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
 <div class="page-head">
   <h1>Mi avatar</h1>
-  <p>Arma tu figurita como quieras: cuerpo, cara, pelo, lentes, gorro y ropa. Todo se puede cambiar cuando se quiera. Algunas piezas se desbloquean con insignias.</p>
+  <p>Elige tu carrera en el gremio y arma tu figurita: cada carrera trae su ropa, su herramienta y su fondo, y todo se puede cambiar cuando se quiera. Algunas piezas se desbloquean con insignias.</p>
 </div>
 
 <form class="av-editor" id="avForm" method="post" action="{% url 'gamification:avatar_editor' %}" data-enhance-root data-live-url="{% url 'gamification:avatar_preview' %}" data-live-target="#preview">
   {% csrf_token %}
   <aside class="av-side">
     <div class="av-preview" id="preview" role="region" aria-label="Vista previa" aria-live="polite">
-      <div class="av-big">{{ preview|safe }}</div>
+      {% include "gamification/_preview.html" %}
     </div>
     {% if unsaved %}<p class="av-note" role="status">Vista previa sin guardar. Pulsa «Guardar avatar» para quedarte con este.</p>{% endif %}
     <div class="av-actions">
       <button class="btn" type="submit">Guardar avatar</button>
-      <a class="btn ghost" href="{% url 'gamification:avatar_editor' %}?azar=1">Sorpréndeme</a>
+      <a class="btn ghost av-dice" href="{% url 'gamification:avatar_editor' %}?azar=1" title="Una combinación al azar que calza con tu carrera">
+        <svg class="die" viewBox="0 0 8 8" width="20" height="20" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><path fill="currentColor" d="M1 0h6v1h1v6h-1v1h-6v-1h-1v-6h1z"/><path fill="var(--sheet)" d="M1 1h6v6h-6z"/><path fill="currentColor" d="M2 2h1v1h-1zM5 2h1v1h-1zM3 3h2v2h-2zM2 5h1v1h-1zM5 5h1v1h-1z"/></svg>
+        Sorpréndeme
+      </a>
       <a class="btn ghost" href="{% url 'gamification:avatar_editor' %}?restablecer=1">Restablecer</a>
     </div>
   </aside>
@@ -32,21 +36,45 @@
     <section class="av-section">
       <h2>{{ section.title }}</h2>
       {% for group in section.groups %}
-      <fieldset class="av-group">
-        <legend>{{ group.label }}</legend>
+      <fieldset class="av-group{% if group.careers %} av-careers{% endif %}">
+        <legend>{{ group.label }}{% if group.has_rec %} <small class="av-hint">★ = recomendado para tu carrera</small>{% endif %}</legend>
+        {% if group.careers %}
+        {% for cluster in group.clusters %}
+        <div class="av-cluster" data-discipline="{{ cluster.slug }}">
+          <h3>{{ cluster.label }}</h3>
+          <div class="av-cards">
+            {% for opt in cluster.options %}
+            <label class="av-opt av-career{% if opt.selected %} is-on{% endif %}" style="--accent:{{ opt.accent }}">
+              <input type="radio" name="class" value="{{ opt.id }}"{% if opt.selected %} checked{% endif %} data-look="{{ opt.look }}">
+              <span class="career">
+                <span class="px">{{ opt.svg|safe }}</span>
+                <span class="ctext">
+                  <b class="cname">{{ opt.label }}</b>
+                  <i class="ctitle">{{ opt.title }}</i>
+                  <small class="ctag">{{ opt.tagline }}</small>
+                  <span class="chips">{% for b in opt.bonus %}<em title="{{ b.name }}">{{ b.code }} +{{ b.value }}</em>{% endfor %}</span>
+                </span>
+              </span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
         <div class="{% if group.tiles %}av-tiles{% else %}av-swatches{% endif %}">
           {% for opt in group.options %}
-          <label class="av-opt{% if opt.locked %} locked{% endif %}" title="{% if opt.locked %}Se desbloquea con «{{ opt.need }}»{% else %}{{ opt.label }}{% endif %}">
+          <label class="av-opt{% if opt.locked %} locked{% endif %}{% if opt.rec %} rec{% endif %}" title="{% if opt.need_level %}Se desbloquea en NV {{ opt.need_level }}{% elif opt.locked %}Se desbloquea con «{{ opt.need }}»{% else %}{{ opt.label }}{% if opt.rec %} · recomendado para tu carrera{% endif %}{% endif %}">
             <input type="radio" name="{{ group.key }}" value="{{ opt.id }}"{% if opt.selected %} checked{% endif %}{% if opt.locked %} disabled{% endif %}>
             {% if group.tiles %}
-            <span class="tile"><span class="px">{{ opt.svg|safe }}</span><b>{{ opt.label }}</b>{% if opt.locked %}<small>🔒 {{ opt.need }}</small>{% endif %}</span>
+            <span class="tile"><span class="px">{{ opt.svg|safe }}</span><b>{% if opt.rec %}<span class="star" aria-hidden="true">★</span> {% endif %}{{ opt.label }}</b>{% if opt.locked %}<small>🔒 {% if opt.need_level %}se desbloquea en NV {{ opt.need_level }}{% else %}{{ opt.need }}{% endif %}</small>{% endif %}</span>
             {% elif opt.color %}
-            <span class="sw" style="background:{{ opt.color }}"><span class="vh">{{ opt.label }}</span></span>
-            {% if group.key == "frame" %}<b class="swl">{{ opt.label }}{% if opt.locked %} 🔒{% endif %}</b>{% endif %}
+            <span class="sw" style="background:{{ opt.color }}"><span class="vh">{{ opt.label }}{% if opt.rec %} (recomendado){% endif %}</span></span>
+            {% if group.key == "frame" %}<b class="swl">{{ opt.label }}{% if opt.locked %} 🔒{% if opt.need_level %} se desbloquea en NV {{ opt.need_level }}{% endif %}{% endif %}</b>{% endif %}
             {% endif %}
           </label>
           {% endfor %}
         </div>
+        {% endif %}
       </fieldset>
       {% endfor %}
     </section>
@@ -54,3 +82,4 @@
   </div>
 </form>
 {% endblock %}
+

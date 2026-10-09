@@ -171,3 +171,86 @@ class Report(TimeStampedModel):
 
     def __str__(self):
         return f"{self.target_type}:{self.target_id} ({self.status})"
+
+
+class Reaction(TimeStampedModel):
+    """Una reacción de una persona a un hilo o a un mensaje (una por persona y tipo; se alterna)."""
+
+    class Kind(models.TextChoices):
+        USEFUL = "useful", "Útil"
+        IDEA = "idea", "Buena idea"
+        TESTED = "tested", "Lo probé"
+        HELPED = "helped", "Me sirvió"
+
+    EMOJI = {"useful": "👍", "idea": "💡", "tested": "✅", "helped": "🎯"}
+
+    person = models.ForeignKey(
+        "accounts.Person", on_delete=models.CASCADE, related_name="forum_reactions"
+    )
+    thread = models.ForeignKey(
+        Thread, null=True, blank=True, on_delete=models.CASCADE, related_name="reactions"
+    )
+    post = models.ForeignKey(
+        Post, null=True, blank=True, on_delete=models.CASCADE, related_name="reactions"
+    )
+    kind = models.CharField("reacción", max_length=8, choices=Kind.choices)
+
+    class Meta:
+        verbose_name = "reacción"
+        verbose_name_plural = "reacciones"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["person", "thread", "kind"],
+                condition=Q(thread__isnull=False),
+                name="uniq_reaction_thread",
+            ),
+            models.UniqueConstraint(
+                fields=["person", "post", "kind"],
+                condition=Q(post__isnull=False),
+                name="uniq_reaction_post",
+            ),
+            models.CheckConstraint(
+                condition=Q(thread__isnull=False, post__isnull=True)
+                | Q(thread__isnull=True, post__isnull=False),
+                name="reaction_one_target",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.kind} · {self.person}"
+
+
+class PollOption(models.Model):
+    """Opción de la encuesta rápida de un hilo (2 a 6)."""
+
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="poll_options")
+    text = models.CharField("opción", max_length=80)
+    position = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "opción de encuesta"
+        verbose_name_plural = "opciones de encuesta"
+        ordering = ["position", "id"]
+
+    def __str__(self):
+        return self.text
+
+
+class PollVote(TimeStampedModel):
+    """Voto de una persona en la encuesta de un hilo: uno por persona, cambiable mientras esté abierto."""
+
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="poll_votes")
+    person = models.ForeignKey(
+        "accounts.Person", on_delete=models.CASCADE, related_name="poll_votes"
+    )
+    option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name="votes")
+
+    class Meta:
+        verbose_name = "voto"
+        verbose_name_plural = "votos"
+        constraints = [
+            models.UniqueConstraint(fields=["thread", "person"], name="uniq_poll_vote_person")
+        ]
+
+    def __str__(self):
+        return f"{self.person} → {self.option_id}"

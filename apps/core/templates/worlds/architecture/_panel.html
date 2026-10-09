@@ -1,5 +1,5 @@
 {% load community_tags %}
-{% load core_extras %}
+{% load core_extras catalog_extras %}
 {% if current %}
 <div class="ar-panel{% if current.complete %} complete{% endif %}" id="panel" role="region" aria-label="Nivel {{ current.level.code|upper }}">
   <div class="ar-phead">
@@ -14,23 +14,27 @@
     </div>
   </div>
   {% if current.level.goal %}<div class="ar-goal"><b>Meta:</b> {{ current.level.goal|terms }}</div>{% endif %}
+  {% level_guide path current %}
 
   <div class="ar-cols">
     <div class="ar-col">
-      <h4>Recursos</h4>
+      <h4><span class="sn">// 02</span> Recursos</h4>
       <ul class="ar-res">
         {% for lr in current.resources %}
-        <li>
+        <li class="ar-r">
+          {% sw_tiles lr.resource "md" 1 %}
+          <div class="ar-rb">
           <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
           {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
           <div class="chips">
             {% for t in lr.resource.tags %}{% if t != 'Esencial' and t != 'Complementario' %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endif %}{% endfor %}{% course_xp lr.resource %}
           </div>
+          </div>
         </li>
         {% empty %}<li class="empty">Sin recursos todavía.</li>{% endfor %}
       </ul>
 
-      <h4 class="ar-gap">Hitos</h4>
+      <h4 class="ar-gap"><span class="sn">// 03</span> Hitos</h4>
       <ul class="ar-checks">
         {% for m in current.milestones %}
         <li>
@@ -48,12 +52,12 @@
 
     <div class="ar-col">
       {% if current.level.mastery_signals %}
-      <h4>Cómo se ve dominarlo</h4>
+      <h4><span class="sn">// 04</span> Cómo se ve dominarlo</h4>
       <ul class="ar-look">{% for s in current.level.mastery_signals %}<li>{{ s|terms }}</li>{% endfor %}</ul>
       {% endif %}
 
       {% if current.quiz %}
-      <h4 class="ar-gap">Mini quiz</h4>
+      <h4 class="ar-gap"><span class="sn">// 05</span> Mini quiz</h4>
       <div class="ar-quiz">
         {% for q in current.quiz %}
         <div class="ar-q">

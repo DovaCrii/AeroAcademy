@@ -10,5 +10,7 @@ staticfiles/
 .env
 .env.*
 !.env.example
+# Contenido privado de JEJ (sección DGAC): el repositorio es público, esto nunca se versiona
+private/
 # Configuración de producción con claves (nunca se versiona)
 deploy/centro.env

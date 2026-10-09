@@ -1,5 +1,5 @@
 {% load community_tags %}
-{% load core_extras %}
+{% load core_extras catalog_extras %}
 {% if current %}
 <div class="cv-panel" id="panel" role="region" aria-label="Corredor {{ current.level.short }}">
   <div class="cv-phead">
@@ -14,6 +14,7 @@
     </div>
   </div>
   {% if current.level.goal %}<div class="cv-goal"><b>Meta:</b> {{ current.level.goal|terms }}</div>{% endif %}
+  {% level_guide path current %}
   {% if current.level.completion_rule == "any_one" %}<p class="cv-rule">Basta una acreditación de este corredor para completarlo.</p>{% endif %}
 
   <ul class="cv-courses">
@@ -22,7 +23,7 @@
     <li class="cv-course {{ item.state }}">
       <svg class="stake" viewBox="0 0 34 46" aria-hidden="true"><line x1="6" y1="4" x2="6" y2="44"/><path d="M6 4 h22 l-6 7 l6 7 h-22z"/></svg>
       <div>
-        <h4>{% if c.resource.url %}<a href="{{ c.resource.url }}" target="_blank" rel="noopener">{{ c.resource.title }}</a>{% else %}{{ c.resource.title }}{% endif %}</h4>
+        <h4>{% sw_tiles c.resource "sm" 1 %} {% if c.resource.url %}<a href="{{ c.resource.url }}" target="_blank" rel="noopener">{{ c.resource.title }}</a>{% else %}{{ c.resource.title }}{% endif %}</h4>
         <div class="meta">{{ c.resource.get_kind_display }}{% if c.resource.duration_text %} · {{ c.resource.duration_text }}{% endif %}{% if not c.is_required %} · opcional{% endif %}</div>
         <div class="chips" style="margin-top:4px">
           <span class="chip {{ c.reward }}">{{ c.get_reward_display }}</span><span class="chip xp" title="Al verificarse el certificado">+{{ c.reward|reward_xp }} XP</span>
@@ -62,7 +63,7 @@
   {% if current.resources %}
   <div class="cv-res">
     <h4>Dónde encontrar los cursos</h4>
-    <ul class="reslist">{% for lr in current.resources %}<li><a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a> {% course_xp lr.resource %}{% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}</li>{% endfor %}</ul>
+    <ul class="reslist">{% for lr in current.resources %}<li>{% sw_tiles lr.resource "sm" 1 %} <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a> {% course_xp lr.resource %}{% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}</li>{% endfor %}</ul>
   </div>
   {% endif %}
   {% level_notes path current.level.code %}

@@ -15,6 +15,7 @@
 </details>
 
 <form class="filters" method="get">
+  <input type="hidden" name="orden" value="{{ sort }}">
   <input type="search" name="q" value="{{ f.q }}" placeholder="Buscar…" aria-label="Buscar">
   <select name="categoria" aria-label="Categoría"><option value="">Todas las categorías</option>{% for c in categories %}<option value="{{ c.slug }}"{% if f.categoria == c.slug %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
   <select name="disciplina" aria-label="Disciplina"><option value="">Todas las disciplinas</option>{% for d in disciplines %}<option value="{{ d.slug }}"{% if f.disciplina == d.slug %} selected{% endif %}>{{ d.name }}</option>{% endfor %}</select>
@@ -22,6 +23,8 @@
   <select name="estado" aria-label="Estado"><option value="">Cualquier estado</option><option value="open"{% if f.estado == "open" %} selected{% endif %}>Consultas sin respuesta</option><option value="answered"{% if f.estado == "answered" %} selected{% endif %}>Con respuesta aceptada</option></select>
   <button class="btn" type="submit">Filtrar</button>
 </form>
+
+<nav class="sorts" aria-label="Ordenar">Ordenar:{% for v, l in sorts %} <a href="?{% if qs_nosort %}{{ qs_nosort }}&amp;{% endif %}orden={{ v }}"{% if sort == v %} class="on" aria-current="true"{% endif %}>{{ l }}</a>{% endfor %}</nav>
 
 <ul class="threads">
   {% for t in page %}
@@ -34,6 +37,11 @@
       {% if t.is_hidden %}<span class="chip warn">Oculto</span>{% endif %}
       {{ t.category.name }} · {{ t.author.name }} · {{ t.last_activity_at|date:"d/m/Y" }} · {{ t.n_posts }} respuesta{{ t.n_posts|pluralize }}
     </span>
+    {% if t.reaction_summary or t.has_poll or t.can_opine %}<span class="opinion-row">
+      {% for emoji, n in t.reaction_summary %}<span class="rsum" title="Reacciones"><span aria-hidden="true">{{ emoji }}</span> {{ n }}</span>{% endfor %}
+      {% if t.has_poll %}<span class="chip">📊 Encuesta</span>{% endif %}
+      {% if t.can_opine %}<a class="opine-link" href="{% url 'community:thread' t.pk %}#opinar">Opinar →</a>{% endif %}
+    </span>{% endif %}
   </li>
   {% empty %}<li class="muted">No hay hilos con estos filtros.</li>{% endfor %}
 </ul>

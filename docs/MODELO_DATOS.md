@@ -13,7 +13,8 @@ Campos comunes en todos los modelos: `id`, `created_at`, `updated_at`.
   - `headline`, el titular profesional;
   - `bio` (máx. 600);
   - `links` (JSON: linkedin, credly, otro);
-  - `character_class`: `architect` | `engineer` | `cartographer` | `artificer` | `pilot`;
+  - `character_class` (carrera): `architect` | `bim_modeler` | `drafter` | `engineer` | `inspector` | `cartographer` | `gis` | `artificer` | `pilot` | `scanner` | `lev_lead` | `bim_coord` | `hse` (detalle en `apps/gamification/avatar/careers.py`);
+  - `sheet_view`: `game` | `compact` | `pro` (vista de la hoja de personaje);
   - `selected_title` FK opcional a `gamification.Title`;
   - `avatar_config` (JSON con capas: base, tono, color, accesorio; solo accesorios desbloqueados);
   - `show_game_view` (bool).

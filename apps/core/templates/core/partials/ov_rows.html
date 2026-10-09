@@ -1,0 +1,10 @@
+{% if rows %}<ul class="w-ovl">{% for r in rows %}
+  <li>
+    <a class="w-th" href="{% url 'paths:detail' r.path.slug %}" aria-hidden="true" tabindex="-1"><span>{{ r.path.vendor.name|slice:":2"|upper }}</span><i style="width:{{ r.pct }}%"></i></a>
+    <div>
+      <a href="{% url 'paths:detail' r.path.slug %}">{{ r.path.title }}</a>
+      <small>{{ r.path.vendor.name }} · {% if r.path.kind == "external_track" %}Cursos oficiales{% else %}Ruta guiada{% endif %} · {{ r.pct }} %</small>
+    </div>
+    <span class="w-pct" aria-label="{{ r.pct }} por ciento">{{ r.pct }}<sup>%</sup></span>
+  </li>{% endfor %}</ul>
+{% else %}<p class="w-mdetail">{{ empty }}</p>{% endif %}

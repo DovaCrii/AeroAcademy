@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 
 from django import forms
 
-from apps.accounts.models import CharacterClass
+from apps.accounts.models import CharacterClass, SheetView
 
 from . import game
 from .models import Title
@@ -26,7 +26,11 @@ class SheetForm(forms.Form):
     )
     linkedin = forms.URLField(label="LinkedIn", required=False, assume_scheme="https")
     credly = forms.URLField(label="Credly", required=False, assume_scheme="https")
-    show_game_view = forms.BooleanField(label="Mostrar mi hoja en vista de juego", required=False)
+    sheet_view = forms.ChoiceField(
+        label="Vista con la que se abre mi hoja",
+        choices=[("", "Sin cambiar")] + list(SheetView.choices),
+        required=False,
+    )
 
     def __init__(self, *args, person, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,7 +48,7 @@ class SheetForm(forms.Form):
             "selected_title": person.selected_title_id,
             "linkedin": person.links.get("linkedin", ""),
             "credly": person.links.get("credly", ""),
-            "show_game_view": person.show_game_view,
+            "sheet_view": person.sheet_view or ("game" if person.show_game_view else "pro"),
         }
 
     def _clean_link(self, name):

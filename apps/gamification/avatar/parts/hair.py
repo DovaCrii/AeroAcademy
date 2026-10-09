@@ -350,5 +350,49 @@ def _off_face(rows):
     return out
 
 
+# --- más peinados ---------------------------------------------------------------------------------------------
+
+LABELS.update({"flat_top": "Corte plano", "pixie": "Pixie", "undercut": "Undercut"})
+
+HAIR["flat_top"] = {
+    "back": {},
+    "front": {
+        2: _s(11, "KKKKK"),
+        3: _s(9, "KHHHHHH"),
+        4: _s(9, "KHHhHHH"),
+        5: _s(9, "KHHHHHH"),
+        6: _s(9, "KHHHjHH"),
+        7: _s(9, "KHHhHHH"),
+        8: _s(10, "HHj"),
+    },
+}
+HAIR["pixie"] = {
+    "back": {},
+    "front": {
+        3: _s(12, "KKKK"),
+        4: _s(10, "KHHHHH"),
+        5: _s(10, "KHHhHH"),
+        6: _s(9, "KHHHHHHH"),
+        7: _s(9, "KHHhHHHH"),
+        8: _s(10, "HHj"),
+        9: _s(10, "Hj"),
+        10: _s(10, "H"),
+        11: _s(10, "H"),
+    },
+}
+HAIR["undercut"] = {
+    "back": {},
+    "front": {
+        1: _s(12, "KKKK"),
+        2: _s(11, "KHHhH"),
+        3: _s(10, "KHHhHH"),
+        4: _s(10, "KHHHhH"),
+        5: _s(10, "KHjHHH"),
+        6: _s(9, "KjHHHHHH"),
+        7: _s(9, "KjjHHHHH"),
+        8: _s(10, "jj"),
+    },
+}
+
 for _style in HAIR.values():
     _style["front"] = _off_face(_style["front"])

@@ -1,0 +1,29 @@
+{
+ "title": "Resumen de prueba",
+ "lead": "Texto de ejemplo para las pruebas.",
+ "diploma": {
+  "title": "Diploma de prueba",
+  "text": "por aprobar una prueba de ejemplo."
+ },
+ "sections": [
+  {
+   "id": "d0",
+   "kicker": "01 · Ejemplo",
+   "title": "Sección de ejemplo",
+   "text": "Contenido genérico.",
+   "image": "demo.svg",
+   "alt": "Imagen de ejemplo",
+   "caption": "Figura de ejemplo"
+  },
+  {
+   "id": "d1",
+   "kicker": "02 · Otro",
+   "title": "Otra sección",
+   "text": "Más texto genérico.",
+   "bullets": [
+    "Punto uno",
+    "Punto dos"
+   ]
+  }
+ ]
+}

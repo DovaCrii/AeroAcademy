@@ -7,10 +7,11 @@ Todo sale del catálogo: nada que escriba la persona entra al SVG.
 """
 
 import hashlib
+import random
 
-from . import palettes
+from . import backgrounds, careers, palettes
 from .art import GRID
-from .parts import body, face, facial_hair, glasses, hair, headwear, outfits
+from .parts import body, face, facial_hair, glasses, hair, headwear, outfits, props
 
 BODIES = tuple(body.LABELS_BODY)
 LEGWEAR = tuple(body.LEGWEAR)
@@ -20,35 +21,34 @@ FACIAL_HAIR = facial_hair.FACIAL_HAIR
 HEADWEAR = headwear.HEADWEAR
 GLASSES = glasses.GLASSES
 OUTFITS, NECKWEAR = outfits.OUTFITS, outfits.NECKWEAR
+PROPS, PINS = props.PROPS, props.PINS
 
 # Lentes que tapan el ojo a propósito (cristal oscuro u ojos pintados dentro); el resto deja ver los ojos.
-OPAQUE_GLASSES = {"sunglasses", "goggles"}
+OPAQUE_GLASSES = {"sunglasses", "goggles", "fpv"}
 # Ventana de la cara (ojos, nariz y boca): el pelo y los gorros no dibujan aquí.
 FACE_X, FACE_Y = range(11, 21), range(10, 17)
 
-CLASSES = ("architect", "engineer", "cartographer", "artificer", "pilot")
-CLASS_LABELS = {
-    "architect": "Arquitecto-Constructor",
-    "engineer": "Calculista",
-    "cartographer": "Cartógrafo",
-    "artificer": "Artífice",
-    "pilot": "Piloto de Nubes",
+CLASSES = careers.SLUGS  # las carreras del gremio (el campo se llama `class` por compatibilidad)
+CLASS_LABELS = {slug: data["name"] for slug, data in careers.CAREERS.items()}
+FRAME_LABELS = {
+    "common": "Común",
+    "bronze": "Bronce",
+    "rare": "Raro",
+    "epic": "Épico",
+    "legendary": "Legendario",
 }
-FRAME_LABELS = {"common": "Común", "rare": "Raro", "epic": "Épico", "legendary": "Legendario"}
 
-# Ropa y color de partida de cada clase (la persona puede cambiarlos).
+# Ropa y color de partida de cada carrera (la persona puede cambiarlos). El look completo está en `careers.py`.
 CLASS_DEFAULTS = {
-    "architect": {"outfit": "shirt_tie", "outfit_color": 0, "background": 0},
-    "engineer": {"outfit": "hivis_vest", "outfit_color": 1, "background": 1},
-    "cartographer": {"outfit": "field_vest", "outfit_color": 2, "background": 2},
-    "artificer": {"outfit": "apron", "outfit_color": 3, "background": 3},
-    "pilot": {"outfit": "flight_jacket", "outfit_color": 4, "background": 4},
+    slug: {key: data["look"][key] for key in ("outfit", "outfit_color", "background")}
+    for slug, data in careers.CAREERS.items()
 }
 
 # Piezas que se desbloquean con una insignia (slug de seed/insignias.json); el resto es libre.
 UNLOCKS = {
     "headwear": {
         "hardhat": "primer-trofeo",
+        "hardhat_lamp": "primer-trofeo",
         "explorer": "explorador-multivendor",
         "propeller": "constructor-de-puentes",
         "headphones": "mentor",
@@ -59,6 +59,12 @@ UNLOCKS = {
         "epic": "reliquia-bentley",
         "legendary": "constructor-de-puentes",
     },
+}
+
+# Piezas que se desbloquean al llegar a un nivel de juego (el nivel sale de `game.level_info`).
+LEVEL_UNLOCKS = {
+    "frame": {"bronze": 3},
+    "pin": {"hardhat_pin": 5, "theodolite_pin": 10},
 }
 
 DEFAULTS = {
@@ -79,6 +85,8 @@ DEFAULTS = {
     "outfit": "shirt_tie",
     "outfit_color": 0,
     "neckwear": "none",
+    "prop": "none",
+    "pin": "none",
     "legwear": "pants",
     "pants_color": 0,
     "background": 0,
@@ -103,6 +111,8 @@ CHOICES = {  # clave de configuración → opciones válidas
     "outfit": OUTFITS,
     "outfit_color": range(len(palettes.OUTFIT_COLORS)),
     "neckwear": NECKWEAR,
+    "prop": PROPS,
+    "pin": PINS,
     "legwear": LEGWEAR,
     "pants_color": range(len(palettes.PANTS_COLORS)),
     "background": range(len(palettes.BACKGROUNDS)),
@@ -113,8 +123,9 @@ CHOICES = {  # clave de configuración → opciones válidas
 # --- configuración -----------------------------------------------------------------------------------------
 
 
-def clean_config(config=None, *, unlocked=None):
-    """Configuración válida. Con `unlocked` (slugs de insignias) descarta lo que aún no se ganó."""
+def clean_config(config=None, *, unlocked=None, level=None):
+    """Configuración válida. Con `unlocked` (slugs de insignias) y `level` (nivel de juego) descarta lo que aún no
+    se ganó."""
     cfg = dict(DEFAULTS)
     cls = (config or {}).get("class")
     if cls in CLASS_DEFAULTS:
@@ -131,6 +142,10 @@ def clean_config(config=None, *, unlocked=None):
         for group in ("headwear", "glasses", "frame"):
             need = UNLOCKS[group].get(cfg[group])
             if need and need not in have:
+                cfg[group] = DEFAULTS[group]
+    if level is not None:
+        for group, pieces in LEVEL_UNLOCKS.items():
+            if pieces.get(cfg[group], 0) > level:
                 cfg[group] = DEFAULTS[group]
     return cfg
 
@@ -160,7 +175,86 @@ def default_config(seed: str, character_class: str = ""):
         if d[17] % 3 == 0
         else "none",
     }
+    cfg["prop"] = careers.CAREERS[cfg["class"]]["look"]["prop"]
     return clean_config(cfg)
+
+
+def apply_career(config, slug, *, unlocked=None, level=None):
+    """Viste la configuración con el look de una carrera (ropa, gorro, lentes, herramienta, fondo).
+
+    Lo personal (cuerpo, piel, pelo, ojos, barba) no cambia. Lo bloqueado por insignias cae a su valor libre.
+    """
+    if slug not in careers.CAREERS:
+        return clean_config(config, unlocked=unlocked, level=level)
+    look = careers.CAREERS[slug]["look"]
+    return clean_config({**(config or {}), **look, "class": slug}, unlocked=unlocked, level=level)
+
+
+def _luminance(hex_color):
+    channels = [int(hex_color[i : i + 2], 16) / 255 for i in (1, 3, 5)]
+    lin = [c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4 for c in channels]
+    return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+
+
+def contrast(hex_a, hex_b):
+    """Razón de contraste (1 a 21) entre dos colores #RRGGBB."""
+    a, b = sorted((_luminance(hex_a), _luminance(hex_b)), reverse=True)
+    return (a + 0.05) / (b + 0.05)
+
+
+def outfit_stands_out(cfg):
+    """La ropa se distingue del fondo (si no, la figura se pierde)."""
+    return contrast(palettes.OUTFIT_COLORS[cfg["outfit_color"]][1]["O"], background_for(cfg)) >= 1.5
+
+
+NATURAL_HAIR = range(9)  # los 9 primeros colores de pelo son naturales; el resto son «de fantasía»
+
+
+def surprise(seed, slug="", *, unlocked=None, level=None):
+    """Combinación al azar que SIEMPRE calza: ropa, gorro, lentes, herramienta y fondo salen de la carrera.
+
+    Con la misma semilla da el mismo avatar. Lo personal (cuerpo, cara, pelo) es libre; lo de oficio se toma de las
+    listas y paletas curadas de la carrera, así el gorro no desentona con la ropa ni la ropa se pierde en el fondo.
+    """
+    rng = random.Random(str(seed))
+    slug = slug if slug in careers.CAREERS else rng.choice(CLASSES)
+    data = careers.CAREERS[slug]
+    pal = data["palette"]
+    free = [h for h in HEADWEAR if h not in UNLOCKS["headwear"]]
+    hats = [h for h in data["headwear"] if h in free] or ["none"]
+    background = rng.choice(pal["background"])
+    colors = [
+        c
+        for c in pal["outfit_color"]
+        if contrast(palettes.OUTFIT_COLORS[c][1]["O"], palettes.BACKGROUNDS[background][1]) >= 1.5
+    ] or [data["look"]["outfit_color"]]
+    outfit_color = rng.choice(colors)
+    cfg = {
+        "class": slug,
+        "body": rng.choice(BODIES),
+        "skin": rng.randrange(len(palettes.SKINS)),
+        "hair": rng.choice([h for h in HAIR]),
+        "hair_color": rng.choice(NATURAL_HAIR)
+        if rng.random() < 0.85
+        else rng.randrange(len(palettes.HAIR_COLORS)),
+        "eyes": rng.choice(list(EYES)),
+        "eye_color": rng.randrange(len(palettes.EYE_COLORS)),
+        "brows": rng.choice(list(BROWS)),
+        "mouth": rng.choice(list(MOUTHS)),
+        "facial_hair": rng.choice(list(FACIAL_HAIR)) if rng.random() < 0.3 else "none",
+        "outfit": rng.choice(data["outfits"]),
+        "outfit_color": outfit_color,
+        "neckwear": data["look"]["neckwear"] if rng.random() < 0.5 else "none",
+        "legwear": "pants" if rng.random() < 0.85 else rng.choice(LEGWEAR),
+        "pants_color": rng.choice(pal["pants_color"]),
+        "headwear": rng.choice(hats) if rng.random() < 0.7 else "none",
+        "headwear_color": rng.choice(pal["headwear_color"]),
+        "glasses": rng.choice(data["glasses"]),
+        "glasses_color": rng.randrange(len(palettes.GLASSES_COLORS)),
+        "prop": rng.choice(data["props"]),
+        "background": background,
+    }
+    return clean_config(cfg, unlocked=unlocked, level=level)
 
 
 # --- composición -------------------------------------------------------------------------------------------
@@ -226,6 +320,8 @@ def compose(config):
         _paint(grid, GLASSES[cfg["glasses"]])
     _paint(grid, _off_face(_above(hair_art["front"], top)))
     _paint(grid, _off_face(hat_art["front"]))
+    _paint(grid, PINS[cfg["pin"]])
+    _paint(grid, PROPS[cfg["prop"]])
     return grid
 
 
@@ -258,6 +354,8 @@ def render_svg(config=None, *, title="Avatar", frame=True, view="full"):
         f"<title>{_esc(title)}</title>",
         f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" fill="{background_for(cfg)}"/>',
     ]
+    for color, d in backgrounds.pattern_paths(cfg["background"]):
+        parts.append(f'<path fill="{color}" d="{d}"/>')
     # Un solo <path> por color: cada tramo horizontal es "M x y h largo v1 h-largo z".
     by_color = {}
     for y, row in enumerate(grid):
@@ -332,12 +430,16 @@ def catalog():
         "outfit": _options(OUTFITS, outfits.LABELS_OUTFITS),
         "outfit_color": _swatches(palettes.OUTFIT_COLORS, "O"),
         "neckwear": _options(NECKWEAR, outfits.LABELS_NECKWEAR),
+        "prop": _options(PROPS, props.LABELS_PROPS),
+        "pin": _options(PINS, props.LABELS_PINS),
         "legwear": _options(LEGWEAR, body.LABELS_LEGWEAR),
         "pants_color": _swatches(palettes.PANTS_COLORS, "P"),
         "background": _swatches(palettes.BACKGROUNDS),
+        "careers": careers.CAREERS,
         "frame": [
             {"id": f, "label": FRAME_LABELS[f], "color": palettes.FRAMES[f][0]}
             for f in palettes.FRAMES
         ],
         "unlocks": UNLOCKS,
+        "level_unlocks": LEVEL_UNLOCKS,
     }

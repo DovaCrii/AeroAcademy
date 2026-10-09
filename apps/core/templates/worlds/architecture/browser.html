@@ -1,6 +1,6 @@
-{# Project Browser · Levels: la lista de capítulos con su avance. #}
+{% load catalog_extras %}{% route_flavour path as fl %}{# Project Browser · Levels: la lista de capítulos con su avance. #}
 <nav class="ar-browser" aria-label="Niveles">
-  <div class="bh">Project Browser · Levels</div>
+  <div class="bh">{{ fl.browser }}</div>
   {% for ch in chapters %}
   <a class="ar-lv{% if ch.complete %} done{% endif %}" href="{% url 'paths:detail' path.slug %}?nivel={{ ch.level.code }}#panel" data-enhance data-fid="lv-{{ ch.level.code }}"{% if ch.level.code == current.level.code %} aria-current="page"{% endif %}>
     <span class="code">{{ ch.level.code|upper }}</span>

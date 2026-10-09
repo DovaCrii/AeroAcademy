@@ -19,20 +19,25 @@ SPECS = {
                     ["none", "stubble", "mustache", "goatee", "beard", "full_beard"]),
     "headwear": ("headwear", "HEADWEAR", True, "KTtUWYRCNZ", (0, 13),
                  ["none", "cap", "beanie", "hardhat", "explorer", "propeller", "headphones", "headband", "beret",
-                  "bucket"]),
-    "glasses": ("glasses", "GLASSES", False, "FLgKEW", (8, 13),
-                ["none", "round", "square", "aviator", "goggles", "sunglasses", "monocle"]),
-    "outfits": ("outfits", "OUTFITS", False, "OoAaWKYRCNZ", (20, 28),
+                  "bucket", "bump_cap", "legionnaire", "hardhat_lamp"]),
+    "glasses": ("glasses", "GLASSES", False, "FLgKEWC", (8, 13),
+                ["none", "round", "square", "aviator", "goggles", "sunglasses", "monocle", "safety", "fpv"]),
+    "outfits": ("outfits", "OUTFITS", False, "OoAaWKYRCNZGDQ", (20, 28),
                 ["tshirt", "hoodie", "hivis_vest", "field_vest", "jacket", "apron", "labcoat", "shirt_tie",
-                 "flight_jacket", "sweater"]),
+                 "flight_jacket", "sweater", "surveyor_jacket", "blazer", "overalls", "bim_hoodie", "hse_vest",
+                 "polo", "cardigan"]),
     "neckwear": ("outfits", "NECKWEAR", False, "OoAaWKYRCNZSs", (18, 25),
                  ["none", "lanyard", "scarf", "tie", "bandana"]),
+    "props": ("props", "PROPS", False, "KWYRCNZGDQSs", (0, 31),
+              ["none", "tablet", "prism_pole", "drone_controller", "scale_ruler", "mug", "gnss_rover",
+               "plans_roll", "wrench", "clipboard", "calculator", "camera", "laser_scanner"]),
+    "pins": ("props", "PINS", False, "KWYRCNZ", (20, 27), ["none", "compass", "hardhat_pin", "theodolite_pin"]),
 }  # fmt: skip
 
 LABEL_ATTR = {
     "hair": "LABELS", "eyes": "LABELS_EYES", "brows": "LABELS_BROWS", "mouths": "LABELS_MOUTHS",
     "facial_hair": "LABELS", "headwear": "LABELS", "glasses": "LABELS", "outfits": "LABELS_OUTFITS",
-    "neckwear": "LABELS_NECKWEAR",
+    "neckwear": "LABELS_NECKWEAR", "props": "LABELS_PROPS", "pins": "LABELS_PINS",
 }  # fmt: skip
 
 

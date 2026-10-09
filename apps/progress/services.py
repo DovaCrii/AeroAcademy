@@ -4,6 +4,7 @@ Regla (docs/MODELO_DATOS.md): avance de un nivel = (misiones marcadas + pregunta
 / (misiones + preguntas). Se calcula, no se guarda. Lo retirado (D7) no cuenta.
 """
 
+import math
 from collections import defaultdict
 
 from django.utils import timezone
@@ -151,6 +152,48 @@ def _floors(chapters, marks, me_id):
     return {"floors": floors, "ground": ground, "height": ground + 44, "top": top}
 
 
+def _waypoints(chapters, marks, me_id):
+    """Plan de vuelo del mundo `aero`: un waypoint por nivel sobre una ruta que sube; el dron espera en el primero
+    sin completar. Cada waypoint lleva su anillo de avance (circunferencia r = 18 → 113,1)."""
+    n = len(chapters)
+    width, left, right, base, top = 760, 70, 690, 262, 72
+    points = []
+    here = next((i for i, ch in enumerate(chapters) if not ch["complete"]), None)
+    for i, ch in enumerate(chapters):
+        t = i / (n - 1) if n > 1 else 0.5
+        x = round(left + (right - left) * t)
+        y = round(base - (base - top) * t + 22 * math.sin(i * 1.7))
+        people = marks.get(ch["level"].id, [])
+        points.append(
+            {
+                "code": ch["level"].code,
+                "short": ch["level"].short,
+                "pct": ch["pct"],
+                "complete": ch["complete"],
+                "x": x,
+                "y": y,
+                "above": i % 2 == 0,
+                "ring": round(113.1 * ch["pct"] / 100, 1),
+                "here": i == here,
+                "marks": [
+                    {
+                        "dx": 24 + k * 22,
+                        "initials": initials(p),
+                        "name": p.name,
+                        "me": p.pk == me_id,
+                    }
+                    for k, p in enumerate(people[:3])
+                ],
+                "extra": max(0, len(people) - 3),
+            }
+        )
+    segments = [
+        {"x1": a["x"], "y1": a["y"], "x2": b["x"], "y2": b["y"], "done": chapters[i]["complete"]}
+        for i, (a, b) in enumerate(zip(points, points[1:], strict=False))
+    ]
+    return {"width": width, "height": 330, "points": points, "segments": segments}
+
+
 def world_context(person, path, level_code=None):
     """Todo lo que necesita la ruta interactiva de un mundo (docs/MUNDOS.md)."""
     chapters = path_services.path_detail(path)
@@ -215,6 +258,7 @@ def world_context(person, path, level_code=None):
         "prev_code": codes[index - 1] if index > 0 else None,
         "next_code": codes[index + 1] if index + 1 < len(codes) else None,
         "building": _floors(chapters, marks, person.pk),
+        "flight": _waypoints(chapters, marks, person.pk),
         "stats": {
             "levels_done": sum(ch["complete"] for ch in chapters),
             "levels_total": len(chapters),

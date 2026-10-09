@@ -33,11 +33,14 @@ def published_paths_for(resource_ids):
 
 
 def resource_queryset(
-    *, platform="", kind="", free=False, cert=False, q="", product="", path="", essential=False
-):
-    qs = Resource.objects.select_related("platform").prefetch_related(
+    *, platform="", kind="", free=False, cert=False, q="", product="", path="", essential=False,
+    ids=None,
+):  # fmt: skip
+    qs = Resource.objects.select_related("platform__vendor").prefetch_related(
         Prefetch("skills"), "products"
     )
+    if ids is not None:
+        qs = qs.filter(pk__in=ids)
     if platform:
         qs = qs.filter(platform__slug=platform)
     if kind:
@@ -53,9 +56,9 @@ def resource_queryset(
             Q(level_links__level__path__slug=path, level_links__level__path__is_published=True)
             | Q(external_courses__path__slug=path, external_courses__path__is_published=True)
         )
-    ids = essential_ids()
+    ess_ids = essential_ids()
     if essential:
-        qs = qs.filter(pk__in=ids)
+        qs = qs.filter(pk__in=ess_ids)
     if q:
         words = q.split()[:6]
         for word in words:  # cada palabra debe aparecer en algún campo: «revit familias» encuentra más que la frase exacta
@@ -69,7 +72,7 @@ def resource_queryset(
     # Primero lo esencial, luego lo oficial; dentro, por título.
     qs = qs.annotate(
         _essential=Case(
-            When(pk__in=ids, then=Value(0)), default=Value(1), output_field=IntegerField()
+            When(pk__in=ess_ids, then=Value(0)), default=Value(1), output_field=IntegerField()
         )
     ).order_by("_essential", "-is_official", "title")
     return qs.distinct()

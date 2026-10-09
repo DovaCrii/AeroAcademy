@@ -1,4 +1,6 @@
 import re
+from functools import lru_cache
+from pathlib import Path
 
 from django import template
 from django.utils.html import escape
@@ -48,3 +50,44 @@ def reward_xp(reward):
 
     kind = Credential.Kind.CERTIFICATION if reward == "relic" else Credential.Kind.COMPLETION
     return CREDENTIAL_POINTS[kind]
+
+
+# ── garabatos inline (img/doodles/*.svg) ────────────────────────────────────────────────────────
+# La tinta usa currentColor: solo sigue el color del tema si el SVG va dentro del HTML.
+_DOODLES = Path(__file__).resolve().parents[1] / "static" / "core" / "img" / "doodles"
+_DOODLE_NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+_DOODLE_ALIAS = {"civil-estructural": "civil"}
+_SVG_OPEN = re.compile(r"<svg\b([^>]*)>", re.S)
+
+
+@lru_cache(maxsize=64)
+def _doodle_source(name):
+    path = _DOODLES / f"{name}.svg"
+    if not path.is_file() or path.resolve().parent != _DOODLES.resolve():
+        return ""
+    svg = path.read_text(encoding="utf-8")
+    svg = re.sub(r"^\s*<\?xml[^>]*\?>\s*", "", svg)
+    svg = re.sub(
+        r"<title\b.*?</title>", "", svg, flags=re.S
+    )  # decorativo: sin título para lectores
+    return svg.strip()
+
+
+@register.simple_tag
+def doodle(name, **attrs):
+    """Dibujo a mano decorativo, en línea (aria-hidden). Solo archivos de img/doodles; si falta, no devuelve nada."""
+    name = _DOODLE_ALIAS.get(name, name)
+    if not isinstance(name, str) or not _DOODLE_NAME.match(name):
+        return ""
+    svg = _doodle_source(name)
+    if not svg:
+        return ""
+    css = escape(str(attrs.get("class", "dd")))
+
+    def _open(match):
+        inner = re.sub(
+            r"\s(?:role|aria-labelledby|class|width|height)=\"[^\"]*\"", "", match.group(1)
+        )
+        return f'<svg{inner} class="{css}" aria-hidden="true" focusable="false">'
+
+    return mark_safe(_SVG_OPEN.sub(_open, svg, count=1))  # noqa: S308

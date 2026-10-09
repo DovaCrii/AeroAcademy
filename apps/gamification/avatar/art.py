@@ -39,6 +39,9 @@ COLOR_KEYS = {
     "C": "cian fijo",
     "N": "marrón fijo",
     "Z": "gris fijo",
+    "G": "verde fijo",
+    "D": "gris oscuro fijo",
+    "Q": "naranja fijo",
 }
 
 

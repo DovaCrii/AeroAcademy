@@ -1,0 +1,86 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Prueba de conocimientos RPAS{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'dgac/dgac.css' %}">{% endblock %}
+{% block body_attrs %} class="dg-page"{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Prueba de <em>conocimientos</em> RPAS</h1>
+  <p>Una prueba interna para saber cómo está el equipo en lo que exige la DGAC. Al terminar ves en qué te equivocaste y qué reforzar; si apruebas, recibes tu diploma interno.</p>
+</div>
+{% include "dgac/_nav.html" with here="test" %}
+
+<section class="dg-rules" aria-label="Reglas de la prueba">
+  <div class="dg-stat"><b>{{ per_attempt }}</b><span>preguntas al azar</span></div>
+  <div class="dg-stat"><b>{{ pass_percent }} %</b><span>para aprobar</span></div>
+  <div class="dg-stat"><b>{{ valid_months }}</b><span>meses de vigencia</span></div>
+  <div class="dg-stat"><b>∞</b><span>intentos, sin costo</span></div>
+</section>
+
+<section class="dg-start">
+  {% if not bank_ok %}
+  <div class="dg-empty" role="status">
+    <svg viewBox="0 0 120 80" aria-hidden="true"><rect x="2" y="2" width="116" height="76" rx="8"/><path d="M14 58 L38 36 L58 50 L84 24 L106 44"/><circle cx="84" cy="24" r="4"/></svg>
+    <div><h2>Banco de preguntas aún no instalado</h2><p>El banco es material interno de J.E.J. y no vive en el repositorio. Pide a quien administra la plataforma que lo instale.</p></div>
+  </div>
+  {% else %}
+  <div>
+    {% if valid %}
+    <p class="dg-badge ok">Aprobada · vigente hasta {{ valid.expires_on|date:"d-m-Y" }}</p>
+    <p>Tu diploma está listo. Puedes volver a rendir cuando quieras; el último aprobado renueva la vigencia.</p>
+    {% else %}
+    <p class="lead">Cada pregunta es una tarjeta. Responde con el mouse o con el teclado (<kbd>A</kbd>–<kbd>D</kbd> para elegir y <kbd>Enter</kbd> para pasar a la siguiente). Sin responder cuenta como incorrecta.</p>
+    {% endif %}
+  </div>
+  <div class="actions">
+    <a class="btn" href="{% url 'dgac:take' %}">{% if attempts %}Rendir de nuevo{% else %}Comenzar la prueba{% endif %}</a>
+    {% if valid %}<a class="btn ghost" href="{% url 'dgac:diploma' valid.pk %}">Ver mi diploma</a>{% endif %}
+  </div>
+  {% endif %}
+</section>
+
+<div class="sched dg-hist">
+  <table>
+    <caption>Mi historial</caption>
+    <thead><tr><th>Fecha</th><th>Puntaje</th><th>Resultado</th><th>Vigencia</th><th><span class="sr">Detalle</span></th></tr></thead>
+    <tbody>
+    {% for a in attempts %}
+      <tr>
+        <td>{{ a.taken_at|date:"d-m-Y H:i" }}</td>
+        <td><b>{{ a.score_percent }} %</b> <small>({{ a.correct_count }}/{{ a.question_count }})</small></td>
+        <td>{% if a.passed %}<span class="chip ok">Aprobada</span>{% else %}<span class="chip warn">A reforzar</span>{% endif %}</td>
+        <td>{% if a.passed %}hasta {{ a.expires_on|date:"d-m-Y" }}{% if not a.is_current %} <small>(vencida)</small>{% endif %}{% else %}—{% endif %}</td>
+        <td><a href="{% url 'dgac:result' a.pk %}">Ver revisión</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5"><div class="empty">Todavía no has rendido la prueba.</div></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if team is not None %}
+<div class="sched dg-team">
+  <table>
+    <caption>Equipo · último resultado de cada persona</caption>
+    <thead><tr><th>Persona</th><th>Último intento</th><th>Resultado</th><th>Vigencia</th><th><span class="sr">Detalle</span></th></tr></thead>
+    <tbody>
+    {% for row in team %}
+      <tr>
+        <td>{{ row.person.name }}</td>
+        {% if row.attempt %}
+        <td>{{ row.attempt.taken_at|date:"d-m-Y" }} · <b>{{ row.attempt.score_percent }} %</b></td>
+        <td>{% if row.attempt.passed %}<span class="chip ok">Aprobada</span>{% else %}<span class="chip warn">A reforzar</span>{% endif %}</td>
+        <td>{% if row.attempt.is_current %}hasta {{ row.attempt.expires_on|date:"d-m-Y" }}{% elif row.attempt.passed %}<span class="chip warn">vencida</span>{% else %}—{% endif %}</td>
+        <td><a href="{% url 'dgac:result' row.attempt.pk %}">Ver</a></td>
+        {% else %}
+        <td colspan="3"><small>Sin intentos todavía</small></td><td></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

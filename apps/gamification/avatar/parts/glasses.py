@@ -73,3 +73,23 @@ GLASSES = {
         13: mix(_E, "..FF..F........."),
     },
 }
+
+# --- lentes de oficio ---------------------------------------------------------------------------------------
+
+LABELS.update({"safety": "Gafas de seguridad", "fpv": "Visor FPV"})
+
+# Gafas de seguridad: marco ancho con protección lateral; el ojo se ve a través del cristal.
+GLASSES["safety"] = {
+    9: sym("........FFFFFFFF"),
+    10: sym("......FFFFFL..LF"),
+    11: sym("........FFFL..LF"),
+    12: sym("..........FFFFFF"),
+}
+
+# Visor FPV de piloto de dron: banda opaca con franja cian y correa (tapa los ojos a propósito).
+GLASSES["fpv"] = {
+    9: sym(".......KKKKKKKKK"),
+    10: sym("......KKFFCCCCCC"),
+    11: sym("......KKFFFFFFFF"),
+    12: sym("........KKKKKKKK"),
+}

@@ -66,7 +66,7 @@ chown "$USER_NAME:$USER_NAME" "$STATE" "$STATE/media" /var/backups/centro
 echo "==> Copiando la aplicación a $APP"
 rsync -a --delete \
   --exclude ".venv" --exclude ".uv-python" --exclude ".gunicorn" --exclude "__pycache__" --exclude ".git" --exclude "staticfiles" \
-  --exclude "db.sqlite3*" --exclude "media" --exclude ".env" --exclude "deploy/centro.env" \
+  --exclude "db.sqlite3*" --exclude "media" --exclude ".env" --exclude "deploy/centro.env" --exclude "private" \
   "$SRC"/ "$APP"/
 
 echo "==> Configuración en $ENV_FILE"
@@ -105,6 +105,19 @@ if [ "$PUBLISH" != "node" ] && grep -q '^ALLOWED_HOSTS=$' "$ENV_FILE"; then
   echo "ALLOWED_HOSTS está vacío en $ENV_FILE: complétalo y vuelve a ejecutar." >&2
   exit 1
 fi
+
+echo "==> Contenido DGAC (privado, fuera de git)"
+# Material interno de JEJ: se copia aparte desde tu computador a ~/AeroAcademy/private/dgac (como centro.env).
+if [ -d "$SRC/private/dgac" ]; then
+  mkdir -p "$STATE/dgac"
+  rsync -a --delete "$SRC/private/dgac"/ "$STATE/dgac"/
+  chown -R "$USER_NAME:$USER_NAME" "$STATE/dgac"
+  chmod -R go-rwx "$STATE/dgac"
+  echo "    instalado en $STATE/dgac"
+else
+  echo "    sin private/dgac: la sección DGAC dirá que falta el contenido (se puede copiar después)"
+fi
+set_env DGAC_DATA_DIR "$STATE/dgac"
 
 echo "==> Entorno Python (uv)"
 cd "$APP"
@@ -160,6 +173,7 @@ echo "==> Estáticos, migraciones y semillas"
 run_manage collectstatic --noinput >/dev/null
 run_manage migrate --noinput
 run_manage seed_catalog
+run_manage cargar_dgac || true   # ruta DGAC desde $STATE/dgac (si está)
 run_manage puesta_en_marcha || true   # hilo de bienvenida (una vez) y lista de lo que falta
 run_manage reindex_assistant || true
 

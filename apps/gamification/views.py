@@ -18,9 +18,7 @@ def _page(request, cfg, *, unsaved=False):
         {
             "cfg": cfg,
             "sections": services.editor_sections(cfg, request.user),
-            "preview": services.svg_sized(
-                cfg, 192, title=f"Avatar de {request.user.name}", view="full"
-            ),
+            **services.preview_context(cfg, request.user),
             "unsaved": unsaved,
         },
     )
@@ -40,7 +38,7 @@ def avatar_editor(request):
 
         cfg = avatar.clean_config(
             avatar.default_config(request.user.login, request.user.character_class),
-            unlocked=services.unlocked_badges(request.user),
+            **services.gates(request.user),
         )
         return _page(request, cfg, unsaved=True)
     return _page(request, services.person_config(request.user))
@@ -51,16 +49,7 @@ def avatar_preview(request):
     """Vista previa en vivo: solo el fragmento; no guarda nada."""
     cfg = services.clean_from_form(request.user, request.GET)
     return render(
-        request,
-        "gamification/_preview.html",
-        {
-            "big": services.svg_sized(
-                cfg, 192, title=f"Avatar de {request.user.name}", view="full"
-            ),
-            "medium": services.svg_sized(cfg, 96, view="full"),
-            "small": services.svg_sized(cfg, 64, view="full"),
-            "bust": services.svg_sized(cfg, 32, view="bust"),
-        },
+        request, "gamification/_preview.html", services.preview_context(cfg, request.user)
     )
 
 
@@ -82,9 +71,10 @@ def seen(request):
 
 
 def _render_sheet(request, person):
-    view = request.GET.get("vista") or ("juego" if person.show_game_view else "pro")
+    stored = {"game": "juego", "compact": "compacta", "pro": "pro"}.get(person.sheet_view)
+    view = request.GET.get("vista") or stored or ("juego" if person.show_game_view else "pro")
     ctx = sheet_data.build(person, request.user)
-    ctx["view"] = "pro" if view == "pro" else "juego"
+    ctx["view"] = view if view in {"pro", "compacta"} else "juego"
     ctx["avatar_big"] = services.svg_sized(
         services.person_config(person), 160, title=f"Avatar de {person.name}", view="full"
     )
@@ -109,7 +99,9 @@ def edit_sheet(request):
         data = form.cleaned_data
         person.headline, person.bio = data["headline"].strip(), data["bio"].strip()
         person.selected_title = data["selected_title"]
-        person.show_game_view = data["show_game_view"]
+        if data["sheet_view"]:
+            person.sheet_view = data["sheet_view"]
+            person.show_game_view = data["sheet_view"] == "game"
         person.links = {k: data[k] for k in ("linkedin", "credly") if data[k]}
         if data["character_class"] != person.character_class:
             person.character_class = data["character_class"]
@@ -117,7 +109,7 @@ def edit_sheet(request):
                 person.avatar_config = {**person.avatar_config, "class": data["character_class"]}
         person.save(
             update_fields=[
-                "headline", "bio", "selected_title", "show_game_view", "links",
+                "headline", "bio", "selected_title", "show_game_view", "sheet_view", "links",
                 "character_class", "avatar_config", "updated_at",
             ]
         )  # fmt: skip

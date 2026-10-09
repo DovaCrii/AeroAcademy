@@ -1,0 +1,116 @@
+{% extends "core/base.html" %}
+{% load static core_extras %}
+{% block title %}Operaciones RPAS en JEJ{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'dgac/dgac.css' %}">
+{% endblock %}
+{% block body_attrs %} class="dg-page"{% endblock %}
+
+{% block content %}
+<section class="dg-hero" id="inicio" aria-label="Operaciones RPAS en JEJ">
+  <div>
+    <span class="dg-tag">DGAC · RPAS · uso interno</span>
+    <h1>Operaciones <em>RPAS</em> en JEJ</h1>
+    <p class="lead">{{ overview.lead|default:"Qué se hace en JEJ con drones, cómo se autoriza cada vuelo ante la DGAC y qué debe lograr cada persona del equipo." }}</p>
+    <div class="dg-hero-stats" role="list" aria-label="La sección en números">
+      <span role="listitem">{{ sections|length }} láminas</span>
+      <span role="listitem">Prueba de {{ per_attempt }} preguntas</span>
+      <span role="listitem">Aprueba con {{ pass_percent }} %</span>
+      <span role="listitem">Vale {{ valid_months }} meses</span>
+    </div>
+  </div>
+  <div class="dg-doodle" role="img" aria-label="Dibujo de un dron y una lista de verificación"></div>
+</section>
+
+{% include "dgac/_nav.html" with here="home" %}
+
+{# Mi avance: waypoints de la sección. Datos reales de la persona. #}
+<ol class="dg-track" aria-label="Mi avance en la sección DGAC">
+  <li class="done">
+    <span class="wp">1</span>
+    <div><b>Conoce el proceso</b><small>Lee las láminas de esta página</small></div>
+    <a class="btn ghost" href="#operaciones">Ver</a>
+  </li>
+  <li class="{% if summary.path_pct == 100 %}done{% elif summary.path_pct %}now{% endif %}">
+    <span class="wp">2</span>
+    <div><b>Ruta de entrenamiento</b>
+      <small>{% if summary.path %}{{ summary.path_pct }} % completada · cuenta en Topografía{% else %}Aún no instalada{% endif %}</small></div>
+    {% if summary.path %}<a class="btn ghost" href="{% url 'paths:detail' summary.path.slug %}">Abrir</a>{% endif %}
+  </li>
+  <li class="{% if summary.valid %}done{% elif summary.best %}now{% endif %}">
+    <span class="wp">3</span>
+    <div><b>Prueba de conocimientos</b>
+      <small>{% if summary.valid %}Aprobada · vigente hasta {{ summary.valid.expires_on|date:"d-m-Y" }}{% elif summary.best %}Mejor resultado: {{ summary.best.score_percent }} %{% else %}{{ per_attempt }} preguntas · aprueba con {{ pass_percent }} %{% endif %}</small></div>
+    {% if bank_ok %}<a class="btn{% if summary.valid %} ghost{% endif %}" href="{% url 'dgac:test' %}">{% if summary.valid %}Ver{% else %}Rendir{% endif %}</a>{% endif %}
+  </li>
+  <li class="{% if summary.valid %}done{% endif %}">
+    <span class="wp">4</span>
+    <div><b>Diploma interno</b>
+      <small>{% if summary.valid %}Listo para imprimir{% else %}Se emite al aprobar la prueba{% endif %}</small></div>
+    {% if summary.valid %}<a class="btn" href="{% url 'dgac:diploma' summary.valid.pk %}">Ver diploma</a>{% endif %}
+  </li>
+</ol>
+<p class="dg-note">Todo tu avance cuenta en la sección de <a href="{% url 'paths:index' %}?discipline=topografia">Topografía</a>: la ruta está en esa disciplina y el diploma queda en tus <a href="{% url 'credentials:mine' %}">certificados</a>.</p>
+
+<div id="operaciones"></div>
+{% if not installed %}
+<div class="dg-empty" role="status">
+  <svg viewBox="0 0 120 80" aria-hidden="true"><rect x="2" y="2" width="116" height="76" rx="8"/><path d="M14 58 L38 36 L58 50 L84 24 L106 44"/><circle cx="84" cy="24" r="4"/></svg>
+  <div>
+    <h2>Contenido aún no instalado</h2>
+    <p>Las láminas y el detalle del proceso son material interno de J.E.J. y no viven en el repositorio. Pide a quien administra la plataforma que instale la carpeta privada del servidor.</p>
+  </div>
+</div>
+{% endif %}
+
+{% for s in sections %}
+<section class="dg-sec{% if forloop.counter|divisibleby:2 %} alt{% endif %}" id="{{ s.id }}" aria-labelledby="h-{{ s.id }}">
+  <header class="dg-sec-head">
+    <span class="dg-kicker">{{ s.kicker|default:forloop.counter|stringformat:"s" }}</span>
+    <h2 id="h-{{ s.id }}">{{ s.title }}</h2>
+    {% if s.reference %}<span class="chip">{{ s.reference }}</span>{% endif %}
+  </header>
+  {% if s.text %}<p class="lead">{{ s.text|terms }}</p>{% endif %}
+
+  {% if s.image %}
+  <figure class="dg-fig">
+    <a href="{% url 'dgac:asset' s.image %}" target="_blank" rel="noopener" aria-label="Abrir la infografía en grande">
+      <img src="{% url 'dgac:asset' s.image %}" alt="{{ s.alt|default:s.title }}" loading="lazy" width="1000" height="{{ s.height|default:560 }}">
+    </a>
+    {% if s.caption %}<figcaption>{{ s.caption }}</figcaption>{% endif %}
+  </figure>
+  {% endif %}
+
+  {% if s.steps %}
+  <ol class="dg-steps">
+    {% for st in s.steps %}<li><span class="n">{{ forloop.counter|stringformat:"02d" }}</span><div><b>{{ st.title }}</b>{% if st.text %}<p>{{ st.text|terms }}</p>{% endif %}{% if st.who %}<span class="chip">{{ st.who }}</span>{% endif %}</div></li>{% endfor %}
+  </ol>
+  {% endif %}
+
+  {% if s.cards %}
+  <div class="dg-cards">
+    {% for c in s.cards %}<article class="dg-card"><h3>{{ c.title }}</h3><p>{{ c.text|terms }}</p>{% if c.tag %}<span class="chip">{{ c.tag }}</span>{% endif %}</article>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if s.bullets %}
+  <ul class="dg-bullets">{% for b in s.bullets %}<li>{{ b|terms }}</li>{% endfor %}</ul>
+  {% endif %}
+
+  {% if s.callout %}<p class="dg-callout" role="note">{{ s.callout|terms }}</p>{% endif %}
+</section>
+{% endfor %}
+
+{% if installed %}
+<section class="dg-cta">
+  <div>
+    <h2>Ahora ponlo en práctica</h2>
+    <p>Recorre la ruta de entrenamiento misión por misión y luego rinde la prueba: {{ per_attempt }} preguntas, {{ pass_percent }} % para aprobar y un diploma interno que vale {{ valid_months }} meses.</p>
+  </div>
+  <div class="actions">
+    {% if summary.path %}<a class="btn" href="{% url 'paths:detail' summary.path.slug %}">Ir a la ruta</a>{% endif %}
+    {% if bank_ok %}<a class="btn ghost" href="{% url 'dgac:test' %}">Prueba de conocimientos</a>{% endif %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

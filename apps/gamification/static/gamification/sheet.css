@@ -48,3 +48,4 @@
 .sheet-form{max-width:640px}.sheet-form .field{margin:.8rem 0;display:flex;flex-direction:column;gap:.25rem}
 .sheet-form .err{color:#b42318;margin:0;font-size:.85rem}
 @media (prefers-reduced-motion:no-preference){.person-card a{transition:border-color .15s}}
+.attrs .bonus{float:right;margin-right:.35rem;font-family:var(--font-mono);font-size:.7rem;color:var(--amber-ink)}

@@ -7,18 +7,19 @@
 
 :root{
   /* superficies y tinta (claro: papel de plano) */
-  --bg:#EEF2F7; --sheet:#FFFFFF; --sheet-2:#E8EEF6;
-  --ink:#0B1A2E; --ink-2:#33445A; --line:#8D9CAD; --hair:#D3DCE7;
-  --poche:#0B1A2E; --level:#0A5BD3; --red:#D42A22; --fill:#FFB000; --ok:#13803C;
-  --scan:#FF5A00; --night:#06142A; --night-2:#0B2440;
+  --bg:#FAF8F3; --sheet:#FFFFFF; --sheet-2:#F3EFE4;
+  --ink:#1F2430; --ink-2:#4A5160; --line:#9A978C; --hair:#E4DFD1;
+  --poche:#1F2430; --level:#0A5BD3; --red:#C92A37; --fill:#FFC93C; --ok:#1B7F3B;
+  --scan:#FF8C42; --night:#06142A; --night-2:#0B2440;
   --brand-blue:#1E8CFF; --brand-cyan:#4CC6FF;
 
   /* acento ámbar: --amber para rellenos y trazos; --amber-ink para texto sobre fondo (AA) */
-  --amber:#F5A524; --amber-ink:#9A4F00; --on-amber:#1B1204;
-  --glow:rgba(245,165,36,.28);
-  --grid-minor:rgba(11,26,46,.045); --grid-major:rgba(11,26,46,.075);
-  --decor:#0A5BD3; --decor-2:#B86400;
-  --header-bg:rgba(255,255,255,.86);
+  --amber:#FFC93C; --amber-ink:#8A5A00; --on-amber:#1F2430;
+  --glow:rgba(255,201,60,.4);
+  --grid-minor:rgba(31,36,48,.035); --grid-major:rgba(31,36,48,.06);
+  --decor:#2EC4B6; --decor-2:#FF8C42;
+  --header-bg:rgba(250,248,243,.88);
+  --teal:#2EC4B6; --orange:#FF8C42; --sky:#4CC9F0; --green:#8AC926; --btn:#1F2430; --on-btn:#FFFFFF;
 
   /* capa de juego (docs/GAMIFICACION.md) */
   --rarity-common:#8D9CAD; --rarity-rare:#1E8CFF; --rarity-epic:#8B5CF6; --rarity-legendary:#E0A800;
@@ -26,6 +27,8 @@
   --px-orange:#FF5A00; --px-red:#E5322A; --px-green:#13803C; --px-steel:#8A99A8; --px-asphalt:#2B2F36;
 
   /* tipografía: todo local (sin CDN) */
+  --font-display:"ArchivoLocal","Archivo","Arial Black",Arial,sans-serif;
+  --font-hand:"Segoe Print","Bradley Hand","Comic Neue","Comic Sans MS",cursive;
   --font:"ArchivoLocal","Archivo","Arial Narrow",Arial,sans-serif;
   --font-serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
   --font-mono:ui-monospace,"Cascadia Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
@@ -33,9 +36,30 @@
 
   /* forma: nada de cajas duras */
   --r:10px; --r-sm:8px; --r-card:16px; --r-lg:20px; --r-pill:999px;
-  --shadow-1:0 1px 2px rgba(11,26,46,.06),0 4px 14px rgba(11,26,46,.06);
-  --shadow-2:0 2px 6px rgba(11,26,46,.08),0 16px 36px rgba(11,26,46,.13);
+  --shadow-1:0 1px 2px rgba(31,36,48,.06),0 6px 18px rgba(31,36,48,.07);
+  --shadow-2:0 2px 6px rgba(31,36,48,.08),0 16px 36px rgba(31,36,48,.13);
   --ease:cubic-bezier(.2,.7,.2,1);
+
+  /* escala modular (razón 1.25, base 16 px): small · body · lead/h4 · h3 · h2 · h1 · display */
+  --fs-label:.6875rem; --fs-small:.8125rem; --fs-body:1rem; --fs-h4:1.25rem; --fs-h3:1.5625rem;
+  --fs-h2:clamp(1.9rem,1.5rem + 1.6vw,2.44rem); --fs-h1:clamp(2.44rem,1.8rem + 2.6vw,3.81rem);
+  --fs-display:clamp(3rem,2rem + 4.4vw,5.96rem); --fs-lead:clamp(1.125rem,1.05rem + .35vw,1.3125rem);
+  --lh-tight:1.06; --lh-head:1.16; --lh-body:1.6; --measure:65ch;
+  --track-label:.12em; --track-head:-.018em;
+
+  /* ritmo vertical: pasos entre secciones (distintos pero de la misma familia) */
+  --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:40px; --sp-5:64px; --sp-6:clamp(72px,9vw,128px);
+
+  /* elevación: superficies en capas (fondo < hoja < hoja elevada < flotante) */
+  --elev-1:var(--sheet);
+  --elev-2:#FFF7DF;
+  --surface-tint:linear-gradient(160deg,var(--sheet),var(--sheet));
+  --shadow-3:0 4px 10px rgba(31,36,48,.08),0 24px 50px rgba(31,36,48,.16);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* acento por disciplina (texto AA sobre papel; en oscuro se aclaran) */
+  --d-arq:#0B7FAE; --d-civ:#946500; --d-top:#4A7A00; --d-mec:#C92A37; --d-cap:#0F8579;
+  --f-arq:#4CC9F0; --f-civ:#FFC93C; --f-top:#8AC926; --f-mec:#E63946; --f-cap:#2EC4B6;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
@@ -44,7 +68,7 @@
     --ink:#F3F6FB; --ink-2:#BCCADC; --line:#4A6A92; --hair:#1C3659;
     --poche:#F3F6FB; --level:#6CCBFF; --red:#FF6B5E; --fill:#FFC21A; --ok:#4ADE80;
     --scan:#FF7A1A; --night:#030C19; --night-2:#04213F;
-    --amber:#F5A524; --amber-ink:#FFB547; --on-amber:#1B1204;
+    --amber:#FFC93C; --amber-ink:#FFD25E; --on-amber:#1F2430;
     --glow:rgba(245,165,36,.22);
     --grid-minor:rgba(108,203,255,.045); --grid-major:rgba(108,203,255,.08);
     --decor:#6CCBFF; --decor-2:#F5A524;
@@ -52,6 +76,11 @@
     --shadow-1:0 1px 2px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.25);
     --shadow-2:0 2px 8px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.4);
     --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
+    --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB;
+  --btn:#F3F6FB; --on-btn:#061325;
+    --elev-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
+    --surface-tint:linear-gradient(160deg,color-mix(in srgb,var(--sheet) 86%,#1E8CFF),var(--sheet) 60%);
+    --shadow-3:0 4px 12px rgba(0,0,0,.45),0 30px 64px rgba(0,0,0,.55);
     color-scheme:dark;
   }
 }
@@ -60,7 +89,7 @@
   --ink:#F3F6FB; --ink-2:#BCCADC; --line:#4A6A92; --hair:#1C3659;
   --poche:#F3F6FB; --level:#6CCBFF; --red:#FF6B5E; --fill:#FFC21A; --ok:#4ADE80;
   --scan:#FF7A1A; --night:#030C19; --night-2:#04213F;
-  --amber:#F5A524; --amber-ink:#FFB547; --on-amber:#1B1204;
+  --amber:#FFC93C; --amber-ink:#FFD25E; --on-amber:#1F2430;
   --glow:rgba(245,165,36,.22);
   --grid-minor:rgba(108,203,255,.045); --grid-major:rgba(108,203,255,.08);
   --decor:#6CCBFF; --decor-2:#F5A524;
@@ -68,5 +97,10 @@
   --shadow-1:0 1px 2px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.25);
   --shadow-2:0 2px 8px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.4);
   --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
+  --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB;
+  --btn:#F3F6FB; --on-btn:#061325;
+  --elev-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
+  --surface-tint:linear-gradient(160deg,color-mix(in srgb,var(--sheet) 86%,#1E8CFF),var(--sheet) 60%);
+  --shadow-3:0 4px 12px rgba(0,0,0,.45),0 30px 64px rgba(0,0,0,.55);
   color-scheme:dark;
 }

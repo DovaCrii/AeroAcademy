@@ -1,0 +1,51 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Rendir la prueba RPAS{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'dgac/dgac.css' %}">
+<script src="{% static 'dgac/take.js' %}" defer></script>
+{% endblock %}
+{% block body_attrs %} class="dg-page"{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Prueba de <em>conocimientos</em> RPAS</h1>
+  <p>{{ total }} preguntas · aprueba con {{ pass_percent }} %. Sin JavaScript verás todas las preguntas en una sola página.</p>
+</div>
+
+<form class="dg-quiz" method="post" action="{% url 'dgac:take' %}" data-dgac-quiz novalidate>
+  {% csrf_token %}
+  <input type="hidden" name="draw" value="{{ token }}">
+
+  <div class="dg-hud" role="group" aria-label="Avance de la prueba">
+    <span class="dg-hud-cap">Pregunta <b data-hud-current>01</b> / {{ total }}</span>
+    <div class="dg-alt" aria-hidden="true"><i data-hud-bar style="width:0%"></i></div>
+    <span class="dg-hud-cap">Respondidas <b data-hud-done>0</b></span>
+  </div>
+  <ol class="dg-dots" aria-hidden="true">{% for q in questions %}<li data-dot="{{ q.number }}"></li>{% endfor %}</ol>
+
+  {% for q in questions %}
+  <fieldset class="dg-q" data-n="{{ q.number }}">
+    <legend>
+      <span class="dg-qn">{{ q.number|stringformat:"02d" }}</span>
+      <span class="dg-qt">{% for line in q.lines %}<span class="dg-line">{{ line }}</span>{% endfor %}</span>
+    </legend>
+    <div class="dg-opts">
+      {% for o in q.options %}
+      <label class="dg-opt">
+        <input type="radio" name="q{{ q.id }}" value="{{ o.key }}">
+        <span class="k">{{ o.key|upper }}</span><span class="t">{{ o.text }}</span>
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  {% endfor %}
+
+  <div class="dg-nav">
+    <button class="btn ghost" type="button" data-prev hidden>← Anterior</button>
+    <button class="btn ghost" type="button" data-next hidden>Siguiente →</button>
+    <button class="btn" type="submit" data-submit>Entregar la prueba</button>
+  </div>
+  <p class="dg-warn" data-warn role="status" hidden></p>
+</form>
+{% endblock %}

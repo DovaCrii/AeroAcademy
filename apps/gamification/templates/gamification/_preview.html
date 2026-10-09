@@ -1,4 +1,11 @@
-<div class="av-big">{{ big|safe }}</div>
+<div class="av-card" style="--accent:{{ card.accent }}">
+  <div class="av-big"><span class="av-idle">{{ big|safe }}</span></div>
+  <p class="av-disc">{{ card.discipline }}</p>
+  <p class="av-name">{{ card.name }}</p>
+  <p class="av-title">{{ card.title }}</p>
+  <p class="av-tag">{{ card.tagline }}</p>
+  <ul class="av-bonus" aria-label="Bonos de la carrera">{% for b in card.bonus %}<li title="{{ b.name }}"><b>{{ b.code }}</b> +{{ b.value }}</li>{% endfor %}</ul>
+</div>
 <div class="av-sizes" aria-label="Tu avatar a distintos tamaños">
   <figure><span class="px">{{ medium|safe }}</span><figcaption>96 px</figcaption></figure>
   <figure><span class="px">{{ small|safe }}</span><figcaption>64 px</figcaption></figure>

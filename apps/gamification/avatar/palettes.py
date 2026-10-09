@@ -45,6 +45,13 @@ OUTFIT_COLORS = [
     ("Negro", {"O": "#2B2F36", "o": "#15181D", "A": "#FFC21A", "a": "#D99A00"}),
     ("Blanco", {"O": "#F0F3F7", "o": "#C9D3DD", "A": "#1E8CFF", "a": "#0F5FB8"}),
     ("Mostaza", {"O": "#E0A800", "o": "#A87F00", "A": "#2B2F36", "a": "#15181D"}),
+    ("Azul marino", {"O": "#23406B", "o": "#162B4A", "A": "#FFFFFF", "a": "#C9D3DD"}),
+    ("Beige", {"O": "#CDB98E", "o": "#A89468", "A": "#2B3A55", "a": "#1B2538"}),
+    ("Verde oliva", {"O": "#6B7A3A", "o": "#4C5828", "A": "#FFC21A", "a": "#D99A00"}),
+    ("Burdeos", {"O": "#7A2E3F", "o": "#561F2D", "A": "#F0F3F7", "a": "#C9D3DD"}),
+    ("Amarillo hi-vis", {"O": "#E8D81A", "o": "#B3A60F", "A": "#2B2F36", "a": "#15181D"}),
+    ("Antracita", {"O": "#3A4350", "o": "#262D37", "A": "#4CC6FF", "a": "#2B9BD9"}),
+    ("Turquesa", {"O": "#1AA39A", "o": "#117A73", "A": "#FFFFFF", "a": "#C9D3DD"}),
 ]
 
 PANTS_COLORS = [
@@ -54,6 +61,8 @@ PANTS_COLORS = [
     ("Gris", {"P": "#6B7480", "p": "#4A525C"}),
     ("Jean", {"P": "#3E6BA8", "p": "#294A7A"}),
     ("Verde oliva", {"P": "#5E6B3A", "p": "#434D28"}),
+    ("Antracita", {"P": "#3A4350", "p": "#262D37"}),
+    ("Beige", {"P": "#CDB98E", "p": "#A89468"}),
 ]
 
 GLASSES_COLORS = [
@@ -73,6 +82,8 @@ HEADWEAR_COLORS = [
     ("Café", {"T": "#7A5230", "t": "#553719", "U": "#D9B26A"}),
     ("Blanco", {"T": "#F0F3F7", "t": "#C9D3DD", "U": "#1E8CFF"}),
     ("Violeta", {"T": "#8B5CF6", "t": "#5E3AB8", "U": "#FFFFFF"}),
+    ("Naranja", {"T": "#FF7A1A", "t": "#C45A0C", "U": "#FFFFFF"}),
+    ("Gris", {"T": "#7A8794", "t": "#55616D", "U": "#FFC21A"}),
 ]
 
 BACKGROUNDS = [
@@ -84,6 +95,17 @@ BACKGROUNDS = [
     ("Ámbar oscuro", "#4A3410"),
     ("Violeta", "#2E1F4F"),
     ("Borgoña", "#4A1F2B"),
+    # Con dibujo por disciplina (ver backgrounds.py): el color es el fondo base.
+    ("Plano azul", "#0E3566"),
+    ("Curvas de nivel", "#1B3A2A"),
+    ("Perfil de camino", "#22262C"),
+    ("Engranajes", "#2B2F36"),
+    ("HUD de vuelo", "#06213F"),
+    ("Nube de puntos", "#0A1630"),
+    ("Isométrico BIM", "#1B2A4A"),
+    ("Cercha", "#2A2F3A"),
+    ("Mapa SIG", "#123B3A"),
+    ("Franja de seguridad", "#1A1A1A"),
 ]
 
 # Colores fijos que no cambian con la configuración.
@@ -102,11 +124,15 @@ FIXED = {
     "C": "#4CC6FF",
     "N": "#7A5230",
     "Z": "#8A99A8",
+    "G": "#13803C",
+    "D": "#4A5663",
+    "Q": "#FF5A00",
 }
 
 # Marco por rareza (docs/GAMIFICACION.md): color de respaldo y variable CSS.
 FRAMES = {
     "common": ("#8D9CAD", "--rarity-common"),
+    "bronze": ("#B87333", "--rarity-bronze"),
     "rare": ("#1E8CFF", "--rarity-rare"),
     "epic": ("#8B5CF6", "--rarity-epic"),
     "legendary": ("#E0A800", "--rarity-legendary"),

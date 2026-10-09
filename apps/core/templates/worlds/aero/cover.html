@@ -1,0 +1,36 @@
+<section class="lv-cover ao-cover" id="inicio" aria-label="{{ program_title }}">
+  <canvas id="cloudCv" data-scene="terrain" aria-hidden="true"></canvas>
+  <div class="lv-grid" aria-hidden="true"></div>
+  <svg class="lv-reticle" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r="290"/><circle cx="300" cy="300" r="210"/><circle cx="300" cy="300" r="120"/>
+    <line x1="0" y1="300" x2="600" y2="300"/><line x1="300" y1="0" x2="300" y2="600"/>
+    <g class="tick"><line x1="300" y1="6" x2="300" y2="22"/><line x1="300" y1="578" x2="300" y2="594"/><line x1="6" y1="300" x2="22" y2="300"/><line x1="578" y1="300" x2="594" y2="300"/></g>
+  </svg>
+
+  <div class="lv-frame">
+    <span class="lv-cap">Captura / RPA{% if program_code %} · {{ program_code }}{% endif %}</span>
+    <b class="lv-title">{{ path.title }}</b>
+    <span class="lv-cap">{{ stats.levels_total }} waypoints · plan de vuelo</span>
+  </div>
+
+  <div class="lv-in">
+    <h1>{{ program_title }}</h1>
+    <p class="lv-lead">{{ path.description }}</p>
+    {% if flow %}
+    <ol class="lv-flow">
+      {% for step in flow %}
+      <li><span class="n">// {{ forloop.counter|stringformat:"02d" }}</span><b>{{ step.title }}</b><small>{{ step.text }}</small></li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+  </div>
+
+  <div class="lv-scale">ESCALA 1:2000<i></i></div>
+  <div class="lv-readouts" role="list" aria-label="La ruta en números">
+    <span role="listitem">Waypoints<b>{{ stats.levels_total }}</b></span>
+    <span role="listitem">Misiones<b>{{ stats.milestones }}</b></span>
+    <span role="listitem">Preguntas<b>{{ stats.questions }}</b></span>
+    <span role="listitem">Tu avance<b>{{ stats.pct }} %</b></span>
+    <span role="listitem">Equipo<b>{{ stats.participants }}</b></span>
+  </div>
+</section>

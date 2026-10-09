@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="ACC">
+  <rect x="5" y="6" width="56" height="56" rx="15" fill="#1B2A41" opacity=".16"/>
+  <path d="M17 3.5 C27 2.2 40 3.2 47 3.4 C57 3.6 60.7 8 60.6 17 C60.9 27 60.2 38 60.5 47 C60.4 56 56 60.6 47 60.6 C38 61 26 60.2 17 60.5 C8 60.7 3.4 56 3.5 47 C3.2 38 3.8 27 3.4 17 C3.6 8 8 3.6 17 3.5 Z" fill="#38BDF8" stroke="#1B2A41" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M9 13 C20 10.5 38 11 55 12.5" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M16 42 a8 8 0 0 1 4 -15 a11 11 0 0 1 21 3 a7 7 0 0 1 3 12 z" fill="none" stroke="#04202E" stroke-opacity=".28" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="32" y="39.9" text-anchor="middle" font-family="'Segoe Print','Comic Sans MS','Segoe UI',Arial,sans-serif" font-weight="800" font-size="22" letter-spacing="-.5" fill="#04202E">ACC</text>
+</svg>

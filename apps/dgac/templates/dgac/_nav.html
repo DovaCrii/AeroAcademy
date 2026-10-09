@@ -1,0 +1,6 @@
+{# Pestañas de la sección DGAC · RPAS. `here` = home | test #}
+<nav class="tabs dg-tabs" aria-label="Sección DGAC · RPAS">
+  <a href="{% url 'dgac:home' %}"{% if here == 'home' %} aria-current="page"{% endif %}>Operaciones</a>
+  {% if summary.path %}<a href="{% url 'paths:detail' summary.path.slug %}">Ruta de entrenamiento</a>{% endif %}
+  <a href="{% url 'dgac:test' %}"{% if here == 'test' %} aria-current="page"{% endif %}>Prueba de conocimientos</a>
+</nav>

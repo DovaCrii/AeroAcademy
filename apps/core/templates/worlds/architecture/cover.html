@@ -1,20 +1,33 @@
-<section class="lv-cover ar-cover" id="inicio" aria-label="{{ program_title }}">
-  <canvas id="cloudCv" data-scene="building" aria-hidden="true"></canvas>
+{% load catalog_extras %}{% route_flavour path as fl %}
+<section class="lv-cover ar-cover fl-{{ fl.key }}" id="inicio" aria-label="{{ program_title }}">
+  <canvas id="cloudCv" data-scene="{{ fl.scene }}" aria-hidden="true"></canvas>
+  <div class="lv-photo" aria-hidden="true"></div>
   <div class="lv-grid" aria-hidden="true"></div>
   <svg class="lv-reticle" viewBox="0 0 600 600" aria-hidden="true">
     <circle cx="300" cy="300" r="290"/><circle cx="300" cy="300" r="210"/><circle cx="300" cy="300" r="120"/>
     <line x1="0" y1="300" x2="600" y2="300"/><line x1="300" y1="0" x2="300" y2="600"/>
     <g class="tick"><line x1="300" y1="6" x2="300" y2="22"/><line x1="300" y1="578" x2="300" y2="594"/><line x1="6" y1="300" x2="22" y2="300"/><line x1="578" y1="300" x2="594" y2="300"/></g>
   </svg>
+  {% if fl.key == "civ" %}
+  <div class="lv-profile" aria-hidden="true">
+    <svg viewBox="0 0 640 220" preserveAspectRatio="none">
+      <path class="pf-ground" d="M0 150 C60 120 100 170 170 140 S270 80 330 110 S450 170 520 100 S600 60 640 70 V220 H0Z"/>
+      <path class="pf-line" d="M0 150 C60 120 100 170 170 140 S270 80 330 110 S450 170 520 100 S600 60 640 70"/>
+      <path class="pf-grade" d="M0 130 L170 120 L330 96 L520 90 L640 62"/>
+    </svg>
+    <ol>{% for ch in chapters %}<li><i></i><span>{{ ch.level.short }}</span></li>{% endfor %}</ol>
+  </div>
+  {% endif %}
 
   <div class="lv-frame">
-    <span class="lv-cap">Levantamiento digital{% if program_code %} · {{ program_code }}{% endif %}</span>
+    <span class="lv-cap">{{ fl.kicker }}{% if program_code %} · {{ program_code }}{% endif %}</span>
     <b class="lv-title">{{ path.title }}</b>
     <span class="lv-cap">{{ path.vendor.name }} · {{ stats.levels_total }} niveles</span>
+    <span class="lv-tiles">{% path_tiles path "md" %}</span>
   </div>
 
   <div class="lv-in">
-    <h1>{{ program_title }}</h1>
+    <h1>{{ program_title }}{% if fl.key == "civ" and intro.title %} <em>{{ intro.title|lower }}</em>{% endif %}</h1>
     <p class="lv-lead">{{ path.description }}</p>
     {% if flow %}
     <ol class="lv-flow">
@@ -25,7 +38,7 @@
     {% endif %}
   </div>
 
-  <div class="lv-scale">ESCALA 1:500<i></i></div>
+  <div class="lv-scale">{{ fl.scale }}<i></i></div>
   <div class="lv-readouts" role="list" aria-label="La ruta en números">
     <span role="listitem">Niveles<b>{{ stats.levels_total }}</b></span>
     <span role="listitem">Misiones<b>{{ stats.milestones }}</b></span>

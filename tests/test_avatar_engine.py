@@ -124,15 +124,9 @@ def test_every_color_option_changes_the_result(category):
 def test_glasses_and_headwear_colors_change_the_result():
     base = {"glasses": "round", "headwear": "cap"}
     assert len({av.render_svg({**base, "glasses_color": i}) for i in range(5)}) == 5
-    assert (
-        len(
-            {
-                av.render_svg({**base, "headwear_color": i})
-                for i in range(len(palettes.HEADWEAR_COLORS))
-            }
-        )
-        == 8
-    )
+    assert len(
+        {av.render_svg({**base, "headwear_color": i}) for i in range(len(palettes.HEADWEAR_COLORS))}
+    ) == len(palettes.HEADWEAR_COLORS)
 
 
 def test_the_three_bodies_are_visibly_different():

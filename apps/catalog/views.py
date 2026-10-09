@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from apps.paths.models import LearningPath
 
-from . import services
+from . import services, software
 from .models import Platform, Resource
 
 # Cómo se agrupan los tipos para filtrar rápido (pestañas del catálogo).
@@ -38,7 +38,14 @@ def resources(request):
         "path": path,
         "q": params.get("q", "").strip()[:100],
     }
+    software_slug = params.get("software", "")
+    software_slug = software_slug if software_slug in software.TILES else ""
+    f["software"] = software_slug
+    ids = None
+    if software_slug:
+        ids = software.resource_ids_for_software(services.resource_queryset(), software_slug)
     qs = services.resource_queryset(
+        ids=ids,
         platform=f["platform"],
         kind=kind,
         free=f["free"],
@@ -47,10 +54,21 @@ def resources(request):
         path=path,
         essential=f["essential"],
     )
+    filtered = any(v for v in f.values())
+    rows = []
+    show_rows = not filtered and params.get("todo") != "1" and "page" not in params
+    if show_rows:  # sin filtros: filas por producto, como el home de Bentley Learn
+        every = list(qs)
+        rows = software.group_by_software(every)
+        cards = [r for row in rows for r in row["items"]]
+        in_paths = services.published_paths_for([r.pk for r in cards])
+        for r in cards:
+            r.in_paths = in_paths.get(r.pk, [])
     page = Paginator(qs, 24).get_page(params.get("page"))
-    in_paths = services.published_paths_for([r.pk for r in page])
-    for r in page:
-        r.in_paths = in_paths.get(r.pk, [])
+    if not show_rows:
+        in_paths = services.published_paths_for([r.pk for r in page])
+        for r in page:
+            r.in_paths = in_paths.get(r.pk, [])
 
     counts = dict(Resource.objects.values_list("kind").annotate(n=Count("pk")))
     kinds = [(value, label, counts.get(value, 0)) for value, label in KIND_GROUPS]
@@ -78,7 +96,10 @@ def resources(request):
                 Q(grants_completion_certificate=True) | Q(kind=Resource.Kind.EXAM)
             ).count(),
             "f": f,
-            "filtered": any(v for k, v in f.items()),
+            "filtered": filtered,
+            "show_rows": show_rows,
+            "rows": rows,
+            "software_tile": software.TILES.get(software_slug),
             "querystring": query.urlencode(),
             "kind_base": base.urlencode(),
             "route_base": route_base.urlencode(),

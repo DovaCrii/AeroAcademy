@@ -38,13 +38,21 @@ def can_view(person, credential) -> bool:
     return credential.is_verified and credential.visibility == Credential.Visibility.TEAM
 
 
+def is_system_issued(credential) -> bool:
+    """Diploma interno que emite el sistema (p. ej. la prueba DGAC): sin archivo y sin revisión humana."""
+    return credential.kind == Credential.Kind.INTERNAL and not credential.file
+
+
 def can_download(person, credential) -> bool:
     """El archivo contiene datos personales: solo la persona dueña y los responsables (D4)."""
+    if not credential.file:
+        return False
     return credential.owner_id == person.pk or person.is_lead
 
 
 def can_edit(person, credential) -> bool:
-    return credential.owner_id == person.pk
+    # Lo que emitió el sistema no se edita a mano: editarlo lo devolvería a revisión sin archivo que revisar.
+    return credential.owner_id == person.pk and not is_system_issued(credential)
 
 
 def can_review(person) -> bool:
@@ -346,6 +354,27 @@ def promote_free_course(cred, by):
     )
     game.refresh(cred.owner)
     return resource
+
+
+@transaction.atomic
+def issue_system_credential(owner, credential_id, fields):
+    """Emite (o renueva) una credencial interna que el propio sistema verifica, sin archivo adjunto.
+
+    Una por persona y `credential_id`: volver a emitirla actualiza la misma (fechas, ruta) en vez de duplicar el XP.
+    El XP y las insignias salen de `game.refresh`, el mismo camino de cualquier credencial verificada.
+    """
+    cred = Credential.objects.filter(
+        owner=owner, kind=Credential.Kind.INTERNAL, credential_id=credential_id
+    ).first()
+    cred = cred or Credential(owner=owner, credential_id=credential_id)
+    for key, value in fields.items():
+        setattr(cred, key, value)
+    cred.kind = Credential.Kind.INTERNAL
+    cred.status = Credential.Status.VERIFIED
+    cred.reviewed_by, cred.reviewed_at = None, timezone.now()
+    cred.save()
+    game.refresh(owner)
+    return cred
 
 
 def visible_filter(person):

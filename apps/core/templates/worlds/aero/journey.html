@@ -1,0 +1,41 @@
+{# Plan de vuelo: un waypoint por nivel; el anillo se llena con el avance y el dron espera en el primero sin completar. #}
+<svg class="ao-flight" viewBox="0 0 {{ flight.width }} {{ flight.height }}" role="img" aria-labelledby="flT">
+  <title id="flT">Plan de vuelo: {{ stats.levels_total }} waypoints. Tu avance es {{ stats.pct }} % y alcanzaste {{ stats.levels_done }} waypoints.</title>
+  <defs>
+    <pattern id="ao-dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" class="dot"/></pattern>
+  </defs>
+  <rect class="ao-sky" x="0" y="0" width="{{ flight.width }}" height="{{ flight.height }}" rx="14"/>
+  <rect x="0" y="0" width="{{ flight.width }}" height="{{ flight.height }}" rx="14" fill="url(#ao-dots)"/>
+  <path class="ao-terrain" d="M0 292 C90 270 150 300 240 284 C330 268 380 296 470 280 C560 264 640 292 760 270 L760 330 L0 330 Z"/>
+  {% for s in flight.segments %}
+  <line class="ao-leg{% if s.done %} done{% endif %}" x1="{{ s.x1 }}" y1="{{ s.y1 }}" x2="{{ s.x2 }}" y2="{{ s.y2 }}"/>
+  {% endfor %}
+  {% for p in flight.points %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ p.code }}#panel" data-enhance data-fid="wp-{{ p.code }}" aria-label="Waypoint {{ p.code|upper }} {{ p.short }}: {{ p.pct }} % completo"{% if p.code == current.level.code %} aria-current="true"{% endif %}>
+    <g class="ao-wp{% if p.code == current.level.code %} on{% endif %}{% if p.complete %} done{% endif %}">
+      <circle class="hit" cx="{{ p.x }}" cy="{{ p.y }}" r="26"/>
+      <circle class="trk" cx="{{ p.x }}" cy="{{ p.y }}" r="18"/>
+      <circle class="ring" cx="{{ p.x }}" cy="{{ p.y }}" r="18" stroke-dasharray="{{ p.ring }} 113.1" transform="rotate(-90 {{ p.x }} {{ p.y }})"/>
+      <text class="code" x="{{ p.x }}" y="{{ p.y|add:'4' }}" text-anchor="middle">{{ p.code|upper }}</text>
+      {% if p.above %}
+      <text class="nm" x="{{ p.x }}" y="{{ p.y|add:'-32' }}" text-anchor="middle">{{ p.short }}</text>
+      <text class="pc" x="{{ p.x }}" y="{{ p.y|add:'-46' }}" text-anchor="middle">{{ p.pct }} %</text>
+      {% else %}
+      <text class="nm" x="{{ p.x }}" y="{{ p.y|add:'42' }}" text-anchor="middle">{{ p.short }}</text>
+      <text class="pc" x="{{ p.x }}" y="{{ p.y|add:'56' }}" text-anchor="middle">{{ p.pct }} %</text>
+      {% endif %}
+      {% if p.here %}
+      <g class="ao-drone" transform="translate({{ p.x }} {{ p.y|add:'-30' }})" aria-hidden="true">
+        <line x1="-9" y1="-3" x2="9" y2="3"/><line x1="9" y1="-3" x2="-9" y2="3"/>
+        <circle cx="-9" cy="-3" r="4"/><circle cx="9" cy="-3" r="4"/><circle cx="-9" cy="3" r="4"/><circle cx="9" cy="3" r="4"/>
+        <rect x="-3" y="-3" width="6" height="6" rx="1.5"/>
+      </g>
+      {% endif %}
+      {% for m in p.marks %}
+      <g class="ao-mark-p{% if m.me %} me{% endif %}"><title>{{ m.name }}</title><circle cx="{{ p.x|add:m.dx }}" cy="{{ p.y }}" r="10"/><text x="{{ p.x|add:m.dx }}" y="{{ p.y|add:'3.5' }}" text-anchor="middle">{{ m.initials }}</text></g>
+      {% endfor %}
+    </g>
+  </a>
+  {% endfor %}
+  <text class="ao-cota" x="16" y="316">HOME · 0 m</text>
+</svg>

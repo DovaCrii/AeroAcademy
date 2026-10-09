@@ -1,0 +1,31 @@
+/* Guía rápida y mosaicos de software: compartidos por los mundos de ruta. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Guía rápida: hoja de anotación con esquina marcada */
+.gd{--acc:#4CC9F0;margin:18px 26px 0;border:1px solid var(--acc);background:color-mix(in srgb,var(--acc) 7%,var(--sheet));position:relative}
+.gd-civ{--acc:#FFC93C}.gd-top{--acc:#8AC926}.gd-mec{--acc:#E63946}.gd-cap{--acc:#2EC4B6}
+.gd::before{content:"";position:absolute;left:-1px;top:-1px;width:26px;height:26px;border-top:3px solid var(--acc);border-left:3px solid var(--acc);pointer-events:none}
+.gd-head{display:flex;align-items:baseline;gap:12px;padding:12px 18px 0}
+.gd-no{font:600 12px var(--font-mono);letter-spacing:.1em;color:color-mix(in srgb,var(--acc) 70%,var(--ink))}
+.gd-head h4{margin:0;font-family:var(--font-display);font-style:normal;font-weight:600;font-size:20px}
+.gd-body{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:8px 26px;padding:8px 18px 12px}
+.gd h5{margin:10px 0 6px;font:600 11.5px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.gd h5.gd-err{color:var(--red)}
+.gd ol,.gd ul{margin:0;padding-left:20px;font-size:14.5px}
+.gd li{margin:3px 0}
+.gd-cmd{list-style:none;padding:0!important;display:flex;flex-wrap:wrap;gap:6px}
+.gd-cmd li{margin:0;padding:3px 9px;border:1px solid var(--line);border-radius:999px;background:var(--sheet);font-size:13.5px}
+.gd-mis li::marker{color:var(--red)}
+.gd-foot{margin:0;padding:9px 18px;border-top:1px dashed var(--line);font-size:14px}
+.gd-foot span{font:600 11px var(--font-mono);letter-spacing:.1em;color:var(--ink-2);margin-right:8px}
+
+/* mosaicos de software dentro del mundo */
+.sw-tiles{display:inline-flex;gap:6px;flex:none}
+.sw-tile{display:block;border-radius:22%;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.sw-sm .sw-tile{width:22px;height:22px;border-radius:6px;box-shadow:none;vertical-align:middle}
+.sw-md .sw-tile{width:34px;height:34px}
+
+@media (max-width:980px){
+  .gd{margin-left:16px;margin-right:16px}
+  .gd-body{grid-template-columns:1fr}
+}
+.gd-head h4{text-transform:none;letter-spacing:0}

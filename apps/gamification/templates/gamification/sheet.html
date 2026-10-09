@@ -8,6 +8,7 @@
 <div class="sheet-bar">
   <div class="toggle" role="group" aria-label="Vista de la hoja">
     <a href="?vista=juego" {% if view == "juego" %}aria-current="true"{% endif %}>Vista de juego</a>
+    <a href="?vista=compacta" {% if view == "compacta" %}aria-current="true"{% endif %}>Vista compacta</a>
     <a href="?vista=pro" {% if view == "pro" %}aria-current="true"{% endif %}>Vista profesional</a>
   </div>
   {% if is_owner %}
@@ -28,7 +29,7 @@
     {% if person.bio %}<p class="bio">{{ person.bio }}</p>{% endif %}
     {% if person.links %}<p class="links">{% for key, url in person.links.items %}<a href="{{ url }}" rel="noopener noreferrer" target="_blank">{{ key|capfirst }}</a> {% endfor %}</p>{% endif %}
   </div>
-  {% if view == "juego" %}
+  {% if view != "pro" %}
   <div class="lvlbox">
     <div class="n">NV {{ info.level }}</div>
     <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ info.pct }}"><i style="width:{{ info.pct }}%"></i></div>
@@ -39,19 +40,26 @@
 </section>
 
 <div class="sheet-grid">
-  {% if view == "juego" %}
+  {% if view != "pro" %}
   <section class="card" aria-labelledby="h-attrs">
     <h2 id="h-attrs">Atributos</h2>
-    <svg class="hex" viewBox="-20 -10 240 220" role="img" aria-label="Atributos: {% for a in attributes %}{{ a.name }} {{ a.value }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+    {% if view == "juego" %}<svg class="hex" viewBox="-20 -10 240 220" role="img" aria-label="Atributos: {% for a in attributes %}{{ a.name }} {{ a.value }}{% if not forloop.last %}, {% endif %}{% endfor %}">
       {% for ring in hex.rings %}<polygon points="{{ ring }}" class="ring"/>{% endfor %}
       {% for ax in hex.axes %}<line x1="{{ hex.center }}" y1="{{ hex.center }}" x2="{{ ax.x }}" y2="{{ ax.y }}" class="axis"/>{% endfor %}
       <polygon points="{{ hex.values }}" class="values"/>
       {% for l in hex.labels %}<text x="{{ l.x }}" y="{{ l.y }}" text-anchor="middle" dominant-baseline="middle" class="lab">{{ l.text }}</text>{% endfor %}
-    </svg>
-    <ul class="attrs">{% for a in attributes %}<li><b>{{ a.code }}</b> {{ a.name }} <span>{{ a.value }}</span></li>{% endfor %}</ul>
-    <p class="muted small">Se calculan con las habilidades de las credenciales verificadas.</p>
+    </svg>{% endif %}
+    <ul class="attrs">{% for a in attributes %}<li><b>{{ a.code }}</b> {{ a.name }} <span>{{ a.value }}</span>{% if a.bonus %} <small class="bonus" title="Bono de tu carrera">+{{ a.bonus }}</small>{% endif %}</li>{% endfor %}</ul>
+    <p class="muted small">Se calculan con las habilidades de las credenciales verificadas, más el bono de la carrera.</p>
   </section>
 
+  {% if view == "compacta" %}
+  <section class="card" aria-labelledby="h-badges-c">
+    <h2 id="h-badges-c">Insignias <small>{{ earned_count }} de {{ showcase|length }}</small></h2>
+    <ul class="chips">{% for row in showcase %}{% if row.earned %}<li title="{{ row.badge.description }}">{{ row.badge.name }}</li>{% endif %}{% empty %}{% endfor %}</ul>
+    {% if not earned_count %}<p class="muted">Todavía no hay insignias.</p>{% endif %}
+  </section>
+  {% else %}
   <section class="card wide" aria-labelledby="h-badges">
     <h2 id="h-badges">Vitrina de insignias <small>{{ earned_count }} de {{ showcase|length }}</small></h2>
     <ul class="cases">
@@ -64,6 +72,7 @@
       {% endfor %}
     </ul>
   </section>
+  {% endif %}
   {% endif %}
 
   <section class="card" aria-labelledby="h-skills">
@@ -91,3 +100,6 @@
   {% endif %}
 </div>
 {% endblock %}
+
+
+
