@@ -109,3 +109,5 @@ body.world-civil{--sign:#FFC21A;--asphalt:#2B2F36;--slope:#3E8E4E;--relic:#8B5CF
 
 .cv-cover .lv-in{padding-top:186px}
 @media (max-width:860px){.cv-cover .lv-in{padding-top:220px}}
+/* Íconos del software sobre el título (ya no dentro del recuadro, donde tapaban el h1) */
+.cv-cover .lv-tiles-in{display:flex;gap:8px;margin:0 0 14px}

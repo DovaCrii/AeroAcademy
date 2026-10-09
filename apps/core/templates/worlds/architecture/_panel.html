@@ -4,84 +4,103 @@
 <div class="ar-panel{% if current.complete %} complete{% endif %}" id="panel" role="region" aria-label="Nivel {{ current.level.code|upper }}">
   <div class="ar-phead">
     <span class="elev">{{ current.level.code|upper }}</span>
-    <div>
+    <div class="ar-ptitle">
       <h3>{{ current.level.title }}</h3>
-      <div class="meta">{{ current.level.estimated_hours }}{% if current.level.audience %} · {{ current.level.audience }}{% endif %} · {{ current.done }} de {{ current.total }} · {{ current.pct }} %</div>
+      <ul class="meta">
+        {% if current.level.estimated_hours %}<li><span class="k">Duración</span> {{ current.level.estimated_hours }}</li>{% endif %}
+        {% if current.level.audience %}<li><span class="k">Público</span> {{ current.level.audience }}</li>{% endif %}
+        <li><span class="k">Avance</span> {{ current.done }} de {{ current.total }} · {{ current.pct }} %</li>
+      </ul>
     </div>
     <div class="pnav">
       {% if prev_code %}<a class="btn ghost" href="?nivel={{ prev_code }}#panel" data-enhance data-fid="prev">← Anterior</a>{% endif %}
       {% if next_code %}<a class="btn ghost" href="?nivel={{ next_code }}#panel" data-enhance data-fid="next">Siguiente →</a>{% endif %}
     </div>
+    <div class="ar-prog" role="progressbar" aria-label="Avance del nivel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ current.pct }}"><i style="width:{{ current.pct }}%"></i></div>
   </div>
-  {% if current.level.goal %}<div class="ar-goal"><b>Meta:</b> {{ current.level.goal|terms }}</div>{% endif %}
-  {% level_guide path current %}
 
-  <div class="ar-cols">
-    <div class="ar-col">
-      <h4><span class="sn">// 02</span> Recursos</h4>
-      <ul class="ar-res">
-        {% for lr in current.resources %}
-        <li class="ar-r">
-          {% sw_tiles lr.resource "md" 1 %}
-          <div class="ar-rb">
-          <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
-          {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
-          <div class="chips">
-            {% for t in lr.resource.tags %}{% if t != 'Esencial' and t != 'Complementario' %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endif %}{% endfor %}{% course_xp lr.resource %}
-          </div>
-          </div>
-        </li>
-        {% empty %}<li class="empty">Sin recursos todavía.</li>{% endfor %}
-      </ul>
-
-      <h4 class="ar-gap"><span class="sn">// 03</span> Hitos</h4>
-      <ul class="ar-checks">
-        {% for m in current.milestones %}
-        <li>
-          <form method="post" action="{% url 'progress:toggle_milestone' path.slug m.obj.key %}" data-enhance>
-            {% csrf_token %}
-            <input type="hidden" name="checked" value="{% if m.checked %}0{% else %}1{% endif %}">
-            <button type="submit" class="ar-check" aria-pressed="{% if m.checked %}true{% else %}false{% endif %}" data-fid="ms-{{ m.obj.key }}">
-              <span class="box" aria-hidden="true"></span><span class="txt">{{ m.obj.text|terms }}</span>
-            </button>
-          </form>
-        </li>
-        {% empty %}<li class="empty">Este nivel no tiene hitos.</li>{% endfor %}
-      </ul>
-    </div>
-
-    <div class="ar-col">
+  <div class="ar-stack">
+    {% if current.level.goal or current.level.mastery_signals %}
+    <section class="ar-sec ar-meta-sec" aria-labelledby="sec-meta">
+      <h4 class="ar-sh" id="sec-meta"><span class="sn">// 01</span><svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4" stroke="currentColor" stroke-width="1.6"/></svg>Meta</h4>
+      {% if current.level.goal %}<div class="ar-goal">{{ current.level.goal|terms }}</div>{% endif %}
       {% if current.level.mastery_signals %}
-      <h4><span class="sn">// 04</span> Cómo se ve dominarlo</h4>
+      <h5 class="ar-sub-h">Cómo se ve dominarlo</h5>
       <ul class="ar-look">{% for s in current.level.mastery_signals %}<li>{{ s|terms }}</li>{% endfor %}</ul>
       {% endif %}
+    </section>
+    {% endif %}
 
-      {% if current.quiz %}
-      <h4 class="ar-gap"><span class="sn">// 05</span> Mini quiz</h4>
-      <div class="ar-quiz">
-        {% for q in current.quiz %}
-        <div class="ar-q">
-          <p>{{ q.obj.question|terms }}</p>
-          <div class="ar-opts">
-            {% for i, opt in q.options %}
-            <form method="post" action="{% url 'progress:answer_quiz' path.slug q.obj.key %}" data-enhance>
-              {% csrf_token %}
-              <input type="hidden" name="choice" value="{{ i }}">
-              <button type="submit" data-fid="q-{{ q.obj.key }}-{{ i }}"{% if q.answered and i == q.obj.answer_index %} class="right"{% elif q.answered and i == q.selected %} class="wrong"{% endif %}>{{ opt|terms }}</button>
-            </form>
-            {% endfor %}
-          </div>
-          {% if q.answered %}
-          <div class="ar-fb" role="status"><b>{% if q.correct %}Correcto.{% else %}Casi.{% endif %}</b> {{ q.obj.explanation|terms }}</div>
-          {% endif %}
-        </div>
-        {% endfor %}
+    {% level_guide path current "02" %}
+
+    <details class="ar-acc" open>
+      <summary class="ar-sh"><span class="sn">// 03</span><svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.500c2.500-1.200 5-1.200 7 .5 2-1.700 4.500-1.700 7-.5v11c-2.500-1.200-5-1.200-7 .5-2-1.700-4.500-1.700-7-.5z M10 5v11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Recursos<span class="cnt">{{ current.resources|length }}</span></summary>
+      <div class="ar-acc-body">
+        <ul class="ar-res">
+          {% for lr in current.resources|slice:":5" %}{% include "worlds/architecture/_resource.html" %}
+          {% empty %}<li class="empty">Sin recursos todavía.</li>{% endfor %}
+        </ul>
+        {% if current.resources|length > 5 %}
+        <details class="ar-more">
+          <summary><span class="m-in">Ver {{ current.resources|length|add:"-5" }} más</span><span class="m-out">Ver menos</span></summary>
+          <ul class="ar-res">{% for lr in current.resources|slice:"5:" %}{% include "worlds/architecture/_resource.html" %}{% endfor %}</ul>
+        </details>
+        {% endif %}
       </div>
-      {% endif %}
+    </details>
 
-      {% if current.complete %}<p class="ar-badge" role="status">✔ Nivel completo</p>{% endif %}
-    </div>
+    <details class="ar-acc" open>
+      <summary class="ar-sh"><span class="sn">// 04</span><svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2v16M4 3h10l-2 3.500 2 3.500H4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Misiones<span class="cnt">{{ current.milestones|length }}</span></summary>
+      <div class="ar-acc-body">
+        <ul class="ar-checks">
+          {% for m in current.milestones %}
+          <li>
+            <form method="post" action="{% url 'progress:toggle_milestone' path.slug m.obj.key %}" data-enhance>
+              {% csrf_token %}
+              <input type="hidden" name="checked" value="{% if m.checked %}0{% else %}1{% endif %}">
+              <button type="submit" class="ar-check" aria-pressed="{% if m.checked %}true{% else %}false{% endif %}" data-fid="ms-{{ m.obj.key }}">
+                <span class="box" aria-hidden="true"></span><span class="txt">{{ m.obj.text|terms }}</span>
+              </button>
+            </form>
+          </li>
+          {% empty %}<li class="empty">Este nivel no tiene misiones.</li>{% endfor %}
+        </ul>
+      </div>
+    </details>
+
+    {% if current.quiz %}
+    <details class="ar-acc" open>
+      <summary class="ar-sh"><span class="sn">// 05</span><svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.500 8a2.500 2.500 0 1 1 3.600 2.200c-.7.4-1.100.9-1.100 1.700M10 14.500v.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Preguntas<span class="cnt">{{ current.quiz|length }}</span></summary>
+      <div class="ar-acc-body">
+        <div class="ar-quiz">
+          {% for q in current.quiz %}
+          <div class="ar-q">
+            <p><span class="qn">{{ forloop.counter }}</span>{{ q.obj.question|terms }}</p>
+            <div class="ar-opts">
+              {% for i, opt in q.options %}
+              <form method="post" action="{% url 'progress:answer_quiz' path.slug q.obj.key %}" data-enhance>
+                {% csrf_token %}
+                <input type="hidden" name="choice" value="{{ i }}">
+                <button type="submit" data-fid="q-{{ q.obj.key }}-{{ i }}"{% if q.answered and i == q.obj.answer_index %} class="right"{% elif q.answered and i == q.selected %} class="wrong"{% endif %}>{{ opt|terms }}</button>
+              </form>
+              {% endfor %}
+            </div>
+            {% if q.answered %}
+            <div class="ar-fb" role="status"><b>{% if q.correct %}Correcto.{% else %}Casi.{% endif %}</b> {{ q.obj.explanation|terms }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </details>
+    {% endif %}
+
+    {% if current.complete %}<p class="ar-badge" role="status">✔ Nivel completo</p>{% endif %}
+
+    <details class="ar-acc ar-notes">
+      <summary class="ar-sh"><span class="sn">// 06</span><svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.500h9l3 3V17.500H4zM13 2.500v3h3M7 9h6M7 12.500h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Notas</summary>
+      <div class="ar-acc-body">{% level_notes path current.level.code %}</div>
+    </details>
   </div>
-  {% level_notes path current.level.code %}
 </div>
 {% endif %}

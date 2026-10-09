@@ -1,0 +1,10 @@
+{% load core_extras catalog_extras %}<li class="ar-r">
+  {% sw_tiles lr.resource "md" 1 %}
+  <div class="ar-rb">
+    <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a>
+    {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
+    <div class="chips">
+      {% for t in lr.resource.tags %}{% if t != 'Esencial' and t != 'Complementario' %}<span class="chip{% if t == 'Oficial' %} off{% elif t == 'Certificate of completion' %} cert{% endif %}">{{ t }}</span>{% endif %}{% endfor %}{% course_xp lr.resource %}
+    </div>
+  </div>
+</li>
