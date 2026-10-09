@@ -76,7 +76,8 @@ Hay skills en `.claude/skills/`. Claude Code las carga solo; en Codex, leer el `
 | `nueva-ruta` | Al crear o modificar un JSON en `seed/rutas/` |
 | `nuevo-mundo` | Al crear el diseño de una especialidad nueva |
 | `nueva-insignia` | Al agregar insignias o títulos |
-| `sprite-8bit` | Al dibujar avatares, insignias o a Teo |
+| `sprite-8bit` | Al dibujar avatares, insignias o a Nala |
+| `orquestar` | Al repartir una ronda entre subagentes (qué modelo usa cada uno y en qué orden) |
 
 ## Subagentes del proyecto
 
@@ -88,6 +89,12 @@ Definidos en `.claude/agents/` y alineados con las skills. Úsalos para paraleli
 | `artista-pixel` | Dibujar piezas de avatar, insignias y sprites | `sprite-8bit`, `nuevo-mundo` |
 | `curador-semillas` | Rutas, cursos, insignias y títulos (`seed/`) | `nueva-ruta`, `nueva-insignia` |
 | `revisor-bloque` | Revisar un bloque o PR antes de entregarlo (solo lee) | `bloque` |
+| `verificador-enlaces` | Recorrer el sitio y revisar URLs externas (solo reporta) | — |
+| `explorador` | Búsquedas, inventarios y resúmenes rápidos (solo lee) | — |
+
+**Modelos y orquestación (skill `orquestar`):** la sesión principal (**Opus**) orquesta: decide, reparte, revisa, integra y
+publica. **Sonnet** construye (`bloque-dev`, `artista-pixel`, `curador-semillas`, `revisor-bloque`). **Haiku** hace lo
+mecánico y de lectura (`verificador-enlaces`, `explorador`). Al lanzar un subagente se pasa `model` explícito.
 
 Reglas: cada subagente edita solo lo que se le asignó; no hace `git`, `push` ni PR (eso lo hace quien lo lanzó); y quien lo
 lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de integrarlo.
