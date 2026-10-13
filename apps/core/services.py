@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.catalog.models import Discipline, Platform, Product, Resource
-from apps.catalog.software import PRODUCT_TILE
+from apps.catalog.software import PRODUCT_TILE, route_icon
 from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
 from apps.gamification.models import Badge
@@ -34,7 +34,10 @@ def _software_icons():
 
 
 def _path_icon(path, icons):
-    """Ficha de software (img/software/<producto>.svg) del primer producto de la ruta que tenga una."""
+    """Icono propio de la ruta (img/software/ruta-<slug>.svg); si no, la ficha del primer producto que tenga una."""
+    own = route_icon(path.slug)
+    if own in icons:
+        return own
     for product in path.products.all():
         for stem in sorted(icons):
             if product.slug == stem or product.slug.startswith(stem + "-"):

@@ -123,6 +123,7 @@ body.world-architecture.fl-cap{--acc:#2EC4B6}
 body.world-architecture.fl-tra{--acc:#8793A6;--fill:#8793A6}
 .ar-sn{margin:0 0 8px;font:600 12px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 .ar-sn span,.sn{font-family:var(--font-mono);letter-spacing:.08em;font-weight:600;color:color-mix(in srgb,var(--acc) 75%,var(--ink))}
+.ar-sn span{display:inline-block;margin-right:10px;vertical-align:middle;font-family:var(--font-display);font-weight:900;font-stretch:80%;font-size:34px;line-height:.9;letter-spacing:-.03em;transform:rotate(-3deg);text-shadow:2px 2px 0 color-mix(in srgb,var(--acc) 30%,transparent)}
 .ar-cover .lv-title{color:var(--acc)}
 .ar-cover{border-bottom-color:var(--acc)}
 

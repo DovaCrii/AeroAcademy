@@ -38,18 +38,56 @@
   </div>
 </section>
 
-<nav class="w-circles" aria-label="Disciplinas">
+{# Selector de disciplina sin JS: radios hermanos de .w-circles y #rutas (checked ~). El script de abajo solo mejora (scroll, hash, scrollspy). #}
+<input class="w-dsel" type="radio" name="disc" id="d-all" checked>
+{% for d in disciplines %}<input class="w-dsel" type="radio" name="disc" id="d-{{ d.slug }}">{% endfor %}
+<style>
+{% for d in disciplines %}#d-{{ d.slug }}:checked ~ .w-sec-routes .w-d:not([data-d="{{ d.slug }}"]){display:none}
+#d-{{ d.slug }}:checked ~ .w-circles li[data-d="{{ d.slug }}"] .w-circ{box-shadow:0 0 0 4px var(--ink),var(--shadow-3);transform:translateY(-3px)}
+#d-{{ d.slug }}:checked ~ .w-circles li[data-d="{{ d.slug }}"] b{background:var(--amber);color:#1F2430}
+#d-{{ d.slug }}:focus-visible ~ .w-circles li[data-d="{{ d.slug }}"] .w-circ{outline:3px solid var(--amber);outline-offset:4px}
+#d-{{ d.slug }}:checked ~ .w-sec-routes .w-d[data-d="{{ d.slug }}"]{grid-column:1/-1}
+{% endfor %}</style>
+
+<nav class="w-circles" aria-label="Disciplinas: elige una para ver sus rutas">
   <ul>
+    <li data-d="todas"><label for="d-all"><span class="w-circ w-circ-hud w-circ-all"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><b>TODAS</b></label></li>
     {% for d in disciplines %}
-    <li data-d="{{ d.slug }}"><a href="#rutas">
-      <span class="w-circ{% if not d.img %} w-circ-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}<svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg></span>
+    <li data-d="{{ d.slug }}"><label for="d-{{ d.slug }}">
+      <span class="w-circ{% if not d.img %} w-circ-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}<svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg><em class="w-circ-n" title="{{ d.paths|length }} ruta{{ d.paths|length|pluralize }}">{{ d.paths|length }}</em></span>
       <b>{{ d.label|upper }}</b>
-    </a></li>
+    </label></li>
     {% endfor %}
     <li data-d="dgac"><a href="{% url 'dgac:home' %}"><span class="w-circ w-circ-hud">{% doodle "dgac" class="dd" %}<svg class="i" aria-hidden="true"><use href="#i-cert"/></svg></span><b>DGAC</b></a></li>
   </ul>
 </nav>
 {% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
+
+<nav class="w-jump" aria-label="En esta página">
+  <a href="#rutas">Rutas</a><a href="#mision">Mi misión</a><a href="#avance">Mi avance</a><a href="#equipo">Equipo</a><a href="#modulos">Módulos</a><a href="#destacados">Destacados</a><a href="#suite">Suite Aero</a>
+</nav>
+
+<section id="rutas" class="w-sec w-sec-routes" aria-labelledby="rut-h">
+  <header class="w-sh w-sh-lead">
+    <h2 id="rut-h" class="w-h2">Rutas por disciplina</h2>
+    <p class="w-lead">Elige una disciplina arriba para ver solo sus rutas, o recorre todas. <a href="{% url 'paths:map' %}">Ver el mapa de metro</a>.</p>
+  </header>
+  <div class="w-dl">
+    {% for d in disciplines %}
+    <article class="w-d{% if d.slug == 'transversal' %} w-d-base{% endif %}" data-d="{{ d.slug }}" aria-labelledby="dh-{{ d.slug }}">
+      <header class="w-d-h">
+        <span class="w-d-ill{% if not d.img %} w-d-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}</span>
+        <div>
+          <h3 id="dh-{{ d.slug }}"><svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg>{{ d.label }}</h3>
+          <p>{% if d.slug == "transversal" %}Base de todo: dibujo, modelado y datos de proyecto. Parte por aquí.{% else %}{{ d.paths|length }} ruta{{ d.paths|length|pluralize }} de aprendizaje{% endif %}</p>
+        </div>
+        {% if d.paths|length > 2 and d.slug != 'transversal' or d.paths|length > 3 %}<label class="w-d-more" for="d-{{ d.slug }}">Ver las {{ d.paths|length }} →</label>{% endif %}
+      </header>
+      {% include "core/partials/route_rows.html" with d=d %}
+    </article>
+    {% endfor %}
+  </div>
+</section>
 
 <section class="w-greet decor-contour" aria-labelledby="hola">
   {% doodle "doodle-sparks" class="dd dd-tr" %}
@@ -161,7 +199,18 @@
     <p class="w-ov-cta"><a class="btn" href="{% url 'paths:index' %}">Ver mis rutas</a><a class="btn ghost" href="{% url 'credentials:mine' %}">Mis certificados</a></p>
   </div>
 </section>
-<section id="modulos" class="w-sec w-sec-mods" aria-labelledby="mod-h">
+<section class="w-team" id="equipo" style="background-image:url('{% static 'core/img/equipo.jpg' %}')">
+  <div class="w-team-in">
+    <span class="kicker">Equipo · Proceso</span>
+    <h2>Un equipo, un solo lugar para avanzar</h2>
+    <p>Arquitectura, estructuras, topografía, mecánica y captura aprendiendo sobre los mismos proyectos. Las ideas se convierten en mejoras con un camino claro.</p>
+    <ol class="w-proc"><li><b>Ideas</b></li><li><b>Plan</b></li><li><b>Ejecución</b></li><li><b>Resultados</b></li></ol>
+  </div>
+</section>
+
+<details class="w-fold" id="modulos">
+  <summary><span class="w-fold-t">Módulos</span><span class="w-fold-h">Aprender, certificarse, conversar y medir el avance</span></summary>
+<section class="w-sec w-sec-mods" aria-labelledby="mod-h">
   {% doodle "doodle-arrows" class="dd dd-tr" %}
   <header class="w-sh">
     <h2 id="mod-h" class="w-h2">Módulos</h2>
@@ -179,7 +228,11 @@
   </div>
 </section>
 
-<section class="w-feat" id="destacados" aria-labelledby="feat-h">
+</details>
+
+<details class="w-fold" id="destacados">
+  <summary><span class="w-fold-t">Destacados del catálogo</span><span class="w-fold-h">Búsqueda y recursos por producto</span></summary>
+<section class="w-feat" aria-labelledby="feat-h">
   <div class="w-feat-in">
     <header class="w-feat-head">
       <span class="w-kicker">Catálogo</span>
@@ -215,46 +268,11 @@
     {% endfor %}
   </div>
 </section>
-<section id="rutas" class="w-sec w-sec-routes" aria-labelledby="rut-h">
-  {% doodle "doodle-scribbles" class="dd dd-tr" %}
-  <header class="w-sh w-sh-lead">
-    <h2 id="rut-h" class="w-h2">Rutas por disciplina</h2>
-    <p class="w-lead">Cada disciplina tiene sus rutas de aprendizaje con recursos oficiales, misiones y certificaciones. <a href="{% url 'paths:map' %}">Ver el mapa de metro</a>.</p>
-  </header>
-  {% for d in disciplines %}{% if d.slug == "transversal" %}
-  <article class="w-base" data-d="transversal" aria-labelledby="base-h">
-    <span class="w-base-ill">{% doodle "transversal" class="dd" %}</span>
-    <div class="w-base-txt">
-      <span class="w-kicker">Base de todo</span>
-      <h3 id="base-h">{{ d.label }}</h3>
-      <p>El software sobre el que se apoya el resto: dibujo, modelado y datos de proyecto. Parte por aquí y todo lo demás se vuelve más fácil.</p>
-    </div>
-    {% include "core/partials/route_rows.html" with d=d %}
-  </article>
-  {% endif %}{% endfor %}
-  <div class="w-routes">
-    {% for d in disciplines %}{% if d.slug != "transversal" %}
-    <article class="w-rc" data-d="{{ d.slug }}">
-      <div class="w-ph{% if not d.img %} w-dp-hud{% endif %}"{% if d.img %} style="background-image:url('{% static 'core/img/'|add:d.img %}')"{% endif %}>{% if not d.img %}{% doodle d.slug class="dd" %}{% endif %}</div>
-      <div class="w-bd">
-        <h3><svg class="i" aria-hidden="true"><use href="#{{ d.icon }}"/></svg>{{ d.label }}</h3>
-        {% include "core/partials/route_rows.html" with d=d %}
-      </div>
-    </article>
-    {% endif %}{% endfor %}
-  </div>
-</section>
+</details>
 
-<section class="w-team" id="equipo" style="background-image:url('{% static 'core/img/equipo.jpg' %}')">
-  <div class="w-team-in">
-    <span class="kicker">Equipo · Proceso</span>
-    <h2>Un equipo, un solo lugar para avanzar</h2>
-    <p>Arquitectura, estructuras, topografía, mecánica y captura aprendiendo sobre los mismos proyectos. Las ideas se convierten en mejoras con un camino claro.</p>
-    <ol class="w-proc"><li><b>Ideas</b></li><li><b>Plan</b></li><li><b>Ejecución</b></li><li><b>Resultados</b></li></ol>
-  </div>
-</section>
-
-<section class="w-suite decor-contour" id="suite" aria-labelledby="suite-h">
+<details class="w-fold" id="suite">
+  <summary><span class="w-fold-t">Suite Aero</span><span class="w-fold-h">Auspicia la academia · aplicaciones del ecosistema</span></summary>
+<section class="w-suite decor-contour" aria-labelledby="suite-h">
   <div class="w-suite-head">
     <span class="w-kicker">Auspicia</span>
     <h2 id="suite-h">Suite Aero</h2>
@@ -276,10 +294,40 @@
   </ul>
 </section>
 
+</details>
+
 <section class="w-vals" id="valores" aria-label="Cómo trabajamos">
   {% for icon, text in values %}
   <div><svg class="i" aria-hidden="true"><use href="#{{ icon }}"/></svg>{{ text }}</div>
   {% endfor %}
 </section>
-{% endblock %}
+<script>
+/* Mejora progresiva de la portada: todo funciona sin esto (radios y details nativos). */
+(function(){
+  var root=document.documentElement,top=document.querySelector(".top"),sec=document.getElementById("rutas");
+  function setTop(){root.style.setProperty("--top-h",(top?top.offsetHeight:0)+"px");}
+  setTop();addEventListener("resize",setTop);
+  function pick(id){var r=document.getElementById(id);if(r&&r.classList.contains("w-dsel")){r.checked=true;return true;}return false;}
+  document.querySelectorAll(".w-dsel").forEach(function(r){r.addEventListener("change",function(){
+    if(!sec)return;var t=sec.getBoundingClientRect().top;
+    if(t<0||t>innerHeight*.7)sec.scrollIntoView({behavior:"smooth",block:"start"});
+  });});
+  function fromHash(){
+    var h=location.hash.slice(1);if(!h)return;
+    if(pick(h)){if(sec)sec.scrollIntoView({block:"start"});return;}
+    var el=document.getElementById(h);if(el&&el.tagName==="DETAILS")el.open=true;
+  }
+  fromHash();addEventListener("hashchange",fromHash);
+  var links=document.querySelectorAll(".w-jump a");
+  links.forEach(function(a){a.addEventListener("click",function(){var el=document.querySelector(a.getAttribute("href"));if(el&&el.tagName==="DETAILS")el.open=true;});});
+  if("IntersectionObserver" in window){
+    var map={};links.forEach(function(a){var el=document.querySelector(a.getAttribute("href"));if(el)map[el.id]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;links.forEach(function(a){a.removeAttribute("aria-current");});
+      if(map[e.target.id])map[e.target.id].setAttribute("aria-current","true");
+    });},{rootMargin:"-30% 0px -60% 0px"});
+    Object.keys(map).forEach(function(id){io.observe(document.getElementById(id));});
+  }
+})();
+</script>{% endblock %}
 

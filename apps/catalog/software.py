@@ -138,6 +138,25 @@ PRODUCT_TILE = {
     "sql": "sql",
 }
 
+# Icono propio de cada ruta (slug de LearningPath → archivo img/software/<stem>.svg). Nunca se repite entre rutas.
+# Son pictogramas originales; si se incorpora un logotipo oficial, se cambia aquí el archivo de ESA ruta (ver docs/ICONOS.md).
+ROUTE_ICON = {
+    slug: f"ruta-{slug}"
+    for slug in (
+        "autocad", "civil-3d", "forma-revit", "forma-coordinacion", "plant-3d",
+        "bentley-learn", "bentley-itwin", "bentley-lumenrt", "bentley-openbuildings", "bentley-openplant",
+        "bentley-projectwise", "bim-101", "topografia-101", "ia-101", "herramientas-ia", "vibe-coding",
+        "agentes-ia", "claude-code-mcp", "python-datos-101", "data-science-aplicada", "datos-reportes",
+        "geospatial-data-science",
+    )
+}  # fmt: skip
+
+
+def route_icon(slug):
+    """Nombre (sin .svg) del icono propio de una ruta, o '' si no tiene."""
+    return ROUTE_ICON.get(slug, "")
+
+
 # Palabras del título (en minúsculas) → mosaico. El orden no importa: se ordena por posición en el título.
 TITLE_KEYWORDS = [
     (r"\brevit\b", "revit"),
