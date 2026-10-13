@@ -1,0 +1,24 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}Segundo paso{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }} · verificación en dos pasos</p>
+    <h1>Escribe tu código</h1>
+    <p class="pub-lead">Hola, {{ user.name }}. Por tu rol, la entrada pública necesita un segundo paso: el código de 6 dígitos de tu app de autenticación, o uno de tus códigos de recuperación.</p>
+    <form class="pub-form" method="post" action="{% url 'accounts:verify' %}" novalidate>
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      {% if error %}<p class="pub-error" role="alert">{{ error }}</p>{% endif %}
+      <div class="field">
+        <label for="id_code">Código</label>
+        <input id="id_code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="32" required autofocus>
+      </div>
+      <button class="btn pub-btn" type="submit">Verificar</button>
+    </form>
+    <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn pub-btn" type="submit">Salir</button></form>
+  </div>
+</section>
+{% endblock %}

@@ -188,9 +188,9 @@ def test_pending_people_cannot_write(client_for, make_person):
 def test_world_panels_show_the_latest_notes(client_for, member):
     note(member, "Mira esta nota del capítulo")
     for slug in (FORMA, BENTLEY):
-        html = client_for(member.login).get(f"/rutas/{slug}/").content.decode()
+        html = client_for(member.login).get(f"/rutas/{slug}/?paso=notas").content.decode()
         assert "Notas del equipo" in html and f"/rutas/{slug}/notas/" in html
-    html = client_for(member.login).get(f"/rutas/{FORMA}/").content.decode()
+    html = client_for(member.login).get(f"/rutas/{FORMA}/?paso=notas").content.decode()
     assert "Mira esta nota" in html
 
 

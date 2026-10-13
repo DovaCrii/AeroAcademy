@@ -122,10 +122,14 @@ def test_finding3_nobody_replies_to_a_hidden_note(member, lead):
 
 
 def test_finding3_glossary_of_an_unpublished_path_is_not_served(member):
+    def forma_glossary():
+        hits = search.search("Family Editor")
+        return any(h["kind"] == "glossary" and FORMA in h["url"] for h in hits)
+
     search.reindex()
-    assert any(h["kind"] == "glossary" for h in search.search("Family Editor"))
+    assert forma_glossary()
     draft_path()
-    assert not any(h["kind"] == "glossary" for h in search.search("Family Editor"))
+    assert not forma_glossary()
 
 
 # 4 y 5 · tablero --------------------------------------------------------------------------------------------------------

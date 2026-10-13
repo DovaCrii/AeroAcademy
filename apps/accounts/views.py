@@ -1,13 +1,15 @@
+import ipaddress
 from urllib.parse import unquote
 
 from django.contrib import auth
 from django.db import transaction
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST
 
-from . import services, team_link
+from . import ratelimit, services, team_link, totp, two_factor
 from .forms import SignupForm, TeamSignupForm
 from .models import PersonStatus
 
@@ -44,7 +46,23 @@ def has_password_session(request) -> bool:
 
 
 def _client_ip(request) -> str:
-    return request.META.get("REMOTE_ADDR", "")
+    """IP del cliente para los límites de intentos. En la puerta pública `REMOTE_ADDR` es siempre el proxy local:
+    se usa el último valor de `X-Forwarded-For`, que es el que agrega el propio proxy de Tailscale (los anteriores
+    los puede escribir el cliente). Si no hay uno válido, se cae a `REMOTE_ADDR`."""
+    remote = request.META.get("REMOTE_ADDR", "")
+    if getattr(request, "public_door", False):
+        last = request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[-1].strip()
+        try:
+            return str(ipaddress.ip_address(last))
+        except ValueError:
+            pass
+    return remote
+
+
+def _login(request, person) -> None:
+    """Inicia la sesión por contraseña. El segundo factor nunca se hereda: cada inicio de sesión lo vuelve a pedir."""
+    auth.login(request, person, backend=services.PASSWORD_BACKEND)
+    request.session[two_factor.SESSION_KEY] = False
 
 
 def _next_of(request) -> str:
@@ -95,7 +113,7 @@ def login(request):
             _login_context(request, error=LOGIN_ERROR, email=email),
         )
     services.clear_login_failures(ip, email)
-    auth.login(request, person, backend=services.PASSWORD_BACKEND)
+    _login(request, person)
     return redirect(_next_of(request) or "core:home")
 
 
@@ -112,6 +130,17 @@ def signup(request, token):
     person = services.resolve_signup_token(token)
     if person is None:
         return _private(render(request, "accounts/signup_invalid.html", status=400))
+    if request.method == "POST":
+        ip = _client_ip(request)
+        if ratelimit.blocked(
+            "signup",
+            ip,
+            limit=SIGNUP_MAX,
+        ):
+            return _private(
+                render(request, "accounts/signup_invalid.html", {"wait": LOGIN_WAIT}, status=429)
+            )
+        ratelimit.hit("signup", ip, window=services.LOGIN_WINDOW_SECONDS)
     form = SignupForm(request.POST or None, person=person)
     if request.method == "POST" and form.is_valid():
         with transaction.atomic():
@@ -126,7 +155,7 @@ def signup(request, token):
                 password=form.cleaned_data["password1"],
                 character_class=form.cleaned_data["character_class"],
             )
-        auth.login(request, fresh, backend=services.PASSWORD_BACKEND)
+        _login(request, fresh)
         return redirect("core:home")
     return _private(
         render(
@@ -137,6 +166,7 @@ def signup(request, token):
     )
 
 
+SIGNUP_MAX = 20  # envíos por IP y 15 minutos al registro con enlace personal
 TEAM_WAIT = "Demasiados intentos con este enlace. Espera unos 15 minutos y vuelve a intentar."
 
 
@@ -176,7 +206,7 @@ def team_signup(request, token):
         character_class=data["character_class"],
     )
     if result.kind == team_link.LOGGED_IN:
-        auth.login(request, result.person, backend=services.PASSWORD_BACKEND)
+        _login(request, result.person)
         return redirect("core:home")
     return _private(render(request, "accounts/team_signup_result.html", {"kind": result.kind}))
 
@@ -187,3 +217,83 @@ def _private(response):
     response["Referrer-Policy"] = "same-origin"
     response["Cache-Control"] = "no-store"
     return response
+
+
+TOTP_WAIT = "Demasiados intentos. Espera unos 15 minutos y vuelve a intentar."
+
+
+@never_cache
+@require_http_methods(["GET", "POST"])
+def verify(request):
+    """Segundo paso de la puerta pública: código de la app o de recuperación. Solo para lead y admin."""
+    if not getattr(request, "public_door", False) or not request.user.is_authenticated:
+        return redirect("core:home")
+    person = request.user
+    nxt = _next_of(request)
+    if not two_factor.needs_second_factor(person) or request.session.get(two_factor.SESSION_KEY):
+        return redirect(nxt or "core:home")
+    if not two_factor.is_enrolled(person):
+        return render(request, "accounts/totp_blocked.html", status=403)
+    if request.method == "GET":
+        return render(request, "accounts/totp_verify.html", {"next": nxt})
+    ip = _client_ip(request)
+    if two_factor.check_blocked(person, ip):
+        return render(
+            request, "accounts/totp_verify.html", {"next": nxt, "error": TOTP_WAIT}, status=429
+        )
+    if two_factor.verify_login(person, request.POST.get("code", "")[:32], ip):
+        request.session.cycle_key()
+        request.session[two_factor.SESSION_KEY] = True
+        return redirect(nxt or "core:home")
+    return render(
+        request,
+        "accounts/totp_verify.html",
+        {"next": nxt, "error": "Código incorrecto o ya usado."},
+        status=400,
+    )
+
+
+@never_cache
+@require_http_methods(["GET", "POST"])
+def two_factor_setup(request):
+    """Activar, ver o desactivar el segundo factor. Solo por la puerta de la tailnet (en la pública no existe)."""
+    if getattr(request, "public_door", False):
+        raise Http404("No encontrado.")
+    person = request.user
+    ctx = {"enrolled": two_factor.is_enrolled(person)}
+    if request.method == "POST":
+        action = request.POST.get("action", "")
+        code = request.POST.get("code", "")[:32]
+        ip = _client_ip(request)
+        if two_factor.check_blocked(person, ip):
+            ctx["error"] = TOTP_WAIT
+            return render(
+                request, "accounts/two_factor.html", _setup_context(person, ctx), status=429
+            )
+        if action == "confirm":
+            codes = two_factor.confirm_enrollment(person, code)
+            if codes is None:
+                ratelimit.hit("totp", str(person.pk), window=two_factor.WINDOW_SECONDS)
+                ctx["error"] = "Código incorrecto. Revisa que la hora del teléfono sea automática."
+            else:
+                ctx.update(enrolled=True, recovery_codes=codes)
+        elif action in {"regenerate", "disable"}:
+            if two_factor.verify_login(person, code, ip):
+                if action == "disable":
+                    two_factor.disable(person)
+                    ctx["enrolled"] = False
+                else:
+                    ctx["recovery_codes"] = two_factor.regenerate_recovery(person)
+            else:
+                ctx["error"] = "Código incorrecto o ya usado."
+    return render(request, "accounts/two_factor.html", _setup_context(person, ctx))
+
+
+def _setup_context(person, ctx):
+    if not ctx.get("enrolled"):
+        device = two_factor.begin_enrollment(person)
+        ctx["secret"] = totp.group(device.secret)
+        ctx["otpauth"] = totp.otpauth_uri(device.secret, person.login)
+    else:
+        ctx["recovery_left"] = two_factor.recovery_left(person)
+    return ctx

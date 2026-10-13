@@ -1,0 +1,1090 @@
+{
+  "_nota": "Rama OPCIONAL de IA y Datos donde se juntan el levantamiento, los SIG y la IA. Requisitos: Python y datos 101 y, en coordenadas, Topografía 101 (datums y UTM). Recursos abiertos y gratuitos: Kaggle Geospatial Analysis, Geographic Data Science with Python, QGIS Training Manual, Earth Engine, Carpentries, GeoPandas, PDAL, laspy, PySAL, PyKrige y PostGIS. Earth Engine es gratuito solo para ciertos usos: revisar términos antes de usarlo en trabajo de clientes. No se encontró un curso gratuito oficial de Esri sobre ciencia de datos espacial verificable; queda como brecha. URLs verificadas el 2026-10-13 en el navegador. Las keys son estables: agregar siempre al final.",
+  "slug": "geospatial-data-science",
+  "title": "Geospatial Data Science",
+  "program": "IA y Datos · Rama opcional · Geoespacial",
+  "platform": "recursos-abiertos",
+  "kind": "structured",
+  "vendor": "open-source",
+  "products": [
+    "geopandas",
+    "qgis",
+    "postgis",
+    "earth-engine",
+    "python"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos",
+    "topografia"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Vector y ráster",
+      "title": "Paso 0 · Datos geoespaciales: vector y ráster",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien conoce topografía y sabe Python básico",
+      "goal": "Distinguir datos vectoriales (puntos, líneas, polígonos) y ráster (celdas), sus formatos y para qué sirve cada uno. Punto de encuentro entre el levantamiento, los SIG y la IA.",
+      "guide": {
+        "title": "Guía rápida · Vector y ráster",
+        "software": "gis",
+        "do": [
+          "Vector: elementos con geometría y atributos (puntos de levantamiento, ejes, predios).",
+          "Ráster: cuadrícula de valores (modelo digital de terreno, imágenes).",
+          "Anota formato, sistema de referencia y resolución de cada capa."
+        ],
+        "commands": [
+          "*Shapefile*",
+          "*GeoJSON*",
+          "*GeoPackage*",
+          "*GeoTIFF*",
+          "*Resolución*"
+        ],
+        "mistakes": [
+          "Mezclar capas sin revisar el sistema de coordenadas.",
+          "Usar Shapefile por costumbre pudiendo usar GeoPackage.",
+          "Ignorar la resolución del ráster."
+        ],
+        "essential": "Data Carpentry: Introduction to Geospatial Concepts"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Data Carpentry: Introduction to Geospatial Concepts",
+          "url": "https://datacarpentry.github.io/organization-geospatial/",
+          "description": "Lección abierta de The Carpentries: datos vectoriales y ráster, sistemas de referencia y formatos. Gratuito.",
+          "tags": [
+            "Course",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Geographic Data Science with Python",
+          "url": "https://geographicdata.science/book/",
+          "description": "Libro abierto de ciencia de datos geográficos con Python (PySAL, GeoPandas). Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: AI and Data Scientist",
+          "url": "https://roadmap.sh/ai-data-scientist",
+          "description": "Mapa de etapas de roadmap.sh: matemática y estadística, Python y SQL, EDA, ML, deep learning, MLOps, ingeniería de IA y vibe coding. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Recorrer *Introduction to Geospatial Concepts* de Data Carpentry",
+          "completed_by_resource": "Data Carpentry: Introduction to Geospatial Concepts"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Clasificar las capas de un proyecto de ejemplo en vector y ráster e indicar el formato de cada una"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Abrir un GeoPackage y un GeoTIFF de ejemplo en QGIS y anotar sistema de referencia y resolución"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Leer el primer capítulo de *Geographic Data Science with Python*"
+        }
+      ],
+      "mastery_signals": [
+        "Distingues vector y ráster y eliges el formato adecuado",
+        "Anotas sistema de referencia y resolución de cada capa"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Tienes un modelo digital de terreno. ¿Qué tipo de dato es?",
+          "options": [
+            "Vector de puntos",
+            "Ráster",
+            "Tabla sin geometría"
+          ],
+          "answer": 1,
+          "explanation": "Una cuadrícula de valores de elevación es un ráster."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Qué guarda un GeoPackage?",
+          "options": [
+            "Solo imágenes",
+            "Capas vectoriales (y otras) en un solo archivo abierto",
+            "Solo nubes de puntos"
+          ],
+          "answer": 1,
+          "explanation": "Es un formato abierto de una sola base de datos que puede contener varias capas."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Coordenadas",
+      "title": "Paso 1 · Sistemas de coordenadas y GeoPandas",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien hizo Topografía 101 (datums, UTM) o conoce lo básico",
+      "goal": "Repasar sistemas de referencia (EPSG, UTM, datums) y aplicarlos con pyproj y GeoPandas. Vínculo con la ruta Topografía 101: los errores de CRS son la causa más común de capas que «no calzan».",
+      "guide": {
+        "title": "Guía rápida · CRS",
+        "software": "python",
+        "do": [
+          "Todo dato geoespacial debe declarar su CRS; si falta, averígualo antes de usarlo.",
+          "Para medir distancias y áreas usa un CRS proyectado (por ejemplo, UTM de tu zona).",
+          "Con GeoPandas: *gdf.crs* para ver y *gdf.to_crs()* para convertir."
+        ],
+        "commands": [
+          "*EPSG*",
+          "*crs*",
+          "*to_crs*",
+          "*Transformer*"
+        ],
+        "mistakes": [
+          "Mezclar grados y metros.",
+          "Calcular áreas en un CRS geográfico.",
+          "Asignar un CRS equivocado (set_crs) en vez de convertir (to_crs)."
+        ],
+        "essential": "GeoPandas: Introduction"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "GeoPandas: Introduction",
+          "url": "https://geopandas.org/en/stable/getting_started/introduction.html",
+          "description": "Introducción oficial a GeoPandas: GeoDataFrames, CRS, mapas y operaciones espaciales. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "pyproj documentation",
+          "url": "https://pyproj4.github.io/pyproj/stable/",
+          "description": "Transformar coordenadas entre sistemas de referencia (EPSG) con Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Kaggle Learn: Geospatial Analysis",
+          "url": "https://www.kaggle.com/learn/geospatial-analysis",
+          "description": "Mapas interactivos, coordenadas, geocodificación y análisis de proximidad con GeoPandas y Folium. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Seguir *Introduction to GeoPandas* y leer un archivo con su CRS",
+          "completed_by_resource": "GeoPandas: Introduction"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Completar los módulos de coordenadas de *Kaggle Learn: Geospatial Analysis*",
+          "completed_by_resource": "Kaggle Learn: Geospatial Analysis"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Convertir un par de coordenadas geográficas a UTM de tu zona con pyproj y compararlas con tu cálculo de Topografía 101"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Cargar una capa de puntos con GeoPandas, convertirla a UTM y calcular la distancia entre dos puntos"
+        }
+      ],
+      "mastery_signals": [
+        "Antes de medir, verificas el CRS de cada capa",
+        "Distingues *set_crs* de *to_crs*"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Tienes puntos con coordenadas en grados y quieres calcular la distancia en metros. ¿Qué haces?",
+          "options": [
+            "Restas las coordenadas",
+            "Conviertes a un CRS proyectado y mides allí",
+            "Multiplicas por 111"
+          ],
+          "answer": 1,
+          "explanation": "Las distancias se miden en un CRS proyectado en metros."
+        },
+        {
+          "key": "n1-q1",
+          "question": "Una capa llegó sin CRS y sabes que está en UTM huso 19S. ¿Qué usas?",
+          "options": [
+            "to_crs",
+            "set_crs con el código correspondiente",
+            "Nada"
+          ],
+          "answer": 1,
+          "explanation": "set_crs declara el CRS que ya tenían los datos; to_crs los transforma a otro."
+        },
+        {
+          "key": "n1-q2",
+          "question": "¿Por qué se dice que dos capas «no calzan»?",
+          "options": [
+            "Porque son de colores distintos",
+            "Porque probablemente tienen distinto CRS o datum",
+            "Porque son de distinto tamaño"
+          ],
+          "answer": 1,
+          "explanation": "La diferencia de CRS o datum desplaza las capas entre sí."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "QGIS",
+      "title": "Paso 2 · QGIS: el SIG abierto",
+      "estimated_hours": "6 a 10 h",
+      "audience": "Quien trabaja con capas y mapas",
+      "goal": "Usar QGIS para cargar, simbolizar, editar y analizar capas, y como puente visual con el trabajo en Python.",
+      "guide": {
+        "title": "Guía rápida · QGIS",
+        "software": "qgis",
+        "do": [
+          "Fija el CRS del proyecto y comprueba el de cada capa.",
+          "Aprende selección, tabla de atributos, geoprocesos y composición de mapas.",
+          "Guarda el proyecto con rutas relativas."
+        ],
+        "commands": [
+          "*Project CRS*",
+          "*Attribute table*",
+          "*Processing Toolbox*",
+          "*Print Layout*"
+        ],
+        "mistakes": [
+          "Editar la capa original sin copia.",
+          "Rutas absolutas que rompen el proyecto en otro equipo.",
+          "No guardar el CRS del proyecto."
+        ],
+        "essential": "QGIS Training Manual"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "QGIS Training Manual",
+          "url": "https://docs.qgis.org/latest/en/docs/training_manual/index.html",
+          "description": "Manual de capacitación oficial de QGIS: de la interfaz al análisis espacial. Gratuito.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "QGIS User Guide",
+          "url": "https://docs.qgis.org/latest/en/docs/user_manual/index.html",
+          "description": "Guía de usuario oficial de QGIS. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Seguir los primeros módulos del *QGIS Training Manual*",
+          "completed_by_resource": "QGIS Training Manual"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Cargar una capa de puntos de ejemplo y un ráster, ajustar su simbología y exportar un mapa"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Hacer un *Buffer* de 50 m alrededor de unos puntos y contar cuántos puntos de otra capa quedan dentro"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Guardar el proyecto con rutas relativas y comprobar que abre en otro computador"
+        }
+      ],
+      "mastery_signals": [
+        "Tus proyectos QGIS abren en otro equipo sin romper rutas",
+        "Ajustas el CRS del proyecto y lo verificas"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Compartes un proyecto QGIS y a otra persona no le aparecen las capas. ¿Qué pasó probablemente?",
+          "options": [
+            "Rutas absolutas a archivos de tu computador",
+            "Un virus",
+            "El mapa es muy grande"
+          ],
+          "answer": 0,
+          "explanation": "Las rutas relativas y datos compartidos evitan este problema."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Qué hace un *Buffer*?",
+          "options": [
+            "Crea una zona alrededor de una geometría a cierta distancia",
+            "Une capas",
+            "Cambia el CRS"
+          ],
+          "answer": 0,
+          "explanation": "Genera polígonos a una distancia dada de los elementos."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Teledetección",
+      "title": "Paso 3 · Teledetección y Google Earth Engine",
+      "estimated_hours": "6 a 10 h",
+      "audience": "Quien ya maneja ráster y Python básico",
+      "goal": "Trabajar con imágenes satelitales y series de observación de la Tierra: bandas, índices (NDVI), colecciones y clasificación. Con Earth Engine o con datos abiertos en Python.",
+      "guide": {
+        "title": "Guía rápida · Teledetección",
+        "software": "gee",
+        "do": [
+          "Entiende bandas, resolución y fecha de cada imagen.",
+          "Calcula índices como NDVI y compáralos entre fechas.",
+          "Earth Engine procesa en la nube; revisa sus términos de uso antes de usarlo para clientes."
+        ],
+        "commands": [
+          "*Banda*",
+          "*NDVI*",
+          "*ImageCollection*",
+          "*Reducer*"
+        ],
+        "mistakes": [
+          "Comparar imágenes de fechas y sensores distintos sin corregir.",
+          "Ignorar nubes y sombras.",
+          "Usar Earth Engine con fines comerciales sin revisar los términos."
+        ],
+        "essential": "Google Earth Engine: Get started"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Google Earth Engine: Get started",
+          "url": "https://developers.google.com/earth-engine/guides/getstarted",
+          "description": "Primeros pasos con Earth Engine: cuenta, editor de código y primer script. Gratuito para uso no comercial y de investigación; revisa los términos antes de usarlo en trabajo de clientes.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Google Earth Engine: Tutorials",
+          "url": "https://developers.google.com/earth-engine/tutorials",
+          "description": "Tutoriales oficiales de Earth Engine: imágenes, colecciones, índices (NDVI) y clasificación. Gratuito para uso no comercial.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Microsoft Planetary Computer: Docs",
+          "url": "https://planetarycomputer.microsoft.com/docs/overview/about/",
+          "description": "Catálogo de datos de observación de la Tierra y documentación para analizarlos con Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Rasterio documentation",
+          "url": "https://rasterio.readthedocs.io/en/stable/",
+          "description": "Leer, escribir y procesar rásteres georreferenciados con Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "The Carpentries: Geospatial Raster and Vector Data with Python",
+          "url": "https://carpentries-incubator.github.io/geospatial-python/",
+          "description": "Lección abierta de The Carpentries: ráster y vectores con Python. Gratuito.",
+          "tags": [
+            "Course",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Crear la cuenta y ejecutar tu primer script con *Google Earth Engine: Get started*",
+          "completed_by_resource": "Google Earth Engine: Get started"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Completar un tutorial de *Google Earth Engine: Tutorials* sobre imágenes y colecciones",
+          "completed_by_resource": "Google Earth Engine: Tutorials"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Calcular el NDVI de un sitio de ejemplo en dos fechas y describir qué cambió"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Leer un GeoTIFF con rasterio y obtener estadísticas básicas por banda"
+        }
+      ],
+      "mastery_signals": [
+        "Distingues bandas, resolución y fecha de una imagen",
+        "Revisas los términos de uso antes de aplicar la herramienta a un trabajo de clientes"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Quieres comparar dos imágenes satelitales de fechas distintas. ¿Qué cuidas?",
+          "options": [
+            "Nada",
+            "Sensor, resolución, nubes y correcciones comparables",
+            "Solo el color"
+          ],
+          "answer": 1,
+          "explanation": "La comparación exige condiciones comparables."
+        },
+        {
+          "key": "n3-q1",
+          "question": "Quieres usar Earth Engine en un proyecto comercial de un cliente. ¿Qué haces?",
+          "options": [
+            "Lo usas, es gratis",
+            "Revisas los términos y la modalidad de uso (comercial o no comercial)",
+            "Lo usas con la cuenta de otra persona"
+          ],
+          "answer": 1,
+          "explanation": "El uso gratuito está acotado a ciertos fines; se verifica antes."
+        },
+        {
+          "key": "n3-q2",
+          "question": "¿Qué mide el NDVI?",
+          "options": [
+            "La vegetación a partir de bandas roja e infrarroja cercana",
+            "La altura del terreno",
+            "La temperatura"
+          ],
+          "answer": 0,
+          "explanation": "Es un índice de vegetación derivado de bandas de luz roja e infrarroja cercana."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Nubes de puntos",
+      "title": "Paso 4 · Nubes de puntos y ML",
+      "estimated_hours": "8 a 12 h",
+      "audience": "Quien trabaja con LiDAR o fotogrametría",
+      "goal": "Leer, filtrar y clasificar nubes de puntos (suelo, vegetación, edificios) con PDAL, laspy y modelos de ML. Aquí se juntan levantamiento e IA.",
+      "guide": {
+        "title": "Guía rápida · Nubes de puntos",
+        "software": "python",
+        "do": [
+          "Empieza leyendo el encabezado (CRS, número de puntos, clases) con laspy o PDAL.",
+          "Filtra y submuestrea antes de modelar: las nubes son enormes.",
+          "Para clasificar, calcula características por punto (altura, rugosidad, intensidad) y entrena un modelo simple.",
+          "Valida con puntos de control medidos en campo."
+        ],
+        "commands": [
+          "*LAS / LAZ*",
+          "*PDAL pipeline*",
+          "*Clasificación*",
+          "*Submuestreo*"
+        ],
+        "mistakes": [
+          "Cargar una nube de cientos de millones de puntos completa en memoria.",
+          "Evaluar un clasificador con puntos vecinos a los del entrenamiento (fuga espacial).",
+          "Ignorar el CRS del archivo."
+        ],
+        "essential": "PDAL: Point Data Abstraction Library"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "PDAL: Point Data Abstraction Library",
+          "url": "https://pdal.io/en/stable/",
+          "description": "Procesar nubes de puntos (LAS/LAZ): filtros, clasificación y *pipelines*. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "laspy documentation",
+          "url": "https://laspy.readthedocs.io/en/latest/",
+          "description": "Leer y escribir archivos LAS/LAZ desde Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Open3D documentation",
+          "url": "https://www.open3d.org/docs/release/",
+          "description": "Biblioteca abierta para nubes de puntos y geometría 3D en Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "scikit-learn: Getting Started",
+          "url": "https://scikit-learn.org/stable/getting_started.html",
+          "description": "Primeros pasos oficiales con scikit-learn: ajustar, predecir, pipelines y validación. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Roadmap: Machine Learning",
+          "url": "https://roadmap.sh/machine-learning",
+          "description": "Mapa de etapas de roadmap.sh: aprendizaje supervisado y no supervisado, evaluación y despliegue. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Leer con *laspy* el encabezado de un LAS de ejemplo y anotar CRS, puntos y clases",
+          "completed_by_resource": "laspy documentation"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Armar un *pipeline* de PDAL que filtre y submuestree un archivo de ejemplo",
+          "completed_by_resource": "PDAL: Point Data Abstraction Library"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Entrenar un clasificador simple (suelo y no suelo) con altura sobre el terreno y evaluar con una zona de prueba separada"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Comparar el resultado con puntos de control medidos y anotar el error"
+        }
+      ],
+      "mastery_signals": [
+        "Trabajas con submuestras y verificas el CRS antes de procesar",
+        "Evalúas el clasificador en una zona que no usaste para entrenar"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "Tu clasificador de suelo da 98 % de exactitud, pero entrenaste y evaluaste en puntos vecinos de la misma zona. ¿Qué pasa?",
+          "options": [
+            "Es excelente",
+            "Hay fuga espacial: la evaluación es optimista; prueba en otra zona",
+            "Falta más memoria"
+          ],
+          "answer": 1,
+          "explanation": "Puntos cercanos se parecen; evaluar con vecinos infla la métrica."
+        },
+        {
+          "key": "n4-q1",
+          "question": "Tienes un LAZ de 400 millones de puntos. ¿Cómo empiezas?",
+          "options": [
+            "Lo cargas completo en pandas",
+            "Lees el encabezado y trabajas con una submuestra o con un pipeline de PDAL",
+            "Lo conviertes a Excel"
+          ],
+          "answer": 1,
+          "explanation": "Se procesa por partes o con herramientas pensadas para volúmenes grandes."
+        },
+        {
+          "key": "n4-q2",
+          "question": "¿Qué valida mejor un clasificador de suelo?",
+          "options": [
+            "Que el mapa se vea bonito",
+            "Puntos de control medidos en campo",
+            "El tiempo de ejecución"
+          ],
+          "answer": 1,
+          "explanation": "Los puntos de campo son una referencia independiente."
+        }
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Análisis espacial",
+      "title": "Paso 5 · Análisis espacial: buffer, join, interpolación y puntos calientes",
+      "estimated_hours": "6 a 10 h",
+      "audience": "Quien ya usa GeoPandas",
+      "goal": "Aplicar operaciones espaciales (buffer, unión espacial), interpolación (kriging) y detección de puntos calientes (autocorrelación espacial).",
+      "guide": {
+        "title": "Guía rápida · Análisis espacial",
+        "software": "python",
+        "do": [
+          "Buffer y *sjoin* responden «qué está cerca de» y «qué cae dentro de».",
+          "Interpolar crea una superficie a partir de puntos: elige el método y valida con puntos retenidos.",
+          "Un punto caliente es una concentración estadísticamente significativa, no solo un valor alto."
+        ],
+        "commands": [
+          "*buffer*",
+          "*sjoin*",
+          "*Kriging*",
+          "*Moran's I*",
+          "*Getis-Ord*"
+        ],
+        "mistakes": [
+          "Interpolar con pocos puntos o mal distribuidos y confiar en el mapa.",
+          "Confundir un valor alto aislado con un punto caliente.",
+          "Hacer buffers en grados."
+        ],
+        "essential": "PySAL esda: Exploratory Spatial Data Analysis"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "PySAL esda: Exploratory Spatial Data Analysis",
+          "url": "https://pysal.org/esda/",
+          "description": "Autocorrelación espacial y puntos calientes (Moran, Getis-Ord) con PySAL. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "PyKrige documentation",
+          "url": "https://geostat-framework.readthedocs.io/projects/pykrige/en/stable/",
+          "description": "Interpolación por kriging en Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Geographic Data Science with Python",
+          "url": "https://geographicdata.science/book/",
+          "description": "Libro abierto de ciencia de datos geográficos con Python (PySAL, GeoPandas). Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Kaggle Learn: Geospatial Analysis",
+          "url": "https://www.kaggle.com/learn/geospatial-analysis",
+          "description": "Mapas interactivos, coordenadas, geocodificación y análisis de proximidad con GeoPandas y Folium. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Completar los módulos de proximidad y uniones espaciales de *Kaggle Learn: Geospatial Analysis*",
+          "completed_by_resource": "Kaggle Learn: Geospatial Analysis"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Interpolar cotas de un conjunto de puntos con *PyKrige* y validar con puntos retenidos",
+          "completed_by_resource": "PyKrige documentation"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Calcular el *Moran's I* global de una variable de puntos con *PySAL esda* y explicar si hay agrupamiento",
+          "completed_by_resource": "PySAL esda: Exploratory Spatial Data Analysis"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Hacer un *sjoin* entre puntos y polígonos y contar puntos por polígono"
+        }
+      ],
+      "mastery_signals": [
+        "Validas una interpolación con puntos que no usaste para generarla",
+        "Distingues un valor alto de un punto caliente significativo"
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "Interpolas una superficie con solo 12 puntos concentrados en una esquina. ¿Qué concluyes?",
+          "options": [
+            "Que el mapa es confiable",
+            "Que fuera de la zona de datos la superficie es poco confiable",
+            "Que hay que usar más colores"
+          ],
+          "answer": 1,
+          "explanation": "La interpolación no inventa información donde no hay datos."
+        },
+        {
+          "key": "n5-q1",
+          "question": "¿Qué indica un *Moran's I* positivo y significativo?",
+          "options": [
+            "Agrupamiento espacial de valores similares",
+            "Valores aleatorios",
+            "Errores de medición"
+          ],
+          "answer": 0,
+          "explanation": "Indica autocorrelación espacial positiva: valores parecidos están cerca."
+        },
+        {
+          "key": "n5-q2",
+          "question": "Quieres un buffer de 100 m, pero tus datos están en grados. ¿Qué haces?",
+          "options": [
+            "Pones 100",
+            "Conviertes a un CRS proyectado en metros y luego haces el buffer",
+            "Pones 0,001"
+          ],
+          "answer": 1,
+          "explanation": "Las distancias se aplican en un CRS proyectado."
+        }
+      ]
+    },
+    {
+      "code": "n6",
+      "order": 6,
+      "short": "PostGIS y publicación",
+      "title": "Paso 6 · PostGIS, API y mapas web",
+      "estimated_hours": "8 a 12 h",
+      "audience": "Quien quiere compartir resultados con el equipo",
+      "goal": "Guardar datos espaciales en PostGIS, publicarlos con una API y mostrarlos en un mapa web con tiles o COG. Cierre de la ruta.",
+      "guide": {
+        "title": "Guía rápida · Publicar",
+        "software": "gis",
+        "do": [
+          "PostGIS añade tipos y funciones espaciales a PostgreSQL.",
+          "Una API pequeña con FastAPI entrega GeoJSON o tiles.",
+          "Para ráster grandes usa COG; para vectores, tiles vectoriales.",
+          "Controla quién ve qué: los datos de clientes no se publican abiertos."
+        ],
+        "commands": [
+          "*PostGIS*",
+          "*ST_Intersects*",
+          "*FastAPI*",
+          "*GeoJSON*",
+          "*COG*",
+          "*Tiles*"
+        ],
+        "mistakes": [
+          "Publicar datos de clientes sin autenticación.",
+          "Servir ráster enormes sin COG ni tiles.",
+          "Consultas espaciales sin índice."
+        ],
+        "essential": "PostGIS: Introduction to PostGIS (workshop)"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "PostGIS: Introduction to PostGIS (workshop)",
+          "url": "https://postgis.net/workshops/postgis-intro/",
+          "description": "Taller oficial: bases de datos espaciales con PostGIS, consultas espaciales y vistas. Gratuito.",
+          "tags": [
+            "Course",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "PostGIS documentation",
+          "url": "https://postgis.net/documentation/",
+          "description": "Documentación oficial de PostGIS. Gratuita.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: PostgreSQL DBA",
+          "url": "https://roadmap.sh/postgresql-dba",
+          "description": "Mapa de etapas de roadmap.sh: PostgreSQL desde lo básico a la administración (útil para PostGIS). Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "FastAPI: Tutorial - User Guide",
+          "url": "https://fastapi.tiangolo.com/tutorial/",
+          "description": "Tutorial oficial para publicar una API en Python (por ejemplo, de datos espaciales). Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Leaflet: Quick Start Guide",
+          "url": "https://leafletjs.com/examples/quick-start/",
+          "description": "Mapa web interactivo en pocas líneas con Leaflet. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 5,
+          "title": "MapLibre GL JS: Documentation",
+          "url": "https://maplibre.org/maplibre-gl-js/docs/",
+          "description": "Mapas vectoriales en el navegador con MapLibre. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 6,
+          "title": "Cloud Optimized GeoTIFF (cogeo.org)",
+          "url": "https://cogeo.org/",
+          "description": "Qué es un COG y cómo servir rásteres grandes por la web. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 7,
+          "title": "Folium documentation",
+          "url": "https://python-visualization.github.io/folium/latest/",
+          "description": "Mapas interactivos de Leaflet desde Python. Gratuito.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 8,
+          "title": "Roadmap: Data Engineer",
+          "url": "https://roadmap.sh/data-engineer",
+          "description": "Mapa de etapas de roadmap.sh: pipelines, almacenes de datos y orquestación. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n6-t0",
+          "text": "Seguir el taller *Introduction to PostGIS* hasta consultas espaciales",
+          "completed_by_resource": "PostGIS: Introduction to PostGIS (workshop)"
+        },
+        {
+          "key": "n6-t1",
+          "text": "Cargar una capa de puntos en PostGIS, crear un índice espacial y hacer una consulta de puntos dentro de un polígono"
+        },
+        {
+          "key": "n6-t2",
+          "text": "Crear con *FastAPI* un endpoint que devuelva puntos en GeoJSON",
+          "completed_by_resource": "FastAPI: Tutorial - User Guide"
+        },
+        {
+          "key": "n6-t3",
+          "text": "Mostrar ese GeoJSON en un mapa con Leaflet o MapLibre"
+        },
+        {
+          "key": "n6-t4",
+          "text": "Definir quién puede ver el mapa y qué datos no se publican"
+        }
+      ],
+      "mastery_signals": [
+        "Tu consulta espacial usa un índice y devuelve lo esperado",
+        "Defines acceso antes de publicar un mapa"
+      ],
+      "quiz": [
+        {
+          "key": "n6-q0",
+          "question": "Tu consulta espacial en PostGIS es lenta con millones de puntos. ¿Qué revisas?",
+          "options": [
+            "Un índice espacial (GiST)",
+            "El color del mapa",
+            "El navegador"
+          ],
+          "answer": 0,
+          "explanation": "Un índice espacial acelera mucho las consultas por ubicación."
+        },
+        {
+          "key": "n6-q1",
+          "question": "Publicas un mapa con datos de un cliente. ¿Qué haces antes?",
+          "options": [
+            "Lo publicas abierto",
+            "Definir autenticación y permisos y confirmar con el cliente",
+            "Lo publicas con un enlace largo"
+          ],
+          "answer": 1,
+          "explanation": "Un enlace largo no es seguridad; el acceso se controla."
+        },
+        {
+          "key": "n6-q2",
+          "question": "Quieres servir un ráster de 5 GB por la web. ¿Qué formato ayuda?",
+          "options": [
+            "Un GeoTIFF normal descargado completo",
+            "Un Cloud Optimized GeoTIFF que se lee por partes",
+            "Una imagen JPG"
+          ],
+          "answer": 1,
+          "explanation": "COG permite leer solo las partes necesarias."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "CRS",
+      "location": "Coordenadas",
+      "meaning": "Sistema de referencia de coordenadas: define cómo los números se ubican en la Tierra."
+    },
+    {
+      "term": "GeoPackage",
+      "location": "Formatos",
+      "meaning": "Formato abierto que guarda capas espaciales en un solo archivo."
+    },
+    {
+      "term": "COG",
+      "location": "Ráster",
+      "meaning": "GeoTIFF optimizado para leerse por partes desde la nube."
+    },
+    {
+      "term": "Kriging",
+      "location": "Interpolación",
+      "meaning": "Interpolación geoestadística que usa la correlación espacial de los datos."
+    },
+    {
+      "term": "PostGIS",
+      "location": "Bases de datos",
+      "meaning": "Extensión espacial de PostgreSQL."
+    }
+  ],
+  "description": "De los datos vectoriales y ráster a las nubes de puntos con ML, el análisis espacial y la publicación con PostGIS, APIs y mapas web, con recursos abiertos y gratuitos.",
+  "intro": {
+    "title": "Donde el levantamiento se encuentra con la IA",
+    "text": "Esta rama junta lo que sabes de topografía (coordenadas, nubes de puntos, terreno) con Python, ML y SIG. Cada paso trabaja con datos de ejemplo y verifica contra puntos de control."
+  },
+  "flow": [
+    {
+      "title": "Datos",
+      "text": "Vector y ráster"
+    },
+    {
+      "title": "CRS",
+      "text": "Coordenadas y GeoPandas"
+    },
+    {
+      "title": "QGIS",
+      "text": "SIG abierto"
+    },
+    {
+      "title": "Imágenes",
+      "text": "Teledetección y Earth Engine"
+    },
+    {
+      "title": "LiDAR",
+      "text": "Nubes de puntos y ML"
+    },
+    {
+      "title": "Análisis",
+      "text": "Espacial y estadístico"
+    },
+    {
+      "title": "Publicar",
+      "text": "PostGIS, API y mapas"
+    }
+  ]
+}

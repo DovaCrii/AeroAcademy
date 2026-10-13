@@ -1,0 +1,104 @@
+{% extends "core/base.html" %}
+{% load static l10n %}
+
+{% block title %}Mapa de rutas{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'paths/metro.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Mapa de rutas</h1>
+  <p>Cada color es una disciplina y cada estación es una ruta. Donde se cruzan varias líneas hay un transbordo: un mismo curso que sirve a más de una especialidad.</p>
+  <p class="mm-nav"><a class="btn ghost" href="{% url 'paths:index' %}">← Ver rutas por empresa</a></p>
+</div>
+
+{% if metro.stations %}
+<section class="mm-card" aria-labelledby="mm-h">
+  <header class="mm-head">
+    <h2 id="mm-h">Líneas de aprendizaje</h2>
+    <p class="mm-stats"><b>{{ metro.counts.lines }}</b> línea{{ metro.counts.lines|pluralize }} · <b>{{ metro.counts.stations }}</b> ruta{{ metro.counts.stations|pluralize }} · <b>{{ metro.counts.interchanges }}</b> transbordo{{ metro.counts.interchanges|pluralize }} · <b>{{ metro.counts.done }}</b> completa{{ metro.counts.done|pluralize }}</p>
+  </header>
+
+  <ul class="mm-legend" aria-label="Leyenda">
+    {% for ln in metro.lines %}<li><i class="mm-sw" style="--c:{{ ln.color }}"></i>{{ ln.name }}</li>{% endfor %}
+  </ul>
+  <ul class="mm-legend mm-legend-st" aria-label="Símbolos">
+    <li><svg width="22" height="22" viewBox="-11 -11 22 22" aria-hidden="true"><circle class="mm-st" r="7" style="--c:var(--ink-2)"/></svg>Por empezar</li>
+    <li><svg width="22" height="22" viewBox="-11 -11 22 22" aria-hidden="true"><circle class="mm-st" r="7" style="--c:var(--ink-2)"/><path class="mm-half" d="M0 -3.6 a3.6 3.6 0 0 0 0 7.2 z" style="--c:var(--ink-2)"/></svg>En curso</li>
+    <li><svg width="22" height="22" viewBox="-11 -11 22 22" aria-hidden="true"><circle class="mm-st mm-done" r="7" style="--c:var(--ink-2)"/></svg>Completa</li>
+    <li><svg width="20" height="34" viewBox="-10 -17 20 34" aria-hidden="true"><rect class="mm-cap" x="-7" y="-14" width="14" height="28" rx="7"/></svg>Transbordo (cápsula: sirve a varias líneas)</li>
+    <li><svg width="22" height="26" viewBox="-11 -16 22 26" aria-hidden="true"><path class="mm-pin" d="M0 6 L-6 -6 a7 7 0 1 1 12 0 z"/></svg>Estás aquí</li>
+  </ul>
+
+  <div class="mm-scroll" tabindex="0" role="region" aria-label="Mapa de metro de las rutas (desplázalo para verlo completo)">
+    {% localize off %}
+    <svg class="mm-svg" viewBox="0 0 {{ metro.width }} {{ metro.height }}" style="min-width:{{ metro.width }}px" role="group" aria-label="Mapa de metro: {{ metro.counts.lines }} líneas y {{ metro.counts.stations }} rutas">
+      <title>Mapa de metro de las rutas</title>
+      {% for ln in metro.lines %}
+      <g class="mm-line" style="--c:{{ ln.color }}" aria-hidden="true">
+        <path class="mm-track" d="{{ ln.d }}"/>
+        <g class="mm-pill"><rect x="{{ ln.pill_left.x }}" y="{{ ln.pill_left.y }}" width="{{ ln.pill_left.w }}" height="{{ metro.PILL_H }}" rx="13"/><text x="{{ ln.pill_left.tx }}" y="{{ ln.y }}">{{ ln.name }}</text></g>
+        <g class="mm-pill"><rect x="{{ ln.pill_right.x }}" y="{{ ln.pill_right.y }}" width="{{ ln.pill_right.w }}" height="{{ metro.PILL_H }}" rx="13"/><text x="{{ ln.pill_right.tx }}" y="{{ ln.y }}">{{ ln.name }}</text></g>
+      </g>
+      {% endfor %}
+      {% for s in metro.stations %}
+      <a class="mm-station {{ s.state }}{% if s.current %} here{% endif %}{% if s.interchange %} ix{% endif %}" href="{{ s.url }}" data-route="{{ s.slug }}" style="--c:{{ s.primary.color }}" aria-label="{{ s.title }}: {% if s.state == 'done' %}completa{% elif s.state == 'progress' %}en curso, {{ s.pct }} %{% else %}por empezar{% endif %}{% if s.interchange %}. Transbordo: {% for ln in s.lines %}{{ ln.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}{% if s.current %}. Estás aquí{% endif %}">
+        <title>{{ s.title }}{% if s.interchange %} · {% for ln in s.lines %}{{ ln.name }}{% if not forloop.last %} + {% endif %}{% endfor %}{% endif %}</title>
+        <g transform="translate({{ s.x }} 0)">
+          <rect class="mm-hit" x="-48" y="{{ s.hit_y }}" width="96" height="{{ s.hit_h }}"/>
+          {% for k in s.links %}<line class="mm-link" x1="0" y1="{{ k.a }}" x2="0" y2="{{ k.b }}"/>{% endfor %}
+          {% if s.interchange %}
+          {% for c in s.capsules %}
+          {% if s.state == "progress" %}<rect class="mm-glow" x="-17" y="{{ c.gy }}" width="34" height="{{ c.gh }}" rx="17"/>{% endif %}
+          <rect class="mm-cap" x="-13" y="{{ c.y }}" width="26" height="{{ c.h }}" rx="13"/>
+          {% endfor %}
+          {% for ln in s.lines %}
+          <g transform="translate(0 {{ ln.y }})" style="--c:{{ ln.color }}"><circle class="mm-st mm-xd{% if s.state == 'done' %} mm-done{% endif %}" r="6.5"/>{% if s.state == "progress" %}<path class="mm-half" d="M0 -3 a3 3 0 0 0 0 6 z"/>{% endif %}</g>
+          {% endfor %}
+          {% else %}
+          <g transform="translate(0 {{ s.top }})">
+            {% if s.state == "progress" %}<circle class="mm-glow" r="13"/>{% endif %}
+            <circle class="mm-st{% if s.state == 'done' %} mm-done{% endif %}" r="9"/>
+            {% if s.state == "progress" %}<path class="mm-half" d="M0 -4.5 a4.5 4.5 0 0 0 0 9 z"/>{% endif %}
+          </g>
+          {% endif %}
+          <text class="mm-lbl" text-anchor="middle" y="{{ s.bottom|add:s.label_dy }}">{% for t in s.label %}<tspan x="0" dy="{% if forloop.first %}0{% else %}12{% endif %}">{{ t }}</tspan>{% endfor %}</text>
+          {% if s.current %}
+          <g class="mm-here" aria-hidden="true" transform="translate(0 {{ s.top }})"><path class="mm-pin" d="M0 -15 L-7 -29 a8 8 0 1 1 14 0 z"/><circle class="mm-pin-dot" cx="0" cy="-34" r="2.6"/><text class="mm-here-t" text-anchor="middle" y="-52">Estás aquí</text></g>
+          {% endif %}
+        </g>
+      </a>
+      {% endfor %}
+    </svg>
+    {% endlocalize %}
+  </div>
+
+  <div class="mm-sr">
+    <h3>Mapa en texto</h3>
+    <ul>
+      {% for ln in metro.lines %}
+      <li>Línea {{ ln.name }}:
+        <ol>
+          {% for s in ln.stations %}<li><a href="{{ s.url }}">{{ s.title }}</a> ({% if s.state == "done" %}completa{% elif s.state == "progress" %}en curso, {{ s.pct }} %{% else %}por empezar{% endif %}){% if s.interchange %}, transbordo con {% for o in s.lines %}{% if o.slug != ln.slug %}{{ o.name }}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}{% endif %}{% if s.current %}, estás aquí{% endif %}</li>{% endfor %}
+        </ol>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% if metro.interchanges %}
+<section class="mm-card mm-ix-list" aria-labelledby="mm-ix-h">
+  <h2 id="mm-ix-h">Transbordos</h2>
+  <p>Rutas que sirven a más de una disciplina: aprenderlas una vez te abre varias líneas.</p>
+  <ul>
+    {% for s in metro.interchanges %}<li><a href="{{ s.url }}">{{ s.title }}</a><span>{% for ln in s.lines %}<i class="mm-sw" style="--c:{{ ln.color }}" title="{{ ln.name }}"></i>{{ ln.name }}{% if not forloop.last %} · {% endif %}{% endfor %}</span></li>{% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% else %}
+<p class="empty">Todavía no hay rutas cargadas. Corre <code>manage.py seed_catalog</code>.</p>
+{% endif %}
+{% endblock %}
+
+
+

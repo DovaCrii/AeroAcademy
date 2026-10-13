@@ -1,0 +1,27 @@
+{% load core_extras %}
+<section class="sl-card sl-quiz" aria-labelledby="sl-h">
+  <h4 class="sl-h" id="sl-h">Evalúa lo aprendido <span class="cnt">{{ current.quiz|length }}</span></h4>
+  <p class="sl-score" role="status">
+    <b>{{ current.quiz_right }} de {{ current.quiz|length }} correctas</b>
+    {% if current.quiz_missing %}<span> · sin responder: {{ current.quiz_missing }}</span>{% endif %}
+  </p>
+  <div class="ar-quiz">
+    {% for q in current.quiz %}
+    <div class="ar-q">
+      <p><span class="qn">{{ forloop.counter }}</span>{{ q.obj.question|terms }}</p>
+      <div class="ar-opts">
+        {% for i, opt in q.options %}
+        <form method="post" action="{% url 'progress:answer_quiz' path.slug q.obj.key %}" data-enhance>
+          {% csrf_token %}
+          <input type="hidden" name="choice" value="{{ i }}">
+          <button type="submit" data-fid="q-{{ q.obj.key }}-{{ i }}"{% if q.answered and i == q.obj.answer_index %} class="right"{% elif q.answered and i == q.selected %} class="wrong"{% endif %}>{{ opt|terms }}</button>
+        </form>
+        {% endfor %}
+      </div>
+      {% if q.answered %}
+      <div class="ar-fb" role="status"><b>{% if q.correct %}Correcto.{% else %}Casi.{% endif %}</b> {{ q.obj.explanation|terms }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>

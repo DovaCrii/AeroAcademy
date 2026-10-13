@@ -116,4 +116,5 @@ DISCIPLINE_VISUALS = {
     "mecanica": {"icon": "i-mec", "img": "mecanica.jpg", "label": "Mecánica"},
     "transversal": {"icon": "i-prog", "img": "", "label": "Transversal"},
     "captura-rpa": {"icon": "i-aero", "img": "", "label": "Captura · RPA"},
+    "ia-datos": {"icon": "i-chip", "img": "", "label": "IA y Datos"},
 }

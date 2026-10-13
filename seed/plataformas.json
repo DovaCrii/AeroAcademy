@@ -13,6 +13,11 @@
     {"slug": "coursera", "name": "Coursera", "kind": "learning", "url": "https://www.coursera.org/"},
     {"slug": "linkedin-learning", "name": "LinkedIn Learning", "kind": "learning", "url": "https://www.linkedin.com/learning/"},
     {"slug": "dgac-chile", "name": "DGAC Chile", "kind": "regulator", "url": "https://www.dgac.gob.cl/"},
+    {"slug": "anthropic-academy", "name": "Claude Academy (Anthropic)", "kind": "learning", "vendor": "anthropic", "url": "https://academy.claude.com/", "notes": "Cursos gratuitos con insignia de finalización. Requiere cuenta gratuita para guardar el progreso. Los cursos antiguos de anthropic.skilljar.com se mudaron aquí."},
+    {"slug": "deeplearning-ai", "name": "DeepLearning.AI", "kind": "learning", "vendor": "deeplearning-ai", "url": "https://www.deeplearning.ai/courses/", "notes": "Cursos cortos gratuitos con cuenta gratuita."},
+    {"slug": "kaggle-learn", "name": "Kaggle Learn", "kind": "learning", "vendor": "kaggle", "url": "https://www.kaggle.com/learn", "notes": "Micro-cursos gratuitos con notebooks. Requiere cuenta gratuita de Kaggle para los ejercicios y el certificado."},
+    {"slug": "huggingface-learn", "name": "Hugging Face Learn", "kind": "learning", "vendor": "huggingface", "url": "https://huggingface.co/learn", "notes": "Cursos abiertos y gratuitos."},
+    {"slug": "recursos-abiertos", "name": "Documentación y cursos abiertos", "kind": "learning", "url": "", "notes": "Documentación oficial y cursos libres (Git, Python, QGIS, GeoPandas, Microsoft Learn, Google, Carpentries…). Todo gratuito; algunos piden cuenta gratuita."},
     {"slug": "interna", "name": "Capacitación interna", "kind": "vendor", "url": ""}
   ]
 }

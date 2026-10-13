@@ -1,0 +1,667 @@
+{
+  "_nota": "Rama OPCIONAL de IA y Datos, práctica para reportes de ingeniería (avance de levantamiento, volúmenes). Recomendado: Python y datos 101. Combina micro-cursos de Kaggle, documentación oficial y rutas gratuitas de Microsoft Learn para Power BI (el examen PL-300 tiene costo; el material de estudio es gratuito). Plataforma Microsoft Learn por el eje Power BI. URLs verificadas el 2026-10-13: las rutas Power BI redirigen a data-analytics-microsoft y power-bi-effective (se enlazan las finales). Las keys son estables: agregar siempre al final.",
+  "slug": "datos-reportes",
+  "title": "Datos e informes · Python, SQL y Power BI",
+  "program": "IA y Datos · Rama opcional · Informes",
+  "platform": "microsoft-learn",
+  "kind": "structured",
+  "vendor": "microsoft",
+  "products": [
+    "power-bi",
+    "python"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "pandas",
+      "title": "Paso 0 · Datos para reportes con pandas",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien ya hizo Python y datos 101 (o sabe pandas básico)",
+      "goal": "Preparar con pandas las tablas de un reporte de ingeniería: avance de levantamiento, conteos y volúmenes.",
+      "guide": {
+        "title": "Guía rápida · Tablas de reporte",
+        "software": "python",
+        "do": [
+          "Define qué pregunta responde el reporte antes de tocar los datos.",
+          "Resume con *groupby* y *pivot_table*; exporta a CSV o Excel.",
+          "Verifica totales contra un cálculo independiente."
+        ],
+        "commands": [
+          "*groupby*",
+          "*pivot_table*",
+          "*to_csv*",
+          "*merge*"
+        ],
+        "mistakes": [
+          "Entregar tablas sin revisar los totales.",
+          "Mezclar unidades.",
+          "Reportes que nadie puede reproducir."
+        ],
+        "essential": "Kaggle Learn: Pandas"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Pandas",
+          "url": "https://www.kaggle.com/learn/pandas",
+          "description": "Micro-curso de pandas: DataFrames, selección, agrupación y fusión. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Roadmap: Python for Data Analysis",
+          "url": "https://roadmap.sh/python-data-analysis",
+          "description": "Mapa de etapas de roadmap.sh: Python, pandas, visualización y análisis de datos. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: Data Analyst",
+          "url": "https://roadmap.sh/data-analyst",
+          "description": "Mapa de etapas de roadmap.sh: limpieza, análisis, visualización y comunicación de resultados. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Completar *Kaggle Learn: Pandas* si no lo hiciste (o repasarlo)",
+          "completed_by_resource": "Kaggle Learn: Pandas"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Armar la tabla de avance de levantamiento: puntos por día y por cuadrilla, con totales"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Calcular un volumen simple (área por altura) en una tabla y comprobar el total con una calculadora o una planilla"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Guardar el script que genera la tabla para que se pueda repetir cada semana"
+        }
+      ],
+      "mastery_signals": [
+        "Tus totales coinciden con un cálculo independiente",
+        "El script reproduce el reporte con un comando"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Tu tabla de avance suma 1 200 puntos, pero el registro de campo indica 1 250. ¿Qué haces?",
+          "options": [
+            "Entregas la tabla",
+            "Investigas la diferencia (duplicados, filtros, archivos faltantes) antes de entregar",
+            "Cambias el total a mano"
+          ],
+          "answer": 1,
+          "explanation": "Un reporte con totales que no cuadran se revisa antes de entregarse."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Por qué guardar el script del reporte?",
+          "options": [
+            "Para repetirlo y auditarlo",
+            "Para ocupar espacio",
+            "No es necesario"
+          ],
+          "answer": 0,
+          "explanation": "Un reporte reproducible ahorra tiempo y permite verificar cómo se calculó."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "SQL",
+      "title": "Paso 1 · SQL para consultar datos",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien trabaja con bases de datos o planillas grandes",
+      "goal": "Consultar y resumir tablas con SQL: filtrar, agrupar, unir y ordenar.",
+      "guide": {
+        "title": "Guía rápida · SQL",
+        "software": "sql",
+        "do": [
+          "Piensa en tres preguntas: ¿qué columnas?, ¿de qué tabla?, ¿con qué condición?",
+          "Aprende *SELECT*, *WHERE*, *GROUP BY*, *ORDER BY* y *JOIN*.",
+          "Prueba la consulta con pocas filas antes de correrla sobre todo."
+        ],
+        "commands": [
+          "*SELECT*",
+          "*WHERE*",
+          "*GROUP BY*",
+          "*JOIN*",
+          "*LIMIT*"
+        ],
+        "mistakes": [
+          "Un *JOIN* sin condición: multiplica filas.",
+          "Seleccionar todas las columnas de una tabla grande.",
+          "Ejecutar *UPDATE* o *DELETE* sin *WHERE*."
+        ],
+        "essential": "Kaggle Learn: Intro to SQL"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Intro to SQL",
+          "url": "https://www.kaggle.com/learn/intro-to-sql",
+          "description": "Consultas SQL con BigQuery: SELECT, WHERE, GROUP BY y JOIN. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Kaggle Learn: Advanced SQL",
+          "url": "https://www.kaggle.com/learn/advanced-sql",
+          "description": "JOIN y UNION, funciones de ventana y consultas más eficientes. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: SQL",
+          "url": "https://roadmap.sh/sql",
+          "description": "Mapa de etapas de roadmap.sh: consultas, joins, agregaciones y modelado. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "PostgreSQL Tutorial (documentación)",
+          "url": "https://www.postgresql.org/docs/current/tutorial.html",
+          "description": "Tutorial oficial de PostgreSQL. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Completar *Kaggle Learn: Intro to SQL*",
+          "completed_by_resource": "Kaggle Learn: Intro to SQL"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Escribir una consulta que cuente puntos por código en una tabla de ejemplo"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Escribir una consulta con *JOIN* entre puntos y una tabla de códigos y comprobar el número de filas"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Explicar por qué *DELETE* sin *WHERE* es peligroso y cómo te protegerías (copia, transacción)"
+        }
+      ],
+      "mastery_signals": [
+        "Compruebas el número de filas tras un *JOIN*",
+        "Nunca ejecutas *UPDATE* o *DELETE* sin condición"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "¿Qué hace *GROUP BY*?",
+          "options": [
+            "Agrupa filas para calcular resúmenes como COUNT o AVG",
+            "Ordena una tabla",
+            "Une dos tablas"
+          ],
+          "answer": 0,
+          "explanation": "GROUP BY permite agregar por categoría."
+        },
+        {
+          "key": "n1-q1",
+          "question": "Ejecutas «DELETE FROM puntos;» por error. ¿Qué pasa?",
+          "options": [
+            "Nada",
+            "Se borran todas las filas de la tabla",
+            "Se borra una fila"
+          ],
+          "answer": 1,
+          "explanation": "Sin WHERE el borrado afecta toda la tabla; por eso se usan copias y transacciones."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Power BI",
+      "title": "Paso 2 · Power BI: primeros informes",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien presenta resultados a otras personas",
+      "goal": "Cargar datos en Power BI, transformarlos y construir un primer informe con visuales claros.",
+      "guide": {
+        "title": "Guía rápida · Power BI",
+        "software": "powerbi",
+        "do": [
+          "Importa tu CSV y revisa los tipos de columna en *Power Query*.",
+          "Crea visuales simples: tarjeta, columnas, línea, mapa.",
+          "Publica o comparte solo con las personas autorizadas."
+        ],
+        "commands": [
+          "*Power Query*",
+          "*Visual*",
+          "*Medida*",
+          "*Informe*"
+        ],
+        "mistakes": [
+          "Publicar un informe con datos de clientes en un espacio abierto.",
+          "Visuales con demasiada información.",
+          "No revisar los tipos de columna al importar."
+        ],
+        "essential": "Microsoft Learn: Get started with Microsoft data analytics"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Microsoft Learn: Get started with Microsoft data analytics",
+          "url": "https://learn.microsoft.com/en-us/training/paths/data-analytics-microsoft/",
+          "description": "Ruta gratuita de Microsoft Learn: primeros pasos del análisis de datos con Power BI.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Roadmap: Power BI",
+          "url": "https://roadmap.sh/power-bi",
+          "description": "Mapa de etapas de roadmap.sh: modelo de datos, DAX, informes y publicación. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Power BI documentation: Get started",
+          "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/",
+          "description": "Documentación oficial de Power BI: conceptos y primeros pasos. Gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Recorrer *Get started with Microsoft data analytics*",
+          "completed_by_resource": "Microsoft Learn: Get started with Microsoft data analytics"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Importar el CSV de avance de levantamiento a Power BI y revisar los tipos de columna"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Crear un informe de una página con una tarjeta de total de puntos, un gráfico por día y un filtro por cuadrilla"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Pedir a una persona del equipo que interprete el informe sin explicarle nada"
+        }
+      ],
+      "mastery_signals": [
+        "Tu informe se entiende a primera vista",
+        "Sabes con quién se comparte y qué datos contiene"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Vas a compartir un informe con datos de un cliente. ¿Qué haces?",
+          "options": [
+            "Lo publicas abierto",
+            "Verificas permisos y lo compartes solo con quienes corresponde",
+            "Lo envías por mensaje personal"
+          ],
+          "answer": 1,
+          "explanation": "Los informes con datos de clientes solo se comparten con personas autorizadas."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Para qué sirve *Power Query*?",
+          "options": [
+            "Para transformar y limpiar datos antes de analizarlos",
+            "Para dibujar mapas",
+            "Para exportar a PDF"
+          ],
+          "answer": 0,
+          "explanation": "Power Query prepara los datos que alimentan el informe."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Modelo",
+      "title": "Paso 3 · Modelos y diseño de informes",
+      "estimated_hours": "5 a 8 h",
+      "audience": "Quien mantiene informes de uso frecuente",
+      "goal": "Modelar datos con relaciones y medidas, y diseñar informes legibles y con buenas prácticas.",
+      "guide": {
+        "title": "Guía rápida · Modelos e informes",
+        "software": "powerbi",
+        "do": [
+          "Separa tablas de hechos (puntos, avances) y de dimensiones (códigos, fechas, cuadrillas).",
+          "Crea medidas para totales y promedios en vez de columnas duplicadas.",
+          "Diseña con una pregunta por página y colores con significado."
+        ],
+        "commands": [
+          "*Relación*",
+          "*Medida (DAX)*",
+          "*Tabla de hechos*",
+          "*Dimensión*"
+        ],
+        "mistakes": [
+          "Relaciones muchos a muchos sin necesidad.",
+          "Informes con quince visuales por página.",
+          "Fechas sin tabla de calendario."
+        ],
+        "essential": "Microsoft Learn: Model data with Power BI"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Microsoft Learn: Model data with Power BI",
+          "url": "https://learn.microsoft.com/en-us/training/paths/model-data-power-bi/",
+          "description": "Ruta gratuita: modelo de datos, relaciones y medidas con Power BI.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Microsoft Learn: Design effective reports in Power BI",
+          "url": "https://learn.microsoft.com/en-us/training/paths/power-bi-effective/",
+          "description": "Ruta gratuita: requisitos, diseño y buenas prácticas de informes en Power BI.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: BI Analyst",
+          "url": "https://roadmap.sh/bi-analyst",
+          "description": "Mapa de etapas de roadmap.sh: del requisito de negocio al informe. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Completar la ruta *Model data with Power BI* (al menos relaciones y medidas)",
+          "completed_by_resource": "Microsoft Learn: Model data with Power BI"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Recorrer *Design effective reports in Power BI* y aplicar tres recomendaciones a tu informe",
+          "completed_by_resource": "Microsoft Learn: Design effective reports in Power BI"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Crear una medida de total de puntos y otra de promedio por día"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Agregar una tabla de calendario y relacionarla con la fecha de los puntos"
+        }
+      ],
+      "mastery_signals": [
+        "Tu modelo tiene hechos y dimensiones claros",
+        "Cada página responde una pregunta"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Tu informe es lento y confuso con 20 visuales. ¿Qué haces?",
+          "options": [
+            "Agregas más filtros",
+            "Reduces a una pregunta por página y simplificas el modelo",
+            "Cambias de herramienta"
+          ],
+          "answer": 1,
+          "explanation": "La claridad y el rendimiento mejoran al simplificar y enfocar cada página."
+        },
+        {
+          "key": "n3-q1",
+          "question": "¿Qué es una medida?",
+          "options": [
+            "Un cálculo que se evalúa según el contexto del informe",
+            "Una columna fija",
+            "Un filtro"
+          ],
+          "answer": 0,
+          "explanation": "Las medidas (DAX) calculan sobre el contexto de filtros del visual."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Entrega",
+      "title": "Paso 4 · Reporte de ingeniería de punta a punta",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien debe entregar reportes periódicos",
+      "goal": "Juntar todo: de los datos de campo a un reporte de avance de levantamiento y volúmenes que se actualice con poco esfuerzo, verificado y documentado.",
+      "guide": {
+        "title": "Guía rápida · Entrega",
+        "software": "powerbi",
+        "do": [
+          "Define periodicidad, destinatarios y qué decisión apoya el reporte.",
+          "Automatiza la preparación con un script y deja registro de la fecha de los datos.",
+          "Incluye siempre fuente, fecha de corte y responsable."
+        ],
+        "commands": [
+          "*Fecha de corte*",
+          "*Fuente*",
+          "*Actualización*"
+        ],
+        "mistakes": [
+          "Reportes sin fecha de corte.",
+          "Cifras sin fuente.",
+          "Depender de pasos manuales que solo una persona conoce."
+        ],
+        "essential": "Kaggle Learn: Data Visualization"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Data Analyst",
+          "url": "https://roadmap.sh/data-analyst",
+          "description": "Mapa de etapas de roadmap.sh: limpieza, análisis, visualización y comunicación de resultados. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Microsoft Certified: Power BI Data Analyst Associate",
+          "url": "https://learn.microsoft.com/en-us/credentials/certifications/data-analyst-associate/",
+          "description": "Certificación PL-300: el material de estudio es gratuito; el examen tiene costo.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Kaggle Learn: Data Visualization",
+          "url": "https://www.kaggle.com/learn/data-visualization",
+          "description": "Gráficos con seaborn: líneas, barras, mapas de calor, dispersión y distribuciones. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Revisar la certificación *Power BI Data Analyst Associate* y anotar qué temas aún no dominas",
+          "completed_by_resource": "Microsoft Certified: Power BI Data Analyst Associate"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Armar el reporte de avance: puntos por día, acumulado y porcentaje de cumplimiento, con fecha de corte y fuente"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Agregar una sección de volúmenes con la fórmula usada y el chequeo manual"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Documentar en una página cómo actualizar el reporte y quién es responsable"
+        }
+      ],
+      "mastery_signals": [
+        "Tu reporte tiene fuente, fecha de corte y responsable",
+        "Otra persona puede actualizarlo con tu documento"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "Un compañero actualiza el reporte y los números cambian sin explicación. ¿Qué te habría ayudado?",
+          "options": [
+            "Nada",
+            "Fecha de corte, fuente y pasos documentados",
+            "Más colores"
+          ],
+          "answer": 1,
+          "explanation": "Fuente, fecha y documentación hacen el reporte auditable."
+        },
+        {
+          "key": "n4-q1",
+          "question": "El jefe pide volúmenes «ya». ¿Qué aseguras antes de enviarlos?",
+          "options": [
+            "Que el número se vea bien",
+            "Que la fórmula y los datos estén verificados con un chequeo independiente",
+            "Que sea un número redondo"
+          ],
+          "answer": 1,
+          "explanation": "Un volumen se verifica con una comprobación independiente antes de entregarse."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Power Query",
+      "location": "Power BI",
+      "meaning": "Editor para importar y transformar datos."
+    },
+    {
+      "term": "Medida",
+      "location": "Power BI",
+      "meaning": "Cálculo (DAX) que se evalúa según los filtros del informe."
+    },
+    {
+      "term": "JOIN",
+      "location": "SQL",
+      "meaning": "Une filas de dos tablas según una condición."
+    },
+    {
+      "term": "Fecha de corte",
+      "location": "Reportes",
+      "meaning": "Fecha hasta la cual llegan los datos del reporte."
+    }
+  ],
+  "description": "Preparar datos con pandas y SQL y presentarlos en Power BI para reportes de ingeniería, con recursos gratuitos de Microsoft Learn y Kaggle.",
+  "intro": {
+    "title": "Del dato de campo al reporte",
+    "text": "Reportes que se pueden repetir y auditar: tablas con pandas, consultas con SQL e informes en Power BI. Cada paso trabaja un caso de levantamiento."
+  },
+  "flow": [
+    {
+      "title": "pandas",
+      "text": "Tablas de reporte"
+    },
+    {
+      "title": "SQL",
+      "text": "Consultar y resumir"
+    },
+    {
+      "title": "Power BI",
+      "text": "Primer informe"
+    },
+    {
+      "title": "Modelo",
+      "text": "Relaciones y medidas"
+    },
+    {
+      "title": "Entrega",
+      "text": "Reporte completo"
+    }
+  ]
+}

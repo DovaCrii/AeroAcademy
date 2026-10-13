@@ -41,7 +41,7 @@ Todos los bloques de `docs/PLAN.md` están construidos. Esto es lo que queda, or
 - Fuente Press Start 2P (A10: necesita tu permiso para descargarla; hoy se usa una monoespaciada).
 - `htmx.min.js` (A11: hoy `enhance.js` hace el trabajo; ver D23).
 - URLs de Bentley marcadas `verify_url`: confirmarlas con una cuenta Bentley.
-- Rutas nuevas (Trimble, Esri, drones/RPA) y sus mundos `survey`, `mechanical`, `aero` (los sprites de Nala ya existen).
+- Rutas nuevas (Trimble, Esri, drones/RPA) y sus mundos `survey`, `mechanical`, `aero` (los sprites de Nala ya existen). Inventario, brechas y backlog de cursos: `docs/CURSOS.md`.
 - Exportar la hoja profesional a PDF; vista previa de PDF e imágenes de documentos; historial de ediciones de artículos; matriz exportable.
 - Accesorios de avatar por nivel: **hecho** (marco de bronce NV 3, pin de casquito NV 5, pin de teodolito dorado NV 10; salen bloqueados con «se desbloquea en NV x»). Falta: expediciones del equipo (insignia *Gremio Unido*).
 - **Avatares y opciones de visualización (pedido 2026-10-09):** más piezas de avatar, vistas alternativas (compacta / juego / profesional) y preferencias de visualización por persona. **Hecho:** 13 carreras con look propio, 17 ropas, 13 herramientas, fondos por disciplina y vista de hoja elegible (`Person.sheet_view`).

@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+
+{% block title %}Verificación en dos pasos{% endblock %}
+
+{% block content %}
+<section class="sheet">
+  <div class="sheet-in">
+    <h1>Verificación en dos pasos</h1>
+    <p class="lead">Quien es responsable o administra el sitio necesita este segundo paso para entrar por la dirección pública. Se activa aquí, por la red del equipo.</p>
+    {% if error %}<p class="pub-error" role="alert">{{ error }}</p>{% endif %}
+
+    {% if recovery_codes %}
+    <h2>Códigos de recuperación</h2>
+    <p>Guárdalos ahora en un lugar seguro (gestor de contraseñas). Sirven una sola vez cada uno y <b>no se vuelven a mostrar</b>.</p>
+    <ul class="recovery">{% for c in recovery_codes %}<li><code>{{ c }}</code></li>{% endfor %}</ul>
+    {% endif %}
+
+    {% if enrolled %}
+    <p><b>Segundo factor activado.</b> Códigos de recuperación disponibles: {{ recovery_left|default:"los de arriba" }}.</p>
+    <form method="post" action="{% url 'accounts:two_factor' %}">
+      {% csrf_token %}
+      <label for="id_code">Código actual de tu app (para cambiar algo)</label>
+      <input id="id_code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="32" required>
+      <button class="btn" type="submit" name="action" value="regenerate">Generar códigos de recuperación nuevos</button>
+      <button class="btn" type="submit" name="action" value="disable">Desactivar</button>
+    </form>
+    {% else %}
+    <h2>1. Agrega la cuenta en tu app</h2>
+    <p>En Google Authenticator, Microsoft Authenticator, Aegis o 1Password elige «ingresar clave de configuración» (tipo basado en tiempo) y escribe:</p>
+    <p><code>{{ secret }}</code></p>
+    <p>O pega esta dirección donde tu app acepte un enlace <span class="term">otpauth</span>: <code>{{ otpauth }}</code></p>
+    <h2>2. Escribe el código que muestra</h2>
+    <form method="post" action="{% url 'accounts:two_factor' %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="confirm">
+      <label for="id_code">Código de 6 dígitos</label>
+      <input id="id_code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="32" required>
+      <button class="btn" type="submit">Activar</button>
+    </form>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

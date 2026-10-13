@@ -29,6 +29,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
 9. `docs/PLAN.md`: bloques de trabajo con criterios de aceptación. **Trabajar un bloque a la vez.**
 10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente. `docs/FUSIONES.md`: cómo se fusiona (**la persona**). `docs/PRODUCCION.md` y `docs/PENDIENTES.md`: salida a producción y lo que queda.
 11. `docs/DECISIONES.md`: decisiones tomadas y abiertas. No resolver una decisión abierta por cuenta propia.
+12. `docs/CURSOS.md`: inventario de rutas, brechas, ideas de cursos nuevos y cómo escalar (plantilla y checklist de autoría).
 
 ## Stack
 
@@ -40,7 +41,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
   - **Capa de juego:** `core/static/game.css`, con sprites SVG 8-bit.
 - Tipografías locales (OFL): Archivo para todo el texto; Press Start 2P solo para niveles, insignias y títulos de juego.
 - Pruebas con `pytest` + `pytest-django`. Lint con `ruff`.
-- Producción: VM Linux, `gunicorn` en `127.0.0.1:8010` (el 8000 es de AeroControl en la misma VM), publicado solo en la tailnet desde un nodo Tailscale propio (`aeroacademy.<tailnet>.ts.net`, `tailscale serve`, nunca Funnel).
+- Producción: VM Linux, `gunicorn` en `127.0.0.1:8010` (el 8000 es de AeroControl en la misma VM), publicado desde un nodo Tailscale propio (`aeroacademy.<tailnet>.ts.net`): por defecto solo tailnet (`tailscale serve`); con `PUBLIC_FUNNEL=1` también una **puerta pública endurecida con Funnel** (D36: segundo gunicorn en `127.0.0.1:8011`, sin identidad de Tailscale, sin `/admin/`, TOTP para lead y admin). Funnel solo en el nodo propio, nunca en el de AeroControl.
 
 ## Comandos
 
@@ -128,6 +129,8 @@ lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de inte
 - **Seguridad:**
   - La identidad viene del encabezado `Tailscale-User-Login`. Solo se confía en él cuando la petición llega
     desde `127.0.0.1` (proxy de `tailscale serve`). Ver ARQUITECTURA.
+  - En la puerta pública (`settings.PUBLIC_DOOR`, la fija el proceso) ese encabezado se descarta y no existe `/admin/`.
+    Toda herramienta de lead/admin nueva que no deba salir a internet va en `PUBLIC_BLOCKED_PREFIXES`.
   - Las personas nuevas quedan `pending` hasta que un admin las aprueba. Ver MODERACION.
   - Los archivos de certificados no se sirven como estáticos públicos: siempre por una vista que valida permisos.
   - Validar tipo y tamaño de archivo (PDF, PNG, JPG; máx. 10 MB). Nombres de archivo generados, nunca los del usuario.

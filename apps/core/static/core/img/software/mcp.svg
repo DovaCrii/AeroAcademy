@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="MCP">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14B8A6"/><stop offset="1" stop-color="#0B5E63"/></linearGradient>
+    <clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath>
+  </defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <g clip-path="url(#t)"><rect width="64" height="64" fill="url(#g)"/><path d="M0 0H64V22C44 16 20 18 0 28Z" fill="#fff" opacity=".12"/></g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.2"/>
+  <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 32L16 18M32 32L48 18M32 32L32 52"/></g><circle cx="32" cy="32" r="7" fill="#fff"/><g fill="#fff"><rect x="9" y="11" width="13" height="13" rx="3.5"/><rect x="42" y="11" width="13" height="13" rx="3.5"/><rect x="25.5" y="46" width="13" height="10" rx="3.5"/></g>
+</svg>

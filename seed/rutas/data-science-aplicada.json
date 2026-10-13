@@ -1,0 +1,727 @@
+{
+  "_nota": "Rama OPCIONAL de IA y Datos que sigue las etapas del roadmap roadmap.sh/ai-data-scientist (estadística, Python y SQL, EDA, ML clásico, evaluación, deep learning y LLM, producción). Requisitos: Python y datos 101. Mezcla Kaggle Learn, Google ML Crash Course, Khan Academy, scikit-learn y Hugging Face; todo gratuito (Kaggle pide cuenta gratuita). No se incluyen cursos de Coursera por ser de pago. Etapa de MLOps pendiente para una ruta propia. URLs verificadas el 2026-10-13. Las keys son estables: agregar siempre al final.",
+  "slug": "data-science-aplicada",
+  "title": "Data Science aplicada",
+  "program": "IA y Datos · Rama opcional · Ciencia de datos",
+  "platform": "kaggle-learn",
+  "kind": "structured",
+  "vendor": "kaggle",
+  "products": [
+    "kaggle-learn",
+    "python"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Estadística",
+      "title": "Etapa 1 · Estadística y probabilidad",
+      "estimated_hours": "8 a 15 h",
+      "audience": "Quien ya hizo Python y datos 101",
+      "goal": "Dominar los conceptos estadísticos con los que se interpretan datos y modelos: distribuciones, muestreo, intervalos y pruebas de hipótesis. Primera etapa del roadmap de AI and Data Scientist.",
+      "guide": {
+        "title": "Guía rápida · Estadística",
+        "software": "python",
+        "do": [
+          "Empieza por estadística descriptiva (media, mediana, desviación) y distribuciones.",
+          "Entiende el muestreo y el error antes de las pruebas de hipótesis.",
+          "Calcula a mano un ejemplo y luego con Python."
+        ],
+        "commands": [
+          "*Media / mediana*",
+          "*Desviación estándar*",
+          "*Intervalo de confianza*",
+          "*p-valor*"
+        ],
+        "mistakes": [
+          "Usar la media con datos con valores extremos.",
+          "Interpretar el p-valor como probabilidad de que la hipótesis sea cierta.",
+          "Concluir causalidad desde una correlación."
+        ],
+        "essential": "Khan Academy: Statistics and probability"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Khan Academy: Statistics and probability",
+          "url": "https://www.khanacademy.org/math/statistics-probability",
+          "description": "Curso gratuito de estadística y probabilidad: distribuciones, muestreo, intervalos y pruebas de hipótesis.",
+          "tags": [
+            "Course",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "OpenIntro Statistics",
+          "url": "https://www.openintro.org/book/os/",
+          "description": "Libro de estadística de acceso abierto y gratuito, con laboratorios.",
+          "tags": [
+            "Guide",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: AI and Data Scientist",
+          "url": "https://roadmap.sh/ai-data-scientist",
+          "description": "Mapa de etapas de roadmap.sh: matemática y estadística, Python y SQL, EDA, ML, deep learning, MLOps, ingeniería de IA y vibe coding. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Completar las unidades de estadística descriptiva y probabilidad de *Khan Academy*",
+          "completed_by_resource": "Khan Academy: Statistics and probability"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Calcular media, mediana y desviación de las cotas de un CSV de puntos, a mano para diez puntos y con pandas para todos"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Estimar un intervalo de confianza para la cota media de una muestra y explicar qué significa"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Marcar en el roadmap de AI and Data Scientist las etapas de matemática y estadística que ya dominas"
+        }
+      ],
+      "mastery_signals": [
+        "Eliges un estadístico adecuado según la forma de los datos",
+        "Explicas qué dice y qué no dice un intervalo de confianza"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Tus mediciones tienen un valor extremo por error de medición. ¿Qué resumen es más robusto?",
+          "options": [
+            "La media",
+            "La mediana",
+            "El máximo"
+          ],
+          "answer": 1,
+          "explanation": "La mediana es menos sensible a valores extremos."
+        },
+        {
+          "key": "n0-q1",
+          "question": "Dos variables están correlacionadas. ¿Puedes concluir que una causa a la otra?",
+          "options": [
+            "Sí",
+            "No: la correlación no prueba causalidad",
+            "Solo si es mayor a 0,5"
+          ],
+          "answer": 1,
+          "explanation": "Sin diseño de estudio o análisis adicional no se concluye causalidad."
+        },
+        {
+          "key": "n0-q2",
+          "question": "¿Qué indica un intervalo de confianza del 95 %?",
+          "options": [
+            "El valor verdadero está ahí con 95 % de seguridad en un solo caso",
+            "Un procedimiento que, repetido muchas veces, cubre el valor verdadero el 95 % de las veces",
+            "Que el 95 % de los datos están dentro"
+          ],
+          "answer": 1,
+          "explanation": "Es una propiedad del procedimiento a largo plazo, no una probabilidad sobre un caso concreto."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "EDA",
+      "title": "Etapa 2 · Exploración y series de tiempo",
+      "estimated_hours": "5 a 8 h",
+      "audience": "Quien ya sabe estadística básica",
+      "goal": "Explorar un conjunto de datos antes de modelar: distribuciones, relaciones, valores atípicos y tendencias en el tiempo.",
+      "guide": {
+        "title": "Guía rápida · EDA",
+        "software": "python",
+        "do": [
+          "Mira primero: tamaño, tipos, nulos y distribuciones.",
+          "Grafica relaciones entre variables y busca atípicos.",
+          "Si hay fechas, revisa tendencia y estacionalidad."
+        ],
+        "commands": [
+          "*describe*",
+          "*corr*",
+          "*Atípico*",
+          "*Serie de tiempo*"
+        ],
+        "mistakes": [
+          "Modelar sin explorar.",
+          "Eliminar atípicos sin entender su causa.",
+          "Mezclar el futuro en el entrenamiento de una serie de tiempo."
+        ],
+        "essential": "Kaggle Learn: Data Visualization"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Data Visualization",
+          "url": "https://www.kaggle.com/learn/data-visualization",
+          "description": "Gráficos con seaborn: líneas, barras, mapas de calor, dispersión y distribuciones. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Kaggle Learn: Data Cleaning",
+          "url": "https://www.kaggle.com/learn/data-cleaning",
+          "description": "Valores faltantes, escalado, fechas, codificación de texto y entradas inconsistentes. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Kaggle Learn: Time Series",
+          "url": "https://www.kaggle.com/learn/time-series",
+          "description": "Series de tiempo: tendencia, estacionalidad y pronóstico. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Repasar *Kaggle Learn: Data Visualization* aplicado a un conjunto de datos de tu trabajo",
+          "completed_by_resource": "Kaggle Learn: Data Visualization"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Hacer un análisis exploratorio de un CSV de mediciones: distribuciones, relaciones y atípicos, con conclusiones por escrito"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Completar *Kaggle Learn: Time Series* hasta tendencia y estacionalidad",
+          "completed_by_resource": "Kaggle Learn: Time Series"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Investigar un atípico: ¿error de medición, dato real o error de captura?"
+        }
+      ],
+      "mastery_signals": [
+        "Exploras antes de modelar y dejas por escrito qué encontraste",
+        "Investigas los atípicos antes de eliminarlos"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Encuentras tres puntos con cotas muy distintas al resto. ¿Qué haces?",
+          "options": [
+            "Los eliminas",
+            "Investigas su origen antes de decidir",
+            "Los dejas sin mirarlos"
+          ],
+          "answer": 1,
+          "explanation": "Un atípico puede ser un error o información importante."
+        },
+        {
+          "key": "n1-q1",
+          "question": "En una serie de tiempo, ¿cómo separas entrenamiento y prueba?",
+          "options": [
+            "Al azar",
+            "Por fecha: entrenas con el pasado y pruebas con el futuro",
+            "Da igual"
+          ],
+          "answer": 1,
+          "explanation": "Mezclar el futuro en el entrenamiento da evaluaciones engañosas."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "ML clásico",
+      "title": "Etapa 3 · Machine learning clásico",
+      "estimated_hours": "10 a 16 h",
+      "audience": "Quien ya hizo EDA",
+      "goal": "Entrenar, validar y comparar modelos supervisados (árboles, bosques, regresión) y entender sobreajuste y validación cruzada.",
+      "guide": {
+        "title": "Guía rápida · ML",
+        "software": "python",
+        "do": [
+          "Separa entrenamiento y validación antes de mirar resultados.",
+          "Empieza con un modelo simple como línea base.",
+          "Usa validación cruzada y pipelines para evitar fugas de datos."
+        ],
+        "commands": [
+          "*train_test_split*",
+          "*Pipeline*",
+          "*Validación cruzada*",
+          "*Sobreajuste*"
+        ],
+        "mistakes": [
+          "Evaluar con los mismos datos del entrenamiento.",
+          "Preprocesar antes de separar (fuga de datos).",
+          "Optimizar un modelo complejo sin línea base."
+        ],
+        "essential": "Kaggle Learn: Intro to Machine Learning"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Intro to Machine Learning",
+          "url": "https://www.kaggle.com/learn/intro-to-machine-learning",
+          "description": "Primer modelo de ML: árboles de decisión, validación y bosques aleatorios. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Kaggle Learn: Intermediate Machine Learning",
+          "url": "https://www.kaggle.com/learn/intermediate-machine-learning",
+          "description": "Datos faltantes, variables categóricas, pipelines, validación cruzada y fugas de datos. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Google Machine Learning Crash Course",
+          "url": "https://developers.google.com/machine-learning/crash-course",
+          "description": "Curso intensivo de ML de Google: regresión, clasificación, datos, evaluación y redes. Gratuito.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "scikit-learn: Getting Started",
+          "url": "https://scikit-learn.org/stable/getting_started.html",
+          "description": "Primeros pasos oficiales con scikit-learn: ajustar, predecir, pipelines y validación. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "mlcourse.ai (Open Machine Learning Course)",
+          "url": "https://mlcourse.ai/",
+          "description": "Curso abierto de ML de OpenDataScience, con teoría y práctica en Python. Gratuito.",
+          "tags": [
+            "Course",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 5,
+          "title": "Roadmap: Machine Learning",
+          "url": "https://roadmap.sh/machine-learning",
+          "description": "Mapa de etapas de roadmap.sh: aprendizaje supervisado y no supervisado, evaluación y despliegue. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Completar *Kaggle Learn: Intro to Machine Learning*",
+          "completed_by_resource": "Kaggle Learn: Intro to Machine Learning"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Completar *Kaggle Learn: Intermediate Machine Learning*",
+          "completed_by_resource": "Kaggle Learn: Intermediate Machine Learning"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Entrenar un modelo que prediga un valor de tu trabajo con datos de ejemplo (por ejemplo, tipo de superficie desde atributos) y comparar con una línea base"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Revisar el *Machine Learning Crash Course* de Google en los módulos de datos y evaluación"
+        }
+      ],
+      "mastery_signals": [
+        "Tu modelo se evalúa en datos que no vio al entrenar",
+        "Siempre comparas contra una línea base simple"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Tu modelo tiene 99 % de exactitud en entrenamiento y 70 % en validación. ¿Qué pasa?",
+          "options": [
+            "Está perfecto",
+            "Sobreajuste",
+            "Faltan columnas"
+          ],
+          "answer": 1,
+          "explanation": "Gran diferencia entre entrenamiento y validación indica sobreajuste."
+        },
+        {
+          "key": "n2-q1",
+          "question": "Escalaste los datos con todo el conjunto y después separaste entrenamiento y prueba. ¿Cuál es el problema?",
+          "options": [
+            "Ninguno",
+            "Fuga de datos: la prueba influyó en el preprocesamiento",
+            "Es más lento"
+          ],
+          "answer": 1,
+          "explanation": "El preprocesamiento debe ajustarse solo con el entrenamiento; los pipelines ayudan."
+        },
+        {
+          "key": "n2-q2",
+          "question": "¿Para qué sirve una línea base?",
+          "options": [
+            "Para saber si un modelo complejo realmente mejora algo",
+            "Para dibujar gráficos",
+            "Para guardar el modelo"
+          ],
+          "answer": 0,
+          "explanation": "Sin una referencia simple no sabes si la complejidad vale la pena."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Evaluar",
+      "title": "Etapa 4 · Evaluación y explicabilidad",
+      "estimated_hours": "5 a 8 h",
+      "audience": "Quien entrena modelos",
+      "goal": "Elegir métricas adecuadas, entender por qué un modelo predice lo que predice y reconocer sesgos antes de usarlo en decisiones.",
+      "guide": {
+        "title": "Guía rápida · Evaluar",
+        "software": "python",
+        "do": [
+          "Elige la métrica según el costo del error (falsos positivos o negativos).",
+          "Mira qué variables importan y si tienen sentido.",
+          "Revisa por grupos si el modelo funciona igual para todos."
+        ],
+        "commands": [
+          "*Precisión / recall*",
+          "*Importancia de variables*",
+          "*SHAP*",
+          "*Sesgo*"
+        ],
+        "mistakes": [
+          "Usar solo exactitud con clases desbalanceadas.",
+          "Confiar en un modelo sin entender qué variables usa.",
+          "No revisar el rendimiento por subgrupos."
+        ],
+        "essential": "Kaggle Learn: Machine Learning Explainability"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Machine Learning Explainability",
+          "url": "https://www.kaggle.com/learn/machine-learning-explainability",
+          "description": "Entender por qué un modelo predice lo que predice (importancia por permutación, SHAP). Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Kaggle Learn: Feature Engineering",
+          "url": "https://www.kaggle.com/learn/feature-engineering",
+          "description": "Crear variables que mejoran un modelo. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Kaggle Learn: Intro to AI Ethics",
+          "url": "https://www.kaggle.com/learn/intro-to-ai-ethics",
+          "description": "Micro-curso sobre sesgo, equidad y uso responsable de sistemas de IA. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Completar *Kaggle Learn: Machine Learning Explainability*",
+          "completed_by_resource": "Kaggle Learn: Machine Learning Explainability"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Calcular precisión y recall de un clasificador sobre un conjunto desbalanceado y explicar qué métrica importa para tu caso"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Listar las variables más importantes de tu modelo y comprobar con una experta o un experto que tienen sentido"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Revisar el rendimiento del modelo por subgrupos (por ejemplo, por zona o equipo de medición)"
+        }
+      ],
+      "mastery_signals": [
+        "Eliges la métrica según el costo del error",
+        "Puedes explicar por qué tu modelo predice lo que predice"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Un clasificador detecta fallas que ocurren en 1 % de los casos y tiene 99 % de exactitud prediciendo siempre «sin falla». ¿Qué pasa?",
+          "options": [
+            "Es excelente",
+            "La exactitud engaña: faltan precisión y recall para la clase rara",
+            "Está sobreajustado"
+          ],
+          "answer": 1,
+          "explanation": "Con clases desbalanceadas, la exactitud oculta que no detecta lo importante."
+        },
+        {
+          "key": "n3-q1",
+          "question": "Tu modelo usa mucho la variable «ID de equipo». ¿Qué sospechas?",
+          "options": [
+            "Que es una variable muy buena",
+            "Que puede estar aprendiendo algo irrelevante o una fuga de datos",
+            "Nada"
+          ],
+          "answer": 1,
+          "explanation": "Una variable sin sentido causal con alta importancia suele ser una señal de alerta."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "LLM y producción",
+      "title": "Etapa 5 · Deep learning, LLM y puesta en producción (introducción)",
+      "estimated_hours": "6 a 10 h",
+      "audience": "Quien ya entrena modelos clásicos",
+      "goal": "Ubicar el deep learning y los LLM dentro del roadmap, probar modelos abiertos y conocer qué implica poner un modelo en producción.",
+      "guide": {
+        "title": "Guía rápida · LLM y producción",
+        "software": "python",
+        "do": [
+          "Los LLM y el deep learning se aprenden mejor después de dominar ML clásico.",
+          "Prueba modelos abiertos con el curso de Hugging Face.",
+          "Poner un modelo en producción incluye datos, monitoreo y mantenimiento."
+        ],
+        "commands": [
+          "*Transformer*",
+          "*Fine-tuning*",
+          "*Inferencia*",
+          "*Monitoreo*"
+        ],
+        "mistakes": [
+          "Saltar a deep learning sin bases de ML clásico.",
+          "Entrenar con datos de clientes en servicios sin autorización.",
+          "Poner un modelo en producción sin monitoreo."
+        ],
+        "essential": "Hugging Face LLM Course"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Hugging Face LLM Course",
+          "url": "https://huggingface.co/learn/llm-course/chapter1/1",
+          "description": "Curso abierto de Hugging Face sobre transformers y modelos de lenguaje. Gratuito.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Roadmap: AI and Data Scientist",
+          "url": "https://roadmap.sh/ai-data-scientist",
+          "description": "Mapa de etapas de roadmap.sh: matemática y estadística, Python y SQL, EDA, ML, deep learning, MLOps, ingeniería de IA y vibe coding. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: Data Engineer",
+          "url": "https://roadmap.sh/data-engineer",
+          "description": "Mapa de etapas de roadmap.sh: pipelines, almacenes de datos y orquestación. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Roadmap: AI Engineer",
+          "url": "https://roadmap.sh/ai-engineer",
+          "description": "Mapa de etapas de roadmap.sh: construir aplicaciones con LLM, RAG y agentes. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Recorrer los primeros capítulos del *Hugging Face LLM Course* y ejecutar un ejemplo",
+          "completed_by_resource": "Hugging Face LLM Course"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Usar un modelo abierto para clasificar un texto corto de ejemplo y evaluar si acierta"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Escribir qué monitorearías de un modelo en producción (calidad, datos de entrada, errores)"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Revisar los roadmaps de Data Engineer y AI Engineer y anotar qué te interesa profundizar"
+        }
+      ],
+      "mastery_signals": [
+        "Sabes qué parte del roadmap es base y cuál es especialización",
+        "Piensas en monitoreo y datos antes de poner algo en producción"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "Quieres entrenar un modelo con documentos de clientes en un servicio gratuito en la nube. ¿Qué haces?",
+          "options": [
+            "Los subes",
+            "No, sin autorización; usas datos de ejemplo o anonimizados",
+            "Los subes con otro nombre"
+          ],
+          "answer": 1,
+          "explanation": "Los datos de clientes requieren autorización antes de salir de tu entorno."
+        },
+        {
+          "key": "n4-q1",
+          "question": "¿Por qué monitorear un modelo en producción?",
+          "options": [
+            "Porque los datos cambian y la calidad puede degradarse",
+            "Porque es obligatorio por ley siempre",
+            "Para ahorrar energía"
+          ],
+          "answer": 0,
+          "explanation": "El mundo cambia: sin monitoreo no se detecta la degradación."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Sobreajuste",
+      "location": "ML",
+      "meaning": "El modelo memoriza el entrenamiento y falla con datos nuevos."
+    },
+    {
+      "term": "Fuga de datos",
+      "location": "ML",
+      "meaning": "Información de la prueba que se filtra al entrenamiento."
+    },
+    {
+      "term": "Línea base",
+      "location": "ML",
+      "meaning": "Modelo simple con el que se compara cualquier mejora."
+    },
+    {
+      "term": "Validación cruzada",
+      "location": "ML",
+      "meaning": "Evaluar repetidamente con distintas particiones de los datos."
+    }
+  ],
+  "description": "Estadística, exploración, machine learning clásico, evaluación y explicabilidad, con una introducción a deep learning, LLM y producción, siguiendo el roadmap de AI and Data Scientist.",
+  "intro": {
+    "title": "Del dato al modelo, con criterio",
+    "text": "Rama opcional para quien quiere profundizar. Cada etapa tiene un micro-curso gratuito, un ejercicio con datos de ejemplo y una pregunta sobre errores típicos como sobreajuste o fuga de datos."
+  },
+  "flow": [
+    {
+      "title": "Estadística",
+      "text": "Interpretar datos"
+    },
+    {
+      "title": "EDA",
+      "text": "Explorar antes de modelar"
+    },
+    {
+      "title": "ML",
+      "text": "Modelos y validación"
+    },
+    {
+      "title": "Evaluar",
+      "text": "Métricas y sesgo"
+    },
+    {
+      "title": "LLM",
+      "text": "Deep learning y producción"
+    }
+  ]
+}

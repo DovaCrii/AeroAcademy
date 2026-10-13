@@ -156,6 +156,26 @@ class Person(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         return self.role == "admin"
 
 
+class TotpDevice(TimeStampedModel):
+    """Segundo factor (D36) para quien es lead o admin y entra por la puerta pública. Se activa desde la tailnet.
+
+    `confirmed_at` vacío = secreto generado pero aún sin comprobar (no cuenta como activado). `last_counter` impide
+    reusar un código. Los códigos de recuperación se guardan solo como huella (HMAC con la SECRET_KEY)."""
+
+    person = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="totp")
+    secret = models.CharField(max_length=64, editable=False)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    last_counter = models.BigIntegerField(default=0)
+    recovery_hashes = models.JSONField(default=list, blank=True)
+
+    class Meta:
+        verbose_name = "segundo factor (TOTP)"
+        verbose_name_plural = "segundos factores (TOTP)"
+
+    def __str__(self):
+        return f"TOTP de {self.person_id}"
+
+
 class TeamSignupLink(TimeStampedModel):
     """Enlace de inscripción del equipo (D35): uno solo vigente para todos. Se guarda solo el hash del secreto; la URL
     (firmada) lleva el id y el secreto y se muestra una única vez al generarla."""

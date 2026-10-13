@@ -16,6 +16,7 @@ urlpatterns = [
     path("", include("apps.gamification.urls")),
     path("", include("apps.progress.urls")),
     path("", include("apps.paths.urls")),
+    path("", include("apps.paths.course_urls")),
     path("", include("apps.catalog.urls")),
     path("", include("apps.core.urls")),
 ]

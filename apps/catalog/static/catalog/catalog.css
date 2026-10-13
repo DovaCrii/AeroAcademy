@@ -63,7 +63,7 @@
 
 /* ===== Estilo Aerotop: secciones diferenciadas, acentos por disciplina, filas por software ===== */
 :root{--d-arq:#2F7BFF;--d-civ:#F5A524;--d-top:#2FB36D;--d-mec:#E5483F;--d-cap:#2CC4F0}
-.d-arq{--acc:var(--d-arq)}.d-civ{--acc:var(--d-civ)}.d-top{--acc:var(--d-top)}.d-mec{--acc:var(--d-mec)}.d-cap{--acc:var(--d-cap)}.d-tra{--acc:var(--d-tra)}
+.d-arq{--acc:var(--d-arq)}.d-civ{--acc:var(--d-civ)}.d-top{--acc:var(--d-top)}.d-mec{--acc:var(--d-mec)}.d-cap{--acc:var(--d-cap)}.d-tra{--acc:var(--d-tra)}.d-iad{--acc:var(--d-iad,#7C4DE0)}
 
 /* 00 · cabecera: banda de fotografía con grilla técnica y barra de escala */
 .cat-head{position:relative;margin:8px 0 22px;padding:30px clamp(18px,3vw,36px) 26px;border-radius:var(--r-card,16px);overflow:hidden;
@@ -151,7 +151,7 @@
 
 
 /* ===== Dirección «cuaderno cuadriculado»: claro, trazo a mano, acentos nuevos por disciplina ===== */
-:root{--d-arq:#4CC9F0;--d-civ:#FFC93C;--d-top:#8AC926;--d-mec:#E63946;--d-cap:#2EC4B6;--d-tra:#8793A6}
+:root{--d-arq:#4CC9F0;--d-civ:#FFC93C;--d-top:#8AC926;--d-mec:#E63946;--d-cap:#2EC4B6;--d-tra:#8793A6;--d-iad:#A78BFA}
 .cat-head{color:var(--ink);background:
   linear-gradient(var(--grid-major) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,var(--grid-major) 1px,transparent 1px) 0 0/26px 26px,var(--sheet);
   border:2px solid var(--ink);border-bottom-width:4px;border-radius:18px 14px 20px 12px / 12px 20px 14px 18px}
@@ -194,6 +194,8 @@
 .vs-bentley .vs-band{background:linear-gradient(105deg,#0A55C9 0%,#0A3A92 60%,#08285F 100%);border-bottom:4px solid #5CC8FF;box-shadow:0 10px 26px -12px rgba(10,58,146,.7)}
 .vs-internal{--vs-a:#2CC4B6}
 .vs-internal .vs-band{background:linear-gradient(105deg,#0F6E64 0%,#0B4F73 100%);border-bottom:4px solid #F5B02E}
+.vs-ia{--vs-a:#8B5CF6}
+.vs-ia .vs-band{background:linear-gradient(105deg,#4C1D95 0%,#2B2A8C 60%,#0C4A6E 100%);border-bottom:4px solid #FFD76A}
 
 /* icon pack: baldosas en rejilla regular */
 .vs-pack,.vs-cards{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:12px}
@@ -231,7 +233,8 @@ a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
 .vs-bentley .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);
   background:linear-gradient(135deg,#0A55C9,#08285F)}
 .vs-internal .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);background:linear-gradient(135deg,#0F6E64,#0B3F63)}
-.vs-autodesk .cat-thumb::before,.vs-bentley .cat-thumb::before,.vs-internal .cat-thumb::before{opacity:.5;
+.vs-ia .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);background:linear-gradient(135deg,#4C1D95,#1E1B6E)}
+.vs-autodesk .cat-thumb::before,.vs-bentley .cat-thumb::before,.vs-internal .cat-thumb::before,.vs-ia .cat-thumb::before{opacity:.5;
   background:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px) 0 0/16px 16px,linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px) 0 0/16px 16px}
 .vs .cat-prod{color:#fff}
 .vs .cat-row{border-left-color:var(--vs-a)}

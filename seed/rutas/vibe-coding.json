@@ -1,0 +1,819 @@
+{
+  "_nota": "Ruta núcleo, sigue roadmap.sh/vibe-coding (planificar, iterar, probar, versionar, revisar y asegurar) más roadmap.sh/code-review-best-practices y, opcional, roadmap.sh/ai-product-builder. Requisitos: Claude Code y MCP (y Herramientas para trabajar con IA). Los recursos son documentación y cursos oficiales gratuitos; «Vibe Coding 101 with Replit» usa la plataforma Replit y es complementario. URLs verificadas el 2026-10-13. Las keys son estables: agregar siempre al final.",
+  "slug": "vibe-coding",
+  "title": "Vibe coding responsable",
+  "program": "IA y Datos · Núcleo · Paso 5 de 5",
+  "platform": "anthropic-academy",
+  "kind": "structured",
+  "vendor": "anthropic",
+  "products": [
+    "claude-code"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Mentalidad",
+      "title": "Paso 0 · Vibe coding: qué es y qué mentalidad pide",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Quien ya usa Claude Code o un asistente de código",
+      "goal": "Entender qué es programar «por conversación», qué responsabilidades siguen siendo tuyas y cómo se integra la IA en todo el ciclo de desarrollo.",
+      "guide": {
+        "title": "Guía rápida · Mentalidad",
+        "software": "claude-code",
+        "do": [
+          "Tú defines el qué y el porqué; la IA propone el cómo. El criterio sigue siendo tuyo.",
+          "Trabaja en pasos pequeños, no en un pedido gigante.",
+          "Entender lo que se genera es parte del trabajo."
+        ],
+        "commands": [
+          "*Vibe coding*",
+          "*Spec*",
+          "*Iteración*"
+        ],
+        "mistakes": [
+          "Aceptar código que no entiendes y que no sabrás mantener.",
+          "Pedir una aplicación entera en un solo prompt.",
+          "Usarlo para sistemas críticos sin revisión."
+        ],
+        "essential": "The AI-native SDLC playbook"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "The AI-native SDLC playbook",
+          "url": "https://academy.claude.com/courses/ai-native-sdlc-playbook",
+          "description": "Cómo cambia el ciclo de desarrollo de software cuando la IA participa en cada etapa. 14 lecciones. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "1 h"
+        },
+        {
+          "order": 1,
+          "title": "Roadmap: Vibe Coding",
+          "url": "https://roadmap.sh/vibe-coding",
+          "description": "Mapa de etapas de roadmap.sh: planificar, prompts, contexto, depuración, control de versiones, pruebas y seguridad. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "AI Fluency for builders",
+          "url": "https://academy.claude.com/courses/ai-fluency-for-builders",
+          "description": "Variante del curso de fluidez en IA para quienes construyen soluciones de punta a punta. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Vibe Coding 101 with Replit",
+          "url": "https://www.deeplearning.ai/short-courses/vibe-coding-101-with-replit/",
+          "description": "Curso corto de DeepLearning.AI: de la idea a una app con un asistente de IA (usa la plataforma Replit). Gratuito con cuenta gratuita.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Completar *The AI-native SDLC playbook*",
+          "completed_by_resource": "The AI-native SDLC playbook"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Escribir en media página qué tipo de trabajo tuyo es buen candidato para vibe coding y cuál no"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Leer el roadmap de vibe coding y escoger tres prácticas para adoptar esta semana"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Pedir a una IA un script simple (por ejemplo, renombrar archivos) y explicar con tus palabras qué hace cada línea"
+        }
+      ],
+      "mastery_signals": [
+        "Distingues prototipos y herramientas internas de sistemas críticos",
+        "Puedes explicar lo que hace el código que aceptas"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "La IA genera un script de 80 líneas que funciona. ¿Es suficiente?",
+          "options": [
+            "Sí, funciona",
+            "No: debes entender qué hace, probarlo y poder mantenerlo",
+            "Sí, si es corto"
+          ],
+          "answer": 1,
+          "explanation": "El código aceptado es tu responsabilidad: se entiende, se prueba y se mantiene."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Cuál es un buen primer proyecto para vibe coding?",
+          "options": [
+            "Un sistema de control de seguridad",
+            "Una herramienta interna pequeña, como un conversor de CSV",
+            "Un cálculo estructural certificado"
+          ],
+          "answer": 1,
+          "explanation": "Empieza con herramientas pequeñas y de bajo riesgo, donde puedes verificar el resultado."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Planificar",
+      "title": "Paso 1 · De prompt a app: planificar e iterar",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Quien ya usa Claude Code",
+      "goal": "Convertir una idea en un plan por fases (MVP), construir paso a paso y mantener actualizado el documento de contexto del proyecto.",
+      "guide": {
+        "title": "Guía rápida · Planificar",
+        "software": "claude-code",
+        "do": [
+          "Antes de codificar: pide ayuda para refinar la idea, definir fases y escribir un documento de contexto.",
+          "Elige una tecnología popular y documentada; pide módulos pequeños.",
+          "Un pedido a la vez; revisa y confirma antes del siguiente.",
+          "Si falla tres veces, detente y reinicia con contexto limpio."
+        ],
+        "commands": [
+          "*MVP*",
+          "*CLAUDE.md*",
+          "*Spec-driven*",
+          "*/clear*"
+        ],
+        "mistakes": [
+          "Empezar a codificar sin plan.",
+          "Archivos gigantes que nadie revisa.",
+          "Insistir diez veces con el mismo prompt en vez de reiniciar."
+        ],
+        "essential": "Claude Code docs: Best practices"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Claude Code docs: Best practices",
+          "url": "https://code.claude.com/docs/en/best-practices",
+          "description": "Buenas prácticas: verificar el trabajo, explorar y planificar antes de codificar, gestionar el contexto. Documentación oficial gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Claude Code docs: Common workflows",
+          "url": "https://code.claude.com/docs/en/common-workflows",
+          "description": "Recetas paso a paso: entender código, depurar, refactorizar, pruebas, Git. Documentación oficial gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: Claude Code",
+          "url": "https://roadmap.sh/claude-code",
+          "description": "Mapa de etapas de roadmap.sh: instalación, CLAUDE.md, skills, subagentes, hooks, MCP, permisos y buenas prácticas. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Leer *Best practices for Claude Code* y elegir tres prácticas para tu proyecto",
+          "completed_by_resource": "Claude Code docs: Best practices"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Escribir un plan por fases (MVP, mejoras) para una herramienta que convierta un CSV de puntos a un informe resumido"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Construir la primera fase en pasos pequeños con Claude Code y hacer un commit tras cada paso"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Actualizar el *CLAUDE.md* con una lección aprendida durante la construcción"
+        }
+      ],
+      "mastery_signals": [
+        "Tus proyectos parten de un plan por fases",
+        "Tu documento de contexto se actualiza con lo que aprendes"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Quieres una herramienta de varias funciones. ¿Cómo la pides?",
+          "options": [
+            "Todo en un solo prompt",
+            "Por fases, empezando por el MVP, con un pedido a la vez",
+            "Sin plan, ya se verá"
+          ],
+          "answer": 1,
+          "explanation": "Construir por fases pequeñas facilita revisar y corregir."
+        },
+        {
+          "key": "n1-q1",
+          "question": "La IA falla tres veces en la misma corrección. ¿Qué haces?",
+          "options": [
+            "Repites el mismo pedido",
+            "Te detienes, limpias el contexto y replanteas con más información",
+            "Cambias de proyecto"
+          ],
+          "answer": 1,
+          "explanation": "Un contexto sobrecargado empeora los resultados; reiniciar con un mejor planteamiento ayuda."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Pruebas y Git",
+      "title": "Paso 2 · Pruebas y control de versiones",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien ya hace commits",
+      "goal": "Pedir pruebas desde el primer momento, confirmar seguido y volver atrás con Git cuando la IA se equivoca.",
+      "guide": {
+        "title": "Guía rápida · Pruebas y Git",
+        "software": "git",
+        "do": [
+          "Pide pruebas automáticas junto con cada función.",
+          "Cuando encuentres un fallo, pide primero una prueba que lo reproduzca y luego el arreglo.",
+          "Haz commit tras cada tarea que funciona, con un mensaje claro.",
+          "Para volver atrás usa Git, no el deshacer de la herramienta."
+        ],
+        "commands": [
+          "*pytest*",
+          "*git commit*",
+          "*git revert*",
+          "*TDD*"
+        ],
+        "mistakes": [
+          "Aceptar funciones sin una sola prueba.",
+          "Acumular horas de cambios sin commits.",
+          "Corregir sin reproducir primero el error."
+        ],
+        "essential": "pytest: Get Started"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "pytest: Get Started",
+          "url": "https://docs.pytest.org/en/stable/getting-started.html",
+          "description": "Primeras pruebas automáticas en Python. Documentación oficial gratuita.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Pro Git (libro oficial)",
+          "url": "https://git-scm.com/book/en/v2",
+          "description": "El libro oficial de Git, en línea y gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Microsoft Learn: Introduction to Git",
+          "url": "https://learn.microsoft.com/en-us/training/modules/intro-to-git/",
+          "description": "Módulo gratuito: repositorios, commits y ramas con Git.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Seguir *pytest: Get Started* y escribir una prueba para una función de tu herramienta",
+          "completed_by_resource": "pytest: Get Started"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Pedir a Claude Code que escriba pruebas para la conversión de coordenadas y revisar que cubren casos reales (dos puntos conocidos)"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Provocar un error, pedir una prueba que lo reproduzca y luego el arreglo"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Practicar volver a un commit anterior con Git tras un cambio malo"
+        }
+      ],
+      "mastery_signals": [
+        "Cada función nueva viene con su prueba",
+        "Usas Git para volver atrás, no esperas que la IA lo deshaga"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Encuentras un error. ¿Qué pides primero?",
+          "options": [
+            "Que lo arregle ya",
+            "Una prueba que lo reproduzca, y luego el arreglo",
+            "Que reescriba todo"
+          ],
+          "answer": 1,
+          "explanation": "Reproducir primero confirma que se entiende el fallo y evita regresiones."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Por qué confirmar cambios (commit) seguido?",
+          "options": [
+            "Para tener puntos seguros a los que volver",
+            "Para llenar el historial",
+            "Para que la IA lo recuerde"
+          ],
+          "answer": 0,
+          "explanation": "Cada commit es un punto de restauración."
+        },
+        {
+          "key": "n2-q2",
+          "question": "La IA escribió pruebas que siempre pasan, aunque el código esté mal. ¿Qué revisas?",
+          "options": [
+            "Nada, pasan",
+            "Que las pruebas verifiquen resultados reales y casos límite",
+            "El color de la salida"
+          ],
+          "answer": 1,
+          "explanation": "Una prueba debe poder fallar si el código falla; se comprueba con casos conocidos."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Revisión",
+      "title": "Paso 3 · Revisar el código que escribe la IA",
+      "estimated_hours": "3 a 4 h",
+      "audience": "Quien acepta código generado",
+      "goal": "Revisar con una lista de verificación: corrección, alcance, claridad, pruebas, seguridad y mantenibilidad.",
+      "guide": {
+        "title": "Guía rápida · Revisión",
+        "software": "git",
+        "do": [
+          "Lee el *diff* completo, no solo el resumen que da la IA.",
+          "Pregunta: ¿hace lo pedido y nada más? ¿Hay pruebas? ¿Se entiende? ¿Hay secretos?",
+          "Ejecuta las pruebas tú y prueba un caso a mano.",
+          "Pide a una persona o a un subagente revisor una segunda lectura."
+        ],
+        "commands": [
+          "*diff*",
+          "*Code review*",
+          "*Checklist*"
+        ],
+        "mistakes": [
+          "Aprobar por el resumen sin leer el diff.",
+          "Revisar solo si compila.",
+          "No revisar los cambios «pequeños»."
+        ],
+        "essential": "Google Engineering Practices: Code review"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Code Review Best Practices",
+          "url": "https://roadmap.sh/code-review-best-practices",
+          "description": "Mapa de etapas de roadmap.sh: cómo revisar cambios de código con criterio. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Google Engineering Practices: Code review",
+          "url": "https://google.github.io/eng-practices/review/",
+          "description": "Cómo revisar y cómo pedir una revisión de código. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Claude Code docs: Common workflows",
+          "url": "https://code.claude.com/docs/en/common-workflows",
+          "description": "Recetas paso a paso: entender código, depurar, refactorizar, pruebas, Git. Documentación oficial gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Leer *Google Engineering Practices: Code review* y adaptar su lista de preguntas",
+          "completed_by_resource": "Google Engineering Practices: Code review"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Armar tu lista de verificación de revisión (corrección, alcance, pruebas, seguridad, claridad)"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Revisar con tu lista un cambio real hecho por la IA y anotar al menos un hallazgo"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Hacer que un subagente revisor de solo lectura revise el mismo cambio y comparar hallazgos"
+        }
+      ],
+      "mastery_signals": [
+        "Revisas el diff completo con una lista",
+        "Usas una segunda lectura para lo importante"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "La IA dice «listo, todo funciona». ¿Qué haces?",
+          "options": [
+            "Apruebas",
+            "Lees el diff, corres las pruebas y pruebas un caso real",
+            "Le pides que lo repita"
+          ],
+          "answer": 1,
+          "explanation": "La confianza se construye con revisión y pruebas, no con la afirmación del modelo."
+        },
+        {
+          "key": "n3-q1",
+          "question": "El cambio tocó un archivo que no pediste. ¿Qué haces?",
+          "options": [
+            "Lo aceptas",
+            "Preguntas por qué y reviertes si no corresponde al alcance",
+            "Lo ignoras"
+          ],
+          "answer": 1,
+          "explanation": "Los cambios fuera de alcance son un riesgo y se cuestionan."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Seguridad",
+      "title": "Paso 4 · Seguridad y cuándo NO hacer vibe coding",
+      "estimated_hours": "2 a 4 h",
+      "audience": "Todo el equipo que genere código con IA",
+      "goal": "Aplicar prácticas de seguridad (secretos, dependencias, validación de entradas) y reconocer los casos donde no se debe delegar el código a la IA.",
+      "guide": {
+        "title": "Guía rápida · Seguridad",
+        "software": "git",
+        "do": [
+          "Nunca dejes claves en el código: variables de entorno y *.gitignore*.",
+          "Pide una auditoría de seguridad del código y revisa sus hallazgos tú.",
+          "Verifica que las dependencias existan y sean legítimas antes de instalarlas.",
+          "No uses vibe coding en sistemas críticos de seguridad o cálculos certificados sin revisión experta."
+        ],
+        "commands": [
+          "*Variables de entorno*",
+          "*OWASP*",
+          "*Dependencias*",
+          "*Secretos*"
+        ],
+        "mistakes": [
+          "Dejar que la IA ponga claves dentro del código.",
+          "Instalar paquetes con nombres que la IA «inventó».",
+          "Subir datos de clientes en los ejemplos."
+        ],
+        "essential": "OWASP Top 10"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "OWASP Top 10",
+          "url": "https://owasp.org/www-project-top-ten/",
+          "description": "Los diez riesgos más comunes de seguridad web. OWASP, gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Claude Code docs: Security",
+          "url": "https://code.claude.com/docs/en/security",
+          "description": "Modelo de seguridad de Claude Code: permisos, sandbox, inyección de prompts y buenas prácticas. Documentación oficial gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: API Security Best Practices",
+          "url": "https://roadmap.sh/api-security-best-practices",
+          "description": "Mapa de etapas de roadmap.sh: buenas prácticas para exponer y consumir APIs con seguridad. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Revisar el *OWASP Top 10* y relacionar tres riesgos con una herramienta que hayas construido",
+          "completed_by_resource": "OWASP Top 10"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Buscar en un proyecto de práctica claves o datos sensibles dentro del código y moverlos a variables de entorno"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Pedir una auditoría de seguridad de tu herramienta y evaluar cada hallazgo en vez de aceptarlo"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Escribir una lista de tres casos de tu trabajo donde NO usarías vibe coding y por qué"
+        }
+      ],
+      "mastery_signals": [
+        "Sin secretos en el código ni en los commits",
+        "Sabes en qué casos el código debe escribirse y revisarse con experta o experto"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "La IA sugiere instalar un paquete que no conoces. ¿Qué haces?",
+          "options": [
+            "Lo instalas",
+            "Compruebas que existe, es legítimo y está mantenido",
+            "Lo copias de un blog"
+          ],
+          "answer": 1,
+          "explanation": "Los nombres inventados o maliciosos de paquetes son un riesgo real."
+        },
+        {
+          "key": "n4-q1",
+          "question": "¿En cuál caso NO delegarías el código a la IA sin revisión experta?",
+          "options": [
+            "Un conversor de CSV interno",
+            "Un cálculo que respalda un entregable certificado",
+            "Un script para renombrar archivos"
+          ],
+          "answer": 1,
+          "explanation": "Donde un error tiene consecuencias legales o de seguridad se exige revisión experta."
+        },
+        {
+          "key": "n4-q2",
+          "question": "¿Dónde van las claves de acceso?",
+          "options": [
+            "En el código para que funcionen",
+            "En variables de entorno fuera del repositorio",
+            "En el README"
+          ],
+          "answer": 1,
+          "explanation": "Los secretos no se versionan; se leen del entorno."
+        }
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Producto",
+      "title": "Paso 5 (opcional) · De la idea al producto con IA",
+      "estimated_hours": "2 a 4 h",
+      "audience": "Quien quiere llevar una herramienta interna a uso del equipo",
+      "goal": "Ver el camino de un prototipo a una herramienta que otras personas usan: problema, usuarios, medición y mantenimiento.",
+      "guide": {
+        "title": "Guía rápida · Producto",
+        "software": "claude-code",
+        "do": [
+          "Define el problema y quién lo tiene, antes de la solución.",
+          "Prueba con un grupo pequeño y mide si ahorra tiempo.",
+          "Asigna responsable: alguien mantiene la herramienta."
+        ],
+        "commands": [
+          "*Problema*",
+          "*Usuarios*",
+          "*Métrica*",
+          "*Mantenimiento*"
+        ],
+        "mistakes": [
+          "Construir sin hablar con quien lo usará.",
+          "Herramientas sin responsable.",
+          "No medir el beneficio."
+        ],
+        "essential": "Claude 101"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: AI Product Builder",
+          "url": "https://roadmap.sh/ai-product-builder",
+          "description": "Mapa de etapas de roadmap.sh: de la idea a un producto con IA. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Claude 101",
+          "url": "https://academy.claude.com/courses/claude-101",
+          "description": "Usar Claude en el trabajo diario: primera conversación, prompts efectivos, proyectos, artifacts, skills y herramientas conectadas. 13 lecciones, un cuestionario e insignia. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "2,5 h"
+        },
+        {
+          "order": 2,
+          "title": "Building effective human-agent teams (beta)",
+          "url": "https://academy.claude.com/courses/building-effective-human-agent-teams",
+          "description": "Repartir el trabajo entre personas y agentes de IA con criterio. Curso en beta. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Revisar el roadmap AI Product Builder y escribir el problema y el usuario de tu herramienta",
+          "completed_by_resource": "Roadmap: AI Product Builder"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Probar la herramienta con dos compañeras o compañeros y recoger sus observaciones"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Medir el tiempo que ahorra frente al método anterior"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Definir quién mantiene la herramienta y dónde se documenta"
+        }
+      ],
+      "mastery_signals": [
+        "Tu herramienta tiene problema, usuarios, medida de éxito y responsable",
+        "La documentas para que otra persona la mantenga"
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "Terminaste un prototipo útil para ti. ¿Qué haces antes de ofrecerlo al equipo?",
+          "options": [
+            "Lo envías sin explicación",
+            "Lo pruebas con 2 o 3 personas y defines responsable y documentación",
+            "Lo borras"
+          ],
+          "answer": 1,
+          "explanation": "Una herramienta de equipo necesita pruebas con usuarios, documentación y un responsable."
+        },
+        {
+          "key": "n5-q1",
+          "question": "¿Por qué medir el tiempo ahorrado?",
+          "options": [
+            "Para saber si el esfuerzo vale la pena",
+            "Para impresionar",
+            "No sirve"
+          ],
+          "answer": 0,
+          "explanation": "La medición muestra si la herramienta aporta valor."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Vibe coding",
+      "location": "IA",
+      "meaning": "Construir software conversando con una IA que escribe el código."
+    },
+    {
+      "term": "MVP",
+      "location": "Producto",
+      "meaning": "Versión mínima que sirve para probar la idea."
+    },
+    {
+      "term": "Diff",
+      "location": "Git",
+      "meaning": "Diferencias entre dos versiones de los archivos."
+    },
+    {
+      "term": "TDD",
+      "location": "Pruebas",
+      "meaning": "Escribir primero la prueba y luego el código que la hace pasar."
+    },
+    {
+      "term": "Secreto",
+      "location": "Seguridad",
+      "meaning": "Clave, contraseña o token que nunca va en el código."
+    }
+  ],
+  "description": "Construir herramientas con IA de forma responsable: plan por fases, iteración, pruebas, Git, revisión del código generado, seguridad y los casos en los que no se debe hacer.",
+  "intro": {
+    "title": "Rápido, pero con red de seguridad",
+    "text": "Programar conversando es rápido y riesgoso. Aquí aprendes a planificar, probar, versionar y revisar para que lo que sale de la IA sea algo que puedas mantener y defender."
+  },
+  "flow": [
+    {
+      "title": "Mentalidad",
+      "text": "Qué es y qué no"
+    },
+    {
+      "title": "Planificar",
+      "text": "MVP y fases"
+    },
+    {
+      "title": "Probar",
+      "text": "Pruebas y Git"
+    },
+    {
+      "title": "Revisar",
+      "text": "Checklist del diff"
+    },
+    {
+      "title": "Asegurar",
+      "text": "Secretos y límites"
+    },
+    {
+      "title": "Producto",
+      "text": "De prototipo a herramienta"
+    }
+  ]
+}

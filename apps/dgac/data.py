@@ -5,21 +5,15 @@ infografías son de JEJ y se leen de disco. Si algo falta, la sección dice que 
 """
 
 import json
-import re
 from pathlib import Path
 
 from django.conf import settings
 
+from apps.core import private_files
+
 from . import constants
 
 _cache: dict = {}
-_SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,80}\.(svg|png|jpg|jpeg)$")
-CONTENT_TYPES = {
-    "svg": "image/svg+xml",
-    "png": "image/png",
-    "jpg": "image/jpeg",
-    "jpeg": "image/jpeg",
-}
 
 
 class DataError(Exception):
@@ -114,14 +108,8 @@ def load_route():
 
 def image_path(name):
     """Ruta segura de una infografía de la carpeta de datos, o None. El nombre nunca sale de la carpeta."""
-    if not _SAFE_NAME.match(name or ""):
-        return None
-    base = (data_dir() / constants.DIR_IMAGES).resolve()
-    path = (base / name).resolve()
-    if path.parent != base or not path.is_file():
-        return None
-    return path
+    return private_files.safe_file(data_dir() / constants.DIR_IMAGES, name)
 
 
 def image_type(path: Path):
-    return CONTENT_TYPES[path.suffix.lstrip(".").lower()]
+    return private_files.content_type(path)

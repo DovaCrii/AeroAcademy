@@ -29,7 +29,7 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-circ svg.i{position:absolute;right:6px;bottom:6px;width:34px;height:34px;padding:7px;border-radius:50%;background:var(--cc,var(--amber));color:#1F2430;stroke-width:1.8;box-sizing:border-box}
 .w-circles a:hover .w-circ,.w-circles a:focus-visible .w-circ{transform:translateY(-4px) rotate(-3deg);box-shadow:0 0 0 3px var(--cc,var(--amber)),var(--shadow-3)}
 .w-circles b{font-family:var(--font-mono);font-weight:700;font-size:var(--fs-label);letter-spacing:.12em;text-align:center;max-width:14ch;line-height:1.3}
-.w-circles li[data-d=arquitectura]{--cc:var(--f-arq)}.w-circles li[data-d=civil-estructural]{--cc:var(--f-civ)}.w-circles li[data-d=topografia]{--cc:var(--f-top)}.w-circles li[data-d=mecanica]{--cc:var(--f-mec)}.w-circles li[data-d=captura-rpa]{--cc:var(--f-cap)}
+.w-circles li[data-d=arquitectura]{--cc:var(--f-arq)}.w-circles li[data-d=civil-estructural]{--cc:var(--f-civ)}.w-circles li[data-d=topografia]{--cc:var(--f-top)}.w-circles li[data-d=mecanica]{--cc:var(--f-mec)}.w-circles li[data-d=captura-rpa]{--cc:var(--f-cap)}.w-circles li[data-d=ia-datos]{--cc:#A78BFA}
 @media (max-width:760px){.w-circles ul{justify-content:flex-start;padding-left:16px;padding-right:16px;margin:0 -16px}}
 
 /* acento por disciplina: --acc (texto/trazo AA en el tema) */
@@ -39,6 +39,7 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-rc[data-d=topografia]{--acc:var(--d-top)}
 .w-rc[data-d=mecanica]{--acc:var(--d-mec)}
 .w-rc[data-d=captura-rpa]{--acc:var(--d-cap)}
+.w-rc[data-d=ia-datos]{--acc:var(--d-kno)}
 
 /* ── saludo: tarjeta que se monta sobre el hero, intro editorial + contadores de distinto tamaño ───── */
 .w-greet{position:relative;z-index:3;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;
@@ -379,7 +380,7 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 }
 
 /* ══ Tema cuaderno: piel clara con notas de color y trazo de lápiz (sobrescribe las bases de arriba) ═════════ */
-.w-rc[data-d=arquitectura]{--accf:var(--f-arq)}.w-rc[data-d=civil-estructural]{--accf:var(--f-civ)}.w-rc[data-d=topografia]{--accf:var(--f-top)}.w-rc[data-d=mecanica]{--accf:var(--f-mec)}.w-rc[data-d=captura-rpa]{--accf:var(--f-cap)}
+.w-rc[data-d=arquitectura]{--accf:var(--f-arq)}.w-rc[data-d=civil-estructural]{--accf:var(--f-civ)}.w-rc[data-d=topografia]{--accf:var(--f-top)}.w-rc[data-d=mecanica]{--accf:var(--f-mec)}.w-rc[data-d=captura-rpa]{--accf:var(--f-cap)}.w-rc[data-d=ia-datos]{--accf:#A78BFA}
 .w-sec,.w-greet,.w-feat-in{position:relative}
 
 /* saludo: ya no se monta sobre el hero (lo hacen los círculos) */

@@ -11,9 +11,9 @@
     </div>
     <aside class="pp-info" aria-labelledby="pp-imp">
       <h2 id="pp-imp"><span>¡Importante!</span></h2>
-      <p class="pp-intro"><b>Para entrar a la academia tienes que estar dentro de la red del equipo.</b> Sigue estos pasos:</p>
+      {% if request.public_door %}<p class="pp-intro"><b>Entras por la dirección pública de la academia.</b> Solo funciona con tu correo y contraseña (el acceso automático por <span class="term">Tailscale</span> no existe aquí). Sigue estos pasos:</p>{% else %}<p class="pp-intro"><b>Para entrar a la academia tienes que estar dentro de la red del equipo.</b> Sigue estos pasos:</p>{% endif %}
       <ol class="pp-steps">
-        <li><span class="pp-n" aria-hidden="true">1</span>{% include "accounts/_ico.html" with name="net" %}<span>Únete a la tailnet (<span class="term">Tailscale</span>) con tu correo.</span></li>
+        <li><span class="pp-n" aria-hidden="true">1</span>{% include "accounts/_ico.html" with name="net" %}<span>{% if request.public_door %}Ten a mano el enlace del equipo que te mandó el admin.{% else %}Únete a la tailnet (<span class="term">Tailscale</span>) con tu correo.{% endif %}</span></li>
         <li><span class="pp-n" aria-hidden="true">2</span>{% include "accounts/_ico.html" with name="link" %}<span>Abre el enlace del equipo que te mandó el admin.</span></li>
         <li><span class="pp-n" aria-hidden="true">3</span>{% include "accounts/_ico.html" with name="key" %}<span>Crea tu contraseña.</span></li>
         <li><span class="pp-n" aria-hidden="true">4</span>{% include "accounts/_ico.html" with name="sheet" %}<span>Completa tu hoja de personaje.</span></li>

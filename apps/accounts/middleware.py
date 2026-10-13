@@ -6,12 +6,12 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.cache import cache
-from django.http import HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import urlencode
 
-from . import services
+from . import services, two_factor
 from .models import PersonStatus
 
 logger = logging.getLogger("apps.accounts")
@@ -44,6 +44,27 @@ def _has_password_session(request) -> bool:
     )
 
 
+class PublicDoorMiddleware:
+    """Puerta pública (D36, Funnel). La decide el proceso (`settings.PUBLIC_DOOR`), nunca la petición.
+
+    En la puerta pública se borran los encabezados de identidad de Tailscale (aunque alguien los mande), y
+    `/admin/`, la moderación y la gestión de personas responden 404. En la puerta de la tailnet no cambia nada.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        request.public_door = bool(settings.PUBLIC_DOOR)
+        if request.public_door:
+            for name in (LOGIN_HEADER, NAME_HEADER, PIC_HEADER):
+                request.META.pop(name, None)
+            path = request.path
+            if path.startswith(settings.PUBLIC_BLOCKED_PREFIXES) or "/moderar" in path:
+                raise Http404("No encontrado.")
+        return self.get_response(request)
+
+
 class TailscaleRemoteUserMiddleware(RemoteUserMiddleware):
     """Identidad desde `Tailscale-User-Login` o, si no hay encabezado, desde la sesión por contraseña (D34).
 
@@ -71,6 +92,9 @@ class TailscaleRemoteUserMiddleware(RemoteUserMiddleware):
         ):  # solo desde el proxy local: lo usa el instalador y el monitoreo
             return None
 
+        if getattr(request, "public_door", False):
+            return self._public_door(request)
+
         header_login = request.META.get(LOGIN_HEADER, "").strip()
         if not header_login and settings.DEBUG:
             header_login = settings.DEV_REMOTE_USER
@@ -93,6 +117,18 @@ class TailscaleRemoteUserMiddleware(RemoteUserMiddleware):
             self._sync(request)
             return None
 
+        if request.user.is_authenticated or request.path.startswith(PUBLIC_PREFIXES):
+            return None
+        target = reverse("accounts:welcome")
+        if request.method == "GET":
+            target += "?" + urlencode({"next": request.get_full_path()})
+        return redirect(target)
+
+    @staticmethod
+    def _public_door(request):
+        """Sin Tailscale: solo vale la sesión por contraseña. Una sesión de otra clase se cierra."""
+        if request.user.is_authenticated and not _has_password_session(request):
+            auth.logout(request)
         if request.user.is_authenticated or request.path.startswith(PUBLIC_PREFIXES):
             return None
         target = reverse("accounts:welcome")
@@ -135,4 +171,36 @@ class ApprovalMiddleware:
                 waiting = reverse("accounts:waiting")
                 if request.path != waiting:
                     return redirect(waiting)
+        return self.get_response(request)
+
+
+class PublicSecondFactorMiddleware:
+    """En la puerta pública, quien es lead o admin debe pasar el segundo factor (TOTP) antes de ver nada más.
+
+    - Con TOTP activado y sin verificar en esta sesión: va a /verificar/.
+    - Sin TOTP activado: página de bloqueo (se activa entrando por la tailnet).
+    """
+
+    EXEMPT = ("/verificar/", "/salir/", HEALTH_PATH)
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user = getattr(request, "user", None)
+        if (
+            getattr(request, "public_door", False)
+            and user is not None
+            and user.is_authenticated
+            and user.status == PersonStatus.APPROVED
+            and two_factor.needs_second_factor(user)
+            and not request.session.get(two_factor.SESSION_KEY)
+            and not request.path.startswith(self.EXEMPT)
+        ):
+            if two_factor.is_enrolled(user):
+                target = reverse("accounts:verify")
+                if request.method == "GET":
+                    target += "?" + urlencode({"next": request.get_full_path()})
+                return redirect(target)
+            return render(request, "accounts/totp_blocked.html", status=403)
         return self.get_response(request)

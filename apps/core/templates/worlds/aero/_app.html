@@ -58,6 +58,7 @@
   <h2>Waypoints</h2>
 </div>
 <p class="ao-sub">Elige un waypoint en la lista. Cada misión que marcas y cada pregunta que respondes queda guardada a tu nombre.{% if path.slug == "dgac-rpas" %} <a href="{% url 'dgac:home' %}">Ver las láminas del proceso</a>.{% endif %}</p>
+{% include "paths/_level_line.html" %}
 <div class="ao-viewer">
   {% include "worlds/aero/browser.html" %}
   {% include "worlds/aero/_panel.html" %}

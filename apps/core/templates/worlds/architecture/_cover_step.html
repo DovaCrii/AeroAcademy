@@ -1,0 +1,15 @@
+{% load core_extras %}
+<section class="sl-card sl-cover" aria-labelledby="sl-h">
+  <h4 class="sl-h" id="sl-h">Qué vas a lograr</h4>
+  {% if current.level.goal %}<div class="ar-goal">{{ current.level.goal|terms }}</div>{% endif %}
+  {% if current.level.mastery_signals %}
+  <h5 class="ar-sub-h">Cómo se ve dominarlo</h5>
+  <ul class="ar-look">{% for s in current.level.mastery_signals %}<li>{{ s|terms }}</li>{% endfor %}</ul>
+  {% endif %}
+</section>
+<section class="sl-card sl-outline" aria-labelledby="sl-o">
+  <h4 class="sl-h" id="sl-o">Lo que sigue en este nivel</h4>
+  <ol class="sl-toc">
+    {% for s in steps %}{% if s.key != "portada" %}<li><a href="{{ s.url }}" data-enhance data-step><span class="n">{{ s.n }}</span>{{ s.label }}</a></li>{% endif %}{% endfor %}
+  </ol>
+</section>

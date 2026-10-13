@@ -6,7 +6,8 @@
     {"slug": "topografia", "name": "Topografía", "default_world": "survey", "order": 2},
     {"slug": "mecanica", "name": "Mecánica", "default_world": "mechanical", "order": 3},
     {"slug": "captura-rpa", "name": "Captura / RPA", "default_world": "aero", "order": 4},
-    {"slug": "transversal", "name": "Transversal", "default_world": "civil", "order": 5}
+    {"slug": "transversal", "name": "Transversal", "default_world": "civil", "order": 5},
+    {"slug": "ia-datos", "name": "IA y Datos", "default_world": "architecture", "order": 6}
   ],
   "vendors": [
     {
@@ -71,7 +72,46 @@
     {
       "slug": "microsoft", "name": "Microsoft", "url": "https://www.microsoft.com/", "order": 6,
       "products": [
-        {"slug": "power-bi", "name": "Power BI", "disciplines": []}
+        {"slug": "power-bi", "name": "Power BI", "disciplines": ["ia-datos"]}
+      ]
+    },
+    {
+      "slug": "anthropic", "name": "Anthropic", "url": "https://www.anthropic.com/", "order": 10,
+      "products": [
+        {"slug": "claude", "name": "Claude", "disciplines": ["transversal", "ia-datos"]},
+        {"slug": "claude-code", "name": "Claude Code", "disciplines": ["transversal", "ia-datos"]},
+        {"slug": "mcp", "name": "Model Context Protocol (MCP)", "disciplines": ["transversal", "ia-datos"]},
+        {"slug": "claude-api", "name": "Claude API", "disciplines": ["ia-datos"]}
+      ]
+    },
+    {
+      "slug": "deeplearning-ai", "name": "DeepLearning.AI", "url": "https://www.deeplearning.ai/", "order": 11,
+      "products": []
+    },
+    {
+      "slug": "kaggle", "name": "Kaggle (Google)", "url": "https://www.kaggle.com/", "order": 12,
+      "products": [
+        {"slug": "kaggle-learn", "name": "Kaggle Learn", "disciplines": ["ia-datos"]}
+      ]
+    },
+    {
+      "slug": "huggingface", "name": "Hugging Face", "url": "https://huggingface.co/", "order": 13,
+      "products": []
+    },
+    {
+      "slug": "google", "name": "Google", "url": "https://www.google.com/", "order": 14,
+      "products": [
+        {"slug": "earth-engine", "name": "Google Earth Engine", "disciplines": ["ia-datos", "topografia"]}
+      ]
+    },
+    {
+      "slug": "open-source", "name": "Código abierto y comunidad", "url": "", "order": 15,
+      "products": [
+        {"slug": "python", "name": "Python", "disciplines": ["transversal", "ia-datos"]},
+        {"slug": "git", "name": "Git y GitHub", "disciplines": ["transversal", "ia-datos"]},
+        {"slug": "geopandas", "name": "GeoPandas", "disciplines": ["ia-datos", "topografia"]},
+        {"slug": "qgis", "name": "QGIS", "disciplines": ["ia-datos", "topografia"]},
+        {"slug": "postgis", "name": "PostgreSQL / PostGIS", "disciplines": ["ia-datos", "topografia"]}
       ]
     }
   ]
