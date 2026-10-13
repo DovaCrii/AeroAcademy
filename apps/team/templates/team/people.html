@@ -10,6 +10,33 @@
   <p>Invitación, aprobación y área de cada persona. {% if is_admin %}<a href="{% url 'team:people_add' %}">Agregar personas</a> · {% endif %}<a href="{% url 'team:board' %}">Tablero del equipo</a> · <a href="{% url 'community:moderation' %}">Moderación</a></p>
 </div>
 
+{% if is_admin %}
+<section class="mod-sec" aria-labelledby="tl-h">
+  <h2 id="tl-h">Enlace de inscripción del equipo</h2>
+  <p class="muted">Un solo enlace para todos: lo mandas y cada persona se inscribe con su correo y su contraseña. Quien no esté en la lista queda pendiente hasta que la apruebes. Solo funciona dentro de la tailnet.</p>
+  {% if team_link_url %}
+  <p><b>Cópialo ahora: no se vuelve a mostrar.</b> Si lo pierdes, genera otro (el anterior deja de servir).</p>
+  <input id="tl-in" class="copy-box" type="text" value="{{ team_link_url }}" readonly>
+  <p><button class="btn" type="button" data-copy="tl-in">Copiar enlace</button></p>
+  {% endif %}
+  {% if team_link %}
+  <p>Vigente hasta el <b>{{ team_link.expires_at|date:"d/m/Y H:i" }}</b> · {{ team_link.uses }} inscripci{{ team_link.uses|pluralize:"ón,ones" }}{% if team_link.created_by %} · generado por {{ team_link.created_by.name }}{% endif %}.</p>
+  {% else %}
+  <p class="muted">No hay un enlace vigente.</p>
+  {% endif %}
+  <form class="inline-form" method="post" action="{% url 'team:team_link_create' %}">{% csrf_token %}
+    <label>Vigencia
+      <select name="days">{% for d in team_link_days %}<option value="{{ d }}"{% if d == team_link_default %} selected{% endif %}>{{ d }} días</option>{% endfor %}</select></label>
+    <button class="btn primary" type="submit">{% if team_link %}Generar uno nuevo (revoca el actual){% else %}Generar enlace{% endif %}</button>
+  </form>
+  {% if team_link %}
+  <form class="inline-form" method="post" action="{% url 'team:team_link_revoke' %}">{% csrf_token %}
+    <button class="btn" type="submit">Revocar enlace</button>
+  </form>
+  {% endif %}
+</section>
+{% endif %}
+
 {% for person, link in fresh_links %}
 <section class="mod-sec" aria-labelledby="fl-{{ person.pk }}">
   <h2 id="fl-{{ person.pk }}">Enlace de registro de {{ person.name }}</h2>

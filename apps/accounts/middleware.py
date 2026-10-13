@@ -22,7 +22,7 @@ PIC_HEADER = "HTTP_TAILSCALE_USER_PROFILE_PIC"
 HEALTH_PATH = "/healthz"
 TAILSCALE_BACKEND = "apps.accounts.backends.TailscaleBackend"
 # Páginas que puede ver quien aún no entró (bienvenida, entrar, salir, registro con enlace del admin).
-PUBLIC_PREFIXES = ("/bienvenida/", "/entrar/", "/salir/", "/registro/")
+PUBLIC_PREFIXES = ("/bienvenida/", "/entrar/", "/salir/", "/registro/", "/inscripcion/")
 
 
 def _is_trusted(remote_addr: str) -> bool:

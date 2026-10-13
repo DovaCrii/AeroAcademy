@@ -1,0 +1,24 @@
+{% extends "accounts/_auth_layout.html" %}
+
+{% block title %}Inscríbete{% endblock %}
+{% block kicker %}{{ BRAND_PLATFORM }} · inscripción del equipo{% endblock %}
+{% block form_title %}Inscríbete{% endblock %}
+
+{% block form_body %}
+<p class="pub-lead">Este enlace es para el equipo. Escribe tu correo, tu nombre y elige una contraseña.</p>
+{% if wait %}<p class="pub-error" role="alert">{{ wait }}</p>{% endif %}
+<form class="pub-form" method="post" novalidate>
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="field">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <span class="ico-wrap">{% include "accounts/_ico.html" with name=field.name %}{{ field }}</span>
+    {% for err in field.errors %}<p class="pub-error" role="alert">{{ err }}</p>{% endfor %}
+    {% if field.name == "password1" %}<p class="pub-hint">Al menos 10 caracteres; evita tu correo, tu nombre y claves comunes.</p>{% endif %}
+  </div>
+  {% endfor %}
+  {% for err in form.non_field_errors %}<p class="pub-error" role="alert">{{ err }}</p>{% endfor %}
+  <button class="btn pub-btn" type="submit">Inscribirme</button>
+</form>
+<p class="pub-invite">¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}">Entra con tu contraseña</a>.</p>
+{% endblock %}

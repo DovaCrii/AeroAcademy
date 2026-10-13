@@ -154,3 +154,29 @@ class Person(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     @property
     def is_admin(self):
         return self.role == "admin"
+
+
+class TeamSignupLink(TimeStampedModel):
+    """Enlace de inscripción del equipo (D35): uno solo vigente para todos. Se guarda solo el hash del secreto; la URL
+    (firmada) lleva el id y el secreto y se muestra una única vez al generarla."""
+
+    secret_hash = models.CharField("huella del secreto", max_length=64, editable=False)
+    created_by = models.ForeignKey(
+        Person,
+        verbose_name="generado por",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    expires_at = models.DateTimeField("vence el")
+    revoked_at = models.DateTimeField("revocado el", null=True, blank=True)
+    uses = models.PositiveIntegerField("inscripciones", default=0)
+
+    class Meta:
+        verbose_name = "enlace de inscripción del equipo"
+        verbose_name_plural = "enlaces de inscripción del equipo"
+        ordering = ["-created_at", "-pk"]
+
+    def __str__(self):
+        return f"Enlace #{self.pk} (vence {self.expires_at:%d/%m/%Y})"

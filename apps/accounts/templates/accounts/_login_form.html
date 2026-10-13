@@ -5,11 +5,11 @@
   {% if error %}<p class="pub-error" role="alert">{{ error }}</p>{% endif %}
   <div class="field">
     <label for="id_email">Correo</label>
-    <input id="id_email" name="email" type="email" autocomplete="username" inputmode="email" maxlength="254" required value="{{ email|default:'' }}"{% if error %} aria-invalid="true"{% endif %}>
+    <span class="ico-wrap">{% include "accounts/_ico.html" with name="mail" %}<input id="id_email" name="email" type="email" autocomplete="username" inputmode="email" maxlength="254" required value="{{ email|default:'' }}"{% if error %} aria-invalid="true"{% endif %}></span>
   </div>
   <div class="field">
     <label for="id_password">Contraseña</label>
-    <input id="id_password" name="password" type="password" autocomplete="current-password" maxlength="256" required>
+    <span class="ico-wrap">{% include "accounts/_ico.html" with name="lock" %}<input id="id_password" name="password" type="password" autocomplete="current-password" maxlength="256" required></span>
   </div>
   <button class="btn pub-btn" type="submit">Entrar</button>
   <details class="pub-forgot">

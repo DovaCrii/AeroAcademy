@@ -11,19 +11,27 @@
 <link rel="stylesheet" href="{% static 'core/tokens.css' %}">
 <link rel="stylesheet" href="{% static 'core/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/components.css' %}">
+<link rel="stylesheet" href="{% static 'core/brand.css' %}">
 <link rel="stylesheet" href="{% static 'accounts/public.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/paper.css' %}">
 <script src="{% static 'core/theme.js' %}"></script>
+<script src="{% static 'accounts/public.js' %}" defer></script>
 </head>
 <body class="pub">
 <a class="skip" href="#contenido">Saltar al contenido</a>
 
 {# Diseño mínimo para quien aún no entró: sin menús, campana ni asistente (nada de eso funciona sin sesión). #}
 <header class="pub-top">
-  <a class="pub-brand" href="{% url 'accounts:welcome' %}" aria-label="Levantamiento Digital 101, {{ BRAND_PLATFORM }}: bienvenida">
-    {% include "core/partials/mark.html" with cls="pub-mark" %}
-    <span class="pub-brandtxt"><span class="cap">{{ BRAND_PLATFORM }}</span><span class="pub-name">Levantamiento Digital <b>101</b></span></span>
-  </a>
-  <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
+  <div class="pp-band">
+    <a class="pub-brand brandcell" href="{% url 'accounts:welcome' %}" aria-label="Levantamiento Digital 101, {{ BRAND_PLATFORM }}: bienvenida">
+      {% include "core/partials/mark.html" with cls="pub-mark mark" %}
+      <span class="brandtxt"><span class="cap">{{ BRAND_PLATFORM }}</span><span class="badge101"><span>Levantamiento Digital</span><b>101</b></span></span>
+    </a>
+    <svg class="pp-doodle d1" viewBox="0 0 80 40" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 30c14-26 38-26 52-4" stroke-dasharray="3 6"/><path d="m50 18 8 8-11 3"/><path d="m68 6 2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="currentColor" stroke="none"/></svg>
+    <img class="pp-nala teo-px" src="{% static 'game/teo/teo-happy.svg' %}" width="64" height="64" alt="" role="presentation">
+    <svg class="pp-doodle d2" viewBox="0 0 80 40" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 12 18 8l12 6 12-6 12 4"/><path d="M12 30h40" stroke-dasharray="2 5"/><circle cx="66" cy="28" r="5"/><path d="M62 10h8M66 6v8"/></svg>
+    <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
+  </div>
 </header>
 
 <main id="contenido" class="pub-main">
@@ -33,6 +41,7 @@
   {% block content %}{% endblock %}
 </main>
 
+{% include "accounts/_landscape.html" %}
 <footer class="pub-foot">
   {{ BRAND_PLATFORM }} · {{ BRAND_ACADEMY }} · Solo dentro de la red del equipo (Tailscale)
 </footer>

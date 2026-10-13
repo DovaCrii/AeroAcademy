@@ -7,8 +7,8 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST
 
-from . import services
-from .forms import SignupForm
+from . import services, team_link
+from .forms import SignupForm, TeamSignupForm
 from .models import PersonStatus
 
 LOGIN_ERROR = "Correo o contraseña incorrectos."
@@ -135,6 +135,50 @@ def signup(request, token):
             {"form": form, "person": person, "is_reset": person.has_usable_password()},
         )
     )
+
+
+TEAM_WAIT = "Demasiados intentos con este enlace. Espera unos 15 minutos y vuelve a intentar."
+
+
+@never_cache
+@require_http_methods(["GET", "POST"])
+def team_signup(request, token):
+    """Inscripción con el enlace del equipo (D35). Cualquier fallo del enlace muestra la misma página."""
+    link = team_link.resolve(token)
+    if link is None:
+        return _private(render(request, "accounts/team_signup_invalid.html", status=400))
+    if request.method == "GET":
+        return _private(
+            render(request, "accounts/team_signup.html", {"form": TeamSignupForm(), "link": link})
+        )
+
+    ip = _client_ip(request)
+    form = TeamSignupForm(request.POST)
+    if team_link.blocked(ip, link):
+        return _private(
+            render(
+                request,
+                "accounts/team_signup.html",
+                {"form": form, "link": link, "wait": TEAM_WAIT},
+                status=429,
+            )
+        )
+    team_link.register_submission(ip, link)
+    if not form.is_valid():
+        return _private(render(request, "accounts/team_signup.html", {"form": form, "link": link}))
+
+    data = form.cleaned_data
+    result = team_link.enroll(
+        link,
+        login=data["email"],
+        display_name=data["display_name"],
+        password=data["password1"],
+        character_class=data["character_class"],
+    )
+    if result.kind == team_link.LOGGED_IN:
+        auth.login(request, result.person, backend=services.PASSWORD_BACKEND)
+        return redirect("core:home")
+    return _private(render(request, "accounts/team_signup_result.html", {"kind": result.kind}))
 
 
 def _private(response):
