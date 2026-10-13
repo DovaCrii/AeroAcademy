@@ -91,12 +91,17 @@ def test_tiles_have_a_family_and_every_tile_has_a_row():
 OFFICIAL_AUTODESK = {"autocad", "revit", "forma", "navisworks", "infraworks"}
 
 
+PICTO_AUTODESK = {"civil3d", "plant-3d", "recap", "dynamo", "acc"}
+
+
 def test_autodesk_tiles_have_letter_and_code_and_bentley_are_pictograms():
     root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
     for t in software.TILES.values():
         svg = (root / t.static_path).read_text(encoding="utf-8")
         if t.slug in OFFICIAL_AUTODESK:  # logo oficial de Autodesk sobre baldosa blanca
             assert (root / "core/img/software/oficial" / f"autodesk-{t.slug}.svg").is_file()
+            assert 'fill="#fff"' in svg and "<text" not in svg
+        elif t.slug in PICTO_AUTODESK:  # pictograma simplificado sobre baldosa blanca, sin texto
             assert 'fill="#fff"' in svg and "<text" not in svg
         elif t.family == software.AUTODESK:
             assert (

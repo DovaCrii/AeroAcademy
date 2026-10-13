@@ -46,6 +46,11 @@ copias en `img/software/oficial/autodesk-<producto>.svg`. En las baldosas van de
 ## Sin icono oficial (siguen con pictograma original; falta que el dueño los aporte)
 
 - **Autodesk:** Civil 3D, Plant 3D, ReCap, Dynamo, Autodesk Docs / ACC (sus páginas no publican un icono propio descargable).
+  Se dibujaron como **pictogramas simplificados a partir de la imagen «Suite Autodesk · aplicaciones complementarias»** que
+  aportó el dueño (carretera azul con líneas de carril; refinería con acento rojo; escáner sobre trípode frente a una nube de
+  puntos; nodos unidos por cables; nube con hoja y tres personas). **No son archivos oficiales de Autodesk**: reemplazarlos si
+  se consiguen los oficiales. Van en `civil3d.svg`, `plant-3d.svg`, `recap.svg`, `dynamo.svg`, `acc.svg`, `ruta-civil-3d.svg`
+  y `ruta-plant-3d.svg`, sobre baldosa blanca y sin texto.
 - **Bentley Systems (todos):** bentley.com solo publica fotos de producto, no iconos, y el icono `bentley` de Simple Icons
   es el de **Bentley Motors** (otra marca); no se usa.
 
