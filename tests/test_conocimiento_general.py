@@ -331,7 +331,7 @@ def test_sheet_shows_next_goal_to_its_owner_only(client_for, member, make_person
     do_level(member, topo, "n0")
     html = client_for(member.login).get("/perfil/").content.decode()
     assert "Próximo logro" in html and "ng-bar" in html
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     seen = client_for(other.login).get(f"/perfil/{member.pk}/").content.decode()
     assert "Próximo logro" not in seen
 

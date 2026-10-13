@@ -94,7 +94,7 @@ def test_unpublished_paths_are_not_suggested_to_members_but_are_to_leads(member,
 
 
 def test_board_shows_this_weeks_badges_and_team_certificates(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     cred = make_cred(other, title="Certificado Revit")
     creds.verify(cred, lead)
     texts = [i["text"] for i in dashboard.guild_board(member)["items"]]
@@ -103,14 +103,14 @@ def test_board_shows_this_weeks_badges_and_team_certificates(member, lead, make_
 
 
 def test_board_hides_private_credentials(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     creds.verify(make_cred(other, title="Secreto", visibility="private"), lead)
     texts = " ".join(i["text"] for i in dashboard.guild_board(member)["items"])
     assert "Secreto" not in texts
 
 
 def test_board_ignores_old_events_and_pending_people(member, make_person):
-    old = make_person("vieja@lev.cl")
+    old = make_person("vieja@example.com")
     game.award(old, "x:1", "manual", 10)
     badge = PersonBadge.objects.create(
         person=old,
@@ -120,7 +120,7 @@ def test_board_ignores_old_events_and_pending_people(member, make_person):
     )
     PersonBadge.objects.filter(pk=badge.pk).update(earned_at=timezone.now() - timedelta(days=30))
     XPEvent.objects.filter(person=old).update(created_at=timezone.now() - timedelta(days=30))
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     PersonBadge.objects.create(
         person=pending,
         badge=__import__("apps.gamification.models", fromlist=["Badge"]).Badge.objects.get(

@@ -1,6 +1,6 @@
 # Salida a producción
 
-Servidor: la VM `p340` de la tailnet (`ssh levdigital01@100.121.16.118`), **compartida con AeroControl y otras apps**. Lo sube la persona; el agente deja todo listo y comprobado, pero no entra al servidor.
+Servidor: la VM `p340` de la tailnet (`ssh example@<IP-DE-LA-VM>`), **compartida con AeroControl y otras apps**. Lo sube la persona; el agente deja todo listo y comprobado, pero no entra al servidor.
 Complementa `docs/OPERACION.md` (operación diaria) y `docs/FUSIONES.md` (cómo llegar a `main`).
 
 ## Cómo convive con lo que ya corre en la VM
@@ -17,7 +17,7 @@ En cambio tiene un **nodo Tailscale propio** en la misma VM: otra instancia de `
 | Configuración | `/etc/aerocontrol.env` | `/etc/centro/env` |
 | Datos | `/srv/aerocontrol-data` | `/var/lib/centro` |
 | Servicios | `aerocontrol.service` | `centro.service`, `centro-*.timer`, `tailscaled-aeroacademy.service` |
-| Usuario | `levdigital01` | `centro` (de sistema, sin acceso) |
+| Usuario | `example` | `centro` (de sistema, sin acceso) |
 
 El instalador **no toca** el puerto 8000 ni lo que ya publique el nodo principal; si el 8010 estuviera ocupado, se detiene y te dice qué variable cambiar.
 
@@ -35,14 +35,14 @@ python tools/preflight.py        # debe terminar en «Todo en verde»
 
 **A. Código** (si ya clonaste, solo actualiza)
 ```bash
-ssh levdigital01@100.121.16.118
+ssh example@<IP-DE-LA-VM>
 cd ~/AeroAcademy 2>/dev/null && git pull || git clone https://github.com/DovaCrii/AeroAcademy.git ~/AeroAcademy
 cd ~/AeroAcademy && git log --oneline -1
 ```
 
 **B. Configuración** (desde tu computador, otra terminal, en la carpeta del proyecto)
 ```bash
-scp deploy/centro.env levdigital01@100.121.16.118:~/AeroAcademy/deploy/centro.env
+scp deploy/centro.env example@<IP-DE-LA-VM>:~/AeroAcademy/deploy/centro.env
 ```
 Hazlo **antes** del bloque C: si el instalador corre sin ese archivo crea un `/etc/centro/env` vacío (no pasa nada grave: con `centro.env` presente, el instalador lo reemplaza y guarda el anterior como `env.bak`).
 

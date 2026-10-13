@@ -1,0 +1,8 @@
+{
+  "allow_email_domains": ["empresa.cl", "correo.cl", "preflight.cl"],
+  "allow_rules": {
+    "*.svg": ["rut"],
+    "tests/*": ["email"],
+    "tests/test_privacy_scan.py": ["rut"]
+  }
+}

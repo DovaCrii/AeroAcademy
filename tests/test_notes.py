@@ -178,7 +178,7 @@ def test_unpublished_paths_are_hidden_from_members(client_for, member):
 
 
 def test_pending_people_cannot_write(client_for, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     response = client_for(pending.login).post(
         f"/rutas/{FORMA}/notas/", {"type": "tip", "text": "x"}
     )

@@ -78,7 +78,7 @@ def test_useful_xp_idempotent_revoked_and_capped(member, make_person, lead):
     assert reaction_xp(member) == 1
     # tope diario
     for i in range(opinions.DAILY_REACTION_XP + 3):
-        fan = make_person(f"fan{i}@lev.cl")
+        fan = make_person(f"fan{i}@example.com")
         opinions.toggle_reaction(fan, thread(member, title=f"H{i}"), "useful")
     assert reaction_xp(member) == opinions.DAILY_REACTION_XP
 
@@ -100,7 +100,7 @@ def test_clear_reactions_only_when_hidden(member, lead, make_person):
         opinions.clear_reactions(t, lead)
     moderation.set_hidden(t, lead, True, "x")
     with pytest.raises(PermissionError):
-        opinions.clear_reactions(t, make_person("otra@lev.cl"))
+        opinions.clear_reactions(t, make_person("otra@example.com"))
     assert opinions.clear_reactions(t, lead) == 1
     assert not Reaction.objects.filter(thread=t).exists()
 
@@ -144,7 +144,7 @@ def test_vote_rejects_foreign_option(member, lead):
 def test_add_poll_later_by_author_only(member, make_person):
     t = thread(member, "ideas-mejoras")
     with pytest.raises(PermissionError):
-        opinions.add_poll(t, make_person("x@lev.cl"), "a\nb")
+        opinions.add_poll(t, make_person("x@example.com"), "a\nb")
     opinions.add_poll(t, member, "a\nb")
     with pytest.raises(ValueError):
         opinions.add_poll(t, member, "c\nd")
@@ -194,7 +194,7 @@ def test_views_post_only_csrf_and_escaping(client_for, member, lead):
 def test_hidden_thread_404_for_members_on_actions(client_for, member, lead, make_person):
     t = idea(member)
     moderation.set_hidden(t, lead, True, "x")
-    other = client_for(make_person("o@lev.cl").login)
+    other = client_for(make_person("o@example.com").login)
     assert (
         other.post(
             reverse("community:react", args=["thread", t.pk]), {"reaction": "idea"}
@@ -210,7 +210,9 @@ def test_clear_opinions_view_leads_only(client_for, member, lead, make_person):
     opinions.vote(t, lead, t.poll_options.first().pk)
     moderation.set_hidden(t, lead, True, "x")
     url = reverse("community:clear_opinions", args=[t.pk])
-    assert client_for(make_person("m@lev.cl").login).post(url, {"votes": "1"}).status_code == 403
+    assert (
+        client_for(make_person("m@example.com").login).post(url, {"votes": "1"}).status_code == 403
+    )
     client_for(lead.login).post(url, {"votes": "1"})
     assert not Reaction.objects.exists() and not PollVote.objects.exists()
 
@@ -219,7 +221,7 @@ def test_sorting_and_summary(client_for, member, lead, make_person):
     thread(member, title="Tranquilo")
     loved = thread(member, title="Querido")
     opinions.toggle_reaction(lead, loved, "idea")
-    opinions.toggle_reaction(make_person("z@lev.cl"), loved, "useful")
+    opinions.toggle_reaction(make_person("z@example.com"), loved, "useful")
     forum.reply(loved, lead, "hola")
     c = client_for(lead.login)
     url = reverse("community:forum")
@@ -257,7 +259,7 @@ def test_queries_do_not_grow_with_data(client_for, member, lead, make_person):
     list_url, detail_url = reverse("community:forum"), reverse("community:thread", args=[first.pk])
     base_list, base_detail = _count(c, list_url), _count(c, detail_url)
     for i in range(12):
-        fan = make_person(f"f{i}@lev.cl")
+        fan = make_person(f"f{i}@example.com")
         t = idea(member, "A\nB")
         post = forum.reply(first, lead, f"msg {i}")
         for kind in ("useful", "idea"):

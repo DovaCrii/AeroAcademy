@@ -1,0 +1,7 @@
+# Paso para agregar a un job de GitHub Actions, después de actions/checkout@v4
+# (la revisión usa solo Python de la biblioteca estándar; el runner de GitHub ya lo trae).
+# Copiar tools/kit/privacy_scan.py a tools/privacy_scan.py (o dejarlo en tools/kit/) y,
+# si hace falta, crear .privacy-scan.json con las excepciones.
+
+      - name: Revisión de privacidad
+        run: python tools/kit/privacy_scan.py

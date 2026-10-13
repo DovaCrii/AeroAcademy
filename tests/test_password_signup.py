@@ -146,7 +146,7 @@ def test_link_goes_into_the_copyable_invitation(admin_person, invited, client_fo
 
 @pytest.mark.parametrize("role", ["lead", "member"])
 def test_only_admin_can_create_links(role, make_person, invited, client_for):
-    person = make_person(f"{role}x@lev.cl", role=role)
+    person = make_person(f"{role}x@example.com", role=role)
     c = client_for(person.login)
     assert c.post(f"/equipo/personas/{invited.pk}/enlace/").status_code == 403
     invited.refresh_from_db()
@@ -340,7 +340,7 @@ def login(c, email, password, **extra):
 
 def test_login_ok(with_password):
     c = anon()
-    response = login(c, "ANA@lev.cl ", GOOD)
+    response = login(c, "ANA@example.com ", GOOD)
     assert response.status_code == 302 and response.url == "/"
     assert session_person_id(c) == str(with_password.pk)
     assert c.get("/").status_code == 200
@@ -354,17 +354,17 @@ def test_login_page_renders(client_for):
 
 def test_wrong_password_and_unknown_email_are_indistinguishable(with_password):
     a = login(anon(), with_password.login, "mala")
-    b = login(anon(), "nadie@lev.cl", "mala")
+    b = login(anon(), "nadie@example.com", "mala")
     assert a.status_code == b.status_code == 200
     for r in (a, b):
         assert "correo o contraseña incorrectos" in r.content.decode().lower()
     strip = lambda r: r.content.split(b"<main")[1].split(b"csrfmiddlewaretoken")[0]  # noqa: E731
-    assert strip(a).replace(b"ana@lev.cl", b"") == strip(b).replace(b"nadie@lev.cl", b"")
+    assert strip(a).replace(b"ana@example.com", b"") == strip(b).replace(b"nadie@example.com", b"")
 
 
 @pytest.mark.parametrize("status", ["pending", "suspended"])
 def test_pending_and_suspended_cannot_log_in(make_person, status):
-    person = set_password(make_person("p@lev.cl", status=status))
+    person = set_password(make_person("p@example.com", status=status))
     c = anon()
     response = login(c, person.login, GOOD)
     assert "correo o contraseña incorrectos" in response.content.decode().lower()
@@ -397,7 +397,7 @@ def test_login_rate_limit_blocks_even_the_right_password(with_password):
 
 
 def test_rate_limit_is_per_email(with_password, make_person):
-    other = set_password(make_person("otra@lev.cl"))
+    other = set_password(make_person("otra@example.com"))
     for _ in range(5):
         login(anon(), with_password.login, "mala")
     assert session_person_id(_logged(anon(), other.login)) == str(other.pk)
@@ -406,8 +406,8 @@ def test_rate_limit_is_per_email(with_password, make_person):
 def test_rate_limit_counts_unknown_emails_too():
     c = anon()
     for _ in range(5):
-        login(c, "nadie@lev.cl", "x")
-    assert "Demasiados intentos" in login(c, "nadie@lev.cl", "x").content.decode()
+        login(c, "nadie@example.com", "x")
+    assert "Demasiados intentos" in login(c, "nadie@example.com", "x").content.decode()
 
 
 def test_rate_limit_resets_after_success(with_password):
@@ -535,11 +535,11 @@ def test_header_login_still_works_without_a_password(client_for, member):
 
 
 def test_header_creates_pending_person_as_before(client_for):
-    assert client_for("nuevo@lev.cl").get("/").url == "/espera/"
+    assert client_for("nuevo@example.com").get("/").url == "/espera/"
 
 
 def test_header_does_not_hijack_a_password_session(client_for, with_password, make_person, caplog):
-    other = make_person("jefe2@lev.cl")
+    other = make_person("jefe2@example.com")
     c = anon()
     login(c, with_password.login, GOOD)
     c.defaults["HTTP_TAILSCALE_USER_LOGIN"] = other.login
@@ -570,13 +570,13 @@ def test_missing_header_does_not_log_a_password_session_out(with_password):
 def test_unknown_header_does_not_create_people_over_a_password_session(with_password):
     c = anon()
     login(c, with_password.login, GOOD)
-    c.defaults["HTTP_TAILSCALE_USER_LOGIN"] = "intruso@lev.cl"
+    c.defaults["HTTP_TAILSCALE_USER_LOGIN"] = "intruso@example.com"
     c.get("/")
-    assert not Person.objects.filter(login="intruso@lev.cl").exists()
+    assert not Person.objects.filter(login="intruso@example.com").exists()
 
 
 def test_login_page_lets_a_header_session_switch_to_password(client_for, member, make_person):
-    other = set_password(make_person("b@lev.cl"))
+    other = set_password(make_person("b@example.com"))
     c = client_for(member.login)
     c.get("/")
     page = c.get("/entrar/")
@@ -588,11 +588,11 @@ def test_login_page_lets_a_header_session_switch_to_password(client_for, member,
 
 
 def test_header_switches_header_sessions_as_before(client_for, make_person):
-    make_person("a@lev.cl")
-    b = make_person("b@lev.cl")
-    c = client_for("a@lev.cl")
+    make_person("a@example.com")
+    b = make_person("b@example.com")
+    c = client_for("a@example.com")
     c.get("/")
-    c.defaults["HTTP_TAILSCALE_USER_LOGIN"] = "b@lev.cl"
+    c.defaults["HTTP_TAILSCALE_USER_LOGIN"] = "b@example.com"
     c.get("/")
     assert session_person_id(c) == str(b.pk)
 
@@ -642,8 +642,8 @@ def test_command_prints_a_working_link(invited):
 
 
 def test_command_refuses_unknown_and_pending(make_person):
-    make_person("p@lev.cl", status="pending")
-    for email in ("nadie@lev.cl", "p@lev.cl", "no-es-correo"):
+    make_person("p@example.com", status="pending")
+    for email in ("nadie@example.com", "p@example.com", "no-es-correo"):
         with pytest.raises(CommandError):
             run_cmd(email)
 

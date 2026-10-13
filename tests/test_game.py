@@ -425,7 +425,7 @@ def test_the_avatar_editor_unlocks_pieces_with_badges(member, lead):
 
 
 def test_pending_people_get_no_game_context(client_for, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     response = client_for(pending.login).get("/", follow=True)
     assert "NV " not in response.content.decode()
 

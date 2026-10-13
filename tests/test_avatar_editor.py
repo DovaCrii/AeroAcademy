@@ -113,7 +113,7 @@ def test_free_pieces_can_be_saved(client_for, member):
 
 
 def test_avatars_are_personal(client_for, make_person):
-    ana, luis = make_person("ana@lev.cl"), make_person("luis@lev.cl")
+    ana, luis = make_person("ana@example.com"), make_person("luis@example.com")
     post(client_for(ana.login), hair="mohawk", hair_color="10")
     luis.refresh_from_db()
     assert luis.avatar_config == {}
@@ -176,7 +176,7 @@ def test_random_keeps_my_class_and_never_unlocks_pieces(client_for, member):
 
 
 def test_pending_people_cannot_open_or_save(client_for, make_person):
-    pending = make_person("p@lev.cl", status="pending")
+    pending = make_person("p@example.com", status="pending")
     client = client_for(pending.login)
     assert client.get(EDITOR).status_code == 302
     assert post(client, hair="bun").status_code == 302

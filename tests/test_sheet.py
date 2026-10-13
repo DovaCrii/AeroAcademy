@@ -135,15 +135,15 @@ def test_sheet_views_and_default_view(client_for, member):
 def test_anyone_approved_can_open_a_teammates_sheet_but_not_pending(
     client_for, member, make_person
 ):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     assert client_for(member.login).get(f"/personas/{other.pk}/").status_code == 200
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(member.login).get(f"/personas/{pending.pk}/").status_code == 404
     assert client_for(member.login).get("/personas/99999/").status_code == 404
 
 
 def test_other_people_cannot_edit_from_their_sheet(client_for, member, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     html = client_for(member.login).get(f"/personas/{other.pk}/").content.decode()
     assert "Editar mi hoja" not in html
 
@@ -178,7 +178,7 @@ def test_accepted_answers_raise_collaboration(member):
 
 
 def test_private_credentials_are_hidden_from_teammates(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     verified(other, lead, skills=["lidar"], title="Secreto", visibility="private")
     verified(other, lead, skills=["gnss"], title="Publico", visibility="team")
     html = client_for(member.login).get(f"/personas/{other.pk}/").content.decode()
@@ -192,7 +192,7 @@ def test_private_credentials_are_hidden_from_teammates(client_for, member, lead,
 
 
 def test_timeline_hides_private_credential_events(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     verified(other, lead, title="Secreto", visibility="private")
     assert not [e for e in sheet.timeline(other, member) if e["detail"] == "Secreto"]
     assert [e for e in sheet.timeline(other, other) if e["detail"] == "Secreto"]
@@ -216,10 +216,10 @@ def test_hexagon_uses_dot_decimals(member):
 
 
 def test_directory_is_alphabetical_with_cards(client_for, member, make_person):
-    make_person("zeta@lev.cl")
+    make_person("zeta@example.com")
     html = client_for(member.login).get("/personas/").content.decode()
     assert "El gremio" in html and html.index("ana") < html.index("zeta")
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert pending.name not in html
 
 
@@ -237,10 +237,10 @@ def test_directory_query_count_does_not_grow_with_people(
         return len(ctx)
 
     for i in range(2):
-        make_person(f"a{i}@lev.cl")
+        make_person(f"a{i}@example.com")
     few = count()
     for i in range(12):
-        make_person(f"b{i}@lev.cl")
+        make_person(f"b{i}@example.com")
     assert count() <= few
 
 

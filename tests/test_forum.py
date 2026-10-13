@@ -89,7 +89,7 @@ def test_reply_updates_activity_and_closed_threads_refuse(member, lead):
 
 
 def test_only_the_asker_or_a_lead_accepts(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = question(member)
     post = forum.reply(t, other, "Prueba esto")
     with pytest.raises(PermissionError):
@@ -103,7 +103,7 @@ def test_only_the_asker_or_a_lead_accepts(member, lead, make_person):
 
 
 def test_accepting_gives_xp_to_the_answerer_once(member, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = question(member)
     post = forum.reply(t, other, "Prueba esto")
     forum.accept(t, post, member)
@@ -112,7 +112,7 @@ def test_accepting_gives_xp_to_the_answerer_once(member, make_person):
 
 
 def test_changing_the_accepted_answer_moves_the_xp(member, make_person):
-    a, b = make_person("a@lev.cl"), make_person("b@lev.cl")
+    a, b = make_person("a@example.com"), make_person("b@example.com")
     t = question(member)
     pa, pb = forum.reply(t, a, "A"), forum.reply(t, b, "B")
     forum.accept(t, pa, member)
@@ -121,7 +121,7 @@ def test_changing_the_accepted_answer_moves_the_xp(member, make_person):
 
 
 def test_unaccepting_or_deleting_the_accepted_post_revokes_xp(member, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = question(member)
     post = forum.reply(t, other, "Prueba")
     forum.accept(t, post, member)
@@ -159,7 +159,7 @@ def test_cannot_accept_a_post_from_another_thread_or_a_deleted_one(member, lead)
 
 
 def test_mentor_and_sabio_badges_follow_accepted_answers(member, make_person):
-    expert = make_person("experta@lev.cl")
+    expert = make_person("experta@example.com")
     for i in range(5):
         t = question(member, f"q{i}")
         forum.accept(t, forum.reply(t, expert, "r"), member)
@@ -177,7 +177,7 @@ def test_only_the_author_deletes_a_post(member, lead):
 
 
 def test_closing_needs_the_author_or_a_lead(member, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = question(member)
     with pytest.raises(PermissionError):
         forum.set_closed(t, other, True)
@@ -241,7 +241,7 @@ def test_pages_render_and_post(client_for, member, lead):
 def test_non_authors_do_not_see_accept_buttons_and_cannot_post_them(
     client_for, member, lead, make_person
 ):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = question(member)
     post = forum.reply(t, lead, "r")
     assert (
@@ -283,7 +283,7 @@ def test_pagination(client_for, member):
 
 
 def test_forum_requires_approval(client_for, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(pending.login).get("/foro/").status_code != 200
 
 

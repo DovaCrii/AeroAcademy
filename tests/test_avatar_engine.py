@@ -58,7 +58,7 @@ def test_compose_is_a_32x32_matrix_and_every_key_has_a_color():
 
 
 def test_render_is_a_safe_pixel_svg():
-    svg = av.render_svg(av.default_config("ana@lev.cl"), title='Ana <b>"x"</b>')
+    svg = av.render_svg(av.default_config("ana@example.com"), title='Ana <b>"x"</b>')
     assert svg.startswith("<svg") and svg.endswith("</svg>")
     assert 'shape-rendering="crispEdges"' in svg and 'viewBox="-2 -2 36 36"' in svg
     assert "<b>" not in svg and "&lt;b&gt;" in svg and "&quot;x&quot;" in svg
@@ -83,7 +83,7 @@ def test_runs_are_merged_so_the_svg_stays_small():
 
 
 def test_render_is_deterministic():
-    cfg = av.default_config("luis@lev.cl")
+    cfg = av.default_config("luis@example.com")
     assert av.render_svg(cfg) == av.render_svg(dict(cfg))
 
 
@@ -177,26 +177,26 @@ def test_every_combination_of_the_main_parts_renders():
 
 
 def test_default_config_is_stable_per_login_and_varied_across_people():
-    assert av.default_config("Ana@LEV.cl ") == av.default_config("ana@lev.cl")
-    seen = {tuple(sorted(av.default_config(f"p{i}@lev.cl").items())) for i in range(60)}
+    assert av.default_config("Ana@EXAMPLE.com ") == av.default_config("ana@example.com")
+    seen = {tuple(sorted(av.default_config(f"p{i}@example.com").items())) for i in range(60)}
     assert len(seen) == 60  # el equipo no se ve todo igual
 
 
 def test_default_config_covers_all_three_bodies():
-    bodies = {av.default_config(f"p{i}@lev.cl")["body"] for i in range(30)}
+    bodies = {av.default_config(f"p{i}@example.com")["body"] for i in range(30)}
     assert bodies == {"masculine", "feminine", "neutral"}
 
 
 def test_default_config_never_assigns_locked_pieces():
     for i in range(80):
-        cfg = av.default_config(f"p{i}@lev.cl")
+        cfg = av.default_config(f"p{i}@example.com")
         assert cfg["headwear"] not in engine.UNLOCKS["headwear"]
         assert cfg["glasses"] not in engine.UNLOCKS["glasses"]
         assert cfg["frame"] == "common"
 
 
 def test_default_config_respects_the_chosen_class():
-    cfg = av.default_config("x@lev.cl", "pilot")
+    cfg = av.default_config("x@example.com", "pilot")
     assert cfg["class"] == "pilot" and cfg["outfit"] == "flight_jacket"
 
 

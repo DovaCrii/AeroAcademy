@@ -48,7 +48,7 @@ def wrong_choice(key):
 
 
 def test_milestone_check_persists_and_is_personal(client_for, make_person):
-    ana, luis = make_person("ana@lev.cl"), make_person("luis@lev.cl")
+    ana, luis = make_person("ana@example.com"), make_person("luis@example.com")
     assert toggle(client_for(ana.login), "n0-t0").status_code == 302
 
     assert MilestoneCheck.objects.filter(person=ana, milestone__key="n0-t0").exists()
@@ -175,7 +175,7 @@ def test_external_tracks_have_no_milestone_actions(member_client):
 
 
 def test_pending_person_cannot_act(client_for, make_person):
-    pending = make_person("p@lev.cl", status="pending")
+    pending = make_person("p@example.com", status="pending")
     response = toggle(client_for(pending.login), "n0-t0")
     assert response.status_code == 302 and response.url == "/espera/"
     assert not MilestoneCheck.objects.exists()
@@ -218,7 +218,7 @@ def test_goal_must_be_one_of_the_path_goals(client_for, member):
 
 
 def test_goals_are_personal(client_for, make_person):
-    ana, luis = make_person("ana@lev.cl"), make_person("luis@lev.cl")
+    ana, luis = make_person("ana@example.com"), make_person("luis@example.com")
     client_for(ana.login).post(url("meta", slug=REVIT), {"goal": "Autodesk Certified User: Revit"})
     assert not PathGoal.objects.filter(person=luis).exists()
     html = client_for(luis.login).get(f"/rutas/{REVIT}/").content.decode()
@@ -309,8 +309,8 @@ def floor_marks(person, code):
 
 
 def test_team_member_appears_on_the_floor_where_they_last_worked(client_for, make_person):
-    ana = make_person("ana.perez@lev.cl")
-    luis = make_person("luis@lev.cl")
+    ana = make_person("ana.perez@example.com")
+    luis = make_person("luis@example.com")
     toggle(client_for(ana.login), "n1-t0")
     toggle(client_for(ana.login), "n3-t0")
 
@@ -328,27 +328,27 @@ def test_my_own_mark_is_flagged(client_for, member):
 
 
 def test_pending_people_do_not_appear(client_for, make_person):
-    pending = make_person("p@lev.cl", status="approved")
+    pending = make_person("p@example.com", status="approved")
     toggle(client_for(pending.login), "n2-t0")
     pending.status = "pending"
     pending.save()
-    other = make_person("o@lev.cl")
+    other = make_person("o@example.com")
     marks, ctx = floor_marks(other, "n2")
     assert marks == [] and ctx["stats"]["participants"] == 0
 
 
 def test_participants_counts_people_with_progress(client_for, make_person):
-    for login in ("a@lev.cl", "b@lev.cl"):
+    for login in ("a@example.com", "b@example.com"):
         toggle(client_for(make_person(login).login), "n0-t0")
-    viewer = make_person("v@lev.cl")
+    viewer = make_person("v@example.com")
     _, ctx = floor_marks(viewer, "n0")
     assert ctx["stats"]["participants"] == 2
 
 
 def test_more_than_four_people_show_a_counter(client_for, make_person):
     for i in range(6):
-        toggle(client_for(make_person(f"p{i}@lev.cl").login), "n0-t0")
-    ctx = services.world_context(make_person("v@lev.cl"), LearningPath.objects.get(slug=FORMA))
+        toggle(client_for(make_person(f"p{i}@example.com").login), "n0-t0")
+    ctx = services.world_context(make_person("v@example.com"), LearningPath.objects.get(slug=FORMA))
     floor = next(f for f in ctx["building"]["floors"] if f["code"] == "n0")
     assert len(floor["marks"]) == 4 and floor["extra"] == 2
 
@@ -376,7 +376,7 @@ def test_percent_rounds_half_up(done, total, expected):
 
 def test_initials():
     class P:
-        def __init__(self, name, login="x@lev.cl"):
+        def __init__(self, name, login="x@example.com"):
             self.name, self.login = name, login
 
     assert services.initials(P("Ana Muñoz")) == "AM"

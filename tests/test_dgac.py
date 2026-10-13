@@ -250,7 +250,7 @@ def test_latest_valid_ignores_expired_attempts(member):
 
 
 def test_member_only_sees_own_attempts_and_lead_sees_all(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     mine = attempt_with(member, 25)
     theirs = attempt_with(other, 25)
     own = client_for(member.login)
@@ -269,7 +269,7 @@ def test_member_only_sees_own_attempts_and_lead_sees_all(client_for, member, lea
 
 
 def test_pending_people_get_no_access(client_for, make_person):
-    pending = make_person("nueva@lev.cl", status="pending")
+    pending = make_person("nueva@example.com", status="pending")
     c = client_for(pending.login)
     for url in ("/dgac/", "/dgac/prueba/", "/dgac/prueba/rendir/", "/dgac/archivo/demo.svg"):
         resp = c.get(url)

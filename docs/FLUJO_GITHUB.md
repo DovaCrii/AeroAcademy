@@ -1,7 +1,7 @@
 # Flujo con GitHub
 
 Repositorio: **https://github.com/DovaCrii/AeroAcademy** (público).
-Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revisa y fusiona.**
+Regla de fondo: **el agente construye, sube, abre el PR, espera el CI en verde y fusiona con merge commit; la persona despliega** (decisión de la persona, 2026-10-13).
 
 ## Ramas y PR
 
@@ -13,7 +13,7 @@ Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revis
 
 - **Un PR por bloque.** Si un bloque es muy grande, se divide en sub-bloques (`12a`, `12b`) con su propio PR.
 - Los PR se **apilan**: el PR del bloque 4 apunta a la rama del 3. Al fusionar el 3, GitHub reapunta el 4 a `main`.
-- El agente **nunca fusiona**, nunca hace `push --force` a `main` ni reescribe ramas ya compartidas.
+- El agente **fusiona solo con el CI en verde** y nunca hace `push --force` a `main` ni reescribe ramas ya compartidas.
 
 ## Qué hace el agente en cada bloque
 
@@ -30,7 +30,7 @@ Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revis
 
 ## Fusiones
 
-La regla completa está en **`docs/FUSIONES.md`**: fusiona la persona (o el agente, si ella se lo pide en el chat), de abajo hacia arriba, solo con *merge commit* (nunca squash ni rebase) y con `tools/fusionar_cadena.py`. Después, `python tools/preflight.py` y `docs/PRODUCCION.md`.
+La regla completa está en **`docs/FUSIONES.md`**: fusiona el agente con el CI en verde (o la persona, si lo prefiere), de abajo hacia arriba, solo con *merge commit* (nunca squash ni rebase) y con `tools/fusionar_cadena.py`. Después, `python tools/preflight.py` y `docs/PRODUCCION.md`.
 
 ## Qué NO hace sin que se lo pidan
 

@@ -23,6 +23,9 @@ jobs:
           python-version: "3.12"
           enable-cache: true
 
+      - name: Revisión de privacidad
+        run: python tools/kit/privacy_scan.py
+
       - name: Instalar dependencias
         run: uv sync
 

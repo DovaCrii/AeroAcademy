@@ -90,7 +90,7 @@ def build():
         section(16, "Color de la ropa", swatches("outfit_color", 80, {"outfit": "hoodie"})),
     ]
     team = "".join(
-        card({**av.default_config(f"{n.lower().replace(' ', '.')}@lev.cl"), "frame": ["common", "common", "rare", "epic"][i % 4]},
+        card({**av.default_config(f"{n.lower().replace(' ', '.')}@example.com"), "frame": ["common", "common", "rare", "epic"][i % 4]},
              96, n, "avatar inicial automático")
         for i, n in enumerate(NAMES)
     )  # fmt: skip
@@ -108,7 +108,7 @@ def build():
         f'<div class="sz"><div class="px">{svg(me, s, "Ejemplo", "bust")}</div><span>busto {s}px</span></div>' for s in (24, 32, 48)
     )
     rows = "".join(
-        f'<tr><td><span class="px">{svg(av.default_config(f"{n.lower().replace(" ", ".")}@lev.cl"), 40, n, "bust")}</span></td>'
+        f'<tr><td><span class="px">{svg(av.default_config(f"{n.lower().replace(" ", ".")}@example.com"), 40, n, "bust")}</span></td>'
         f"<td><b>{escape(n)}</b><br><small>{['Arquitecto-Constructor', 'Calculista', 'Cartógrafo', 'Piloto de Nubes'][i % 4]}</small></td>"
         f'<td><span class="lv">NV {4 + i * 2}</span></td><td><small>{["Aprendiz de Cota", "Guardián del Eje", "Portador del Jalón", "Domador de Hélices"][i % 4]}</small></td></tr>'
         for i, n in enumerate(NAMES[:5])
@@ -165,7 +165,7 @@ small{{color:var(--dim)}}
     <div><b>Diego Soto</b> <small>· Domador de Hélices · NV 9</small><p>Con <em>Insert → Point Cloud</em> el .rcp entra georreferenciado.</p></div></div></div>
   <div class="card" style="grid-column:1/-1"><span class="cap">Equipo · tabla de avance</span><br><br><table>{rows}</table></div>
   <div class="card"><span class="cap">Corte del edificio · quién está en cada piso</span><br><br>
-    <div class="floor"><b>N3</b> Forma ↔ Revit<span class="px">{svg(av.default_config("ana@lev.cl"), 28, "Ana", "bust", False)}{svg(av.default_config("luis@lev.cl"), 28, "Luis", "bust", False)}</span></div>
+    <div class="floor"><b>N3</b> Forma ↔ Revit<span class="px">{svg(av.default_config("ana@example.com"), 28, "Ana", "bust", False)}{svg(av.default_config("luis@example.com"), 28, "Luis", "bust", False)}</span></div>
     <div class="floor"><b>N2</b> Site Design<span class="px">{svg(me, 28, "Yo", "bust", False)}</span></div>
     <div class="floor"><b>N1</b> Fundamentos Revit<span class="px"></span></div></div>
   <div class="card"><span class="cap">Subida de nivel</span><br><br>

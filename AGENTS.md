@@ -27,9 +27,10 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
 7. `docs/GAMIFICACION.md`: XP, niveles, títulos, insignias.
 8. `docs/BOT.md` y `docs/MODERACION.md`.
 9. `docs/PLAN.md`: bloques de trabajo con criterios de aceptación. **Trabajar un bloque a la vez.**
-10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente. `docs/FUSIONES.md`: cómo se fusiona (**la persona**). `docs/PRODUCCION.md` y `docs/PENDIENTES.md`: salida a producción y lo que queda.
+10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente. `docs/FUSIONES.md`: cómo se fusiona (**el agente, con el CI en verde; la persona despliega**). `docs/PRODUCCION.md` y `docs/PENDIENTES.md`: salida a producción y lo que queda.
 11. `docs/DECISIONES.md`: decisiones tomadas y abiertas. No resolver una decisión abierta por cuenta propia.
 12. `docs/CURSOS.md`: inventario de rutas, brechas, ideas de cursos nuevos y cómo escalar (plantilla y checklist de autoría).
+13. `docs/ESTANDAR_TRABAJO.md`: estándar de trabajo con Claude Code (ciclo, modelos, privacidad); plantillas en `tools/kit/`.
 
 ## Stack
 
@@ -102,13 +103,13 @@ lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de inte
 
 ## Flujo con GitHub (regla de trabajo)
 
-**El agente construye, sube y deja el PR listo; la persona revisa y fusiona.** Detalle en `docs/FLUJO_GITHUB.md`.
+**El agente construye, sube, abre el PR, espera el CI en verde y fusiona con merge commit; la persona despliega.** Detalle en `docs/FLUJO_GITHUB.md`.
 
 - Una rama y un PR por bloque: `bloque-<n>-<tema>`, apilados sobre el bloque anterior mientras no se fusione.
 - Al terminar un bloque: `git push -u origin <rama>` y `gh pr create` con la plantilla de `.github/`.
   Título `Bloque <n> · <tema>`; cuerpo con criterios de aceptación y cómo probarlo.
 - Revisar el CI del PR (`gh pr checks`) y arreglarlo si falla. Un PR en rojo no está listo.
-- **Nunca** fusionar PR, forzar `push` sobre `main`, subir secretos o datos reales, ni cambiar la
+- **Nunca** fusionar con el CI en rojo o saltado, forzar `push` sobre `main`, subir secretos o datos reales, ni cambiar la
   visibilidad o los *settings* del repositorio sin que se pida explícitamente.
 - Encadenar bloques solo si la persona lo pidió ("continúa hasta terminar"); si no, esperar su confirmación.
 

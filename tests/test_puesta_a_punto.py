@@ -99,9 +99,9 @@ def test_system_prompt_demands_spanish_and_only_the_final_answer(member):
 
 
 def test_aprobar_lists_pending_people(make_person, capsys):
-    make_person("nueva@lev.cl", status=PersonStatus.PENDING)
+    make_person("nueva@example.com", status=PersonStatus.PENDING)
     call_command("aprobar")
-    assert "nueva@lev.cl" in capsys.readouterr().out
+    assert "nueva@example.com" in capsys.readouterr().out
 
 
 def test_aprobar_approves_and_promotes_an_existing_person(make_person):
@@ -124,17 +124,17 @@ def test_aprobar_before_first_login_lets_the_person_straight_in(client_for):
 
 
 def test_aprobar_is_idempotent_and_rejects_bad_logins(make_person):
-    call_command("aprobar", "ana2@lev.cl")
-    call_command("aprobar", "ana2@lev.cl")
-    assert Person.objects.filter(login="ana2@lev.cl").count() == 1
+    call_command("aprobar", "ana2@example.com")
+    call_command("aprobar", "ana2@example.com")
+    assert Person.objects.filter(login="ana2@example.com").count() == 1
     assert Notification.objects.filter(kind="welcome").count() == 1
     with pytest.raises(CommandError):
         call_command("aprobar", "sin-arroba")
 
 
 def test_bootstrap_admin_stays_admin_whatever_the_command_says(settings):
-    settings.BOOTSTRAP_ADMINS = ["jefa@lev.cl"]
-    person, created = services.grant_access("jefa@lev.cl", "member")
+    settings.BOOTSTRAP_ADMINS = ["jefa@example.com"]
+    person, created = services.grant_access("jefa@example.com", "member")
     assert created and person.role == "admin" and person.status == PersonStatus.APPROVED
 
 
@@ -217,8 +217,8 @@ def test_pages_carry_the_icon_and_the_manifest(client_for, member):
 
 
 def test_the_waiting_page_also_has_the_icon(client_for, make_person):
-    make_person("nuevo@lev.cl", status=PersonStatus.PENDING)
-    html = client_for("nuevo@lev.cl").get("/", follow=True).content.decode()
+    make_person("nuevo@example.com", status=PersonStatus.PENDING)
+    html = client_for("nuevo@example.com").get("/", follow=True).content.decode()
     assert "Esperando aprobación" in html and 'rel="manifest"' in html
 
 

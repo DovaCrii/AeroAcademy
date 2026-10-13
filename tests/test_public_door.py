@@ -91,8 +91,8 @@ def test_totp_window_replay_and_format():
 
 
 def test_otpauth_uri_has_secret_and_issuer():
-    uri = totp.otpauth_uri("ABCDEFGH", "ana@lev.cl")
-    assert uri.startswith("otpauth://totp/AeroAcademy%3Aana%40lev.cl?")
+    uri = totp.otpauth_uri("ABCDEFGH", "ana@example.com")
+    assert uri.startswith("otpauth://totp/AeroAcademy%3Aana%40example.com?")
     assert "secret=ABCDEFGH" in uri and "issuer=AeroAcademy" in uri
 
 
@@ -116,8 +116,8 @@ def test_header_is_ignored_on_the_public_door(public, member):
 def test_header_does_not_create_people_on_the_public_door(public):
     from apps.accounts.models import Person
 
-    tailscale_client("nuevo@lev.cl", name="Nuevo").get("/")
-    assert not Person.objects.filter(login="nuevo@lev.cl").exists()
+    tailscale_client("nuevo@example.com", name="Nuevo").get("/")
+    assert not Person.objects.filter(login="nuevo@example.com").exists()
 
 
 def test_a_tailscale_session_is_not_accepted_on_the_public_door(public, member):

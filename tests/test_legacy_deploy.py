@@ -56,8 +56,8 @@ def legacy_db(tmp_path):
     con.executemany(
         "INSERT INTO people VALUES(?,?,?,?)",
         [
-            ("Ana@Lev.cl", "Ana Pérez", "https://pic.example/a.png", 1),
-            ("luis@lev.cl", "Luis Soto", "javascript:alert(1)", 2),
+            ("Ana@Example.com", "Ana Pérez", "https://pic.example/a.png", 1),
+            ("luis@example.com", "Luis Soto", "javascript:alert(1)", 2),
         ],
     )
     data_ana = {
@@ -65,14 +65,14 @@ def legacy_db(tmp_path):
         "quiz": {qs[0].key: qs[0].answer_index, "zz-q9": 1, qs[1].key: 99},
         "certGoal": goal,
     }
-    con.execute("INSERT INTO progress VALUES(?,?,?)", ("ana@lev.cl", json.dumps(data_ana), 5))
-    con.execute("INSERT INTO progress VALUES(?,?,?)", ("luis@lev.cl", "{no es json", 5))
+    con.execute("INSERT INTO progress VALUES(?,?,?)", ("ana@example.com", json.dumps(data_ana), 5))
+    con.execute("INSERT INTO progress VALUES(?,?,?)", ("luis@example.com", "{no es json", 5))
     con.executemany(
         "INSERT INTO notes VALUES(?,?,?,?,?,?,?,?)",
         [
             (
                 "n1",
-                "ana@lev.cl",
+                "ana@example.com",
                 level_code,
                 0,
                 "works",
@@ -80,10 +80,10 @@ def legacy_db(tmp_path):
                 None,
                 1_700_000_000_000,
             ),
-            ("n2", "luis@lev.cl", "general", -1, "", "Nota sin tipo", None, 1_700_000_100_000),
+            ("n2", "luis@example.com", "general", -1, "", "Nota sin tipo", None, 1_700_000_100_000),
             (
                 "n3",
-                "luis@lev.cl",
+                "luis@example.com",
                 level_code,
                 -1,
                 "ask",
@@ -91,11 +91,20 @@ def legacy_db(tmp_path):
                 "n1",
                 1_700_000_200_000,
             ),
-            ("n4", "ana@lev.cl", "general", -1, "tip", "Huérfana", "no-existe", 1_700_000_300_000),
-            ("n5", "ana@lev.cl", "general", -1, "tip", "   ", None, 1_700_000_400_000),
+            (
+                "n4",
+                "ana@example.com",
+                "general",
+                -1,
+                "tip",
+                "Huérfana",
+                "no-existe",
+                1_700_000_300_000,
+            ),
+            ("n5", "ana@example.com", "general", -1, "tip", "   ", None, 1_700_000_400_000),
             (
                 "n6",
-                "nueva@lev.cl",
+                "nueva@example.com",
                 "general",
                 -1,
                 "fails",
@@ -108,9 +117,9 @@ def legacy_db(tmp_path):
     con.executemany(
         "INSERT INTO shared VALUES(?,?,?)",
         [
-            ("kit0-0", "ana@lev.cl", 1_700_000_000_000),
-            ("ph1-0", "luis@lev.cl", 1_700_000_100_000),
-            ("kit9-9", "ana@lev.cl", 1),
+            ("kit0-0", "ana@example.com", 1_700_000_000_000),
+            ("ph1-0", "luis@example.com", 1_700_000_100_000),
+            ("kit9-9", "ana@example.com", 1),
         ],
     )
     con.commit()
@@ -122,13 +131,15 @@ def test_import_creates_people_progress_notes_and_shared(legacy_db):
     summary = legacy.import_legacy(legacy_db)
     assert summary["checks"] == 2 and summary["quiz"] == 1 and summary["goals"] == 1
     assert summary["notes"] == 4 and summary["shared"] == 2 and summary["people"] == 3
-    ana = Person.objects.get(login="ana@lev.cl")  # el correo se normaliza
+    ana = Person.objects.get(login="ana@example.com")  # el correo se normaliza
     assert (
         ana.display_name == "Ana Pérez"
         and ana.status == "approved"
         and ana.avatar_url.startswith("https://")
     )
-    assert Person.objects.get(login="luis@lev.cl").avatar_url == ""  # una URL no válida no pasa
+    assert (
+        Person.objects.get(login="luis@example.com").avatar_url == ""
+    )  # una URL no válida no pasa
     assert MilestoneCheck.objects.filter(person=ana).count() == 2
     assert (
         QuizAnswer.objects.filter(person=ana).count() == 1
@@ -150,7 +161,7 @@ def test_notes_keep_dates_types_levels_and_replies(legacy_db):
         Note.objects.get(legacy_id="n2").type == "tip"
         and Note.objects.get(legacy_id="n2").level is None
     )
-    assert Note.objects.get(legacy_id="n6").author.login == "nueva@lev.cl"
+    assert Note.objects.get(legacy_id="n6").author.login == "nueva@example.com"
     assert not Note.objects.filter(legacy_id__in=["n4", "n5"]).exists()
 
 
@@ -186,7 +197,7 @@ def test_import_is_idempotent(legacy_db):
 def test_imported_progress_gives_xp_but_notes_do_not_and_nobody_is_spammed(legacy_db, lead):
     before = Notification.objects.count()
     legacy.import_legacy(legacy_db)
-    ana = Person.objects.get(login="ana@lev.cl")
+    ana = Person.objects.get(login="ana@example.com")
     assert game.total_xp(ana) >= 10 * 2 + 5  # 2 misiones + 1 pregunta (más rachas o capítulos)
     assert "primera-luz" in game.unlocked_badges(ana)
     assert not ana.xp_events.filter(kind="note").exists()
@@ -196,7 +207,7 @@ def test_imported_progress_gives_xp_but_notes_do_not_and_nobody_is_spammed(legac
 
 def test_existing_people_and_manual_marks_are_respected(legacy_db, member):
     ana = Person.objects.get(pk=member.pk)
-    ana.login = "ana@lev.cl"
+    ana.login = "ana@example.com"
     ana.display_name = "Nombre ya elegido"
     ana.save()
     _, ms, _ = keys()
@@ -215,7 +226,7 @@ def test_dry_run_changes_nothing(legacy_db, capsys):
     out = capsys.readouterr().out
     assert "[dry-run]" in out and "omitido" in out
     assert not Note.objects.exists() and not SharedCheck.objects.exists()
-    assert not Person.objects.filter(login="ana@lev.cl").exists()
+    assert not Person.objects.filter(login="ana@example.com").exists()
 
 
 def test_command_reports_and_fails_cleanly(legacy_db, tmp_path, capsys):
