@@ -158,7 +158,7 @@ def test_lazy_issue_for_routes_completed_before_this_feature(member, member_clie
 def test_owner_and_leads_can_view_others_get_404(client_for, member, lead, make_person):
     path = make_route()
     finish(member, path)
-    other = make_person("pepe@lev.cl")
+    other = make_person("pepe@example.com")
     url = f"/diplomas/lev-prueba/?persona={member.pk}"
     assert client_for(member.login).get("/diplomas/lev-prueba/").status_code == 200
     assert client_for(member.login).get(url).status_code == 200  # el suyo, indicado
@@ -181,20 +181,20 @@ def test_lead_does_not_see_a_diploma_that_was_not_earned(client_for, member, lea
 
 
 def test_page_shows_name_never_the_email(client_for, make_person):
-    person = make_person("camila.rojas@lev.cl")
+    person = make_person("camila.rojas@example.com")
     person.display_name = "Camila Rojas"
     person.save(update_fields=["display_name"])
     finish(person, make_route())
     html = client_for(person.login).get("/diplomas/lev-prueba/").content.decode()
     assert "Camila Rojas" in html
-    assert "camila.rojas@lev.cl" not in html and "@lev.cl" not in html
+    assert "camila.rojas@example.com" not in html and "@example.com" not in html
 
 
 def test_page_without_display_name_still_hides_the_email(client_for, member):
     finish(member, make_route())
     html = client_for(member.login).get("/diplomas/lev-prueba/").content.decode()
     assert (
-        "ana@lev.cl" not in html
+        "ana@example.com" not in html
         and "@" not in html.split('class="dp-sheet"')[1].split("</article>")[0]
     )
 

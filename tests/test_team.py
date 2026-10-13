@@ -42,7 +42,7 @@ def path(slug):
 
 
 def test_bulk_percentages_match_each_worlds_own_calculation(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     forma, bentley = path(FORMA), path(BENTLEY)
     for m in list(Milestone.objects.filter(path=forma, retired=False))[:7]:
         progress.set_milestone(member, m, True)
@@ -108,7 +108,7 @@ def test_board_shows_people_notes_credentials_and_expiry(client_for, member, lea
 
 
 def test_board_hides_private_credentials_from_members(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     make_cred(other, lead, title="Credencial privada", visibility="private")
     assert "Credencial privada" not in client_for(member.login).get("/equipo/").content.decode()
     assert "Credencial privada" in client_for(lead.login).get("/equipo/").content.decode()
@@ -119,20 +119,20 @@ def test_board_excludes_hidden_notes_and_pending_people(client_for, member, lead
 
     n = notes.create_note(member, path(FORMA), "Nota que se oculta", "tip")
     moderation.set_hidden(n, lead, True, "no")
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     html = client_for(member.login).get("/equipo/").content.decode()
     assert "Nota que se oculta" not in html and pending.name not in html
 
 
 def test_board_requires_approval(client_for, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(pending.login).get("/equipo/").status_code != 200
 
 
 def test_board_is_fast_and_flat_with_30_people_and_300_credentials(
     client_for, member, lead, make_person
 ):
-    people = [make_person(f"p{i}@lev.cl") for i in range(30)]
+    people = [make_person(f"p{i}@example.com") for i in range(30)]
     skill = Skill.objects.first()
     for i in range(300):
         cred = make_cred(people[i % 30], lead, title=f"C{i}")
@@ -167,7 +167,7 @@ def test_matrix_counts_verified_credentials_by_skill(member, lead):
 
 
 def test_matrix_filter_by_attribute_and_visibility(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     secret = make_cred(other, lead, title="Privada", visibility="private")
     secret.skills.set([Skill.objects.get(slug="lidar")])
     cap = services.matrix(member, "CAP")
@@ -223,7 +223,7 @@ def test_unknown_item_or_path_is_404_and_pending_cannot_toggle(client_for, membe
     assert client.post(f"/equipo/kit/{FORMA}/zzz/", {"checked": "1"}).status_code == 404
     assert client.post("/equipo/kit/nope/kit0-1/", {"checked": "1"}).status_code == 404
     assert client.get("/equipo/kit/nope/").status_code == 404
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert (
         client_for(pending.login).post(f"/equipo/kit/{FORMA}/kit0-1/", {"checked": "1"}).status_code
         != 302

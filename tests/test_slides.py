@@ -421,10 +421,10 @@ def test_photo_is_served_to_approved_people_with_safe_headers(slides, photo, mem
 
 def test_photo_is_not_served_to_pending_or_anonymous_people(photo, make_person, client_for):
     url = f"/cursos/foto/{FORMA}/base-rover.png"
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(pending.login).get(url).status_code in (302, 403, 404)
     assert client_for("").get(url).status_code in (302, 401, 403, 404)
-    rejected = make_person("fuera@lev.cl", status="suspended")
+    rejected = make_person("fuera@example.com", status="suspended")
     assert client_for(rejected.login).get(url).status_code in (302, 403, 404)
 
 

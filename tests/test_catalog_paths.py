@@ -350,7 +350,7 @@ def test_catalog_paginates(seeded, member_client):
 
 
 def test_pending_person_cannot_see_paths(client_for, make_person):
-    pending = make_person("p@lev.cl", status="pending")
+    pending = make_person("p@example.com", status="pending")
     assert client_for(pending.login).get("/rutas/").status_code == 302
 
 

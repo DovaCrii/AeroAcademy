@@ -73,7 +73,7 @@ Al lanzar un subagente se pasa `model` explícito. Cada subagente tiene dueños 
 3. **No había `.claude/settings.json` compartido** con permisos conservadores. Agregado.
 4. **Pruebas lentas** (suite grande, pasos largos en el CI): por medir y acotar (marcar pruebas lentas, ejecutar en paralelo con `pytest-xdist`
    y correr solo las del bloque durante el desarrollo). Pendiente.
-5. Dominios ficticios de pruebas (`lev.cl`, etc.) parecen reales: ahora declarados en `.privacy-scan.json`; conviene migrar a `example.com`.
+5. Los datos de prueba usan dominios reservados (`example.com`); el usuario y la IP del servidor no se publican en el repo (van como `example@<IP-DE-LA-VM>`). El resto de dominios ficticios (`empresa.cl`, etc.) están declarados en `.privacy-scan.json`.
 
 ## 8. Checklist para adoptarlo en un repo
 

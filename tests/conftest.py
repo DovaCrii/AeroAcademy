@@ -33,17 +33,17 @@ def make_person(db):
 
 @pytest.fixture
 def member(make_person):
-    return make_person("ana@lev.cl")
+    return make_person("ana@example.com")
 
 
 @pytest.fixture
 def lead(make_person):
-    return make_person("luis@lev.cl", role="lead")
+    return make_person("luis@example.com", role="lead")
 
 
 @pytest.fixture
 def admin_person(make_person):
-    return make_person("jefe@lev.cl", role="admin")
+    return make_person("jefe@example.com", role="admin")
 
 
 @pytest.fixture

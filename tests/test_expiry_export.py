@@ -140,7 +140,7 @@ def test_only_leads_export(client_for, member, lead):
 
 
 def test_zip_matches_the_selection_and_the_xlsx_is_typed(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     make(
         member,
         lead,
@@ -173,7 +173,7 @@ def test_zip_matches_the_selection_and_the_xlsx_is_typed(member, lead, make_pers
 
 
 def test_filters(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     platform = Platform.objects.get(slug="autodesk-learning")
     skill = Skill.objects.get(slug="lidar")
     a = make(member, lead, title="A", platform=platform, kind="certification")
@@ -248,7 +248,7 @@ def test_http_download_and_audit_log(client_for, member, lead):
 
 
 def test_http_filtered_download(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     make(member, lead, title="De ana")
     make(other, lead, title="De otra")
     response = client_for(lead.login).post(

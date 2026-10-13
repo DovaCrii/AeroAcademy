@@ -211,7 +211,7 @@ def test_admin_changes_role_but_not_own_or_bootstrap(
     c.post(f"/equipo/personas/{admin_person.pk}/", {"role": "member"})
     admin_person.refresh_from_db()
     assert admin_person.role == "admin"
-    settings.BOOTSTRAP_ADMINS = ["ana@lev.cl"]
+    settings.BOOTSTRAP_ADMINS = ["ana@example.com"]
     c.post(f"/equipo/personas/{member.pk}/", {"role": "member"})  # member = ana, pero ahora lead
     member.refresh_from_db()
     assert member.role == "lead"
@@ -256,16 +256,16 @@ def test_people_page_escapes_text_and_queries_are_bounded(
 ):
     c = client_for(lead.login)
     for i in range(3):
-        make_person(f"p{i}@lev.cl")
+        make_person(f"p{i}@example.com")
     c.get("/equipo/personas/")
     with CaptureQueriesContext(connection) as few:
         c.get("/equipo/personas/")
-    xss = make_person("x@lev.cl")
+    xss = make_person("x@example.com")
     xss.display_name = "<script>alert(1)</script>"
     xss.role_title = "<b>x</b>"
     xss.save()
     for i in range(10):
-        make_person(f"q{i}@lev.cl")
+        make_person(f"q{i}@example.com")
     with CaptureQueriesContext(connection) as many:
         html = c.get("/equipo/personas/").content.decode()
     assert len(many) <= len(few) + 1

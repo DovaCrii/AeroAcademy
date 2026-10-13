@@ -145,7 +145,7 @@ def test_finding4_the_board_hides_notes_of_draft_paths(client_for, member, lead)
 def test_finding5_private_credentials_do_not_show_up_in_the_progress_percentage(
     member, lead, make_person
 ):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     bentley = LearningPath.objects.get(slug=BENTLEY)
     for course in ExternalCourse.objects.filter(path=bentley, is_required=True):
         cred(
@@ -196,7 +196,7 @@ def test_finding6_unpublished_paths_do_not_reach_the_provider(lead):
 
 
 def test_finding7_a_hidden_answer_cannot_be_accepted(member, lead, make_person):
-    spammer = make_person("spam@lev.cl")
+    spammer = make_person("spam@example.com")
     t = thread(member)
     post = forum.reply(t, spammer, "spam")
     moderation.set_hidden(post, lead, True, "spam")
@@ -206,7 +206,7 @@ def test_finding7_a_hidden_answer_cannot_be_accepted(member, lead, make_person):
 
 
 def test_finding7_hiding_the_accepted_answer_takes_back_the_xp(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = thread(member)
     post = forum.reply(t, other, "buena")
     forum.accept(t, post, member)
@@ -227,7 +227,7 @@ def test_finding7_hiding_a_note_takes_back_its_xp(member, lead):
 
 
 def test_finding7_two_accepts_with_stale_objects_pay_only_the_last(member, lead, make_person):
-    a, b = make_person("a@lev.cl"), make_person("b@lev.cl")
+    a, b = make_person("a@example.com"), make_person("b@example.com")
     t = thread(member)
     pa, pb = forum.reply(t, a, "A"), forum.reply(t, b, "B")
     stale_for_lead, stale_for_author = Thread_get(t), Thread_get(t)
@@ -244,7 +244,7 @@ def Thread_get(t):
 
 
 def test_finding7_accepted_answer_xp_has_a_daily_cap(member, make_person):
-    expert = make_person("experta@lev.cl")
+    expert = make_person("experta@example.com")
     for i in range(forum.DAILY_ACCEPTED_XP + 2):
         t = thread(member, f"q{i}")
         forum.accept(t, forum.reply(t, expert, "r"), member)
@@ -312,14 +312,14 @@ def test_finding10_hiding_a_thread_unpublishes_the_articles_copied_from_it(membe
 
 
 def test_finding10_a_hidden_thread_is_a_404_when_converting(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = thread(member)
     moderation.set_hidden(t, lead, True, "x")
     assert client_for(other.login).get(f"/conocimiento/nuevo/?hilo={t.pk}").status_code == 404
 
 
 def test_finding10_articles_of_hidden_threads_do_not_show_to_members(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = thread(member)
     art = knowledge.create_article(
         member, title="Copia", body="texto", kind="faq", source_thread=t, publish=True
@@ -332,7 +332,7 @@ def test_finding10_articles_of_hidden_threads_do_not_show_to_members(member, lea
 
 
 def test_finding10_hidden_content_cannot_be_reported(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = thread(member)
     post = forum.reply(t, other, "x")
     moderation.set_hidden(post, lead, True, "x")

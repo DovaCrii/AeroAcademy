@@ -93,15 +93,15 @@ def test_inbox_and_bell(client_for, member):
 
 
 def test_new_pending_person_notifies_leads(lead):
-    client = tailscale_client("nueva@lev.cl", name="Nueva")
+    client = tailscale_client("nueva@example.com", name="Nueva")
     assert client.get("/").status_code in (200, 302)
-    person = Person.objects.get(login="nueva@lev.cl")
+    person = Person.objects.get(login="nueva@example.com")
     assert person.status == PersonStatus.PENDING
     assert inbox(lead, "person_pending").filter(title__contains="Nueva").exists()
 
 
 def test_approving_welcomes_the_person(make_person, lead):
-    person = make_person("nuevo@lev.cl", status="pending")
+    person = make_person("nuevo@example.com", status="pending")
     accounts.approve(person, lead)
     accounts.approve(person, lead)
     assert inbox(person, "welcome").count() == 1
@@ -156,7 +156,7 @@ def test_note_reply_notifies_author(member, lead):
 
 
 def test_announcement_reaches_everyone_and_shows_on_home(client_for, member, lead, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     ann = notifications.publish_announcement(
         lead, "Expedición", "Seis trofeos", timezone.localdate() + timedelta(days=5)
     )
@@ -268,7 +268,7 @@ def test_lead_closing_or_accepting_for_someone_else_is_logged(member, lead):
 
 
 def test_report_flow(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = thread(member)
     post = forum.reply(t, other, "Mal comentario")
     rep = moderation.report_content(member, "post", post.pk, "Es ofensivo")
@@ -291,7 +291,7 @@ def test_report_validation(member, make_person):
         moderation.report_content(member, "post", mine.pk + 99, "x")
     with pytest.raises(ValueError):
         moderation.report_content(member, "thread", 1, "x")
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     theirs = forum.reply(thread(other, "otro"), other, "suyo")
     with pytest.raises(ValueError, match="motivo"):
         moderation.report_content(member, "post", theirs.pk, "  ")
@@ -300,7 +300,7 @@ def test_report_validation(member, make_person):
 
 
 def test_dismissing_a_report_logs_it(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     post = forum.reply(thread(other), other, "ok")
     rep = moderation.report_content(member, "post", post.pk, "no me gusta")
     moderation.resolve_report(rep, lead, hide=False, reason="Todo bien")
@@ -328,8 +328,8 @@ def test_moderation_pages_are_for_leads(client_for, member):
 
 
 def test_dashboard_lists_everything(client_for, lead, member, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
-    other = make_person("otra@lev.cl")
+    pending = make_person("nuevo@example.com", status="pending")
+    other = make_person("otra@example.com")
     post = forum.reply(thread(other), other, "contenido reportado")
     moderation.report_content(member, "post", post.pk, "Motivo del reporte")
     moderation.pin(thread(member, "Fijar"), lead)
@@ -339,7 +339,7 @@ def test_dashboard_lists_everything(client_for, lead, member, make_person):
 
 
 def test_approve_person_assigns_role_discipline_and_class(client_for, admin_person, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     response = client_for(admin_person.login).post(
         f"/moderacion/personas/{pending.pk}/aprobar/",
         {"role": "lead", "character_class": "pilot", "disciplines": ["arquitectura"]},
@@ -357,14 +357,14 @@ def test_approve_person_assigns_role_discipline_and_class(client_for, admin_pers
 
 
 def test_a_plain_lead_cannot_name_leads(client_for, lead, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     client_for(lead.login).post(f"/moderacion/personas/{pending.pk}/aprobar/", {"role": "lead"})
     pending.refresh_from_db()
     assert pending.status == "approved" and pending.role == "member"
 
 
 def test_reject_person_suspends(client_for, lead, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     client_for(lead.login).post(f"/moderacion/personas/{pending.pk}/rechazar/")
     pending.refresh_from_db()
     assert pending.status == "suspended"
@@ -379,7 +379,7 @@ def test_only_pending_people_can_be_approved_this_way(client_for, lead, member):
 
 
 def test_http_report_and_resolution(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = thread(other)
     post = forum.reply(t, other, "algo")
     client_for(member.login).post(
@@ -394,7 +394,7 @@ def test_http_report_and_resolution(client_for, member, lead, make_person):
 
 @pytest.mark.parametrize("target", ["//evil.com", "https://evil.com", "/\\evil.com"])
 def test_report_redirect_is_safe(client_for, member, make_person, target):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     post = forum.reply(thread(other), other, "algo")
     response = client_for(member.login).post(
         f"/reportar/post/{post.pk}/", {"reason": "x", "next": target}
@@ -417,7 +417,7 @@ def test_http_thread_moderation(client_for, member, lead):
 
 
 def test_home_announcement_and_lead_counters(client_for, lead, member, make_person):
-    make_person("nuevo@lev.cl", status="pending")
+    make_person("nuevo@example.com", status="pending")
     notifications.publish_announcement(
         lead, "Ruta nueva", "Se abrió una campaña", timezone.localdate()
     )

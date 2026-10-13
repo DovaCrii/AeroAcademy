@@ -57,7 +57,7 @@ def test_mission_shortcut_when_everything_is_done(member):
 
 
 def test_expiring_shortcut_lists_only_my_credentials(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     cred(member, lead, title="Mi licencia", expires_on=timezone.localdate() + timedelta(days=10))
     cred(member, lead, title="Mi vencida", expires_on=timezone.localdate() - timedelta(days=3))
     cred(other, lead, title="La de otra", expires_on=timezone.localdate() + timedelta(days=5))

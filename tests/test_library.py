@@ -141,7 +141,7 @@ def test_database_allows_only_one_current(member):
 
 def test_only_owner_or_lead_edit_and_upload(member, lead, make_person):
     d = doc(member)
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     for call in (
         lambda: services.upload_version(d, other, up()),
         lambda: services.update_document(d, other, title="x", doc_type="manual"),
@@ -160,7 +160,7 @@ def test_only_owner_or_lead_edit_and_upload(member, lead, make_person):
 def test_restricted_documents_are_403_style_hidden_to_members(
     client_for, member, lead, make_person
 ):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     secret = doc(other, "Confidencial", restricted=True)
     open_doc = doc(other, "Abierto")
     client = client_for(member.login)
@@ -324,7 +324,7 @@ def test_invalid_upload_shows_the_error_and_creates_nothing(client_for, member):
 
 def test_edit_and_permissions_over_http(client_for, member, lead, make_person):
     d = doc(member)
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     assert client_for(other.login).get(f"/documentos/{d.pk}/editar/").status_code == 404
     client_for(member.login).post(
         f"/documentos/{d.pk}/editar/", {"title": "Nuevo título", "doc_type": "guide", "tags": "x"}
@@ -363,7 +363,7 @@ def test_pagination_and_query_count(client_for, member, django_assert_max_num_qu
 
 def test_pending_people_cannot_open_documents(client_for, member, make_person):
     d = doc(member)
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(pending.login).get(f"/documentos/{d.pk}/archivo/").status_code != 200
 
 

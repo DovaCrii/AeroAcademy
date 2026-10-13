@@ -371,7 +371,7 @@ def test_summarizing_a_hidden_thread_is_404_for_members(client_for, member, lead
 
 def test_pending_people_cannot_ask(client_for, make_person):
     rec = Recorder().install()
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(pending.login).post("/teo/ask/", {"question": "hola"}).status_code != 200
     assert not rec.requests
 

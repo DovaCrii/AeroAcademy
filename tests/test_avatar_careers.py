@@ -135,11 +135,11 @@ def test_data_migration_keeps_old_values_and_clears_unknown_ones(make_person):
     mod = importlib.import_module("apps.accounts.migrations.0006_careers_data")
     from django.apps import apps
 
-    old = make_person("viejo@lev.cl")
+    old = make_person("viejo@example.com")
     old.character_class = "cartographer"
     old.avatar_config = {"hair": "bun", "class": "pilot"}
     old.save()
-    ghost = make_person("fantasma@lev.cl")
+    ghost = make_person("fantasma@example.com")
     type(ghost).objects.filter(pk=ghost.pk).update(character_class="mago")
     mod.normalize(apps, None)
     old.refresh_from_db()

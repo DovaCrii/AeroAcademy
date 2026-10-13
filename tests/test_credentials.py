@@ -224,7 +224,7 @@ def test_csrf_is_enforced_on_upload(member):
 
 
 def test_member_cannot_download_someone_elses_file(client_for, member, make_person, lead):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     cred = make(other)
     services.verify(cred, lead)  # verificada y del equipo: el listado es visible, el archivo no
     assert client_for(member.login).get(f"/certificados/{cred.pk}/archivo/").status_code == 403
@@ -249,7 +249,7 @@ def test_download_headers(client_for, member):
 
 
 def test_private_credentials_are_hidden_from_other_members(client_for, member, make_person, lead):
-    owner = make_person("otra@lev.cl")
+    owner = make_person("otra@example.com")
     cred = make(owner, visibility="private")
     services.verify(cred, lead)
     assert client_for(member.login).get(f"/certificados/{cred.pk}/").status_code == 404
@@ -258,14 +258,14 @@ def test_private_credentials_are_hidden_from_other_members(client_for, member, m
 
 
 def test_pending_credentials_of_others_are_not_visible_to_members(client_for, member, make_person):
-    cred = make(make_person("otra@lev.cl"))
+    cred = make(make_person("otra@example.com"))
     assert client_for(member.login).get(f"/certificados/{cred.pk}/").status_code == 404
 
 
 def test_verified_team_credential_detail_is_visible_but_without_download(
     client_for, member, make_person, lead
 ):
-    cred = make(make_person("otra@lev.cl"))
+    cred = make(make_person("otra@example.com"))
     services.verify(cred, lead)
     html = client_for(member.login).get(f"/certificados/{cred.pk}/").content.decode()
     assert (
@@ -275,7 +275,7 @@ def test_verified_team_credential_detail_is_visible_but_without_download(
 
 def test_only_the_owner_can_edit_or_delete(client_for, member, make_person, lead):
     cred = make(member)
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     for person in (other, lead):
         client = client_for(person.login)
         assert client.get(f"/certificados/{cred.pk}/editar/").status_code in {403, 404}
@@ -284,7 +284,7 @@ def test_only_the_owner_can_edit_or_delete(client_for, member, make_person, lead
 
 
 def test_pending_people_cannot_use_credentials(client_for, make_person):
-    pending = make_person("p@lev.cl", status="pending")
+    pending = make_person("p@example.com", status="pending")
     assert client_for(pending.login).get("/certificados/").status_code == 302
     assert post_form(client_for(pending.login)).status_code == 302
     assert not Credential.objects.exists()
@@ -294,7 +294,7 @@ def test_pending_people_cannot_use_credentials(client_for, make_person):
 
 
 def test_team_list_shows_only_verified_team_credentials(client_for, member, make_person, lead):
-    ana = make_person("ana2@lev.cl")
+    ana = make_person("ana2@example.com")
     shown = make(ana, title="Visible")
     services.verify(shown, lead)
     services.verify(make(ana, title="Privada", visibility="private"), lead)
@@ -308,7 +308,7 @@ def test_team_list_shows_only_verified_team_credentials(client_for, member, make
 
 
 def test_team_list_filters(client_for, member, make_person, lead):
-    ana, luis = make_person("ana2@lev.cl"), make_person("luis2@lev.cl")
+    ana, luis = make_person("ana2@example.com"), make_person("luis2@example.com")
     a = make(ana, title="Revit básico", kind="completion", issuer="Autodesk")
     b = make(
         luis,
@@ -334,7 +334,7 @@ def test_team_list_filters(client_for, member, make_person, lead):
 
 def test_review_queue_is_for_leads_and_oldest_first(client_for, member, lead, make_person):
     first = make(member, title="Primera")
-    second = make(make_person("otra@lev.cl"), title="Segunda")
+    second = make(make_person("otra@example.com"), title="Segunda")
     assert client_for(member.login).get("/certificados/revisar/").status_code == 403
     html = client_for(lead.login).get("/certificados/revisar/").content.decode().split("<main")[1]
     assert html.index("Primera") < html.index("Segunda")
@@ -560,7 +560,7 @@ def test_a_manual_check_is_not_taken_over_by_the_credential(member, lead):
 
 
 def test_verifying_is_personal(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     services.verify(make(member, resource=resource()), lead)
     assert checks(other) == set()
 
@@ -684,7 +684,7 @@ def test_lead_promotes_a_free_course_to_the_catalog(client_for, member, lead):
 
 def test_promoted_courses_get_consecutive_keys(member, lead, make_person):
     services.promote_free_course(verified_free(member, lead, "Curso A"), lead)
-    services.promote_free_course(verified_free(make_person("otra@lev.cl"), lead, "Curso B"), lead)
+    services.promote_free_course(verified_free(make_person("otra@example.com"), lead, "Curso B"), lead)
     keys = ExternalCourse.objects.filter(path__slug=BENTLEY, key__startswith="lib-c").values_list(
         "key", flat=True
     )
@@ -854,14 +854,14 @@ def test_my_free_courses_appear_in_the_free_chapter_and_the_button_is_offered(cl
 
 
 def test_free_courses_of_others_are_not_listed_to_me(client_for, member, make_person):
-    free_credential(make_person("otra@lev.cl"))
+    free_credential(make_person("otra@example.com"))
     assert "STAAD Advanced" not in civil(client_for(member.login), "?nivel=lib")
 
 
 def test_a_promoted_course_appears_for_everyone_in_the_free_chapter(
     client_for, member, lead, make_person
 ):
-    services.promote_free_course(verified_free(make_person("otra@lev.cl"), lead), lead)
+    services.promote_free_course(verified_free(make_person("otra@example.com"), lead), lead)
     html = civil(client_for(member.login), "?nivel=lib")
     assert "STAAD Advanced" in html and "Trofeo" in html
 
@@ -876,8 +876,8 @@ def test_unverified_urls_are_flagged_and_text_is_escaped(client_for, member):
 
 
 def test_participants_count_people_with_verified_credentials(client_for, member, lead, make_person):
-    verified_course(make_person("ana3@lev.cl"), lead, MS_USER)
-    verified_course(make_person("luis3@lev.cl"), lead, ROAD)
+    verified_course(make_person("ana3@example.com"), lead, MS_USER)
+    verified_course(make_person("luis3@example.com"), lead, ROAD)
     assert "Equipo<b>2</b>" in civil(client_for(member.login))
 
 
@@ -1036,7 +1036,7 @@ def test_query_counts_stay_flat(
     client_for, member, lead, make_person, django_assert_max_num_queries
 ):
     for i in range(6):
-        make(make_person(f"p{i}@lev.cl"), title=f"Curso {i}")
+        make(make_person(f"p{i}@example.com"), title=f"Curso {i}")
     with django_assert_max_num_queries(25):
         assert client_for(lead.login).get("/certificados/equipo/").status_code == 200
     from apps.progress import external

@@ -143,7 +143,7 @@ def test_progress_is_personal(world, member, make_person):
     p = world["make"]("uno", [world["arq"]])
     for m in Milestone.objects.filter(path=p):
         progress.set_milestone(member, m, True)
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     assert station(metro.build_map(other), "uno")["state"] == "todo"
 
 

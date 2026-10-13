@@ -121,7 +121,7 @@ def article(author, title="Cómo cerrar una poligonal", **kw):
 
 
 def test_drafts_are_private_to_author_and_leads(client_for, member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     a = article(member)
     assert client_for(member.login).get(f"/conocimiento/{a.pk}/").status_code == 200
     assert client_for(lead.login).get(f"/conocimiento/{a.pk}/").status_code == 200
@@ -135,7 +135,7 @@ def test_drafts_are_private_to_author_and_leads(client_for, member, lead, make_p
 
 
 def test_only_author_or_lead_edit_publish_delete(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     a = article(member, publish=True)
     for call in (
         lambda: services.update_article(a, other, title="x", body="y", kind="faq"),
@@ -268,7 +268,7 @@ def test_draft_from_a_solved_question(member, lead):
 
 
 def test_only_solved_questions_by_the_asker_or_a_lead(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     t = solved(member, lead)
     with pytest.raises(PermissionError):
         services.draft_from_thread(t, other)
@@ -321,7 +321,7 @@ def test_unauthorised_conversion_redirects_back_with_a_message(
     client_for, member, lead, make_person
 ):
     t = solved(member, lead)
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     response = client_for(other.login).get(f"/conocimiento/nuevo/?hilo={t.pk}", follow=True)
     assert "Solo quien abrió la consulta" in response.content.decode()
     assert (
@@ -374,7 +374,7 @@ def test_only_leads_move_and_result_needs_an_outcome(member, lead):
 
 
 def test_owner_must_be_approved(member, lead, make_person):
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     imp = services.propose(member, "Mejora", "Descripción")
     with pytest.raises(ValueError, match="aprobada"):
         services.move(imp, lead, stage="plan", owner=pending)
@@ -393,7 +393,7 @@ def test_proposer_is_notified_once_per_stage_change(member, lead):
 
 
 def test_edit_and_delete_rules(member, lead, make_person):
-    other = make_person("otra@lev.cl")
+    other = make_person("otra@example.com")
     imp = services.propose(member, "Mejora", "Descripción")
     services.update_improvement(imp, member, title="Editada", description="x")
     with pytest.raises(PermissionError):
@@ -453,5 +453,5 @@ def test_improvement_text_is_escaped(client_for, member):
 
 def test_module_nav_and_pending_access(client_for, member, make_person):
     assert 'href="/conocimiento/"' in client_for(member.login).get("/").content.decode()
-    pending = make_person("nuevo@lev.cl", status="pending")
+    pending = make_person("nuevo@example.com", status="pending")
     assert client_for(pending.login).get("/conocimiento/").status_code != 200

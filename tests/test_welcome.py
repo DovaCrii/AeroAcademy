@@ -101,7 +101,7 @@ def test_welcome_assets_exist():
 
 
 def test_pending_person_does_not_see_the_welcome(client_for, make_person):
-    pending = make_person("p@lev.cl", status="pending")
+    pending = make_person("p@example.com", status="pending")
     assert client_for(pending.login).get("/").status_code == 302
 
 
