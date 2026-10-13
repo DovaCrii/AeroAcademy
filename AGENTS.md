@@ -1,7 +1,8 @@
 # AGENTS.md · AeroAcademy · Academia LEV Digital 101
 
 Instrucciones para agentes de código (Codex, Claude Code u otros) que trabajen en este repositorio.
-Leer completo antes de tocar código. Los documentos de `docs/` mandan sobre cualquier suposición.
+Leer este archivo completo antes de tocar código. Los documentos de `docs/` mandan sobre cualquier suposición.
+Para no cargar contexto de más: leer siempre la **lectura base** y solo los documentos que correspondan al bloque o módulo.
 
 ## Qué es
 
@@ -16,30 +17,38 @@ con estética 8-bit tipo D&D aplicada a la ingeniería, y un asistente llamado *
 Nace del prototipo `legacy/ruta-forma-revit/` (guía "Levantamiento Digital CC 410 · Ruta Forma + Revit").
 Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica, se migra.
 
-## Documentos a leer, en orden
+## Documentos a leer
+
+**Lectura base (siempre, antes de cualquier cambio):**
 
 1. `docs/VISION.md`: identidad, disciplinas, módulos, estilo y mascota.
-2. `docs/PRD.md`: alcance, roles e historias de usuario.
-3. `docs/ARQUITECTURA.md`: stack, módulos, autenticación, bot y despliegue.
-4. `docs/MODELO_DATOS.md`: entidades y reglas.
-5. `docs/TAXONOMIA.md`: empresa → producto → ruta; etiquetas.
-6. `docs/MUNDOS.md`: diseño único por especialidad y contrato común de los mundos.
-7. `docs/GAMIFICACION.md`: XP, niveles, títulos, insignias.
-8. `docs/BOT.md` y `docs/MODERACION.md`.
-9. `docs/PLAN.md`: bloques de trabajo con criterios de aceptación. **Trabajar un bloque a la vez.**
-10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente. `docs/FUSIONES.md`: cómo se fusiona (**el agente, con el CI en verde; la persona despliega**). `docs/PRODUCCION.md` y `docs/PENDIENTES.md`: salida a producción y lo que queda.
-11. `docs/DECISIONES.md`: decisiones tomadas y abiertas. No resolver una decisión abierta por cuenta propia.
-12. `docs/CURSOS.md`: inventario de rutas, brechas, ideas de cursos nuevos y cómo escalar (plantilla y checklist de autoría).
-13. `docs/ESTANDAR_TRABAJO.md`: estándar de trabajo con Claude Code (ciclo, modelos, privacidad); plantillas en `tools/kit/`.
+2. `docs/ARQUITECTURA.md`: stack, módulos, autenticación, bot y despliegue.
+3. `docs/DECISIONES.md`: decisiones tomadas y abiertas. No resolver una decisión abierta por cuenta propia.
+4. `docs/PLAN.md`: bloques de trabajo con criterios de aceptación. **Trabajar un bloque a la vez.**
+
+**Según el bloque o módulo (leer solo lo que toque):**
+
+| Si el cambio toca… | Leer |
+|---|---|
+| Alcance, roles, historias de usuario | `docs/PRD.md` |
+| Modelos, entidades, migraciones | `docs/MODELO_DATOS.md` |
+| Empresas, productos, rutas, etiquetas | `docs/TAXONOMIA.md`, `docs/CURSOS.md` (inventario, brechas, plantilla y checklist de autoría) |
+| Mundos visuales por especialidad | `docs/MUNDOS.md` |
+| XP, niveles, títulos, insignias | `docs/GAMIFICACION.md` |
+| Teo / Nala, foro, moderación | `docs/BOT.md`, `docs/MODERACION.md` |
+| Portada, iconos | `docs/HOME.md`, `docs/ICONOS.md` |
+| Ramas, PR, fusiones | `docs/FLUJO_GITHUB.md`, `docs/FUSIONES.md` (**el agente fusiona con el CI en verde; la persona despliega**) |
+| Despliegue y producción | `docs/PRODUCCION.md`, `docs/PENDIENTES.md` |
+| Cómo trabajamos con Claude Code (ciclo, modelos, privacidad) | `docs/ESTANDAR_TRABAJO.md`; plantillas en `tools/kit/` |
 
 ## Stack
 
 - Python 3.12, gestionado con `uv`.
-- Django (monolito modular), SQLite en modo WAL, plantillas de Django y mejora progresiva con `core/static/core/enhance.js` (D23: sin HTMX hasta decidir A11). Todo funciona sin JS. Sin framework JS ni build de frontend.
+- Django (monolito modular), SQLite en modo WAL, plantillas de Django y mejora progresiva con `apps/core/static/core/enhance.js` (D23: sin HTMX hasta decidir A11). Todo funciona sin JS. Sin framework JS ni build de frontend.
 - CSS propio, en tres capas:
   - **Identidad general:** tomada de `design/academia/index.html`.
-  - **Un CSS por mundo:** `core/static/worlds/<world>.css`, ver `docs/MUNDOS.md`. El mundo Arquitectura sale de `legacy/ruta-forma-revit/static/index.html`.
-  - **Capa de juego:** `core/static/game.css`, con sprites SVG 8-bit.
+  - **Un CSS por mundo:** `apps/core/static/worlds/<world>.css`, ver `docs/MUNDOS.md`. El mundo Arquitectura sale de `legacy/ruta-forma-revit/static/index.html`.
+  - **Capa de juego:** `apps/gamification/static/gamification/game.css`, con sprites SVG 8-bit.
 - Tipografías locales (OFL): Archivo para todo el texto; Press Start 2P solo para niveles, insignias y títulos de juego.
 - Pruebas con `pytest` + `pytest-django`. Lint con `ruff`.
 - Producción: VM Linux, `gunicorn` en `127.0.0.1:8010` (el 8000 es de AeroControl en la misma VM), publicado desde un nodo Tailscale propio (`aeroacademy.<tailnet>.ts.net`): por defecto solo tailnet (`tailscale serve`); con `PUBLIC_FUNNEL=1` también una **puerta pública endurecida con Funnel** (D36: segundo gunicorn en `127.0.0.1:8011`, sin identidad de Tailscale, sin `/admin/`, TOTP para lead y admin). Funnel solo en el nodo propio, nunca en el de AeroControl.
@@ -105,9 +114,13 @@ lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de inte
 
 **El agente construye, sube, abre el PR, espera el CI en verde y fusiona con merge commit; la persona despliega.** Detalle en `docs/FLUJO_GITHUB.md`.
 
+- **Dos fases separadas.** (1) *Implementar en local:* código, pruebas, ruff y migraciones en la rama, con commits locales.
+  (2) *Publicar:* solo cuando la fase 1 está completa y verificada, `git push -u origin <rama>` y `gh pr create`.
+  Si algo de la fase 1 queda dudoso, no se publica.
 - Una rama y un PR por bloque: `bloque-<n>-<tema>`, apilados sobre el bloque anterior mientras no se fusione.
-- Al terminar un bloque: `git push -u origin <rama>` y `gh pr create` con la plantilla de `.github/`.
-  Título `Bloque <n> · <tema>`; cuerpo con criterios de aceptación y cómo probarlo.
+- Al publicar un bloque: PR con la plantilla de `.github/`. Título `Bloque <n> · <tema>`; cuerpo con criterios de aceptación y cómo probarlo.
+- Commits pequeños, en español y en imperativo (`Agrega el motor de XP idempotente`); primera línea ≤ 72 caracteres.
+  Esta es la convención del repositorio: no se usa Conventional Commits.
 - Revisar el CI del PR (`gh pr checks`) y arreglarlo si falla. Un PR en rojo no está listo.
 - **Nunca** fusionar con el CI en rojo o saltado, forzar `push` sobre `main`, subir secretos o datos reales, ni cambiar la
   visibilidad o los *settings* del repositorio sin que se pida explícitamente.
@@ -126,7 +139,9 @@ lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de inte
 ## Reglas
 
 - **Alcance:** implementar solo lo que pide el bloque activo. Si algo falta o es ambiguo, dejarlo anotado en
-  `docs/DECISIONES.md` como pregunta abierta y seguir con lo demás.
+  `docs/DECISIONES.md` como pregunta abierta y seguir con lo demás. **Excepción:** si la duda afecta la
+  seguridad, la privacidad o una decisión de producto, se detiene esa parte y se consulta a la persona antes
+  de seguir; no se resuelve por cuenta propia.
 - **Seguridad:**
   - La identidad viene del encabezado `Tailscale-User-Login`. Solo se confía en él cuando la petición llega
     desde `127.0.0.1` (proxy de `tailscale serve`). Ver ARQUITECTURA.
