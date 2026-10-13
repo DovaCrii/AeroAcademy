@@ -1,19 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="DOC">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5C7CFF"/><stop offset="1" stop-color="#2A2FB0"/></linearGradient>
-    <clipPath id="t"><path d="M14 2H48L62 16V50A12 12 0 0 1 50 62H14A12 12 0 0 1 2 50V14A12 12 0 0 1 14 2Z"/></clipPath>
-  </defs>
-  <path d="M14 5H48L62 19V53A11 11 0 0 1 51 64H14A12 12 0 0 1 2 52V17A12 12 0 0 1 14 5Z" fill="#000" opacity=".22"/>
-  <g clip-path="url(#t)">
-    <rect width="64" height="64" fill="url(#g)"/>
-    <rect y="43" width="64" height="21" fill="#000" opacity=".30"/>
-    <rect y="43" width="64" height="1.4" fill="#fff" opacity=".28"/>
-    <path d="M0 0H64V22C46 16 20 18 0 26Z" fill="#fff" opacity=".13"/>
-    <path d="M48 2V16H62Z" fill="#000" opacity=".28"/>
-    <path d="M48 2 62 16H48Z" fill="#fff" opacity=".42"/>
-  </g>
-  <path d="M14 2.7H47.7L61.3 16.3V50A11.3 11.3 0 0 1 50 61.3H14A11.3 11.3 0 0 1 2.7 50V14A11.3 11.3 0 0 1 14 2.7Z" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.2"/>
-  <text x="29" y="38" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="35" fill="#000" opacity=".25">D</text>
-  <text x="29" y="36.6" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="35" fill="#fff">D</text>
-  <text x="32" y="57.6" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="11.5" letter-spacing="2" fill="#fff">DOC</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Autodesk Docs">
+  <defs><clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath></defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#fff"/>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#0A0E13" stroke-opacity=".14" stroke-width="1.2"/>
+  <g clip-path="url(#t)"><g transform="translate(5 5) scale(.84)"><path d="M16 34Q6 34 6 26Q6 18 15 19Q17 8 30 9Q41 10 42 19Q52 19 52 27Q52 34 43 34Z" fill="#1F6FD6"/><rect x="24" y="14" width="13" height="17" rx="2" fill="#fff"/><path d="M27 19H34M27 23H34M27 27H31" fill="none" stroke="#8CC8FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="42" r="4" fill="#0A3F9E"/><circle cx="32" cy="40" r="5" fill="#1F6FD6"/><circle cx="48" cy="42" r="4" fill="#0A3F9E"/><path d="M8 56Q8 48 16 48T24 56M23 56Q23 46 32 46T41 56M40 56Q40 48 48 48T56 56" fill="#8CC8FF" stroke="none"/></g></g>
 </svg>

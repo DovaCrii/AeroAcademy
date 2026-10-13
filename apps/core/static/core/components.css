@@ -130,3 +130,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--amber)}
   .tabs a{padding:7px 12px}
   .filters{padding:10px}
 }
+
+/* Icono propio de cada ruta en /rutas/ */
+.card .route-ico{float:right;margin:0 0 .4rem .6rem;width:48px;height:48px;border-radius:12px}
+

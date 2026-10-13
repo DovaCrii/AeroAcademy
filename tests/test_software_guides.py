@@ -88,11 +88,22 @@ def test_tiles_have_a_family_and_every_tile_has_a_row():
     assert set(software.ROW_ORDER) == set(software.TILES)
 
 
+OFFICIAL_AUTODESK = {"autocad", "revit", "forma", "navisworks", "infraworks"}
+
+
+PICTO_AUTODESK = {"civil3d", "plant-3d", "recap", "dynamo", "acc"}
+
+
 def test_autodesk_tiles_have_letter_and_code_and_bentley_are_pictograms():
     root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
     for t in software.TILES.values():
         svg = (root / t.static_path).read_text(encoding="utf-8")
-        if t.family == software.AUTODESK:
+        if t.slug in OFFICIAL_AUTODESK:  # logo oficial de Autodesk sobre baldosa blanca
+            assert (root / "core/img/software/oficial" / f"autodesk-{t.slug}.svg").is_file()
+            assert 'fill="#fff"' in svg and "<text" not in svg
+        elif t.slug in PICTO_AUTODESK:  # pictograma simplificado sobre baldosa blanca, sin texto
+            assert 'fill="#fff"' in svg and "<text" not in svg
+        elif t.family == software.AUTODESK:
             assert (
                 f">{t.code}</text>" in svg and svg.count("<text") == 3
             )  # letra (con sombra) + código
@@ -320,3 +331,32 @@ def test_catalog_queries_do_not_grow(seeded, member_client):
     with CaptureQueriesContext(connection) as after:
         assert member_client.get("/catalogo/").status_code == 200
     assert len(after) == len(before)
+
+
+def test_every_route_has_its_own_unique_icon_file():
+    root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
+    slugs = {json.loads(f.read_text(encoding="utf-8"))["slug"] for f in SEED.glob("*.json")}
+    assert slugs <= set(software.ROUTE_ICON), slugs - set(software.ROUTE_ICON)
+    stems = [software.route_icon(s) for s in slugs]
+    assert len(set(stems)) == len(stems)  # ninguna ruta repite icono
+    contents = set()
+    for stem in stems:
+        f = root / "core" / "img" / "software" / f"{stem}.svg"
+        ElementTree.parse(f)
+        contents.add(f.read_bytes())
+    assert len(contents) == len(stems)  # ni siquiera con otro nombre
+    assert software.route_icon("no-existe") == ""
+
+
+def test_official_route_logos_keep_their_source_and_are_on_a_white_tile():
+    root = Path(settings.BASE_DIR) / "apps" / "core" / "static" / "core" / "img" / "software"
+    official = {
+        "python-datos-101": "python",
+        "herramientas-ia": "git", "claude-code-mcp": "claude", "geospatial-data-science": "qgis",
+        "data-science-aplicada": "kaggle", "datos-reportes": "powerbi",
+    }  # fmt: skip
+    for slug, name in official.items():
+        raw = (root / "oficial" / f"{name}.svg").read_text(encoding="utf-8")
+        d = ElementTree.fromstring(raw).find(".//{*}path").get("d")
+        tile = (root / f"ruta-{slug}.svg").read_text(encoding="utf-8")
+        assert d in tile and 'fill="#fff"' in tile  # forma del logo intacta sobre baldosa blanca

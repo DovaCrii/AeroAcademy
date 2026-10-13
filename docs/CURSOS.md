@@ -120,6 +120,13 @@ por computador (Kaggle, Hugging Face; útil para clasificar nubes e imágenes de
 (no se encontró un curso gratuito oficial verificable), R (`r-programming`) y MLOps. Descartados por no aplicar al equipo: frameworks web y
 móviles, lenguajes de sistemas, blockchain, desarrollo de juegos.
 
+**Videos explicativos (idea, no construida).** HyperFrames (HeyGen, Apache-2.0, HTML → MP4) serviría como motor opcional
+de render para lecciones cortas con subtítulos o para exportar un esquema animado a video. Hoy los esquemas animados de
+los cursos (`diagram`) corren dentro de la página, sin video, con teclado y sin JS. Si se adopta: empezar con una sola
+plantilla de 3–5 escenas (HTML/SVG + GSAP en pausa), subtítulos y transcripción editables, versión estática para quien
+prefiere menos movimiento, render en un proceso aislado con versiones fijas de navegador y FFmpeg, y revisión humana antes
+de publicar. No reemplaza al motor de diapositivas ni a los esquemas de la página.
+
 Orden sugerido: 5 y 1 primero (alto valor, no dependen del motor de pasos), luego 2 y 3, después 4 y 6. Las rutas externas
 (7, 10, 11) son rápidas de armar con la skill `nueva-ruta` y sirven para cerrar brechas de herramientas sin escribir contenido.
 

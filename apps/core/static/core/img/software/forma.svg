@@ -1,19 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="FOR">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#28C2FF"/><stop offset="1" stop-color="#1257D6"/></linearGradient>
-    <clipPath id="t"><path d="M14 2H48L62 16V50A12 12 0 0 1 50 62H14A12 12 0 0 1 2 50V14A12 12 0 0 1 14 2Z"/></clipPath>
-  </defs>
-  <path d="M14 5H48L62 19V53A11 11 0 0 1 51 64H14A12 12 0 0 1 2 52V17A12 12 0 0 1 14 5Z" fill="#000" opacity=".22"/>
-  <g clip-path="url(#t)">
-    <rect width="64" height="64" fill="url(#g)"/>
-    <rect y="43" width="64" height="21" fill="#000" opacity=".30"/>
-    <rect y="43" width="64" height="1.4" fill="#fff" opacity=".28"/>
-    <path d="M0 0H64V22C46 16 20 18 0 26Z" fill="#fff" opacity=".13"/>
-    <path d="M48 2V16H62Z" fill="#000" opacity=".28"/>
-    <path d="M48 2 62 16H48Z" fill="#fff" opacity=".42"/>
-  </g>
-  <path d="M14 2.7H47.7L61.3 16.3V50A11.3 11.3 0 0 1 50 61.3H14A11.3 11.3 0 0 1 2.7 50V14A11.3 11.3 0 0 1 14 2.7Z" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.2"/>
-  <text x="29" y="38" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="35" fill="#000" opacity=".25">F</text>
-  <text x="29" y="36.6" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="35" fill="#fff">F</text>
-  <text x="32" y="57.6" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="11.5" letter-spacing="2" fill="#fff">FOR</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Autodesk Forma">
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#fff"/>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#0A0E13" stroke-opacity=".14" stroke-width="1.2"/>
+  <svg x="9" y="9" width="46" height="46" viewBox="0 0 40 40" fill="none">
+<g clip-path="url(#clip0_4055_51007)">
+<g clip-path="url(#clip1_4055_51007)">
+<path d="M2.50515 32.9826L25.5922 18.6223H37.568C37.9365 18.6223 38.2681 18.917 38.2681 19.3224C38.2681 19.654 38.1207 19.8014 37.9365 19.912L26.5971 26.7088C25.8602 27.1509 25.6022 28.0353 25.6022 28.6986L25.5908 32.9826H40V8.08357C40 7.60455 39.6315 7.19922 39.0788 7.19922H25.3343L2.30396 21.4964V32.9826H2.50515Z" fill="black"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_4055_51007">
+<rect width="40" height="40" fill="white"/>
+</clipPath>
+<clipPath id="clip1_4055_51007">
+<rect width="37.696" height="25.7834" fill="white" transform="translate(2.30396 7.19922)"/>
+</clipPath>
+</defs>
+</svg>
+
 </svg>

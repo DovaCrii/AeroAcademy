@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="IA 101">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#3E1B92"/></linearGradient>
+    <clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath>
+  </defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <g clip-path="url(#t)"><rect width="64" height="64" fill="url(#g)"/><path d="M0 0H64V22C44 16 20 18 0 28Z" fill="#fff" opacity=".12"/><path d="M0 64H64V52C44 56 20 54 0 58Z" fill="#000" opacity=".12"/></g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.2"/>
+  <rect x="18" y="18" width="28" height="28" rx="6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 10V18M38 10V18M26 46V54M38 46V54M10 26H18M10 38H18M46 26H54M46 38H54" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 23C33 29 35 31 41 32C35 33 33 35 32 41C31 35 29 33 23 32C29 31 31 29 32 23Z" fill="#FFE2A8"/><circle cx="49" cy="14" r="2.4" fill="#FFE2A8"/>
+</svg>

@@ -3,7 +3,7 @@
   <details>
     <summary aria-label="Hablar con Nala"><img src="{% static 'game/teo/' %}{{ teo_sprite }}" width="48" height="48" alt="Nala"></summary>
     <div class="teo-pop">
-      <p class="teo-hello">{{ nala_greeting }}</p>
+      <p class="teo-hello"><svg class="teo-paw" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="5.2" ry="4.4"/><ellipse cx="4.6" cy="10.6" rx="2.2" ry="2.9"/><ellipse cx="9" cy="5.8" rx="2.3" ry="3"/><ellipse cx="15" cy="5.8" rx="2.3" ry="3"/><ellipse cx="19.4" cy="10.6" rx="2.2" ry="2.9"/></svg>{{ nala_greeting }}</p>
       <form method="post" action="{% url 'assistant:page' %}" class="teo-shortcuts" data-teo-form data-endpoint="{% url 'assistant:ask' %}" aria-label="Atajos de Nala">
         {% csrf_token %}
         {% for key, text in teo_shortcuts %}<button class="btn" type="submit" name="atajo" value="{{ key }}">{{ text }}</button>{% endfor %}

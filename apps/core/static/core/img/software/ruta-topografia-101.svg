@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Topografía 101">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9A23B"/><stop offset="1" stop-color="#8A4A0C"/></linearGradient>
+    <clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath>
+  </defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <g clip-path="url(#t)"><rect width="64" height="64" fill="url(#g)"/><path d="M0 0H64V22C44 16 20 18 0 28Z" fill="#fff" opacity=".12"/><path d="M0 64H64V52C44 56 20 54 0 58Z" fill="#000" opacity=".12"/></g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.2"/>
+  <path d="M32 36L18 58M32 36L46 58M32 36V58" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="22" y="14" width="20" height="14" rx="3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="21" r="4" fill="#FFF1C2"/><path d="M42 21H52" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 28V36H38V28" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 8H42" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
