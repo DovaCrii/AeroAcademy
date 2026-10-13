@@ -1,0 +1,90 @@
+/* Mapa de metro de las rutas y línea de niveles de cada ruta. Solo usa tokens de core/tokens.css. */
+/* --mm-canvas: fondo del plano; --mm-fill: relleno de estaciones, cápsulas y píldoras (claro, como en un plano de metro). */
+:root{--mm-0:#6B7280;--mm-1:#0E7490;--mm-2:#B45309;--mm-3:#9D174D;--mm-4:#4D7C0F;
+  --mm-canvas:#FBF8F1;--mm-fill:#FFFFFF;--mm-fill-ink:#14213D;--mm-edge:#2B3A55;--mm-link:#2B3A55;--mm-pill-ink:#FFFFFF}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--mm-0:#A6B3C4;--mm-1:#67E8F9;--mm-2:#FDBA74;--mm-3:#F9A8D4;--mm-4:#BEF264;
+    --mm-canvas:#1E2D4A;--mm-fill:#F4F6FA;--mm-fill-ink:#14213D;--mm-edge:#0B1528;--mm-link:#C9D3E3;--mm-pill-ink:#14213D}
+}
+:root[data-theme="dark"]{--mm-0:#A6B3C4;--mm-1:#67E8F9;--mm-2:#FDBA74;--mm-3:#F9A8D4;--mm-4:#BEF264;
+  --mm-canvas:#1E2D4A;--mm-fill:#F4F6FA;--mm-fill-ink:#14213D;--mm-edge:#0B1528;--mm-link:#C9D3E3;--mm-pill-ink:#14213D}
+
+.mm-nav{margin-top:12px}
+.mm-card{position:relative;margin:0 0 var(--sp-3);padding:18px 20px 20px;background:var(--surface-tint),var(--sheet);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow-1);min-width:0;
+  background-image:linear-gradient(var(--grid-minor) 1px,transparent 1px),linear-gradient(90deg,var(--grid-minor) 1px,transparent 1px);background-size:24px 24px}
+.mm-head{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;justify-content:space-between}
+.mm-head h2{margin:0}
+.mm-stats{margin:0;color:var(--ink-2);font-size:var(--fs-small)}
+.mm-stats b{color:var(--ink)}
+.mm-legend{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--fs-small);color:var(--ink-2)}
+.mm-legend li{display:inline-flex;align-items:center;gap:7px}
+.mm-legend-st{margin-top:8px}
+.mm-sw{display:inline-block;width:22px;height:7px;border-radius:4px;background:var(--c);vertical-align:middle;margin-right:2px}
+.mm-legend .mm-sw{margin:0}
+
+.mm-scroll{margin-top:14px;overflow-x:auto;overscroll-behavior-x:contain;border:1px dashed var(--hair);border-radius:var(--r);background:var(--mm-canvas)}
+.mm-scroll:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.mm-svg{display:block;width:100%;height:auto;font-family:var(--font)}
+.mm-track{fill:none;stroke:var(--c);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.mm-pill rect{fill:var(--c);stroke:var(--mm-edge);stroke-width:1.5}
+.mm-pill text{fill:var(--mm-pill-ink);font:700 10px var(--font);text-anchor:middle;dominant-baseline:central;letter-spacing:.02em}
+
+.mm-station{cursor:pointer;outline:none}
+.mm-hit{fill:transparent}
+.mm-st{fill:var(--mm-fill);stroke:var(--c);stroke-width:4.5}
+.mm-st.mm-done{fill:var(--c)}
+.mm-half{fill:var(--c)}
+.mm-ix,.mm-cap{fill:var(--mm-fill);stroke:var(--mm-edge);stroke-width:3}
+.mm-link{stroke:var(--mm-link);stroke-width:2.5;stroke-linecap:round;opacity:.8}
+.mm-xd{stroke-width:3.5}
+.mm-ix-done{fill:var(--ok)}
+.mm-ix-half{fill:var(--ok)}
+.mm-glow{fill:none;stroke:var(--amber);stroke-width:3;opacity:.75}
+.mm-lbl{fill:var(--ink);font:600 9.5px var(--font);paint-order:stroke;stroke:var(--mm-canvas);stroke-width:4px;stroke-linejoin:round}
+.mm-station:hover .mm-st,.mm-station:focus-visible .mm-st{stroke-width:6}
+.mm-station:hover .mm-cap,.mm-station:focus-visible .mm-cap{stroke-width:5}
+.mm-station:focus-visible .mm-hit{stroke:var(--amber);stroke-width:2;rx:10;fill:color-mix(in srgb,var(--amber) 14%,transparent)}
+.mm-station:hover .mm-lbl,.mm-station:focus-visible .mm-lbl{fill:var(--amber-ink);text-decoration:underline}
+.mm-pin{fill:var(--red);stroke:var(--sheet);stroke-width:2}
+.mm-pin-dot{fill:var(--sheet)}
+.mm-here-t{fill:var(--red);font:800 11px var(--font);paint-order:stroke;stroke:var(--sheet);stroke-width:4px;letter-spacing:.04em;text-transform:uppercase}
+@media (prefers-reduced-motion:no-preference){
+  .mm-glow{animation:mm-pulse 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .mm-here{animation:mm-bob 1.8s ease-in-out infinite}
+}
+@keyframes mm-pulse{0%,100%{opacity:.35;transform:scale(.92)}50%{opacity:.95;transform:scale(1.12)}}
+@keyframes mm-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+.mm-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.mm-ix-list h2{margin:0 0 4px}
+.mm-ix-list p{margin:0 0 10px;color:var(--ink-2)}
+.mm-ix-list ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px 18px}
+.mm-ix-list li{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-bottom:1px dashed var(--hair)}
+.mm-ix-list li span{font-size:var(--fs-small);color:var(--ink-2)}
+.mm-ix-list .mm-sw{width:12px;height:12px;border-radius:50%;margin-right:5px}
+.mm-ix-list li span .mm-sw:not(:first-child){margin-left:2px}
+
+/* Línea de niveles dentro de cada ruta. */
+.ll{margin:0 0 var(--sp-2);padding:10px 14px 12px;background:var(--sheet);border:1px solid var(--hair);border-radius:var(--r);min-width:0}
+.ll-cap{display:block;margin:0 0 4px;font:500 11px var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.ll-scroll{overflow-x:auto;padding-bottom:2px}
+.ll ol{list-style:none;margin:0;padding:0;display:flex;min-width:max-content}
+.ll li{position:relative;flex:1 0 76px;min-width:76px;text-align:center}
+.ll li::before{content:"";position:absolute;top:16.5px;left:-50%;width:100%;height:5px;background:var(--hair);z-index:0}
+.ll li:first-child::before{display:none}
+.ll li.done::before,.ll li.now::before{background:var(--level)}
+.ll a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px 4px;color:var(--ink-2);text-decoration:none;font-size:11.5px;line-height:1.25}
+.ll-dot{width:22px;height:22px;border-radius:50%;border:4px solid var(--hair);background:var(--sheet);box-sizing:border-box;display:block}
+.ll li.done .ll-dot{background:var(--level);border-color:var(--level)}
+.ll li.part .ll-dot{border-color:var(--level);background:linear-gradient(90deg,var(--level) 50%,var(--sheet) 50%)}
+.ll li.now .ll-dot{border-color:var(--amber);box-shadow:0 0 0 4px var(--glow)}
+.ll li.now.done .ll-dot{background:var(--level)}
+.ll li.now a{color:var(--ink);font-weight:700}
+.ll a:hover .ll-dot,.ll a:focus-visible .ll-dot{border-color:var(--amber)}
+.ll a:focus-visible{outline:2px solid var(--amber);outline-offset:1px;border-radius:6px}
+.ll-code{font:600 11px var(--font-mono);letter-spacing:.06em;text-transform:uppercase}
+.ll-name{max-width:84px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+@media (max-width:520px){.mm-card{padding:14px 12px 16px}}
+
+

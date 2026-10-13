@@ -7,6 +7,13 @@ navegador (tailnet) ─HTTPS─> nodo Tailscale propio (https :443) ─> 127.0.0
                               └ Tailscale-User-Login / -Name / -Profile-Pic        └─> /var/lib/centro/media (certificados)
 ```
 
+Con la **puerta pública** encendida (D36, `PUBLIC_FUNNEL=1`) hay dos puertas al mismo código y a la misma base:
+
+```
+tailnet  ─> nodo `aeroacademy` :8443 (serve)  ─> 127.0.0.1:8010 centro.service         (identidad de Tailscale)
+internet ─> nodo `aeroacademy` :443  (funnel) ─> 127.0.0.1:8011 centro-public.service  (solo contraseña; admin en 404; TOTP)
+```
+
 Monolito modular en Django, sin frontend separado. Mejora progresiva con un ayudante propio (`core/static/core/enhance.js`, D23; HTMX queda como opción) para las interacciones (marcar hitos, quiz, notas,
 filtros) sin recargar la página.
 
@@ -31,6 +38,16 @@ filtros) sin recargar la página.
 Regla: las apps se comunican por `services.py`, no importando vistas entre sí.
 
 ## Autenticación
+
+- **Puerta pública (D36).** `settings.PUBLIC_DOOR` lo fija el proceso (`AEROACADEMY_DOOR=public` en `centro-public.service`),
+  nunca la petición. `PublicDoorMiddleware` (antes de la identidad) marca `request.public_door`, **borra**
+  `Tailscale-User-*` y responde 404 en `/admin/`, `/moderacion/`, `/equipo/personas/`, `…/moderar…` y `/seguridad/`
+  (`PUBLIC_BLOCKED_PREFIXES`). Ahí solo vale la sesión por contraseña. `PublicSecondFactorMiddleware` exige TOTP
+  (`apps/accounts/totp.py`, RFC 6238 con la biblioteca estándar; `two_factor.py`; modelo `TotpDevice` con códigos de
+  recuperación como HMAC) a lead, admin y `is_staff` en cada sesión: `/verificar/` pide el código; sin TOTP activado se
+  muestra un bloqueo que remite a `/seguridad/2fa/` (solo por la tailnet). Cookies y CSRF propios, HSTS y `Secure` en
+  `config/settings/prod.py`. Los límites de intentos (`ratelimit.py`) usan `CACHES` de archivos (`CACHE_DIR`,
+  `/var/lib/centro/cache`), compartida entre workers y servicios.
 
 - Middleware propio `TailscaleRemoteUserMiddleware` (subclase de `RemoteUserMiddleware`):
   - Lee `Tailscale-User-Login`. Crea o actualiza la persona con `Tailscale-User-Name` y `-Profile-Pic`.
@@ -103,7 +120,8 @@ Cualquier otra requiere una entrada en `DECISIONES.md`.
 - Variables en `/etc/centro/env`: `SECRET_KEY`, `ALLOWED_HOSTS` (nombre MagicDNS), `MEDIA_ROOT`,
   `DATABASE_PATH`, `BOOTSTRAP_ADMINS`, `TRUSTED_PROXY_IPS`, `NIM_API_KEY`, `NIM_BASE_URL`, `NIM_MODEL`, `BOT_ENABLED`, `BOT_DAILY_LIMIT`.
 - Respaldo diario: `sqlite3 .backup` + `tar` de `media/`, retención 30 días.
-- No usar `tailscale funnel`.
+- Funnel (D36): solo con `PUBLIC_FUNNEL=1`, en el nodo propio `aeroacademy` (nunca el de AeroControl), servicio `centro-public.service`
+  en `127.0.0.1:8011`. Apagado por defecto y reversible con `PUBLIC_FUNNEL=0`.
 
 ## Migración desde el prototipo
 

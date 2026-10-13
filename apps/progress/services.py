@@ -7,9 +7,11 @@ Regla (docs/MODELO_DATOS.md): avance de un nivel = (misiones marcadas + pregunta
 import math
 from collections import defaultdict
 
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import PersonStatus
+from apps.catalog import guides
 from apps.gamification import game
 from apps.paths import services as path_services
 from apps.paths.models import PathExtra
@@ -212,8 +214,95 @@ def _diploma_link(person, path):
     return diplomas.route_link(person, path)
 
 
-def world_context(person, path, level_code=None):
-    """Todo lo que necesita la ruta interactiva de un mundo (docs/MUNDOS.md)."""
+TABS = (
+    ("aprender", "Aprender"),
+    ("practicar", "Practicar"),
+    ("evaluar", "Evaluar"),
+    ("recursos", "Recursos"),
+    ("notas", "Notas"),
+)
+STEP_KEYS = (
+    "portada",
+    "guia",
+    "practica",
+    "quiz",
+    "recursos",
+    "notas",
+)  # además de 1..N (diapositivas)
+
+
+def step_url(path, level_code, key):
+    return f"{reverse('paths:detail', args=[path.slug])}?nivel={level_code}&paso={key}#panel"
+
+
+def level_steps(path, chapter):
+    """Pasos del nivel, en orden: portada · diapositivas 1..N · guía · misiones · preguntas · recursos · notas.
+
+    Solo presentación: no cambia códigos de nivel ni claves de misiones/preguntas (de ellas dependen XP, insignias
+    y diploma). Un nivel sin diapositivas igual tiene portada, guía, práctica, quiz, recursos y notas.
+    """
+    code = chapter["level"].code
+    slides = guides.slides_for(path.slug, code)
+    steps = [{"key": "portada", "label": "Portada", "tab": "aprender"}]
+    steps += [
+        {"key": str(i), "label": s["title"], "tab": "aprender", "slide": s}
+        for i, s in enumerate(slides, start=1)
+    ]
+    if guides.guide_for(path.slug, code):
+        steps.append({"key": "guia", "label": "Guía rápida", "tab": "aprender"})
+    if chapter["milestones"]:
+        steps.append({"key": "practica", "label": "Misiones", "tab": "practicar"})
+    if chapter["quiz"]:
+        steps.append({"key": "quiz", "label": "Preguntas", "tab": "evaluar"})
+    if chapter["resources"]:
+        steps.append({"key": "recursos", "label": "Recursos", "tab": "recursos"})
+    steps.append({"key": "notas", "label": "Notas del equipo", "tab": "notas"})
+    for n, s in enumerate(steps, start=1):
+        s["n"] = n
+        s["url"] = step_url(path, code, s["key"])
+    return steps
+
+
+def step_context(path, chapter, step_key, prev_code, next_code):
+    """Paso actual, navegación Anterior/Siguiente (al terminar salta a la portada del nivel siguiente) y pestañas."""
+    steps = level_steps(path, chapter)
+    index = next((i for i, s in enumerate(steps) if s["key"] == step_key), 0)  # inválido → portada
+    for i, s in enumerate(steps):
+        s["current"] = i == index
+    step = steps[index]
+    prev_url = steps[index - 1]["url"] if index > 0 else None
+    if index == 0 and prev_code:
+        prev_url = step_url(path, prev_code, "portada")
+    next_url = steps[index + 1]["url"] if index + 1 < len(steps) else None
+    next_is_level = False
+    if next_url is None and next_code:
+        next_url, next_is_level = step_url(path, next_code, "portada"), True
+    tabs = []
+    for tab_key, label in TABS:
+        first = next((s for s in steps if s["tab"] == tab_key), None)
+        if first:
+            tabs.append(
+                {
+                    "key": tab_key,
+                    "label": label,
+                    "url": first["url"],
+                    "active": step["tab"] == tab_key,
+                }
+            )
+    return {
+        "steps": steps,
+        "step": step,
+        "step_no": step["n"],
+        "step_total": len(steps),
+        "step_prev": prev_url,
+        "step_next": next_url,
+        "step_next_is_level": next_is_level,
+        "tabs": tabs,
+    }
+
+
+def world_context(person, path, level_code=None, step=None):
+    """Todo lo que necesita la ruta interactiva de un mundo (docs/MUNDOS.md). `step`: valor de `?paso=`."""
     chapters = path_services.path_detail(path)
     checked = set(
         MilestoneCheck.objects.filter(person=person, milestone__path=path).values_list(
@@ -242,6 +331,9 @@ def world_context(person, path, level_code=None):
                 }
             )
         ch["quiz"] = quiz
+        ch["quiz_right"] = sum(q["correct"] for q in quiz)
+        ch["quiz_answered"] = sum(q["answered"] for q in quiz)
+        ch["quiz_missing"] = len(quiz) - ch["quiz_answered"]
         done = sum(m["checked"] for m in ch["milestones"]) + sum(q["correct"] for q in quiz)
         total = len(ch["milestones"]) + len(quiz)
         ch.update(
@@ -265,7 +357,19 @@ def world_context(person, path, level_code=None):
     intro = next((e.data for e in extras if e.kind == PathExtra.Kind.INTRO), {})
     flow = [e.data for e in extras if e.kind == PathExtra.Kind.FLOW]
     program = [part.strip() for part in path.program.split("·")]
+    steps = (
+        step_context(
+            path,
+            current,
+            step,
+            codes[index - 1] if index > 0 else None,
+            codes[index + 1] if index + 1 < len(codes) else None,
+        )
+        if current
+        else {}
+    )
     return {
+        **steps,
         "path": path,
         "program_code": program[0] if len(program) > 1 else "",
         "program_title": program[-1] or path.title,

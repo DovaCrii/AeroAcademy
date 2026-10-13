@@ -69,8 +69,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.accounts.middleware.PublicDoorMiddleware",  # D36: antes de leer la identidad de Tailscale
     "apps.accounts.middleware.TailscaleRemoteUserMiddleware",
     "apps.accounts.middleware.ApprovalMiddleware",
+    "apps.accounts.middleware.PublicSecondFactorMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -137,6 +139,31 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # la sesión por contraseña dura 30 dí
 
 # Solo estas IP pueden presentar el encabezado Tailscale-User-Login (proxy de `tailscale serve`).
 TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
+# Puerta pública (D36, Tailscale Funnel). La decide el PROCESO y no la petición: el servicio `centro-public` arranca con
+# AEROACADEMY_DOOR=public (lo fija systemd con `env`, después del archivo de entorno). Nada que mande el cliente
+# (encabezados, puerto, Host) puede encender ni apagar este modo. En la puerta pública el encabezado
+# Tailscale-User-Login se descarta, no existe /admin/ ni las herramientas de moderación y quien es lead o admin
+# necesita un segundo factor (TOTP).
+PUBLIC_DOOR = os.environ.get("AEROACADEMY_DOOR", "").strip().lower() == "public"
+PUBLIC_BLOCKED_PREFIXES = ("/admin/", "/moderacion/", "/equipo/personas/", "/seguridad/")
+# Dirección pública (https://<nodo>.ts.net) para los enlaces de invitación cuando el Funnel está encendido.
+ACADEMY_URL = os.environ.get("ACADEMY_URL", "").strip()
+
+# Caché compartida entre los workers de gunicorn y entre los dos servicios (límites de intentos): con CACHE_DIR se usa
+# un directorio de archivos; sin él (desarrollo, pruebas) la caché es por proceso.
+CACHE_DIR = os.environ.get("CACHE_DIR", "").strip()
+CACHES = (
+    {
+        "default": {
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": CACHE_DIR,
+            "TIMEOUT": 3600,
+        }
+    }
+    if CACHE_DIR
+    else {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+)
+
 # Quien figure aquí entra aprobada y como admin (el moderador del proyecto).
 BOOTSTRAP_ADMINS = [e.lower() for e in env_list("BOOTSTRAP_ADMINS")]
 # Solo para desarrollo: simula la identidad. Se ignora si DEBUG es False.
@@ -160,6 +187,11 @@ CREDENTIAL_WARNING_DAYS = int(os.environ.get("CREDENTIAL_WARNING_DAYS", "60"))
 # Sección DGAC / RPAS (apps/dgac): el contenido de JEJ (ruta, banco de preguntas, infografías) vive FUERA del
 # repositorio público, en esta carpeta. Producción: /var/lib/centro/dgac. Si falta, la sección avisa que no está instalado.
 DGAC_DATA_DIR = Path(os.environ.get("DGAC_DATA_DIR", str(BASE_DIR / "private" / "dgac")))
+# Cursos propios con material privado (fotos reales, rutas que no van a git): una carpeta por ruta,
+# `<slug>/fotos/*` y, si la ruta es privada, `<slug>/ruta.json`. Producción: /var/lib/centro/cursos.
+PRIVATE_COURSES_DIR = Path(
+    os.environ.get("PRIVATE_COURSES_DIR", str(BASE_DIR / "private" / "cursos"))
+)
 
 # Marca (docs/VISION.md)
 BRAND_PLATFORM = "AeroAcademy"

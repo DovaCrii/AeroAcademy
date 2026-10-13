@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Claude Code">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8825A"/><stop offset="1" stop-color="#8F3B1F"/></linearGradient>
+    <clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath>
+  </defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <g clip-path="url(#t)"><rect width="64" height="64" fill="url(#g)"/><path d="M0 0H64V22C44 16 20 18 0 28Z" fill="#fff" opacity=".12"/></g>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.2"/>
+  <rect x="9" y="15" width="46" height="34" rx="6" fill="#2A0F05" fill-opacity=".4" stroke="#fff" stroke-width="3.2"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 27L25 33L17 39"/></g><path d="M40 24C41 30 43 32 49 33C43 34 41 36 40 42C39 36 37 34 31 33C37 32 39 30 40 24Z" fill="#FFE2A8"/>
+</svg>

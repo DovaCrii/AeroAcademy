@@ -174,7 +174,7 @@ LOGIN_WINDOW_SECONDS = 15 * 60
 
 
 def academy_url() -> str:
-    return getattr(settings, "ACADEMY_URL", DEFAULT_ACADEMY_URL).rstrip("/")
+    return (getattr(settings, "ACADEMY_URL", "") or DEFAULT_ACADEMY_URL).rstrip("/")
 
 
 def _fingerprint(person: Person) -> str:

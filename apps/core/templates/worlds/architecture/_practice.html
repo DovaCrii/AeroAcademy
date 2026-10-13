@@ -1,0 +1,18 @@
+{% load core_extras %}
+<section class="sl-card sl-practice" aria-labelledby="sl-h">
+  <h4 class="sl-h" id="sl-h">Misiones <span class="cnt">{{ current.milestones|length }}</span></h4>
+  <p class="sl-lead">Marca cada misión cuando la hayas hecho de verdad, en el programa o en terreno. Queda guardada a tu nombre.</p>
+  <ul class="ar-checks">
+    {% for m in current.milestones %}
+    <li>
+      <form method="post" action="{% url 'progress:toggle_milestone' path.slug m.obj.key %}" data-enhance>
+        {% csrf_token %}
+        <input type="hidden" name="checked" value="{% if m.checked %}0{% else %}1{% endif %}">
+        <button type="submit" class="ar-check" aria-pressed="{% if m.checked %}true{% else %}false{% endif %}" data-fid="ms-{{ m.obj.key }}">
+          <span class="box" aria-hidden="true"></span><span class="txt">{{ m.obj.text|terms }}</span>
+        </button>
+      </form>
+    </li>
+    {% empty %}<li class="empty">Este nivel no tiene misiones.</li>{% endfor %}
+  </ul>
+</section>

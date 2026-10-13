@@ -15,6 +15,7 @@
       <form class="ar-goal-form" method="post" action="{% url 'progress:set_goal' path.slug %}" data-enhance>
         {% csrf_token %}
         <input type="hidden" name="nivel" value="{{ current.level.code }}">
+        <input type="hidden" name="paso" value="{{ step.key }}">
         <label for="goal">Mi meta de certificación</label>
         <div class="row">
           <select id="goal" name="goal" data-autosubmit data-fid="goal">
@@ -46,6 +47,7 @@
     </div>
   </div>
 </div>
+{% include "paths/_level_line.html" %}
 <div class="ar-viewer">
   {% include "worlds/architecture/browser.html" %}
   {% include "worlds/architecture/_panel.html" %}

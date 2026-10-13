@@ -1,0 +1,671 @@
+{
+  "_nota": "Rama OPCIONAL de IA y Datos (la ruta núcleo es IA 101 → Herramientas → Claude Code y MCP → Agentes → Vibe coding). Recomendado: IA 101 y Herramientas para trabajar con IA. Base de Datos e informes, Data Science aplicada y Geospatial Data Science. Micro-cursos de Kaggle Learn (gratuitos; piden cuenta de Kaggle), documentación oficial de Python, pandas y Jupyter. URLs verificadas el 2026-10-13. Las keys son estables: agregar siempre al final.",
+  "slug": "python-datos-101",
+  "title": "Python y datos 101",
+  "program": "IA y Datos · Rama opcional · Datos",
+  "platform": "kaggle-learn",
+  "kind": "structured",
+  "vendor": "kaggle",
+  "products": [
+    "kaggle-learn",
+    "python"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Python",
+      "title": "Paso 0 · Python básico",
+      "estimated_hours": "6 a 10 h",
+      "audience": "Quien nunca programó o programó poco",
+      "goal": "Escribir Python que lea datos, use funciones, listas y diccionarios y se pueda ejecutar fuera de un notebook. Meta: *Kaggle Learn: Python* completo.",
+      "guide": {
+        "title": "Guía rápida · Python",
+        "software": "python",
+        "do": [
+          "Practica en el notebook de cada lección y repite el ejercicio sin mirar la solución.",
+          "Aprende tipos, listas, diccionarios, bucles, funciones y cómo importar librerías.",
+          "Lee los mensajes de error de abajo hacia arriba: la última línea dice qué pasó."
+        ],
+        "commands": [
+          "*def*",
+          "*for*",
+          "*if*",
+          "*import*",
+          "*list* / *dict*"
+        ],
+        "mistakes": [
+          "Copiar código sin ejecutar y entender cada línea.",
+          "Variables con nombres de una letra.",
+          "Ignorar los mensajes de error."
+        ],
+        "essential": "Kaggle Learn: Python"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Python",
+          "url": "https://www.kaggle.com/learn/python",
+          "description": "Micro-curso de Python: variables, funciones, listas, bucles y librerías. Gratuito; pide cuenta de Kaggle para los ejercicios y el certificado.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Kaggle Learn: Intro to Programming",
+          "url": "https://www.kaggle.com/learn/intro-to-programming",
+          "description": "Primeros pasos de programación con Python. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "The Python Tutorial (python.org)",
+          "url": "https://docs.python.org/3/tutorial/index.html",
+          "description": "Tutorial oficial de Python. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Google's Python Class",
+          "url": "https://developers.google.com/edu/python",
+          "description": "Clase de Python de Google para quien ya programa un poco. Gratuito.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "Roadmap: Python",
+          "url": "https://roadmap.sh/python",
+          "description": "Mapa de etapas de roadmap.sh: de la sintaxis al desarrollo moderno en Python. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Completar *Kaggle Learn: Python* y descargar el certificado",
+          "completed_by_resource": "Kaggle Learn: Python"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Escribir una función que calcule la distancia horizontal entre dos puntos (N, E) y probarla con dos pares conocidos"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Leer un archivo CSV pequeño de puntos con la librería estándar y contar las filas"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Usar la IA para explicar línea por línea tu función y corregir lo que no entiendas"
+        }
+      ],
+      "mastery_signals": [
+        "Escribes una función que otra persona puede reutilizar",
+        "Entiendes un mensaje de error antes de pedir ayuda"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Tu script falla con un *KeyError*. ¿Qué haces primero?",
+          "options": [
+            "Reinstalas Python",
+            "Lees el mensaje: la clave que no existe en el diccionario",
+            "Cambias de computador"
+          ],
+          "answer": 1,
+          "explanation": "El error indica qué clave falta; la última línea del mensaje suele bastar para ubicarla."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Para qué sirve una función?",
+          "options": [
+            "Para reutilizar un bloque de código con distintos datos",
+            "Para hacer el archivo más grande",
+            "Solo para pruebas"
+          ],
+          "answer": 0,
+          "explanation": "Las funciones agrupan una tarea y la hacen reutilizable y probable."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Notebooks",
+      "title": "Paso 1 · Notebooks: Jupyter y Colab",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Quien ya escribe Python simple",
+      "goal": "Trabajar en notebooks: celdas de código y texto, orden de ejecución y cómo compartir sin filtrar datos.",
+      "guide": {
+        "title": "Guía rápida · Notebooks",
+        "software": "python",
+        "do": [
+          "Ejecuta las celdas en orden; reinicia y ejecuta todo antes de compartir.",
+          "Mezcla texto (Markdown) y código para explicar lo que haces.",
+          "Antes de compartir, borra las salidas con datos sensibles."
+        ],
+        "commands": [
+          "*Celda*",
+          "*Kernel*",
+          "*Markdown*",
+          "*Restart & Run All*"
+        ],
+        "mistakes": [
+          "Compartir un notebook con rutas o datos privados.",
+          "Depender de celdas ejecutadas fuera de orden.",
+          "Subir datos de clientes a un notebook en la nube."
+        ],
+        "essential": "Project Jupyter: Try Jupyter"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Project Jupyter: Try Jupyter",
+          "url": "https://jupyter.org/try",
+          "description": "Probar notebooks de Jupyter en el navegador, sin instalar nada. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Google Colab",
+          "url": "https://colab.research.google.com/",
+          "description": "Notebooks de Python en la nube, gratuitos con cuenta de Google. No subas datos de clientes sin permiso.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "uv (documentación)",
+          "url": "https://docs.astral.sh/uv/",
+          "description": "Gestor de Python y paquetes que usa este proyecto: entornos reproducibles. Código abierto, gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Abrir un notebook en *Try Jupyter* y ejecutar sus celdas de ejemplo",
+          "completed_by_resource": "Project Jupyter: Try Jupyter"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Crear un notebook que cargue un CSV de ejemplo y muestre las primeras filas, con una celda de explicación"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Reiniciar el kernel y ejecutar todo para comprobar que el orden es correcto"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Limpiar las salidas antes de guardar y comprobar que no queda ningún dato sensible"
+        }
+      ],
+      "mastery_signals": [
+        "Tu notebook se ejecuta de principio a fin sin errores",
+        "No compartes salidas con datos privados"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Tu notebook funciona solo si ejecutas las celdas en cierto orden. ¿Qué haces?",
+          "options": [
+            "Nada",
+            "Reordenas y usas Restart & Run All para validar",
+            "Lo envías con instrucciones"
+          ],
+          "answer": 1,
+          "explanation": "Un notebook reproducible corre de arriba hacia abajo."
+        },
+        {
+          "key": "n1-q1",
+          "question": "Quieres usar Colab con datos de un cliente. ¿Qué haces?",
+          "options": [
+            "Los subes, es gratis",
+            "No los subes sin autorización; usas datos de ejemplo o anonimizados",
+            "Los subes y los borras luego"
+          ],
+          "answer": 1,
+          "explanation": "Un servicio en la nube sale de tu control: los datos de clientes necesitan permiso."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "pandas",
+      "title": "Paso 2 · pandas: tablas de datos",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien ya sabe Python básico",
+      "goal": "Cargar, filtrar, agrupar y unir tablas con pandas; es la base de cualquier análisis, incluidos los puntos de levantamiento.",
+      "guide": {
+        "title": "Guía rápida · pandas",
+        "software": "python",
+        "do": [
+          "Carga con *read_csv*, explora con *head*, *info* y *describe*.",
+          "Filtra con condiciones, agrupa con *groupby*, une con *merge*.",
+          "Comprueba tipos y valores nulos antes de calcular."
+        ],
+        "commands": [
+          "*read_csv*",
+          "*DataFrame*",
+          "*groupby*",
+          "*merge*",
+          "*describe*"
+        ],
+        "mistakes": [
+          "Calcular sobre columnas con texto en vez de números.",
+          "Perder filas al unir tablas sin revisar.",
+          "Modificar el DataFrame original sin copia."
+        ],
+        "essential": "Kaggle Learn: Pandas"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Pandas",
+          "url": "https://www.kaggle.com/learn/pandas",
+          "description": "Micro-curso de pandas: DataFrames, selección, agrupación y fusión. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "pandas: 10 minutes to pandas",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html",
+          "description": "Recorrido rápido oficial por pandas. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: Python for Data Analysis",
+          "url": "https://roadmap.sh/python-data-analysis",
+          "description": "Mapa de etapas de roadmap.sh: Python, pandas, visualización y análisis de datos. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Completar *Kaggle Learn: Pandas*",
+          "completed_by_resource": "Kaggle Learn: Pandas"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Cargar un CSV de puntos (nombre, norte, este, cota, código) y obtener cuántos puntos hay por código"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Calcular la cota mínima, máxima y media por código y exportar el resultado a CSV"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Unir la tabla de puntos con una tabla de códigos y comprobar que no se perdieron filas"
+        }
+      ],
+      "mastery_signals": [
+        "Revisas tipos y nulos antes de calcular",
+        "Compruebas el número de filas tras cada unión"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Al unir dos tablas con *merge* pasas de 500 a 480 filas. ¿Qué haces?",
+          "options": [
+            "Nada, es normal",
+            "Revisas qué claves no coinciden y qué tipo de unión usaste",
+            "Borras las filas restantes"
+          ],
+          "answer": 1,
+          "explanation": "Una pérdida de filas puede significar claves distintas o un tipo de unión inadecuado."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Qué hace *groupby*?",
+          "options": [
+            "Agrupa filas por una columna para calcular resúmenes",
+            "Ordena las columnas",
+            "Borra duplicados siempre"
+          ],
+          "answer": 0,
+          "explanation": "Permite resumir por categoría, por ejemplo, por código de punto."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Limpieza",
+      "title": "Paso 3 · Limpieza de datos",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien ya usa pandas",
+      "goal": "Detectar y tratar faltantes, duplicados, formatos y unidades inconsistentes, y dejar un registro de lo que se cambió.",
+      "guide": {
+        "title": "Guía rápida · Limpieza",
+        "software": "python",
+        "do": [
+          "Cuenta nulos y duplicados antes de decidir qué hacer.",
+          "Normaliza texto, fechas y unidades; no borres sin registrar.",
+          "Guarda el dato original aparte y documenta cada regla de limpieza."
+        ],
+        "commands": [
+          "*isna*",
+          "*drop_duplicates*",
+          "*to_datetime*",
+          "*astype*"
+        ],
+        "mistakes": [
+          "Rellenar los nulos con cero sin pensar qué significan.",
+          "Sobrescribir el archivo original.",
+          "Mezclar metros y centímetros en la misma columna."
+        ],
+        "essential": "Kaggle Learn: Data Cleaning"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Data Cleaning",
+          "url": "https://www.kaggle.com/learn/data-cleaning",
+          "description": "Valores faltantes, escalado, fechas, codificación de texto y entradas inconsistentes. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Roadmap: Python for Data Analysis",
+          "url": "https://roadmap.sh/python-data-analysis",
+          "description": "Mapa de etapas de roadmap.sh: Python, pandas, visualización y análisis de datos. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Completar *Kaggle Learn: Data Cleaning*",
+          "completed_by_resource": "Kaggle Learn: Data Cleaning"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Detectar en un CSV de ejemplo puntos duplicados (mismo nombre y coordenadas) y registrar cuántos eran"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Marcar valores fuera de rango (por ejemplo, cota negativa imposible) en vez de borrarlos y listarlos aparte"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Escribir un script que limpie el CSV y genere un informe de qué cambió"
+        }
+      ],
+      "mastery_signals": [
+        "Cada cambio de limpieza queda registrado",
+        "El archivo original se conserva intacto"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Una columna de cotas tiene valores vacíos. ¿Qué haces?",
+          "options": [
+            "Los llenas con 0",
+            "Investigas por qué faltan y decides: marcar, excluir o recuperar el dato",
+            "Borras la columna"
+          ],
+          "answer": 1,
+          "explanation": "Un cero inventado puede falsear resultados; se decide según el significado del faltante."
+        },
+        {
+          "key": "n3-q1",
+          "question": "¿Por qué conservar el archivo original?",
+          "options": [
+            "Para poder auditar y repetir la limpieza",
+            "Para ocupar más espacio",
+            "No hace falta"
+          ],
+          "answer": 0,
+          "explanation": "La trazabilidad exige poder volver al dato original."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Gráficos",
+      "title": "Paso 4 · Visualización",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien ya limpia datos",
+      "goal": "Elegir y construir gráficos claros (líneas, barras, dispersión, distribuciones) que comunican y no confunden.",
+      "guide": {
+        "title": "Guía rápida · Gráficos",
+        "software": "python",
+        "do": [
+          "Elige el gráfico según la pregunta: comparar, ver evolución, ver distribución o relación.",
+          "Rotula ejes con unidades y título que diga la conclusión.",
+          "Menos es más: sin adornos ni 3D innecesario."
+        ],
+        "commands": [
+          "*matplotlib*",
+          "*seaborn*",
+          "*plot*",
+          "*hist*"
+        ],
+        "mistakes": [
+          "Ejes sin unidades.",
+          "Escalas truncadas que exageran diferencias.",
+          "Demasiados colores sin significado."
+        ],
+        "essential": "Kaggle Learn: Data Visualization"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Kaggle Learn: Data Visualization",
+          "url": "https://www.kaggle.com/learn/data-visualization",
+          "description": "Gráficos con seaborn: líneas, barras, mapas de calor, dispersión y distribuciones. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Matplotlib: Quick start guide",
+          "url": "https://matplotlib.org/stable/users/explain/quick_start.html",
+          "description": "Guía rápida oficial de Matplotlib. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "seaborn: User guide and tutorial",
+          "url": "https://seaborn.pydata.org/tutorial.html",
+          "description": "Guía oficial de seaborn para gráficos estadísticos. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Completar *Kaggle Learn: Data Visualization*",
+          "completed_by_resource": "Kaggle Learn: Data Visualization"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Graficar la distribución de cotas de un CSV de puntos con un histograma y rotularlo con unidades"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Hacer un gráfico de dispersión Norte-Este de los puntos, coloreados por código"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Revisar tus gráficos con una persona del equipo: ¿entiende la conclusión sin explicación?"
+        }
+      ],
+      "mastery_signals": [
+        "Tus gráficos se entienden sin explicación oral",
+        "Los ejes tienen unidades y escalas honestas"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "Quieres ver cómo se distribuyen las cotas de 2000 puntos. ¿Qué gráfico eliges?",
+          "options": [
+            "Un histograma",
+            "Un gráfico circular",
+            "Una tabla de 2000 filas"
+          ],
+          "answer": 0,
+          "explanation": "El histograma muestra la distribución de una variable numérica."
+        },
+        {
+          "key": "n4-q1",
+          "question": "¿Qué problema tiene recortar el eje Y para que una diferencia pequeña parezca grande?",
+          "options": [
+            "Ninguno",
+            "Exagera la diferencia y engaña al lector",
+            "Hace el gráfico más lento"
+          ],
+          "answer": 1,
+          "explanation": "Las escalas deben ser honestas para no distorsionar la conclusión."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "DataFrame",
+      "location": "pandas",
+      "meaning": "Tabla de datos con filas y columnas con nombre."
+    },
+    {
+      "term": "Notebook",
+      "location": "Jupyter",
+      "meaning": "Documento con celdas de código y texto ejecutables."
+    },
+    {
+      "term": "Kernel",
+      "location": "Jupyter",
+      "meaning": "Proceso que ejecuta el código del notebook."
+    },
+    {
+      "term": "Nulo",
+      "location": "pandas",
+      "meaning": "Valor faltante (NaN)."
+    }
+  ],
+  "description": "Python, notebooks, pandas, limpieza y visualización con micro-cursos gratuitos de Kaggle y documentación oficial, con ejercicios sobre puntos de levantamiento.",
+  "intro": {
+    "title": "Del CSV de puntos al gráfico",
+    "text": "Aprende Python con datos de tu trabajo: cada paso termina con un resultado que puedes verificar. Usa datos de ejemplo, no de clientes."
+  },
+  "flow": [
+    {
+      "title": "Python",
+      "text": "Funciones y listas"
+    },
+    {
+      "title": "Notebooks",
+      "text": "Jupyter y Colab"
+    },
+    {
+      "title": "pandas",
+      "text": "Tablas"
+    },
+    {
+      "title": "Limpieza",
+      "text": "Nulos y duplicados"
+    },
+    {
+      "title": "Gráficos",
+      "text": "Comunicar"
+    }
+  ]
+}

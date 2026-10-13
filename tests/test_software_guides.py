@@ -63,7 +63,7 @@ def test_title_keywords_map_to_tiles(title, expected):
 
 def test_every_tile_has_an_svg_file():
     root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
-    assert len(software.TILES) == 26
+    assert len(software.TILES) == 37
     for tile in software.TILES.values():
         assert (root / tile.static_path).is_file(), tile.slug
         assert static(tile.static_path)
@@ -82,6 +82,9 @@ def test_tiles_have_a_family_and_every_tile_has_a_row():
         "itwin", "lumenrt", "projectwise", "itwin-capture", "synchro", "descartes",
     }  # fmt: skip
     assert by_family[software.INTERNAL] == {"tbc", "gis", "dgac"}
+    assert by_family[software.IA] == {
+        "ia", "terminal", "git", "claude-code", "mcp", "agentes", "python", "qgis", "gee", "powerbi", "sql",
+    }  # fmt: skip
     assert set(software.ROW_ORDER) == set(software.TILES)
 
 
@@ -93,7 +96,7 @@ def test_autodesk_tiles_have_letter_and_code_and_bentley_are_pictograms():
             assert (
                 f">{t.code}</text>" in svg and svg.count("<text") == 3
             )  # letra (con sombra) + código
-        elif t.family == software.BENTLEY:
+        elif t.family in (software.BENTLEY, software.IA):
             assert "<text" not in svg  # pictograma blanco, sin texto
 
 
@@ -103,7 +106,7 @@ def test_vendor_sections_split_rows_by_family(seeded):
     )
     sections = software.vendor_sections(software.group_by_software(resources))
     keys = [s["key"] for s in sections]
-    order = [software.AUTODESK, software.BENTLEY, software.INTERNAL]
+    order = [software.AUTODESK, software.BENTLEY, software.INTERNAL, software.IA]
     assert keys == sorted(keys, key=order.index)
     assert "autodesk" in keys and "bentley" in keys
     bentley = next(s for s in sections if s["key"] == "bentley")
@@ -118,6 +121,7 @@ def test_transversal_discipline_and_new_products_map():
     assert software.TILES["microstation"].discipline == software.TRA
     assert software.PRODUCT_TILE["plant-3d"] == "plant-3d"
     assert software.DISCIPLINE_BY_SLUG["transversal"] == software.TRA
+    assert software.DISCIPLINE_BY_SLUG["ia-datos"] == software.IAD
 
 
 def test_vendor_key_and_path_tiles_fall_back_to_title():
@@ -231,13 +235,13 @@ def test_guide_lookup_and_unknown_cases():
 
 
 def test_guide_renders_in_route_panel(seeded, member_client, member):
-    html = member_client.get("/rutas/civil-3d/?nivel=n2").content.decode()
+    html = member_client.get("/rutas/civil-3d/?nivel=n2&paso=guia").content.decode()
     assert 'class="gd gd-civ"' in html
     assert "Guía rápida · Alineamientos" in html
     assert '<em class="term">Alignment Creation Tools</em>' in html
     assert "Curso esencial".upper() in html.upper()
     assert "define-geometry-for-civil-3d" in html  # enlace al curso esencial
-    revit = member_client.get("/rutas/forma-revit/?nivel=n1").content.decode()
+    revit = member_client.get("/rutas/forma-revit/?nivel=n1&paso=guia").content.decode()
     assert 'class="gd gd-arq"' in revit
     assert "Guía rápida · Fundamentos de Revit" in revit
 

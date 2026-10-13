@@ -296,7 +296,9 @@ def test_deploy_files_exist_and_are_consistent():
     for line in install.splitlines():
         code = line.split("#", 1)[0]
         if not code.strip().startswith("echo"):  # los avisos al operador pueden nombrarlo
-            assert "tailscale funnel" not in code, "nunca se usa funnel"
+            assert "tailscale funnel" not in code, (
+                "el Funnel solo va por el nodo propio (TS[@] funnel)"
+            )
     assert (
         "tailscale serve --bg" in install
         and "healthz" in install
@@ -415,7 +417,7 @@ def test_the_installer_issues_the_certificate_up_front():
     install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
     serve = install.index('"${TS[@]}" serve --bg --https=443')
     cert = install.index('"${TS[@]}" cert --cert-file')
-    assert serve < cert < install.index('echo "    Dirección: https://$HC_HOST"\n    ;;')
+    assert serve < cert < install.index('echo "    Dirección pública (Funnel)')
     assert "HTTPS Certificates" in install and "diagnostico.sh" in install
 
 

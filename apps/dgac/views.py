@@ -1,7 +1,9 @@
-from django.http import FileResponse, Http404
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods
+
+from apps.core import private_files
 
 from . import assessment, data, services
 from .models import KnowledgeAttempt
@@ -39,11 +41,7 @@ def asset(request, name):
     path = data.image_path(name)
     if path is None:
         raise Http404
-    response = FileResponse(path.open("rb"), content_type=data.image_type(path))
-    response["X-Content-Type-Options"] = "nosniff"
-    response["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'; sandbox"
-    response["Cache-Control"] = "private, max-age=300"
-    return response
+    return private_files.file_response(path)
 
 
 @require_GET

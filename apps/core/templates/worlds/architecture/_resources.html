@@ -1,0 +1,13 @@
+<section class="sl-card sl-resources" aria-labelledby="sl-h">
+  <h4 class="sl-h" id="sl-h">Recursos <span class="cnt">{{ current.resources|length }}</span></h4>
+  <ul class="ar-res">
+    {% for lr in current.resources|slice:":5" %}{% include "worlds/architecture/_resource.html" %}
+    {% empty %}<li class="empty">Sin recursos todavía.</li>{% endfor %}
+  </ul>
+  {% if current.resources|length > 5 %}
+  <details class="ar-more">
+    <summary><span class="m-in">Ver {{ current.resources|length|add:"-5" }} más</span><span class="m-out">Ver menos</span></summary>
+    <ul class="ar-res">{% for lr in current.resources|slice:"5:" %}{% include "worlds/architecture/_resource.html" %}{% endfor %}</ul>
+  </details>
+  {% endif %}
+</section>

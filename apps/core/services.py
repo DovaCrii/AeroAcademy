@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.catalog.models import Discipline, Platform, Product, Resource
+from apps.catalog.software import PRODUCT_TILE
 from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
 from apps.gamification.models import Badge
@@ -38,6 +39,12 @@ def _path_icon(path, icons):
         for stem in sorted(icons):
             if product.slug == stem or product.slug.startswith(stem + "-"):
                 return stem
+    for (
+        product
+    ) in path.products.all():  # productos con otro nombre que su ficha (power-bi → powerbi)
+        tile = PRODUCT_TILE.get(product.slug)
+        if tile in icons:
+            return tile
     return ""
 
 

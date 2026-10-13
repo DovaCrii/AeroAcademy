@@ -272,10 +272,11 @@ def test_path_detail_structured_uses_its_world(seeded, member_client):
     assert response.status_code == 200
     assert "Levantamiento Digital" in html and "CC 410" in html
     assert 'aria-label="Nivel N2' in html
-    assert '<em class="term">Send to Revit</em>' in html
+    missions = member_client.get("/rutas/forma-coordinacion/?nivel=n2&paso=practica")
+    assert '<em class="term">Send to Revit</em>' in missions.content.decode()
     assert (
         "Learn Forma Site Design in 90 minutes"
-        in member_client.get("/rutas/forma-coordinacion/?nivel=n1").content.decode()
+        in member_client.get("/rutas/forma-coordinacion/?nivel=n1&paso=recursos").content.decode()
     )
 
 
@@ -283,7 +284,7 @@ def test_path_detail_falls_back_to_the_architecture_world_when_world_not_built(
     seeded, member_client
 ):
     LearningPath.objects.filter(slug="forma-coordinacion").update(world="mechanical")
-    html = member_client.get("/rutas/forma-coordinacion/?nivel=n2").content.decode()
+    html = member_client.get("/rutas/forma-coordinacion/?nivel=n2&paso=practica").content.decode()
     assert "ar-cover" in html and '<em class="term">Send to Revit</em>' in html
 
 
@@ -438,7 +439,7 @@ def test_a_structured_route_in_a_world_without_support_still_shows_its_missions(
 
     path = LearningPath.objects.get(slug="civil-3d")
     assert path.world == "civil" and path.kind == LearningPath.Kind.STRUCTURED
-    html = member_client.get("/rutas/civil-3d/").content.decode()
+    html = member_client.get("/rutas/civil-3d/?paso=practica").content.decode()
     first = Milestone.objects.filter(path=path, retired=False).first()
     assert first.text.split("*")[0][:20] in html and "no tiene cursos con certificado" not in html
 

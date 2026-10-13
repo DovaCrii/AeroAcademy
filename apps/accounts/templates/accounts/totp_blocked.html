@@ -1,0 +1,14 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}Falta el segundo factor{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }} · entrada pública</p>
+    <h1>Activa tu segundo factor</h1>
+    <p class="pub-lead">Tu rol (responsable o administración) exige verificación en dos pasos para entrar desde internet, y todavía no la tienes activada. Por seguridad no se puede activar desde aquí: entra por la red del equipo (<span class="term">Tailscale</span>), abre <b>/seguridad/2fa/</b> y sigue los pasos. Después vuelve a entrar por esta dirección.</p>
+    <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn pub-btn" type="submit">Salir</button></form>
+  </div>
+</section>
+{% endblock %}

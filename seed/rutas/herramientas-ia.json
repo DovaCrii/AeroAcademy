@@ -1,0 +1,663 @@
+{
+  "_nota": "Ruta núcleo, prerrequisito de Claude Code y MCP. Se recomienda haber hecho IA 101. Las herramientas de IA para programar trabajan sobre la terminal, Git y un entorno limpio: esta ruta lo cubre con documentación y cursos oficiales y gratuitos. URLs verificadas el 2026-10-13; la de LFS101 queda con verify_url (confirmar que hoy tiene opción sin costo). Las keys son estables: agregar siempre al final.",
+  "slug": "herramientas-ia",
+  "title": "Herramientas para trabajar con IA · Git, terminal y Linux",
+  "program": "IA y Datos · Núcleo · Paso 2 de 5",
+  "platform": "recursos-abiertos",
+  "kind": "structured",
+  "vendor": "open-source",
+  "products": [
+    "git",
+    "python"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Terminal",
+      "title": "Paso 0 · La terminal: PowerShell y Bash",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien nunca usó la línea de comandos",
+      "goal": "Moverte por carpetas, listar, copiar, buscar y encadenar comandos en la terminal. Las herramientas de IA para programar viven ahí.",
+      "guide": {
+        "title": "Guía rápida · Terminal",
+        "software": "terminal",
+        "do": [
+          "Aprende cinco comandos: ver dónde estás, listar, entrar a una carpeta, copiar y buscar texto.",
+          "En Windows usa *PowerShell*; en Linux o WSL, *Bash*.",
+          "Usa *Tab* para completar rutas y la flecha arriba para repetir comandos.",
+          "Antes de borrar algo, listar primero qué se borrará."
+        ],
+        "commands": [
+          "*Get-ChildItem* / *ls*",
+          "*Set-Location* / *cd*",
+          "*Copy-Item* / *cp*",
+          "*Select-String* / *grep*"
+        ],
+        "mistakes": [
+          "Ejecutar un comando copiado sin entender qué hace.",
+          "Borrar con comodines sin listar antes.",
+          "Mezclar la sintaxis de PowerShell y de Bash."
+        ],
+        "essential": "PowerShell 101 (Microsoft Learn)"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Shell / Bash",
+          "url": "https://roadmap.sh/shell-bash",
+          "description": "Mapa de etapas de roadmap.sh: terminal, comandos, tuberías y scripts. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "PowerShell 101 (Microsoft Learn)",
+          "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/00-introduction",
+          "description": "Introducción oficial a PowerShell: comandos, tuberías, objetos y scripts. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Bash Reference Manual",
+          "url": "https://www.gnu.org/software/bash/manual/bash.html",
+          "description": "Manual de referencia oficial de Bash (GNU). Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Completar los primeros capítulos de *PowerShell 101* y listar los archivos de una carpeta de proyecto con filtros",
+          "completed_by_resource": "PowerShell 101 (Microsoft Learn)"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Crear una carpeta de práctica, copiar tres archivos y renombrarlos desde la terminal"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Buscar una palabra dentro de varios archivos de texto con *Select-String* o *grep*"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Escribir un script de tres líneas que cuente cuántos archivos CSV hay en una carpeta"
+        }
+      ],
+      "mastery_signals": [
+        "Te mueves por carpetas sin el explorador de archivos",
+        "Lees un comando antes de ejecutarlo"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Quieres borrar todos los .tmp de una carpeta. ¿Qué haces antes?",
+          "options": [
+            "Ejecutas el borrado de una vez",
+            "Listas primero los archivos que coinciden y luego borras",
+            "Borras toda la carpeta por seguridad"
+          ],
+          "answer": 1,
+          "explanation": "Listar antes de borrar evita perder archivos por un comodín mal escrito."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Qué comando equivale a *ls* de Bash en PowerShell?",
+          "options": [
+            "Get-ChildItem",
+            "Remove-Item",
+            "Set-Content"
+          ],
+          "answer": 0,
+          "explanation": "*Get-ChildItem* (alias *ls*) lista el contenido de una carpeta."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Linux",
+      "title": "Paso 1 · Linux y WSL",
+      "estimated_hours": "3 a 6 h",
+      "audience": "Quien llega de Windows",
+      "goal": "Entender el sistema de archivos de Linux, permisos y procesos, y tener Linux dentro de Windows con WSL. La mayoría de los servidores y herramientas de datos corren en Linux.",
+      "guide": {
+        "title": "Guía rápida · Linux",
+        "software": "terminal",
+        "do": [
+          "Instala WSL y abre una distribución para practicar.",
+          "Aprende la estructura de carpetas (/home, /etc, /var) y los permisos (leer, escribir, ejecutar).",
+          "Aprende a instalar paquetes y a ver procesos."
+        ],
+        "commands": [
+          "*wsl --install*",
+          "*chmod*",
+          "*sudo*",
+          "*apt*"
+        ],
+        "mistakes": [
+          "Usar *sudo* sin saber qué instala o cambia.",
+          "Trabajar con proyectos en la carpeta de Windows desde WSL (lento).",
+          "Cambiar permisos masivamente con *chmod 777*."
+        ],
+        "essential": "Microsoft Learn: What is Windows Subsystem for Linux"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Linux",
+          "url": "https://roadmap.sh/linux",
+          "description": "Mapa de etapas de roadmap.sh: sistema de archivos, permisos, procesos y administración básica. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Microsoft Learn: What is Windows Subsystem for Linux",
+          "url": "https://learn.microsoft.com/en-us/windows/wsl/about",
+          "description": "Linux dentro de Windows (WSL): qué es y cómo instalarlo. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Introduction to Linux (LFS101)",
+          "url": "https://training.linuxfoundation.org/training/introduction-to-linux/",
+          "description": "Curso introductorio de Linux de la Linux Foundation (se cursa gratis en edX; confirma en la página la opción sin costo).",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "verify_url": true
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Instalar WSL y abrir una distribución de Linux",
+          "completed_by_resource": "Microsoft Learn: What is Windows Subsystem for Linux"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Crear una carpeta en tu /home, un archivo de texto y cambiarle los permisos a solo lectura"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Ver los procesos en ejecución e identificar cuál usa más memoria"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Instalar un paquete con el gestor de paquetes y comprobar su versión"
+        }
+      ],
+      "mastery_signals": [
+        "Distingues tu /home de las carpetas del sistema",
+        "Explicas qué hace *sudo* antes de usarlo"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Un tutorial te dice que ejecutes «sudo chmod -R 777 /» para arreglar un permiso. ¿Qué haces?",
+          "options": [
+            "Lo ejecutas, es del tutorial",
+            "No lo ejecutas: da permisos a todo el sistema; buscas la solución puntual",
+            "Lo ejecutas en una carpeta cualquiera"
+          ],
+          "answer": 1,
+          "explanation": "Ese comando abre permisos a todo el sistema. Se corrige el permiso concreto, con el mínimo necesario."
+        },
+        {
+          "key": "n1-q1",
+          "question": "¿Qué es WSL?",
+          "options": [
+            "Un antivirus de Windows",
+            "Linux ejecutándose dentro de Windows",
+            "Un editor de código"
+          ],
+          "answer": 1,
+          "explanation": "Windows Subsystem for Linux permite usar un entorno Linux sin salir de Windows."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Git",
+      "title": "Paso 2 · Git: guardar y deshacer con seguridad",
+      "estimated_hours": "4 a 6 h",
+      "audience": "Quien escribe scripts, informes en Markdown o código",
+      "goal": "Dominar el ciclo de Git: iniciar, preparar, confirmar, ramificar y volver atrás. Es la red de seguridad cuando una IA modifica tus archivos.",
+      "guide": {
+        "title": "Guía rápida · Git",
+        "software": "git",
+        "do": [
+          "Ciclo básico: *git status*, *git add*, *git commit*.",
+          "Crea una rama para cada cambio y confirma seguido, con mensajes claros.",
+          "Para volver atrás usa Git, no el deshacer de la herramienta."
+        ],
+        "commands": [
+          "*git init*",
+          "*git status*",
+          "*git add*",
+          "*git commit*",
+          "*git switch -c*",
+          "*git diff*"
+        ],
+        "mistakes": [
+          "Trabajar días sin confirmar nada.",
+          "Confirmar archivos con claves o datos de clientes.",
+          "Usar *git reset --hard* sin saber qué se pierde."
+        ],
+        "essential": "Pro Git (libro oficial)"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Git and GitHub Beginner",
+          "url": "https://roadmap.sh/git-github-beginner",
+          "description": "Mapa de etapas de roadmap.sh: repositorios, commits, ramas y trabajo con GitHub. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Pro Git (libro oficial)",
+          "url": "https://git-scm.com/book/en/v2",
+          "description": "El libro oficial de Git, en línea y gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Microsoft Learn: Introduction to Git",
+          "url": "https://learn.microsoft.com/en-us/training/modules/intro-to-git/",
+          "description": "Módulo gratuito: repositorios, commits y ramas con Git.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Completar el módulo *Introduction to Git* de Microsoft Learn",
+          "completed_by_resource": "Microsoft Learn: Introduction to Git"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Crear un repositorio de práctica con un script o una nota y hacer tres confirmaciones con mensajes claros"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Crear una rama, cambiar un archivo, revisar el cambio con *git diff* y volver a la rama principal"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Añadir un archivo *.gitignore* para no subir datos ni claves"
+        }
+      ],
+      "mastery_signals": [
+        "Cada cambio tiene su commit y su mensaje",
+        "Puedes volver a una versión anterior sin pánico"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "Una IA modificó cinco archivos y el resultado no te gusta. Hiciste commit antes. ¿Qué haces?",
+          "options": [
+            "Reescribes todo a mano",
+            "Revisas *git diff* y vuelves al commit anterior con Git",
+            "Pides a la IA que lo deshaga sola"
+          ],
+          "answer": 1,
+          "explanation": "Con commits frecuentes, Git es tu botón de deshacer confiable."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Qué va en .gitignore?",
+          "options": [
+            "Archivos que no deben versionarse: claves, datos de clientes y archivos generados",
+            "Todos los archivos del proyecto",
+            "El historial"
+          ],
+          "answer": 0,
+          "explanation": "El archivo lista lo que Git debe ignorar, por ejemplo credenciales y datos sensibles."
+        },
+        {
+          "key": "n2-q2",
+          "question": "¿Para qué sirve una rama?",
+          "options": [
+            "Para aislar un cambio hasta que esté listo",
+            "Para borrar el historial",
+            "Para comprimir el proyecto"
+          ],
+          "answer": 0,
+          "explanation": "Las ramas permiten probar cambios sin afectar la línea principal."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "GitHub",
+      "title": "Paso 3 · GitHub: colaborar y revisar",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien trabaja con otras personas en el mismo repositorio",
+      "goal": "Usar GitHub para compartir repositorios, abrir *pull requests* y revisar cambios de otras personas (y de la IA).",
+      "guide": {
+        "title": "Guía rápida · GitHub",
+        "software": "git",
+        "do": [
+          "Crea una cuenta y un repositorio privado de práctica.",
+          "Abre un *pull request* para cada rama y pide revisión.",
+          "Revisa el *diff* antes de aceptar."
+        ],
+        "commands": [
+          "*git push*",
+          "*Pull request*",
+          "*Issue*",
+          "*Review*"
+        ],
+        "mistakes": [
+          "Subir secretos por error: revoca la clave, no solo la borres.",
+          "Aceptar un pull request sin leer el diff.",
+          "Trabajar siempre sobre la rama principal."
+        ],
+        "essential": "GitHub Learn"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "GitHub Learn",
+          "url": "https://learn.github.com/",
+          "description": "Portal de aprendizaje de GitHub (antes GitHub Skills): ejercicios guiados dentro de un repositorio. Gratuito; pide cuenta gratuita de GitHub.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "GitHub Docs: What is GitHub?",
+          "url": "https://docs.github.com/en/get-started/start-your-journey/what-is-github",
+          "description": "Qué es GitHub y cómo se relaciona con Git. Documentación oficial gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Completar un ejercicio guiado de *GitHub Learn* (por ejemplo, el de primer repositorio o pull request)",
+          "completed_by_resource": "GitHub Learn"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Subir tu repositorio de práctica a un repositorio privado de GitHub"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Abrir un pull request entre dos ramas y comentar una línea del diff"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Revisar el pull request de una compañera o compañero y dejar un comentario útil"
+        }
+      ],
+      "mastery_signals": [
+        "Subes cambios por rama y los revisas antes de unirlos",
+        "Sabes qué hacer si subes una clave por error: revocarla"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Subiste por error una clave de API a GitHub y la borraste en el siguiente commit. ¿Es suficiente?",
+          "options": [
+            "Sí, ya no está en el archivo",
+            "No: sigue en el historial; revoca y cambia la clave",
+            "Sí, si el repositorio es privado"
+          ],
+          "answer": 1,
+          "explanation": "Lo que se subió queda en el historial. La clave debe revocarse."
+        },
+        {
+          "key": "n3-q1",
+          "question": "¿Qué es un pull request?",
+          "options": [
+            "Una propuesta de cambio para revisar antes de unirla",
+            "Una copia de seguridad",
+            "Un tipo de rama especial"
+          ],
+          "answer": 0,
+          "explanation": "Es la solicitud de unir una rama, con espacio para comentar y revisar."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Entorno",
+      "title": "Paso 4 · Entorno de trabajo reproducible",
+      "estimated_hours": "2 a 4 h",
+      "audience": "Quien va a pasar a Claude Code y Python",
+      "goal": "Dejar un entorno limpio: editor, Python con *uv* y un proyecto que otra persona pueda abrir y ejecutar igual que tú.",
+      "guide": {
+        "title": "Guía rápida · Entorno",
+        "software": "python",
+        "do": [
+          "Instala VS Code y *uv*; crea el proyecto con su entorno virtual.",
+          "Guarda las dependencias en un archivo, no en tu memoria.",
+          "Escribe un README corto con los comandos para correrlo."
+        ],
+        "commands": [
+          "*uv init*",
+          "*uv add*",
+          "*uv run*",
+          "*README.md*"
+        ],
+        "mistakes": [
+          "Instalar paquetes globalmente.",
+          "No registrar qué versión de Python usa el proyecto.",
+          "Depender de rutas absolutas de tu computador."
+        ],
+        "essential": "uv (documentación)"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "uv (documentación)",
+          "url": "https://docs.astral.sh/uv/",
+          "description": "Gestor de Python y paquetes que usa este proyecto: entornos reproducibles. Código abierto, gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Visual Studio Code Docs",
+          "url": "https://code.visualstudio.com/docs",
+          "description": "Documentación del editor VS Code, útil como entorno junto a Claude Code. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "The Python Tutorial (python.org)",
+          "url": "https://docs.python.org/3/tutorial/index.html",
+          "description": "Tutorial oficial de Python. Gratuito.",
+          "tags": [
+            "Tutorial",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Instalar *uv* y crear un proyecto nuevo con *uv init*",
+          "completed_by_resource": "uv (documentación)"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Añadir una dependencia (por ejemplo, pandas) y ejecutar un script con *uv run*"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Abrir el proyecto en VS Code y ejecutar el script desde la terminal integrada"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Escribir un README de cinco líneas para que otra persona lo ejecute sin tu ayuda"
+        }
+      ],
+      "mastery_signals": [
+        "Otra persona puede clonar tu proyecto y ejecutarlo con un comando",
+        "No instalas paquetes fuera del entorno del proyecto"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "¿Por qué conviene un entorno virtual por proyecto?",
+          "options": [
+            "Para que cada proyecto tenga sus versiones de paquetes sin pisarse",
+            "Para que corra más rápido",
+            "Para no tener que usar Git"
+          ],
+          "answer": 0,
+          "explanation": "Aísla las dependencias de cada proyecto y evita conflictos."
+        },
+        {
+          "key": "n4-q1",
+          "question": "Tu script usa una ruta como C:\\Users\\tu-nombre\\datos.csv. ¿Qué problema trae?",
+          "options": [
+            "Ninguno",
+            "Falla en otros computadores; mejor una ruta relativa o un parámetro",
+            "Es más seguro"
+          ],
+          "answer": 1,
+          "explanation": "Las rutas absolutas rompen la reproducibilidad en otros equipos."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Terminal",
+      "location": "Sistema",
+      "meaning": "Ventana donde se escriben comandos para controlar el computador."
+    },
+    {
+      "term": "Commit",
+      "location": "Git",
+      "meaning": "Punto guardado del proyecto con un mensaje que explica el cambio."
+    },
+    {
+      "term": "Branch",
+      "location": "Git",
+      "meaning": "Línea de trabajo paralela para probar un cambio sin afectar la principal."
+    },
+    {
+      "term": "Pull request",
+      "location": "GitHub",
+      "meaning": "Propuesta de unir una rama, con revisión de otras personas."
+    },
+    {
+      "term": "Entorno virtual",
+      "location": "Python",
+      "meaning": "Carpeta con las versiones de paquetes de un proyecto."
+    }
+  ],
+  "description": "Terminal (PowerShell y Bash), Linux con WSL, Git y GitHub y un entorno de Python reproducible: la base para usar Claude Code y otras herramientas de IA con seguridad.",
+  "intro": {
+    "title": "Antes de pedirle a una IA que toque tus archivos",
+    "text": "La IA que programa trabaja en la terminal y modifica archivos. Con Git puedes deshacer, con la terminal sabes qué ejecuta y con un entorno reproducible lo que hace puede repetirse."
+  },
+  "flow": [
+    {
+      "title": "Terminal",
+      "text": "PowerShell y Bash"
+    },
+    {
+      "title": "Linux",
+      "text": "WSL y permisos"
+    },
+    {
+      "title": "Git",
+      "text": "Guardar y deshacer"
+    },
+    {
+      "title": "GitHub",
+      "text": "Revisar y colaborar"
+    },
+    {
+      "title": "Entorno",
+      "text": "uv y proyecto limpio"
+    }
+  ]
+}

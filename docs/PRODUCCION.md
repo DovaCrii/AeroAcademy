@@ -5,7 +5,7 @@ Complementa `docs/OPERACION.md` (operación diaria) y `docs/FUSIONES.md` (cómo 
 
 ## Cómo convive con lo que ya corre en la VM
 
-`tailscale serve status` en `p340` muestra los **tres** puertos HTTPS posibles (443, 8443 y 10000) ocupados, y los tres con **Funnel encendido** (públicos a internet). AeroAcademy guarda certificados y datos personales y entra con la identidad de Tailscale, que **no llega por Funnel**: por eso **no** se publica en ninguno de esos puertos.
+`tailscale serve status` en `p340` muestra los **tres** puertos HTTPS posibles (443, 8443 y 10000) ocupados, y los tres con **Funnel encendido** (públicos a internet). AeroAcademy guarda certificados y datos personales y entra con la identidad de Tailscale, que **no llega por Funnel**: por eso **no** se publica en ninguno de esos puertos. Si se quiere acceso público, se hace con el **nodo propio** `aeroacademy` y una puerta endurecida distinta (D36, §6): nunca con el Funnel de AeroControl.
 
 En cambio tiene un **nodo Tailscale propio** en la misma VM: otra instancia de `tailscaled` (`tailscaled-aeroacademy.service`, modo userspace, con su estado y su socket) que aparece en tu tailnet como `aeroacademy` y sirve en **su propio** 443, solo tailnet. No se toca nada de AeroControl ni de las demás apps.
 
@@ -130,7 +130,7 @@ Ver «Importar los datos del prototipo» en `docs/OPERACION.md` (primero con `--
 | No aparece el enlace de inicio de sesión | `sudo journalctl -u tailscaled-aeroacademy -n 50`; usa la *auth key* (bloque C) |
 | El nodo `aeroacademy` no abre por HTTPS | En la consola de Tailscale: DNS → HTTPS Certificates activado; Machines → `aeroacademy` aprobada (si tu tailnet exige aprobación de equipos) |
 | El servicio no responde | `journalctl -u centro -n 100` |
-| 401 «Se requiere identidad de Tailscale» | Se entró por la IP o por `127.0.0.1`, o por una dirección de Funnel; usa `https://aeroacademy.tailccd107.ts.net` |
+| 401 «Se requiere identidad de Tailscale» | Se entró por la IP o por `127.0.0.1`, o por la dirección de Funnel del nodo principal (AeroControl); usa `https://aeroacademy.tailccd107.ts.net` |
 | 400 «Invalid HTTP_HOST» | El nombre usado no está en `ALLOWED_HOSTS` (el instalador lo ajusta al nombre real del nodo) |
 | 403 «CSRF» al enviar un formulario | `PUBLIC_HTTPS_PORT` debe ser `443` en `/etc/centro/env` |
 | Teo «durmiendo» | Falta `NIM_API_KEY` o `BOT_ENABLED=false` |
@@ -138,6 +138,50 @@ Ver «Importar los datos del prototipo» en `docs/OPERACION.md` (primero con `--
 | Teo responde en inglés o muestra «thinking process» | Actualiza (`git pull` + instalador) y `sudo aeroacademy teo_probar --buscar` |
 | Quieres quitar la publicación | `sudo tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve reset` (solo afecta al nodo propio) |
 | Volver atrás | `docs/OPERACION.md` → Respaldos → Restaurar |
+
+## 6. Puerta pública con Funnel (D36, opcional)
+
+Acceso gratuito sin instalar Tailscale. Dos puertas sobre el mismo código y la misma base:
+
+| | Tailnet | Pública |
+|---|---|---|
+| Dirección | `https://aeroacademy.tailccd107.ts.net:8443` | `https://aeroacademy.tailccd107.ts.net` |
+| Servicio | `centro.service` → `127.0.0.1:8010` | `centro-public.service` → `127.0.0.1:8011` |
+| Entrada | identidad de Tailscale (o contraseña) | **solo** enlace/contraseña; sin `/admin/` ni moderación |
+| Responsables y admins | sin cambios | **TOTP obligatorio** |
+
+**Antes de encender (una vez):**
+1. Consola de Tailscale → *Access controls*: el nodo `aeroacademy` necesita el atributo `funnel` (en `nodeAttrs`, p. ej. `{"target": ["tag:aeroacademy"], "attr": ["funnel"]}` o `autogroup:member` si el nodo es tuyo) y HTTPS Certificates activo.
+2. **Activa tu segundo factor por la tailnet**, antes de abrir la puerta: entra a `https://aeroacademy.tailccd107.ts.net:8443/seguridad/2fa/` (o por el 443 de siempre, mientras no la enciendas), agrega la clave en tu app de autenticación, escribe el código y **guarda los 8 códigos de recuperación**. Cada lead/admin debe hacerlo; sin eso queda bloqueado en la puerta pública (no pierde nada: puede entrar por la tailnet).
+
+**Encender** (en la VM; `AEROACADEMY_PUBLISH=node` es el valor por defecto):
+```bash
+cd ~/AeroAcademy && git pull
+PUBLIC_FUNNEL=1 sudo -E ./deploy/install.sh
+```
+El instalador: crea `centro-public.service`, fija `ACADEMY_URL` (los enlaces de invitación salen con la dirección pública), pasa `PUBLIC_HTTPS_PORT=8443`, y publica con `tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve --https=8443 …:8010` y `… funnel --bg --https=443 http://127.0.0.1:8011`. Es idempotente.
+
+**Comprobar:**
+```bash
+systemctl is-active centro centro-public tailscaled-aeroacademy aerocontrol   # los cuatro: active
+tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve status      # 443 con «Funnel on» → 8011; 8443 tailnet → 8010
+tailscale serve status                                                          # lo de AeroControl, sin cambios
+curl -sI https://aeroacademy.tailccd107.ts.net/admin/ | head -1                # 404
+curl -sI https://aeroacademy.tailccd107.ts.net/bienvenida/ | grep -i strict-transport
+```
+
+**Cómo invitar:** en **Equipo → Gestionar personas** genera el enlace del equipo y mándalo; es `https://aeroacademy.tailccd107.ts.net/inscripcion/<token>/`. Cada persona pone correo, nombre y contraseña (D35), y entra cuando la apruebes en **Moderación** (desde la tailnet: en la pública no existe). Para una persona concreta ya aprobada, su enlace personal (D34) sale con la misma dirección pública. Quien ya tiene contraseña entra por `/entrar/`.
+
+**Vuelta atrás (rollback):**
+```bash
+PUBLIC_FUNNEL=0 sudo -E ./deploy/install.sh     # apaga centro-public, borra la config de Funnel del nodo propio y vuelve a servir la tailnet en el 443
+# A mano, si hiciera falta:
+sudo systemctl disable --now centro-public
+sudo tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve reset      # solo afecta al nodo propio
+sudo tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve --bg --https=443 http://127.0.0.1:8010
+```
+
+**Si algo falla:** `journalctl -u centro-public -n 100`; un 403 de CSRF en la pública indica que `ALLOWED_HOSTS` no trae el nombre del nodo; «Bloqueado: falta segundo factor» es lo esperado para un lead/admin sin TOTP (actívalo por la tailnet). El HSTS de la pública dura un año: no hace falta tocarlo, pero un navegador que lo vio ya no acepta HTTP en ese nombre.
 
 ## Lista de salida
 

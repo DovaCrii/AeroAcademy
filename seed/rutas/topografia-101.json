@@ -259,11 +259,349 @@
           ],
           "answer": 3,
           "explanation": "El deslinde es una posición en planta. Pendiente, cota y rebaje son altimétricos."
+        },
+        {
+          "key": "n0-q4",
+          "question": "Una cuadrilla replantea ejes de fundaciones con una huincha vieja y cada eje queda a 2 cm del siguiente más de lo diseñado, siempre en el mismo sentido. ¿Cómo se describe el problema?",
+          "options": [
+            "Falta de precisión: las medidas son erráticas",
+            "Es un error aleatorio imposible de corregir",
+            "Error sistemático: son repetibles pero poco exactos",
+            "No hay error, está dentro del rango normal"
+          ],
+          "answer": 2,
+          "explanation": "Un desvío constante y en el mismo sentido es sistemático: se corrige calibrando o contrastando con un patrón, no repitiendo la medida."
+        },
+        {
+          "key": "n0-q5",
+          "question": "Dos áreas reciben el mismo levantamiento: una necesita ubicar pernos de anclaje y la otra estimar el área de un terreno baldío. ¿Qué criterio es razonable?",
+          "options": [
+            "Tolerancia distinta según uso: más fina para los pernos",
+            "Misma tolerancia para ambas, la más estricta",
+            "Tolerancia más fina para el terreno porque es más grande",
+            "No definir tolerancia hasta ver los resultados"
+          ],
+          "answer": 0,
+          "explanation": "La tolerancia se fija por el uso del dato: unos milímetros para anclajes y bastante más holgura para un área de catastro."
         }
       ],
       "mastery_signals": [
         "Explicas la diferencia entre planimetría y altimetría con un ejemplo propio",
         "Sabes por qué hay que preguntar la tolerancia antes de elegir equipo"
+      ],
+      "slides": [
+        {
+          "title": "Qué es la topografía",
+          "body": "La **topografía** mide y representa la forma y la posición de las cosas sobre el terreno: dónde están, a qué altura y qué tan lejos queda una de otra. Todo proyecto (un edificio, un camino, una faena) parte de esa información.",
+          "points": [
+            "Responde dos preguntas: *¿dónde?* y *¿a qué altura?*",
+            "Entrega números (coordenadas, cotas) y también dibujos (planos, modelos 3D)",
+            "Es la base común de arquitectura, ingeniería civil, minería e industria",
+            "Sin sistema de referencia, las coordenadas son números sueltos"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Medir no basta: un levantamiento sirve cuando se sabe en qué sistema está, con qué tolerancia y con qué método se hizo."
+          }
+        },
+        {
+          "title": "Del terreno al plano: qué hace un levantamiento",
+          "body": "Todo levantamiento sigue la misma cadena, sea con huincha, estación total, GNSS o dron: se mide, se calcula, se controla la calidad y recién ahí se entrega.",
+          "terms": [
+            "*Levantamiento*",
+            "*Control de calidad*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "terreno",
+                "label": "Terreno",
+                "sub": "lo que existe",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "medir",
+                "label": "Medición",
+                "sub": "equipo y método",
+                "kind": "equipo",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "calc",
+                "label": "Cálculo",
+                "sub": "coordenadas y cotas",
+                "kind": "proceso",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "control",
+                "label": "Control",
+                "sub": "chequeo de calidad",
+                "kind": "proceso",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "entrega",
+                "label": "Plano / modelo",
+                "sub": "con informe",
+                "kind": "producto",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "uso",
+                "label": "Proyecto",
+                "sub": "se diseña o decide",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "terreno",
+                "to": "medir",
+                "label": "mira",
+                "flow": true
+              },
+              {
+                "from": "medir",
+                "to": "calc",
+                "label": "datos",
+                "flow": true
+              },
+              {
+                "from": "calc",
+                "to": "control",
+                "label": "resultado",
+                "flow": true
+              },
+              {
+                "from": "control",
+                "to": "entrega",
+                "label": "aprobado",
+                "flow": true
+              },
+              {
+                "from": "entrega",
+                "to": "uso",
+                "label": "se usa",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "terreno"
+              ],
+              [
+                "medir",
+                "terreno-medir"
+              ],
+              [
+                "calc",
+                "medir-calc"
+              ],
+              [
+                "control",
+                "calc-control"
+              ],
+              [
+                "entrega",
+                "control-entrega"
+              ],
+              [
+                "uso",
+                "entrega-uso"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Planimetría y altimetría",
+          "body": "Todo punto se describe con tres números. Los dos primeros son la **planimetría** (este y norte) y el tercero es la **altimetría** (la cota o altura).",
+          "points": [
+            "*Planimetría*: posición en planta. Se responde con un plano de planta.",
+            "*Altimetría*: altura de cada punto. Se responde con cotas, perfiles y curvas de nivel.",
+            "Un deslinde es una pregunta planimétrica; una pendiente de calle es altimétrica",
+            "Cada una tiene su propia tolerancia y a veces su propio método de medición"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Para ubicar una fundación importa la planimetría con precisión de milímetros; para saber si el agua escurre importa la altimetría con precisión de centímetros."
+          }
+        },
+        {
+          "title": "Precisión, exactitud y tolerancia",
+          "body": "Son tres palabras que se confunden y en terreno significan cosas distintas.",
+          "points": [
+            "*Precisión*: qué tan parejas salen las repeticiones entre sí",
+            "*Exactitud*: qué tan cerca está el resultado del valor verdadero",
+            "*Tolerancia*: cuánto error acepta el proyecto antes de rechazar el dato",
+            "Se puede ser muy preciso y estar corrido: un error sistemático no se ve repitiendo la medición",
+            "La tolerancia la fija el uso del dato, no el equipo disponible"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Medir cinco veces lo mismo y obtener lo mismo no prueba que esté bien: solo prueba que el instrumento repite. Para detectar el corrimiento hay que contrastar con un valor conocido."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: la misma obra, tres tolerancias",
+          "body": "En una misma obra en Chile conviven datos con exigencias muy distintas. Pedir la misma precisión para todo encarece el trabajo sin mejorar nada.",
+          "points": [
+            "Ejes de fundaciones y pernos de anclaje: milímetros",
+            "Explanada y movimiento de tierra: centímetros",
+            "Superficie de un predio para un catastro: decímetros o más",
+            "Mapa de contexto o imagen satelital de referencia: metros"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Antes de salir a medir, pregunta tres cosas: para qué se usará el dato, qué error acepta y en qué sistema de coordenadas debe llegar (en Chile, normalmente SIRGAS-Chile, UTM 18S o 19S)."
+          }
+        },
+        {
+          "title": "Errores típicos al empezar",
+          "points": [
+            "Confundir precisión con exactitud y declarar bueno un dato solo porque se repite",
+            "Pedir la máxima precisión sin preguntar para qué",
+            "Entregar coordenadas sin decir sistema, huso ni tipo de altura",
+            "Mezclar cotas locales con cotas sobre el nivel del mar sin avisar",
+            "Anotar a mano sin respaldo: la libreta de campo también es un dato que se pierde"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "El error más caro no es medir mal: es medir bien en el sistema equivocado y descubrirlo en obra."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "La topografía es un servicio interno del proyecto: quien diseña dice qué necesita y con qué tolerancia, y quien mide devuelve el dato con su informe de calidad. Cuando esa conversación se salta, aparecen las sorpresas en obra.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "pide",
+                "label": "Proyectista",
+                "sub": "define necesidad",
+                "kind": "persona",
+                "x": 16,
+                "y": 30
+              },
+              {
+                "id": "espec",
+                "label": "Especificación",
+                "sub": "entregable + tolerancia",
+                "kind": "dato",
+                "x": 50,
+                "y": 30
+              },
+              {
+                "id": "topo",
+                "label": "Topografía",
+                "sub": "mide y calcula",
+                "kind": "equipo",
+                "x": 84,
+                "y": 30
+              },
+              {
+                "id": "informe",
+                "label": "Informe",
+                "sub": "sistema, método, error",
+                "kind": "producto",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "diseno",
+                "label": "Diseño",
+                "sub": "usa el dato",
+                "kind": "proceso",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "obra",
+                "label": "Obra",
+                "sub": "replantea y verifica",
+                "kind": "persona",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "pide",
+                "to": "espec",
+                "label": "pide",
+                "flow": true
+              },
+              {
+                "from": "espec",
+                "to": "topo",
+                "label": "acuerda",
+                "flow": true
+              },
+              {
+                "from": "topo",
+                "to": "informe",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "informe",
+                "to": "diseno",
+                "label": "valida",
+                "flow": true
+              },
+              {
+                "from": "diseno",
+                "to": "obra",
+                "label": "planos",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "pide"
+              ],
+              [
+                "espec",
+                "pide-espec"
+              ],
+              [
+                "topo",
+                "espec-topo"
+              ],
+              [
+                "informe",
+                "topo-informe"
+              ],
+              [
+                "diseno",
+                "informe-diseno"
+              ],
+              [
+                "obra",
+                "diseno-obra"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "body": "Lo que debes llevarte de este nivel:",
+          "points": [
+            "La topografía responde *¿dónde?* (planimetría) y *¿a qué altura?* (altimetría)",
+            "Precisión es repetir bien; exactitud es acertar; tolerancia es lo que el proyecto acepta",
+            "Toda medida lleva sistema de referencia y método",
+            "La tolerancia sale del uso del dato, no del equipo",
+            "Pide siempre un informe de calidad junto con la entrega"
+          ]
+        }
       ]
     },
     {
@@ -426,6 +764,30 @@
           ],
           "answer": 0,
           "explanation": "Los datums antiguos difieren por metros. Se transforman con parámetros oficiales; superponerlos sin más produce corrimientos."
+        },
+        {
+          "key": "n1-q4",
+          "question": "Un levantamiento GNSS entrega h = 612,40 m y el modelo de geoide da N = +18,00 m en el punto. ¿Qué cota ortométrica (H = h − N) corresponde?",
+          "options": [
+            "630,40 m",
+            "612,40 m",
+            "18,00 m",
+            "594,40 m"
+          ],
+          "answer": 3,
+          "explanation": "H = h − N = 612,40 − 18,00 = 594,40 m. Sumar N en vez de restarlo es un error típico."
+        },
+        {
+          "key": "n1-q5",
+          "question": "Dos topógrafos usan el mismo equipo y el mismo método, pero sus coordenadas de control difieren 80 cm de forma pareja. Uno trabajó con el marco de una época y el otro con otra. ¿Qué lo explica mejor?",
+          "options": [
+            "El equipo de uno estaba descalibrado",
+            "El movimiento de la placa entre épocas, que desplaza las coordenadas",
+            "Un error aleatorio del GNSS",
+            "El huso UTM distinto"
+          ],
+          "answer": 1,
+          "explanation": "En un país con deformación tectónica activa, las coordenadas cambian con la época del marco y se corrigen indicando y transformando entre épocas."
         }
       ],
       "mastery_signals": [
@@ -435,6 +797,280 @@
       "images": [
         "core/img/topo/elipsoide-geoide.svg",
         "core/img/topo/alturas.svg"
+      ],
+      "slides": [
+        {
+          "title": "Tres superficies: terreno, geoide y elipsoide",
+          "body": "Cuando se dice «altura» hay que preguntar sobre qué superficie. La Tierra real tiene tres representaciones que conviven en cualquier proyecto.",
+          "points": [
+            "*Terreno*: la superficie física, con cerros y quebradas",
+            "*Geoide*: superficie de gravedad que prolonga el nivel medio del mar bajo los continentes",
+            "*Elipsoide*: forma matemática achatada que sirve para calcular coordenadas",
+            "El geoide es irregular; el elipsoide es una forma simple y calculable"
+          ],
+          "image": "core/img/topo/elipsoide-geoide.svg",
+          "caption": "Terreno, geoide y elipsoide: tres referencias distintas"
+        },
+        {
+          "title": "Altura elipsoidal y altura ortométrica: h ≈ H + N",
+          "body": "El receptor GNSS entrega **h**, la altura sobre el elipsoide. Los planos y la gente hablan de **H**, la altura sobre el nivel del mar (ortométrica). Entre ambas está **N**, la ondulación del geoide.",
+          "callout": {
+            "kind": "ojo",
+            "text": "N puede valer decenas de metros según la zona. Escribir como cota la altura elipsoidal del GNSS es un error clásico."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "gnss",
+                "label": "GNSS",
+                "sub": "mide h (elipsoidal)",
+                "kind": "equipo",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "modelo",
+                "label": "Modelo de geoide",
+                "sub": "entrega N",
+                "kind": "dato",
+                "x": 16,
+                "y": 72
+              },
+              {
+                "id": "calc",
+                "label": "H = h − N",
+                "sub": "proceso de conversión",
+                "kind": "proceso",
+                "x": 50,
+                "y": 48
+              },
+              {
+                "id": "cota",
+                "label": "Cota H",
+                "sub": "sobre el nivel del mar",
+                "kind": "producto",
+                "x": 84,
+                "y": 48
+              },
+              {
+                "id": "plano",
+                "label": "Plano / diseño",
+                "sub": "usa cota ortométrica",
+                "kind": "persona",
+                "x": 84,
+                "y": 80
+              }
+            ],
+            "edges": [
+              {
+                "from": "gnss",
+                "to": "calc",
+                "label": "h",
+                "flow": true
+              },
+              {
+                "from": "modelo",
+                "to": "calc",
+                "label": "N",
+                "flow": true
+              },
+              {
+                "from": "calc",
+                "to": "cota",
+                "label": "H",
+                "flow": true
+              },
+              {
+                "from": "cota",
+                "to": "plano",
+                "label": "se usa",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "gnss"
+              ],
+              [
+                "modelo"
+              ],
+              [
+                "calc",
+                "gnss-calc",
+                "modelo-calc"
+              ],
+              [
+                "cota",
+                "calc-cota"
+              ],
+              [
+                "plano",
+                "cota-plano"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Datum y marcos de referencia",
+          "body": "Un **datum** es la manera de amarrar un elipsoide a la Tierra. Un **marco de referencia** es su materialización: un conjunto de estaciones con coordenadas y una época.",
+          "points": [
+            "En Chile el marco oficial es *SIRGAS-Chile*, parte de SIRGAS (el sistema para América Latina y el Caribe)",
+            "*WGS 84* es el sistema del GPS; para fines de obra coincide con SIRGAS en el orden de unos pocos decímetros o menos",
+            "Chile se mueve: las placas tectónicas y los terremotos desplazan las estaciones y por eso el marco lleva una *época*",
+            "Datums antiguos como *PSAD-56* y SAD-69 no coinciden con SIRGAS: hay que transformar"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "El IGM y la red SIRGAS publican estaciones de operación continua y herramientas de transformación; son la fuente oficial para amarrar un proyecto."
+          },
+          "terms": [
+            "*SIRGAS-Chile*",
+            "*WGS 84*",
+            "*PSAD-56*"
+          ]
+        },
+        {
+          "title": "Ejemplo chileno: un plano antiguo que no calza",
+          "body": "Un plano de una faena de los años 90 viene en PSAD-56. Al abrirlo junto a un levantamiento nuevo en SIRGAS-Chile, los muros quedan corridos varios metros.",
+          "points": [
+            "Síntoma: todo el plano está desplazado, pero conserva su forma",
+            "Causa: datums distintos, no un error de medición",
+            "Solución: transformar con parámetros del IGM y verificar con dos o tres puntos conocidos",
+            "Documentar: «convertido de PSAD-56 a SIRGAS-Chile, método y fecha»"
+          ],
+          "image": "priv:alturas-elipsoidal-ortometrica.jpg",
+          "caption": "Un punto más alto puede tener menor altura GNSS: depende del geoide",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Cuando un archivo viene corrido de forma pareja, sospecha del datum antes que del instrumento."
+          }
+        },
+        {
+          "title": "Errores típicos en geodesia básica",
+          "points": [
+            "Usar la altura elipsoidal del GNSS como cota sobre el mar",
+            "Mezclar PSAD-56 o SAD-69 con SIRGAS sin transformar",
+            "Creer que «WGS 84» y «SIRGAS» son idénticos sin mirar el marco y la época",
+            "No anotar la época o el marco de las coordenadas de control",
+            "Aplicar un modelo de geoide global en un proyecto que exige cotas del IGM de nivelación"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Si el proyecto exige cotas ligadas a una nivelación oficial, el modelo de geoide solo es una aproximación: hay que chequear contra una cota conocida."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En un proyecto con varias especialidades, el sistema de referencia se define una vez, al inicio, y se escribe en un documento de control compartido.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "def",
+                "label": "Definir sistema",
+                "sub": "datum, época, alturas",
+                "kind": "proceso",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "doc",
+                "label": "Hoja de control",
+                "sub": "un solo documento",
+                "kind": "dato",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "topo",
+                "label": "Topografía",
+                "sub": "entrega en ese sistema",
+                "kind": "equipo",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "civil",
+                "label": "Civil / mina",
+                "sub": "diseña en ese sistema",
+                "kind": "persona",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "bim",
+                "label": "Modelo BIM / GIS",
+                "sub": "mismas coordenadas",
+                "kind": "producto",
+                "x": 50,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "def",
+                "to": "doc",
+                "label": "escribe",
+                "flow": true
+              },
+              {
+                "from": "doc",
+                "to": "topo",
+                "label": "aplica",
+                "flow": true
+              },
+              {
+                "from": "topo",
+                "to": "civil",
+                "label": "datos",
+                "flow": true
+              },
+              {
+                "from": "civil",
+                "to": "bim",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "doc",
+                "to": "bim",
+                "label": "valida",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "def"
+              ],
+              [
+                "doc",
+                "def-doc"
+              ],
+              [
+                "topo",
+                "doc-topo"
+              ],
+              [
+                "civil",
+                "topo-civil"
+              ],
+              [
+                "bim",
+                "civil-bim",
+                "doc-bim"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Hay tres superficies: terreno, geoide, elipsoide",
+            "GNSS entrega h; el plano usa H; H = h − N",
+            "SIRGAS-Chile es el marco oficial y tiene época",
+            "PSAD-56 y SAD-69 son antiguos: se transforman",
+            "Una buena entrega dice datum, época y tipo de altura"
+          ]
+        }
       ]
     },
     {
@@ -597,6 +1233,30 @@
           ],
           "answer": 1,
           "explanation": "La proyección impone un pequeño factor para repartir la deformación. Por eso para obras muy precisas se combinan factores de escala y de altura."
+        },
+        {
+          "key": "n2-q4",
+          "question": "Recibes un CSV con columnas «X = 345 120» y «Y = 6 300 450» en un proyecto de Santiago. ¿Qué es lo más probable?",
+          "options": [
+            "Coordenadas UTM en metros: este de 345 120 y norte de 6 300 450",
+            "Latitud y longitud en grados decimales",
+            "Distancias en kilómetros",
+            "Cotas y pendientes"
+          ],
+          "answer": 0,
+          "explanation": "Valores de seis y siete cifras con ese orden corresponden a UTM sur: este de 6 dígitos y norte de 7 dígitos (alrededor de 6,3 millones en Santiago)."
+        },
+        {
+          "key": "n2-q5",
+          "question": "El factor de escala combinado de una obra a 3 000 m de altitud es 0,9995. Mides 1 000,000 m de distancia en terreno. ¿Cuál es aproximadamente la distancia de grilla?",
+          "options": [
+            "1 000,000 m",
+            "1 000,500 m",
+            "995,000 m",
+            "999,500 m"
+          ],
+          "answer": 3,
+          "explanation": "Distancia de grilla = distancia de terreno × factor de escala = 1 000 × 0,9995 = 999,5 m."
         }
       ],
       "mastery_signals": [
@@ -605,6 +1265,297 @@
       ],
       "images": [
         "core/img/topo/utm-zonas-chile.svg"
+      ],
+      "slides": [
+        {
+          "title": "Coordenadas geográficas y proyectadas",
+          "body": "Hay dos formas de decir dónde está un punto. Las **geográficas** usan latitud y longitud (grados sobre el elipsoide). Las **proyectadas** convierten esa superficie curva en un plano con metros.",
+          "points": [
+            "*Geográficas*: sirven para ubicar en el globo y las usan GNSS y mapas web",
+            "*Proyectadas* (como UTM): sirven para medir distancias y áreas en metros",
+            "Toda proyección deforma algo: distancias, ángulos o áreas",
+            "UTM conserva bien los ángulos y controla la deformación de distancias por franjas de 6 grados"
+          ],
+          "image": "core/img/topo/utm-zonas-chile.svg",
+          "caption": "Husos UTM de Chile"
+        },
+        {
+          "title": "Cómo funciona UTM",
+          "body": "UTM divide el mundo en husos de 6 grados de ancho. Cada huso tiene su meridiano central, un factor de escala y desplazamientos para evitar coordenadas negativas.",
+          "points": [
+            "Factor de escala en el meridiano central: *0,9996*",
+            "Falso este: 500 000 m, para que no haya este negativo",
+            "Falso norte: 10 000 000 m en el hemisferio sur",
+            "Fuera del meridiano central la escala varía y llega a ser mayor que 1 hacia los bordes del huso"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Una coordenada UTM completa dice: este, norte, huso y hemisferio, datum y tipo de altura. Con menos que eso queda ambigua."
+          }
+        },
+        {
+          "title": "Qué husos usa Chile",
+          "body": "Chile continental se reparte entre dos husos.",
+          "points": [
+            "*UTM 19S* (meridiano central 69° O): norte y centro, incluida la Región Metropolitana",
+            "*UTM 18S* (meridiano central 75° O): sur del país y gran parte de la costa de la zona centro-sur",
+            "En SIRGAS los códigos EPSG son 32719 y 32718 (WGS 84), o los de SIRGAS equivalentes",
+            "Isla de Pascua y Juan Fernández usan otros husos"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Un proyecto en Puerto Montt va en 18S y uno en Santiago en 19S. Si una obra cruza el límite, se elige un solo huso para todo el proyecto y se calcula el factor de escala."
+          }
+        },
+        {
+          "title": "Qué pasa cuando un archivo «cae en el mar»",
+          "body": "Es el síntoma más común de coordenadas mal interpretadas. Conviene revisar en orden.",
+          "terms": [
+            "*EPSG*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "sint",
+                "label": "Archivo mal ubicado",
+                "sub": "cae en el mar o corrido",
+                "kind": "dato",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "datum",
+                "label": "¿Datum?",
+                "sub": "SIRGAS, PSAD-56…",
+                "kind": "proceso",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "huso",
+                "label": "¿Huso?",
+                "sub": "18S o 19S",
+                "kind": "proceso",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "unidad",
+                "label": "¿Unidades y orden?",
+                "sub": "metros, E-N invertido",
+                "kind": "proceso",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "fix",
+                "label": "Transformar",
+                "sub": "parámetros oficiales",
+                "kind": "producto",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "check",
+                "label": "Verificar",
+                "sub": "con puntos conocidos",
+                "kind": "persona",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "sint",
+                "to": "datum",
+                "label": "1",
+                "flow": true
+              },
+              {
+                "from": "datum",
+                "to": "huso",
+                "label": "2",
+                "flow": true
+              },
+              {
+                "from": "huso",
+                "to": "unidad",
+                "label": "3",
+                "flow": true
+              },
+              {
+                "from": "unidad",
+                "to": "fix",
+                "label": "corrige",
+                "flow": true
+              },
+              {
+                "from": "fix",
+                "to": "check",
+                "label": "chequea",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "sint"
+              ],
+              [
+                "datum",
+                "sint-datum"
+              ],
+              [
+                "huso",
+                "datum-huso"
+              ],
+              [
+                "unidad",
+                "huso-unidad"
+              ],
+              [
+                "fix",
+                "unidad-fix"
+              ],
+              [
+                "check",
+                "fix-check"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Coordenadas locales y de proyecto",
+          "body": "Muchas obras trabajan con una grilla local o *topográfica*: más corta de números y con la escala ajustada a la altura de la obra para que la distancia de plano coincida con la de terreno.",
+          "points": [
+            "Se define con origen, giro y factor de escala respecto de UTM",
+            "Esos parámetros deben quedar escritos: sin ellos no se puede volver a UTM",
+            "A gran altitud (por ejemplo minería a 3 000 m) el factor de altura es del orden de 0,9995: cerca de 5 cm por kilómetro",
+            "Todas las especialidades deben usar la misma grilla"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Si el proyecto usa coordenadas locales, entrega siempre una «tarjeta de transformación»: origen, giro, escala y puntos de ejemplo."
+          }
+        },
+        {
+          "title": "Errores típicos con coordenadas",
+          "points": [
+            "Abrir un archivo 18S como 19S: el punto queda corrido cientos de kilómetros",
+            "Intercambiar este y norte o perder el hemisferio",
+            "Medir distancias de plano sin factor de escala donde importa el centímetro",
+            "Mezclar grados decimales con grados-minutos-segundos",
+            "No guardar los parámetros de la grilla local"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Ante cualquier archivo desconocido, pregunta primero datum, huso y unidades y pruébalo en un punto conocido."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "Para evitar corrimientos, el equipo fija un sistema de proyecto al inicio. Cada archivo que entra se convierte a ese sistema y se verifica contra puntos de control conocidos.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "entra",
+                "label": "Archivo recibido",
+                "sub": "cualquier sistema",
+                "kind": "dato",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "conv",
+                "label": "Conversión",
+                "sub": "datum + huso",
+                "kind": "proceso",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "ctrl",
+                "label": "Chequeo en control",
+                "sub": "puntos conocidos",
+                "kind": "equipo",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "sist",
+                "label": "Sistema de proyecto",
+                "sub": "un solo marco",
+                "kind": "producto",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "modelos",
+                "label": "CAD / BIM / GIS",
+                "sub": "todo alineado",
+                "kind": "persona",
+                "x": 50,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "entra",
+                "to": "conv",
+                "label": "pasa",
+                "flow": true
+              },
+              {
+                "from": "conv",
+                "to": "ctrl",
+                "label": "se prueba",
+                "flow": true
+              },
+              {
+                "from": "ctrl",
+                "to": "sist",
+                "label": "aprobado",
+                "flow": true
+              },
+              {
+                "from": "sist",
+                "to": "modelos",
+                "label": "publica",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "entra"
+              ],
+              [
+                "conv",
+                "entra-conv"
+              ],
+              [
+                "ctrl",
+                "conv-ctrl"
+              ],
+              [
+                "sist",
+                "ctrl-sist"
+              ],
+              [
+                "modelos",
+                "sist-modelos"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Geográficas en grados; proyectadas en metros",
+            "UTM: husos de 6°, k0 = 0,9996, falso este 500 000 m",
+            "Chile: UTM 19S y 18S, con casos especiales en islas",
+            "Cuando algo se corre, revisa datum, huso y unidades",
+            "Coordenadas locales: guarda origen, giro y escala"
+          ]
+        }
       ]
     },
     {
@@ -731,6 +1682,30 @@
           ],
           "answer": 2,
           "explanation": "La altura del prisma afecta directamente la cota. Siempre hay que configurarla igual que en terreno."
+        },
+        {
+          "key": "n3-q4",
+          "question": "Una poligonal de 1 200 m de perímetro cierra con un error lineal de 4 cm. ¿Cuál es la precisión relativa aproximada?",
+          "options": [
+            "1:300",
+            "1:30 000",
+            "1:3 000",
+            "1:300 000"
+          ],
+          "answer": 1,
+          "explanation": "1 200 m / 0,04 m = 30 000, o sea 1:30 000. La precisión se expresa como longitud total sobre error de cierre."
+        },
+        {
+          "key": "n3-q5",
+          "question": "Al terminar el replanteo del día, vuelves a mirar el backsight y cae 8 mm fuera de la tolerancia. ¿Qué haces?",
+          "options": [
+            "Nada, el replanteo ya está marcado",
+            "Cambiar el prisma",
+            "Rehacer el replanteo realizado desde la última verificación buena",
+            "Subir la tolerancia al valor observado"
+          ],
+          "answer": 2,
+          "explanation": "Si el equipo o el trípode se movió, lo medido después de la última verificación correcta es dudoso y debe repetirse."
         }
       ],
       "mastery_signals": [
@@ -740,6 +1715,421 @@
       "images": [
         "core/img/topo/estacion-total.svg",
         "core/img/topo/nivel-poligonal.svg"
+      ],
+      "slides": [
+        {
+          "title": "Estación total, nivel y poligonal: para qué sirve cada una",
+          "body": "Los equipos clásicos siguen siendo la referencia cuando se necesita precisión milimétrica o centimétrica controlada.",
+          "points": [
+            "*Estación total*: mide ángulo horizontal, ángulo vertical y distancia a un prisma; entrega coordenadas",
+            "*Nivel óptico o digital*: mide diferencias de altura con una mira",
+            "*Poligonal*: cadena de estaciones medidas en secuencia para llevar el control por el terreno",
+            "Los tres se complementan: la total para posición y el nivel para altura de alta precisión"
+          ],
+          "image": "core/img/topo/estacion-total.svg",
+          "caption": "Elementos de una estación total"
+        },
+        {
+          "title": "Cómo funciona una estación total",
+          "body": "A partir de un punto conocido y de una orientación, el equipo calcula la posición del prisma.",
+          "callout": {
+            "kind": "ojo",
+            "text": "Sin backsight correcto todo sale girado. Y sin altura de instrumento y de prisma bien anotadas la cota queda corrida."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "est",
+                "label": "Estación",
+                "sub": "punto conocido + altura",
+                "kind": "equipo",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "bs",
+                "label": "Backsight",
+                "sub": "referencia de orientación",
+                "kind": "dato",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "obs",
+                "label": "Observación",
+                "sub": "ángulos y distancia",
+                "kind": "proceso",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "prisma",
+                "label": "Prisma",
+                "sub": "altura configurada",
+                "kind": "equipo",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "coord",
+                "label": "Coordenadas",
+                "sub": "E, N, cota",
+                "kind": "producto",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "lib",
+                "label": "Libreta digital",
+                "sub": "archivo con metadatos",
+                "kind": "dato",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "est",
+                "to": "bs",
+                "label": "orienta",
+                "flow": true
+              },
+              {
+                "from": "bs",
+                "to": "obs",
+                "label": "gira",
+                "flow": true
+              },
+              {
+                "from": "obs",
+                "to": "prisma",
+                "label": "mide",
+                "flow": true
+              },
+              {
+                "from": "prisma",
+                "to": "coord",
+                "label": "calcula",
+                "flow": true
+              },
+              {
+                "from": "coord",
+                "to": "lib",
+                "label": "guarda",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "est"
+              ],
+              [
+                "bs",
+                "est-bs"
+              ],
+              [
+                "obs",
+                "bs-obs"
+              ],
+              [
+                "prisma",
+                "obs-prisma"
+              ],
+              [
+                "coord",
+                "prisma-coord"
+              ],
+              [
+                "lib",
+                "coord-lib"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Poligonal: de un punto a la red de control",
+          "body": "Una poligonal parte de puntos conocidos, avanza por estaciones nuevas y cierra contra otro punto conocido (o contra sí misma). El cierre revela cuánto error se acumuló.",
+          "terms": [
+            "*Error de cierre*",
+            "*Compensación*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "pc1",
+                "label": "Punto conocido A",
+                "sub": "orientación inicial",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "e1",
+                "label": "Estación 1",
+                "sub": "mide ángulo y distancia",
+                "kind": "equipo",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "e2",
+                "label": "Estación 2",
+                "sub": "sigue la cadena",
+                "kind": "equipo",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "pc2",
+                "label": "Punto conocido B",
+                "sub": "cierre",
+                "kind": "dato",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "cierre",
+                "label": "Error de cierre",
+                "sub": "comparar con tolerancia",
+                "kind": "proceso",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "comp",
+                "label": "Compensación",
+                "sub": "reparto del error",
+                "kind": "producto",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "pc1",
+                "to": "e1",
+                "label": "avanza",
+                "flow": true
+              },
+              {
+                "from": "e1",
+                "to": "e2",
+                "label": "avanza",
+                "flow": true
+              },
+              {
+                "from": "e2",
+                "to": "pc2",
+                "label": "cierra",
+                "flow": true
+              },
+              {
+                "from": "pc2",
+                "to": "cierre",
+                "label": "compara",
+                "flow": true
+              },
+              {
+                "from": "cierre",
+                "to": "comp",
+                "label": "reparte",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "pc1"
+              ],
+              [
+                "e1",
+                "pc1-e1"
+              ],
+              [
+                "e2",
+                "e1-e2"
+              ],
+              [
+                "pc2",
+                "e2-pc2"
+              ],
+              [
+                "cierre",
+                "pc2-cierre"
+              ],
+              [
+                "comp",
+                "cierre-comp"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Nivelación geométrica",
+          "body": "El nivel mide diferencias de altura con lecturas sobre una mira. La cota se obtiene por pasos.",
+          "points": [
+            "Altura del instrumento (HI) = cota del BM + lectura atrás",
+            "Cota del punto nuevo = HI − lectura adelante",
+            "Equivale a cota BM + atrás − adelante",
+            "Se cierra contra otro BM y el error de cierre se compara con la tolerancia del proyecto (por ejemplo, del orden de 10 mm por raíz de kilómetro en nivelación ordinaria)"
+          ],
+          "image": "core/img/topo/nivel-poligonal.svg",
+          "caption": "Nivelación y poligonal",
+          "callout": {
+            "kind": "ejemplo",
+            "text": "BM de cota 100,00 m, lectura atrás 1,52 m, adelante 0,80 m: el punto nuevo está en 100,72 m."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: replanteo de ejes de un edificio",
+          "body": "En la obra gruesa de un edificio, la estación total se arma sobre un punto de control y replantea los ejes de las fundaciones.",
+          "points": [
+            "Se arma el trípode sobre un vértice del control y se mide la altura del instrumento",
+            "Se orienta a otro vértice (backsight) y se verifica con un tercero",
+            "Se replantean los ejes y se marcan; el nivel controla las cotas de fondo",
+            "Antes de cerrar el día se re-chequea el backsight para detectar un trípode movido"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Cada hora y al terminar, vuelve a mirar el backsight: si cambió más de la tolerancia, todo lo replanteado desde la última verificación es dudoso."
+          }
+        },
+        {
+          "title": "Errores típicos con equipos clásicos",
+          "points": [
+            "Trípode mal asentado o plomada descentrada: el levantamiento queda corrido",
+            "No medir o anotar mal la altura de instrumento y de prisma",
+            "Prisma configurado con otra constante o altura distinta a la real",
+            "Nivelar en una sola dirección sin cerrar contra otro punto conocido",
+            "No aplicar la corrección atmosférica en distancias largas (del orden de 1 ppm por cada grado de temperatura)"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "La doble posición (círculo directo y tránsito) cancela varios errores instrumentales: úsala en puntos de control."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En obra, la topografía clásica da la red de control que usan todas las demás técnicas: el dron, el GNSS y el escáner se amarran a esos vértices.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "red",
+                "label": "Red de control",
+                "sub": "vértices y BM",
+                "kind": "dato",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "replan",
+                "label": "Replanteo",
+                "sub": "ejes y cotas",
+                "kind": "proceso",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "verif",
+                "label": "Verificación",
+                "sub": "as-built medido",
+                "kind": "proceso",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "dron",
+                "label": "Dron / escáner",
+                "sub": "se amarran a la red",
+                "kind": "equipo",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "informe",
+                "label": "Informe",
+                "sub": "tolerancias cumplidas",
+                "kind": "producto",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "ing",
+                "label": "Ingeniería",
+                "sub": "aprueba",
+                "kind": "persona",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "red",
+                "to": "replan",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "replan",
+                "to": "verif",
+                "label": "se mide",
+                "flow": true
+              },
+              {
+                "from": "verif",
+                "to": "dron",
+                "label": "control",
+                "flow": true
+              },
+              {
+                "from": "dron",
+                "to": "informe",
+                "label": "datos",
+                "flow": true
+              },
+              {
+                "from": "informe",
+                "to": "ing",
+                "label": "revisa",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "red"
+              ],
+              [
+                "replan",
+                "red-replan"
+              ],
+              [
+                "verif",
+                "replan-verif"
+              ],
+              [
+                "dron",
+                "verif-dron"
+              ],
+              [
+                "informe",
+                "dron-informe"
+              ],
+              [
+                "ing",
+                "informe-ing"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Estación total: posición; nivel: altura; poligonal: control",
+            "Orientación y alturas bien medidas son la base",
+            "Cota = BM + atrás − adelante",
+            "Se cierra la poligonal y se compensa",
+            "El control clásico sostiene al resto de las técnicas"
+          ]
+        }
       ]
     },
     {
@@ -891,6 +2281,42 @@
           ],
           "answer": 3,
           "explanation": "El estático con varias horas de observación y postproceso es el método clásico para puntos de control de alta calidad."
+        },
+        {
+          "key": "n4-q4",
+          "question": "Mides un punto con RTK a 35 km de la base propia y la solución queda en Float mucho tiempo. ¿Qué explicación es más probable?",
+          "options": [
+            "Falla de la colectora",
+            "Falta el huso UTM",
+            "La distancia a la base es grande y los errores atmosféricos ya no se anulan bien",
+            "Hay demasiados satélites"
+          ],
+          "answer": 2,
+          "explanation": "Los errores de ionosfera y troposfera dejan de ser comunes entre base y rover al alejarse: la solución cuesta fijar o queda en Float."
+        },
+        {
+          "key": "n4-q5",
+          "question": "Necesitas la coordenada de un punto de control que anclará un proyecto de 10 años. La base de operación continua más cercana está a 30 km. ¿Qué opción es mejor?",
+          "options": [
+            "Observación estática larga y postproceso contra estaciones oficiales",
+            "RTK de 3 segundos",
+            "Tomar el valor del GNSS del celular",
+            "Medir con huincha desde un vértice cercano"
+          ],
+          "answer": 0,
+          "explanation": "Un punto de control permanente pide la mejor calidad: observación larga, postproceso y amarre a estaciones oficiales."
+        },
+        {
+          "key": "n4-q8",
+          "question": "Vas a mapear 400 ha con un dron con módulo GNSS. El terreno es ondulado y no hay enlace de radio estable con la base. ¿Qué esquema conviene?",
+          "options": [
+            "RTK en vivo con la base detrás de un cerro",
+            "GNSS autónomo y sin control",
+            "PPK: el dron registra posiciones y eventos de cámara y se corrige después con los datos de la base",
+            "No usar GNSS: solo huincha"
+          ],
+          "answer": 2,
+          "explanation": "PPK no depende del enlace en vuelo: se corrige después con la base que registró cada 1 segundo."
         }
       ],
       "mastery_signals": [
@@ -900,6 +2326,540 @@
       "images": [
         "core/img/topo/gnss-rtk.svg",
         "core/img/topo/gnss-metodos.svg"
+      ],
+      "slides": [
+        {
+          "title": "GNSS: qué es y qué entrega",
+          "body": "**GNSS** es el nombre general de los sistemas de navegación por satélite (GPS, GLONASS, Galileo, BeiDou). Un receptor calcula su posición midiendo la distancia a varios satélites.",
+          "points": [
+            "Posición *autónoma*: precisión de metros",
+            "Con correcciones diferenciales se llega a centímetros",
+            "Se necesitan al menos cuatro satélites y buena geometría (*DOP* bajo)",
+            "La altura que entrega es elipsoidal: pasarla a cota requiere un modelo de geoide"
+          ],
+          "image": "core/img/topo/gnss-metodos.svg",
+          "caption": "Métodos GNSS y su precisión"
+        },
+        {
+          "title": "Cómo funciona RTK: base, rover y NTRIP",
+          "body": "En RTK, un receptor de coordenada conocida calcula sus errores y los envía al *rover* que mide en terreno. Las correcciones pueden venir de una base propia o de una red por internet.",
+          "callout": {
+            "kind": "dato",
+            "text": "Con base propia el rendimiento cae al alejarse: del orden de 1 cm + 1 ppm horizontal, así que a 20 km suma unos 2 cm más. Con red NTRIP la distancia depende de la densidad de la red."
+          },
+          "terms": [
+            "*RTK*",
+            "*NTRIP*",
+            "*RTCM*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "sat",
+                "label": "Satélites GNSS",
+                "sub": "señales",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "base",
+                "label": "Base GNSS",
+                "sub": "coordenada conocida",
+                "kind": "equipo",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "caster",
+                "label": "Caster NTRIP",
+                "sub": "servidor de correcciones",
+                "kind": "proceso",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "rover",
+                "label": "Rover",
+                "sub": "mide el punto",
+                "kind": "equipo",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "fixed",
+                "label": "Solución Fixed",
+                "sub": "cm en tiempo real",
+                "kind": "producto",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "lib",
+                "label": "Colectora",
+                "sub": "guarda el punto",
+                "kind": "dato",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "sat",
+                "to": "base",
+                "label": "observa",
+                "flow": true
+              },
+              {
+                "from": "base",
+                "to": "caster",
+                "label": "RTCM",
+                "flow": true
+              },
+              {
+                "from": "caster",
+                "to": "rover",
+                "label": "correcciones",
+                "flow": true
+              },
+              {
+                "from": "rover",
+                "to": "fixed",
+                "label": "resuelve",
+                "flow": true
+              },
+              {
+                "from": "fixed",
+                "to": "lib",
+                "label": "registra",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "sat"
+              ],
+              [
+                "base",
+                "sat-base"
+              ],
+              [
+                "caster",
+                "base-caster"
+              ],
+              [
+                "rover",
+                "caster-rover"
+              ],
+              [
+                "fixed",
+                "rover-fixed"
+              ],
+              [
+                "lib",
+                "fixed-lib"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Estático, PPK y comparación",
+          "body": "La elección del método depende de la precisión pedida y de si existe enlace en terreno.",
+          "points": [
+            "*Estático*: horas de observación, postproceso; máxima calidad para puntos de control",
+            "*RTK*: tiempo real, centímetros, necesita enlace de datos",
+            "*PPK*: se registra todo y se corrige después; muy usado en drones porque no depende de radio",
+            "*Fixed* significa ambigüedades resueltas; *Float* es una solución aproximada y no sirve para control"
+          ],
+          "image": "priv:rtk-vs-ppk-vs-estatico.jpg",
+          "caption": "Tres métodos GNSS: estático, RTK y PPK"
+        },
+        {
+          "title": "Ejemplo en terreno: control para un levantamiento con dron",
+          "body": "Para amarrar un vuelo de 80 hectáreas se miden puntos de control con GNSS. Un flujo típico:",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "sesion",
+                "label": "Sesión estática",
+                "sub": "base en punto del control",
+                "kind": "equipo",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "post",
+                "label": "Postproceso",
+                "sub": "coordenadas finales",
+                "kind": "proceso",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "gcp",
+                "label": "Puntos de control",
+                "sub": "medidos con RTK",
+                "kind": "dato",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "check",
+                "label": "Chequeo",
+                "sub": "comparar contra control",
+                "kind": "proceso",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "dron",
+                "label": "Vuelo",
+                "sub": "amarrado al sistema",
+                "kind": "producto",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "inf",
+                "label": "Informe",
+                "sub": "método y error",
+                "kind": "persona",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "sesion",
+                "to": "post",
+                "label": "datos",
+                "flow": true
+              },
+              {
+                "from": "post",
+                "to": "gcp",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "gcp",
+                "to": "check",
+                "label": "medidos",
+                "flow": true
+              },
+              {
+                "from": "check",
+                "to": "dron",
+                "label": "aprobado",
+                "flow": true
+              },
+              {
+                "from": "dron",
+                "to": "inf",
+                "label": "entrega",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "sesion"
+              ],
+              [
+                "post",
+                "sesion-post"
+              ],
+              [
+                "gcp",
+                "post-gcp"
+              ],
+              [
+                "check",
+                "gcp-check"
+              ],
+              [
+                "dron",
+                "check-dron"
+              ],
+              [
+                "inf",
+                "dron-inf"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "PPK en el dron: de las fotos con posición al producto",
+          "body": "Con **PPK** cada foto recibe una posición precisa sin necesidad de un enlace de radio en vuelo. Sirve para superficies extensas o con poca visual directa entre la base y el dron.",
+          "callout": {
+            "kind": "ojo",
+            "text": "La base debe registrar con una tasa de 1 segundo durante todo el vuelo y estar sobre un punto de coordenadas conocidas. Si la base se apaga antes que el dron aterrice, se pierde la corrección de esa parte."
+          },
+          "terms": [
+            "*PPK*",
+            "*Evento de disparo*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "base",
+                "label": "Base GNSS",
+                "sub": "registra cada 1 s",
+                "kind": "equipo",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "dron",
+                "label": "Dron con GNSS",
+                "sub": "fotos + eventos de disparo",
+                "kind": "equipo",
+                "x": 16,
+                "y": 75
+              },
+              {
+                "id": "tray",
+                "label": "Trayectoria PPK",
+                "sub": "corrige la posición",
+                "kind": "proceso",
+                "x": 50,
+                "y": 50
+              },
+              {
+                "id": "fotos",
+                "label": "Fotos con posición",
+                "sub": "geoetiquetadas",
+                "kind": "dato",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "fot",
+                "label": "Fotogrametría",
+                "sub": "orientación y ajuste",
+                "kind": "proceso",
+                "x": 84,
+                "y": 82
+              },
+              {
+                "id": "prod",
+                "label": "Nube y ortofoto",
+                "sub": "productos",
+                "kind": "producto",
+                "x": 50,
+                "y": 82
+              }
+            ],
+            "edges": [
+              {
+                "from": "base",
+                "to": "tray",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "dron",
+                "to": "tray",
+                "label": "dron",
+                "flow": true
+              },
+              {
+                "from": "tray",
+                "to": "fotos",
+                "label": "corrige",
+                "flow": true
+              },
+              {
+                "from": "fotos",
+                "to": "fot",
+                "label": "entran",
+                "flow": true
+              },
+              {
+                "from": "fot",
+                "to": "prod",
+                "label": "genera",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "base"
+              ],
+              [
+                "dron"
+              ],
+              [
+                "tray",
+                "base-tray",
+                "dron-tray"
+              ],
+              [
+                "fotos",
+                "tray-fotos"
+              ],
+              [
+                "fot",
+                "fotos-fot"
+              ],
+              [
+                "prod",
+                "fot-prod"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Fuentes de error GNSS",
+          "points": [
+            "*Multipath*: señales que rebotan en fachadas de vidrio, cerros o autos",
+            "Poco cielo visible: árboles, cañones, edificios altos",
+            "Ionosfera y troposfera: crecen con la distancia a la base",
+            "Altura de antena mal medida: la cota queda corrida",
+            "Distinto sistema entre red NTRIP y proyecto sin transformar",
+            "Duración muy corta de la observación: promedia mal el ruido"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Un indicador «Fixed» no garantiza calidad: revisa desviaciones, DOP y que el punto se repita en dos ocasiones."
+          }
+        },
+        {
+          "title": "Buenas prácticas de campo",
+          "points": [
+            "Verifica la solución en un punto conocido antes y después de la jornada",
+            "Mide la altura de antena a la referencia correcta y anótala",
+            "Registra dos observaciones independientes de puntos críticos",
+            "Configura el sistema de coordenadas y el geoide en la colectora y anótalos",
+            "Respalda el archivo bruto (RINEX) además de la coordenada final"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Si el punto es crítico, vuelve a ocuparlo con otro horario: la geometría satelital cambia y se descubren errores sistemáticos."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "El GNSS entrega los puntos que anclan al resto de los datos. En un equipo, topografía fija la red de control y cada especialidad la usa sin remedirla.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "red",
+                "label": "Red GNSS",
+                "sub": "vértices estáticos",
+                "kind": "dato",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "rtk",
+                "label": "Levantamiento RTK",
+                "sub": "detalle y replanteo",
+                "kind": "equipo",
+                "x": 16,
+                "y": 50
+              },
+              {
+                "id": "ppk",
+                "label": "Dron con PPK",
+                "sub": "posición de cámara",
+                "kind": "equipo",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "check",
+                "label": "Puntos de chequeo",
+                "sub": "validan el modelo",
+                "kind": "proceso",
+                "x": 84,
+                "y": 80
+              },
+              {
+                "id": "prod",
+                "label": "Modelo / ortofoto",
+                "sub": "en SIRGAS-Chile",
+                "kind": "producto",
+                "x": 50,
+                "y": 80
+              },
+              {
+                "id": "eq",
+                "label": "Equipo de proyecto",
+                "sub": "reutiliza el control",
+                "kind": "persona",
+                "x": 16,
+                "y": 80
+              }
+            ],
+            "edges": [
+              {
+                "from": "red",
+                "to": "rtk",
+                "label": "amarra",
+                "flow": true
+              },
+              {
+                "from": "red",
+                "to": "ppk",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "ppk",
+                "to": "check",
+                "label": "verifica",
+                "flow": true
+              },
+              {
+                "from": "check",
+                "to": "prod",
+                "label": "aprueba",
+                "flow": true
+              },
+              {
+                "from": "prod",
+                "to": "eq",
+                "label": "entrega",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "red"
+              ],
+              [
+                "rtk",
+                "red-rtk"
+              ],
+              [
+                "ppk",
+                "red-ppk"
+              ],
+              [
+                "check",
+                "ppk-check"
+              ],
+              [
+                "prod",
+                "check-prod"
+              ],
+              [
+                "eq",
+                "prod-eq"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "GNSS = satélites; autónomo es de metros, diferencial de centímetros",
+            "RTK en vivo, PPK después, estático para control",
+            "Base propia o NTRIP: ambos usan correcciones RTCM",
+            "Revisa Fixed, DOP, multipath y altura de antena",
+            "Anota sistema y geoide en cada entrega"
+          ]
+        }
       ]
     },
     {
@@ -1102,6 +3062,54 @@
           ],
           "answer": 0,
           "explanation": "El LiDAR genera retornos múltiples: algunos pulsos pasan entre las hojas y llegan al suelo; la fotogrametría no ve lo que la cámara no ve."
+        },
+        {
+          "key": "n5-q6",
+          "question": "Debes levantar una nave industrial de 120 m de largo con estructura metálica densa y poca luz. Hay que entregar un modelo en cuatro horas. ¿Qué parece más adecuado?",
+          "options": [
+            "Fotogrametría con dron al interior",
+            "Imagen satelital",
+            "Estación total punto por punto",
+            "SLAM portátil recorriendo la nave, amarrado a puntos de control"
+          ],
+          "answer": 3,
+          "explanation": "El SLAM captura caminando y no depende de la luz; con control se amarra al sistema del proyecto."
+        },
+        {
+          "key": "n5-q7",
+          "question": "Un cliente pide un MDT bajo un bosque nativo de 200 ha y propone fotogrametría con dron. ¿Qué le respondes?",
+          "options": [
+            "Perfecto, la cámara ve el suelo",
+            "La fotogrametría ve copas; el suelo se obtiene mejor con LiDAR aerotransportado",
+            "Mejor usar TLS en todo el predio",
+            "Sube la altura de vuelo"
+          ],
+          "answer": 1,
+          "explanation": "Algunos pulsos láser pasan entre las hojas y llegan al suelo; una cámara solo registra lo que ve desde arriba."
+        },
+        {
+          "key": "n5-q8",
+          "question": "Con un dron rápido y obturador electrónico, los postes verticales salen inclinados en las fotos. ¿Qué sospechas y qué haces?",
+          "options": [
+            "Efecto de obturación por rodadura; usas obturador mecánico o bajas la velocidad",
+            "Falla del GNSS; cambias el huso",
+            "Falta de puntos de control",
+            "El viento sopla a favor"
+          ],
+          "answer": 0,
+          "explanation": "El rolling shutter deforma las líneas rectas cuando la cámara se mueve rápido; el obturador mecánico lo evita."
+        },
+        {
+          "key": "n5-q9",
+          "question": "Debes modelar los techos de una nave y también las fachadas laterales de un edificio alto. ¿Qué plan de captura es mejor?",
+          "options": [
+            "Solo vuelo nadir a gran altura",
+            "Solo estación total",
+            "Solo imagen satelital",
+            "Nadir para techos y terreno, y vuelos oblicuos para las fachadas"
+          ],
+          "answer": 3,
+          "explanation": "Las fachadas solo se ven con cámara inclinada; el nadir cubre techos y terreno."
         }
       ],
       "mastery_signals": [
@@ -1113,6 +3121,338 @@
         "core/img/topo/tls-slam-dron.svg",
         "core/img/topo/flujo-fotogrametria.svg",
         "core/img/topo/captura-foto-lidar.svg"
+      ],
+      "slides": [
+        {
+          "title": "Captura masiva: de puntos aislados a millones de puntos",
+          "body": "La captura masiva registra superficies completas en lugar de puntos individuales. El resultado base es una **nube de puntos** o un conjunto de fotos que se transforma en una.",
+          "points": [
+            "*TLS*: escáner láser terrestre sobre trípode, por estaciones",
+            "*SLAM*: escáner móvil que se recorre caminando",
+            "*Fotogrametría con dron*: fotos que se transforman en nube, MDS y ortomosaico",
+            "*LiDAR aerotransportado*: láser desde dron o avión"
+          ],
+          "image": "core/img/topo/tls-slam-dron.svg",
+          "caption": "TLS, SLAM y dron frente a frente"
+        },
+        {
+          "title": "Cómo funciona cada técnica",
+          "body": "Una mide con láser (directo) y otra con fotos (indirecto). Conviene entender el flujo de datos de cada una.",
+          "terms": [
+            "*SfM*",
+            "*Retornos múltiples*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "fotos",
+                "label": "Fotos solapadas",
+                "sub": "cámara RGB",
+                "kind": "equipo",
+                "x": 16,
+                "y": 22
+              },
+              {
+                "id": "sfm",
+                "label": "Reconstrucción",
+                "sub": "puntos comunes y pose",
+                "kind": "proceso",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "nubef",
+                "label": "Nube desde fotos",
+                "sub": "densa y con color",
+                "kind": "producto",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "laser",
+                "label": "Pulsos láser",
+                "sub": "TLS, SLAM o LiDAR",
+                "kind": "equipo",
+                "x": 16,
+                "y": 68
+              },
+              {
+                "id": "tof",
+                "label": "Medición directa",
+                "sub": "distancia + ángulo",
+                "kind": "proceso",
+                "x": 50,
+                "y": 68
+              },
+              {
+                "id": "nubel",
+                "label": "Nube láser",
+                "sub": "retornos múltiples",
+                "kind": "producto",
+                "x": 84,
+                "y": 68
+              }
+            ],
+            "edges": [
+              {
+                "from": "fotos",
+                "to": "sfm",
+                "label": "procesa",
+                "flow": true
+              },
+              {
+                "from": "sfm",
+                "to": "nubef",
+                "label": "genera",
+                "flow": true
+              },
+              {
+                "from": "laser",
+                "to": "tof",
+                "label": "mide",
+                "flow": true
+              },
+              {
+                "from": "tof",
+                "to": "nubel",
+                "label": "registra",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "fotos"
+              ],
+              [
+                "sfm",
+                "fotos-sfm"
+              ],
+              [
+                "nubef",
+                "sfm-nubef"
+              ],
+              [
+                "laser"
+              ],
+              [
+                "tof",
+                "laser-tof"
+              ],
+              [
+                "nubel",
+                "tof-nubel"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Cuándo conviene cada una",
+          "body": "No existe el mejor equipo, sino el adecuado al entorno y al entregable.",
+          "points": [
+            "*TLS*: interiores, detalle fino, mejor precisión local",
+            "*SLAM*: pasillos y plantas, rapidez a costa de algo de precisión",
+            "*Fotogrametría*: grandes superficies abiertas, costo bajo, necesita luz y textura",
+            "*LiDAR aéreo*: bajo vegetación, poca luz, corredores lineales",
+            "*Multiespectral y térmico*: salud de cultivos e inspección, no topografía"
+          ],
+          "image": "priv:lidar-vs-foto-avion-dron.jpg",
+          "caption": "Fotogrametría con dron frente a LiDAR aerotransportado",
+          "callout": {
+            "kind": "dato",
+            "text": "Ala fija cubre más superficie por vuelo y aguanta mejor el viento; multirrotor despega vertical y sirve en espacios reducidos."
+          }
+        },
+        {
+          "title": "Sensores del dron: qué mide cada uno",
+          "body": "El sensor se elige según la pregunta y no según el equipo disponible.",
+          "points": [
+            "*RGB*: color visible; es el sensor de la topografía y de los modelos 3D",
+            "*Multiespectral*: capta varias bandas de luz y permite calcular índices de vegetación, que indican la salud de las plantas; su aplicación principal es la agricultura",
+            "*Térmico*: capta la emisión infrarroja de los cuerpos; se usa en inspección y seguridad (paneles solares, líneas eléctricas, pérdidas de calor)",
+            "*LiDAR*: mide directo con láser; funciona con poca luz y entre follaje",
+            "Un mismo vuelo no sirve para todo: el térmico y el multiespectral tienen píxeles más gruesos y no reemplazan a la cámara RGB para medir"
+          ],
+          "image": "priv:ndvi-multiespectral-parcelas.jpg",
+          "caption": "Índice de vegetación calculado con imágenes multiespectrales",
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Un viñedo con estrés hídrico se detecta con multiespectral o térmico; la geometría del mismo predio sale de la cámara RGB."
+          }
+        },
+        {
+          "title": "La cámara de mapeo: obturador, intervalo y ángulo",
+          "body": "Tres decisiones de la cámara cambian la calidad geométrica del resultado.",
+          "points": [
+            "*Obturador mecánico*: expone toda la imagen a la vez; evita el efecto de obturación por rodadura (*rolling shutter*), que deforma líneas rectas cuando el dron se mueve rápido",
+            "*Intervalo mínimo de disparo*: limita la velocidad. Velocidad máxima ≈ (1 − traslape frontal) × largo de la huella ÷ intervalo",
+            "*Nadir* (cámara mirando hacia abajo): ideal para terreno, MDT y ortofoto",
+            "*Oblicua*: necesaria para fachadas, taludes verticales y modelos 3D completos; se combina con vuelos nadir",
+            "*Calibración interna*: la cámara tiene parámetros propios (focal, punto principal, distorsión); conviene guardarlos en los metadatos de cada foto y verificarlos con un vuelo de calibración"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Con una huella de 100 m en la línea de vuelo y 80 % de traslape, las fotos se toman cada 20 m. Con un intervalo mínimo de 0,7 s se podría ir hasta unos 28 m/s, pero en la práctica manda el viento y el desenfoque por movimiento, no la cámara."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: elegir para una cantera y para un edificio patrimonial",
+          "body": "Dos casos muy distintos dentro de un mismo equipo:",
+          "points": [
+            "Cantera de 60 ha, modelo en dos días: fotogrametría o LiDAR con dron, más control GNSS",
+            "Edificio patrimonial de tres pisos: TLS o SLAM en el interior, fotogrametría para el techo",
+            "Ladera con bosque denso: LiDAR, porque la fotogrametría solo ve las copas",
+            "Viñedo: sensor multiespectral para estrés hídrico, no escáner"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "La pregunta que ordena la decisión: ¿qué entregable, con qué tolerancia y en qué entorno? Solo después se elige el equipo."
+          }
+        },
+        {
+          "title": "Errores típicos en captura masiva",
+          "points": [
+            "Elegir por moda y no por la precisión que pide el entregable",
+            "Volar sin revisar las reglas de la DGAC",
+            "Entregar una nube sin sistema de coordenadas",
+            "Creer que más megapíxeles reemplazan a los puntos de control",
+            "Escanear de más: archivos enormes que nadie puede abrir",
+            "Ignorar el entorno: vidrio, agua y superficies lisas confunden a la cámara y al láser"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Una nube sin control está bien en forma pero flota en el espacio: no sabes dónde está."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "El equipo combina capturas para cubrir un proyecto completo. El control topográfico es el hilo que las une.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "control",
+                "label": "Control GNSS / total",
+                "sub": "puntos conocidos",
+                "kind": "dato",
+                "x": 50,
+                "y": 20
+              },
+              {
+                "id": "dron",
+                "label": "Dron",
+                "sub": "contexto y terreno",
+                "kind": "equipo",
+                "x": 16,
+                "y": 50
+              },
+              {
+                "id": "tls",
+                "label": "TLS / SLAM",
+                "sub": "detalle e interiores",
+                "kind": "equipo",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "union",
+                "label": "Unión y chequeo",
+                "sub": "un solo sistema",
+                "kind": "proceso",
+                "x": 50,
+                "y": 50
+              },
+              {
+                "id": "modelo",
+                "label": "Modelo del sitio",
+                "sub": "nube + superficie",
+                "kind": "producto",
+                "x": 50,
+                "y": 80
+              },
+              {
+                "id": "eq",
+                "label": "Disciplinas",
+                "sub": "consultan el modelo",
+                "kind": "persona",
+                "x": 16,
+                "y": 80
+              }
+            ],
+            "edges": [
+              {
+                "from": "control",
+                "to": "dron",
+                "label": "amarra",
+                "flow": true
+              },
+              {
+                "from": "control",
+                "to": "tls",
+                "label": "amarra",
+                "flow": true
+              },
+              {
+                "from": "dron",
+                "to": "union",
+                "label": "datos",
+                "flow": true
+              },
+              {
+                "from": "tls",
+                "to": "union",
+                "label": "datos",
+                "flow": true
+              },
+              {
+                "from": "union",
+                "to": "modelo",
+                "label": "integra",
+                "flow": true
+              },
+              {
+                "from": "modelo",
+                "to": "eq",
+                "label": "usa",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "control"
+              ],
+              [
+                "dron",
+                "control-dron"
+              ],
+              [
+                "tls",
+                "control-tls"
+              ],
+              [
+                "union",
+                "dron-union",
+                "tls-union"
+              ],
+              [
+                "modelo",
+                "union-modelo"
+              ],
+              [
+                "eq",
+                "modelo-eq"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "TLS: detalle; SLAM: velocidad; fotogrametría: área; LiDAR: bajo vegetación",
+            "Directo (láser) frente a indirecto (fotos)",
+            "Las mezclas funcionan mejor que un solo equipo",
+            "Sin control, la nube flota",
+            "Elige por entregable, tolerancia y entorno"
+          ]
+        }
       ]
     },
     {
@@ -1278,6 +3618,30 @@
           ],
           "answer": 1,
           "explanation": "Un modelo global gratuito tiene error de altura de metros: sirve para prefactibilidad, no para diseño de detalle."
+        },
+        {
+          "key": "n6-q6",
+          "question": "Un proyectista recibe un levantamiento como «solo curvas de nivel en DWG» y necesita calcular volúmenes. ¿Qué es lo más razonable?",
+          "options": [
+            "Pedir el modelo (TIN o ráster) del MDT, porque las curvas son un dibujo derivado",
+            "Calcular con las curvas sin problema",
+            "Dibujar curvas nuevas a mano",
+            "Usar la ortofoto"
+          ],
+          "answer": 0,
+          "explanation": "El modelo es el dato fuente. Las curvas son una derivación y calcular con ellas pierde precisión."
+        },
+        {
+          "key": "n6-q7",
+          "question": "Una ladera tiene una pendiente de 20 %. ¿A qué distancia en planta quedan dos curvas consecutivas con equidistancia de 1 m?",
+          "options": [
+            "2 m",
+            "20 m",
+            "0,2 m",
+            "5 m"
+          ],
+          "answer": 3,
+          "explanation": "Distancia en planta = equidistancia / pendiente = 1 / 0,20 = 5 m."
         }
       ],
       "mastery_signals": [
@@ -1289,6 +3653,322 @@
         "core/img/topo/productos.svg",
         "core/img/topo/mdt-mds.svg",
         "core/img/topo/tin-raster.svg"
+      ],
+      "slides": [
+        {
+          "title": "Los productos de un levantamiento",
+          "body": "Un levantamiento no entrega una sola cosa: entrega una familia de productos que parten del dato bruto.",
+          "points": [
+            "*Nube de puntos*: dato bruto (LAS, LAZ, E57, RCP)",
+            "*Modelos de elevación*: MDT, MDS, MDE",
+            "*Curvas de nivel*: líneas de igual altura derivadas del modelo",
+            "*Ortofoto*: foto corregida geométricamente",
+            "*Planos y modelos BIM as-built*: la interpretación final"
+          ],
+          "image": "core/img/topo/productos.svg",
+          "caption": "Familia de productos de un levantamiento"
+        },
+        {
+          "title": "De la nube al plano: cadena de productos",
+          "body": "Cada producto sale del anterior. Conviene conservar el dato fuente porque permite regenerar lo demás.",
+          "terms": [
+            "*MDT*",
+            "*MDS*",
+            "*TIN*",
+            "*Ráster*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "nube",
+                "label": "Nube de puntos",
+                "sub": "dato bruto",
+                "kind": "dato",
+                "x": 16,
+                "y": 22
+              },
+              {
+                "id": "clas",
+                "label": "Clasificación",
+                "sub": "suelo, vegetación, edificios",
+                "kind": "proceso",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "mdt",
+                "label": "MDT / MDS",
+                "sub": "TIN o ráster",
+                "kind": "producto",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "curvas",
+                "label": "Curvas de nivel",
+                "sub": "equidistancia elegida",
+                "kind": "producto",
+                "x": 84,
+                "y": 68
+              },
+              {
+                "id": "plano",
+                "label": "Plano",
+                "sub": "dibujo final",
+                "kind": "producto",
+                "x": 50,
+                "y": 68
+              },
+              {
+                "id": "bim",
+                "label": "Modelo as-built",
+                "sub": "BIM",
+                "kind": "producto",
+                "x": 16,
+                "y": 68
+              }
+            ],
+            "edges": [
+              {
+                "from": "nube",
+                "to": "clas",
+                "label": "filtra",
+                "flow": true
+              },
+              {
+                "from": "clas",
+                "to": "mdt",
+                "label": "interpola",
+                "flow": true
+              },
+              {
+                "from": "mdt",
+                "to": "curvas",
+                "label": "deriva",
+                "flow": true
+              },
+              {
+                "from": "curvas",
+                "to": "plano",
+                "label": "dibuja",
+                "flow": true
+              },
+              {
+                "from": "plano",
+                "to": "bim",
+                "label": "modela",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "nube"
+              ],
+              [
+                "clas",
+                "nube-clas"
+              ],
+              [
+                "mdt",
+                "clas-mdt"
+              ],
+              [
+                "curvas",
+                "mdt-curvas"
+              ],
+              [
+                "plano",
+                "curvas-plano"
+              ],
+              [
+                "bim",
+                "plano-bim"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "MDT, MDS, TIN y ráster",
+          "body": "Dos preguntas distintas: qué superficie representa (MDT o MDS) y cómo se guarda (TIN o ráster).",
+          "points": [
+            "*MDT*: suelo desnudo; para movimientos de tierra, drenaje y trazados",
+            "*MDS*: superficie con árboles y edificios; para visibilidad e inspección",
+            "*TIN*: triángulos entre puntos reales; se adapta al relieve",
+            "*Ráster*: grilla de celdas con una cota; liviano y bueno para análisis",
+            "Las *curvas de nivel* se derivan del modelo; el modelo es el dato"
+          ],
+          "image": "core/img/topo/mdt-mds.svg",
+          "caption": "MDT frente a MDS"
+        },
+        {
+          "title": "Curvas de nivel y equidistancia",
+          "body": "La **equidistancia** es la diferencia de altura entre dos curvas consecutivas y se elige según escala y relieve.",
+          "points": [
+            "Curvas muy juntas: pendiente fuerte",
+            "Curvas separadas: terreno suave",
+            "Curva directriz cada cierto número de intervalos, con cota rotulada",
+            "Equidistancia de 1 m es habitual para anteproyectos de caminos de escala 1:1 000; con 0,5 m o menos en detalle",
+            "Una equidistancia demasiado fina llena el plano de líneas y no mejora la decisión"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "En una ladera de 30 por ciento, curvas cada 1 m quedan separadas unos 3,3 m en planta (1 / 0,30)."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: pedir bien el entregable",
+          "body": "Al encargar un levantamiento, el pedido debe cerrar las ambigüedades. Una lista corta evita rehacer trabajo:",
+          "points": [
+            "Sistema de coordenadas, huso y tipo de altura",
+            "Producto: MDT, ortofoto, nube, curvas (con equidistancia) y escala",
+            "Tolerancia y puntos de chequeo",
+            "Formatos de entrega: LAZ, GeoTIFF, DXF, DWG o IFC según el uso",
+            "Informe de calidad con método y errores"
+          ],
+          "image": "priv:mde-mdt-mds-diferencias.jpg",
+          "caption": "Diferencias entre modelos de elevación",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Si el pedido solo dice «plano topográfico», recibirás lo que el topógrafo imagine, no lo que tu proyecto necesita."
+          }
+        },
+        {
+          "title": "Errores típicos con productos",
+          "points": [
+            "Pedir «un plano» sin escala, equidistancia, sistema ni tolerancia",
+            "Confundir MDT con MDS en movimientos de tierra",
+            "Aceptar entregas sin informe de calidad",
+            "Entregar las curvas como único producto: el modelo es el dato",
+            "Interpolar sobre huecos sin avisar que ahí no hay medición"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Un archivo sin metadatos (sistema, fecha, método) es un archivo que nadie puede usar con confianza."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "Cada disciplina toma el producto que le sirve y lo importa en su propio software.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "topo",
+                "label": "Topografía",
+                "sub": "entrega los productos",
+                "kind": "persona",
+                "x": 16,
+                "y": 50
+              },
+              {
+                "id": "mdt",
+                "label": "MDT",
+                "sub": "suelo para el diseño",
+                "kind": "producto",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "orto",
+                "label": "Ortofoto",
+                "sub": "fondo de planos",
+                "kind": "producto",
+                "x": 50,
+                "y": 78
+              },
+              {
+                "id": "civil",
+                "label": "Civil",
+                "sub": "trazado y volúmenes",
+                "kind": "proceso",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "bim",
+                "label": "BIM",
+                "sub": "contexto del modelo",
+                "kind": "proceso",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "gis",
+                "label": "GIS",
+                "sub": "análisis y mapas",
+                "kind": "proceso",
+                "x": 84,
+                "y": 80
+              }
+            ],
+            "edges": [
+              {
+                "from": "topo",
+                "to": "mdt",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "topo",
+                "to": "orto",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "mdt",
+                "to": "civil",
+                "label": "diseño",
+                "flow": true
+              },
+              {
+                "from": "mdt",
+                "to": "bim",
+                "label": "contexto",
+                "flow": true
+              },
+              {
+                "from": "orto",
+                "to": "gis",
+                "label": "mapas",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "topo"
+              ],
+              [
+                "mdt",
+                "topo-mdt"
+              ],
+              [
+                "orto",
+                "topo-orto"
+              ],
+              [
+                "civil",
+                "mdt-civil"
+              ],
+              [
+                "bim",
+                "mdt-bim"
+              ],
+              [
+                "gis",
+                "orto-gis"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Nube de puntos: dato bruto; el resto se deriva",
+            "MDT para obras; MDS para ver lo que hay sobre el suelo",
+            "TIN conserva puntos reales; ráster es grilla",
+            "La equidistancia se elige por escala y relieve",
+            "Pide siempre sistema, tolerancia, formato e informe"
+          ]
+        }
       ]
     },
     {
@@ -1460,6 +4140,30 @@
           ],
           "answer": 0,
           "explanation": "Con la nube se prefabrica antes de la detención; medir a última hora gasta el tiempo más caro."
+        },
+        {
+          "key": "n7-q6",
+          "question": "Un acopio se mide en marzo y en abril con modelos de superficie del mismo sistema. ¿Cómo se estima lo extraído?",
+          "options": [
+            "Sumando las ortofotos",
+            "Restando las dos superficies y calculando el volumen de la diferencia",
+            "Comparando solo curvas de nivel",
+            "Midiendo el perímetro"
+          ],
+          "answer": 1,
+          "explanation": "La diferencia entre superficies da el volumen: lo que bajó es extracción y lo que subió es aporte."
+        },
+        {
+          "key": "n7-q7",
+          "question": "Dos especialidades entregan modelos y los pisos no calzan 1,20 m. Una usó cota local y otra cota sobre el nivel del mar. ¿Qué falló?",
+          "options": [
+            "El software",
+            "El huso UTM",
+            "El acuerdo de referencia vertical entre especialidades",
+            "La resolución de la ortofoto"
+          ],
+          "answer": 2,
+          "explanation": "Hay que acordar y documentar la referencia vertical del proyecto y la relación entre cota local y cota oficial."
         }
       ],
       "mastery_signals": [
@@ -1469,6 +4173,421 @@
       "images": [
         "core/img/topo/aplicaciones.svg",
         "core/img/bim/brownfield-asbuilt.svg"
+      ],
+      "slides": [
+        {
+          "title": "La topografía al servicio de cada especialidad",
+          "body": "Cada especialidad le pide cosas distintas a un levantamiento. Saber traducir esa necesidad es la mitad del trabajo.",
+          "points": [
+            "*Arquitectura*: as-built de edificios existentes para remodelar o documentar",
+            "*Civil*: levantamiento, replanteo de ejes y movimientos de tierra",
+            "*Minería*: volumetría de acopios, control de rajos y monitoreo de taludes",
+            "*Industria*: plantas para modelar tuberías y equipos",
+            "*Ciudad*: catastro, mapas base y gemelos digitales"
+          ],
+          "image": "core/img/topo/aplicaciones.svg",
+          "caption": "Aplicaciones por especialidad"
+        },
+        {
+          "title": "Flujo típico: del problema al producto",
+          "body": "Sea cual sea la especialidad, el flujo se parece: partir del problema, elegir técnica, medir y devolver un producto útil.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "prob",
+                "label": "Necesidad",
+                "sub": "remodelar, excavar, medir",
+                "kind": "persona",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "tec",
+                "label": "Técnica",
+                "sub": "TLS, dron, GNSS, georradar",
+                "kind": "equipo",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "capt",
+                "label": "Captura",
+                "sub": "con control",
+                "kind": "proceso",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "prod",
+                "label": "Producto",
+                "sub": "as-built, MDT, volumen",
+                "kind": "producto",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "valid",
+                "label": "Validación",
+                "sub": "chequeo en terreno",
+                "kind": "proceso",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "dec",
+                "label": "Decisión",
+                "sub": "diseño u operación",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "prob",
+                "to": "tec",
+                "label": "define",
+                "flow": true
+              },
+              {
+                "from": "tec",
+                "to": "capt",
+                "label": "ejecuta",
+                "flow": true
+              },
+              {
+                "from": "capt",
+                "to": "prod",
+                "label": "procesa",
+                "flow": true
+              },
+              {
+                "from": "prod",
+                "to": "valid",
+                "label": "verifica",
+                "flow": true
+              },
+              {
+                "from": "valid",
+                "to": "dec",
+                "label": "apoya",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "prob"
+              ],
+              [
+                "tec",
+                "prob-tec"
+              ],
+              [
+                "capt",
+                "tec-capt"
+              ],
+              [
+                "prod",
+                "capt-prod"
+              ],
+              [
+                "valid",
+                "prod-valid"
+              ],
+              [
+                "dec",
+                "valid-dec"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Minería e industria: volumen y brownfield",
+          "body": "Dos temas que aparecen en proyectos grandes y requieren cuidados propios.",
+          "points": [
+            "*Volumetría*: restar dos superficies (antes y después) o comparar contra una base; la altura de referencia importa",
+            "A gran altitud el factor de escala por altura separa distancias de terreno y de grilla",
+            "*Brownfield*: intervenir una instalación que ya existe y suele operar",
+            "En brownfield el levantamiento as-built manda: los planos antiguos pueden no reflejar lo que hay"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "A 3 000 m de altitud el factor de altura es cercano a 0,9995, es decir, unos 5 cm de diferencia por kilómetro. Hay que decidir si el proyecto trabaja en grilla o en distancias de terreno."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: empalme en una detención corta",
+          "body": "Una planta con planos de hace décadas necesita un empalme de tubería en una detención de pocos días. El riesgo es que la pieza nueva no calce.",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Escanear antes de la detención reduce el tiempo de parada: el diseño se hace con la realidad y no con la memoria."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "antes",
+                "label": "Planos antiguos",
+                "sub": "sin verificar",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "scan",
+                "label": "Escáner láser",
+                "sub": "nube de la zona",
+                "kind": "equipo",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "geo",
+                "label": "Georradar",
+                "sub": "redes enterradas",
+                "kind": "equipo",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "model",
+                "label": "Modelo as-built",
+                "sub": "tubería y estructura",
+                "kind": "producto",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "prefab",
+                "label": "Prefabricado",
+                "sub": "se corta con medidas reales",
+                "kind": "proceso",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "emp",
+                "label": "Empalme",
+                "sub": "en la detención",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "antes",
+                "to": "scan",
+                "label": "desconfío",
+                "flow": true
+              },
+              {
+                "from": "scan",
+                "to": "geo",
+                "label": "suma",
+                "flow": true
+              },
+              {
+                "from": "geo",
+                "to": "model",
+                "label": "integra",
+                "flow": true
+              },
+              {
+                "from": "model",
+                "to": "prefab",
+                "label": "medidas",
+                "flow": true
+              },
+              {
+                "from": "prefab",
+                "to": "emp",
+                "label": "instala",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "antes"
+              ],
+              [
+                "scan",
+                "antes-scan"
+              ],
+              [
+                "geo",
+                "scan-geo"
+              ],
+              [
+                "model",
+                "geo-model"
+              ],
+              [
+                "prefab",
+                "model-prefab"
+              ],
+              [
+                "emp",
+                "prefab-emp"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Ejemplo con nivel de obra",
+          "body": "En obra se usan siglas de niveles que conviene conocer para no confundir cotas: terreno natural, nivel de piso terminado, de fundación, de coronamiento.",
+          "points": [
+            "Cada sigla se refiere a una cota con un significado distinto",
+            "El plano debe decir a qué cota de referencia se asocian",
+            "La cota ±0,00 de un edificio es local y se amarra a una cota oficial en la memoria",
+            "Dos especialidades con cotas locales distintas producen choques en obra"
+          ],
+          "image": "priv:niveles-obra-simbolos.jpg",
+          "caption": "Siglas de niveles usadas en obra"
+        },
+        {
+          "title": "Errores típicos entre especialidades",
+          "points": [
+            "Hablar solo en lenguaje técnico y perder a la contraparte",
+            "Usar un levantamiento antiguo para una obra nueva sin verificar cambios",
+            "No acordar la altura de referencia entre especialidades",
+            "Confiar en planos antiguos antes de intervenir una instalación existente",
+            "No considerar redes enterradas: se excava y se corta lo que no estaba en planos"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Georradar no es infalible: se contrasta con planos y se confirma con calicatas donde el riesgo es alto."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En proyectos multidisciplinarios, el levantamiento es el modelo de referencia común: todos revisan sobre la misma base.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "lev",
+                "label": "Levantamiento",
+                "sub": "fuente única",
+                "kind": "dato",
+                "x": 16,
+                "y": 50
+              },
+              {
+                "id": "arq",
+                "label": "Arquitectura",
+                "sub": "remodelación",
+                "kind": "persona",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "civ",
+                "label": "Civil",
+                "sub": "fundaciones y redes",
+                "kind": "persona",
+                "x": 50,
+                "y": 78
+              },
+              {
+                "id": "mec",
+                "label": "Industria",
+                "sub": "interferencias",
+                "kind": "persona",
+                "x": 84,
+                "y": 78
+              },
+              {
+                "id": "coord",
+                "label": "Coordinación",
+                "sub": "un solo modelo",
+                "kind": "proceso",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "obra",
+                "label": "Obra",
+                "sub": "ejecuta sin sorpresas",
+                "kind": "producto",
+                "x": 84,
+                "y": 22
+              }
+            ],
+            "edges": [
+              {
+                "from": "lev",
+                "to": "arq",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "lev",
+                "to": "civ",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "civ",
+                "to": "mec",
+                "label": "coordina",
+                "flow": true
+              },
+              {
+                "from": "mec",
+                "to": "coord",
+                "label": "reporta",
+                "flow": true
+              },
+              {
+                "from": "arq",
+                "to": "coord",
+                "label": "reporta",
+                "flow": true
+              },
+              {
+                "from": "coord",
+                "to": "obra",
+                "label": "aprueba",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "lev"
+              ],
+              [
+                "arq",
+                "lev-arq"
+              ],
+              [
+                "civ",
+                "lev-civ"
+              ],
+              [
+                "mec",
+                "civ-mec"
+              ],
+              [
+                "coord",
+                "mec-coord",
+                "arq-coord"
+              ],
+              [
+                "obra",
+                "coord-obra"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Cada especialidad usa productos distintos del mismo levantamiento",
+            "Brownfield: manda el as-built, no el plano antiguo",
+            "Altitud y escala importan en minería",
+            "Georradar para redes enterradas, siempre contrastado",
+            "Acuerda el sistema y la cota de referencia entre todos"
+          ]
+        }
       ]
     },
     {
@@ -1622,6 +4741,30 @@
           ],
           "answer": 3,
           "explanation": "Para esa extensión y tolerancia, la fotogrametría con control es eficiente; los modelos gratuitos tienen errores de metros."
+        },
+        {
+          "key": "n8-q6",
+          "question": "Una subestación necesita un modelo del interior de una sala de equipos de 8 por 12 m con tolerancia de 1 cm, sin GNSS disponible. ¿Qué plan es razonable?",
+          "options": [
+            "Dron al interior",
+            "GNSS RTK con antena externa",
+            "TLS con targets y control medido con estación total",
+            "Imagen satelital"
+          ],
+          "answer": 2,
+          "explanation": "Interior, tolerancia fina y sin GNSS: escáner terrestre y control con estación total."
+        },
+        {
+          "key": "n8-q7",
+          "question": "El cliente pide un plano para un loteo de 12 ha, con curvas cada 1 m y 10 cm de tolerancia vertical. Tienes plazo corto. ¿Qué propones?",
+          "options": [
+            "Fotogrametría con GCP y puntos de chequeo; informe de calidad",
+            "TLS punto por punto",
+            "Solo curvas del mapa regional",
+            "Estación total en toda la superficie"
+          ],
+          "answer": 0,
+          "explanation": "Para una superficie abierta de esa extensión y tolerancia, la fotogrametría con control y chequeo es eficiente."
         }
       ],
       "mastery_signals": [
@@ -1631,6 +4774,418 @@
       ],
       "images": [
         "core/img/topo/aplicaciones.svg"
+      ],
+      "slides": [
+        {
+          "title": "Cómo elegir el equipo: parte por el entregable",
+          "body": "La decisión correcta no empieza por el equipo que se tiene, sino por lo que hay que entregar.",
+          "points": [
+            "*Entregable*: qué producto pide el cliente",
+            "*Tolerancia*: cuánto error acepta",
+            "*Entorno*: interior o exterior, cielo abierto, vegetación, acceso",
+            "*Escala*: hectáreas o metros cuadrados",
+            "*Sistema*: coordenadas y tipo de altura definidos antes de ir a terreno"
+          ],
+          "image": "core/img/topo/aplicaciones.svg",
+          "caption": "Aplicaciones de topografía"
+        },
+        {
+          "title": "Árbol de decisión",
+          "body": "Una secuencia ordenada de preguntas lleva a una combinación razonable de técnicas.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "ent",
+                "label": "Entregable",
+                "sub": "producto pedido",
+                "kind": "producto",
+                "x": 16,
+                "y": 22
+              },
+              {
+                "id": "tol",
+                "label": "Tolerancia",
+                "sub": "mm, cm o dm",
+                "kind": "dato",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "ento",
+                "label": "Entorno",
+                "sub": "interior/exterior",
+                "kind": "dato",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "tec",
+                "label": "Técnica",
+                "sub": "combinación",
+                "kind": "proceso",
+                "x": 84,
+                "y": 68
+              },
+              {
+                "id": "ctrl",
+                "label": "Control",
+                "sub": "GNSS o total",
+                "kind": "equipo",
+                "x": 50,
+                "y": 68
+              },
+              {
+                "id": "plan",
+                "label": "Plan de trabajo",
+                "sub": "tiempos y costos",
+                "kind": "persona",
+                "x": 16,
+                "y": 68
+              }
+            ],
+            "edges": [
+              {
+                "from": "ent",
+                "to": "tol",
+                "label": "define",
+                "flow": true
+              },
+              {
+                "from": "tol",
+                "to": "ento",
+                "label": "limita",
+                "flow": true
+              },
+              {
+                "from": "ento",
+                "to": "tec",
+                "label": "elige",
+                "flow": true
+              },
+              {
+                "from": "tec",
+                "to": "ctrl",
+                "label": "amarra",
+                "flow": true
+              },
+              {
+                "from": "ctrl",
+                "to": "plan",
+                "label": "programa",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "ent"
+              ],
+              [
+                "tol",
+                "ent-tol"
+              ],
+              [
+                "ento",
+                "tol-ento"
+              ],
+              [
+                "tec",
+                "ento-tec"
+              ],
+              [
+                "ctrl",
+                "tec-ctrl"
+              ],
+              [
+                "plan",
+                "ctrl-plan"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Mezclas que funcionan",
+          "body": "La mayoría de los proyectos se resuelven con combinaciones, no con un solo equipo.",
+          "points": [
+            "Dron para el contexto y escáner para los detalles",
+            "GNSS o estación total para el control; la nube sin control flota",
+            "Escáner interior más fotogrametría para techos y fachadas",
+            "Fotogrametría con GCP para un predio de 15 ha con tolerancia de 10 cm en altura",
+            "Túneles: escáner móvil o terrestre y comparación contra el diseño"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Iglesia colonial: TLS en fachada y ornamentos, dron para techo, estación total para amarrar todo al sistema."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: carretera de 40 km en tres semanas",
+          "body": "Un trazado largo con plazo corto. El camino razonable:",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "No uses el dato más fino en todo el corredor «por si acaso»: pesa, demora y no mejora la decisión del anteproyecto."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "fuente",
+                "label": "Modelo gratuito de 30 m",
+                "sub": "prefactibilidad",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "dens",
+                "label": "Densificar",
+                "sub": "donde el trazado complica",
+                "kind": "proceso",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "dron",
+                "label": "LiDAR o dron",
+                "sub": "MDT del corredor",
+                "kind": "equipo",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "gcp",
+                "label": "Control GNSS",
+                "sub": "puntos repartidos",
+                "kind": "equipo",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "mdt",
+                "label": "MDT",
+                "sub": "anteproyecto",
+                "kind": "producto",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "rev",
+                "label": "Revisión",
+                "sub": "puntos de chequeo",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "fuente",
+                "to": "dens",
+                "label": "parte",
+                "flow": true
+              },
+              {
+                "from": "dens",
+                "to": "dron",
+                "label": "vuelo",
+                "flow": true
+              },
+              {
+                "from": "dron",
+                "to": "gcp",
+                "label": "amarra",
+                "flow": true
+              },
+              {
+                "from": "gcp",
+                "to": "mdt",
+                "label": "calcula",
+                "flow": true
+              },
+              {
+                "from": "mdt",
+                "to": "rev",
+                "label": "valida",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "fuente"
+              ],
+              [
+                "dens",
+                "fuente-dens"
+              ],
+              [
+                "dron",
+                "dens-dron"
+              ],
+              [
+                "gcp",
+                "dron-gcp"
+              ],
+              [
+                "mdt",
+                "gcp-mdt"
+              ],
+              [
+                "rev",
+                "mdt-rev"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Errores típicos en la elección",
+          "points": [
+            "Resolver con el equipo que uno tiene en vez del que pide el problema",
+            "Olvidar el control y entregar una nube bonita pero flotando",
+            "No dejar documentación del método y la calidad",
+            "No considerar permisos o reglas de vuelo",
+            "No definir sistema ni tipo de altura antes de salir"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Si hay vuelo, revisa DGAC; si hay datos oficiales, apóyate en SIRGAS-Chile."
+          }
+        },
+        {
+          "title": "Informe de calidad: lo que debe acompañar toda entrega",
+          "body": "Una entrega sin informe obliga a confiar a ciegas. Un informe corto y estándar basta.",
+          "points": [
+            "Sistema de coordenadas, huso, datum, época y tipo de altura",
+            "Método y equipos, fecha y condiciones",
+            "Error en puntos de chequeo (por ejemplo RMSE horizontal y vertical)",
+            "Cobertura, huecos y densidad",
+            "Formatos entregados y archivo LEEME"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Los estándares de exactitud de datos geoespaciales, como los de ASPRS, ayudan a expresar el error con el mismo lenguaje entre proveedores."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En un equipo, quien coordina la topografía recibe la necesidad de cada disciplina, la consolida y encarga un solo levantamiento bien especificado.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "disc",
+                "label": "Disciplinas",
+                "sub": "necesidades",
+                "kind": "persona",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "cons",
+                "label": "Consolidación",
+                "sub": "un solo pedido",
+                "kind": "proceso",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "tdr",
+                "label": "Especificación",
+                "sub": "entregable + tolerancia",
+                "kind": "dato",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "ejec",
+                "label": "Ejecución",
+                "sub": "técnica elegida",
+                "kind": "equipo",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "qa",
+                "label": "Control de calidad",
+                "sub": "informe",
+                "kind": "proceso",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "pub",
+                "label": "Publicación",
+                "sub": "datos en carpeta común",
+                "kind": "producto",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "disc",
+                "to": "cons",
+                "label": "piden",
+                "flow": true
+              },
+              {
+                "from": "cons",
+                "to": "tdr",
+                "label": "redacta",
+                "flow": true
+              },
+              {
+                "from": "tdr",
+                "to": "ejec",
+                "label": "encarga",
+                "flow": true
+              },
+              {
+                "from": "ejec",
+                "to": "qa",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "qa",
+                "to": "pub",
+                "label": "aprueba",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "disc"
+              ],
+              [
+                "cons",
+                "disc-cons"
+              ],
+              [
+                "tdr",
+                "cons-tdr"
+              ],
+              [
+                "ejec",
+                "tdr-ejec"
+              ],
+              [
+                "qa",
+                "ejec-qa"
+              ],
+              [
+                "pub",
+                "qa-pub"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Entregable y tolerancia primero; equipo después",
+            "Entorno y escala condicionan la técnica",
+            "Mezcla técnicas y siempre incluye control",
+            "Define sistema y altura antes de ir a terreno",
+            "Exige informe de calidad"
+          ]
+        }
       ]
     },
     {
@@ -1812,6 +5367,66 @@
           ],
           "answer": 2,
           "explanation": "Corrige la perspectiva y el relieve; por eso se puede medir distancias y áreas sobre él."
+        },
+        {
+          "key": "n9-q6",
+          "question": "Una cámara tiene píxel de 2,4 µm y focal de 8,8 mm. Vuelas a 100 m. ¿Cuál es el GSD aproximado?",
+          "options": [
+            "0,27 cm",
+            "27 cm",
+            "2,7 m",
+            "2,7 cm"
+          ],
+          "answer": 3,
+          "explanation": "GSD = 0,0000024 × 100 / 0,0088 ≈ 0,027 m, o sea 2,7 cm."
+        },
+        {
+          "key": "n9-q7",
+          "question": "En el informe aparece un RMSE vertical de 12 cm en puntos de chequeo, pero el cliente exige 5 cm. ¿Qué haces primero?",
+          "options": [
+            "Reportar solo el RMSE horizontal",
+            "Revisar distribución y calidad de GCP, traslape y calibración, y reprocesar",
+            "Quitar los puntos de chequeo",
+            "Cambiar la tolerancia"
+          ],
+          "answer": 1,
+          "explanation": "Un error mayor que la tolerancia se diagnostica: distribución del control, calibración y procesamiento."
+        },
+        {
+          "key": "n9-q8",
+          "question": "Al terminar la aerotriangulación, el programa entrega para cada foto seis valores. ¿Cuáles son?",
+          "options": [
+            "Brillo, contraste, saturación, nitidez, ruido y zoom",
+            "Posición X, Y, Z y tres giros (yaw, pitch y roll)",
+            "Cota, pendiente, curva, área, volumen y escala",
+            "Huso, datum, época, geoide, marco y unidades"
+          ],
+          "answer": 1,
+          "explanation": "Esa es la pose: tres parámetros de posición y tres de orientación de la cámara en cada foto."
+        },
+        {
+          "key": "n9-q9",
+          "question": "Debes mapear un corredor lineal de 25 km con pocas líneas de vuelo. ¿Qué configuración reduce la sensibilidad a la geometría del bloque?",
+          "options": [
+            "Referenciación solo por escala",
+            "Sin traslape lateral",
+            "Solo cámara térmica",
+            "Posicionamiento directo con GNSS e inercial, dejando puntos de chequeo"
+          ],
+          "answer": 3,
+          "explanation": "Con GNSS e inercial la pose viene medida y el ajuste depende menos de la geometría; igual se verifican puntos."
+        },
+        {
+          "key": "n9-q10",
+          "question": "Un vuelo sin GCP tiene GSD de 2,7 cm y el cliente exige 2 cm de error absoluto. ¿Qué conviene?",
+          "options": [
+            "Esperar unos 5 cm sin control y agregar GCP bien distribuidos o posicionamiento directo con control de chequeo",
+            "Aceptar: sin GCP el error es menor que el GSD",
+            "Subir el vuelo al doble",
+            "Bajar el traslape para reducir el ruido"
+          ],
+          "answer": 0,
+          "explanation": "Sin control el error típico ronda 2 veces el GSD; para 2 cm se necesita control o posicionamiento directo y chequeo."
         }
       ],
       "mastery_signals": [
@@ -1823,6 +5438,458 @@
         "core/img/topo/gsd-traslape.svg",
         "core/img/topo/puntos-control.svg",
         "core/img/topo/aerotriangulacion.svg"
+      ],
+      "slides": [
+        {
+          "title": "Fotogrametría: medir con fotos",
+          "body": "Si un detalle aparece en varias fotos tomadas desde puntos distintos, se calcula su posición en 3D. Es una medición **indirecta**: se mide sobre las imágenes, no sobre el objeto.",
+          "points": [
+            "Necesita luz suficiente, textura y visibilidad",
+            "Entrega nube densa, MDS/MDT y ortomosaico",
+            "Es muy económica para superficies abiertas",
+            "La calidad depende de la planificación, el control y el procesamiento"
+          ],
+          "image": "core/img/topo/flujo-fotogrametria.svg",
+          "caption": "Flujo de un proyecto fotogramétrico"
+        },
+        {
+          "title": "Qué mide la fotogrametría: la pose de la cámara",
+          "body": "Lo que realmente se calcula, antes que el terreno, es dónde estaba cada cámara y hacia dónde miraba. A eso se le llama **pose**: tres parámetros de posición (X, Y, Z) y tres de orientación (yaw, pitch y roll).",
+          "points": [
+            "*Parámetros internos* (modelo de la cámara): distancia focal, punto principal y distorsión del lente",
+            "*Parámetros externos*: la pose de cada foto",
+            "Un punto del terreno visto en dos o más fotos queda determinado por la intersección de sus rayos",
+            "Es una técnica sin contacto, que llega a lugares inaccesibles pero visibles, es fácil de aplicar a gran escala y se puede automatizar",
+            "Sus límites: necesita luz (sensor pasivo), sufre por oclusiones, otras técnicas pueden ser más precisas y el ajuste en bloque es muy sensible a la geometría"
+          ],
+          "image": "priv:pose-camara-parametros-internos-externos.jpg",
+          "caption": "Un punto 3D visto en dos fotos: parámetros internos y pose de cada cámara",
+          "callout": {
+            "kind": "dato",
+            "text": "Calibrar la cámara en un campo con puntos de control y puntos de chequeo permite reutilizar los parámetros internos ajustados en proyectos futuros."
+          }
+        },
+        {
+          "title": "Flujo completo de un proyecto",
+          "body": "Cada etapa tiene decisiones propias. Saltarse la planificación o el control se paga en el procesamiento.",
+          "terms": [
+            "*GSD*",
+            "*GCP*",
+            "*Ortomosaico*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "plan",
+                "label": "Planificación",
+                "sub": "GSD, traslape, altura",
+                "kind": "proceso",
+                "x": 16,
+                "y": 22
+              },
+              {
+                "id": "gcp",
+                "label": "Control en terreno",
+                "sub": "GCP y chequeo",
+                "kind": "equipo",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "vuelo",
+                "label": "Vuelo",
+                "sub": "cámara y GNSS",
+                "kind": "equipo",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "proc",
+                "label": "Procesamiento",
+                "sub": "aerotriangulación",
+                "kind": "proceso",
+                "x": 84,
+                "y": 68
+              },
+              {
+                "id": "prod",
+                "label": "Nube, MDS, orto",
+                "sub": "productos",
+                "kind": "producto",
+                "x": 50,
+                "y": 68
+              },
+              {
+                "id": "val",
+                "label": "Validación",
+                "sub": "RMSE",
+                "kind": "persona",
+                "x": 16,
+                "y": 68
+              }
+            ],
+            "edges": [
+              {
+                "from": "plan",
+                "to": "gcp",
+                "label": "define",
+                "flow": true
+              },
+              {
+                "from": "gcp",
+                "to": "vuelo",
+                "label": "amarra",
+                "flow": true
+              },
+              {
+                "from": "vuelo",
+                "to": "proc",
+                "label": "fotos",
+                "flow": true
+              },
+              {
+                "from": "proc",
+                "to": "prod",
+                "label": "genera",
+                "flow": true
+              },
+              {
+                "from": "prod",
+                "to": "val",
+                "label": "chequea",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "plan"
+              ],
+              [
+                "gcp",
+                "plan-gcp"
+              ],
+              [
+                "vuelo",
+                "gcp-vuelo"
+              ],
+              [
+                "proc",
+                "vuelo-proc"
+              ],
+              [
+                "prod",
+                "proc-prod"
+              ],
+              [
+                "val",
+                "prod-val"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "GSD: el tamaño del píxel en el suelo",
+          "body": "El **GSD** (ground sampling distance) es cuánto terreno cubre un píxel. Se calcula con el tamaño del píxel del sensor, la altura de vuelo y la distancia focal.",
+          "points": [
+            "GSD = tamaño de píxel × altura de vuelo / distancia focal",
+            "Ejemplo: píxel de 2,4 µm, focal de 8,8 mm y 100 m de altura dan un GSD de unos 2,7 cm",
+            "El error sin control suele ser de 1 a 3 veces el GSD; con control bien hecho baja a 1 o 2",
+            "Mayor altura: más área por foto, pero cada píxel abarca más suelo"
+          ],
+          "image": "core/img/topo/gsd-traslape.svg",
+          "caption": "GSD y traslape",
+          "callout": {
+            "kind": "dato",
+            "text": "Sin GCP el error típico es del orden de 2 veces el GSD: con 2,7 cm de GSD hay que esperar unos 5 cm. Con una cámara de 5 472 píxeles de ancho, la foto cubre cerca de 150 m."
+          }
+        },
+        {
+          "title": "Traslape y diseño del vuelo",
+          "body": "El traslape garantiza puntos comunes entre fotos.",
+          "points": [
+            "Frontal (en la línea): 75 a 80 %",
+            "Lateral (entre líneas): 60 a 70 %",
+            "Más traslape en vegetación o superficies lisas",
+            "Con 150 m de ancho de foto y 70 % lateral, las líneas van a unos 45 m",
+            "La velocidad y el tiempo de obturación deben evitar desenfoque: unos 0,5 píxeles de movimiento como máximo"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Traslape bajo: menos puntos de paso, menos fotos y líneas, vuelo y proceso más cortos, pero menos precisión. Traslape alto: más puntos de paso y más precisión, a cambio de más tiempo de vuelo y de procesamiento."
+          },
+          "image": "priv:gsd-altura-vuelo-traslape-esquema.jpg",
+          "caption": "A mayor altura, más terreno por foto y GSD más grueso"
+        },
+        {
+          "title": "Puntos de control y de chequeo",
+          "body": "Los **GCP** son marcadores con coordenadas medidas con GNSS que anclan el modelo. Los **puntos de chequeo** no participan en el ajuste y miden el error real.",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Reparte los GCP rodeando el área e incluye las zonas más alta y más baja; pon más en bosque y en cambios de cota. Un buen marcador tiene contraste de color y mide de 15 a 20 píxeles en la foto: ni muy pequeño ni muy grande."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "gnss",
+                "label": "Medición GNSS",
+                "sub": "coordenadas de GCP",
+                "kind": "equipo",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "marc",
+                "label": "Marcadores",
+                "sub": "visibles en las fotos",
+                "kind": "dato",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "ajuste",
+                "label": "Ajuste",
+                "sub": "con los GCP",
+                "kind": "proceso",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "chec",
+                "label": "Puntos de chequeo",
+                "sub": "no se usan en el ajuste",
+                "kind": "dato",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "err",
+                "label": "Error real",
+                "sub": "RMSE",
+                "kind": "producto",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "ok",
+                "label": "Aprobar o rehacer",
+                "sub": "contra tolerancia",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "gnss",
+                "to": "marc",
+                "label": "XYZ",
+                "flow": true
+              },
+              {
+                "from": "marc",
+                "to": "ajuste",
+                "label": "ancla",
+                "flow": true
+              },
+              {
+                "from": "ajuste",
+                "to": "chec",
+                "label": "modelo",
+                "flow": true
+              },
+              {
+                "from": "chec",
+                "to": "err",
+                "label": "mide",
+                "flow": true
+              },
+              {
+                "from": "err",
+                "to": "ok",
+                "label": "decide",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "gnss"
+              ],
+              [
+                "marc",
+                "gnss-marc"
+              ],
+              [
+                "ajuste",
+                "marc-ajuste"
+              ],
+              [
+                "chec",
+                "ajuste-chec"
+              ],
+              [
+                "err",
+                "chec-err"
+              ],
+              [
+                "ok",
+                "err-ok"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Referenciación: cómo se conoce la pose de cada foto",
+          "body": "Según cómo se determine la pose, el trabajo se clasifica en cuatro niveles. Cuanto más directa, menos control en terreno, pero nunca cero verificación.",
+          "points": [
+            "*Solo escala*: el modelo se mide bien en forma relativa, sin ubicación absoluta",
+            "*Indirecta* (con GCP): la pose se calcula en la aerotriangulación y luego se transforma al sistema topográfico con los puntos de control; es sensible a la geometría del bloque",
+            "*Directa con GNSS*: la posición de cada foto viene del GNSS (RTK o PPK) y la orientación sale del ajuste; no exige GCP",
+            "*Directa con GNSS e inercial*: posición y orientación vienen de sensores; el bloque es menos sensible a la geometría y sirve para corredores con pocas líneas de vuelo",
+            "Aun con posicionamiento directo se dejan puntos de chequeo"
+          ],
+          "image": "priv:ppk-esquema-base-dron-fotos.jpg",
+          "caption": "Esquema PPK: el dron registra fotos y la base GNSS registra para el postproceso",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Con referenciación indirecta el mínimo absoluto son cinco GCP por vuelo y el área de interés debe quedar rodeada de ellos."
+          }
+        },
+        {
+          "title": "Errores típicos en fotogrametría",
+          "points": [
+            "Poner todos los GCP en un borde o a la misma cota: el modelo se pandea",
+            "Usar todos los puntos para ajustar y ninguno para chequear",
+            "Volar con sombras largas, luz cambiante, sobre agua o vidrio",
+            "Creer que RTK o PPK eliminan toda verificación en terreno",
+            "Volar muy rápido: imágenes movidas",
+            "No documentar la calibración de la cámara"
+          ],
+          "image": "priv:gcp-vs-sin-gcp.jpg",
+          "caption": "Con control en terreno el modelo queda anclado; sin control puede deformarse"
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En un equipo, el vuelo no es un fin: alimenta los productos que usan diseño y obra. Se programa en ciclos para ver avance.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "ciclo",
+                "label": "Vuelo mensual",
+                "sub": "mismo plan",
+                "kind": "proceso",
+                "x": 16,
+                "y": 50
+              },
+              {
+                "id": "orto",
+                "label": "Ortofoto",
+                "sub": "avance visible",
+                "kind": "producto",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "mds",
+                "label": "MDS / MDT",
+                "sub": "volúmenes",
+                "kind": "producto",
+                "x": 50,
+                "y": 78
+              },
+              {
+                "id": "comp",
+                "label": "Comparación",
+                "sub": "contra diseño",
+                "kind": "proceso",
+                "x": 84,
+                "y": 78
+              },
+              {
+                "id": "rep",
+                "label": "Informe",
+                "sub": "para gerencia de obra",
+                "kind": "persona",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "dec",
+                "label": "Decisión",
+                "sub": "ajustar plan",
+                "kind": "persona",
+                "x": 84,
+                "y": 22
+              }
+            ],
+            "edges": [
+              {
+                "from": "ciclo",
+                "to": "orto",
+                "label": "genera",
+                "flow": true
+              },
+              {
+                "from": "ciclo",
+                "to": "mds",
+                "label": "genera",
+                "flow": true
+              },
+              {
+                "from": "mds",
+                "to": "comp",
+                "label": "compara",
+                "flow": true
+              },
+              {
+                "from": "comp",
+                "to": "rep",
+                "label": "informa",
+                "flow": true
+              },
+              {
+                "from": "rep",
+                "to": "dec",
+                "label": "decide",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "ciclo"
+              ],
+              [
+                "orto",
+                "ciclo-orto"
+              ],
+              [
+                "mds",
+                "ciclo-mds"
+              ],
+              [
+                "comp",
+                "mds-comp"
+              ],
+              [
+                "rep",
+                "comp-rep"
+              ],
+              [
+                "dec",
+                "rep-dec"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Fotogrametría = fotos solapadas, medición indirecta",
+            "GSD = píxel × altura / focal",
+            "Traslape 75–80 % frontal y 60–70 % lateral",
+            "GCP anclan; chequeo mide el error real",
+            "Planifica, controla y valida"
+          ]
+        }
       ]
     },
     {
@@ -2004,6 +6071,66 @@
           ],
           "answer": 1,
           "explanation": "El tamaño de celda marca el detalle que se puede representar."
+        },
+        {
+          "key": "n10-q6",
+          "question": "Una quebrada angosta desaparece del modelo al pasar a ráster de 10 m. ¿Qué conviene?",
+          "options": [
+            "Una celda menor o conservar el TIN con líneas de quiebre",
+            "Usar celdas de 100 m",
+            "Quitar la quebrada",
+            "Ignorar el problema"
+          ],
+          "answer": 0,
+          "explanation": "Una celda grande suaviza detalles; para formas finas se usa celda menor o TIN con breaklines."
+        },
+        {
+          "key": "n10-q7",
+          "question": "Calculas el corte de una plataforma como la diferencia entre el terreno existente (MDT) y el diseño, pero el resultado es la mitad de lo esperado. El diseño estaba en altura elipsoidal y el MDT en ortométrica. ¿Qué haces?",
+          "options": [
+            "Duplicas el resultado",
+            "Cambias el color del mapa",
+            "Aumentas el tamaño de celda",
+            "Unificas la referencia vertical y recalculas"
+          ],
+          "answer": 3,
+          "explanation": "Hay que llevar ambas superficies a la misma referencia de altura antes de restar."
+        },
+        {
+          "key": "n10-q8",
+          "question": "En un TIN de un predio con un estanque aparecen triángulos largos que cruzan el agua, donde el láser no devolvió puntos. ¿Qué haces?",
+          "options": [
+            "Los dejas: la superficie del agua es correcta",
+            "Subes la equidistancia",
+            "Limitas la longitud máxima de arista o defines un contorno para excluir el hueco",
+            "Cambias el huso"
+          ],
+          "answer": 2,
+          "explanation": "El TIN interpola donde no hay medición; hay que excluir o marcar esas zonas."
+        },
+        {
+          "key": "n10-q9",
+          "question": "Un levantamiento tiene un error horizontal de 5 cm. ¿Qué escala de plano soporta, con la regla de 0,25 mm por denominador?",
+          "options": [
+            "1:50",
+            "1:2000",
+            "1:10000",
+            "1:200"
+          ],
+          "answer": 3,
+          "explanation": "5 cm ÷ 0,25 mm = 200, es decir 1:200."
+        },
+        {
+          "key": "n10-q10",
+          "question": "Proponen usar un modelo satelital gratuito de unos 30 m de malla para diseñar el drenaje fino de una plataforma. ¿Qué dices?",
+          "options": [
+            "No: su error vertical es de metros; sirve para prefactibilidad y debe densificarse para el detalle",
+            "Perfecto, tiene centímetros",
+            "Sí, si se cambia de datum",
+            "Solo con curvas cada 10 cm"
+          ],
+          "answer": 0,
+          "explanation": "Un modelo global de esa malla tiene error vertical del orden de varios metros; el detalle exige fotogrametría o láser con control."
         }
       ],
       "mastery_signals": [
@@ -2015,6 +6142,351 @@
         "core/img/topo/mdt-mds.svg",
         "core/img/topo/tin-raster.svg",
         "core/img/topo/volumenes.svg"
+      ],
+      "slides": [
+        {
+          "title": "MDE, MDT y MDS: qué representa cada uno",
+          "body": "**MDE** es el nombre general de un modelo de elevación. El **MDS** incluye lo que está sobre el suelo y el **MDT** es el suelo desnudo.",
+          "points": [
+            "MDT para movimientos de tierra, drenaje y trazados",
+            "MDS para visibilidad, inspección y análisis de dosel",
+            "La diferencia MDS − MDT da la altura de objetos (árboles, edificios)",
+            "Un modelo global gratuito de unos 30 m de malla sirve en prefactibilidad; con control, el detalle alcanza centímetros"
+          ],
+          "image": "core/img/topo/mdt-mds.svg",
+          "caption": "MDT y MDS"
+        },
+        {
+          "title": "De la nube al modelo",
+          "body": "El modelo no aparece solo: se prepara la nube y se interpola.",
+          "terms": [
+            "*TIN*",
+            "*Breakline*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "nube",
+                "label": "Nube de puntos",
+                "sub": "dato bruto",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "clas",
+                "label": "Clasificación",
+                "sub": "extrae el suelo",
+                "kind": "proceso",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "interp",
+                "label": "Interpolación",
+                "sub": "TIN o ráster",
+                "kind": "proceso",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "quiebre",
+                "label": "Líneas de quiebre",
+                "sub": "canales y bordes",
+                "kind": "dato",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "mdt",
+                "label": "MDT",
+                "sub": "validado",
+                "kind": "producto",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "uso",
+                "label": "Curvas, perfiles, volúmenes",
+                "sub": "usos",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "nube",
+                "to": "clas",
+                "label": "filtra",
+                "flow": true
+              },
+              {
+                "from": "clas",
+                "to": "interp",
+                "label": "suelo",
+                "flow": true
+              },
+              {
+                "from": "interp",
+                "to": "quiebre",
+                "label": "respeta",
+                "flow": true
+              },
+              {
+                "from": "quiebre",
+                "to": "mdt",
+                "label": "genera",
+                "flow": true
+              },
+              {
+                "from": "mdt",
+                "to": "uso",
+                "label": "deriva",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "nube"
+              ],
+              [
+                "clas",
+                "nube-clas"
+              ],
+              [
+                "interp",
+                "clas-interp"
+              ],
+              [
+                "quiebre",
+                "interp-quiebre"
+              ],
+              [
+                "mdt",
+                "quiebre-mdt"
+              ],
+              [
+                "uso",
+                "mdt-uso"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "TIN frente a ráster",
+          "body": "Son dos maneras de guardar un modelo: una adapta el modelo al relieve y la otra a una grilla.",
+          "points": [
+            "*TIN*: triángulos entre puntos medidos (Delaunay); conserva puntos reales y respeta quiebres",
+            "*Ráster*: celdas con una cota; liviano, bueno para pendientes y cuencas",
+            "El tamaño de celda marca el detalle: 1 m muestra terraplenes que 10 m suaviza",
+            "Un TIN muy grande se simplifica sin perder las líneas de quiebre"
+          ],
+          "image": "core/img/topo/tin-raster.svg",
+          "caption": "TIN frente a ráster"
+        },
+        {
+          "title": "Delaunay y la calidad del TIN",
+          "body": "Un TIN usa una **triangulación de Delaunay**: ninguna circunferencia que pasa por los tres vértices de un triángulo contiene otro punto. Eso evita triángulos muy alargados donde se puede.",
+          "points": [
+            "Permite *interpolación lineal*: la cota de un punto dentro de un triángulo se calcula con los tres vértices",
+            "No es una interpolación geoestadística: no estima ni suaviza, solo une los puntos medidos",
+            "Conviene conservar el TIN y no solo las curvas de nivel",
+            "Problemas de generación: tiempo de triangulación, tiempo de carga, rendimiento visual, estilos 3D y calidad de la fuente de entrada",
+            "Triángulos largos en el borde o sobre huecos: limita la longitud máxima de arista o define un contorno del modelo"
+          ],
+          "image": "priv:delaunay-circunferencias-tin.jpg",
+          "caption": "Triangulación de Delaunay: las circunferencias circunscritas no contienen otros vértices",
+          "callout": {
+            "kind": "ojo",
+            "text": "Un TIN rellena todo lo que está dentro del contorno, incluso donde no hay medición (agua, sombras, huecos). Esas zonas se marcan o se excluyen."
+          }
+        },
+        {
+          "title": "Fuente, resolución y escala: qué modelo usar en cada etapa",
+          "body": "Cada fuente de elevación sirve a una etapa del proyecto. La escala útil sale del error que se acepta.",
+          "points": [
+            "*Regla de escala*: el error horizontal máximo es cercano a 0,25 mm por el denominador de la escala. Con 5 cm de error, la escala es 1:200",
+            "*Resolución detectable*: un detalle necesita dos o más píxeles para verse",
+            "*Modelo satelital global gratuito*, de unos 30 m de malla: error vertical del orden de 5 m; sirve en perfil y prefactibilidad",
+            "*Modelo satelital de unos 5 m de malla*: error cercano a 2,5 m; mejora la base a densificar",
+            "*Fotogrametría con dron*, GSD de 10 a 15 cm: 413 ha y escala 1:500, adecuada para ingeniería y volúmenes",
+            "*Escáner láser*, 5 cm a 100 m: pocas hectáreas y escala 1:200"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Una buena práctica: el dato se captura, se clasifica, se procesa y se distribuye en formatos que el resto del equipo pueda abrir; y los entregables 2D se ligan al modelo 3D, no al revés."
+          }
+        },
+        {
+          "title": "Volúmenes de corte y relleno",
+          "body": "Hay dos métodos habituales: por secciones y por diferencia de superficies.",
+          "points": [
+            "Por secciones: V ≈ (A₁ + A₂) / 2 × distancia",
+            "Ejemplo: áreas de 100 y 60 m² separadas 25 m dan 2 000 m³",
+            "Por superficies: existente menos diseño; lo que sobra es corte, lo que falta es relleno",
+            "Con las mismas referencias de altura en ambas superficies"
+          ],
+          "image": "core/img/topo/volumenes.svg",
+          "caption": "Volúmenes por superficies",
+          "callout": {
+            "kind": "ojo",
+            "text": "Si el modelo existente está en altura elipsoidal y el diseño en ortométrica, el volumen sale falso."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: perfil y movimiento de tierra de un camino",
+          "body": "Un anteproyecto de camino pasa por varias etapas con distinto nivel de modelo.",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "No uses el dato fino cuando basta el grueso, ni el grueso cuando se necesita el fino: cada etapa pide una precisión."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "gl",
+                "label": "Modelo global",
+                "sub": "prefactibilidad",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "dr",
+                "label": "Dron o LiDAR",
+                "sub": "factibilidad",
+                "kind": "equipo",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "det",
+                "label": "Levantamiento de detalle",
+                "sub": "ingeniería",
+                "kind": "equipo",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "perfil",
+                "label": "Perfil longitudinal",
+                "sub": "terreno vs rasante",
+                "kind": "producto",
+                "x": 84,
+                "y": 70
+              },
+              {
+                "id": "vol",
+                "label": "Corte y relleno",
+                "sub": "por secciones",
+                "kind": "producto",
+                "x": 50,
+                "y": 70
+              },
+              {
+                "id": "dec",
+                "label": "Decisión de trazado",
+                "sub": "compensar movimiento",
+                "kind": "persona",
+                "x": 16,
+                "y": 70
+              }
+            ],
+            "edges": [
+              {
+                "from": "gl",
+                "to": "dr",
+                "label": "densifica",
+                "flow": true
+              },
+              {
+                "from": "dr",
+                "to": "det",
+                "label": "refina",
+                "flow": true
+              },
+              {
+                "from": "det",
+                "to": "perfil",
+                "label": "extrae",
+                "flow": true
+              },
+              {
+                "from": "perfil",
+                "to": "vol",
+                "label": "calcula",
+                "flow": true
+              },
+              {
+                "from": "vol",
+                "to": "dec",
+                "label": "apoya",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "gl"
+              ],
+              [
+                "dr",
+                "gl-dr"
+              ],
+              [
+                "det",
+                "dr-det"
+              ],
+              [
+                "perfil",
+                "det-perfil"
+              ],
+              [
+                "vol",
+                "perfil-vol"
+              ],
+              [
+                "dec",
+                "vol-dec"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Perfil longitudinal",
+          "body": "El perfil muestra el terreno y la rasante propuesta a lo largo de un eje. Sirve para ver corte, relleno y curvas verticales.",
+          "points": [
+            "Se genera cortando el modelo a lo largo del eje",
+            "Las diferencias entre terreno y rasante son corte o relleno",
+            "Si el modelo no respeta quebradas, el perfil esconde obstáculos",
+            "Se acompaña de secciones transversales"
+          ],
+          "image": "priv:perfil-longitudinal-via.jpg",
+          "caption": "Perfil longitudinal con rasante, corte y relleno"
+        },
+        {
+          "title": "Errores típicos y uso en el equipo",
+          "points": [
+            "Calcular movimientos de tierra con el MDS",
+            "Interpolar sobre huecos sin avisar que ahí no hay medición",
+            "Mezclar alturas elipsoidales y ortométricas entre modelo y diseño",
+            "Pedir el modelo más fino «por si acaso»",
+            "En el equipo: el MDT de referencia se versiona y todos diseñan sobre la misma versión"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Cada vez que el modelo cambia, vuelve a calcular volúmenes: un cálculo viejo con un modelo nuevo no sirve."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "MDT: suelo; MDS: superficie; MDE: nombre general",
+            "TIN conserva puntos; ráster es una grilla",
+            "Líneas de quiebre protegen canales y quebradas",
+            "Volumen = existente − diseño o por áreas medias",
+            "Una referencia de altura, una versión de modelo"
+          ]
+        }
       ]
     },
     {
@@ -2184,6 +6656,30 @@
           ],
           "answer": 1,
           "explanation": "El control se lleva desde afuera con instrumentos que no dependen del GNSS."
+        },
+        {
+          "key": "n11-q6",
+          "question": "Entregan una nube de 4 000 millones de puntos sin informe y tu computador no la abre. ¿Qué pides?",
+          "options": [
+            "Reducirla sin criterio",
+            "Versión recortada y submuestreada para el uso, con informe de error y sistema",
+            "Más RAM",
+            "Que la impriman"
+          ],
+          "answer": 1,
+          "explanation": "Una entrega útil incluye recortes, submuestreo para el uso y un informe de calidad."
+        },
+        {
+          "key": "n11-q7",
+          "question": "Escaneas un pasillo con tres estaciones y el informe de registro muestra 3 cm de error medio, pero el cliente exige 1 cm. ¿Qué ayuda más?",
+          "options": [
+            "Subir la tolerancia",
+            "Cambiar el color de la nube",
+            "Agregar objetos de referencia y estaciones intermedias y re-registrar",
+            "Mallar primero"
+          ],
+          "answer": 2,
+          "explanation": "Más geometría y traslape reducen el error de registro."
         }
       ],
       "mastery_signals": [
@@ -2194,6 +6690,324 @@
       "images": [
         "core/img/topo/registro-nubes.svg",
         "core/img/topo/tls-slam-dron.svg"
+      ],
+      "slides": [
+        {
+          "title": "Escaneo 3D: del escáner a un modelo útil",
+          "body": "Un escaneo no termina cuando el escáner se apaga: la nube bruta debe unirse, ubicarse, limpiarse y transformarse.",
+          "points": [
+            "Planificar estaciones y recorrido",
+            "Medir con traslape suficiente",
+            "Registrar las nubes en un solo sistema",
+            "Georreferenciar si hace falta",
+            "Filtrar, clasificar y generar superficies o modelos",
+            "Tipos de escáner: terrestre (estaciones), móvil (se recorre) y aéreo; elige también el alcance y la precisión que pide el uso"
+          ],
+          "image": "core/img/topo/registro-nubes.svg",
+          "caption": "Registro de nubes"
+        },
+        {
+          "title": "Flujo de trabajo",
+          "body": "Cada paso depende del anterior. Los errores se arrastran.",
+          "terms": [
+            "*Registro*",
+            "*ICP*",
+            "*Target*"
+          ],
+          "diagram": {
+            "nodes": [
+              {
+                "id": "plan",
+                "label": "Planificar",
+                "sub": "estaciones y traslape",
+                "kind": "proceso",
+                "x": 16,
+                "y": 22
+              },
+              {
+                "id": "medir",
+                "label": "Escanear",
+                "sub": "con targets",
+                "kind": "equipo",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "reg",
+                "label": "Registro",
+                "sub": "unir nubes",
+                "kind": "proceso",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "geo",
+                "label": "Georreferenciar",
+                "sub": "con puntos de control",
+                "kind": "proceso",
+                "x": 84,
+                "y": 68
+              },
+              {
+                "id": "filt",
+                "label": "Filtrar y clasificar",
+                "sub": "limpiar ruido",
+                "kind": "proceso",
+                "x": 50,
+                "y": 68
+              },
+              {
+                "id": "mod",
+                "label": "Modelo o malla",
+                "sub": "y mapa de desviaciones",
+                "kind": "producto",
+                "x": 16,
+                "y": 68
+              }
+            ],
+            "edges": [
+              {
+                "from": "plan",
+                "to": "medir",
+                "label": "define",
+                "flow": true
+              },
+              {
+                "from": "medir",
+                "to": "reg",
+                "label": "nubes",
+                "flow": true
+              },
+              {
+                "from": "reg",
+                "to": "geo",
+                "label": "nube",
+                "flow": true
+              },
+              {
+                "from": "geo",
+                "to": "filt",
+                "label": "XYZ",
+                "flow": true
+              },
+              {
+                "from": "filt",
+                "to": "mod",
+                "label": "genera",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "plan"
+              ],
+              [
+                "medir",
+                "plan-medir"
+              ],
+              [
+                "reg",
+                "medir-reg"
+              ],
+              [
+                "geo",
+                "reg-geo"
+              ],
+              [
+                "filt",
+                "geo-filt"
+              ],
+              [
+                "mod",
+                "filt-mod"
+              ]
+            ]
+          },
+          "callout": {
+            "kind": "dato",
+            "text": "Una estación terrestre toma de pocos minutos a decenas de minutos según la resolución y si captura color; planifica el tiempo en terreno con esa cifra."
+          }
+        },
+        {
+          "title": "Registro: unir nubes",
+          "body": "Se puede registrar con objetos comunes (esferas o tablas) o con ajuste automático por superficies (tipo ICP).",
+          "points": [
+            "Con targets: tres o más objetos bien repartidos y visibles desde las estaciones",
+            "Con ICP: exige traslape y geometría variada; en un pasillo liso y largo la nube «resbala»",
+            "El informe de registro entrega el error medio entre nubes",
+            "Un buen recorrido en interiores cierra el circuito (cierre de lazo)"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Dos planos casi paralelos no restringen el movimiento a lo largo: agrega objetos o cambia el recorrido."
+          }
+        },
+        {
+          "title": "Georreferenciación",
+          "body": "Para pasar de un sistema local al del proyecto se miden puntos de control con topografía y se ajusta la nube.",
+          "points": [
+            "Mide los puntos con GNSS (exterior) o estación total (interior)",
+            "Para llevarlos al interior sin GNSS: poligonal o targets visibles",
+            "Verifica con puntos de chequeo",
+            "Usa puntos fijos y del mismo tipo de altura"
+          ],
+          "image": "priv:dosel-nube-puntos-fotogrametria-lidar.jpg",
+          "caption": "Corte de nube: fotogrametría ve la copa; LiDAR llega al suelo",
+          "callout": {
+            "kind": "dato",
+            "text": "Una nube bonita no es una nube precisa: pide error de registro, cobertura y densidad."
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: túnel y estanque",
+          "body": "El escaneo se usa para medir desviaciones respecto del diseño.",
+          "points": [
+            "Túnel de 2 km: escáner móvil o terrestre; se compara la nube contra el diseño para ver sobre y subexcavación",
+            "Estanque: se compara contra la forma ideal; un mapa de desviaciones muestra deformaciones",
+            "Planta industrial: se modelan tuberías y estructuras para revisar interferencias"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Define de antemano el nivel de detalle: determina el tiempo en terreno y el tamaño de los datos."
+          }
+        },
+        {
+          "title": "Errores típicos en escaneo",
+          "points": [
+            "Registrar con pocas esferas mal repartidas",
+            "Georreferenciar con puntos movidos o de otro tipo de altura",
+            "Entregar cientos de millones de puntos sin recortes y sin informe",
+            "Dejar «fantasmas» de personas o vehículos en la nube",
+            "Escanear sin pensar en el uso final"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Filtra objetos móviles y ruido antes de generar mallas: se arrastran a todo el resto."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "La nube registrada es la verdad de terreno contra la que se compara el diseño.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "nube",
+                "label": "Nube registrada",
+                "sub": "en coordenadas del proyecto",
+                "kind": "dato",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "dis",
+                "label": "Modelo de diseño",
+                "sub": "BIM o CAD",
+                "kind": "dato",
+                "x": 16,
+                "y": 75
+              },
+              {
+                "id": "comp",
+                "label": "Comparación",
+                "sub": "mapa de desviaciones",
+                "kind": "proceso",
+                "x": 50,
+                "y": 50
+              },
+              {
+                "id": "inc",
+                "label": "Hallazgos",
+                "sub": "interferencias",
+                "kind": "producto",
+                "x": 84,
+                "y": 50
+              },
+              {
+                "id": "rev",
+                "label": "Revisión",
+                "sub": "con el equipo",
+                "kind": "persona",
+                "x": 84,
+                "y": 82
+              },
+              {
+                "id": "ajuste",
+                "label": "Ajuste de diseño",
+                "sub": "antes de fabricar",
+                "kind": "persona",
+                "x": 50,
+                "y": 82
+              }
+            ],
+            "edges": [
+              {
+                "from": "nube",
+                "to": "comp",
+                "label": "entra",
+                "flow": true
+              },
+              {
+                "from": "dis",
+                "to": "comp",
+                "label": "entra",
+                "flow": true
+              },
+              {
+                "from": "comp",
+                "to": "inc",
+                "label": "detecta",
+                "flow": true
+              },
+              {
+                "from": "inc",
+                "to": "rev",
+                "label": "reporta",
+                "flow": true
+              },
+              {
+                "from": "rev",
+                "to": "ajuste",
+                "label": "decide",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "nube"
+              ],
+              [
+                "dis"
+              ],
+              [
+                "comp",
+                "nube-comp",
+                "dis-comp"
+              ],
+              [
+                "inc",
+                "comp-inc"
+              ],
+              [
+                "rev",
+                "inc-rev"
+              ],
+              [
+                "ajuste",
+                "rev-ajuste"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Flujo: planificar, escanear, registrar, georreferenciar, limpiar, modelar",
+            "Registro necesita traslape y geometría variada",
+            "Sin georreferenciación la nube queda en sistema local",
+            "Pide error de registro, cobertura y densidad",
+            "El mapa de desviaciones compara contra el diseño"
+          ]
+        }
       ]
     },
     {
@@ -2349,6 +7163,54 @@
           ],
           "answer": 1,
           "explanation": "Los sensores de visión tienen límites; la planificación y el observador siguen siendo necesarios."
+        },
+        {
+          "key": "n12-q6",
+          "question": "Despegas con 100 % de batería y a los 10 minutos el viento sube. El dron está a 800 m y marca 38 %. ¿Qué haces?",
+          "options": [
+            "Sigues tomando fotos hasta 20 %",
+            "Subes más",
+            "Inicias el retorno ahora para aterrizar con reserva",
+            "Apagas la telemetría"
+          ],
+          "answer": 2,
+          "explanation": "Con viento en contra el regreso consume más: se regresa con holgura sobre el 30 %."
+        },
+        {
+          "key": "n12-q7",
+          "question": "Tu equipo planifica volar un corredor con relieve fuerte y una zona de sombra de enlace. ¿Qué medida es más adecuada?",
+          "options": [
+            "Revisar el perfil de elevación, dividir en tramos o reposicionar el control y definir la acción ante pérdida de enlace",
+            "Volar igual y esperar",
+            "Subir el volumen de la alarma",
+            "Quitar al observador"
+          ],
+          "answer": 0,
+          "explanation": "El relieve puede bloquear el enlace: se planifica la ruta y se define el comportamiento ante pérdida."
+        },
+        {
+          "key": "n12-q8",
+          "question": "Antes de despegar, la aplicación muestra una advertencia de calibración de la brújula y del sistema inercial. ¿Qué haces?",
+          "options": [
+            "Despegas y calibras en el aire",
+            "Cierras el aviso",
+            "Cambias la tarjeta de memoria",
+            "Realizas la calibración pedida y verificas que la advertencia desaparezca antes de volar"
+          ],
+          "answer": 3,
+          "explanation": "Las advertencias previas se resuelven en tierra: un vuelo con sensores sin calibrar puede perder el control."
+        },
+        {
+          "key": "n12-q9",
+          "question": "Terminaste el vuelo, descargaste las fotos y hay un solo respaldo, en un computador. ¿Qué es lo más sensato?",
+          "options": [
+            "Formatear la tarjeta de inmediato",
+            "Prestar la tarjeta a otro equipo",
+            "Verificar un segundo respaldo ordenado por vuelo y dejar la tarjeta dentro del dron",
+            "Borrar la bitácora"
+          ],
+          "answer": 2,
+          "explanation": "Dos copias ordenadas protegen el trabajo y la tarjeta dentro del dron evita que se extravíe."
         }
       ],
       "mastery_signals": [
@@ -2358,6 +7220,549 @@
       ],
       "images": [
         "core/img/topo/seguridad-vuelo.svg"
+      ],
+      "slides": [
+        {
+          "title": "Operación segura: protocolo antes, durante y después",
+          "body": "Un vuelo seguro no depende de la suerte sino de un protocolo repetible. Las reglas legales vigentes están en la sección DGAC de AeroAcademy.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "antes",
+                "label": "Antes",
+                "sub": "visita y checklist",
+                "kind": "proceso",
+                "x": 16,
+                "y": 22
+              },
+              {
+                "id": "rev",
+                "label": "Revisión",
+                "sub": "hélices, baterías",
+                "kind": "equipo",
+                "x": 50,
+                "y": 22
+              },
+              {
+                "id": "vuelo",
+                "label": "Vuelo",
+                "sub": "piloto + observador",
+                "kind": "persona",
+                "x": 84,
+                "y": 22
+              },
+              {
+                "id": "reg",
+                "label": "Registro",
+                "sub": "bitácora",
+                "kind": "dato",
+                "x": 84,
+                "y": 68
+              },
+              {
+                "id": "desp",
+                "label": "Después",
+                "sub": "respaldo y revisión",
+                "kind": "proceso",
+                "x": 50,
+                "y": 68
+              },
+              {
+                "id": "mejora",
+                "label": "Mejora",
+                "sub": "lecciones",
+                "kind": "producto",
+                "x": 16,
+                "y": 68
+              }
+            ],
+            "edges": [
+              {
+                "from": "antes",
+                "to": "rev",
+                "label": "checklist",
+                "flow": true
+              },
+              {
+                "from": "rev",
+                "to": "vuelo",
+                "label": "aprobado",
+                "flow": true
+              },
+              {
+                "from": "vuelo",
+                "to": "reg",
+                "label": "anota",
+                "flow": true
+              },
+              {
+                "from": "reg",
+                "to": "desp",
+                "label": "cierra",
+                "flow": true
+              },
+              {
+                "from": "desp",
+                "to": "mejora",
+                "label": "aprende",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "antes"
+              ],
+              [
+                "rev",
+                "antes-rev"
+              ],
+              [
+                "vuelo",
+                "rev-vuelo"
+              ],
+              [
+                "reg",
+                "vuelo-reg"
+              ],
+              [
+                "desp",
+                "reg-desp"
+              ],
+              [
+                "mejora",
+                "desp-mejora"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Antes del vuelo",
+          "points": [
+            "Visita el sitio, idealmente el día anterior",
+            "Elige zona de despegue y aterrizaje",
+            "Revisa visualmente cuerpo, hélices, antenas y cámara",
+            "Una hélice dañada no se repara: se cambia",
+            "Baterías cargadas; bajo unos 5 °C rinden menos",
+            "Revisa advertencias de la aplicación y calibra cuando corresponda"
+          ],
+          "image": "core/img/topo/seguridad-vuelo.svg",
+          "caption": "Seguridad antes, durante y después del vuelo"
+        },
+        {
+          "title": "Condiciones y límites",
+          "body": "Hay límites objetivos que se respetan sin negociación.",
+          "points": [
+            "*Viento*: mídelo con anemómetro y respeta el límite del fabricante",
+            "*Reserva de batería*: regreso con al menos 30 %",
+            "*Frío*: revisa la carga justo antes de despegar",
+            "*Luz y visibilidad*: no vueles sin condiciones para mantener contacto visual",
+            "Una advertencia de viento fuerte insistente es motivo para cancelar"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Los sistemas de evasión y seguimiento de terreno no ven cables finos, agua ni sitios con poca luz."
+          }
+        },
+        {
+          "title": "Roles: piloto y observador",
+          "body": "Dos personas reparten la atención.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "pil",
+                "label": "Piloto",
+                "sub": "aparato, ruta, telemetría",
+                "kind": "persona",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "obs",
+                "label": "Observador",
+                "sub": "contacto visual y entorno",
+                "kind": "persona",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "riesgo",
+                "label": "Riesgo detectado",
+                "sub": "cables, personas, aves",
+                "kind": "dato",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "com",
+                "label": "Comunicación",
+                "sub": "aviso claro",
+                "kind": "proceso",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "dec",
+                "label": "Decisión",
+                "sub": "continuar o abortar",
+                "kind": "proceso",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "rth",
+                "label": "Retorno",
+                "sub": "aterrizaje seguro",
+                "kind": "producto",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "pil",
+                "to": "obs",
+                "label": "hablan",
+                "flow": true
+              },
+              {
+                "from": "obs",
+                "to": "riesgo",
+                "label": "detecta",
+                "flow": true
+              },
+              {
+                "from": "riesgo",
+                "to": "com",
+                "label": "avisa",
+                "flow": true
+              },
+              {
+                "from": "com",
+                "to": "dec",
+                "label": "pasa",
+                "flow": true
+              },
+              {
+                "from": "dec",
+                "to": "rth",
+                "label": "ejecuta",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "pil"
+              ],
+              [
+                "obs",
+                "pil-obs"
+              ],
+              [
+                "riesgo",
+                "obs-riesgo"
+              ],
+              [
+                "com",
+                "riesgo-com"
+              ],
+              [
+                "dec",
+                "com-dec"
+              ],
+              [
+                "rth",
+                "dec-rth"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Ejemplo en terreno: pérdida de enlace en un corredor",
+          "body": "Una misión lineal con relieve puede perder enlace con el control remoto en una zona de sombra.",
+          "points": [
+            "Revisa el perfil de elevación del trazado antes del vuelo",
+            "Planifica la ruta de retorno y la altura de seguridad",
+            "Define qué hace el dron ante pérdida de enlace y pruébalo",
+            "Si la sombra de relieve es crítica, divide la misión en tramos"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "La matriz de riesgo (probabilidad por impacto) ordena qué controles agregar antes de despegar."
+          }
+        },
+        {
+          "title": "Revisiones previas y límites del equipo",
+          "body": "Además del checklist visual, hay verificaciones que se olvidan.",
+          "points": [
+            "Calibra la brújula y el sistema inercial (IMU) cuando la aplicación lo pida",
+            "Revisa el centro de estado del sistema: si aparece una advertencia que impide volar, no se vuela",
+            "Hélices adecuadas a la altitud del lugar de vuelo",
+            "Mantén actualizados el dron y el software de planificación; conéctalos a internet con regularidad",
+            "*Viento*: el límite estándar de muchos equipos de mapeo es de unos 12 m/s (43 km/h); mídelo en el sitio y consulta además un pronóstico de viento orientado a drones",
+            "*Baterías*: tienen vida útil; si se desgastan más rápido de lo normal, ya cumplieron su ciclo",
+            "Lleva anemómetro, registra el vuelo y graba video del despegue y del aterrizaje"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Una advertencia persistente de viento o de sistema es una orden de cancelar y aterrizar, no una molestia que se cierra."
+          }
+        },
+        {
+          "title": "Errores típicos en operación",
+          "points": [
+            "Despegar sin leer advertencias ni calibrar cuando corresponde",
+            "Seguir volando con ráfagas o batería baja «para terminar la línea»",
+            "Confiar solo en la evasión de obstáculos",
+            "Perder datos por no respaldar la tarjeta",
+            "No llevar bitácora ni video de despegue y aterrizaje"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Casi todos los incidentes se anuncian antes: una advertencia ignorada, una batería al límite, un viento que sube."
+          },
+          "image": "priv:normativa-dgac-rpas.jpg",
+          "caption": "Riesgos de volar sin autorización y sin cumplir normativa en Chile"
+        },
+        {
+          "title": "Del checklist al dato procesado",
+          "body": "La seguridad no termina al aterrizar: el dato también se cuida. Un orden fijo evita perder el vuelo completo por un descuido.",
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Después de descargar y verificar el respaldo, deja la tarjeta dentro del dron: así no se extravía. La regla de oro: se vuela lo que se planificó."
+          },
+          "diagram": {
+            "nodes": [
+              {
+                "id": "check",
+                "label": "Checklist previo",
+                "sub": "equipo y sitio",
+                "kind": "proceso",
+                "x": 16,
+                "y": 25
+              },
+              {
+                "id": "vuelo",
+                "label": "Vuelo planificado",
+                "sub": "se vuela el plan",
+                "kind": "persona",
+                "x": 50,
+                "y": 25
+              },
+              {
+                "id": "sd",
+                "label": "Tarjeta de memoria",
+                "sub": "fotos y registros",
+                "kind": "dato",
+                "x": 84,
+                "y": 25
+              },
+              {
+                "id": "resp",
+                "label": "Respaldo",
+                "sub": "dos copias ordenadas",
+                "kind": "proceso",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "proc",
+                "label": "Procesamiento",
+                "sub": "con control",
+                "kind": "proceso",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "prod",
+                "label": "Productos",
+                "sub": "con informe",
+                "kind": "producto",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "check",
+                "to": "vuelo",
+                "label": "aprobado",
+                "flow": true
+              },
+              {
+                "from": "vuelo",
+                "to": "sd",
+                "label": "graba",
+                "flow": true
+              },
+              {
+                "from": "sd",
+                "to": "resp",
+                "label": "copia",
+                "flow": true
+              },
+              {
+                "from": "resp",
+                "to": "proc",
+                "label": "entra",
+                "flow": true
+              },
+              {
+                "from": "proc",
+                "to": "prod",
+                "label": "genera",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "check"
+              ],
+              [
+                "vuelo",
+                "check-vuelo"
+              ],
+              [
+                "sd",
+                "vuelo-sd"
+              ],
+              [
+                "resp",
+                "sd-resp"
+              ],
+              [
+                "proc",
+                "resp-proc"
+              ],
+              [
+                "prod",
+                "proc-prod"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En un equipo, la operación segura es parte del plan del proyecto y deja evidencia.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "plan",
+                "label": "Plan de vuelo",
+                "sub": "área, riesgos, permisos",
+                "kind": "proceso",
+                "x": 16,
+                "y": 28
+              },
+              {
+                "id": "check",
+                "label": "Checklist",
+                "sub": "firmado",
+                "kind": "dato",
+                "x": 50,
+                "y": 28
+              },
+              {
+                "id": "vuelo",
+                "label": "Operación",
+                "sub": "dos personas",
+                "kind": "persona",
+                "x": 84,
+                "y": 28
+              },
+              {
+                "id": "bit",
+                "label": "Bitácora",
+                "sub": "condiciones y ciclos",
+                "kind": "dato",
+                "x": 84,
+                "y": 72
+              },
+              {
+                "id": "datos",
+                "label": "Datos respaldados",
+                "sub": "tarjeta ordenada",
+                "kind": "producto",
+                "x": 50,
+                "y": 72
+              },
+              {
+                "id": "rev",
+                "label": "Revisión",
+                "sub": "gerencia de proyecto",
+                "kind": "persona",
+                "x": 16,
+                "y": 72
+              }
+            ],
+            "edges": [
+              {
+                "from": "plan",
+                "to": "check",
+                "label": "prepara",
+                "flow": true
+              },
+              {
+                "from": "check",
+                "to": "vuelo",
+                "label": "autoriza",
+                "flow": true
+              },
+              {
+                "from": "vuelo",
+                "to": "bit",
+                "label": "registra",
+                "flow": true
+              },
+              {
+                "from": "bit",
+                "to": "datos",
+                "label": "respalda",
+                "flow": true
+              },
+              {
+                "from": "datos",
+                "to": "rev",
+                "label": "entrega",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "plan"
+              ],
+              [
+                "check",
+                "plan-check"
+              ],
+              [
+                "vuelo",
+                "check-vuelo"
+              ],
+              [
+                "bit",
+                "vuelo-bit"
+              ],
+              [
+                "datos",
+                "bit-datos"
+              ],
+              [
+                "rev",
+                "datos-rev"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Antes, durante y después: protocolo repetible",
+            "Viento y reserva de batería: límites firmes",
+            "Dos personas: piloto y observador",
+            "La evasión automática no reemplaza al observador",
+            "Bitácora y respaldo cierran cada vuelo"
+          ]
+        }
       ]
     }
   ]

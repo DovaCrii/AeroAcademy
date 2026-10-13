@@ -66,7 +66,31 @@
       window.location.href = href;
     }).then(function (ok) {
       if (ok && !link.getAttribute("data-target")) history.replaceState({}, "", href);
+      // cambio de paso: vuelve al inicio de la diapositiva
+      if (ok && link.hasAttribute("data-step")) {
+        var panel = root.querySelector("#panel");
+        if (panel && panel.getBoundingClientRect().top < 0) panel.scrollIntoView({ block: "start" });
+      }
     });
+  });
+
+  // ← / → cambian de paso (diapositivas). Se ignora si hay foco en un campo o con teclas modificadoras.
+  document.addEventListener("keydown", function (e) {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    var t = e.target;
+    if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+    if (e.key === "ArrowRight") {
+      // diagrama por partes: primero se revela la siguiente parte, luego se pasa de diapositiva
+      var more = Array.prototype.find.call(root.querySelectorAll(".dg-step:not(:checked)"), function (c) {
+        return c.offsetParent !== null;
+      });
+      if (more) { e.preventDefault(); more.click(); return; }
+    }
+    var link = root.querySelector(e.key === "ArrowRight" ? ".sl-next" : ".sl-prev");
+    if (!link) return;
+    e.preventDefault();
+    link.click();
   });
 
   root.addEventListener("change", function (e) {

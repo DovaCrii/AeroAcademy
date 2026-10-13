@@ -1,6 +1,6 @@
 # Operación · AeroAcademy
 
-Guía para quien instala y mantiene el servicio en la VM. Todo el acceso es **solo por la tailnet** (`tailscale serve`; nunca `funnel`).
+Guía para quien instala y mantiene el servicio en la VM. El acceso es **solo por la tailnet** (`tailscale serve`) salvo que se encienda la puerta pública con Funnel (D36, ver `docs/PRODUCCION.md` §6).
 
 ## Instalar o actualizar
 

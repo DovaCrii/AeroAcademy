@@ -53,9 +53,11 @@ def test_milestone_check_persists_and_is_personal(client_for, make_person):
 
     assert MilestoneCheck.objects.filter(person=ana, milestone__key="n0-t0").exists()
     assert not MilestoneCheck.objects.filter(person=luis).exists()
-    html = client_for(ana.login).get(f"/rutas/{FORMA}/?nivel=n0").content.decode()
+    html = client_for(ana.login).get(f"/rutas/{FORMA}/?nivel=n0&paso=practica").content.decode()
     assert 'aria-pressed="true"' in html
-    html_luis = client_for(luis.login).get(f"/rutas/{FORMA}/?nivel=n0").content.decode()
+    html_luis = (
+        client_for(luis.login).get(f"/rutas/{FORMA}/?nivel=n0&paso=practica").content.decode()
+    )
     assert 'aria-pressed="true"' not in html_luis
 
 
@@ -229,7 +231,9 @@ def test_goals_are_personal(client_for, make_person):
 def test_without_js_redirects_back_to_the_level(member_client):
     response = toggle(member_client, "n1-t0")
     assert response.status_code == 302
-    assert response.url == f"/rutas/{FORMA}/?nivel=n1#panel"
+    assert (
+        response.url == f"/rutas/{FORMA}/?nivel=n1&paso=practica#panel"
+    )  # vuelve al paso de misiones
 
 
 def test_partial_response_is_only_the_fragment_and_has_new_percentages(member_client):
@@ -241,12 +245,14 @@ def test_partial_response_is_only_the_fragment_and_has_new_percentages(member_cl
 
 
 def test_partial_get_returns_selected_level_only(member_client):
-    html = member_client.get(f"/rutas/{FORMA}/?nivel=n2", HTTP_X_PARTIAL="1").content.decode()
+    html = member_client.get(
+        f"/rutas/{FORMA}/?nivel=n2&paso=practica", HTTP_X_PARTIAL="1"
+    ).content.decode()
     assert "<html" not in html and "Send to Revit" in html and "ar-cover" not in html
 
 
 def test_full_page_reads_without_js(member_client):
-    html = member_client.get(f"/rutas/{FORMA}/?nivel=n2").content.decode()
+    html = member_client.get(f"/rutas/{FORMA}/?nivel=n2&paso=practica").content.decode()
     assert "ar-cover" in html and "Levantamiento Digital" in html and "CC 410" in html
     assert html.count('class="ar-lv') == 5  # Project Browser
     assert html.count("ar-floor") >= 5  # corte del edificio
@@ -288,7 +294,7 @@ def test_milestone_text_is_escaped(client_for, member):
     Milestone.objects.filter(path__slug=FORMA, key="n0-t0").update(
         text="<script>alert(1)</script> *Revit*"
     )
-    html = client_for(member.login).get(f"/rutas/{FORMA}/?nivel=n0").content.decode()
+    html = client_for(member.login).get(f"/rutas/{FORMA}/?nivel=n0&paso=practica").content.decode()
     assert "<script>alert(1)</script>" not in html
     assert "&lt;script&gt;" in html and '<em class="term">Revit</em>' in html
 

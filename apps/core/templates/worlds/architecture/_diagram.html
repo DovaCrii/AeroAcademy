@@ -1,0 +1,23 @@
+{% load l10n %}{% localize off %}{% with d=slide.diagram %}
+<figure class="dg" aria-label="Diagrama: {{ slide.title }}">
+  {% for k in d.parts %}<input type="checkbox" class="dg-step dg-c{{ k }}" aria-label="Mostrar la siguiente parte del diagrama ({{ k|add:1 }} de {{ d.total }})">{% endfor %}
+  <div class="dg-canvas">
+    <svg viewBox="0 0 160 90" aria-hidden="true" focusable="false">
+      <defs><marker id="dg-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.2" markerHeight="3.2" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 10 5 0 10z" class="dg-head"/></marker></defs>
+      {% for e in d.edges %}<line class="dg-edge" x1="{{ e.sx1 }}" y1="{{ e.sy1 }}" x2="{{ e.sx2 }}" y2="{{ e.sy2 }}" marker-end="url(#dg-arr)"{% if e.step %} data-s="{{ e.step }}"{% endif %}/>{% endfor %}
+    </svg>
+    {% for e in d.edges %}
+    {% if e.flow %}<i class="dg-dot" aria-hidden="true" style="--x1:{{ e.x1 }}%;--y1:{{ e.y1 }}%;--x2:{{ e.x2 }}%;--y2:{{ e.y2 }}%"{% if e.step %} data-s="{{ e.step }}"{% endif %}></i>{% endif %}
+    {% if e.label %}<span class="dg-elabel" aria-hidden="true" style="left:{{ e.mx }}%;top:{{ e.my }}%"{% if e.step %} data-s="{{ e.step }}"{% endif %}>{{ e.label }}</span>{% endif %}
+    {% endfor %}
+    {% for n in d.nodes %}
+    <div class="dg-node k-{{ n.kind }}" style="left:{{ n.x }}%;top:{{ n.y }}%"{% if n.step %} data-s="{{ n.step }}"{% endif %}>
+      <b class="dg-k">{{ n.kind_label }}</b>
+      <span class="dg-l">{{ n.label }}</span>
+      {% if n.sub %}<span class="dg-sub">{{ n.sub }}</span>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if d.edges %}<ul class="sr-only">{% for e in d.edges %}<li>{{ e.from }} → {{ e.to }}{% if e.label %}: {{ e.label }}{% endif %}</li>{% endfor %}</ul>{% endif %}
+</figure>
+{% endwith %}{% endlocalize %}

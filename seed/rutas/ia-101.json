@@ -1,0 +1,864 @@
+{
+  "_nota": "Ruta núcleo de IA y Datos, sin requisitos: es el primer paso del camino IA 101 → Herramientas para trabajar con IA → Claude Code y MCP → Agentes de IA → Vibe coding responsable (y, como ramas opcionales, Python y datos 101 → Data Science aplicada → Geospatial Data Science). URLs verificadas el 2026-10-13 en el navegador; los cursos de Claude Academy se mudaron de anthropic.skilljar.com a academy.claude.com. Todo gratuito; algunos cursos piden una cuenta gratuita. Regla de oro: nunca pegar certificados, datos personales ni información de clientes en una herramienta de IA. Las keys son estables: agregar siempre al final.",
+  "slug": "ia-101",
+  "title": "IA 101 · IA en el trabajo",
+  "program": "IA y Datos · Núcleo · Paso 1 de 5",
+  "platform": "anthropic-academy",
+  "kind": "structured",
+  "vendor": "anthropic",
+  "products": [
+    "claude"
+  ],
+  "disciplines": [
+    "transversal",
+    "ia-datos"
+  ],
+  "world": "architecture",
+  "levels": [
+    {
+      "code": "n0",
+      "order": 0,
+      "short": "Qué es",
+      "title": "Paso 0 · Qué es la IA generativa y cómo funciona",
+      "estimated_hours": "3 a 6 h",
+      "audience": "Todo el equipo, sin requisitos",
+      "goal": "Entender en simple qué es un modelo de lenguaje (LLM), qué hace bien y qué no, para usarlo con criterio y no como oráculo. Meta: terminar *Claude 101* y *AI capabilities and limitations*.",
+      "guide": {
+        "title": "Guía rápida · Qué es un LLM",
+        "software": "ia",
+        "do": [
+          "Piensa en el modelo como un colega rápido que ha leído mucho, no como un buscador ni una base de datos.",
+          "Pídele una tarea concreta con el contexto que tendría un colega nuevo: quién eres, para qué es y cómo debe quedar.",
+          "Recuerda que no ve tu computador ni tus archivos salvo que se los pases."
+        ],
+        "commands": [
+          "*Token*",
+          "*Contexto*",
+          "*Prompt*",
+          "*Alucinación*"
+        ],
+        "mistakes": [
+          "Tratar la respuesta como un hecho verificado.",
+          "Esperar que recuerde conversaciones anteriores sin habérselas pasado.",
+          "Preguntar sin contexto y culpar al modelo de la respuesta genérica."
+        ],
+        "essential": "Claude 101"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Claude 101",
+          "url": "https://academy.claude.com/courses/claude-101",
+          "description": "Usar Claude en el trabajo diario: primera conversación, prompts efectivos, proyectos, artifacts, skills y herramientas conectadas. 13 lecciones, un cuestionario e insignia. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "2,5 h"
+        },
+        {
+          "order": 1,
+          "title": "AI capabilities and limitations",
+          "url": "https://academy.claude.com/courses/ai-capabilities-and-limitations",
+          "description": "Modelo mental de lo que un LLM puede y no puede hacer: predicción del siguiente token, conocimiento, memoria de trabajo, límites de contexto. Base para entender las alucinaciones. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "3,5 h"
+        },
+        {
+          "order": 2,
+          "title": "Elements of AI",
+          "url": "https://www.elementsofai.com/",
+          "description": "Introducción a la IA para no expertos (Universidad de Helsinki), en línea y gratuita. Disponible en varios idiomas.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Introduction to Large Language Models (Google Skills)",
+          "url": "https://www.skills.google/course_templates/539",
+          "description": "Microcurso de 30 minutos: qué son los LLM, casos de uso y ajuste por instrucciones. Gratuito; pide cuenta gratuita.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ],
+          "duration_text": "30 min"
+        },
+        {
+          "order": 4,
+          "title": "Microsoft Learn: Introduction to generative AI and agents",
+          "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/",
+          "description": "Módulo gratuito sobre IA generativa, LLM y agentes.",
+          "tags": [
+            "Module",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n0-t0",
+          "text": "Completar *Claude 101* y guardar la insignia de finalización",
+          "completed_by_resource": "Claude 101"
+        },
+        {
+          "key": "n0-t1",
+          "text": "Completar *AI capabilities and limitations* y anotar tres cosas que un LLM no puede hacer",
+          "completed_by_resource": "AI capabilities and limitations"
+        },
+        {
+          "key": "n0-t2",
+          "text": "Pedirle a la IA que explique, con un ejemplo de tu trabajo, qué es un token y qué es la ventana de contexto"
+        },
+        {
+          "key": "n0-t3",
+          "text": "Escribir en tres líneas cuándo usarías la IA y cuándo no en tu trabajo de esta semana"
+        }
+      ],
+      "mastery_signals": [
+        "Distingues una pregunta que la IA responde bien de una que debes buscar en la fuente",
+        "Puedes explicar a un colega por qué la IA a veces inventa datos"
+      ],
+      "quiz": [
+        {
+          "key": "n0-q0",
+          "question": "Un colega dice que la IA «sabe» la última norma vigente porque contestó con seguridad. ¿Qué es lo más prudente?",
+          "options": [
+            "Confiar, porque contestó con seguridad",
+            "Verificar en el texto oficial de la norma",
+            "Pedirle que repita la respuesta hasta que coincida"
+          ],
+          "answer": 1,
+          "explanation": "Un LLM genera texto plausible a partir de patrones; la seguridad del tono no es evidencia. Lo vigente se confirma en la fuente."
+        },
+        {
+          "key": "n0-q1",
+          "question": "¿Qué es la ventana de contexto?",
+          "options": [
+            "La cantidad de texto que el modelo puede considerar en una conversación",
+            "El tiempo que tarda en responder",
+            "La carpeta donde guarda tus archivos"
+          ],
+          "answer": 0,
+          "explanation": "Es el límite de lo que el modelo «ve» a la vez. Lo que queda fuera de ella no influye en la respuesta."
+        }
+      ]
+    },
+    {
+      "code": "n1",
+      "order": 1,
+      "short": "Prompting",
+      "title": "Paso 1 · Prompting que funciona",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien ya probó un asistente de IA",
+      "goal": "Escribir prompts con rol, contexto, tarea y formato; iterarlos en vez de rendirse. Meta: una biblioteca personal de cinco prompts que reutilices.",
+      "guide": {
+        "title": "Guía rápida · Prompts",
+        "software": "ia",
+        "do": [
+          "Estructura: contexto (quién y para qué), tarea (verbo claro), restricciones y formato de salida.",
+          "Pega un ejemplo del resultado que quieres; vale más que una descripción larga.",
+          "Itera: pide un cambio concreto («más breve, tabla de tres columnas») en vez de empezar de cero."
+        ],
+        "commands": [
+          "*Rol*",
+          "*Few-shot* (ejemplos)",
+          "*Formato de salida*",
+          "*Iterar*"
+        ],
+        "mistakes": [
+          "Un prompt de una línea para una tarea de media página.",
+          "Pedir cinco cosas a la vez: se mezclan y se pierde calidad.",
+          "No decir qué NO quieres (por ejemplo, no inventar cifras)."
+        ],
+        "essential": "Claude docs: Prompt engineering overview"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Prompt Engineering",
+          "url": "https://roadmap.sh/prompt-engineering",
+          "description": "Mapa de etapas de roadmap.sh: cómo escribir prompts claros, con contexto y ejemplos, e iterarlos. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Claude docs: Prompt engineering overview",
+          "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
+          "description": "Técnicas de prompting: claridad, ejemplos, roles, formato y cómo iterar. Documentación oficial gratuita.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Claude 101",
+          "url": "https://academy.claude.com/courses/claude-101",
+          "description": "Usar Claude en el trabajo diario: primera conversación, prompts efectivos, proyectos, artifacts, skills y herramientas conectadas. 13 lecciones, un cuestionario e insignia. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "2,5 h"
+        },
+        {
+          "order": 3,
+          "title": "ChatGPT Prompt Engineering for Developers",
+          "url": "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/",
+          "description": "Curso corto de DeepLearning.AI sobre principios de prompting (aplican a cualquier LLM). Gratuito con cuenta gratuita.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n1-t0",
+          "text": "Reescribir un prompt vago de tu trabajo con contexto, tarea, restricciones y formato, y comparar las dos respuestas"
+        },
+        {
+          "key": "n1-t1",
+          "text": "Agregar un ejemplo (few-shot) a un prompt y anotar cómo cambió el resultado"
+        },
+        {
+          "key": "n1-t2",
+          "text": "Pedir «dime qué información te falta antes de responder» y comprobar que mejora la respuesta"
+        },
+        {
+          "key": "n1-t3",
+          "text": "Guardar cinco prompts útiles en un documento del equipo (sin datos de clientes)"
+        }
+      ],
+      "mastery_signals": [
+        "Tus prompts dicen quién eres, para qué es, qué quieres y cómo debe verse",
+        "Iteras con cambios concretos en vez de repetir la pregunta"
+      ],
+      "quiz": [
+        {
+          "key": "n1-q0",
+          "question": "Pediste «hazme un resumen» y salió genérico. ¿Qué mejora más el resultado?",
+          "options": [
+            "Repetir la pregunta en mayúsculas",
+            "Indicar la audiencia, la extensión, el formato y pegar el texto fuente",
+            "Cambiar de modelo sin cambiar el prompt"
+          ],
+          "answer": 1,
+          "explanation": "El modelo necesita contexto y criterios. Audiencia, extensión y formato transforman la respuesta."
+        },
+        {
+          "key": "n1-q1",
+          "question": "Quieres que la salida sea una tabla con tres columnas. ¿Cómo lo aseguras?",
+          "options": [
+            "Lo pides explícitamente y das una fila de ejemplo",
+            "Esperas que lo adivine",
+            "Lo corriges a mano siempre"
+          ],
+          "answer": 0,
+          "explanation": "Especificar el formato y dar un ejemplo reduce la ambigüedad."
+        }
+      ]
+    },
+    {
+      "code": "n2",
+      "order": 2,
+      "short": "Límites",
+      "title": "Paso 2 · Límites y alucinaciones: cómo verificar",
+      "estimated_hours": "2 a 4 h",
+      "audience": "Todo el equipo",
+      "goal": "Reconocer cuándo la IA puede equivocarse (cifras, normas, fuentes, cálculos) y aplicar un método de verificación antes de usar su salida en un entregable.",
+      "guide": {
+        "title": "Guía rápida · Verificar",
+        "software": "ia",
+        "do": [
+          "Lo verificable (cifras, normas, citas, fórmulas) se contrasta siempre con la fuente original.",
+          "Pídele las fuentes y abre cada una: puede inventar enlaces o títulos.",
+          "Para cálculos, pide el método y repítelo en una planilla o con un script; no aceptes solo el número."
+        ],
+        "commands": [
+          "*Alucinación*",
+          "*Fuente primaria*",
+          "*Sesgo*",
+          "*Verificación*"
+        ],
+        "mistakes": [
+          "Citar una norma o un artículo porque «la IA lo dijo».",
+          "Pegar una cifra calculada por la IA en un informe sin recalcularla.",
+          "Confiar más cuanto más seguro suena el texto."
+        ],
+        "essential": "AI capabilities and limitations"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AI capabilities and limitations",
+          "url": "https://academy.claude.com/courses/ai-capabilities-and-limitations",
+          "description": "Modelo mental de lo que un LLM puede y no puede hacer: predicción del siguiente token, conocimiento, memoria de trabajo, límites de contexto. Base para entender las alucinaciones. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "3,5 h"
+        },
+        {
+          "order": 1,
+          "title": "Kaggle Learn: Intro to AI Ethics",
+          "url": "https://www.kaggle.com/learn/intro-to-ai-ethics",
+          "description": "Micro-curso sobre sesgo, equidad y uso responsable de sistemas de IA. Gratuito; pide cuenta de Kaggle.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "AI Fluency: Framework and foundations",
+          "url": "https://academy.claude.com/courses/ai-fluency-framework-foundations",
+          "description": "Marco de las 4D (Delegation, Description, Discernment, Diligence) para colaborar con IA de forma eficaz, ética y segura. Incluye uso responsable. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "4 h"
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n2-t0",
+          "text": "Pedir a la IA tres referencias para una afirmación técnica y comprobar en la fuente cuántas existen de verdad"
+        },
+        {
+          "key": "n2-t1",
+          "text": "Tomar un cálculo simple de tu trabajo, pedírselo a la IA y recalcularlo aparte; anotar si coinciden"
+        },
+        {
+          "key": "n2-t2",
+          "text": "Escribir una lista de verificación de cinco puntos para usar antes de entregar algo hecho con IA"
+        },
+        {
+          "key": "n2-t3",
+          "text": "Completar *Kaggle Learn: Intro to AI Ethics* y anotar un ejemplo de sesgo",
+          "completed_by_resource": "Kaggle Learn: Intro to AI Ethics"
+        }
+      ],
+      "mastery_signals": [
+        "Nunca entregas una cifra o una cita de IA sin contrastarla",
+        "Tienes tu lista de verificación y la usas"
+      ],
+      "quiz": [
+        {
+          "key": "n2-q0",
+          "question": "La IA te da un número de coordenadas y una norma citada con su artículo. ¿Qué haces antes de usarlos?",
+          "options": [
+            "Los copias, pues tienen formato oficial",
+            "Compruebas el número con tus datos y el artículo en el texto oficial",
+            "Le preguntas a la IA si está segura"
+          ],
+          "answer": 1,
+          "explanation": "Preguntarle si está segura no la hace más fiable. Las cifras y las citas se verifican en la fuente."
+        },
+        {
+          "key": "n2-q1",
+          "question": "¿Por qué se llaman «alucinaciones» los datos inventados?",
+          "options": [
+            "Porque el modelo genera texto plausible aunque no tenga el dato",
+            "Porque el modelo está estropeado",
+            "Porque solo ocurre con temas poco comunes"
+          ],
+          "answer": 0,
+          "explanation": "El modelo predice texto probable; si no tiene el dato, puede completar con algo verosímil pero falso."
+        }
+      ]
+    },
+    {
+      "code": "n3",
+      "order": 3,
+      "short": "Privacidad",
+      "title": "Paso 3 · Privacidad y uso responsable",
+      "estimated_hours": "2 a 4 h",
+      "audience": "Todo el equipo; obligatorio antes de usar IA con material del trabajo",
+      "goal": "Saber qué información nunca se pega en una herramienta de IA y cómo usar la IA con ética y diligencia. Regla central: no pegar certificados, datos personales ni información de clientes.",
+      "guide": {
+        "title": "Guía rápida · Qué NO pegar",
+        "software": "ia",
+        "do": [
+          "Nunca pegues certificados, credenciales, claves ni datos personales (nombres, RUT, correos, teléfonos).",
+          "Nunca pegues información de clientes, contratos, ubicaciones sensibles ni documentos internos sin autorización.",
+          "Si necesitas ayuda con un documento real, anonimiza: reemplaza nombres y cifras por marcadores.",
+          "Revisa qué datos guarda y usa cada herramienta en su centro de privacidad."
+        ],
+        "commands": [
+          "*PII* (datos personales)",
+          "*Anonimizar*",
+          "*Política de uso*",
+          "*Diligencia*"
+        ],
+        "mistakes": [
+          "Pegar un certificado escaneado «solo para que lo resuma».",
+          "Subir el contrato de un cliente a una herramienta personal.",
+          "Usar una cuenta personal para trabajo de la empresa sin saber las reglas."
+        ],
+        "essential": "AI Fluency: Framework and foundations"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AI Fluency: Framework and foundations",
+          "url": "https://academy.claude.com/courses/ai-fluency-framework-foundations",
+          "description": "Marco de las 4D (Delegation, Description, Discernment, Diligence) para colaborar con IA de forma eficaz, ética y segura. Incluye uso responsable. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "4 h"
+        },
+        {
+          "order": 1,
+          "title": "Anthropic Privacy Center",
+          "url": "https://privacy.claude.com/",
+          "description": "Centro de privacidad de Claude: qué datos se guardan, cómo se usan y cómo gestionarlos. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Anthropic Usage Policy",
+          "url": "https://www.anthropic.com/legal/aup",
+          "description": "Política de uso aceptable de los productos de Anthropic. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "OWASP Top 10 for LLM Applications",
+          "url": "https://genai.owasp.org/llm-top-10/",
+          "description": "Los principales riesgos de seguridad de aplicaciones con LLM (inyección de prompts, fuga de datos, agencia excesiva…). OWASP, gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n3-t0",
+          "text": "Completar *AI Fluency: Framework and foundations* (las 4D) y descargar la insignia",
+          "completed_by_resource": "AI Fluency: Framework and foundations"
+        },
+        {
+          "key": "n3-t1",
+          "text": "Leer el centro de privacidad de la herramienta que usas y anotar si guarda tus conversaciones y cómo desactivarlo"
+        },
+        {
+          "key": "n3-t2",
+          "text": "Tomar un documento real, anonimizarlo (marcadores en vez de nombres y cifras) y pedir el resumen sobre la versión anonimizada"
+        },
+        {
+          "key": "n3-t3",
+          "text": "Redactar la regla del equipo en una frase: qué no se pega nunca en una herramienta de IA"
+        }
+      ],
+      "mastery_signals": [
+        "Sabes de memoria qué no se pega: certificados, datos personales, información de clientes, claves",
+        "Anonimizas antes de pedir ayuda con un documento real"
+      ],
+      "quiz": [
+        {
+          "key": "n3-q0",
+          "question": "Un cliente te envía un informe y quieres resumirlo con IA. ¿Qué haces?",
+          "options": [
+            "Lo pegas completo, es más rápido",
+            "Pides autorización o lo anonimizas y resumes la versión sin datos del cliente",
+            "Pegas solo las primeras páginas"
+          ],
+          "answer": 1,
+          "explanation": "La información del cliente no se comparte sin permiso. Si se puede, se anonimiza."
+        },
+        {
+          "key": "n3-q1",
+          "question": "Tienes un certificado de calibración con datos de personas. ¿Puedes pegarlo para que la IA extraiga las fechas?",
+          "options": [
+            "Sí, son solo fechas",
+            "No: contiene datos personales; copia las fechas a mano y consulta sin el documento",
+            "Sí, si borras el logo"
+          ],
+          "answer": 1,
+          "explanation": "Los certificados contienen datos personales y no se pegan en herramientas de IA."
+        },
+        {
+          "key": "n3-q2",
+          "question": "De las 4D de la fluidez en IA, ¿cuál implica revisar con cuidado lo que la IA produce?",
+          "options": [
+            "Delegation",
+            "Description",
+            "Discernment",
+            "Ninguna"
+          ],
+          "answer": 2,
+          "explanation": "Discernment es evaluar con criterio la salida de la IA; Diligence es responsabilizarse del uso."
+        }
+      ]
+    },
+    {
+      "code": "n4",
+      "order": 4,
+      "short": "Informes",
+      "title": "Paso 4 · IA para informes y documentos de ingeniería",
+      "estimated_hours": "3 a 5 h",
+      "audience": "Quien redacta informes, memorias o guías",
+      "goal": "Usar la IA como editor y asistente de redacción técnica (estructura, claridad, resumen, revisión) sin delegarle las cifras ni la responsabilidad. Meta: una guía o informe corto mejor escrito y verificado.",
+      "guide": {
+        "title": "Guía rápida · Escribir con IA",
+        "software": "ia",
+        "do": [
+          "Primero define la audiencia y el objetivo del documento; luego pide un esquema.",
+          "Redacta tú los datos y conclusiones; usa la IA para ordenar, acortar y mejorar la claridad.",
+          "Pide una revisión como un lector crítico: ambigüedades, saltos y términos sin definir.",
+          "Verifica cifras, unidades y referencias antes de entregar."
+        ],
+        "commands": [
+          "*Audiencia*",
+          "*Esquema*",
+          "*Voz activa*",
+          "*Revisión*"
+        ],
+        "mistakes": [
+          "Pedirle que redacte todo el informe desde cero y entregarlo sin leerlo.",
+          "Dejar que cambie cifras o unidades al «mejorar» el texto.",
+          "Mezclar el estilo del equipo con uno genérico y sin voz."
+        ],
+        "essential": "Google Technical Writing courses"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "Roadmap: Technical Writer",
+          "url": "https://roadmap.sh/technical-writer",
+          "description": "Mapa de etapas de roadmap.sh: escritura técnica: audiencia, estructura, claridad y mantenimiento de documentos. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Google Technical Writing courses",
+          "url": "https://developers.google.com/tech-writing",
+          "description": "Cursos de escritura técnica de Google: frases claras, párrafos, documentos y revisión. Gratuito.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Microsoft Writing Style Guide",
+          "url": "https://learn.microsoft.com/en-us/style-guide/welcome/",
+          "description": "Guía de estilo para documentación técnica clara y consistente. Gratuito.",
+          "tags": [
+            "Guide",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Claude 101",
+          "url": "https://academy.claude.com/courses/claude-101",
+          "description": "Usar Claude en el trabajo diario: primera conversación, prompts efectivos, proyectos, artifacts, skills y herramientas conectadas. 13 lecciones, un cuestionario e insignia. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "2,5 h"
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n4-t0",
+          "text": "Hacer el curso *Google Technical Writing courses* (parte uno) y aplicar una técnica a un párrafo propio",
+          "completed_by_resource": "Google Technical Writing courses"
+        },
+        {
+          "key": "n4-t1",
+          "text": "Escribir el esquema de una guía de dos páginas (por ejemplo, un procedimiento de levantamiento) y pedir a la IA que señale lagunas"
+        },
+        {
+          "key": "n4-t2",
+          "text": "Pedir a la IA que revise un párrafo tuyo como lector crítico y aceptar solo los cambios que mejoran la claridad"
+        },
+        {
+          "key": "n4-t3",
+          "text": "Comparar las cifras y unidades del texto final con el original, línea por línea"
+        }
+      ],
+      "mastery_signals": [
+        "Tu documento tiene audiencia, objetivo y estructura antes del primer párrafo",
+        "Las cifras y unidades finales son las tuyas, no las que «mejoró» la IA"
+      ],
+      "quiz": [
+        {
+          "key": "n4-q0",
+          "question": "Le pides a la IA que mejore la redacción de una memoria y cambia «0,5 m» por «50 cm» y redondea una cota. ¿Qué haces?",
+          "options": [
+            "Aceptas, porque es lo mismo",
+            "Revisas cada cifra y unidad contra el original antes de aceptar",
+            "Le pides que lo haga de nuevo sin revisar"
+          ],
+          "answer": 1,
+          "explanation": "La edición con IA puede alterar datos sin avisar. Las cifras y unidades se comparan con el original."
+        },
+        {
+          "key": "n4-q1",
+          "question": "¿Qué le delegas mejor a la IA en un informe?",
+          "options": [
+            "Los resultados de medición",
+            "Ordenar el esquema y acortar párrafos largos",
+            "La firma y la responsabilidad técnica"
+          ],
+          "answer": 1,
+          "explanation": "La IA es útil para estructura y claridad; los datos y la responsabilidad profesional siguen siendo tuyos."
+        }
+      ]
+    },
+    {
+      "code": "n5",
+      "order": 5,
+      "short": "Tu flujo",
+      "title": "Paso 5 · Tu flujo de trabajo con IA",
+      "estimated_hours": "2 a 3 h",
+      "audience": "Quien terminó los pasos 0 a 4",
+      "goal": "Armar y documentar tu flujo personal: qué tareas delegas, qué verificas y qué nunca compartes. Cierre de la ruta y puerta de entrada a *Claude Code y MCP*.",
+      "guide": {
+        "title": "Guía rápida · Flujo personal",
+        "software": "ia",
+        "do": [
+          "Elige tres tareas repetitivas de tu semana y decide cuál puedes acelerar con IA.",
+          "Para cada una anota: entrada, prompt base, verificación y qué datos no se comparten.",
+          "Comparte el flujo con el equipo para afinarlo."
+        ],
+        "commands": [
+          "*Flujo de trabajo*",
+          "*Verificación*",
+          "*Prompt base*"
+        ],
+        "mistakes": [
+          "Automatizar una tarea que ni tú entiendes aún.",
+          "No medir si de verdad ahorras tiempo.",
+          "Guardar prompts con datos reales dentro."
+        ],
+        "essential": "Claude 101"
+      },
+      "resources": [
+        {
+          "order": 0,
+          "title": "AI Fluency for builders",
+          "url": "https://academy.claude.com/courses/ai-fluency-for-builders",
+          "description": "Variante del curso de fluidez en IA para quienes construyen soluciones de punta a punta. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 1,
+          "title": "Claude 101",
+          "url": "https://academy.claude.com/courses/claude-101",
+          "description": "Usar Claude en el trabajo diario: primera conversación, prompts efectivos, proyectos, artifacts, skills y herramientas conectadas. 13 lecciones, un cuestionario e insignia. Gratuito; pide cuenta gratuita para guardar el progreso y la insignia.",
+          "tags": [
+            "Course",
+            "Oficial",
+            "Gratuito",
+            "IA y Datos",
+            "Esencial"
+          ],
+          "duration_text": "2,5 h"
+        },
+        {
+          "order": 2,
+          "title": "Roadmap: AI Engineer",
+          "url": "https://roadmap.sh/ai-engineer",
+          "description": "Mapa de etapas de roadmap.sh: construir aplicaciones con LLM, RAG y agentes. Gratuito; úsalo para ubicarte y elegir qué reforzar.",
+          "tags": [
+            "Roadmap",
+            "Gratuito",
+            "IA y Datos",
+            "Complementario"
+          ]
+        }
+      ],
+      "milestones": [
+        {
+          "key": "n5-t0",
+          "text": "Elegir tres tareas repetitivas y estimar el tiempo que tomaban antes"
+        },
+        {
+          "key": "n5-t1",
+          "text": "Probar la IA en una de ellas y medir el tiempo y la calidad frente al método anterior"
+        },
+        {
+          "key": "n5-t2",
+          "text": "Documentar el flujo: prompt base, verificación y datos que no se comparten"
+        },
+        {
+          "key": "n5-t3",
+          "text": "Presentar el flujo al equipo en cinco minutos y recoger una mejora"
+        }
+      ],
+      "mastery_signals": [
+        "Tienes un flujo documentado que otra persona puede repetir",
+        "Sabes cuánto tiempo te ahorra y qué debes seguir verificando"
+      ],
+      "quiz": [
+        {
+          "key": "n5-q0",
+          "question": "Quieres automatizar un reporte semanal con IA. ¿Qué haces primero?",
+          "options": [
+            "Pegas los datos de todos los clientes",
+            "Defines entrada, verificación y datos que no se comparten, y pruebas con datos de ejemplo",
+            "Lo programas sin entenderlo"
+          ],
+          "answer": 1,
+          "explanation": "Un flujo confiable parte de entradas claras y verificación, con datos de ejemplo o anonimizados."
+        },
+        {
+          "key": "n5-q1",
+          "question": "¿Para qué sirve documentar tu flujo con IA?",
+          "options": [
+            "Para que otro lo repita y se pueda mejorar y auditar",
+            "Para que la IA lo recuerde sola",
+            "No sirve; es burocracia"
+          ],
+          "answer": 0,
+          "explanation": "Un flujo documentado se comparte, se mide y se mejora; uno informal no."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "LLM",
+      "location": "IA",
+      "meaning": "Modelo de lenguaje grande: genera texto prediciendo la continuación más probable."
+    },
+    {
+      "term": "Token",
+      "location": "IA",
+      "meaning": "Trozo de texto (palabra o parte) con que el modelo lee y escribe."
+    },
+    {
+      "term": "Contexto",
+      "location": "IA",
+      "meaning": "Todo lo que el modelo ve en la conversación; tiene un límite."
+    },
+    {
+      "term": "Alucinación",
+      "location": "IA",
+      "meaning": "Dato falso pero verosímil generado por el modelo."
+    },
+    {
+      "term": "PII",
+      "location": "Privacidad",
+      "meaning": "Datos personales identificables (nombre, RUT, correo, teléfono)."
+    }
+  ],
+  "description": "Qué es un modelo de lenguaje, cómo pedirle bien las cosas, cuándo se equivoca, qué información nunca se comparte y cómo usarlo para informes y documentos de ingeniería.",
+  "intro": {
+    "title": "La IA como colega rápido, no como oráculo",
+    "text": "Ruta sin requisitos, con cursos oficiales y gratuitos. Cada paso mezcla un curso, una práctica con tu propio trabajo y una regla de privacidad. Al terminar tienes un flujo de trabajo con IA documentado."
+  },
+  "flow": [
+    {
+      "title": "Entender",
+      "text": "Qué es un LLM y sus límites"
+    },
+    {
+      "title": "Pedir",
+      "text": "Prompts con contexto"
+    },
+    {
+      "title": "Verificar",
+      "text": "Alucinaciones y fuentes"
+    },
+    {
+      "title": "Proteger",
+      "text": "Privacidad y uso responsable"
+    },
+    {
+      "title": "Aplicar",
+      "text": "Informes y flujo propio"
+    }
+  ]
+}

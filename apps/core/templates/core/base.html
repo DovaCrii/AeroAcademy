@@ -44,7 +44,7 @@
     {% endif %}
     <div class="cell cell-actions">
       <button class="iconbtn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">◐</button>
-      {% if user.is_authenticated %}<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="iconbtn" type="submit" title="Salir" aria-label="Salir">⏻</button></form>{% endif %}
+      {% if password_session %}<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="iconbtn" type="submit" title="Salir" aria-label="Salir">⏻</button></form>{% endif %}
     </div>
   </div>
   <script>

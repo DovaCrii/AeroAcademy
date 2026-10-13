@@ -1,0 +1,20 @@
+{% comment %}Línea de niveles de una ruta. Contexto: path, chapters, current (de world_context / external_context).{% endcomment %}
+{% load static %}{% if chapters|length > 1 %}
+<link rel="stylesheet" href="{% static 'paths/metro.css' %}">
+<nav class="ll" aria-label="Línea de niveles de la ruta">
+  <span class="ll-cap">Línea de niveles</span>
+  <div class="ll-scroll">
+    <ol>
+      {% for ch in chapters %}
+      <li class="{% if ch.complete %}done{% elif ch.done %}part{% endif %}{% if ch.level.code == current.level.code %} now{% endif %}">
+        <a href="{% url 'paths:detail' path.slug %}?nivel={{ ch.level.code }}#panel" data-enhance data-fid="ll-{{ ch.level.code }}"{% if ch.level.code == current.level.code %} aria-current="step"{% endif %} aria-label="Nivel {{ ch.level.code|upper }} {{ ch.level.short }}: {% if ch.complete %}completo{% elif ch.done %}en curso{% else %}pendiente{% endif %}{% if ch.level.code == current.level.code %}, estás aquí{% endif %}">
+          <span class="ll-dot" aria-hidden="true"></span>
+          <span class="ll-code">{{ ch.level.code|upper }}</span>
+          <span class="ll-name">{{ ch.level.short }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</nav>
+{% endif %}

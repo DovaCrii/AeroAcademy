@@ -262,6 +262,30 @@
           ],
           "answer": 0,
           "explanation": "La automatización se apoya en datos consistentes; sin ellos revisa mal o no revisa."
+        },
+        {
+          "key": "n0-q5",
+          "question": "Un equipo exporta láminas desde el modelo, pero un colega las edita a mano en 2D 'para ir más rápido'. Al mes, planta y corte no coinciden. ¿Qué principio se rompió?",
+          "options": [
+            "Las láminas deben ser derivadas del modelo: una sola fuente de información",
+            "Los planos deben estar en color",
+            "Hay que usar más capas",
+            "El nivel 0 es suficiente"
+          ],
+          "answer": 0,
+          "explanation": "Si las láminas dejan de salir del modelo, aparecen dos verdades que se desfasan."
+        },
+        {
+          "key": "n0-q6",
+          "question": "Una oficina intercambia modelos por especialidad y los coordina con formatos acordados, pero cada proyecto usa su propio repositorio sin normas comunes. ¿Dónde está, aproximadamente?",
+          "options": [
+            "Nivel 0",
+            "Nivel 3",
+            "Nivel 1",
+            "Nivel 2"
+          ],
+          "answer": 3,
+          "explanation": "Colaborar con modelos por especialidad es nivel 2; el 3 exige datos integrados e interoperables en un entorno común."
         }
       ],
       "mastery_signals": [
@@ -272,6 +296,229 @@
       "images": [
         "core/img/bim/evolucion-cad-bim-gemelo-ia.svg",
         "core/img/bim/dimensiones-bim.svg"
+      ],
+      "slides": [
+        {
+          "title": "BIM: un producto y un proceso",
+          "body": "BIM (*Building Information Modelling*) no es un programa ni un 3D bonito. Es **modelar la información** de un activo: cada objeto lleva geometría **y** datos, y existe un proceso acordado para crearlos, revisarlos y entregarlos.",
+          "points": [
+            "El *modelo* es el producto: objetos con forma, material, fabricante, costo y mantención",
+            "El *proceso* es cómo se trabaja: quién modela, quién revisa, dónde vive la versión vigente",
+            "Las láminas 2D se derivan del modelo, no al revés",
+            "Su valor aparece cuando alguien más usa los datos: obra, costos u operación"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Un modelo sin datos ni proceso es solo geometría: sirve para mirar, no para decidir."
+          },
+          "terms": [
+            "*BIM*",
+            "*Modelo*",
+            "*Objeto paramétrico*"
+          ]
+        },
+        {
+          "title": "De CAD a gemelo digital e IA",
+          "body": "Cada etapa construye sobre la anterior. El **CAD** (años 80 y 90) dibuja digitalmente y el plano es el producto; el **BIM** (años 2000) modela información: objetos más datos; el **gemelo digital** (2010 en adelante) integra información de distintas fuentes, modelos, disciplinas y ciclo de vida; la **IA y la automatización** (2020 en adelante) generan, revisan y analizan, y empiezan a conectarse directamente al modelo mediante protocolos. Todas dependen de **datos confiables**.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "cad",
+                "label": "CAD 2D",
+                "kind": "dato",
+                "x": 14,
+                "y": 22,
+                "sub": "líneas y capas"
+              },
+              {
+                "id": "bim",
+                "label": "BIM",
+                "kind": "proceso",
+                "x": 50,
+                "y": 22,
+                "sub": "objetos con datos"
+              },
+              {
+                "id": "gemelo",
+                "label": "Gemelo digital",
+                "kind": "producto",
+                "x": 86,
+                "y": 22,
+                "sub": "modelo + datos vivos"
+              },
+              {
+                "id": "ia",
+                "label": "IA y automatización",
+                "kind": "equipo",
+                "x": 86,
+                "y": 52,
+                "sub": "revisa y propone"
+              },
+              {
+                "id": "datos",
+                "label": "Datos confiables",
+                "kind": "persona",
+                "x": 50,
+                "y": 80,
+                "sub": "ordenados y con dueño"
+              }
+            ],
+            "edges": [
+              {
+                "from": "cad",
+                "to": "bim",
+                "label": "con datos",
+                "flow": true
+              },
+              {
+                "from": "bim",
+                "to": "gemelo",
+                "label": "conecta",
+                "flow": true
+              },
+              {
+                "from": "gemelo",
+                "to": "ia",
+                "label": "analiza",
+                "flow": true
+              },
+              {
+                "from": "datos",
+                "to": "bim",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "datos",
+                "to": "ia",
+                "label": "combustible",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "cad"
+              ],
+              [
+                "bim",
+                "cad-bim"
+              ],
+              [
+                "gemelo",
+                "bim-gemelo"
+              ],
+              [
+                "ia",
+                "gemelo-ia"
+              ],
+              [
+                "datos",
+                "datos-bim",
+                "datos-ia"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Niveles de madurez 0 a 3",
+          "body": "La madurez describe **cómo colabora** un equipo, no cuán bonito es el modelo. Sirve para ubicar dónde está una oficina y qué sigue.",
+          "points": [
+            "*Nivel 0*: dibujos 2D sueltos, sin coordinar",
+            "*Nivel 1*: 2D y 3D con datos poco coordinados; cada especialidad en su archivo",
+            "*Nivel 2*: un modelo por especialidad; se intercambian y se coordinan con formatos acordados",
+            "*Nivel 3*: datos integrados e interoperables en un entorno común durante todo el ciclo de vida",
+            "Saltarse un nivel suele salir caro: sin nivel 2 ordenado, el 3 no se sostiene"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Mucha gente dice 'hacemos BIM' estando en nivel 1. Pregunta qué se intercambia y cómo."
+          }
+        },
+        {
+          "title": "Dimensiones: de 3D a 7D",
+          "body": "Cada dimensión es una **pregunta** que el modelo debe poder responder, y exige datos que alguien mantiene.",
+          "points": [
+            "*3D*: forma y espacio",
+            "*4D*: tiempo, secuencia de obra",
+            "*5D*: costo y cantidades",
+            "*6D*: energía y sostenibilidad",
+            "*7D*: operación y mantenimiento"
+          ],
+          "image": "core/img/bim/dimensiones-bim.svg",
+          "caption": "Dimensiones BIM: forma, tiempo, costo, sostenibilidad y operación"
+        },
+        {
+          "title": "Qué cambia en cómo se produce",
+          "body": "El desfase entre etapas no es solo de software: es de **modelo de producción**, de coordinación y de gestión de la información.",
+          "points": [
+            "CAD: el entregable es el plano; cada lámina se mantiene a mano",
+            "BIM: el entregable es el modelo; planos y listados se derivan",
+            "Gemelo y activo digital: el modelo se une con datos de distintas fuentes y mantiene trazabilidad en el tiempo",
+            "IA: propone alternativas y revisa reglas, pero necesita un modelo con datos consistentes",
+            "Un equipo que trabaja solo en CAD 2D sigue en el paradigma de la primera etapa aunque use programas modernos"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Un activo digital es cualquier recurso que existe de forma digital y tiene valor propio: modelo, nube, datos y documentos del activo."
+          }
+        },
+        {
+          "title": "Ejemplo: un muro como objeto con datos",
+          "body": "En un plano 2D un muro son dos líneas. En BIM es un **objeto** con tipo, espesor, capas, resistencia al fuego, fabricante, costo unitario y fecha de ejecución. Con el mismo objeto se obtienen planos, cantidades, programación y, años después, la ficha de mantención.",
+          "points": [
+            "Geometría: largo, alto, espesor y ubicación",
+            "Datos técnicos: materiales, transmisión térmica, resistencia al fuego",
+            "Datos de proyecto: fase, responsable, estado de revisión",
+            "Datos de operación: proveedor, garantía, frecuencia de mantención"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Cambiar el espesor del muro actualiza planta, corte, cubicación y programa: una sola fuente."
+          }
+        },
+        {
+          "title": "Errores típicos al empezar con BIM",
+          "points": [
+            "Creer que BIM es 'hacer un 3D' sin datos ni proceso",
+            "Pedir 5D o 7D sin tener ordenados los datos de base",
+            "Entregar modelo y láminas desconectados: las láminas se dibujan aparte y se desfasan",
+            "Modelar todo al máximo detalle desde el día uno",
+            "Encargar una IA sobre datos desordenados: solo acelera los errores"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Si el modelo no responde una pregunta concreta del proyecto, probablemente sobra o falta algo."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "En un equipo, BIM no reemplaza el criterio: lo ordena. Se empieza por una pregunta de negocio y se decide qué datos hacen falta para responderla.",
+          "points": [
+            "Definir el uso del modelo antes de modelar: coordinar, cubicar, programar u operar",
+            "Acordar quién es dueño de cada modelo y de cada dato",
+            "Usar el mismo origen, unidades y nombres desde el inicio",
+            "Medir madurez de forma honesta y subir de a un nivel",
+            "Reutilizar lo que ya se hace bien: terreno, trazado y coordinación existen hace años"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "En ingeniería civil ya se 'hace BIM' con terreno y trazado; lo nuevo es hacerlo con estándar y entre disciplinas."
+          }
+        },
+        {
+          "title": "Resumen: lo que te llevas",
+          "points": [
+            "BIM = información modelada + proceso compartido",
+            "CAD dibuja, BIM modela, el gemelo se conecta, la IA analiza",
+            "Madurez 0 a 3: qué tanto colabora el equipo",
+            "Dimensiones 3D a 7D: preguntas que el modelo responde",
+            "Sin datos confiables, ninguna etapa posterior funciona"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Siguiente paso: roles y entregables, es decir, quién hace qué y qué se pide."
+          }
+        }
       ]
     },
     {
@@ -425,6 +672,30 @@
           ],
           "answer": 1,
           "explanation": "La gestión de información es un rol: sin él, circulan versiones paralelas."
+        },
+        {
+          "key": "n1-q5",
+          "question": "El mandante quiere recibir 'todo el modelo con todos los datos posibles' al cierre. ¿Qué documento ayuda a acotar qué se pide y para qué?",
+          "options": [
+            "Un presupuesto",
+            "Una planilla de turnos",
+            "Los requisitos de información (EIR) ligados a los usos del activo",
+            "Un manual de marca"
+          ],
+          "answer": 2,
+          "explanation": "Los requisitos de información definen qué se entrega y para qué decisión; el resto es ruido."
+        },
+        {
+          "key": "n1-q6",
+          "question": "Para un permiso de edificación se pide el mismo nivel de detalle que para fabricar estructuras. ¿Qué es lo más probable?",
+          "options": [
+            "Se ahorra tiempo",
+            "Se pierde precisión",
+            "Mejora la coordinación",
+            "Se invierte esfuerzo de modelado que el permiso no usa"
+          ],
+          "answer": 3,
+          "explanation": "El nivel de información debe seguir el propósito; sobremodelar cuesta sin aportar a la decisión."
         }
       ],
       "mastery_signals": [
@@ -434,6 +705,202 @@
       ],
       "images": [
         "core/img/bim/lod.svg"
+      ],
+      "slides": [
+        {
+          "title": "Un equipo BIM: roles y responsabilidades",
+          "body": "Un modelo sin dueño se descompone. Los proyectos con BIM separan **quién encarga**, **quién gestiona** y **quién modela**.",
+          "points": [
+            "*Mandante*: define qué necesita saber para operar y qué recibirá",
+            "*Gestor BIM*: fija estándares, método y control de calidad",
+            "*Coordinador*: reúne los modelos y resuelve interferencias",
+            "*Modeladores* por especialidad: dueños de su modelo",
+            "*Gestor de la información*: administra el entorno común, versiones y permisos"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Una persona puede cumplir varios roles en un proyecto pequeño, pero el rol debe estar escrito."
+          },
+          "terms": [
+            "*Gestor BIM*",
+            "*Matriz de responsabilidades*"
+          ]
+        },
+        {
+          "title": "Qué se pide y cuándo: OIR, AIR y EIR",
+          "body": "La información se pide **desde el fin**: primero qué necesita saber quien opera, luego qué debe entregar cada proveedor.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "oir",
+                "label": "OIR",
+                "kind": "persona",
+                "x": 14,
+                "y": 22,
+                "sub": "necesidad de la organización"
+              },
+              {
+                "id": "air",
+                "label": "AIR",
+                "kind": "dato",
+                "x": 50,
+                "y": 22,
+                "sub": "info del activo para operar"
+              },
+              {
+                "id": "eir",
+                "label": "EIR",
+                "kind": "proceso",
+                "x": 86,
+                "y": 22,
+                "sub": "lo que se exige al proveedor"
+              },
+              {
+                "id": "bep",
+                "label": "BEP",
+                "kind": "producto",
+                "x": 86,
+                "y": 62,
+                "sub": "cómo lo hará el equipo"
+              },
+              {
+                "id": "entrega",
+                "label": "Entregables",
+                "kind": "producto",
+                "x": 50,
+                "y": 62,
+                "sub": "modelos, listados, informes"
+              }
+            ],
+            "edges": [
+              {
+                "from": "oir",
+                "to": "air",
+                "label": "traduce",
+                "flow": true
+              },
+              {
+                "from": "air",
+                "to": "eir",
+                "label": "se pide",
+                "flow": true
+              },
+              {
+                "from": "eir",
+                "to": "bep",
+                "label": "responde",
+                "flow": true
+              },
+              {
+                "from": "bep",
+                "to": "entrega",
+                "label": "produce",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "oir"
+              ],
+              [
+                "air",
+                "oir-air"
+              ],
+              [
+                "eir",
+                "air-eir"
+              ],
+              [
+                "bep",
+                "eir-bep"
+              ],
+              [
+                "entrega",
+                "bep-entrega"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "El plan de ejecución BIM (BEP)",
+          "body": "El **BEP** es el documento vivo con el que el equipo responde a lo que pide el mandante. Se acuerda al arranque y se actualiza.",
+          "points": [
+            "Objetivos y usos del modelo",
+            "Roles, responsables y matriz de responsabilidades",
+            "Convención de nombres de archivos y de objetos",
+            "Software, versiones y formatos de intercambio",
+            "Origen, sistema de coordenadas y unidades",
+            "Frecuencia de intercambio y control de calidad"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Lo primero que debe fijar un BEP es el origen y el sistema de coordenadas; si no, cada modelo nace en su propio mundo."
+          }
+        },
+        {
+          "title": "LOD y LOIN: cuánto detalle y cuánta información",
+          "body": "El **LOD** habla de cuánta geometría tiene un elemento. El **LOIN** (*nivel de información necesario*) va más allá: define geometría, información y documentación según el **propósito**.",
+          "points": [
+            "Se define por uso: permiso, licitación, obra u operación",
+            "Se define por elemento: un muro no necesita el mismo nivel que un equipo mecánico",
+            "Menos es más: lo que no se usa se desactualiza"
+          ],
+          "image": "core/img/bim/lod.svg",
+          "caption": "Niveles de detalle e información según el uso del modelo"
+        },
+        {
+          "title": "Ejemplo: tres usos, tres niveles",
+          "body": "Un mismo edificio exige niveles distintos según la decisión que se tome con el modelo.",
+          "points": [
+            "Permiso de edificación: volumen, superficies y alturas; poca información por objeto",
+            "Licitación de estructuras: dimensiones, secciones y cantidades fiables",
+            "Operación: ubicación y datos de cada equipo (modelo, proveedor, mantención), sin necesidad de cada tornillo"
+          ],
+          "image": "priv:lod-linea-tiempo.jpg",
+          "caption": "LOD: más que detalle, confiabilidad de la información",
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Pedir el máximo detalle 'por si acaso' triplica el costo de modelar y casi nunca mejora una decisión."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Modelar al máximo detalle desde el primer día",
+            "No fijar origen y coordenadas comunes en el BEP",
+            "No dejar escrito quién es responsable de cada modelo",
+            "Copiar un BEP de otro proyecto sin adaptarlo",
+            "Pedir información sin decir para qué se usará"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Si en la reunión de arranque nadie sabe quién actualiza un modelo, el BEP está incompleto."
+          }
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "Antes de modelar, el equipo se reúne una hora y responde cuatro preguntas. Esa hora ahorra semanas de retrabajo.",
+          "points": [
+            "¿Para qué usaremos el modelo? Cada uso define un nivel de información",
+            "¿Quién es dueño de cada modelo y de cada dato?",
+            "¿Qué origen, unidades y nombres compartimos?",
+            "¿Cómo y cuándo intercambiamos y revisamos?"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Una matriz de responsabilidades de una página suele bastar para un proyecto pequeño."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Roles claros: mandante, gestor, coordinador, modeladores",
+            "OIR, AIR y EIR dicen qué se necesita; el BEP dice cómo se hará",
+            "LOIN: pedir información por uso, no 'por si acaso'",
+            "Origen y coordenadas comunes se fijan en el BEP",
+            "Siguiente: dónde vive la información, el entorno común de datos"
+          ]
+        }
       ]
     },
     {
@@ -587,6 +1054,30 @@
           ],
           "answer": 1,
           "explanation": "Un nombre bien armado permite ordenar, filtrar y auditar."
+        },
+        {
+          "key": "n2-q5",
+          "question": "Un proveedor entrega el modelo 'final' por correo y nadie sabe si reemplaza al anterior. ¿Qué práctica del CDE lo habría evitado?",
+          "options": [
+            "Cambiar el nombre del archivo a mano",
+            "Subirlo al estado compartido con revisión, versión y registro, y publicarlo solo tras autorización",
+            "Responder con un PDF",
+            "Mantener cinco copias"
+          ],
+          "answer": 1,
+          "explanation": "El flujo con estados y puertas deja claro qué es vigente y qué lo reemplaza."
+        },
+        {
+          "key": "n2-q6",
+          "question": "Una versión de un modelo fue reemplazada y ya no se usa, pero hay que conservarla por si surge una disputa. ¿A qué estado va?",
+          "options": [
+            "Publicado",
+            "En curso",
+            "Compartido",
+            "Archivo"
+          ],
+          "answer": 3,
+          "explanation": "El archivo guarda el historial con trazabilidad sin que se confunda con lo vigente."
         }
       ],
       "mastery_signals": [
@@ -596,6 +1087,200 @@
       ],
       "images": [
         "core/img/bim/cde-iso19650.svg"
+      ],
+      "slides": [
+        {
+          "title": "Qué es ISO 19650 y para qué sirve",
+          "body": "ISO 19650 es el estándar internacional para **gestionar la información** durante todo el ciclo de vida de un activo con BIM. No dice cómo modelar: dice cómo **pedir, producir, revisar y entregar** información de forma ordenada.",
+          "points": [
+            "Parte 1: conceptos y principios",
+            "Parte 2: fase de entrega (diseño y construcción)",
+            "Parte 3: fase de operación del activo",
+            "Define roles: quien encarga, quien lidera y los equipos de entrega"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Es una norma de gestión de información: se puede aplicar con cualquier programa."
+          },
+          "terms": [
+            "*ISO 19650*",
+            "*CDE*"
+          ]
+        },
+        {
+          "title": "El entorno común de datos (CDE)",
+          "body": "El **CDE** es el lugar único donde vive la información del proyecto, con control de acceso, versiones y trazabilidad. No es 'una carpeta compartida': es un **flujo con estados y puertas**.",
+          "points": [
+            "Un solo lugar para consultar lo vigente",
+            "Permisos por rol",
+            "Versiones y registro de cambios",
+            "Estados y puertas de revisión"
+          ],
+          "image": "core/img/bim/cde-iso19650.svg",
+          "caption": "Estados de la información en un CDE"
+        },
+        {
+          "title": "Los estados y las puertas de revisión",
+          "body": "La información viaja por cuatro estados. Entre ellos hay **puertas**: revisión, autorización y archivado, cada una con responsable y registro.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "wip",
+                "label": "En curso",
+                "kind": "persona",
+                "x": 14,
+                "y": 22,
+                "sub": "trabajo del equipo"
+              },
+              {
+                "id": "shared",
+                "label": "Compartido",
+                "kind": "proceso",
+                "x": 50,
+                "y": 22,
+                "sub": "listo para coordinar"
+              },
+              {
+                "id": "pub",
+                "label": "Publicado",
+                "kind": "producto",
+                "x": 86,
+                "y": 22,
+                "sub": "autorizado para usar"
+              },
+              {
+                "id": "arch",
+                "label": "Archivo",
+                "kind": "dato",
+                "x": 86,
+                "y": 62,
+                "sub": "historial inmutable"
+              },
+              {
+                "id": "rev",
+                "label": "Revisión y autorización",
+                "kind": "equipo",
+                "x": 50,
+                "y": 62,
+                "sub": "puerta con responsable"
+              }
+            ],
+            "edges": [
+              {
+                "from": "wip",
+                "to": "shared",
+                "label": "revisión",
+                "flow": true
+              },
+              {
+                "from": "shared",
+                "to": "pub",
+                "label": "autoriza",
+                "flow": true
+              },
+              {
+                "from": "pub",
+                "to": "arch",
+                "label": "archivado",
+                "flow": true
+              },
+              {
+                "from": "rev",
+                "to": "shared",
+                "label": "controla"
+              },
+              {
+                "from": "rev",
+                "to": "pub",
+                "label": "controla"
+              }
+            ],
+            "steps": [
+              [
+                "wip"
+              ],
+              [
+                "shared",
+                "wip-shared"
+              ],
+              [
+                "pub",
+                "shared-pub"
+              ],
+              [
+                "arch",
+                "pub-arch"
+              ],
+              [
+                "rev",
+                "rev-shared",
+                "rev-pub"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Nombres, códigos y metadatos",
+          "body": "Un archivo debe reconocerse **sin abrirlo**. La convención separa campos con un guion y se acuerda en el BEP.",
+          "points": [
+            "Proyecto, quien lo origina, zona o sistema, nivel o ubicación",
+            "Tipo (modelo, plano, informe) y rol (arquitectura, estructura, instalaciones)",
+            "Número correlativo y, aparte, revisión y estado",
+            "Metadatos: autor, fecha, descripción, estado de aptitud"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Ejemplo inventado: PRY01-EST-ZA-N02-M3D-0001. Se ordena, se filtra y se audita sin abrir nada."
+          }
+        },
+        {
+          "title": "Ejemplo: un modelo que se usó sin autorización",
+          "body": "Estructuras subió un modelo en borrador a la carpeta de arquitectura y alguien lo usó para una licitación. Nadie lo había revisado.",
+          "points": [
+            "Falla: no había puerta entre 'en curso' y 'compartido'",
+            "Efecto: lo que era borrador se confundió con lo vigente",
+            "Remedio: estados claros, permisos por rol y registro de quién movió qué",
+            "El CDE no evita el error humano; lo hace visible y rastreable"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Un CDE sin puertas es solo almacenamiento con otro nombre."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Llamar 'CDE' al correo y a carpetas sueltas",
+            "Publicar sin revisar ni autorizar",
+            "Mover archivos entre estados sin dejar registro",
+            "Nombres libres: 'final_v3_ahora_si.rvt'",
+            "Dar permisos de escritura a todos en todos los estados"
+          ]
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "El gestor de la información opera el CDE; los equipos solo mueven información cuando cumplen la puerta.",
+          "points": [
+            "Cada especialidad trabaja en su espacio 'en curso'",
+            "Al compartir, otro equipo revisa que el modelo cumple las reglas del BEP",
+            "Solo lo publicado se usa para construir, cubicar o licitar",
+            "Lo reemplazado se archiva con motivo y fecha"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Pregunta de prueba: ¿cuál es la versión vigente de este plano? Si hay que preguntar por correo, no hay CDE."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "ISO 19650 ordena cómo se gestiona la información, no cómo se modela",
+            "El CDE tiene estados: en curso, compartido, publicado y archivo",
+            "Entre estados hay puertas con responsable y registro",
+            "Los nombres y metadatos permiten ordenar y auditar",
+            "Siguiente: cómo viaja la información entre programas, IFC y BCF"
+          ]
+        }
       ]
     },
     {
@@ -748,6 +1433,30 @@
           ],
           "answer": 0,
           "explanation": "Unidades y ubicación son parte del contrato de intercambio."
+        },
+        {
+          "key": "n3-q5",
+          "question": "Recibes un IFC con las puertas clasificadas como 'muros'. Al cubicar, las puertas salen en el listado de muros. ¿Dónde está la causa?",
+          "options": [
+            "En la impresora",
+            "En el visor",
+            "En el mapeo de categorías al exportar",
+            "En la tolerancia del clash"
+          ],
+          "answer": 2,
+          "explanation": "La clasificación se decide al exportar: si está mal, el listado y las reglas también."
+        },
+        {
+          "key": "n3-q6",
+          "question": "Una incidencia llega por correo con una captura y sin ubicación. El responsable pierde media hora buscando. ¿Qué mejora concreta ofrece BCF?",
+          "options": [
+            "Imágenes más grandes",
+            "Vista de cámara guardada, elementos señalados, responsable y estado en un archivo ligero",
+            "Un PDF del modelo completo",
+            "Más reuniones de coordinación"
+          ],
+          "answer": 1,
+          "explanation": "BCF apunta al lugar exacto y al responsable, y la incidencia puede seguirse hasta cerrarla."
         }
       ],
       "mastery_signals": [
@@ -757,6 +1466,208 @@
       ],
       "images": [
         "core/img/bim/ifc-bcf.svg"
+      ],
+      "slides": [
+        {
+          "title": "Interoperabilidad: que el modelo viaje sin perder lo importante",
+          "body": "Cada programa guarda el modelo en su formato **nativo**, que conserva todo pero ata a un fabricante. Los formatos **abiertos** permiten intercambiar y archivar a largo plazo.",
+          "points": [
+            "Nativo: para modelar y editar",
+            "Abierto: para intercambiar, revisar y archivar",
+            "Un buen intercambio conserva objetos, tipos, propiedades y ubicación",
+            "Lo que no está acordado, se pierde en el camino"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Regla práctica: nativo para modelar, IFC para intercambiar y archivar, BCF para coordinar."
+          },
+          "terms": [
+            "*IFC*",
+            "*BCF*",
+            "*Formato nativo*"
+          ]
+        },
+        {
+          "title": "IFC: el modelo en formato abierto",
+          "body": "**IFC** (*Industry Foundation Classes*) describe objetos, sus tipos, propiedades y relaciones (un muro pertenece a un piso, una puerta está en un muro). Se exporta con una **vista de modelo** que define qué subconjunto de datos se intercambia.",
+          "points": [
+            "Clasifica cada objeto (IfcWall, IfcBeam, IfcPump…)",
+            "Lleva conjuntos de propiedades",
+            "Versiones habituales: IFC2x3 e IFC4; IFC 4.3 amplía a infraestructura"
+          ],
+          "image": "core/img/bim/ifc-bcf.svg",
+          "caption": "IFC transporta el modelo; BCF transporta la conversación"
+        },
+        {
+          "title": "Flujo de intercambio entre especialidades",
+          "body": "Cada especialidad modela en su programa, exporta IFC con una vista acordada, otra especialidad lo abre en su visor y las observaciones vuelven por BCF.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "arq",
+                "label": "Arquitectura",
+                "kind": "persona",
+                "x": 14,
+                "y": 22,
+                "sub": "modelo nativo"
+              },
+              {
+                "id": "est",
+                "label": "Estructuras",
+                "kind": "persona",
+                "x": 14,
+                "y": 72,
+                "sub": "modelo nativo"
+              },
+              {
+                "id": "ifc",
+                "label": "IFC",
+                "kind": "dato",
+                "x": 50,
+                "y": 47,
+                "sub": "vista de modelo acordada"
+              },
+              {
+                "id": "visor",
+                "label": "Visor / coordinación",
+                "kind": "equipo",
+                "x": 86,
+                "y": 47,
+                "sub": "revisa y compara"
+              },
+              {
+                "id": "bcf",
+                "label": "Incidencias BCF",
+                "kind": "producto",
+                "x": 86,
+                "y": 82,
+                "sub": "título, vista, responsable"
+              }
+            ],
+            "edges": [
+              {
+                "from": "arq",
+                "to": "ifc",
+                "label": "exporta",
+                "flow": true
+              },
+              {
+                "from": "est",
+                "to": "ifc",
+                "label": "exporta",
+                "flow": true
+              },
+              {
+                "from": "ifc",
+                "to": "visor",
+                "label": "se federa",
+                "flow": true
+              },
+              {
+                "from": "visor",
+                "to": "bcf",
+                "label": "reporta",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "arq",
+                "est"
+              ],
+              [
+                "ifc",
+                "arq-ifc",
+                "est-ifc"
+              ],
+              [
+                "visor",
+                "ifc-visor"
+              ],
+              [
+                "bcf",
+                "visor-bcf"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Qué revisar antes de exportar un IFC",
+          "points": [
+            "Unidades y escala: milímetros contra metros cambia todo",
+            "Ubicación y coordenadas: origen y sistema comunes",
+            "Clasificación: un muro debe ser un muro, no un 'objeto genérico'",
+            "Propiedades pedidas en el EIR: que viajen y con nombre consistente",
+            "Elementos sobrantes: ocultos, auxiliares o de dibujo",
+            "Abrir el IFC en otro visor: la única prueba real"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Un IFC que no abriste en un segundo visor es un IFC sin verificar."
+          }
+        },
+        {
+          "title": "BCF: conversar sin enviar el modelo",
+          "body": "Una incidencia **BCF** lleva título, comentario, **vista del modelo** (cámara y elementos), responsable, estado y fecha. Viaja liviana, sin el modelo, y cualquier programa compatible la abre en el sitio exacto.",
+          "points": [
+            "Reemplaza capturas de pantalla y correos ambiguos",
+            "Tiene estados: abierta, en revisión, resuelta, cerrada",
+            "Se relaciona con el elemento por su identificador, no por su color"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Mala: 'hay un choque en el segundo piso'. Buena: 'Ducto D-12 cruza la viga V-204 en eje C-4; responsable instalaciones; estado abierta'."
+          }
+        },
+        {
+          "title": "Consistencia de datos entre programas",
+          "body": "Un proyecto de infraestructura mezcla programas de civil, edificación, CAD 2D, diseño generativo, render y revisión. Cada uno tiene su formato nativo; entre ellos viajan formatos de dibujo, de intercambio y de revisión.",
+          "points": [
+            "Más programas y formatos significan más puntos donde se pierde información",
+            "Conviene decidir una fuente de verdad por tipo de dato y exportar desde ella",
+            "Cada traspaso debe verificar objetos, propiedades, unidades y coordenadas",
+            "La consistencia se prueba abriendo el resultado en otro programa, no confiando en la exportación"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Si un modelo pasa por tres formatos hasta llegar al visor y nadie verifica, cada paso es una oportunidad de perder propiedades."
+          }
+        },
+        {
+          "title": "Otros formatos y para qué sirven",
+          "body": "Cada tipo de dato tiene su formato. Elegir bien evita pérdidas.",
+          "points": [
+            "Dibujo: DWG o DGN, y PDF para entrega firmada",
+            "Terreno: LandXML y GeoTIFF",
+            "Nubes de puntos: LAS o E57",
+            "Operación: COBie y hojas estructuradas de datos",
+            "Modelo: IFC; conversación: BCF"
+          ]
+        },
+        {
+          "title": "Errores típicos y uso en el equipo",
+          "points": [
+            "Exportar IFC sin abrirlo en otro visor",
+            "Usar IFC como reemplazo del modelo nativo para seguir editando",
+            "Mandar capturas por correo en vez de incidencias BCF",
+            "No acordar vista de modelo, unidades ni coordenadas",
+            "En equipo: definir en el BEP qué se exporta, cuándo y con qué lista de verificación"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Una lista de verificación de seis puntos pegada en la pared evita el 80% de los IFC rotos."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Nativo para editar; abierto para intercambiar y archivar",
+            "IFC lleva objetos y propiedades; BCF lleva incidencias",
+            "Revisa unidades, coordenadas, clasificación y propiedades antes de enviar",
+            "Elige el formato por el uso del dato",
+            "Siguiente: ubicar el modelo en el mundo real"
+          ]
+        }
       ]
     },
     {
@@ -921,6 +1832,30 @@
           ],
           "answer": 1,
           "explanation": "Sin metadatos no se sabe para qué etapa sirve el dato."
+        },
+        {
+          "key": "n4-q5",
+          "question": "Un cálculo de rellenos sale 30% mayor al esperado. El MDT fue en realidad un MDS de un vuelo con vegetación densa. ¿Qué pasó?",
+          "options": [
+            "La vegetación se contó como terreno y alteró el cálculo",
+            "El dron voló demasiado alto",
+            "El sistema de coordenadas es UTM",
+            "Faltó un render"
+          ],
+          "answer": 0,
+          "explanation": "El MDS incluye vegetación y construcciones; los volúmenes se calculan sobre suelo desnudo."
+        },
+        {
+          "key": "n4-q6",
+          "question": "Georreferencias un modelo y la elevación queda 25 m desfasada en toda la zona. ¿Cuál es la causa más probable?",
+          "options": [
+            "El color de la capa",
+            "El tamaño de archivo",
+            "El norte de proyecto",
+            "Mezcla de alturas elipsoidales y ortométricas"
+          ],
+          "answer": 3,
+          "explanation": "Entre ambas alturas hay una ondulación del geoide que puede alcanzar decenas de metros."
         }
       ],
       "mastery_signals": [
@@ -930,6 +1865,209 @@
       ],
       "images": [
         "core/img/bim/geo-bim.svg"
+      ],
+      "slides": [
+        {
+          "title": "Un BIM sin ubicación flota",
+          "body": "Para que un modelo dialogue con el terreno, la nube de puntos y otros modelos necesita **dónde está**. Eso se resuelve con un punto base y un sistema de coordenadas acordados.",
+          "points": [
+            "*Punto base*: origen del proyecto con coordenadas conocidas",
+            "*Sistema de coordenadas*: global (UTM sobre SIRGAS-Chile) o local",
+            "Todos los modelos comparten ambos",
+            "Se registran en el BEP y en el modelo"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Esta ruta se apoya en Topografía 101: geodesia, UTM, GNSS y productos."
+          },
+          "terms": [
+            "*Punto base*",
+            "*Georreferenciación*"
+          ]
+        },
+        {
+          "title": "Georreferenciar: origen, rotación y escala",
+          "body": "Georreferenciar es relacionar el sistema del modelo con el del mundo. Hay tres decisiones que no se pueden improvisar.",
+          "points": [
+            "Origen: dónde está el cero del modelo respecto al cero del sistema",
+            "Rotación: norte verdadero frente a norte de proyecto",
+            "Escala o factor de elevación: pasar de distancia en el terreno a distancia en la proyección",
+            "Alturas: no mezclar elipsoidales con ortométricas"
+          ],
+          "image": "core/img/bim/geo-bim.svg",
+          "caption": "Modelo, nube y terreno comparten un mismo marco de referencia"
+        },
+        {
+          "title": "Nube de puntos y MDT como base del sitio",
+          "body": "La **nube de puntos** captura lo existente con detalle. El **MDT** (modelo digital del terreno, suelo desnudo) entrega la base para plataformas, cortes, rellenos y drenaje. El **MDS** (con árboles y techos) sirve como contexto.",
+          "points": [
+            "Nube: LAS o E57; sirve para modelar sobre ella, verificar y controlar avance",
+            "MDT: GeoTIFF o LandXML; base de movimientos de tierra",
+            "Ortofoto y malla de realidad: contexto visual",
+            "Ningún dato es más preciso que su origen"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Calcular un movimiento de tierra con un MDS cuenta árboles y techos como si fueran suelo."
+          }
+        },
+        {
+          "title": "Del levantamiento al modelo ubicado",
+          "body": "El orden de trabajo importa: primero el marco de referencia, luego la captura, luego el modelo.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "control",
+                "label": "Puntos de control",
+                "kind": "equipo",
+                "x": 14,
+                "y": 22,
+                "sub": "medidos con GNSS"
+              },
+              {
+                "id": "captura",
+                "label": "Captura",
+                "kind": "proceso",
+                "x": 50,
+                "y": 22,
+                "sub": "escáner, dron, topografía"
+              },
+              {
+                "id": "productos",
+                "label": "Nube y MDT",
+                "kind": "dato",
+                "x": 86,
+                "y": 22,
+                "sub": "con fuente y precisión"
+              },
+              {
+                "id": "modelo",
+                "label": "Modelo BIM",
+                "kind": "producto",
+                "x": 86,
+                "y": 62,
+                "sub": "mismo origen y sistema"
+              },
+              {
+                "id": "meta",
+                "label": "Metadatos",
+                "kind": "persona",
+                "x": 50,
+                "y": 62,
+                "sub": "fuente, fecha, sistema"
+              }
+            ],
+            "edges": [
+              {
+                "from": "control",
+                "to": "captura",
+                "label": "ancla",
+                "flow": true
+              },
+              {
+                "from": "captura",
+                "to": "productos",
+                "label": "procesa",
+                "flow": true
+              },
+              {
+                "from": "productos",
+                "to": "modelo",
+                "label": "base del sitio",
+                "flow": true
+              },
+              {
+                "from": "meta",
+                "to": "productos",
+                "label": "documenta"
+              }
+            ],
+            "steps": [
+              [
+                "control"
+              ],
+              [
+                "captura",
+                "control-captura"
+              ],
+              [
+                "productos",
+                "captura-productos"
+              ],
+              [
+                "modelo",
+                "productos-modelo"
+              ],
+              [
+                "meta",
+                "meta-productos"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Fuentes de captura y sus productos",
+          "body": "Los datos del sitio vienen de distintas técnicas de captura masiva. Cada una entrega productos distintos, y la elección depende de qué se necesita ver.",
+          "points": [
+            "Escáner láser terrestre: alta precisión desde estaciones fijas; el móvil recorre rápido espacios grandes; el aéreo cubre superficies extensas",
+            "Dron (UAS): su fotogrametría es una medición indirecta, porque se mide sobre las imágenes y no sobre los objetos",
+            "Multirrotor: despegue vertical y espacios confinados; ala fija: más superficie y autonomía",
+            "Productos: ortofoto 2D, modelo 3D, nube fotogramétrica o LiDAR, mapa térmico y mapa multiespectral",
+            "Reality modeling: la malla de realidad, la nube, las fotos aéreas y la topografía tradicional se combinan como contexto del diseño"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Ninguna técnica sirve para todo: la elección sigue la pregunta del proyecto y el nivel de precisión exigido."
+          }
+        },
+        {
+          "title": "Ejemplo: modelo y nube separados dos kilómetros",
+          "body": "Un equipo abre la nube del sitio y su modelo y los ve a 2 km. Antes de escalar, mover o borrar algo, se verifica.",
+          "points": [
+            "Paso 1: sistema de coordenadas de la nube y del modelo",
+            "Paso 2: punto base de ambos y unidades",
+            "Paso 3: aplicar una transformación documentada, no mover 'a ojo'",
+            "Paso 4: contrastar con puntos de control medidos"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Casi siempre es un problema de sistemas u orígenes, no de forma."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Modelar en un origen arbitrario y luego acomodar el sitio a ojo",
+            "Mezclar alturas elipsoidales con ortométricas",
+            "Usar un MDS donde se necesita el terreno desnudo",
+            "Georreferenciar con puntos poco precisos y creer que la nube heredó precisión",
+            "Perder la fuente, la fecha y el sistema del dato"
+          ]
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "El topógrafo entrega datos con metadatos; el gestor BIM fija el marco; los modeladores no lo cambian.",
+          "points": [
+            "Una ficha de metadatos por dato: fuente, fecha, sistema, precisión, responsable",
+            "Un archivo de ubicación compartido, no copias",
+            "Verificación al recibir cada insumo: ¿calza con los puntos de control?",
+            "Documentar transformaciones aplicadas"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Si un dato llega sin sistema de coordenadas, se devuelve: no se adivina."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Punto base y sistema de coordenadas comunes en todos los modelos",
+            "Georreferenciar: origen, rotación y escala",
+            "Nube para lo existente; MDT para el suelo; MDS como contexto",
+            "El modelo hereda la precisión de su dato de origen",
+            "Siguiente: coordinar modelos de varias especialidades"
+          ]
+        }
       ]
     },
     {
@@ -1069,6 +2207,30 @@
           ],
           "answer": 3,
           "explanation": "Un desplazamiento global casi siempre es de origen, no de diseño."
+        },
+        {
+          "key": "n5-q5",
+          "question": "Un coordinador configura una prueba 'todos los elementos contra todos los elementos' y obtiene 40.000 resultados. ¿Cuál es la mejor corrección?",
+          "options": [
+            "Imprimir el informe",
+            "Definir pares acotados (por ejemplo ductos contra vigas), con tolerancias, y agrupar por causa",
+            "Duplicar el equipo",
+            "Aumentar la tolerancia a 5 m"
+          ],
+          "answer": 1,
+          "explanation": "Las reglas acotadas reducen el ruido y dejan solo lo accionable."
+        },
+        {
+          "key": "n5-q6",
+          "question": "Se resolvió un choque moviendo el ducto directamente en el modelo federado. A la semana, el modelo de instalaciones lo vuelve a poner en su lugar original. ¿Qué pasó?",
+          "options": [
+            "La tolerancia estaba mal",
+            "El BCF falló",
+            "Se corrigió en el lugar equivocado: el origen sigue con el error",
+            "El programa tiene un error"
+          ],
+          "answer": 2,
+          "explanation": "El federado es de lectura; la corrección debe hacerse en el modelo de la especialidad responsable."
         }
       ],
       "mastery_signals": [
@@ -1078,6 +2240,220 @@
       ],
       "images": [
         "core/img/bim/interferencias.svg"
+      ],
+      "slides": [
+        {
+          "title": "Coordinar: reunir sin mezclar",
+          "body": "**Federar** es reunir los modelos de cada especialidad en uno de coordinación, **sin** fundirlos en un solo archivo editable. Cada modelo sigue perteneciendo a su dueño.",
+          "points": [
+            "El federado es solo para revisar",
+            "Cada especialidad corrige en su modelo de origen",
+            "Requiere origen, unidades y coordenadas comunes",
+            "Lo existente (nube de puntos) también se federa como una especialidad más"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Si un modelo aparece desplazado al federar, revisa primero origen y coordenadas, no el diseño."
+          },
+          "terms": [
+            "*Federar*",
+            "*Clash*"
+          ]
+        },
+        {
+          "title": "Tipos de interferencia",
+          "body": "No todo choque es un cruce de geometría.",
+          "points": [
+            "Dura: dos elementos ocupan el mismo espacio (ducto cruza viga)",
+            "Blanda: no se tocan, pero falta holgura, acceso o mantención",
+            "De tiempo (4D): coinciden en el cronograma, como dos cuadrillas con la misma grúa",
+            "Falso positivo: aparece como choque pero es aceptable o duplicado"
+          ],
+          "image": "core/img/bim/interferencias.svg",
+          "caption": "Interferencia dura, blanda y de tiempo"
+        },
+        {
+          "title": "El ciclo de coordinación con BCF",
+          "body": "Detectar es la mitad: el valor está en cerrar el ciclo corrigiendo en el modelo de origen y volviendo a correr la prueba.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "mod",
+                "label": "Modelos por especialidad",
+                "kind": "persona",
+                "x": 14,
+                "y": 22,
+                "sub": "nativos, en CDE"
+              },
+              {
+                "id": "fed",
+                "label": "Modelo federado",
+                "kind": "producto",
+                "x": 50,
+                "y": 22,
+                "sub": "solo revisión"
+              },
+              {
+                "id": "clash",
+                "label": "Detección de choques",
+                "kind": "proceso",
+                "x": 86,
+                "y": 22,
+                "sub": "reglas y tolerancias"
+              },
+              {
+                "id": "bcf",
+                "label": "Incidencias BCF",
+                "kind": "dato",
+                "x": 86,
+                "y": 62,
+                "sub": "responsable y plazo"
+              },
+              {
+                "id": "corr",
+                "label": "Corrección en origen",
+                "kind": "equipo",
+                "x": 50,
+                "y": 62,
+                "sub": "dueño del modelo"
+              }
+            ],
+            "edges": [
+              {
+                "from": "mod",
+                "to": "fed",
+                "label": "se federan",
+                "flow": true
+              },
+              {
+                "from": "fed",
+                "to": "clash",
+                "label": "se prueba",
+                "flow": true
+              },
+              {
+                "from": "clash",
+                "to": "bcf",
+                "label": "se reporta",
+                "flow": true
+              },
+              {
+                "from": "bcf",
+                "to": "corr",
+                "label": "se asigna",
+                "flow": true
+              },
+              {
+                "from": "corr",
+                "to": "mod",
+                "label": "se republica",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "mod"
+              ],
+              [
+                "fed",
+                "mod-fed"
+              ],
+              [
+                "clash",
+                "fed-clash"
+              ],
+              [
+                "bcf",
+                "clash-bcf"
+              ],
+              [
+                "corr",
+                "bcf-corr"
+              ],
+              [
+                "corr-mod"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Reglas de coordinación que sí funcionan",
+          "body": "No se revisa todo contra todo: genera miles de falsos positivos. Se define qué contra qué y con qué tolerancia.",
+          "points": [
+            "Pares acotados: ductos contra vigas, tuberías contra muros, equipos contra accesos",
+            "Tolerancias: duras en cm, blandas con holguras de mantención",
+            "Selecciones por clasificación o nivel, no por todo el modelo",
+            "Agrupar por causa: muchos choques son el mismo problema",
+            "Asignar responsable y plazo desde el informe"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "3.000 choques con 2.200 del mismo muro mal posicionado: se resuelve la raíz y se vuelve a correr."
+          }
+        },
+        {
+          "title": "Ejemplo: sala de máquinas",
+          "body": "Instalaciones, estructura y equipos se federan y la nube de puntos de lo existente se suma como una especialidad más.",
+          "points": [
+            "Una cañería nueva cruza una viga existente detectada solo en la nube",
+            "Un ducto no deja paso para una escalera de mantención: interferencia blanda",
+            "Dos equipos exigen la misma grúa el mismo día: interferencia de tiempo"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "El informe de cada choque incluye ubicación, elementos, responsables y propuesta, no solo una captura."
+          }
+        },
+        {
+          "title": "Estructura de un flujo de trabajo federado",
+          "body": "En un flujo federado cada especialidad mantiene sus modelos de diseño 3D, y un **modelo contenedor** los reúne con vistas dinámicas para revisar, sin reescribirlos. De ahí salen modelos de dibujo y láminas.",
+          "points": [
+            "Modelos 3D de cada especialidad: son la fuente de verdad",
+            "Modelo contenedor: referencia los demás y permite vistas dinámicas",
+            "Modelos de dibujo 2D: cortes y vistas derivadas del 3D",
+            "Láminas: el archivo entregable, siempre derivado",
+            "La nube de puntos y la fotogrametría entran como referencia de lo existente",
+            "Del mismo conjunto salen análisis: interferencias, cantidades e itemizados"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Si una lámina se edita a mano en lugar de actualizar el modelo de origen, el flujo federado deja de ser una sola verdad."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Correr la prueba cuando los modelos no comparten origen",
+            "Resolver choques dentro del federado en vez del modelo de origen",
+            "Revisar todo contra todo y ahogarse en falsos positivos",
+            "No cerrar el ciclo: la incidencia queda abierta sin plazo",
+            "Coordinar tarde, cuando ya está construido"
+          ]
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "La coordinación es una rutina, no un evento final.",
+          "points": [
+            "Ciclo semanal o quincenal: federar, probar, reportar, corregir",
+            "El coordinador prioriza; los modeladores corrigen",
+            "Las reglas y tolerancias viven en el BEP",
+            "Los informes y BCF quedan registrados en el CDE"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Una reunión de coordinación debería revisar incidencias, no discutir quién tiene la culpa."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Federar para revisar; corregir en el modelo de origen",
+            "Duras, blandas y de tiempo: tres tipos de choque",
+            "Reglas acotadas y tolerancias para evitar falsos positivos",
+            "BCF cierra el ciclo con responsable y plazo",
+            "Siguiente: del modelo a la obra, as-built y gemelo digital"
+          ]
+        }
       ]
     },
     {
@@ -1226,6 +2602,30 @@
           ],
           "answer": 0,
           "explanation": "Es el modelo cruzado con el avance en el tiempo."
+        },
+        {
+          "key": "n6-q5",
+          "question": "El mandante recibe un modelo de diseño con la etiqueta 'as-built' y, al intervenir, encuentra una tubería 40 cm fuera de donde figura. ¿Qué faltó?",
+          "options": [
+            "Un nuevo render",
+            "Un levantamiento verificable que respaldara el as-built",
+            "Más colores",
+            "Un formato distinto de archivo"
+          ],
+          "answer": 1,
+          "explanation": "El as-built se respalda con medición; sin eso es una declaración."
+        },
+        {
+          "key": "n6-q6",
+          "question": "Un gemelo digital de una planta lleva dos años sin recibir datos ni actualizar el modelo tras las modificaciones. ¿Qué riesgo corre?",
+          "options": [
+            "Pesar menos",
+            "Verse más actual",
+            "Ser más barato",
+            "Inducir decisiones erradas por parecer vigente"
+          ],
+          "answer": 3,
+          "explanation": "Un gemelo desactualizado engaña: parece confiable y ya no lo es."
         }
       ],
       "mastery_signals": [
@@ -1235,6 +2635,294 @@
       ],
       "images": [
         "core/img/bim/gemelo-digital.svg"
+      ],
+      "slides": [
+        {
+          "title": "Diseño y as-built: dos modelos distintos",
+          "body": "El **modelo de diseño** es lo que se pretende construir. El **as-built** es lo que realmente quedó, con sus tolerancias y los cambios de obra. Entre ambos hay decisiones en terreno que casi nunca vuelven al modelo si nadie lo exige.",
+          "points": [
+            "Diseño: intención, validada por el mandante",
+            "As-built: realidad, respaldada con mediciones",
+            "Diferencias normales: ajustes por interferencias, materiales y accesos",
+            "Entregar el diseño como si fuera as-built es el error más caro de la operación"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "El as-built documenta la realidad; no la hereda del diseño por buena voluntad."
+          },
+          "terms": [
+            "*As-built*",
+            "*Mapa de desviaciones*"
+          ]
+        },
+        {
+          "title": "Verificar lo construido contra el modelo",
+          "body": "Se levanta la obra terminada (o un avance) con escáner, fotogrametría o topografía y se compara con el modelo para ver **dónde y cuánto** se aparta.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "obra",
+                "label": "Obra construida",
+                "kind": "dato",
+                "x": 14,
+                "y": 22,
+                "sub": "losa, muros, redes"
+              },
+              {
+                "id": "captura",
+                "label": "Levantamiento",
+                "kind": "equipo",
+                "x": 50,
+                "y": 22,
+                "sub": "escáner, dron, estación"
+              },
+              {
+                "id": "nube",
+                "label": "Nube georreferenciada",
+                "kind": "producto",
+                "x": 86,
+                "y": 22,
+                "sub": "mismo marco del modelo"
+              },
+              {
+                "id": "desv",
+                "label": "Mapa de desviaciones",
+                "kind": "proceso",
+                "x": 86,
+                "y": 62,
+                "sub": "colores y valores"
+              },
+              {
+                "id": "modelo",
+                "label": "Modelo de diseño",
+                "kind": "producto",
+                "x": 50,
+                "y": 62,
+                "sub": "la intención"
+              }
+            ],
+            "edges": [
+              {
+                "from": "obra",
+                "to": "captura",
+                "label": "se mide",
+                "flow": true
+              },
+              {
+                "from": "captura",
+                "to": "nube",
+                "label": "procesa",
+                "flow": true
+              },
+              {
+                "from": "nube",
+                "to": "desv",
+                "label": "compara",
+                "flow": true
+              },
+              {
+                "from": "modelo",
+                "to": "desv",
+                "label": "referencia",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "obra"
+              ],
+              [
+                "captura",
+                "obra-captura"
+              ],
+              [
+                "nube",
+                "captura-nube"
+              ],
+              [
+                "desv",
+                "nube-desv"
+              ],
+              [
+                "modelo",
+                "modelo-desv"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Seguimiento de avance y entrega al operador",
+          "body": "Con fotos o nubes periódicas contra el modelo 4D se ve qué está hecho y qué no. Los vuelos repetidos de dron entregan actualizaciones visuales multitemporales, en 2D y 3D, para comparar el sitio con el diseño. Al cierre, lo que se entrega es un **activo digital**: modelo, datos y documentos para operar.",
+          "points": [
+            "Avance: capturas periódicas contra el programa",
+            "Datos de equipos con plantillas acordadas (COBie u otras)",
+            "Documentos: manuales, garantías, certificados",
+            "Todo ligado al objeto que describe"
+          ],
+          "image": "priv:niveles-obra-simbolos.jpg",
+          "caption": "Siglas de niveles en obra: una convención que el modelo y la obra deben compartir"
+        },
+        {
+          "title": "Gemelo digital: qué lo hace gemelo",
+          "body": "Un **gemelo digital** es el modelo conectado con datos reales del activo (sensores, órdenes de mantención, energía) y mantenido al día durante su vida. Su valor está en la **decisión** que mejora.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "activo",
+                "label": "Activo real",
+                "kind": "equipo",
+                "x": 14,
+                "y": 22,
+                "sub": "edificio, planta, red"
+              },
+              {
+                "id": "sensores",
+                "label": "Datos vivos",
+                "kind": "dato",
+                "x": 50,
+                "y": 22,
+                "sub": "sensores, órdenes, consumos"
+              },
+              {
+                "id": "gemelo",
+                "label": "Gemelo digital",
+                "kind": "producto",
+                "x": 86,
+                "y": 22,
+                "sub": "modelo + datos"
+              },
+              {
+                "id": "decision",
+                "label": "Decisión",
+                "kind": "persona",
+                "x": 86,
+                "y": 62,
+                "sub": "mantener, ahorrar, ampliar"
+              },
+              {
+                "id": "dueno",
+                "label": "Dueños y propósito",
+                "kind": "proceso",
+                "x": 50,
+                "y": 62,
+                "sub": "quién lo mantiene y para qué"
+              }
+            ],
+            "edges": [
+              {
+                "from": "activo",
+                "to": "sensores",
+                "label": "captura",
+                "flow": true
+              },
+              {
+                "from": "sensores",
+                "to": "gemelo",
+                "label": "alimenta",
+                "flow": true
+              },
+              {
+                "from": "gemelo",
+                "to": "decision",
+                "label": "informa",
+                "flow": true
+              },
+              {
+                "from": "decision",
+                "to": "activo",
+                "label": "actúa"
+              },
+              {
+                "from": "dueno",
+                "to": "gemelo",
+                "label": "sostiene"
+              }
+            ],
+            "steps": [
+              [
+                "activo"
+              ],
+              [
+                "sensores",
+                "activo-sensores"
+              ],
+              [
+                "gemelo",
+                "sensores-gemelo"
+              ],
+              [
+                "decision",
+                "gemelo-decision"
+              ],
+              [
+                "dueno",
+                "dueno-gemelo"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Control de calidad con nubes de puntos",
+          "body": "Una nube de puntos medida bien permite verificar lo construido de forma **representativa y rápida**, en vez de depender de unas pocas secciones.",
+          "points": [
+            "Espesor de un revestimiento proyectado: se escanea antes y después, y la diferencia entre ambas nubes da espesor y volumen",
+            "Túneles y excavaciones: la nube contra el diseño muestra sobre-excavación y sub-excavación, con informes de áreas y volúmenes",
+            "Estanques: un mapa de colores y reportes automáticos de verticalidad, redondez, asentamiento de coraza y hundimiento de piso",
+            "Una sección cada tanto tiene baja representatividad; la nube cubre toda la superficie"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Las nubes de puntos no deben ser solo bonitas: deben ser precisas, y se evalúa su representatividad."
+          }
+        },
+        {
+          "title": "Ejemplo: una losa en la cota equivocada",
+          "body": "Se escanea una losa terminada y se compara con la cota de diseño dentro de una tolerancia acordada.",
+          "points": [
+            "Se define la tolerancia antes de medir",
+            "Se captura con puntos de control",
+            "El mapa de desviaciones muestra zonas fuera de tolerancia con valor y ubicación",
+            "El informe indica qué se corrige y qué se acepta"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Un mapa de colores sin tolerancia definida solo asusta; con tolerancia, decide."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Entregar el modelo de diseño como si fuera el as-built",
+            "Armar un gemelo sin definir qué decisión va a mejorar",
+            "No actualizar: un gemelo desactualizado es peor que ninguno",
+            "Medir sin marco de referencia común con el modelo",
+            "Instalar sensores sin plan de datos ni dueño"
+          ]
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "El as-built y el gemelo son decisiones de contrato, no de última hora.",
+          "points": [
+            "Pedir el as-built desde el EIR, con técnica y tolerancia",
+            "Definir hitos de levantamiento durante la obra, no solo al cierre",
+            "Acordar con operación qué datos vivos se necesitan",
+            "Asignar quién actualiza el modelo tras cada cambio"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Cada cambio de obra sin registrar es una deuda que paga quien opera."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Diseño es intención; as-built es realidad medida",
+            "El mapa de desviaciones compara nube y modelo con tolerancias",
+            "Gemelo digital: modelo + datos vivos + decisión + dueño",
+            "Un gemelo sin propósito o sin actualización pierde valor",
+            "Siguiente: el ciclo de vida del activo y sus costos"
+          ]
+        }
       ]
     },
     {
@@ -1385,6 +3073,30 @@
           ],
           "answer": 2,
           "explanation": "Un activo se construye en meses o años y se opera por décadas."
+        },
+        {
+          "key": "n7-q5",
+          "question": "Dos opciones de sistema: una cuesta 10% menos construir, pero consume el doble de energía por décadas. ¿Qué mirada conviene?",
+          "options": [
+            "Considerar CAPEX y OPEX en el ciclo de vida, no solo el costo inicial",
+            "Elegir siempre la más barata de construir",
+            "Ignorar la energía",
+            "Elegir según el color"
+          ],
+          "answer": 0,
+          "explanation": "El costo total del activo incluye la operación, que puede pesar más que la obra."
+        },
+        {
+          "key": "n7-q6",
+          "question": "El equipo de operación tarda días en ubicar la válvula de corte de una zona porque los planos no coinciden con lo instalado. ¿Qué entrega faltó al cierre de obra?",
+          "options": [
+            "Un video institucional",
+            "Un as-built actualizado y ligado al objeto, con datos para operar",
+            "Más láminas 2D",
+            "Un nuevo diseño"
+          ],
+          "answer": 1,
+          "explanation": "Con as-built ligado a objetos, la ubicación y los datos de cada válvula se consultan en segundos."
         }
       ],
       "mastery_signals": [
@@ -1394,6 +3106,229 @@
       ],
       "images": [
         "core/img/bim/ciclo-de-vida-activo.svg"
+      ],
+      "slides": [
+        {
+          "title": "El activo como ciclo",
+          "body": "Un **activo** (edificio, planta, camino o red) pasa por diseño, construcción, operación y renovación, y vuelve a empezar. Casi toda su vida es operación.",
+          "points": [
+            "Diseño: define qué se construye y qué datos nacen",
+            "Construcción: genera lo realmente ejecutado",
+            "Operación: décadas de uso y mantención",
+            "Renovación: nueva intervención sobre lo existente"
+          ],
+          "image": "core/img/bim/ciclo-de-vida-activo.svg",
+          "caption": "Ciclo de vida del activo",
+          "terms": [
+            "*CAPEX*",
+            "*OPEX*",
+            "*Ciclo de vida*"
+          ]
+        },
+        {
+          "title": "CAPEX y OPEX: lo que se paga y cuándo",
+          "body": "**CAPEX** es el costo de construir; **OPEX** es el de operar y mantener. En muchos activos, acumulado en décadas, el OPEX termina pesando más (el orden de magnitud depende del tipo de activo).",
+          "points": [
+            "CAPEX: diseño, materiales, obra, equipos instalados",
+            "OPEX: energía, mantención, reparaciones, personal de operación",
+            "Decisiones de diseño baratas pueden elevar el OPEX durante décadas",
+            "Los datos de calidad bajan el OPEX: menos búsqueda, menos errores al intervenir"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Optimizar solo el CAPEX es como comprar el auto más barato sin mirar cuánto consume."
+          }
+        },
+        {
+          "title": "Cómo fluye la información entre fases",
+          "body": "La información nace en diseño, se verifica en obra y se usa en operación. Cada traspaso es una oportunidad de perderla o de mejorarla.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "dis",
+                "label": "Diseño",
+                "kind": "proceso",
+                "x": 14,
+                "y": 22,
+                "sub": "modelo y requisitos"
+              },
+              {
+                "id": "con",
+                "label": "Construcción",
+                "kind": "proceso",
+                "x": 50,
+                "y": 22,
+                "sub": "ejecución y cambios"
+              },
+              {
+                "id": "ope",
+                "label": "Operación",
+                "kind": "proceso",
+                "x": 86,
+                "y": 22,
+                "sub": "uso y mantención"
+              },
+              {
+                "id": "ren",
+                "label": "Renovación",
+                "kind": "proceso",
+                "x": 86,
+                "y": 62,
+                "sub": "intervención futura"
+              },
+              {
+                "id": "asb",
+                "label": "As-built confiable",
+                "kind": "dato",
+                "x": 50,
+                "y": 62,
+                "sub": "verificado con medición"
+              },
+              {
+                "id": "req",
+                "label": "Requisitos del operador",
+                "kind": "persona",
+                "x": 14,
+                "y": 62,
+                "sub": "qué datos necesita"
+              }
+            ],
+            "edges": [
+              {
+                "from": "dis",
+                "to": "con",
+                "label": "traspasa",
+                "flow": true
+              },
+              {
+                "from": "con",
+                "to": "ope",
+                "label": "entrega",
+                "flow": true
+              },
+              {
+                "from": "ope",
+                "to": "ren",
+                "label": "decide",
+                "flow": true
+              },
+              {
+                "from": "asb",
+                "to": "ope",
+                "label": "alimenta",
+                "flow": true
+              },
+              {
+                "from": "req",
+                "to": "dis",
+                "label": "define"
+              }
+            ],
+            "steps": [
+              [
+                "dis"
+              ],
+              [
+                "con",
+                "dis-con"
+              ],
+              [
+                "ope",
+                "con-ope"
+              ],
+              [
+                "ren",
+                "ope-ren"
+              ],
+              [
+                "asb",
+                "asb-ope"
+              ],
+              [
+                "req",
+                "req-dis"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Las etapas del ciclo de vida, una por una",
+          "body": "Mirar el ciclo completo ayuda a ver dónde nacen los datos y dónde se pierden.",
+          "points": [
+            "Diseño: identificar necesidades, objetivos y riesgos; fijar estándares de desempeño; pronosticar costos y financiar",
+            "Construcción: abastecimiento, ejecución y puesta en marcha",
+            "Operación: servicios operacionales, deterioro y mantenimiento, monitoreo de rendimiento",
+            "Fin de vida: desmantelamiento, o renovación y reemplazo, que reinicia el ciclo",
+            "En activos de larga vida, como una planta minera, el OPEX puede llegar a pesar del orden del doble que el CAPEX",
+            "Sin datos confiables el mantenimiento se vuelve reactivo: se repara cuando falla"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "Para gestionar el gasto de operación en lugar de sufrirlo, hay que saber con certeza qué existe realmente en el activo."
+          }
+        },
+        {
+          "title": "Lo que no se registra se paga dos veces",
+          "body": "Cada modificación sin actualizar el modelo vuelve a generar inexactitud. La segunda vez se paga al operar, intervenir o ampliar.",
+          "points": [
+            "Búsqueda de planos que no coinciden",
+            "Cañerías u otras redes ocultas que no figuran",
+            "Equipos reemplazados sin registro de modelo y proveedor",
+            "Retrasos por 'ir a ver al terreno' cada vez"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Un edificio con diseño excelente pero planos de instalaciones distintos de lo construido: la factura llega cinco años después, con una cañería rota."
+          }
+        },
+        {
+          "title": "IA y automatización sobre datos ordenados",
+          "body": "La IA puede generar alternativas de diseño, revisar el modelo contra reglas y detectar anomalías en operación. Funciona sobre **datos consistentes**: nombres, parámetros y estructura.",
+          "points": [
+            "Revisión de reglas: exige parámetros y nombres uniformes",
+            "Detección de anomalías: exige datos de operación continuos",
+            "Alternativas de diseño: exige criterios y restricciones claros",
+            "Siempre con revisión humana"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Una IA sobre datos desordenados no corrige los errores: los hace más rápido."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Optimizar solo el costo de construir",
+            "Entregar modelos sin los datos que el operador necesita",
+            "Confiar en la IA sobre datos desordenados",
+            "No preguntar al operador qué necesitará desde el primer día",
+            "Dejar de actualizar el modelo tras la entrega"
+          ]
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "Se empieza por el final: qué debe poder responder el activo en operación.",
+          "points": [
+            "Preguntar a quien opera qué datos necesita el primer día",
+            "Traducirlo a requisitos de información del activo (AIR)",
+            "Pedir as-built verificado al cierre de obra",
+            "Medir ahorro: tiempo de búsqueda, errores al intervenir, mantención planificada"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "La mejor pregunta del curso: ¿quién usará este dato y para qué decisión?"
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Activo: diseño, construcción, operación y renovación",
+            "CAPEX construye; OPEX opera y suele acumular más",
+            "As-built confiable baja el OPEX",
+            "IA y automatización necesitan datos ordenados",
+            "Siguiente: un caso brownfield completo, del escaneo al tie-in"
+          ]
+        }
       ]
     },
     {
@@ -1561,6 +3496,30 @@
           ],
           "answer": 3,
           "explanation": "Es el punto donde la obra nueva se conecta con lo que ya opera."
+        },
+        {
+          "key": "n8-q6",
+          "question": "Planificas el escaneo de una sala de bombas con tuberías y estructuras densas. ¿Qué haces para evitar zonas sin datos?",
+          "options": [
+            "Un plan de estaciones con solapes, esferas de registro y puntos de control, anticipando zonas de sombra",
+            "Escanear una sola vez desde la puerta",
+            "Usar solo fotos con el celular",
+            "Confiar en el modelo antiguo"
+          ],
+          "answer": 0,
+          "explanation": "El plan de estaciones y los solapes aseguran cobertura y registro entre escaneos."
+        },
+        {
+          "key": "n8-q7",
+          "question": "Un equipo modela una nube con una herramienta semiautomática de tuberías y la da por buena sin revisar. Después se descubre que dos codos quedaron mal. ¿Qué principio faltó?",
+          "options": [
+            "Usar color",
+            "Cambiar de formato",
+            "Hacer una calicata",
+            "Revisión humana de lo modelado automáticamente"
+          ],
+          "answer": 3,
+          "explanation": "La automatización acelera, pero el as-built necesita verificación contra la nube."
         }
       ],
       "mastery_signals": [
@@ -1570,6 +3529,247 @@
       ],
       "images": [
         "core/img/bim/brownfield-asbuilt.svg"
+      ],
+      "slides": [
+        {
+          "title": "Brownfield: intervenir lo que ya opera",
+          "body": "**Brownfield** es ampliar o modificar un activo existente que suele estar operando. A diferencia del terreno virgen, el riesgo está en lo **desconocido**: planos antiguos, redes sin registro y espacios estrechos.",
+          "points": [
+            "Lo existente manda: el diseño se adapta a la realidad medida",
+            "La planta o instalación debe seguir operando",
+            "Las ventanas de detención son cortas y caras",
+            "Un error de medida se descubre durante el empalme, cuando ya es tarde"
+          ],
+          "image": "priv:planta-minera-ilustracion-ia.jpg",
+          "caption": "Instalación industrial en operación: contexto típico de una intervención brownfield",
+          "terms": [
+            "*Brownfield*",
+            "*Tie-in*"
+          ],
+          "callout": {
+            "kind": "dato",
+            "text": "En sectores como la minería, buena parte de la inversión es reposición y ampliación de instalaciones existentes, es decir, proyectos brownfield."
+          }
+        },
+        {
+          "title": "El flujo de un proyecto brownfield",
+          "body": "Todo parte del **as-built**: de él dependen el diseño, la prefabricación, la logística y la seguridad.",
+          "diagram": {
+            "nodes": [
+              {
+                "id": "cap",
+                "label": "Captura combinada",
+                "kind": "equipo",
+                "x": 14,
+                "y": 22,
+                "sub": "escáner, dron, georradar"
+              },
+              {
+                "id": "nube",
+                "label": "Nube georreferenciada",
+                "kind": "dato",
+                "x": 50,
+                "y": 22,
+                "sub": "base medible"
+              },
+              {
+                "id": "asb",
+                "label": "Modelo as-built",
+                "kind": "producto",
+                "x": 86,
+                "y": 22,
+                "sub": "scan-to-BIM revisado"
+              },
+              {
+                "id": "dis",
+                "label": "Diseño y prefabricación",
+                "kind": "proceso",
+                "x": 86,
+                "y": 62,
+                "sub": "con interferencias resueltas"
+              },
+              {
+                "id": "tie",
+                "label": "Tie-in en la ventana",
+                "kind": "persona",
+                "x": 50,
+                "y": 62,
+                "sub": "empalme planificado"
+              },
+              {
+                "id": "fin",
+                "label": "As-built final",
+                "kind": "producto",
+                "x": 14,
+                "y": 62,
+                "sub": "lo realmente ejecutado"
+              }
+            ],
+            "edges": [
+              {
+                "from": "cap",
+                "to": "nube",
+                "label": "procesa",
+                "flow": true
+              },
+              {
+                "from": "nube",
+                "to": "asb",
+                "label": "modela",
+                "flow": true
+              },
+              {
+                "from": "asb",
+                "to": "dis",
+                "label": "base",
+                "flow": true
+              },
+              {
+                "from": "dis",
+                "to": "tie",
+                "label": "ejecuta",
+                "flow": true
+              },
+              {
+                "from": "tie",
+                "to": "fin",
+                "label": "registra",
+                "flow": true
+              }
+            ],
+            "steps": [
+              [
+                "cap"
+              ],
+              [
+                "nube",
+                "cap-nube"
+              ],
+              [
+                "asb",
+                "nube-asb"
+              ],
+              [
+                "dis",
+                "asb-dis"
+              ],
+              [
+                "tie",
+                "dis-tie"
+              ],
+              [
+                "fin",
+                "tie-fin"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "Seis bloques de un proyecto brownfield",
+          "body": "Los bloques se apoyan unos en otros, y el desafío común es **convivir con lo existente** sin perder continuidad operacional.",
+          "points": [
+            "1. Diagnóstico y as-built: estado real de la instalación por escaneo digital",
+            "2. Ingeniería en fases: perfil, prefactibilidad, básica y detalle, recalibradas sobre lo existente",
+            "3. Ingeniería de empalmes: conexión a líneas de energía, agua y proceso ya instaladas",
+            "4. Permisos y ventanas de detención: tramitación y planificación de los cortes",
+            "5. Construcción 'en caliente': montaje junto a una instalación operando, con gestión real de interferencias",
+            "6. Modernización y operación continua: eficiencia y mantenimiento después de entregar"
+          ]
+        },
+        {
+          "title": "Capturar: cada técnica tiene su lugar",
+          "body": "Ninguna técnica lo hace todo. Se combinan según qué se necesita ver y dónde.",
+          "points": [
+            "Escáner láser: detalle fino de lo visible, interiores y estructuras",
+            "Fotogrametría con dron: contexto, cubiertas y patios",
+            "Georradar: redes enterradas; la profundidad depende del suelo (la arcilla húmeda la limita)",
+            "Topografía y puntos de control: marco de referencia común",
+            "Calicata: verificación puntual donde un error sería grave"
+          ],
+          "callout": {
+            "kind": "ojo",
+            "text": "Dentro de una sala de máquinas no hay vuelo ni GNSS: el escáner es la técnica, no el dron."
+          }
+        },
+        {
+          "title": "Redes enterradas y seguridad",
+          "body": "Excavar junto a una instalación operando exige conocer lo que hay bajo el suelo y respetar los permisos y zonas de trabajo.",
+          "points": [
+            "Contrastar planos antiguos con georradar",
+            "Confirmar con calicatas en los puntos críticos",
+            "Señalizar y marcar antes de excavar",
+            "Escanear reduce el tiempo de personas en zonas peligrosas",
+            "Coordinar con operación: permisos, bloqueos y zonas"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Una zanja sin verificar puede cortar agua, electricidad o gas; el costo de una calicata es una fracción."
+          }
+        },
+        {
+          "title": "Tie-in: el empalme en la ventana de detención",
+          "body": "El **tie-in** conecta lo nuevo con lo existente, muchas veces en una ventana corta. Se prefabrica con el as-built, así que el punto de empalme debe medirse con alta confianza **antes** de la detención.",
+          "points": [
+            "Antes: escanear y georreferenciar el punto, prefabricar con esas medidas",
+            "Durante: empalmar y verificar con control dimensional",
+            "Después: levantar el as-built final y actualizar el modelo"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Un tramo fabricado con medidas de huincha que no calza en la ventana de 36 horas cuesta más que todo el escaneo."
+          }
+        },
+        {
+          "title": "Del escáner al modelo: el flujo de procesamiento",
+          "body": "El trabajo no termina al capturar: sigue un flujo ordenado hasta tener un modelo útil.",
+          "points": [
+            "Planificación: estaciones, esferas de registro, puntos de control",
+            "Medición: escaneo con solapes y cobertura de zonas críticas",
+            "Registro: unir las estaciones en una sola nube",
+            "Georreferenciación (opcional): ubicar en el sistema del proyecto",
+            "Filtrado y limpieza: ruido, objetos temporales y reflejos",
+            "Modelado: tuberías, ductos, estructuras de acero y hormigón, muros y pisos; hay herramientas semiautomáticas que reducen el esfuerzo, con revisión humana",
+            "Entregables: nube, modelo, planos, itemizado y análisis"
+          ],
+          "callout": {
+            "kind": "ejemplo",
+            "text": "Ejemplo de orden de magnitud: unas treinta estaciones de escáner pueden cubrir una planta en poco más de un día de terreno, y el modelado toma varios días más."
+          }
+        },
+        {
+          "title": "Errores típicos",
+          "points": [
+            "Confiar en planos antiguos sin verificar en terreno",
+            "Prefabricar sin un as-built del punto de empalme",
+            "Excavar sin considerar las redes enterradas",
+            "Escanear sin plan: zonas sin datos justo donde se necesitaban",
+            "Aceptar el modelado automático desde la nube sin revisión humana"
+          ]
+        },
+        {
+          "title": "Cómo se usa en un equipo de ingeniería",
+          "body": "El equipo planifica la captura como un proyecto en sí mismo.",
+          "points": [
+            "Plan de escaneo: estaciones, esferas y puntos de control; zonas de sombra previstas",
+            "Entregables acordados: nube georreferenciada, modelo as-built, informe de calidad y planos",
+            "Coordinación de interferencias contra la nube existente",
+            "Cronograma de la ventana: qué antes, durante y después"
+          ],
+          "callout": {
+            "kind": "en-terreno",
+            "text": "Escanear dos veces cuesta menos que fabricar dos veces."
+          }
+        },
+        {
+          "title": "Resumen",
+          "points": [
+            "Brownfield: lo existente y operando manda",
+            "El as-built es la base de todo lo demás",
+            "Combinar escáner, dron y georradar; verificar con calicatas donde importa",
+            "Tie-in medido antes, empalmado durante, registrado después",
+            "Con esto cierras el curso: de CAD a gemelo, con datos confiables"
+          ]
+        }
       ]
     }
   ]

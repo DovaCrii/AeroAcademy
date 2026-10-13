@@ -219,7 +219,7 @@
   {% doodle "doodle-scribbles" class="dd dd-tr" %}
   <header class="w-sh w-sh-lead">
     <h2 id="rut-h" class="w-h2">Rutas por disciplina</h2>
-    <p class="w-lead">Cada disciplina tiene sus rutas de aprendizaje con recursos oficiales, misiones y certificaciones.</p>
+    <p class="w-lead">Cada disciplina tiene sus rutas de aprendizaje con recursos oficiales, misiones y certificaciones. <a href="{% url 'paths:map' %}">Ver el mapa de metro</a>.</p>
   </header>
   {% for d in disciplines %}{% if d.slug == "transversal" %}
   <article class="w-base" data-d="transversal" aria-labelledby="base-h">

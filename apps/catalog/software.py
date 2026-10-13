@@ -1,7 +1,7 @@
 """Mosaicos de software: a qué producto pertenece un recurso o una ruta.
 
-Los mosaicos son originales (`core/img/software/<slug>.svg`), no logotipos de fabricantes. Hay dos familias:
-Autodesk (baldosa con letra grande y banda de código) y Bentley (baldosa azul con pictograma blanco).
+Los mosaicos son originales (`core/img/software/<slug>.svg`), no logotipos de fabricantes. Hay cuatro familias:
+Autodesk (baldosa con letra grande y banda de código), Bentley (baldosa azul con pictograma blanco), internos e IA y Datos.
 Cada uno lleva además la disciplina a la que se asocia, que pinta el acento de la tarjeta.
 """
 
@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from .models import Platform, Resource
 
 # Acentos por disciplina (los colores viven en el CSS del catálogo y de los mundos).
-ARQ, CIV, TOP, MEC, CAP, TRA = "arq", "civ", "top", "mec", "cap", "tra"
+ARQ, CIV, TOP, MEC, CAP, TRA, IAD = "arq", "civ", "top", "mec", "cap", "tra", "iad"
 DISCIPLINE_LABEL = {
     ARQ: "Arquitectura",
     CIV: "Civil",
@@ -19,6 +19,7 @@ DISCIPLINE_LABEL = {
     MEC: "Mecánica",
     CAP: "Captura",
     TRA: "Transversal",
+    IAD: "IA y Datos",
 }
 DISCIPLINE_BY_SLUG = {
     "arquitectura": ARQ,
@@ -27,6 +28,7 @@ DISCIPLINE_BY_SLUG = {
     "mecanica": MEC,
     "captura-rpa": CAP,
     "transversal": TRA,
+    "ia-datos": IAD,
 }
 
 
@@ -43,11 +45,12 @@ class Tile:
         return f"core/img/software/{self.slug}.svg"
 
 
-AUTODESK, BENTLEY, INTERNAL = "autodesk", "bentley", "internal"
+AUTODESK, BENTLEY, INTERNAL, IA = "autodesk", "bentley", "internal", "ia"
 FAMILY_LABEL = {
     AUTODESK: "Autodesk",
     BENTLEY: "Bentley Systems",
     INTERNAL: "Topografía, GIS y captura",
+    IA: "IA y Datos",
 }
 
 TILES = {
@@ -82,6 +85,18 @@ TILES = {
         Tile("TBC", "tbc", "Trimble Business Center", TOP),
         Tile("GIS", "gis", "ArcGIS / GIS", TOP),
         Tile("RPA", "dgac", "DGAC / RPAS", CAP),
+        # IA y Datos: baldosa de color con pictograma blanco genérico (sin logotipos)
+        Tile("IA", "ia", "IA", IAD, IA),
+        Tile("TRM", "terminal", "Terminal", IAD, IA),
+        Tile("GIT", "git", "Git", IAD, IA),
+        Tile("CLC", "claude-code", "Claude Code", IAD, IA),
+        Tile("MCP", "mcp", "MCP", IAD, IA),
+        Tile("AGT", "agentes", "Agentes IA", IAD, IA),
+        Tile("PY", "python", "Python", IAD, IA),
+        Tile("QGS", "qgis", "QGIS", IAD, IA),
+        Tile("GEE", "gee", "Earth Engine", IAD, IA),
+        Tile("PBI", "powerbi", "Power BI", IAD, IA),
+        Tile("SQL", "sql", "SQL", IAD, IA),
     )
 }
 
@@ -110,6 +125,17 @@ PRODUCT_TILE = {
     "synchro": "synchro",
     "descartes": "descartes",
     "infraworks": "infraworks",
+    # IA y Datos
+    "claude": "ia",
+    "claude-code": "claude-code",
+    "claude-api": "agentes",
+    "mcp": "mcp",
+    "python": "python",
+    "git": "git",
+    "qgis": "qgis",
+    "earth-engine": "gee",
+    "power-bi": "powerbi",
+    "sql": "sql",
 }
 
 # Palabras del título (en minúsculas) → mosaico. El orden no importa: se ordena por posición en el título.
@@ -285,6 +311,7 @@ ROW_ORDER = [
     "microstation", "openroads", "openbridge", "openbuildings", "openplant", "openflows", "staad",
     "itwin", "lumenrt", "projectwise", "itwin-capture", "synchro", "descartes",
     "tbc", "gis", "dgac",
+    "ia", "terminal", "git", "claude-code", "mcp", "agentes", "python", "qgis", "gee", "powerbi", "sql",
 ]  # fmt: skip
 
 # Vitrinas de cada fabricante (estilo «descargas de software»): destacados y novedades curados;
@@ -326,7 +353,7 @@ def vendor_sections(rows):
     """
     totals = {r["tile"].slug: r["total"] for r in rows}
     sections = []
-    for family in (AUTODESK, BENTLEY, INTERNAL):
+    for family in (AUTODESK, BENTLEY, INTERNAL, IA):
         fam_rows = [r for r in rows if r["tile"].family == family]
         if not fam_rows:
             continue

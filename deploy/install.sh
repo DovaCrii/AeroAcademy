@@ -4,7 +4,8 @@
 #
 # Qué hace: usuario de sistema, código en /opt/aeroacademy, entorno con uv, /etc/centro/env, migraciones, semillas,
 # estáticos, servicio systemd (gunicorn en 127.0.0.1:8010), tareas diarias (respaldo, vencimientos, seguimiento de Teo)
-# y la publicación en la tailnet. NUNCA usa `tailscale funnel`.
+# y la publicación en la tailnet. Funnel (puerta pública, D36) solo con PUBLIC_FUNNEL=1, apagado por defecto, y solo en el
+# nodo propio `aeroacademy`: nunca se toca el Funnel de AeroControl ni el nodo principal de la VM.
 #
 # VM COMPARTIDA (p. ej. con AeroControl, que usa 127.0.0.1:8000 y los puertos HTTPS de `tailscale serve` con Funnel):
 #   · gunicorn escucha en 127.0.0.1:8010 (AEROACADEMY_PORT);
@@ -21,6 +22,11 @@
 #                                    none = no publicar
 #   AEROACADEMY_HOSTNAME=aeroacademy  nombre del nodo propio
 #   AEROACADEMY_TS_AUTHKEY=tskey-…   clave de autenticación para dar de alta el nodo sin abrir un enlace
+#   PUBLIC_FUNNEL=1                  puerta pública con Tailscale Funnel (D36): segundo gunicorn en 127.0.0.1:8011 (servicio
+#                                    centro-public, sin identidad de Tailscale, sin admin, TOTP para responsables), Funnel en el
+#                                    443 del nodo propio y la puerta de la tailnet en el 8443. Idempotente; PUBLIC_FUNNEL=0 lo apaga.
+#   AEROACADEMY_PUBLIC_PORT=8011     puerto local de la puerta pública
+#   AEROACADEMY_TAILNET_PORT=8443    con Funnel, puerto HTTPS del nodo propio para la puerta de la tailnet
 #   AEROACADEMY_TS_PORT=8443         (modo serve) puerto HTTPS del nodo principal
 set -euo pipefail
 
@@ -35,8 +41,15 @@ PUBLISH="${AEROACADEMY_PUBLISH:-node}"
 TS_HOSTNAME="${AEROACADEMY_HOSTNAME:-aeroacademy}"
 TS_PORT="${AEROACADEMY_TS_PORT:-8443}"
 NODE_SOCK=/run/tailscale-aeroacademy/tailscaled.sock
+FUNNEL="${PUBLIC_FUNNEL:-0}"                    # 1 = puerta pública con Tailscale Funnel (D36); apagada por defecto
+PUBLIC_PORT="${AEROACADEMY_PUBLIC_PORT:-8011}"  # puerto local de gunicorn para la puerta pública
+TAILNET_PORT="${AEROACADEMY_TAILNET_PORT:-8443}" # con Funnel, la puerta de la tailnet pasa a este puerto HTTPS del nodo propio
 
 if [ "$(id -u)" -ne 0 ]; then echo "Ejecuta con sudo." >&2; exit 1; fi
+if [ "$FUNNEL" = 1 ] && [ "$PUBLISH" != "node" ]; then
+  echo "PUBLIC_FUNNEL=1 solo se permite con AEROACADEMY_PUBLISH=node (el nodo propio): el Funnel de AeroControl no se toca." >&2
+  exit 1
+fi
 
 set_env() {  # set_env CLAVE valor: reemplaza la línea o la agrega al final
   if grep -q "^$1=" "$ENV_FILE"; then sed -i "s|^$1=.*|$1=$2|" "$ENV_FILE"; else echo "$1=$2" >> "$ENV_FILE"; fi
@@ -55,6 +68,11 @@ fi
 echo "==> Comprobando que el puerto $PORT es nuestro o está libre"
 if ss -ltnH "sport = :$PORT" 2>/dev/null | grep -q . && ! systemctl is-active --quiet centro.service; then
   echo "El puerto $PORT ya lo usa otro servicio. Elige otro: AEROACADEMY_PORT=8011 sudo -E ./deploy/install.sh" >&2
+  exit 1
+fi
+
+if [ "$FUNNEL" = 1 ] && ss -ltnH "sport = :$PUBLIC_PORT" 2>/dev/null | grep -q . && ! systemctl is-active --quiet centro-public.service; then
+  echo "El puerto $PUBLIC_PORT ya lo usa otro servicio. Elige otro: AEROACADEMY_PUBLIC_PORT=8012 PUBLIC_FUNNEL=1 sudo -E ./deploy/install.sh" >&2
   exit 1
 fi
 
@@ -119,6 +137,20 @@ else
 fi
 set_env DGAC_DATA_DIR "$STATE/dgac"
 
+echo "==> Fotos de cursos (privadas, fuera de git)"
+# Fotos reales de los cursos propios: se copian aparte desde tu computador a ~/AeroAcademy/private/cursos
+# (una carpeta por ruta: <slug>/fotos/*.jpg). Solo las ven personas aprobadas, por la vista cursos:foto.
+if [ -d "$SRC/private/cursos" ]; then
+  mkdir -p "$STATE/cursos"
+  rsync -a --delete "$SRC/private/cursos"/ "$STATE/cursos"/
+  chown -R "$USER_NAME:$USER_NAME" "$STATE/cursos"
+  chmod -R go-rwx "$STATE/cursos"
+  echo "    instaladas en $STATE/cursos"
+else
+  echo "    sin private/cursos: las diapositivas se ven sin fotos (se pueden copiar después)"
+fi
+set_env PRIVATE_COURSES_DIR "$STATE/cursos"
+
 echo "==> Entorno Python (uv)"
 cd "$APP"
 # Python 3.12 lo instala uv dentro de /opt/aeroacademy (no en /root): así el usuario `centro` puede leerlo.
@@ -165,9 +197,16 @@ if [ "$PUBLISH" = "node" ]; then
   DNSNAME="$("${TS[@]}" status --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["Self"]["DNSName"].rstrip("."))')"
   echo "    nodo en la tailnet: $DNSNAME"
   set_env ALLOWED_HOSTS "$DNSNAME"
-  set_env PUBLIC_HTTPS_PORT 443
+  if [ "$FUNNEL" = 1 ]; then
+    set_env PUBLIC_HTTPS_PORT "$TAILNET_PORT"   # la puerta de la tailnet pasa a su puerto; el 443 es el público
+    set_env ACADEMY_URL "https://$DNSNAME"      # los enlaces de invitación apuntan a la dirección pública
+  else
+    set_env PUBLIC_HTTPS_PORT 443
+    sed -i '/^ACADEMY_URL=/d' "$ENV_FILE"
+  fi
   HC_HOST="$DNSNAME"
 fi
+if [ "$FUNNEL" = 1 ]; then set_env CACHE_DIR "$STATE/cache"; fi   # límites de intentos compartidos entre workers y servicios
 
 echo "==> Estáticos, migraciones y semillas"
 run_manage collectstatic --noinput >/dev/null
@@ -185,9 +224,19 @@ for unit in centro-backup.service centro-backup.timer centro-expiry.service cent
 done
 chmod 755 "$APP/deploy/backup.sh" "$APP/deploy/manage.sh"   # rsync ya los copió: aquí solo se les da permiso de ejecución
 ln -sf "$APP/deploy/manage.sh" /usr/local/bin/aeroacademy   # atajo: sudo aeroacademy <comando>  (aprobar, teo_probar…)
+if [ "$FUNNEL" = 1 ]; then
+  install -m 644 deploy/centro-public.service /etc/systemd/system/centro-public.service
+  sed -i "s|127.0.0.1:8011|127.0.0.1:$PUBLIC_PORT|" /etc/systemd/system/centro-public.service
+elif [ -f /etc/systemd/system/centro-public.service ]; then   # PUBLIC_FUNNEL=0: se apaga la puerta pública
+  systemctl disable --now centro-public.service || true
+fi
 systemctl daemon-reload
 systemctl enable --now centro.service centro-backup.timer centro-expiry.timer centro-teo.timer
 systemctl restart centro.service
+if [ "$FUNNEL" = 1 ]; then
+  systemctl enable --now centro-public.service
+  systemctl restart centro-public.service
+fi
 
 echo "==> Comprobando el servicio"
 # Django rechaza un Host que no esté en ALLOWED_HOSTS: se usa el primero (el nombre MagicDNS).
@@ -196,11 +245,26 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
   sleep 1
 done
 [ "${OK:-0}" = 1 ] && echo "    servicio OK en 127.0.0.1:$PORT" || { echo "    el servicio no responde; revisa: journalctl -u centro" >&2; exit 1; }
+if [ "$FUNNEL" = 1 ]; then
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    if curl -fsS -H "Host: $HC_HOST" "http://127.0.0.1:$PUBLIC_PORT/healthz" >/dev/null 2>&1; then OKP=1; break; fi
+    sleep 1
+  done
+  [ "${OKP:-0}" = 1 ] && echo "    puerta pública OK en 127.0.0.1:$PUBLIC_PORT" || { echo "    la puerta pública no responde; revisa: journalctl -u centro-public" >&2; exit 1; }
+fi
 
-echo "==> Publicando en la tailnet (solo tailnet; nunca Funnel)"
+echo "==> Publicando (tailnet; Funnel solo si PUBLIC_FUNNEL=1 y solo en el nodo propio)"
 case "$PUBLISH" in
   node)
-    "${TS[@]}" serve --bg --https=443 "http://127.0.0.1:$PORT"
+    if [ "$FUNNEL" = 1 ]; then
+      # Puerta de la tailnet en su puerto propio y puerta pública (Funnel) en el 443. Solo el nodo `aeroacademy`.
+      "${TS[@]}" serve --bg --https="$TAILNET_PORT" "http://127.0.0.1:$PORT"
+      "${TS[@]}" funnel --bg --https=443 "http://127.0.0.1:$PUBLIC_PORT"
+    else
+      # Sin Funnel: si antes estuvo encendido, `serve reset` borra solo la configuración de ESTE nodo (vuelta atrás).
+      if "${TS[@]}" serve status 2>/dev/null | grep -qi "funnel on"; then "${TS[@]}" serve reset; fi
+      "${TS[@]}" serve --bg --https=443 "http://127.0.0.1:$PORT"
+    fi
     "${TS[@]}" serve status || true
     # El certificado se pide ahora y no en la primera visita: si falla, el navegador solo ve «conexión cerrada».
     echo "==> Certificado HTTPS del nodo"
@@ -216,7 +280,12 @@ case "$PUBLISH" in
       exit 1
     fi
     rm -rf "$CERT_TMP"
-    echo "    Dirección: https://$HC_HOST"
+    if [ "$FUNNEL" = 1 ]; then
+      echo "    Dirección pública (Funnel): https://$HC_HOST"
+      echo "    Dirección de la tailnet (identidad de Tailscale): https://$HC_HOST:$TAILNET_PORT"
+    else
+      echo "    Dirección: https://$HC_HOST"
+    fi
     ;;
   serve)
     CURRENT="$(tailscale serve status 2>/dev/null || true)"
@@ -230,4 +299,4 @@ case "$PUBLISH" in
   none) echo "    sin publicar (AEROACADEMY_PUBLISH=none)";;
   *) echo "AEROACADEMY_PUBLISH debe ser node, serve o none." >&2; exit 1;;
 esac
-echo "Listo. No uses 'tailscale funnel': el sitio es solo para la tailnet."
+if [ "$FUNNEL" = 1 ]; then echo "Listo. Puerta pública ENCENDIDA (Funnel, solo nodo $TS_HOSTNAME). Vuelta atrás: PUBLIC_FUNNEL=0 sudo -E ./deploy/install.sh"; else echo "Listo. Solo tailnet (Funnel apagado)."; fi
