@@ -91,7 +91,16 @@ def legacy_db(tmp_path):
                 "n1",
                 1_700_000_200_000,
             ),
-            ("n4", "ana@example.com", "general", -1, "tip", "Huérfana", "no-existe", 1_700_000_300_000),
+            (
+                "n4",
+                "ana@example.com",
+                "general",
+                -1,
+                "tip",
+                "Huérfana",
+                "no-existe",
+                1_700_000_300_000,
+            ),
             ("n5", "ana@example.com", "general", -1, "tip", "   ", None, 1_700_000_400_000),
             (
                 "n6",
@@ -128,7 +137,9 @@ def test_import_creates_people_progress_notes_and_shared(legacy_db):
         and ana.status == "approved"
         and ana.avatar_url.startswith("https://")
     )
-    assert Person.objects.get(login="luis@example.com").avatar_url == ""  # una URL no válida no pasa
+    assert (
+        Person.objects.get(login="luis@example.com").avatar_url == ""
+    )  # una URL no válida no pasa
     assert MilestoneCheck.objects.filter(person=ana).count() == 2
     assert (
         QuizAnswer.objects.filter(person=ana).count() == 1

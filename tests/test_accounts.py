@@ -12,7 +12,9 @@ pytestmark = pytest.mark.django_db
 
 
 def test_header_from_trusted_proxy_creates_pending_person(client_for):
-    response = client_for("nueva@example.com", name="Nueva Persona", pic="https://x.test/a.png").get("/")
+    response = client_for(
+        "nueva@example.com", name="Nueva Persona", pic="https://x.test/a.png"
+    ).get("/")
     person = Person.objects.get(login="nueva@example.com")
     assert person.status == PersonStatus.PENDING
     assert person.display_name == "Nueva Persona"

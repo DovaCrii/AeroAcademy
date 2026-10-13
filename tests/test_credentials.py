@@ -684,7 +684,9 @@ def test_lead_promotes_a_free_course_to_the_catalog(client_for, member, lead):
 
 def test_promoted_courses_get_consecutive_keys(member, lead, make_person):
     services.promote_free_course(verified_free(member, lead, "Curso A"), lead)
-    services.promote_free_course(verified_free(make_person("otra@example.com"), lead, "Curso B"), lead)
+    services.promote_free_course(
+        verified_free(make_person("otra@example.com"), lead, "Curso B"), lead
+    )
     keys = ExternalCourse.objects.filter(path__slug=BENTLEY, key__startswith="lib-c").values_list(
         "key", flat=True
     )

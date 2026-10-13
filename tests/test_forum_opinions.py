@@ -210,7 +210,9 @@ def test_clear_opinions_view_leads_only(client_for, member, lead, make_person):
     opinions.vote(t, lead, t.poll_options.first().pk)
     moderation.set_hidden(t, lead, True, "x")
     url = reverse("community:clear_opinions", args=[t.pk])
-    assert client_for(make_person("m@example.com").login).post(url, {"votes": "1"}).status_code == 403
+    assert (
+        client_for(make_person("m@example.com").login).post(url, {"votes": "1"}).status_code == 403
+    )
     client_for(lead.login).post(url, {"votes": "1"})
     assert not Reaction.objects.exists() and not PollVote.objects.exists()
 
