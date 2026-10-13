@@ -10,4 +10,5 @@ urlpatterns = [
     path("entrar/", views.login, name="login"),
     path("salir/", views.logout, name="logout"),
     path("registro/<str:token>/", views.signup, name="signup"),
+    path("inscripcion/<str:token>/", views.team_signup, name="team_signup"),
 ]

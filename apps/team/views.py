@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from apps.accounts import team_link
 from apps.accounts.models import Person
 from apps.catalog.models import Discipline
 from apps.paths import services as path_services
@@ -86,10 +87,16 @@ def people(request):
     # El enlace recién generado se muestra una sola vez (queda en la sesión del admin, no en la base).
     links = {int(k): v for k, v in request.session.pop("signup_links", {}).items()}
     rows = onboarding.roster(links=links)
+    is_admin = request.user.is_admin
+    team_link_url = request.session.pop("team_link_url", "") if is_admin else ""
     return render(
         request,
         "team/people.html",
         {
+            "team_link": team_link.active_link() if is_admin else None,
+            "team_link_url": team_link_url,
+            "team_link_days": team_link.VALID_DAYS,
+            "team_link_default": team_link.DEFAULT_DAYS,
             "areas": onboarding.groups_by_area(rows),
             "disciplines": Discipline.objects.all(),
             "can_name_leads": request.user.is_admin,
@@ -150,6 +157,33 @@ def person_signup_link(request, pk):
             f"Enlace de registro para {person.name}: cópialo ahora (se muestra una sola vez).",
         )
     return redirect(f"/equipo/personas/#p{person.pk}")
+
+
+@require_POST
+def team_link_create(request):
+    _admin_only(request)
+    try:
+        days = int(request.POST.get("days") or team_link.DEFAULT_DAYS)
+        url = team_link.generate(request.user, days)
+    except ValueError:
+        messages.error(request, "La vigencia debe ser de 7, 14 o 30 días.")
+    else:
+        request.session["team_link_url"] = url
+        messages.success(
+            request,
+            "Enlace del equipo generado: cópialo ahora (se muestra una sola vez). El anterior dejó de servir.",
+        )
+    return redirect("team:people")
+
+
+@require_POST
+def team_link_revoke(request):
+    _admin_only(request)
+    if team_link.revoke(request.user):
+        messages.success(request, "Enlace del equipo revocado.")
+    else:
+        messages.info(request, "No había un enlace vigente.")
+    return redirect("team:people")
 
 
 @require_http_methods(["GET", "POST"])

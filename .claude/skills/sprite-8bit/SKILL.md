@@ -17,7 +17,7 @@ description: Dibuja sprites pixel-art como SVG para AeroAcademy (avatares por ca
 | Insignia | 32×32 | × 2 o × 3 |
 | Insignia mini (listas) | 16×16 | |
 | Avatar | 32×32 | por capas: base → outfit → accessory → frame |
-| Nala | 32×32 | expresiones: `neutral`, `feliz`, `pensando`, `celebra` |
+| Nala | 48×48 | `idle`, `neutral`, `happy`, `thinking`, `celebra`, `sleep` + un atuendo por mundo |
 
 ## Técnica
 
@@ -55,8 +55,12 @@ Marco por rareza:
 
 ## Nala (D32)
 
-- Cachorrita golden retriever sentada de frente: pelaje dorado `#E0A040`, hocico y pecho crema `#F6D9A0`, sombra ámbar `#B8661A`, contorno café `#2A1606`, lengua `#F27A93`; orejas caídas y cola esponjosa.
-- Archivos en `core/static/game/teo/` (el nombre de archivo se mantiene): `idle`, `happy`, `celebra`, `neutral`, `thinking`, `sleep` y un atuendo por mundo.
+- **Nala es la perra real del dueño: una golden retriever ADULTA**, dibujada **de frente, sentada y tierna** (proporción chibi: cabeza ~50 % del alto, cuerpo pequeño). Rasgos golden: cráneo ancho y redondo, orejas triangulares suaves color albaricoque (`#B97A3A`) colgando a ambos lados con puntas plumosas, hocico crema con nariz negra y sonrisa suave, ojos grandes oscuros con brillo, golilla crema esponjosa en el pecho, patas delanteras juntas con patitas crema redondeadas y cola en plumero asomando a la derecha.
+- **Grilla 48×48** (`viewBox="0 0 48 48"`, `width`/`height` 48; las plantillas fijan el tamaño con `<img width=…>`: 40–48 px en el widget, 96 px en home). Un `<path>` por color con corridas horizontales, `shape-rendering="crispEdges"`, < 8 KB por archivo.
+- Paleta: contorno `#3A2410` (café oscuro, nunca negro), pelaje `#E7C27D`, crema `#F5E2B8`, sombra `#C9944E`, orejas `#B97A3A`, nariz y ojos `#1E1410`, brillo `#FFFFFF`, lengua `#E8788A`. Accesorios: casco `#FFC21A`, chaleco `#FF7A1A`, gafas `#4CC6FF`, acero `#8A99A8`.
+- Método: formas rellenas simétricas (espejo en x) por capas (cola, cuerpo, ancas, golilla, patas, cabeza con orejas) y contorno automático en los píxeles transparentes vecinos; la cabeza se dibuja en su propia capa y se inclina con un cizallado por filas. Símbolos (`?`, `z`, chispas) en ámbar `#FFC21A` con sombra café de 1 px (legibles en claro y oscuro). Revisar siempre a 48 y 192 px sobre `#041126` y `#FAF8F3`.
+- Poses: `idle` (sonrisa, cola media), `neutral` (boca recta, cola baja), `happy` (lengua, ojos en arco, cabeza ladeada, cola en alto), `celebra` (salto, patas arriba, chispas), `thinking` (cabeza ladeada, pata en el mentón, `?`), `sleep` (echada, cabeza sobre las patas, ojos cerrados, tres `z`).
+- Doodle: `core/static/core/img/doodles/nala.svg` (tinta `currentColor`, rellenos planos) es la misma perra, de frente y tierna.- Archivos en `core/static/game/teo/` (el nombre de archivo se mantiene): `idle`, `happy`, `celebra`, `neutral`, `thinking`, `sleep` y un atuendo por mundo.
 - **Atuendos por mundo** (capa `accessory`, misma grilla):
 
   | Mundo | Atuendo |

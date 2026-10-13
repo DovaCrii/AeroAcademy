@@ -1,0 +1,25 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}{% if kind == "pending" %}Inscripción recibida{% else %}Inscripción{% endif %}{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }} · inscripción del equipo</p>
+    {% if kind == "pending" %}
+    <h1>Listo, un administrador aprobará tu acceso</h1>
+    <p class="pub-lead">Tu cuenta quedó creada con tu contraseña. Cuando un administrador la apruebe, entra con tu correo y tu contraseña. Hasta entonces no puedes entrar.</p>
+    {% elif kind == "has_account" %}
+    <h1>Ese correo ya tiene cuenta</h1>
+    <p class="pub-lead">Entra con tu contraseña. Si la olvidaste, pídele al administrador un enlace nuevo.</p>
+    {% elif kind == "personal_link" %}
+    <h1>Usa tu enlace personal</h1>
+    <p class="pub-lead">Este correo no se inscribe con el enlace del equipo: pide a un administrador tu enlace personal.</p>
+    {% else %}
+    <h1>No se pudo completar la inscripción</h1>
+    <p class="pub-lead">Habla con el administrador del equipo.</p>
+    {% endif %}
+    <p><a class="btn pub-btn" href="{% url 'accounts:login' %}">Ir a entrar</a></p>
+  </div>
+</section>
+{% endblock %}

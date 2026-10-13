@@ -1,0 +1,26 @@
+{% extends "accounts/_public.html" %}
+{# Tarjeta de dos columnas (formulario a la izquierda, «¡Importante!» a la derecha; en móvil el formulario va primero). #}
+
+{% block content %}
+<section class="pp-stage">
+  <div class="pp-card">
+    <div class="pp-form">
+      <p class="cap">{% block kicker %}{{ BRAND_PLATFORM }}{% endblock %}</p>
+      <h1>{% block form_title %}{% endblock %}</h1>
+      {% block form_body %}{% endblock %}
+    </div>
+    <aside class="pp-info" aria-labelledby="pp-imp">
+      <h2 id="pp-imp"><span>¡Importante!</span></h2>
+      <p class="pp-intro"><b>Para entrar a la academia tienes que estar dentro de la red del equipo.</b> Sigue estos pasos:</p>
+      <ol class="pp-steps">
+        <li><span class="pp-n" aria-hidden="true">1</span>{% include "accounts/_ico.html" with name="net" %}<span>Únete a la tailnet (<span class="term">Tailscale</span>) con tu correo.</span></li>
+        <li><span class="pp-n" aria-hidden="true">2</span>{% include "accounts/_ico.html" with name="link" %}<span>Abre el enlace del equipo que te mandó el admin.</span></li>
+        <li><span class="pp-n" aria-hidden="true">3</span>{% include "accounts/_ico.html" with name="key" %}<span>Crea tu contraseña.</span></li>
+        <li><span class="pp-n" aria-hidden="true">4</span>{% include "accounts/_ico.html" with name="sheet" %}<span>Completa tu hoja de personaje.</span></li>
+        <li><span class="pp-n" aria-hidden="true">5</span>{% include "accounts/_ico.html" with name="route" %}<span>Elige tu primera ruta.</span></li>
+      </ol>
+      <p class="pp-callout">{% block callout %}Si tu correo no estaba aprobado, quedas pendiente y el admin te habilita.{% endblock %}</p>
+    </aside>
+  </div>
+</section>
+{% endblock %}
