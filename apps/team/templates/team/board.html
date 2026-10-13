@@ -7,7 +7,7 @@
 {% block content %}
 <div class="page-head">
   <h1>Tablero del equipo</h1>
-  <p>Cómo va el gremio. <a href="{% url 'team:matrix' %}">Matriz de competencias</a>{% for p in kit_paths %} · <a href="{% url 'team:kit' p.slug %}">Kit y plan · {{ p.title }}</a>{% endfor %}{% if user.is_lead %} · <a href="{% url 'team:people' %}">Gestionar personas</a> · <a href="{% url 'team:people_add' %}">Agregar personas</a>{% endif %}</p>
+  <p>Cómo va el gremio. <a href="{% url 'team:matrix' %}">Matriz de competencias</a>{% for p in kit_paths %} · <a href="{% url 'team:kit' p.slug %}">Kit y plan · {{ p.title }}</a>{% endfor %}{% if user.is_lead %} · <a href="{% url 'team:people' %}">Gestionar personas</a>{% endif %}{% if user.is_admin %} · <a href="{% url 'team:people_add' %}">Agregar personas</a>{% endif %}</p>
 </div>
 
 <section aria-labelledby="t-areas">

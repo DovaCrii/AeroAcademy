@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from django.test import Client
 
@@ -54,3 +56,32 @@ def client_for():
 @pytest.fixture
 def member_client(member):
     return tailscale_client(member.login)
+
+
+DGAC_FIXTURE = Path(__file__).parent / "fixtures" / "dgac"
+
+
+@pytest.fixture
+def site_world(db, settings, tmp_path, admin_person, member):
+    """Sitio sembrado de punta a punta para la auditoría de enlaces.
+
+    Catálogo, ruta DGAC de la fixture (nada de la ruta real), un hilo por categoría y una nota por ruta.
+    """
+    from django.core.management import call_command
+
+    from apps.community import forum
+    from apps.community import services as community
+    from apps.community.models import Category, Note, Thread
+    from apps.paths.models import LearningPath
+
+    settings.MEDIA_ROOT = tmp_path
+    settings.DGAC_DATA_DIR = DGAC_FIXTURE
+    call_command("seed_catalog", verbosity=0)
+    call_command("cargar_dgac", verbosity=0)
+    for category in Category.objects.all():
+        forum.create_thread(
+            admin_person, category, Thread.Kind.DISCUSSION, f"Hilo {category.slug}", "hola"
+        )
+    for path in LearningPath.objects.all():
+        community.create_note(member, path, "Nota de prueba", Note.Type.TIP)
+    return {"admin": admin_person, "member": member}
