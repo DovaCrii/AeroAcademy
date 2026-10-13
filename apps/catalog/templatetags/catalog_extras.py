@@ -18,6 +18,13 @@ def path_tiles(path, size="md", limit=4):
 
 
 @register.simple_tag
+def route_icon_src(path):
+    """Ruta estática del icono propio de una ruta ("" si no tiene)."""
+    stem = software.route_icon(path.slug)
+    return f"core/img/software/{stem}.svg" if stem else ""
+
+
+@register.simple_tag
 def vendor_family(path):
     """Familia visual del fabricante de una ruta: autodesk, bentley o internal."""
     return software.vendor_key(path)

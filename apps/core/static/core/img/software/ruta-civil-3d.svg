@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Civil 3D">
+  <defs><clipPath id="t"><rect x="2" y="2" width="60" height="60" rx="14"/></clipPath></defs>
+  <rect x="2" y="4" width="60" height="60" rx="14" fill="#000" opacity=".22"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#fff"/>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="13.4" fill="none" stroke="#0A0E13" stroke-opacity=".14" stroke-width="1.2"/>
+  <g clip-path="url(#t)"><g transform="translate(5 5) scale(.84)"><path d="M6 46Q22 40 34 46T58 42M6 54Q22 48 34 54T58 50" fill="none" stroke="#8CC8FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 58Q8 30 30 26T44 6" fill="none" stroke="#0A3F9E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 58Q8 30 30 26T44 6" fill="none" stroke="#1F6FD6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 58Q8 30 30 26T44 6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4"/><path d="M36 42H60" fill="none" stroke="#6B7A8A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 42V54M52 42V54" fill="none" stroke="#6B7A8A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+</svg>

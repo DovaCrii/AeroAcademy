@@ -1,8 +1,7 @@
 {% extends "core/base.html" %}
-{% load core_extras %}
+{% load static core_extras catalog_extras %}
 
 {% block title %}Rutas{% endblock %}
-
 {% block content %}
 <div class="page-head">
   <h1>Rutas</h1>
@@ -44,6 +43,7 @@
 <div class="cards">
   {% for p in paths %}
   <article class="card">
+    {% route_icon_src p as ico %}{% if ico %}<img class="route-ico" src="{% static ico %}" alt="" width="48" height="48" loading="lazy">{% endif %}
     <span class="sub">{{ p.program|default:p.vendor.name }}</span>
     <h3><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a></h3>
     <div class="chips">
@@ -63,4 +63,5 @@
 {% else %}
 <p class="empty">Todavía no hay rutas cargadas. Corre <code>manage.py seed_catalog</code>.</p>
 {% endif %}
+<p class="sub route-credits"><small>Logotipos de AutoCAD, Revit, Python, Git, Claude, QGIS, Kaggle y Power BI: marcas de sus dueños, usados solo para identificar el producto del curso; no implican respaldo. Logo de Git por Jason Long, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>. Más en <code>docs/ICONOS.md</code>.</small></p>
 {% endblock %}

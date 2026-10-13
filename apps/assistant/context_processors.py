@@ -14,8 +14,8 @@ CAREER_WORLD = {
     "mecanica": "mechanical",
     "captura": "aero",
 }
-GREETING = "¡Hola, soy Nala! 🐾 Te acompaño en la academia: pregúntame o usa un atajo."
-GREETING_ASLEEP = "¡Hola, soy Nala! 🐾 Ahora estoy durmiendo, pero los atajos funcionan igual."
+GREETING = "¡Hola, soy Nala! Te acompaño en la academia: pregúntame o usa un atajo."
+GREETING_ASLEEP = "¡Hola, soy Nala! Ahora estoy durmiendo, pero los atajos funcionan igual."
 
 
 def _career_world(user):

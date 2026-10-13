@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="iTwin">
+  <rect x="2" y="4" width="60" height="60" rx="9" fill="#000" opacity=".22"/>
+  <rect x="2" y="2" width="60" height="60" rx="9" fill="#fff"/>
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="8.4" fill="none" stroke="#0A0E13" stroke-opacity=".14" stroke-width="1.2"/>
+  <g transform="translate(5 5) scale(.84)"><path d="M18 44Q8 44 8 35Q8 26 18 27Q20 15 33 16Q44 17 45 27Q56 27 56 36Q56 44 46 44Z" fill="#1F6FD6"/><rect x="18" y="32" width="7" height="12" fill="#fff"/><rect x="27" y="26" width="8" height="18" fill="#8CC8FF"/><rect x="37" y="34" width="7" height="10" fill="#fff"/><path d="M12 54H52" fill="none" stroke="#14A7A0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>
