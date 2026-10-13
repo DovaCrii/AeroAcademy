@@ -30,6 +30,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
 10. `docs/FLUJO_GITHUB.md`: ramas, PR y qué hace (y qué no) el agente. `docs/FUSIONES.md`: cómo se fusiona (**la persona**). `docs/PRODUCCION.md` y `docs/PENDIENTES.md`: salida a producción y lo que queda.
 11. `docs/DECISIONES.md`: decisiones tomadas y abiertas. No resolver una decisión abierta por cuenta propia.
 12. `docs/CURSOS.md`: inventario de rutas, brechas, ideas de cursos nuevos y cómo escalar (plantilla y checklist de autoría).
+13. `docs/ESTANDAR_TRABAJO.md`: estándar de trabajo con Claude Code (ciclo, modelos, privacidad); plantillas en `tools/kit/`.
 
 ## Stack
 

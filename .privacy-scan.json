@@ -1,0 +1,6 @@
+{
+  "allow_email_domains": ["lev.cl", "empresa.cl", "correo.cl", "preflight.cl"],
+  "allow_rules": {
+    "tests/*": ["email"]
+  }
+}
