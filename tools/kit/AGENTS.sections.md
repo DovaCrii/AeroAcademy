@@ -57,12 +57,12 @@ Si ya hay una sección equivalente, se deja la existente. Copia solo lo que falt
 
 ## Flujo con GitHub
 
-**El agente construye, sube y deja el PR listo; la persona revisa y fusiona.**
+**El agente construye, sube, abre el PR, espera el CI en verde y fusiona con merge commit; la persona despliega.**
 
 - Una rama y un PR por bloque: `{{PREFIJO_RAMA}}-<n>-<tema>`.
 - Al terminar: `git push -u origin <rama>` y `gh pr create` con la plantilla de `.github/`.
 - Revisar el CI del PR (`gh pr checks`); un PR en rojo no está listo.
-- Nunca: fusionar PR, `push --force` sobre `main`, subir secretos o datos reales, cambiar visibilidad o settings del repo.
+- Nunca: fusionar con el CI en rojo o saltado, `push --force` sobre `main`, subir secretos o datos reales, cambiar visibilidad o settings del repo.
 
 ## Skills y subagentes (si el proyecto los usa)
 

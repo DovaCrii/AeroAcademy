@@ -43,7 +43,7 @@ Antes de entregar pide: «muéstrame el diff y resume qué cambió». Revísalo 
 ## 6. Abrir el PR
 
 Pide: «sube la rama y abre el PR con la plantilla». Espera el CI (la marca verde en GitHub).
-Un PR en rojo no está listo: pídele a Claude que lo arregle. Luego avisa a quien revisa; **tú no fusionas** a menos que te lo pidan.
+Un PR en rojo no está listo: pídele a Claude que lo arregle. Luego Claude lo fusiona cuando el CI esté en verde; **tú no despliegas** a menos que te lo pidan.
 
 ## Nunca pegues ni subas (ni en el chat de Claude ni en archivos)
 

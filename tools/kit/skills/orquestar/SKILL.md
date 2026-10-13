@@ -23,7 +23,7 @@ Al lanzar un subagente pasa siempre `model` explícito (`"sonnet"` o `"haiku"`);
    qué no toca. Si trabajan en el mismo repo, cada uno en su propio `git worktree`. Sin `git push` ni PR en los subagentes.
 4. **Integrar (Opus).** Leer el informe, mirar el diff, correr `{{COMANDO_PRUEBAS}}` y `{{COMANDO_LINT}}`.
 5. **Verificar (Haiku).** Enlaces, inventarios y revisión mecánica al final.
-6. **Publicar (Opus).** Rama, PR, CI en verde. La persona revisa y fusiona.
+6. **Publicar (Opus).** Rama, PR, CI en verde y fusión con merge commit. La persona despliega.
 
 ## Ahorro de tokens
 

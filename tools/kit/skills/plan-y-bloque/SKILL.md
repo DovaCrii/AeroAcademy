@@ -5,7 +5,7 @@ description: Trabaja un cambio de {{PROYECTO}} en bloques pequeños - plan corto
 
 # Plan y bloque
 
-Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revisa y fusiona.**
+Regla de fondo: **el agente construye, sube, espera el CI en verde y fusiona con merge commit; la persona despliega.**
 
 1. **Plan primero (sin editar).** Lee lo necesario y propone: objetivo, archivos que tocará, pruebas, riesgos y qué queda
    fuera. Espera el visto bueno si el cambio no es trivial. Si falta información, anótala como pregunta abierta.
@@ -19,5 +19,5 @@ Regla de fondo: **el agente construye, sube y deja el PR listo; la persona revis
 8. **Entrega.** `git push -u origin <rama>` y `gh pr create` con la plantilla; revisa `gh pr checks`.
    Informa: enlace del PR, resultado del CI y qué decide la persona.
 
-Nunca: fusionar, `push --force` sobre `main`, subir secretos o datos reales, ni cambiar archivos de despliegue sin pedirlo.
+Nunca: fusionar con el CI en rojo, `push --force` sobre `main`, subir secretos o datos reales, ni cambiar archivos de despliegue sin pedirlo.
 Plan de recuperación: si un paso sale mal, `git switch` a la rama anterior o `git restore` del archivo; no borrar ramas.

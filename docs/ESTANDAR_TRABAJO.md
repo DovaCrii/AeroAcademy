@@ -11,7 +11,7 @@ Plantillas listas para copiar en `tools/kit/`; cómo adoptarlas en `tools/kit/ad
 3. **Plan antes de código.** Cada función parte de un plan corto aprobado por la persona.
 4. **Pasos pequeños e iterativos.** Un bloque = una rama = un PR revisable.
 5. **Probar siempre.** El código sin prueba no está terminado.
-6. **Persona al mando.** El agente construye y deja el PR listo; la persona revisa y fusiona.
+6. **El agente fusiona; la persona despliega.** El agente construye, abre el PR, espera el CI en verde y fusiona con merge commit. La persona despliega a producción.
 7. **Siempre hay vuelta atrás.** Ramas, commits pequeños y despliegue con rollback.
 
 ## 2. El ciclo
@@ -23,7 +23,7 @@ Plantillas listas para copiar en `tools/kit/`; cómo adoptarlas en `tools/kit/ad
 3. Pruebas primero cuando se pueda; commits chicos en español e imperativo.
 4. Lint y pruebas locales, revisión de privacidad (`tools/kit/privacy_scan.py`).
 5. `git push -u origin <rama>` y `gh pr create` con la plantilla; revisar `gh pr checks`. Un PR en rojo no está listo.
-6. La persona revisa el diff y fusiona (merge commit). Después, despliegue según `docs/PRODUCCION.md`, con rollback.
+6. Con el CI en verde, el agente fusiona (merge commit). Después, la persona despliega según `docs/PRODUCCION.md`, con rollback.
 
 ## 3. Política de modelos
 
