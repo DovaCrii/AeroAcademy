@@ -23,7 +23,7 @@ def _page(request, cfg, *, unsaved=False):
             "sections": services.editor_sections(cfg, request.user, open_slug),
             "open_slug": open_slug,
             "tile_bg": engine.background_for(cfg),
-            **services.preview_context(cfg, request.user),
+            **services.preview_context(cfg, request.user, request.GET.get("pose")),
             "unsaved": unsaved,
         },
     )
@@ -59,7 +59,9 @@ def avatar_preview(request):
     """Vista previa en vivo: solo el fragmento; no guarda nada."""
     cfg = services.clean_from_form(request.user, request.GET)
     return render(
-        request, "gamification/_preview.html", services.preview_context(cfg, request.user)
+        request,
+        "gamification/_preview.html",
+        services.preview_context(cfg, request.user, request.GET.get("pose")),
     )
 
 
@@ -95,7 +97,7 @@ def _render_sheet(request, person):
         cfg,
         160,
         title=f"Avatar de {person.name}",
-        view="full",
+        view="stage",
         bg_alt=services.auto_background(person, cfg),
     )
     ctx["avatar_big"] = services.framed(svg, cfg, level=ctx["info"]["level"], large=True)

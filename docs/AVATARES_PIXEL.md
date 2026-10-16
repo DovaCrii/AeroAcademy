@@ -82,6 +82,28 @@ fuera del catálogo; el SVG se arma solo con piezas del catálogo (nada que escr
 - **SVG**: un `<path>` por color (~2 KB por avatar) y `shape-rendering="crispEdges"`; con título y `role="img"`.
 - **Datos**: `Person.avatar_config` (JSON). Etiqueta de plantilla `{% avatar person 32 %}` para mostrarlo en cualquier página.
 
+### Vistas, tamaños, silueta y escenario HD
+
+- **Escala entera.** El SVG ya no lleva marco: el marco de rareza y la placa «NV n» los pinta el contenedor HTML
+  (`.av-frame`, `.av-plate`). `services.svg_sized(cfg, ancho, view=…)` exige un ancho múltiplo del de la vista (en
+  `DEBUG` lanza `ValueError`; en producción redondea hacia abajo y deja un aviso). Vistas (`avatar/views.py`): `full`
+  32 → 64/96/128 · `bust` 24 → 48/72 · `head` 16 → 32/48 · `top` 24×16 · `zone:eyes|glasses|mouth|torso|neck|pin|legs|bg`
+  (miniaturas del editor) · `stage` 80 → 80/160/240.
+- **Silueta.** El motor agrega un **halo de 1 px** (crema sobre fondo oscuro, tinta sobre claro; contraste ≥ 3:1 con
+  los 24 fondos). Los recortes de zona y las miniaturas no lo llevan.
+- **Fondos.** `BACKGROUNDS` pasó de 18 a 24: los 6 claros (18–23) se **agregaron al final**; los índices guardados no
+  cambian (`tests/test_avatar_scale.py` guarda una instantánea). Cada carrera ofrece uno afín. Quien aún no guardó su
+  avatar lleva el fondo oscuro de su carrera **y** uno claro en el mismo SVG (`.av-bg-dark` / `.av-bg-light`) y el tema
+  decide cuál se ve.
+- **Escenario HD** (`avatar/hd/`, decisión en `AVATAR_RESOLUCION.md`): `render_svg(view="stage")` compone la grilla de 32
+  capa por capa ×2 en una figura de 64×64 dentro de un escenario de 80×80, con sombra de suelo, halo y un pase de
+  acabado (luz arriba-izquierda, sombra abajo-derecha, esquinas redondeadas). `HD[categoría][id]` guarda piezas HD
+  opcionales que reemplazan su capa ×2 (solo ids que ya existen; sin `1..4`, que pone el motor). Es función pura de la
+  configuración y se guarda en caché por configuración.
+- **Poses** (`parts/poses.py`): `stand` y `wave`. Son solo de la vista previa: no se guardan.
+- **«Lo que lleva»:** leyenda de dónde viene cada pieza (insignia, nivel, oficio). La ve solo su dueña (editor y hoja
+  propia), nunca otra persona.
+
 ## Que todas las piezas encajen
 
 Con tantas combinaciones (14 peinados × 10 gorros × 7 lentes × 6 barbas × 5 ojos × 6 bocas × 3 cuerpos…) no se puede revisar

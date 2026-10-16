@@ -42,6 +42,12 @@ COLOR_KEYS = {
     "G": "verde fijo",
     "D": "gris oscuro fijo",
     "Q": "naranja fijo",
+    "k": "línea interior fina (HD)",
+    "I": "acero claro (HD)",
+    "V": "pantalla (HD)",
+    "X": "cono naranja (HD)",
+    "x": "franja del cono (HD)",
+    # Solo las pone el motor, nunca una pieza: «1» piel luz, «2» ropa luz, «3» gorro luz, «4» pantalón luz.
 }
 
 

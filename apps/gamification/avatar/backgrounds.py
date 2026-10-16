@@ -201,22 +201,30 @@ LIGHT_BY_DISCIPLINE = {
 }
 
 
-def pattern_paths(index, x0=0, y0=0, x1=32, y1=32):
-    """`[(color, d)]` con una ruta por tinta dentro del recorte; vacío si el fondo es liso."""
+def pattern_paths(index, x0=0, y0=0, x1=32, y1=32, scale=1):
+    """`[(color, d)]` con una ruta por tinta dentro del recorte; vacío si el fondo es liso.
+
+    `scale` agranda el dibujo sin salir de la grilla: en el escenario HD (80 celdas) vale 2,5 y cada celda del dibujo de
+    32 ocupa 2 o 3 celdas, siempre enteras (el borde sigue nítido).
+    """
     name = BY_INDEX.get(index)
     if not name:
         return []
     fn, ink1, ink2 = PATTERNS[name]
+
+    def ink(x, y):
+        return fn(int(x / scale), int(y / scale))
+
     runs = {ink1: [], ink2: []}
     for y in range(y0, y1):
         x = x0
         while x < x1:
-            v = fn(x, y)
+            v = ink(x, y)
             if not v:
                 x += 1
                 continue
             run = 1
-            while x + run < x1 and fn(x + run, y) == v:
+            while x + run < x1 and ink(x + run, y) == v:
                 run += 1
             runs[ink1 if v == 1 else ink2].append(f"M{x} {y}h{run}v1h-{run}z")
             x += run

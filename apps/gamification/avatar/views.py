@@ -3,13 +3,15 @@
 Cada vista es `(x, y, ancho, alto)` en celdas de la grilla. Un tamaño en píxeles solo es válido si su ancho es un múltiplo
 entero del ancho de la vista: así cada celda mide un número entero de píxeles y no hay franjas desiguales.
 
-`SCALE` multiplica toda la grilla: con 1 es el 32×32 de siempre; la figura HD (docs/AVATAR_RESOLUCION.md) usa 2 y sus
-vistas salen de multiplicar las mismas cajas, sin números sueltos.
+`SCALE` multiplica la grilla: con 1 es el 32×32 de siempre y con 2 salen las mismas cajas en la figura HD de 64×64
+(docs/AVATAR_RESOLUCION.md), sin números sueltos. La vista `stage` es el escenario de 80×80 con esa figura adentro
+y sus tamaños válidos son 80, 160, 240…
 """
 
 from .art import GRID
 
-SCALE = 1  # 1 = grilla de 32; la vista HD usa SCALE = 2 sobre las mismas cajas
+SCALE = 1  # 1 = grilla de 32; las vistas HD multiplican las mismas cajas por 2
+STAGE = 80  # escenario HD: 80×80 celdas con la figura de 64×64 adentro (ver `hd/`)
 
 # Recortes de la figura (grilla de 32). Los de zona sirven de miniatura de una pieza: ojos, boca, torso, piernas.
 VIEWS = {
@@ -30,6 +32,8 @@ VIEWS = {
 
 def box(view, scale=SCALE):
     """Caja `(x, y, ancho, alto)` de una vista con nombre o de un rectángulo `(x, y, ancho, alto)` en celdas."""
+    if view == "stage":
+        return 0, 0, STAGE, STAGE
     if isinstance(view, tuple):
         x, y, w, h = view
         if not (0 <= x and 0 <= y and w > 0 and h > 0 and x + w <= GRID and y + h <= GRID):
