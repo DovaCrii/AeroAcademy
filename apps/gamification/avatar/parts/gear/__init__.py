@@ -94,4 +94,10 @@ class Canvas:
         return hd.sprite((x0, y0), rows, space="stage")
 
 
-from . import capture, survey  # noqa: E402,F401  (registran el equipo en `hd.HD["prop"]`)
+from . import (  # noqa: E402,F401  (registran el equipo en `hd.HD["prop"]`)
+    ai,
+    build,
+    capture,
+    plant,
+    survey,
+)
