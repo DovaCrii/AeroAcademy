@@ -41,3 +41,14 @@ body.pub{min-height:100vh;display:flex;flex-direction:column;background:
   .pub-top,.pub-main,.pub-foot{padding-left:16px;padding-right:16px}
   .pub-teo{width:64px;height:64px}
 }
+
+/* Acceso en la cabecera pública y bloque «¿Cómo obtengo mi cuenta?» */
+.pub-nav{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 14px;position:relative;z-index:1}
+.pub-how{color:var(--pp-ink,var(--ink));font-size:var(--fs-small);font-weight:700;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.pub-enter{min-height:36px;padding:6px 18px}
+.pub-account{margin:18px 0 0;padding-top:14px;border-top:2px dashed var(--pp-edge,var(--hair));font-size:var(--fs-small);color:var(--pp-ink2,var(--ink-2))}
+.pub-account h2{margin:0 0 6px;font-size:1rem;color:var(--pp-ink,var(--ink))}
+.pub-account p{margin:0 0 8px}
+.pub-account b{color:var(--pp-ink,var(--ink))}
+.pub-account:target{outline:2px solid var(--amber);outline-offset:6px;border-radius:6px}
+@media (max-width:640px){.pp-band .pp-doodle,.pp-band .pp-nala{display:none}.pub-nav{gap:6px 10px}.pub-how{font-size:12px}}

@@ -8,7 +8,7 @@
 <p class="pub-note">Ya entraste con tu identidad de Tailscale. Si quieres entrar como otra persona (por ejemplo desde un equipo compartido), usa su correo y contraseña.</p>
 {% endif %}
 {% include "accounts/_login_form.html" %}
-<p class="pub-invite">¿No tienes cuenta? Inscríbete con el enlace del equipo. <b>¿Te invitaron?</b> Abre el enlace que te mandó el admin.</p>
+{% include "accounts/_how_account.html" %}
 {% endblock %}
 
-{% block callout %}Si entras por Tailscale con tu correo de la tailnet, no necesitas contraseña.{% endblock %}
+{% block callout %}{% if request.public_door %}Si tu correo no estaba aprobado, quedas pendiente y el admin te habilita.{% else %}Si entras por Tailscale con tu correo de la tailnet, no necesitas contraseña.{% endif %}{% endblock %}
