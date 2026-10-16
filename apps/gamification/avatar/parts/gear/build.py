@@ -4,43 +4,45 @@ cono de tránsito y taza."""
 from ... import hd
 from . import Canvas
 
-CUBE = [  # cubo isométrico BIM: cara de arriba clara, lados cian y blanco
-    "...KKKK...",
-    "..KWWWWK..",
-    ".KWWWWWWK.",
-    "KCCWWWWCCK",
-    "KCCCKKCCCK",
-    "KCCCKKCCCK",
-    ".KCCKKCCK.",
-    "..KCKKCK..",
-    "...KKKK...",
+CUBE = [  # cubo isométrico BIM de 12×12: cara de arriba blanca, lado izquierdo gris, derecho oscuro y arista de luz
+    ".....KK.....",
+    "...KKWWKK...",
+    ".KKWWWWWWKK.",
+    "KWWWWWWWWWWK",
+    "KKKWWWWWWKKK",
+    "KZZKKWWKKDDK",
+    "KZZZKWWKDDDK",
+    "KZZZKWWKDDDK",
+    "KZZZKWWKDDDK",
+    ".KZZKWWKDDK.",
+    "..KZKWWKDK..",
+    "...KKKKKK...",
 ]
 
 
 def _tablet():
     c = Canvas()
-    c.rect(61, 50, 15, 13, "D")
-    c.fill(63, 52, 11, 9, "V")
-    c.paste(63, 52, ["VVVVVCCVVVV"] * 1)
-    c.paste(64, 53, CUBE[1:8])
-    c.paste(66, 62, ["Z"])  # botón de inicio
+    c.rect(62, 46, 16, 17, "D")
+    c.fill(63, 47, 14, 15, "V")
+    c.paste(64, 48, CUBE)
+    c.paste(68, 61, ["ZZ"])  # botón de inicio
     c.hand(60, 60)
     return c.sprite()
 
 
 def _laptop(screen):
     c = Canvas()
-    c.rect(59, 47, 19, 13, "D")  # tapa
-    c.fill(61, 49, 15, 9, "V")
+    c.rect(59, 44, 20, 16, "D")  # tapa
+    c.fill(61, 46, 16, 12, "V")
     screen(c)
-    c.rect(58, 60, 21, 3, "Z")  # base con teclado
-    c.paste(64, 61, ["kkkkkkkkkk"])
+    c.rect(58, 60, 22, 3, "Z")  # base con teclado
+    c.paste(64, 61, ["kkkkkkkkkkkk"])
     c.hand(60, 62)
     return c.sprite()
 
 
 def _bim_screen(c):
-    c.paste(64, 49, CUBE)
+    c.paste(63, 46, CUBE)
 
 
 def _laptop_bim():

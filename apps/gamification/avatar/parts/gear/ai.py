@@ -3,26 +3,22 @@
 from ... import hd
 from . import Canvas
 
-# Pantalla de 15×9 (x 61..75 · y 49..57): nodos cian (`C`) y violeta-pantalla (`V`) unidos por líneas.
-GRAPH = [
-    "VVVVVVVVVVVVVVV",
-    "VCCVVVVVVVVVCCV",
-    "VCCkkVVVVVkkCCV",
-    "VVVVkkCCkkVVVVV",
-    "VVVVVkCCkVVVVVV",
-    "VCCkkkVVkkkCCVV",
-    "VCCVVVVVVVVCCVV",
-    "VVVVVVVVVVVVVVV",
-    "VVVVVVVVVVVVVVV",
-]
+NODES = [(62, 47), (73, 47), (67, 50), (62, 53), (73, 53)]  # esquinas de nodos de 4×4 (x, y)
+EDGES = [(0, 2), (1, 2), (2, 3), (2, 4)]
 
 
 def _laptop_ai():
     c = Canvas()
-    c.rect(59, 47, 19, 13, "D")
-    c.paste(61, 49, GRAPH)
-    c.rect(58, 60, 21, 3, "Z")
-    c.paste(64, 61, ["kkkkkkkkkk"])
+    c.rect(59, 44, 20, 16, "D")
+    c.fill(61, 46, 16, 12, "V")
+    for a, b in EDGES:  # primero las líneas y encima los nodos
+        (x0, y0), (x1, y1) = NODES[a], NODES[b]
+        c.line(x0 + 1, y0 + 1, x1 + 1, y1 + 1, "k", width=2)
+    for x, y in NODES:
+        c.rect(x, y, 4, 4, "Y", edge="K")
+        c.put(x + 1, y + 1, "W")
+    c.rect(58, 60, 22, 3, "Z")
+    c.paste(64, 61, ["kkkkkkkkkkkk"])
     c.hand(60, 62)
     return c.sprite()
 
