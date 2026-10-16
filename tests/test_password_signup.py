@@ -130,7 +130,7 @@ def test_admin_generates_link_and_sees_it_once(admin_person, invited, client_for
     response = c.post(f"/equipo/personas/{invited.pk}/enlace/")
     assert response.status_code == 302
     page = c.get("/equipo/personas/").content.decode()
-    assert "/registro/" in page and "Copiar enlace de registro" in page
+    assert "/registro/" in page and "Generar enlace de registro" in page
     link = page.split("/registro/")[1].split("/")[0]
     assert services.resolve_signup_token(link).pk == invited.pk
     again = c.get("/equipo/personas/").content.decode()
@@ -173,12 +173,12 @@ def test_lead_sees_people_list_but_no_link_buttons(lead, invited, client_for):
     page = client_for(lead.login).get("/equipo/personas/")
     assert page.status_code == 200
     html = page.content.decode()
-    assert "Copiar enlace de registro" not in html and "Agregar personas" not in html
+    assert "Generar enlace de registro" not in html and "Agregar personas" not in html
 
 
 def test_admin_sees_link_buttons(admin_person, invited, client_for):
     html = client_for(admin_person.login).get("/equipo/personas/").content.decode()
-    assert "Copiar enlace de registro" in html and "Agregar personas" in html
+    assert "Generar enlace de registro" in html and "Agregar personas" in html
 
 
 def test_add_people_is_admin_only(lead, admin_person, client_for):

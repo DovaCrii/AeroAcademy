@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.accounts import services
 from apps.accounts.models import Person
+from apps.community import moderation
 
 
 class Command(BaseCommand):
@@ -24,6 +25,7 @@ class Command(BaseCommand):
             url = services.signup_url(person)
         except ValueError as exc:
             raise CommandError(str(exc)) from exc
+        moderation.log(None, "signup_link", person, f"{person.name} (consola)")
         self.stdout.write(f"Enlace de registro para {person.login} (un solo uso, vence en 7 días):")
         self.stdout.write(url)
         self.stdout.write("Mándaselo por un canal privado; generar otro invalida este.")

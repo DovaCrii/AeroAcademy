@@ -76,6 +76,14 @@ body{line-height:var(--lh-body);letter-spacing:.002em}
 .userchip .who svg{display:block;image-rendering:pixelated}
 .userchip .txt{display:flex;flex-direction:column;justify-content:center;min-width:0}
 .userchip:hover .uname{text-decoration:underline;text-decoration-color:var(--amber)}
+.usermenu{position:relative}
+.usermenu>summary{list-style:none;cursor:pointer;display:flex;border-radius:var(--r-pill)}
+.usermenu>summary::-webkit-details-marker{display:none}
+.usermenu>summary:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.um-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:40;min-width:200px;display:flex;flex-direction:column;gap:2px;padding:8px;background:var(--sheet);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow-2)}
+.um-pop a,.um-logout{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;font-size:14px;font-weight:550;color:var(--ink-2);text-decoration:none;padding:8px 12px;border:0;border-radius:var(--r);background:none;cursor:pointer}
+.um-pop a:hover,.um-logout:hover{color:var(--ink);background:var(--sheet-2)}
+.um-pop form{margin:0;border-top:1px dashed var(--hair);padding-top:4px;margin-top:4px}
 .userchip .uname{font-size:14px;font-weight:600;font-stretch:90%;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
 
 /* ── lámina ─────────────────────────────────────────────────────────────── */

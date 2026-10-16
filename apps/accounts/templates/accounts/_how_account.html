@@ -1,0 +1,7 @@
+{# Cómo conseguir cuenta (ancla #cuenta). Cambia el texto según la puerta: la pública no menciona Tailscale. #}
+<section id="cuenta" class="pub-account" aria-labelledby="cuenta-t">
+  <h2 id="cuenta-t">¿Cómo obtengo mi cuenta?</h2>
+  <p>Las cuentas se crean por invitación: el administrador te manda un <b>enlace personal</b> (dura 7 días y sirve una vez) o el <b>enlace del equipo</b>. Ábrelo, crea tu contraseña y entra. <b>¿Te invitaron?</b> Abre el enlace que te mandó el admin.</p>
+  {% if not request.public_door %}<p>Si usas <span class="term">Tailscale</span> con tu correo del equipo, abre el sitio y listo: no necesitas contraseña.</p>{% endif %}
+  <p>¿Aún no tienes un enlace? Pídelo al administrador del equipo.</p>
+</section>
