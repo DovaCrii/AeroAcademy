@@ -12,7 +12,7 @@ avance de cada persona y del equipo, dejar notas, conversar en un foro y **guard
 y credenciales obtenidos**, con vencimientos y exportación de evidencia.
 
 Encima de todo hay una **capa de juego** (XP, niveles, títulos, insignias, clases por disciplina y hoja de personaje)
-con estética 8-bit tipo D&D aplicada a la ingeniería, y un asistente llamado **Teo**.
+con estética 8-bit tipo D&D aplicada a la ingeniería, y una asistente y mascota llamada **Nala** (D32; el código conserva el nombre `teo`).
 
 Nace del prototipo `legacy/ruta-forma-revit/` (guía "Levantamiento Digital CC 410 · Ruta Forma + Revit").
 Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica, se migra.
@@ -35,7 +35,7 @@ Ese prototipo es la **referencia visual del mundo Arquitectura**; no se modifica
 | Empresas, productos, rutas, etiquetas | `docs/TAXONOMIA.md`, `docs/CURSOS.md` (inventario, brechas, plantilla y checklist de autoría) |
 | Mundos visuales por especialidad | `docs/MUNDOS.md` |
 | XP, niveles, títulos, insignias | `docs/GAMIFICACION.md` |
-| Teo / Nala, foro, moderación | `docs/BOT.md`, `docs/MODERACION.md` |
+| Nala (asistente; en el código `teo`), foro, moderación | `docs/BOT.md`, `docs/MODERACION.md` |
 | Portada, iconos | `docs/HOME.md`, `docs/ICONOS.md` |
 | Ramas, PR, fusiones | `docs/FLUJO_GITHUB.md`, `docs/FUSIONES.md` (**el agente fusiona con el CI en verde; la persona despliega**) |
 | Despliegue y producción | `docs/PRODUCCION.md`, `docs/PENDIENTES.md` |
@@ -61,7 +61,8 @@ uv run python manage.py migrate
 uv run python manage.py seed_catalog      # plataformas, vendors, rutas, insignias y títulos desde seed/
 uv run python manage.py runserver         # desarrollo (usar DEV_REMOTE_USER, ver ARQUITECTURA)
 uv run python manage.py check_expirations # avisos de vencimientos (tarea diaria)
-uv run python manage.py reindex_assistant # índice de búsqueda de Teo
+uv run python manage.py reindex_assistant # índice de búsqueda de Nala
+uv run python manage.py revisar_enlaces --externos  # enlaces internos y externos (CSV en private/)
 uv run python manage.py import_legacy --db ruta.db --dry-run   # datos del prototipo
 uv run pytest                             # pruebas
 uv run ruff check . && uv run ruff format --check .
@@ -70,45 +71,50 @@ uv run ruff check . && uv run ruff format --check .
 ## Reglas que salieron de las revisiones (aplican a todo bloque)
 
 - **Autorización primero:** cada vista decide quién ve y quién edita; lo oculto, restringido o en borrador responde 404 (no revela que existe) y no sale en listados, búsquedas, avisos, tablero ni exportaciones.
-- **Privacidad:** nada de `credentials` ni de logins hacia Teo, logs o el índice; lo que sale de credenciales se filtra con `credentials.services.visible_filter`.
+- **Privacidad:** nada de `credentials` ni de logins hacia Nala, logs o el índice; lo que sale de credenciales se filtra con `credentials.services.visible_filter`.
 - **Toda acción que cambia datos es POST con CSRF**, y todo `next` pasa por `url_has_allowed_host_and_scheme` (probar `//evil.com` y `/\evil.com`).
 - **Texto de usuarios escapado;** el Markdown solo con `apps/core/markdown.py`. Probar `<script>` en cada campo nuevo.
 - **XP, insignias y avisos son idempotentes** (`game.award/revoke/refresh`, `notify(key=...)`): marcar/desmarcar, verificar/rechazar y reintentar no duplican.
 - **Archivos privados:** nombre generado, tipo real, tamaño máximo, sin URL pública, descarga como adjunto, borrado al confirmar la transacción.
 - **Consultas acotadas:** cada listado nuevo lleva una prueba de que las consultas no crecen con los datos.
 
-## Skills del proyecto
+## Método, skills y subagentes
 
-Hay skills en `.claude/skills/`. Claude Code las carga solo; en Codex, leer el `SKILL.md` correspondiente antes de la tarea.
+**Método único: skill `orquestar`** (decisión del dueño, 2026-10-16). Fases: Entender → Diseñar (Opus) → Implementar
+(Sonnet) → Verificar (Haiku) → Revisar (Opus) → Publicar y cerrar (`cerrar-pendientes`).
+
+| Modelo (esfuerzo) | Rol | Subagentes |
+|---|---|---|
+| **Opus 5.5 medio** | Sesión principal: diseña, decide, reparte, **revisa diffs**, integra y fusiona | `disenador`, `revisor-bloque` |
+| **Sonnet 5.5 medio** | Implementa | `bloque-dev`, `curador-semillas`, `artista-pixel` |
+| **Haiku 5.5 medio** | Inventarios, comprobaciones del CI, enlaces, vigilar el CI | `verificador` |
+
+Skills en `.claude/skills/` (Claude Code las carga solo; en Codex, leer el `SKILL.md` antes de la tarea):
 
 | Skill | Cuándo |
 |---|---|
-| `bloque` | Al trabajar cualquier bloque de `docs/PLAN.md` |
-| `nueva-ruta` | Al crear o modificar un JSON en `seed/rutas/` |
-| `nuevo-mundo` | Al crear el diseño de una especialidad nueva |
-| `nueva-insignia` | Al agregar insignias o títulos |
-| `sprite-8bit` | Al dibujar avatares, insignias o a Nala |
-| `orquestar` | Al repartir una ronda entre subagentes (qué modelo usa cada uno y en qué orden) |
+| `orquestar` | En toda ronda con más de un paso o agente: fases, modelos y cuándo preguntar |
+| `bloque` | Al trabajar un bloque de `docs/PLAN.md` o una mejora de `docs/MEJORAS_*.md` |
+| `cerrar-pendientes` | Al publicar: push, PR, CI en verde, fusión con merge commit, limpieza |
+| `revision-privacidad` | Antes de cada push o PR, y al agregar archivos, imágenes o datos de prueba |
+| `nueva-ruta` | Al crear o cambiar `seed/rutas/*.json` (slides, `diagram`, `priv:`, icono, foro) |
+| `nuevo-mundo` | Al crear o rediseñar un mundo o una figura temática |
+| `nueva-insignia` | Al agregar insignias, títulos o desbloqueables |
+| `sprite-8bit` | Al dibujar insignias, a Nala, iconos o encargar piezas de avatar |
 
-## Subagentes del proyecto
+Subagentes en `.claude/agents/`, para trabajar en paralelo en **archivos distintos**:
 
-Definidos en `.claude/agents/` y alineados con las skills. Úsalos para paralelizar trabajo en **archivos distintos**:
+| Subagente | Modelo | Para qué | Skills |
+|---|---|---|---|
+| `disenador` | opus | Plan, UX y decisiones antes de construir (escribe en `docs/`) | `orquestar` |
+| `revisor-bloque` | opus | Revisar el diff de un bloque o PR (solo lee) | `bloque` |
+| `bloque-dev` | sonnet | Implementar un bloque o sub-bloque acotado | `bloque` |
+| `curador-semillas` | sonnet | Rutas, cursos, insignias, títulos y foro (`seed/`) | `nueva-ruta`, `nueva-insignia` |
+| `artista-pixel` | sonnet | Avatar, insignias, Nala, iconos y figuras | `sprite-8bit` |
+| `verificador` | haiku | Inventarios, CI local, `revisar_enlaces`, vigilar el CI (solo reporta) | — |
 
-| Subagente | Para qué | Skill con la que trabaja |
-|---|---|---|
-| `bloque-dev` | Implementar un bloque o sub-bloque acotado | `bloque` |
-| `artista-pixel` | Dibujar piezas de avatar, insignias y sprites | `sprite-8bit`, `nuevo-mundo` |
-| `curador-semillas` | Rutas, cursos, insignias y títulos (`seed/`) | `nueva-ruta`, `nueva-insignia` |
-| `revisor-bloque` | Revisar un bloque o PR antes de entregarlo (solo lee) | `bloque` |
-| `verificador-enlaces` | Recorrer el sitio y revisar URLs externas (solo reporta) | — |
-| `explorador` | Búsquedas, inventarios y resúmenes rápidos (solo lee) | — |
-
-**Modelos y orquestación (skill `orquestar`):** la sesión principal (**Opus**) orquesta: decide, reparte, revisa, integra y
-publica. **Sonnet** construye (`bloque-dev`, `artista-pixel`, `curador-semillas`, `revisor-bloque`). **Haiku** hace lo
-mecánico y de lectura (`verificador-enlaces`, `explorador`). Al lanzar un subagente se pasa `model` explícito.
-
-Reglas: cada subagente edita solo lo que se le asignó; no hace `git`, `push` ni PR (eso lo hace quien lo lanzó); y quien lo
-lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de integrarlo.
+Reglas: al lanzar un subagente se pasa `model` explícito; cada uno edita solo lo asignado y no hace `push` ni PR; quien
+lo lanza verifica y revisa el resultado antes de integrarlo.
 
 ## Flujo con GitHub (regla de trabajo)
 
@@ -121,7 +127,8 @@ lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de inte
 - Al publicar un bloque: PR con la plantilla de `.github/`. Título `Bloque <n> · <tema>`; cuerpo con criterios de aceptación y cómo probarlo.
 - Commits pequeños, en español y en imperativo (`Agrega el motor de XP idempotente`); primera línea ≤ 72 caracteres.
   Esta es la convención del repositorio: no se usa Conventional Commits.
-- Revisar el CI del PR (`gh pr checks`) y arreglarlo si falla. Un PR en rojo no está listo.
+- Publicar y fusionar con la skill `cerrar-pendientes`: esperar la corrida real del CI, arreglar lo rojo y fusionar
+  con merge commit. Un PR en rojo no está listo.
 - **Nunca** fusionar con el CI en rojo o saltado, forzar `push` sobre `main`, subir secretos o datos reales, ni cambiar la
   visibilidad o los *settings* del repositorio sin que se pida explícitamente.
 - Encadenar bloques solo si la persona lo pidió ("continúa hasta terminar"); si no, esperar su confirmación.
@@ -162,4 +169,6 @@ lanza **verifica el resultado** (pruebas, ruff y revisión visual) antes de inte
 - `pytest` y `ruff` en verde (el CI del PR también).
 - Migraciones generadas y aplicables desde cero.
 - `docs/PLAN.md` actualizado: bloque marcado como terminado, con notas de lo que quedó pendiente.
-- Rama subida y **PR abierto** con resumen en español (qué cambia, cómo probarlo, qué queda pendiente).
+- Diff revisado (`revisor-bloque`) y privacidad en verde (`revision-privacidad`).
+- PR con resumen en español (qué cambia, cómo probarlo, qué queda pendiente), CI en verde y fusionado con merge
+  commit; la persona despliega.
