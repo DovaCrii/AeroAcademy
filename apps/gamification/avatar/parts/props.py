@@ -25,6 +25,13 @@ LABELS_PROPS = {
     "calculator": "Calculadora",
     "camera": "Cámara de terreno",
     "laser_scanner": "Escáner láser",
+    "total_station": "Estación total",
+    "level_staff": "Mira de nivelación",
+    "laptop_bim": "Laptop con modelo BIM",
+    "traffic_cone": "Cono de tránsito",
+    "pipe_spool": "Tramo de cañería",
+    "valve_wheel": "Volante de válvula",
+    "laptop_ai": "Laptop con IA",
 }
 
 
@@ -187,6 +194,29 @@ _laser_scanner = _merge(
     _right("KZZK", "K.ZK", "K..ZK", "K...ZK", "K....ZK", "K.....ZK", "K.....ZK", "K.....ZK", y0=19),
     _right("K......ZK", "K......ZK", "K.....KKK", y0=27),
 )
+# Herramientas nuevas (se agregaron al final de PROPS): aquí solo su versión mínima de 32; el dibujo real está en
+# `parts/gear/` (escenario HD). Claves: solo las de este contrato.
+_total_station = _merge(
+    _p(26, "KKKKK.", "KDCDK.", "KKKKK.", y0=20),
+    _p(27, "K..K", "K..K", "K..K", "K..K", y0=23),
+    _p(26, "SS", y0=25),
+)
+_level_staff = _merge(
+    _p(28, ".KK.", *["KWRK", "KWKK"] * 11, y0=2),
+    _p(26, "SSKWRK", "SSKWKK", y0=25),
+)
+_laptop_bim = _p(24, "KKKKKKK", "KCWCCCK", "KCCWCCK", "KKKKKKK", "KDDDDDK", "KKKKKKK", y0=21)
+_traffic_cone = _p(26, "..KK..", ".KQQK.", ".KWWK.", "KQQQQK", "KQQQQK", "KKKKKK", y0=26)
+_pipe_spool = _merge(
+    _p(23, "KKKKKKKKK", "KZZZZZZZK", "KDDDDDDDK", "KKKKKKKKK", y0=17),
+    _p(27, "SS", "SS", y0=25),
+)
+_valve_wheel = _merge(
+    _p(25, ".KKKKK.", "KRYYYRK", "KYKKKYK", "KRYYYRK", ".KKKKK.", y0=20),
+    _p(27, "SS", y0=25),
+)
+_laptop_ai = _p(24, "KKKKKKK", "KCGCGCK", "KGCGCGK", "KKKKKKK", "KDDDDDK", "KKKKKKK", y0=21)
+
 # --- pines de solapa (pecho derecho de quien mira); se desbloquean por nivel ---------------------------------
 
 LABELS_PINS = {
@@ -217,4 +247,11 @@ PROPS = {
     "calculator": _calculator,
     "camera": _camera,
     "laser_scanner": _laser_scanner,
+    "total_station": _total_station,
+    "level_staff": _level_staff,
+    "laptop_bim": _laptop_bim,
+    "traffic_cone": _traffic_cone,
+    "pipe_spool": _pipe_spool,
+    "valve_wheel": _valve_wheel,
+    "laptop_ai": _laptop_ai,
 }

@@ -47,7 +47,8 @@ COLOR_KEYS = {
     "V": "pantalla (HD)",
     "X": "cono naranja (HD)",
     "x": "franja del cono (HD)",
-    # Solo las pone el motor, nunca una pieza: «1» piel luz, «2» ropa luz, «3» gorro luz, «4» pantalón luz.
+    # Solo las pone el motor, nunca una pieza: «1» piel luz, «2» ropa luz, «3» gorro luz, «4» pantalón luz y «6» color
+    # de la insignia (parche de manga y adhesivo del casco).
 }
 
 

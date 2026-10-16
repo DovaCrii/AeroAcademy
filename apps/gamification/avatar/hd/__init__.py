@@ -26,6 +26,7 @@ CATEGORIES = {
     "eyes": False,
     "brows": False,
     "mouth": False,
+    "nose": False,
     "glasses": False,
     "facial_hair": False,
     "headwear": True,
@@ -37,12 +38,45 @@ CATEGORIES = {
 }
 HD = {category: {} for category in CATEGORIES}
 
+# Dónde puede dibujar cada categoría: `(x0, y0, x1, y1)` inclusivo, en el espacio de sus sprites (la figura de 64×64,
+# salvo `prop`, que vive en el escenario de 80×80). Son las cajas de la grilla de 32 ×2 con un margen de una celda.
+ZONES = {
+    "eyes": (20, 18, 43, 29),
+    "brows": (20, 14, 43, 21),
+    "mouth": (22, 26, 41, 35),
+    "nose": (28, 22, 35, 27),
+    "glasses": (12, 14, 51, 29),
+    "facial_hair": (18, 20, 45, 39),
+    "headwear": (6, 0, 57, 29),
+    "hair": (2, 0, 61, 54),
+    "outfit": (8, 38, 55, 57),
+    "neckwear": (18, 34, 45, 53),
+    "pin": (36, 40, 47, 51),
+    "prop": (0, 0, 79, 79),
+}
+MAX_COLORS = 12  # por sprite (skill sprite-8bit)
+
 
 def sprite(at, rows, space="figure"):
     """Una pieza HD: filas de texto ancladas en `at` (`'.'` es transparente)."""
     if space not in {"figure", "stage"}:
         raise ValueError(f"espacio desconocido: {space!r}")
     return {"at": tuple(at), "rows": list(rows), "space": space}
+
+
+def mirror(x0, top, rows, bridge=None):
+    """Un par simétrico: `rows` es la mitad izquierda desde la columna `x0`; la derecha es su espejo respecto del centro
+    de la figura (x 31,5). Lo que queda entre las dos mitades se rellena con `bridge` (`{fila: clave}`), por ejemplo el
+    puente de unos lentes; si no, queda transparente."""
+    width = len(rows[0])
+    assert all(len(row) == width for row in rows), rows
+    gap = GRID_HD - 2 * x0 - 2 * width
+    assert gap >= 0, "la mitad izquierda cruza el centro"
+    bridge = bridge or {}
+    return sprite(
+        (x0, top),
+        [row + bridge.get(i, ".") * gap + row[::-1] for i, row in enumerate(rows)],
+    )
 
 
 def up2(rows):
@@ -53,3 +87,8 @@ def up2(rows):
         for dy in range(SCALE):
             out[y * SCALE + dy] = wide
     return out
+
+
+# Registran las piezas HD al importarse; van al final porque necesitan el registro HD ya definido.
+from ..parts import gear  # noqa: E402,F401
+from . import face, facial_hair, glasses, hands, headwear, outfits, pins  # noqa: E402,F401

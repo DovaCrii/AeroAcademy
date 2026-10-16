@@ -73,9 +73,9 @@
 .av-opt{position:relative;cursor:pointer;display:inline-flex;align-items:center}
 .av-opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%;height:100%}
 .av-opt .tile{display:block;border:2px solid var(--hair);border-radius:var(--r-sm);background:var(--sheet-2);line-height:0;padding:1px}
-.av-opt .tile svg,.av-chip .px svg,.av-head svg{shape-rendering:crispEdges}
-.av-opt .tile svg{display:block;image-rendering:pixelated;border-radius:3px;background:var(--tile-bg,#0f2a4d)}
-.av-chip .px svg{background:var(--tile-bg,#0f2a4d)}
+.av-head svg{shape-rendering:crispEdges}
+.av-opt .tile img{display:block;image-rendering:pixelated;border-radius:3px}
+.av-chip .px img{display:block;image-rendering:pixelated;border-radius:50%}
 .av-opt:hover .tile{border-color:var(--ink-2)}
 .av-opt input:checked + .tile{border-color:var(--level);box-shadow:0 0 0 2px var(--level)}
 .av-opt input:focus-visible + .tile,.av-opt input:focus-visible + .sw,.av-opt input:focus-visible + .chip{outline:3px solid var(--red);outline-offset:2px}
@@ -83,6 +83,9 @@
 .av-opt .sw{width:24px;height:24px;border:1px solid var(--ink);border-radius:var(--r-sm);display:block}
 .av-opt input:checked + .sw{box-shadow:0 0 0 2px var(--sheet),0 0 0 4px var(--level)}
 .av-opt .swl{font-size:12px;margin-left:6px}
+.av-opt .pill{display:block;padding:6px 12px;border:2px solid var(--hair);border-radius:var(--r-pill);font:600 13px var(--font);background:var(--sheet-2);min-height:32px}
+.av-opt input:checked + .pill{border-color:var(--level);box-shadow:0 0 0 2px var(--level)}
+.av-opt input:focus-visible + .pill{outline:3px solid var(--red);outline-offset:2px}
 .av-opt.locked{opacity:.55;cursor:not-allowed}
 .av-opt.locked input{cursor:not-allowed}
 .av-opt .lock{position:absolute;left:2px;bottom:2px;pointer-events:none}

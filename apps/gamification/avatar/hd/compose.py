@@ -7,8 +7,9 @@ de la configuración ya limpia y de la pose.
 
 from .. import engine
 from ..parts import body, poses
-from . import HD, OFFSET, SCALE, STAGE, up2
+from . import HD, OFFSET, SCALE, STAGE, sprite, up2
 from .detail import detail_pass
+from .hands import POSE_HANDS
 
 OX, OY = OFFSET
 # Ventana de la cara en el escenario: ni el pelo ni un gorro dibujan aquí.
@@ -49,8 +50,10 @@ def _layer(grid, category, option, rows, *, part=None, only_on=None, clip_face=F
     art = HD[category].get(option)
     if art is not None:
         art = art[part] if part else art
-        if art:
-            _paint_sprite(grid, art, only_on, clip_face)
+        pieces = art if isinstance(art, list) else [art]  # el equipo grande puede ser varias piezas
+        for piece in pieces:
+            if piece:
+                _paint_sprite(grid, piece, only_on, clip_face)
         return
     _paint_rows(grid, up2(rows), only_on)
 
@@ -66,7 +69,23 @@ def _apply_pose(grid, patch):
                         grid[Y][X] = ch
 
 
-def compose_layers(cfg, pose=poses.DEFAULT_POSE):
+# Insignia en el avatar: parche de 4×4 en la manga izquierda (sobre la ropa) y adhesivo de 4×4 en el casco de obra.
+# Los dibuja el motor con la clave `6` (el color de la rareza): ninguna pieza usa esa clave.
+SLEEVE_PATCH = sprite((10, 45), ["6666", "6WW6", "6WW6", "6666"])
+STICKER_ROWS = ["KKKK", "K66K", "K66K", "KKKK"]
+# Dónde va el adhesivo en cada casco (esquina en la figura de 64): sobre la cúpula, entre la cresta y el borde.
+STICKER_HATS = {"hardhat": (39, 9), "hardhat_lamp": (39, 9), "bump_cap": (38, 7)}
+
+
+def _paint_badges(grid, cfg):
+    _paint_sprite(
+        grid, SLEEVE_PATCH, only_on={"O", "o", "A", "a"}
+    )  # solo sobre la ropa (todos sus tonos)
+    if cfg["headwear"] in STICKER_HATS:
+        _paint_sprite(grid, sprite(STICKER_HATS[cfg["headwear"]], STICKER_ROWS))
+
+
+def compose_layers(cfg, pose=poses.DEFAULT_POSE, badge=None):
     """Las capas sin el pase de acabado (la figura ×2 o con piezas HD, ya en el escenario)."""
     grid = blank()
     hair_art, hat_art = engine.HAIR[cfg["hair"]], engine.HEADWEAR[cfg["headwear"]]
@@ -78,11 +97,13 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE):
     _paint_rows(grid, up2(body.BASE))
     _paint_rows(grid, up2(body.BODY_PATCH[cfg["body"]]))
     _apply_pose(grid, poses.POSES.get(pose, {}))
+    if pose in POSE_HANDS:
+        _paint_sprite(grid, POSE_HANDS[pose])  # la mano de la pose, ya en HD
     _paint_rows(grid, up2(body.LEGWEAR[cfg["legwear"]]))
     _layer(grid, "outfit", cfg["outfit"], engine.OUTFITS[cfg["outfit"]], only_on={"O"})
     _layer(grid, "neckwear", cfg["neckwear"], engine.NECKWEAR[cfg["neckwear"]])
     _layer(grid, "facial_hair", cfg["facial_hair"], engine.FACIAL_HAIR[cfg["facial_hair"]])
-    _paint_rows(grid, up2(body.NOSE))
+    _layer(grid, "nose", "default", body.NOSE)
     _layer(grid, "mouth", cfg["mouth"], engine.MOUTHS[cfg["mouth"]])
     if not opaque:
         _layer(grid, "glasses", cfg["glasses"], engine.GLASSES[cfg["glasses"]])
@@ -101,10 +122,12 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE):
         clip_face=True,
     )
     _layer(grid, "pin", cfg["pin"], engine.PINS[cfg["pin"]])
+    if badge:
+        _paint_badges(grid, cfg)
     _layer(grid, "prop", cfg["prop"], engine.PROPS[cfg["prop"]])
     return grid
 
 
-def compose_hd(cfg, pose=poses.DEFAULT_POSE):
+def compose_hd(cfg, pose=poses.DEFAULT_POSE, badge=None):
     """Matriz 80×80 de claves de color ('.' = transparente): capas + acabado."""
-    return detail_pass(compose_layers(cfg, pose))
+    return detail_pass(compose_layers(cfg, pose, badge))

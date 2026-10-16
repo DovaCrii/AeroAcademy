@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.db.models import Sum
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -55,6 +56,22 @@ def avatar_editor(request):
 
 
 @require_GET
+def avatar_piece(request, key, option):
+    """Miniatura SVG de una opción del editor (`<img>` cacheable): solo depende de la URL, no de la persona.
+
+    La configuración viaja en `?c=` (un código corto) y todo se valida contra el catálogo: una categoría u opción que no
+    existe es 404 y nada que escriba la persona entra al SVG.
+    """
+    value = services.piece_option(key, option)
+    if value is None:
+        raise Http404
+    cfg = services.decode_cfg(request.GET.get("c"))
+    response = HttpResponse(services.piece_svg(cfg, key, value), content_type="image/svg+xml")
+    response["Cache-Control"] = "private, max-age=86400"  # solo el navegador de quien lo pide
+    return response
+
+
+@require_GET
 def avatar_preview(request):
     """Vista previa en vivo: solo el fragmento; no guarda nada."""
     cfg = services.clean_from_form(request.user, request.GET)
@@ -99,6 +116,7 @@ def _render_sheet(request, person):
         title=f"Avatar de {person.name}",
         view="stage",
         bg_alt=services.auto_background(person, cfg),
+        badge=services.avatar_badge(person, cfg),
     )
     ctx["avatar_big"] = services.framed(svg, cfg, level=ctx["info"]["level"], large=True)
     if ctx[
