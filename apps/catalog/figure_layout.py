@@ -388,7 +388,32 @@ def _iso_stack(items, labels, pct):
     }
 
 
+def _sheet(items, labels, pct):
+    """Lámina de dibujo: el administrador de capas a la izquierda y, a la derecha, el trazo de cada capa, que se
+    dibuja en firme hasta su avance (el resto queda punteado) y termina en un bloque al completarla."""
+    n = len(items)
+    top, pitch, x_line, line_w = 58, 34, 290, 440
+    for i, s in enumerate(items):
+        y = top + i * pitch
+        done_w = round(line_w * s["pct"] / 100)
+        s.update(
+            y=y,
+            mid=y + 16,
+            line_y=y + 23,
+            label=clip(s["alias"] or s["short"], 17),
+            line_x1=x_line,
+            line_x2=x_line + line_w,
+            done_x2=x_line + done_w,
+            block_x=x_line + line_w - 14,
+            shade=i % 4,  # el color de la capa se reparte entre cuatro tonos
+        )
+        _marks(s, 262, y + 16, 1)
+    tb_y = top + n * pitch + 8
+    return {"w": W, "h": tb_y + 58, "frame_h": tb_y + 48, "tb_y": tb_y, "x_line": x_line}
+
+
 LAYOUTS = {
+    "sheet": _sheet,
     "frames": _frames,
     "iso-stack": _iso_stack,
     "iso": _iso,

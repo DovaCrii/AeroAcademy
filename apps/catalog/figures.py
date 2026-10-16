@@ -59,7 +59,7 @@ BASE_LABELS = {
 
 
 STACK_TEMPLATE = "worlds/figures/stack.html"
-# Figuras ya dibujadas; el resto usa la pila de capas con su propio vocabulario (se agregan de a dos, ver MUNDOS).
+# Figuras con su propio dibujo. Una figura nueva usa la pila de capas con su vocabulario hasta que se agregue aquí.
 DRAWN = {
     "building",
     "building-lod",
@@ -75,6 +75,7 @@ DRAWN = {
     "doc-flow",
     "viz-scene",
     "building-model",
+    "drafting-sheet",
 }
 
 

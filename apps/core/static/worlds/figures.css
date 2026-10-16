@@ -109,6 +109,25 @@
 .fg-slabiso.on .fg-box{stroke:var(--fg-acc);stroke-width:3}
 .fg-slabiso .fg-box{stroke-linejoin:round}
 
+/* drafting-sheet: lámina con capas */
+.fg-frame{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:2}
+.fg-row{fill:transparent;stroke:none}
+.fg-layer:hover .fg-row,.fg-layer.on .fg-row{fill:color-mix(in srgb,var(--fg-acc) 12%,transparent)}
+.fg-layer.on .fg-row{stroke:var(--fg-acc);stroke-width:2}
+.fg-swatch{fill:var(--fg-acc)}
+.fg-layer.sh1 .fg-swatch{fill:var(--fg-warn)}
+.fg-layer.sh2 .fg-swatch{fill:var(--fg-ok)}
+.fg-layer.sh3 .fg-swatch{fill:var(--fg-soft)}
+.fg-todo{stroke:var(--fg-line);stroke-width:2;stroke-dasharray:8 6}
+.fg-draw{stroke:var(--fg-acc);stroke-width:4;stroke-linecap:round}
+.fg-layer.sh1 .fg-draw{stroke:var(--fg-warn)}
+.fg-layer.sh2 .fg-draw{stroke:var(--fg-ok)}
+.fg-layer.sh3 .fg-draw{stroke:var(--fg-soft)}
+.fg-block{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:2}
+.fg-tblock rect,.fg-tblock line{fill:none;stroke:var(--fg-ink);stroke-width:1.5}
+.fg-tblock text{font:700 13px var(--font)}
+.fg-tblock text.fg-tag{font:600 10px var(--font-mono)}
+
 @media (prefers-reduced-motion:no-preference){
   .fg-st .fg-box{transition:stroke .15s}
 }

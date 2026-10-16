@@ -1,0 +1,30 @@
+{# Lámina de dibujo: administrador de capas y trazo de cada capa (firme hasta el avance, punteado el resto), con cajetín. #}
+<svg class="fg fg-sheet" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  <rect class="fg-frame" x="10" y="10" width="740" height="{{ fg.frame_h }}"/>
+  <text class="fg-tag" x="26" y="40">CAPA</text>
+  <text class="fg-tag" x="{{ fg.x_line }}" y="40">DIBUJO · BLOQUES · XREF</text>
+  <line class="fg-guide" x1="276" y1="20" x2="276" y2="{{ fg.tb_y }}"/>
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-layer sh{{ s.shade }}{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-row" x="20" y="{{ s.y }}" width="720" height="32"/>
+      <rect class="fg-swatch" x="28" y="{{ s.y|add:'9' }}" width="14" height="14"/>
+      <text class="fg-code" x="52" y="{{ s.mid }}" dominant-baseline="central">{{ s.code|upper }}</text>
+      <text class="fg-name" x="86" y="{{ s.mid }}" dominant-baseline="central"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <line class="fg-todo" x1="{{ s.line_x1 }}" y1="{{ s.line_y }}" x2="{{ s.line_x2 }}" y2="{{ s.line_y }}"/>
+      {% if s.pct %}<line class="fg-draw" x1="{{ s.line_x1 }}" y1="{{ s.line_y }}" x2="{{ s.done_x2 }}" y2="{{ s.line_y }}"/>{% endif %}
+      {% if s.complete %}<rect class="fg-block" x="{{ s.block_x }}" y="{{ s.line_y|add:'-7' }}" width="14" height="14"/>{% endif %}
+      <text class="fg-pct" x="738" y="{{ s.y|add:'9' }}" text-anchor="end" dominant-baseline="central">{{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+  <g class="fg-tblock">
+    <rect x="360" y="{{ fg.tb_y }}" width="380" height="40"/>
+    <line x1="500" y1="{{ fg.tb_y }}" x2="500" y2="{{ fg.tb_y|add:'40' }}"/><line x1="640" y1="{{ fg.tb_y }}" x2="640" y2="{{ fg.tb_y|add:'40' }}"/>
+    <text class="fg-tag" x="368" y="{{ fg.tb_y|add:'14' }}">PROYECTO</text><text x="368" y="{{ fg.tb_y|add:'31' }}">{{ path.title|truncatechars:16 }}</text>
+    <text class="fg-tag" x="508" y="{{ fg.tb_y|add:'14' }}">{{ fig.labels.sheet_label|upper }}</text><text x="508" y="{{ fg.tb_y|add:'31' }}">{{ fig.labels.sheet }}</text>
+    <text class="fg-tag" x="648" y="{{ fg.tb_y|add:'14' }}">AVANCE</text><text x="648" y="{{ fg.tb_y|add:'31' }}">{{ fg.pct }} %</text>
+  </g>
+</svg>
