@@ -10,6 +10,7 @@
     </div>
     <div class="pnav">
       {% if prev_code %}<a class="btn ghost" href="?nivel={{ prev_code }}#panel">← Anterior</a>{% endif %}
+      {% if not next_code and diploma_url and stats.pct >= 100 %}<a class="btn route-cta" href="{{ diploma_url }}">Ver diploma ✦</a>{% endif %}
       {% if next_code %}<a class="btn ghost" href="?nivel={{ next_code }}#panel">Siguiente →</a>{% endif %}
     </div>
   </div>

@@ -275,8 +275,13 @@ def step_context(path, chapter, step_key, prev_code, next_code):
         prev_url = step_url(path, prev_code, "portada")
     next_url = steps[index + 1]["url"] if index + 1 < len(steps) else None
     next_is_level = False
+    next_label = ""
+    if next_url is not None:
+        nxt = steps[index + 1]
+        next_label = "Quiz" if nxt["key"] == "quiz" else nxt["label"]
     if next_url is None and next_code:
         next_url, next_is_level = step_url(path, next_code, "portada"), True
+        next_label = "Siguiente nivel"
     tabs = []
     for tab_key, label in TABS:
         first = next((s for s in steps if s["tab"] == tab_key), None)
@@ -297,6 +302,7 @@ def step_context(path, chapter, step_key, prev_code, next_code):
         "step_prev": prev_url,
         "step_next": next_url,
         "step_next_is_level": next_is_level,
+        "step_next_label": next_label,
         "tabs": tabs,
     }
 

@@ -290,7 +290,7 @@ def test_forum_requires_approval(client_for, make_person):
 def test_list_query_count_is_flat(client_for, member, django_assert_max_num_queries):
     for i in range(15):
         question(member, f"Hilo {i}")
-    with django_assert_max_num_queries(30):
+    with django_assert_max_num_queries(34):  # incluye las tarjetas de rutas (2 prefetch fijos)
         assert client_for(member.login).get("/foro/").status_code == 200
 
 

@@ -1,0 +1,20 @@
+{% load static %}<article class="card route-card{% if variant == 'compact' %} rc-compact{% endif %}" data-route-card data-slug="{{ path.slug }}"{% if disc_slug %} data-disc="{{ disc_slug }}"{% endif %}>
+  <div class="rc-head">
+    {% if ico %}<img class="route-ico" src="{% static ico %}" alt="" width="48" height="48" loading="lazy">{% else %}<span class="route-ico rc-ph" aria-hidden="true">{{ path.vendor.name|slice:":2"|upper }}</span>{% endif %}
+    <div class="rc-title">
+      <span class="sub">{{ path.program|default:path.vendor.name }}</span>
+      <h3><a href="{% url 'paths:detail' path.slug %}">{{ path.title }}</a></h3>
+    </div>
+  </div>
+  {% if variant != 'compact' and variant != 'notes' and path.description %}<p>{{ path.description|truncatechars:140 }}</p>{% endif %}
+  <div class="chips rc-discs">
+    {% if disc_label %}<span class="chip off">{{ disc_label }}</span>{% endif %}
+    {% for name in also %}<span class="chip" title="También sirve en {{ name }}">también en {{ name }}</span>{% endfor %}
+    {% if not path.is_published %}<span class="chip warn">Sin publicar</span>{% endif %}
+  </div>
+  {% if cta.pct %}<span class="rc-bar" role="progressbar" aria-label="Tu avance en {{ path.title }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ cta.pct }}"><i style="width:{{ cta.pct }}%"></i></span>{% endif %}
+  <div class="rc-actions">
+    {% if cta %}<a class="btn primary route-cta" href="{{ cta.url }}">{{ cta.label }}</a>{% endif %}
+    {% if variant == 'notes' %}<a class="rc-sec" href="{% url 'paths:detail' path.slug %}">Ir a la ruta</a>{% endif %}
+  </div>
+</article>

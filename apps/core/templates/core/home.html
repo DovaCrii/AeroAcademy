@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load static avatar_tags core_extras %}
+{% load static avatar_tags core_extras catalog_extras %}
 
 {% block title %}Bienvenida{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="{% static 'core/welcome.css' %}">{% endblock %}
@@ -22,10 +22,12 @@
       <h1 class="w-wordmark"><span class="a">ACADEMIA · AEROACADEMY</span><span class="l"><span class="w1">Levantamiento</span> <span class="w2">Digital <b>101</b></span></span></h1>
     </div>
     <p class="w-tag">APRENDER <i>·</i> COMPARTIR <i>·</i> COLABORAR <i>·</i> AVANZAR</p>
-    <p class="w-cta"><a class="btn" href="#mision">Ver mi misión</a><a class="btn ghost" href="{% url 'paths:index' %}">Explorar rutas</a></p>
+    <p class="w-cta">{% if start_block %}<a class="btn" href="#empezar">{% if start_block.kind == "continue" %}Continuar donde quedaste{% else %}Empieza aquí{% endif %}</a>{% else %}<a class="btn" href="#mision">Ver mi misión</a>{% endif %}<a class="btn ghost" href="{% url 'paths:index' %}">Explorar rutas</a></p>
     <p class="w-coords" aria-hidden="true"><span>LEVANTAMIENTO · DIGITAL</span><span>EMPRESAS · {{ stats.vendors }}</span><span>RUTAS · {{ stats.paths }}</span><span>RECURSOS · {{ stats.resources }}</span></p>
   </div>
 </section>
+
+
 
 {# Selector de disciplina sin JS: radios hermanos de .w-circles y #rutas (checked ~). El script de abajo solo mejora (scroll, hash, scrollspy). #}
 <input class="w-dsel" type="radio" name="disc" id="d-all" checked>
@@ -50,6 +52,15 @@
     <li data-d="dgac"><a href="{% url 'dgac:home' %}"><span class="w-circ w-circ-hud">{% doodle "dgac" class="dd" %}<svg class="i" aria-hidden="true"><use href="#i-cert"/></svg></span><b>DGAC</b></a></li>
   </ul>
 </nav>
+{% if start_block %}
+<section class="w-start" id="empezar" aria-labelledby="start-h">
+  <h2 id="start-h" class="w-h3">{% if start_block.kind == "continue" %}Continuar donde quedaste{% else %}Empieza aquí{% endif %}</h2>
+  <p class="w-lead">{% if start_block.kind == "continue" %}Tu última ruta con avance: sigue en el primer nivel pendiente.{% else %}Aún no tienes avance. Esta ruta 101 es el mejor primer paso para tu disciplina.{% endif %}</p>
+  {% with sp=start_block.path %}{% route_icon_src sp as sico %}
+  <div class="w-start-strip">{% if sico %}<img class="route-ico" src="{% static sico %}" alt="" width="48" height="48">{% endif %}<div><b><a href="{% url 'paths:detail' sp.slug %}">{{ sp.title }}</a></b><small>{{ sp.vendor.name }}{% if sp.pct %} · {{ sp.pct }} % completado{% endif %}</small></div><a class="btn primary route-cta" href="{{ sp.cta.url }}">{{ sp.cta.label }}</a></div>{% endwith %}
+</section>
+{% endif %}
+
 {% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
 
 <nav class="w-jump" aria-label="En esta página">
@@ -73,6 +84,7 @@
         {% if d.paths|length > 2 and d.slug != 'transversal' or d.paths|length > 3 %}<label class="w-d-more" for="d-{{ d.slug }}">Ver las {{ d.paths|length }} →</label>{% endif %}
       </header>
       {% include "core/partials/route_rows.html" with d=d %}
+      {% if d.also %}<p class="w-also">También sirven aquí: {% for p in d.also %}<a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
     </article>
     {% endfor %}
   </div>

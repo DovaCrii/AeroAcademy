@@ -16,6 +16,7 @@
     {# La metáfora del puente es de la ruta troncal (MicroStation → OpenRoads → OpenBridge); el resto usa su nombre. #}
     {% if path.slug == "bentley-learn" %}<h1>Del km 0+000 <em>al puente</em></h1>{% else %}<h1>{{ path.title|cut:"Ruta " }} <em>paso a paso</em></h1>{% endif %}
     <p class="lv-lead">{{ path.description }}</p>
+    {% if current %}{% include "core/partials/world_start.html" %}{% endif %}
   </div>
   <div class="lv-scale">ESCALA 1:1000<i></i></div>
   <div class="lv-readouts" role="list" aria-label="La ruta en números">

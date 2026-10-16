@@ -33,6 +33,7 @@ def index(request):
         discipline=p.get("discipline", ""),
         skill=p.get("skill", ""),
     )
+    ctx["paths"] = services.attach_ctas(request.user, ctx["paths"])
     ctx["f"] = {k: p.get(k, "") for k in ("product", "discipline", "skill")}
     return render(request, "paths/index.html", ctx)
 
