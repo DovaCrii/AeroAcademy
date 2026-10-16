@@ -5,49 +5,79 @@
 {% block content %}
 <div class="page-head">
   <h1>Rutas</h1>
-  <p>Una campaña por empresa de software. Elige la empresa, el producto y, si quieres, filtra por disciplina o habilidad.</p>
-  <p><a class="btn ghost" href="{% url 'paths:map' %}">Ver el mapa de metro de las rutas →</a></p>
+  <p>Elige un área de aprendizaje y sigue la ruta paso a paso. Si no sabes por dónde partir, empieza por las rutas 101.</p>
 </div>
+<a class="map-link" href="{% url 'paths:map' %}">
+  <span class="map-link-ico" aria-hidden="true">&#9670;</span>
+  <span><strong>Mapa de metro de las rutas</strong><small>Todas las áreas y sus transbordos en un solo plano.</small></span>
+  <span class="map-link-go" aria-hidden="true">&rarr;</span>
+</a>
 {% include "core/partials/how_it_works.html" %}
 
 {% if vendors %}
-<nav class="tabs" aria-label="Empresas de software">
-  {% for v in vendors %}
-  <a href="{% url 'paths:index' %}?vendor={{ v.slug }}"{% if v == vendor %} aria-current="page"{% endif %}>{{ v.name }}</a>
-  {% endfor %}
+{% if not filtered %}
+{% if starters %}
+<section class="area-sec" id="empieza-aqui" aria-labelledby="h-empieza">
+  <h2 id="h-empieza">Empieza aquí</h2>
+  <p class="sub">Las rutas 101 son la puerta de entrada de cada área.</p>
+  <div class="cards">{% for p in starters %}{% route_card p "compact" %}{% endfor %}</div>
+</section>
+{% endif %}
+{% if mine %}
+<section class="area-sec" id="mis-rutas" aria-labelledby="h-mis">
+  <h2 id="h-mis">Mis rutas</h2>
+  <p class="sub">Lo que tienes en curso.</p>
+  <div class="cards">{% for p in mine %}{% route_card p "compact" %}{% endfor %}</div>
+</section>
+{% endif %}
+{% endif %}
+
+{% if areas %}
+<nav class="area-nav" aria-label="Áreas de aprendizaje">
+  {% for a in areas %}<a class="chip" href="#area-{{ a.slug }}">{{ a.name }} <b>{{ a.paths|length }}</b></a>{% endfor %}
 </nav>
+{% endif %}
 
-<form class="filters" method="get" action="{% url 'paths:index' %}">
-  <input type="hidden" name="vendor" value="{{ vendor.slug }}">
-  <label>Producto
-    <select name="product">
-      <option value="">Todos</option>
-      {% for p in products %}<option value="{{ p.slug }}"{% if p.slug == f.product %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
-    </select>
-  </label>
-  <label>Disciplina
-    <select name="discipline">
-      <option value="">Todas</option>
-      {% for d in disciplines %}<option value="{{ d.slug }}"{% if d.slug == f.discipline %} selected{% endif %}>{{ d.name }}</option>{% endfor %}
-    </select>
-  </label>
-  <label>Habilidad
-    <select name="skill">
-      <option value="">Todas</option>
-      {% for s in skills %}<option value="{{ s.slug }}"{% if s.slug == f.skill %} selected{% endif %}>{{ s.name }}</option>{% endfor %}
-    </select>
-  </label>
-  <button class="btn" type="submit">Filtrar</button>
-  <a class="btn ghost" href="{% url 'paths:index' %}?vendor={{ vendor.slug }}">Limpiar</a>
-</form>
+<details class="more-filters"{% if filtered %} open{% endif %}>
+  <summary>Más filtros{% if filtered %} <span class="chip off">activos</span>{% endif %}</summary>
+  <form class="filters" method="get" action="{% url 'paths:index' %}">
+    <label>Empresa
+      <select name="vendor">
+        <option value="">Todas</option>
+        {% for v in vendors %}<option value="{{ v.slug }}"{% if v == vendor %} selected{% endif %}>{{ v.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Producto
+      <select name="product">
+        <option value="">Todos</option>
+        {% for p in products %}<option value="{{ p.slug }}"{% if p.slug == f.product %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Disciplina
+      <select name="discipline">
+        <option value="">Todas</option>
+        {% for d in disciplines %}<option value="{{ d.slug }}"{% if d.slug == f.discipline %} selected{% endif %}>{{ d.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Habilidad
+      <select name="skill">
+        <option value="">Todas</option>
+        {% for s in skills %}<option value="{{ s.slug }}"{% if s.slug == f.skill %} selected{% endif %}>{{ s.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <button class="btn" type="submit">Filtrar</button>
+    {% if filtered %}<a class="btn ghost" href="{% url 'paths:index' %}">Limpiar</a>{% endif %}
+  </form>
+</details>
 
-<div class="cards">
-  {% for p in paths %}
-  {% route_card p %}
-  {% empty %}
-  <p class="empty">No hay rutas con esos filtros.</p>
-  {% endfor %}
-</div>
+{% for a in areas %}
+<section class="area-sec" id="area-{{ a.slug }}" aria-labelledby="h-{{ a.slug }}">
+  <h2 id="h-{{ a.slug }}">{{ a.name }}</h2>
+  <div class="cards">{% for p in a.paths %}{% route_card p %}{% endfor %}</div>
+</section>
+{% empty %}
+<p class="empty">No hay rutas con esos filtros. <a href="{% url 'paths:index' %}">Ver todas las rutas</a></p>
+{% endfor %}
 {% else %}
 <p class="empty">Todavía no hay rutas cargadas. Corre <code>manage.py seed_catalog</code>.</p>
 {% endif %}

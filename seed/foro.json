@@ -6,6 +6,10 @@
     {"slug": "bentley", "name": "Bentley", "description": "OpenRoads, OpenBridge, MicroStation y Bentley Learn."},
     {"slug": "topografia-captura", "name": "Topografía y captura", "description": "Nubes de puntos, GNSS, drones y LiDAR."},
     {"slug": "mecanica", "name": "Mecánica", "description": "Modelado mecánico, planos de taller y ensambles."},
-    {"slug": "ideas-mejoras", "name": "Ideas y mejoras", "description": "Propuestas para mejorar la academia y cómo trabajamos."}
+    {"slug": "ideas-mejoras", "name": "Propuestas y mejoras", "description": "Propuestas para mejorar la academia y cómo trabajamos; aquí van las encuestas rápidas."},
+    {"slug": "ideas", "name": "Ideas", "description": "Lluvia de ideas sin compromiso: nada es mala idea todavía."},
+    {"slug": "implementacion", "name": "Implementación", "description": "Cómo lo estamos haciendo: pruebas piloto, configuración y lo que aprendimos."},
+    {"slug": "seguimiento", "name": "Seguimiento", "description": "Estado de lo acordado y de las mejoras en curso."}
   ]
 }
+

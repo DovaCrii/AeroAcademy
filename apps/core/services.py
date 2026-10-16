@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from apps.catalog.models import Discipline, Platform, Product, Resource
 from apps.catalog.software import DISCIPLINE_SLUG_BY_KEY, PRODUCT_TILE, discipline_key, route_icon
+from apps.community import forum
 from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
 from apps.gamification.models import Badge
@@ -219,4 +220,5 @@ def home_context(person):
         "overview": _overview(person, paths, pcts),
         "badges": _badges(person),
         "featured": _featured(),
+        "team_talk": forum.team_conversations(show_hidden=person.is_lead),
     }

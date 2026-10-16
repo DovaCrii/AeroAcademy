@@ -68,7 +68,7 @@ def published_paths_for(resource_ids):
 
 def resource_queryset(
     *, platform="", kind="", free=False, cert=False, q="", product="", path="", essential=False,
-    general=False, ids=None,
+    general=False, discipline="", ids=None,
 ):  # fmt: skip
     qs = Resource.objects.select_related("platform__vendor").prefetch_related(
         Prefetch("skills"), "products"
@@ -87,6 +87,18 @@ def resource_queryset(
         qs = qs.filter(Q(grants_completion_certificate=True) | Q(kind=Resource.Kind.EXAM))
     if product:
         qs = qs.filter(products__slug=product)
+    if discipline:  # la del recurso o la de alguna ruta publicada que lo usa
+        qs = qs.filter(
+            Q(disciplines__slug=discipline)
+            | Q(
+                level_links__level__path__disciplines__slug=discipline,
+                level_links__level__path__is_published=True,
+            )
+            | Q(
+                external_courses__path__disciplines__slug=discipline,
+                external_courses__path__is_published=True,
+            )
+        )
     if path:
         qs = qs.filter(
             Q(level_links__level__path__slug=path, level_links__level__path__is_published=True)

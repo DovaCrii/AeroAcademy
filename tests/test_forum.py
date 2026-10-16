@@ -39,7 +39,7 @@ def accepted_xp(person):
 
 
 def test_forum_seed_loads_and_retires():
-    assert Category.objects.filter(retired=False).count() == 6
+    assert Category.objects.filter(retired=False).count() == 9
     load_forum({"categories": [{"slug": "solo", "name": "Solo"}]})
     assert Category.objects.get(slug="general").retired is True
     call_command("seed_catalog", verbosity=0)

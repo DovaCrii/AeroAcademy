@@ -6,7 +6,7 @@ from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
 from . import services, software
-from .models import Platform, Resource
+from .models import Discipline, Platform, Resource
 
 # Cómo se agrupan los tipos para filtrar rápido (pestañas del catálogo).
 KIND_GROUPS = [
@@ -60,7 +60,15 @@ def resources(request):
     params = request.GET
     kind = params.get("kind", "")
     kind = kind if kind in Resource.Kind.values else ""
-    paths = list(LearningPath.objects.filter(is_published=True).order_by("title"))
+    paths = list(
+        LearningPath.objects.filter(is_published=True)
+        .select_related("vendor")
+        .prefetch_related("products", "disciplines")
+        .order_by("title")
+    )
+    disciplines = list(Discipline.objects.filter(paths__is_published=True).distinct())
+    discipline = params.get("discipline", "")
+    discipline = discipline if discipline in {d.slug for d in disciplines} else ""
     path = params.get("ruta", "")
     path = path if path in {p.slug for p in paths} else ""
     f = {
@@ -71,6 +79,7 @@ def resources(request):
         "essential": params.get("esencial") == "1",
         "general": params.get("general") == "1",
         "path": path,
+        "discipline": discipline,
         "q": params.get("q", "").strip()[:100],
     }
     software_slug = params.get("software", "")
@@ -89,6 +98,7 @@ def resources(request):
         path=path,
         essential=f["essential"],
         general=f["general"],
+        discipline=discipline,
     )
     filtered = any(v for v in f.values())
     rows = []
@@ -107,24 +117,57 @@ def resources(request):
         for r in page:
             r.in_paths = in_paths.get(r.pk, [])
 
+    platforms = list(Platform.objects.filter(resources__isnull=False).distinct())
     counts = dict(Resource.objects.values_list("kind").annotate(n=Count("pk")))
     kinds = [(value, label, counts.get(value, 0)) for value, label in KIND_GROUPS]
     kinds = [k for k in kinds if k[0] == "" or k[2]]
 
     query = params.copy()
     query.pop("page", None)
-    base = params.copy()
-    for key in ("page", "kind"):
-        base.pop(key, None)
-    route_base = params.copy()
-    for key in ("page", "ruta"):
-        route_base.pop(key, None)
+    kind_label = dict(KIND_GROUPS).get(kind, "")
+    software_tile = software.TILES.get(software_slug)
+    labels = {
+        "q": f"«{f['q']}»",
+        "discipline": next((d.name for d in disciplines if d.slug == discipline), ""),
+        "kind": kind_label,
+        "ruta": next((p.title for p in paths if p.slug == path), ""),
+        "platform": next((p.name for p in platforms if p.slug == f["platform"]), ""),
+        "free": "Gratuito",
+        "cert": "Con certificado",
+        "esencial": "Solo esenciales",
+        "general": "Conocimiento general",
+        "software": software_tile.name if software_tile else "",
+    }
+    active = {
+        "q": f["q"],
+        "discipline": discipline,
+        "kind": kind,
+        "ruta": path,
+        "platform": f["platform"],
+        "free": f["free"],
+        "cert": f["cert"],
+        "esencial": f["essential"],
+        "general": f["general"],
+        "software": software_slug,
+    }
+    chips = []
+    for key, on in active.items():  # cada chip es un enlace al mismo catálogo sin ese parámetro
+        if not (on and labels[key]):
+            continue
+        rest = params.copy()
+        for drop in (key, "page"):
+            rest.pop(drop, None)
+        chips.append({"key": key, "label": labels[key], "query": rest.urlencode()})
+    groups = path_services.group_by_area(paths)
     return render(
         request,
         "catalog/resources.html",
         {
             "page": page,
-            "platforms": Platform.objects.filter(resources__isnull=False).distinct(),
+            "platforms": platforms,
+            "disciplines": disciplines,
+            "chips": chips,
+            "route_groups": groups,
             "kinds": kinds,
             "total": Resource.objects.count(),
             "paths": paths,
@@ -138,9 +181,7 @@ def resources(request):
             "general": general,
             "rows": rows,
             "sections": software.vendor_sections(rows),
-            "software_tile": software.TILES.get(software_slug),
+            "software_tile": software_tile,
             "querystring": query.urlencode(),
-            "kind_base": base.urlencode(),
-            "route_base": route_base.urlencode(),
         },
     )
