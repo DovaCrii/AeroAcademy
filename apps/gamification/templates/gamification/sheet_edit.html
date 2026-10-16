@@ -7,7 +7,7 @@
 {% block content %}
 <div class="page-head">
   <h1>Mi hoja de personaje</h1>
-  <p>Solo tú puedes editarla. El avatar se arma en <a href="{% url 'gamification:avatar_editor' %}">Mi avatar</a>.</p>
+  <p>Solo tú puedes editarla. El avatar y la carrera se eligen en <a href="{% url 'gamification:avatar_editor' %}?seccion=carrera">Mi avatar</a>.</p>
 </div>
 <form method="post" class="form sheet-form">
   {% csrf_token %}

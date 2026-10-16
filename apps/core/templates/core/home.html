@@ -127,7 +127,6 @@
     <div class="w-mbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ mission.pct }}"><i style="width:{{ mission.pct }}%"></i></div>
     <small>{{ mission.pct }} % de la campaña</small>
     {% else %}<p class="w-mdetail">No hay misiones pendientes.</p>{% endif %}
-    {% if player %}<p class="w-lvl"><b>NV {{ player.level }}</b> · {{ player.xp }} XP · faltan {{ player.to_next }} para el nivel {{ player.level|add:1 }}</p>{% endif %}
   </div>
   <div class="w-card w-board">
     <h2 class="w-h3">Tablón del gremio <small>últimos {{ board.days }} días</small></h2>

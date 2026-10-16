@@ -11,7 +11,7 @@ from apps.credentials import services as credential_services
 from apps.credentials.models import Credential
 
 from . import game
-from .avatar.careers import CAREERS
+from .avatar.careers import CAREERS, DISCIPLINE_LABELS
 from .models import Badge, PersonBadge, XPEvent
 
 ATTRIBUTES = [
@@ -183,11 +183,20 @@ def sync_profile(person):
         game.evaluate(person)
 
 
+def career_line(person):
+    """Oficio de la persona («Geomensor/a · Topografía»); se elige solo en el editor de avatar."""
+    data = CAREERS.get(person.character_class)
+    if not data:
+        return None
+    return {"name": data["name"], "discipline": DISCIPLINE_LABELS[data["discipline"]]}
+
+
 def build(person, viewer):
     creds = visible_credentials(person, viewer)
     attrs = attributes(person, viewer, creds)
     info = game.level_info(person)
     cases = showcase(person)
+    tree = skill_tree(creds)
     return {
         "person": person,
         "is_owner": person.pk == viewer.pk,
@@ -197,7 +206,9 @@ def build(person, viewer):
         "hex": hexagon(attrs),
         "showcase": cases,
         "earned_count": sum(1 for row in cases if row["earned"]),
-        "tree": skill_tree(creds),
+        "career": career_line(person),
+        "tree": tree,
+        "skills_count": sum(len(group["skills"]) for group in tree),
         "credentials": creds,
         "timeline": timeline(person, viewer),
     }
