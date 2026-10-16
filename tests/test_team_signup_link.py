@@ -484,17 +484,51 @@ def test_command_revoke_without_active_link_is_harmless():
     assert "No hay" in run("--revocar")
 
 
-def test_team_signup_same_response_for_existing_and_lead(link, make_person):
-    """D35: la respuesta no distingue entre correo con cuenta, responsable, admin o suspendida."""
+def _same_response_cases(make_person):
     existing = make_person("tiene2@empresa.cl")
     existing.set_password("Otra-clave-vieja-882!")
     existing.save()
     make_person("lidx@empresa.cl", role="lead")
     make_person("admx@empresa.cl", role="admin")
     make_person("susx@empresa.cl", status="suspended")
+    make_person("pendx@empresa.cl", status="pending")
+    return (
+        "tiene2@empresa.cl",
+        "lidx@empresa.cl",
+        "admx@empresa.cl",
+        "susx@empresa.cl",
+        "pendx@empresa.cl",
+        "nadie.nuevo@empresa.cl",  # correo nuevo: crea la cuenta pendiente
+    )
+
+
+def test_team_signup_same_response_for_every_case(link, make_person):
+    """D35 / A12: mismo código y mismo texto para cuenta existente, responsable, admin, suspendida, pendiente
+    y correo nuevo, con las dos salidas visibles (entrar o esperar a un administrador)."""
     bodies = set()
-    for email in ("tiene2@empresa.cl", "lidx@empresa.cl", "admx@empresa.cl", "susx@empresa.cl"):
+    for email in _same_response_cases(make_person):
         r = anon().post(url_of(link.token), data(email))
-        assert r.status_code == 200
-        bodies.add(re.sub(r'value="[A-Za-z0-9]{40,}"', "", r.content.decode()))
+        assert r.status_code == 200, email
+        html = r.content.decode()
+        assert 'href="/entrar/"' in html and "entra aquí" in html, email
+        assert "un administrador aprobará tu acceso" in html, email
+        bodies.add(re.sub(r'value="[A-Za-z0-9]{40,}"', "", html))
     assert len(bodies) == 1
+
+
+def test_team_signup_spends_the_same_hash_work_in_every_case(link, make_person, monkeypatch):
+    """A12: responder «ya existe» no es más rápido que crear la cuenta: siempre hay un cálculo de contraseña."""
+    from django.contrib.auth.hashers import PBKDF2PasswordHasher
+
+    real = PBKDF2PasswordHasher.encode
+    calls = []
+
+    def counting(self, password, salt, iterations=None):
+        calls.append(1)
+        return real(self, password, salt, iterations)
+
+    monkeypatch.setattr(PBKDF2PasswordHasher, "encode", counting)
+    for email in _same_response_cases(make_person):
+        calls.clear()
+        assert anon().post(url_of(link.token), data(email)).status_code == 200
+        assert len(calls) == 1, (email, len(calls))
