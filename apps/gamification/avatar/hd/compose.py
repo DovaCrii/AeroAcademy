@@ -72,8 +72,9 @@ def _apply_pose(grid, patch):
 # Insignia en el avatar: parche de 4×4 en la manga izquierda (sobre la ropa) y adhesivo de 4×4 en el casco de obra.
 # Los dibuja el motor con la clave `6` (el color de la rareza): ninguna pieza usa esa clave.
 SLEEVE_PATCH = sprite((10, 45), ["6666", "6WW6", "6WW6", "6666"])
-HELMET_STICKER = sprite((39, 9), ["KKKK", "K66K", "K66K", "KKKK"])
-STICKER_HATS = {"hardhat", "hardhat_lamp"}
+STICKER_ROWS = ["KKKK", "K66K", "K66K", "KKKK"]
+# Dónde va el adhesivo en cada casco (esquina en la figura de 64): sobre la cúpula, entre la cresta y el borde.
+STICKER_HATS = {"hardhat": (39, 9), "hardhat_lamp": (39, 9), "bump_cap": (38, 7)}
 
 
 def _paint_badges(grid, cfg):
@@ -81,7 +82,7 @@ def _paint_badges(grid, cfg):
         grid, SLEEVE_PATCH, only_on={"O", "o", "A", "a"}
     )  # solo sobre la ropa (todos sus tonos)
     if cfg["headwear"] in STICKER_HATS:
-        _paint_sprite(grid, HELMET_STICKER)
+        _paint_sprite(grid, sprite(STICKER_HATS[cfg["headwear"]], STICKER_ROWS))
 
 
 def compose_layers(cfg, pose=poses.DEFAULT_POSE, badge=None):

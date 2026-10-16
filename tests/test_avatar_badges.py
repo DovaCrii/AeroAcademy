@@ -111,3 +111,16 @@ def test_the_sleeve_patch_shows_with_every_outfit(outfit):
     assert avatar.render_svg(cfg, view="stage", badge="epic") != avatar.render_svg(
         cfg, view="stage"
     )
+
+
+@pytest.mark.parametrize("hat", ["hardhat", "hardhat_lamp", "bump_cap"])
+def test_helmets_carry_the_sticker_and_other_hats_do_not(hat):
+    from apps.gamification.avatar.hd import compose
+
+    def marks(headwear):
+        grid = compose.compose_layers(
+            engine.clean_config({"headwear": headwear, "outfit": "tshirt"}), "stand", "epic"
+        )
+        return sum(row[x] == "6" for row in grid[:30] for x in range(64))
+
+    assert marks(hat) > 0 and marks("cap") == 0 and marks("none") == 0
