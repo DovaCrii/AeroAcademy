@@ -101,6 +101,24 @@ fuera del catálogo; el SVG se arma solo con piezas del catálogo (nada que escr
   opcionales que reemplazan su capa ×2 (solo ids que ya existen; sin `1..4`, que pone el motor). Es función pura de la
   configuración y se guarda en caché por configuración.
 - **Poses** (`parts/poses.py`): `stand` y `wave`. Son solo de la vista previa: no se guardan.
+- **Piezas HD** (`avatar/hd/`, una tanda por archivo; todas opcionales y con los ids de siempre): `face.py` (ojos 5×6,
+  cejas, boca hasta 10×4, nariz), `glasses.py` y `facial_hair.py` (pares simétricos con `hd.mirror`), `headwear.py` (12
+  gorros: la pieza de 32 ×2 más costuras, brillos y detalle de oficio; **nunca cambia la silueta**), `outfits.py` (detalle
+  de las 17 prendas sobre `O`: bolsillos, cierres, franjas, parches), `pins.py` (7×7), `hands.py` (agarre y saludo) y
+  `parts/gear/` (equipo por disciplina en coordenadas del escenario: `survey`, `capture`, `build`, `plant`, `ai`; un
+  equipo puede ser una lista de sprites, como el control y el dron). Contrato: contorno `K`, claves de la paleta (nunca
+  `1..6`, que son del motor), ≤ 12 colores por sprite, dentro de su zona (`hd.ZONES`) y fuera de la ventana de la cara.
+  Herramientas: `python tools/validate_part.py hd[:categoría]` y `python tools/preview_avatar.py out.png --hd [--sheet
+  cat | --careers carrera[:herramienta]…] scale=3 [pose=wave] [background=18]` (hoja de contactos sobre fondo oscuro y
+  papel).
+- **Herramientas nuevas** (al final de `PROPS`, con versión mínima de 32): estación total, mira de nivelación, laptop BIM,
+  cono de tránsito, tramo de cañería, volante de válvula y laptop IA; las carreras las ofrecen en su lista `props`.
+- **Insignias en el avatar** (`show_badges`, sí por defecto): el escenario HD dibuja un parche de manga y, con casco de
+  obra, un adhesivo con el color de la **rareza** más alta entre las insignias ganadas y no retiradas (las mismas que ya
+  muestra la vitrina). Al dibujo llega solo la rareza: nunca nombres ni credenciales.
+- **Miniaturas del editor:** `<img loading="lazy">` hacia `/perfil/avatar/pieza/<categoría>/<opción>/?c=<código>`, un SVG
+  suelto y cacheable (`private, max-age`) que solo depende de la URL (el código es un carácter por clave de `CHOICES`);
+  todo se valida contra el catálogo. El editor pesa ~100 KB y 18 `<svg>`.
 - **«Lo que lleva»:** leyenda de dónde viene cada pieza (insignia, nivel, oficio). La ve solo su dueña (editor y hoja
   propia), nunca otra persona.
 
