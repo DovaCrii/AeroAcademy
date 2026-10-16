@@ -1,6 +1,6 @@
 <label class="av-opt{% if opt.locked %} locked{% endif %}{% if opt.rec %} rec{% endif %}"{% if group.key != "frame" %} data-tip="{{ opt.tip }}"{% endif %}>
   <input type="radio" name="{{ group.key }}" value="{{ opt.id }}"{% if opt.selected %} checked{% endif %}{% if opt.locked %} disabled{% endif %} aria-label="{{ opt.tip }}"{% if opt.tip != opt.label %} data-label="{{ opt.label }}"{% endif %}>
-  {% if group.tiles %}<span class="tile">{{ opt.svg|safe }}</span>{% else %}<span class="sw" style="background:{{ opt.color }}"></span>{% endif %}
+  {% if group.tiles %}<span class="tile">{{ opt.svg|safe }}</span>{% elif group.text %}<span class="pill">{{ opt.label }}</span>{% else %}<span class="sw" style="background:{{ opt.color }}"></span>{% endif %}
   {% if group.key == "frame" %}<b class="swl">{{ opt.label }}</b>{% endif %}
   {% if opt.rec %}<i class="rec-dot" aria-hidden="true"></i>{% endif %}
   {% if opt.locked %}<svg class="lock" viewBox="0 0 8 8" width="12" height="12" aria-hidden="true"><path fill="var(--ink)" d="M2 0h4v1h1v2h-1v-2h-4v2h-1v-2h1zM1 3h6v5h-6z"/><path fill="var(--sheet)" d="M3 5h2v2h-2z"/></svg>{% endif %}

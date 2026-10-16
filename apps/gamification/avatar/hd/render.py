@@ -19,7 +19,7 @@ def lighten(hex_color, amount=0.28):
     return "#" + "".join(f"{round(c + (255 - c) * amount):02X}" for c in channels)
 
 
-def palette_hd(cfg):
+def palette_hd(cfg, badge=None):
     """La paleta del avatar más los tonos de luz que solo pone el motor (`1` piel, `2` ropa, `3` gorro, `4` pantalón)."""
     palette = engine.palette_for(cfg)
     palette.update(
@@ -30,6 +30,8 @@ def palette_hd(cfg):
             "4": lighten(palette["P"]),
         }
     )
+    if badge:
+        palette["6"] = engine.BADGE_COLORS[badge]
     return palette
 
 
@@ -59,10 +61,10 @@ def _backdrop(index, halo, pattern, rect):
 
 
 @lru_cache(maxsize=512)
-def _stage_body(cfg_key, bg_alt, pose, pattern, halo, rect):
+def _stage_body(cfg_key, bg_alt, pose, pattern, halo, rect, badge=None):
     """Todo lo que va dentro del `<svg>`: es el mismo para la misma configuración, así que se guarda en caché."""
     cfg = json.loads(cfg_key)
-    grid = compose_hd(cfg, pose)
+    grid = compose_hd(cfg, pose, badge)
     outline = engine.halo_cells(grid) if halo else []
     dark = _backdrop(cfg["background"], outline, pattern, rect)
     if bg_alt is None or bg_alt == cfg["background"]:
@@ -70,7 +72,7 @@ def _stage_body(cfg_key, bg_alt, pose, pattern, halo, rect):
     else:
         light = _backdrop(bg_alt, outline, pattern, rect)
         parts = [f'<g class="av-bg-dark">{dark}</g><g class="av-bg-light">{light}</g>']
-    palette = palette_hd(cfg)
+    palette = palette_hd(cfg, badge)
     by_color = {}
     for y, row in enumerate(grid):
         for x, ch in enumerate(row):
@@ -92,10 +94,13 @@ def render_stage(
     halo=True,
     inline=False,
     backdrop=True,
+    badge=None,
 ):
     """SVG del escenario HD para una configuración ya limpia."""
     pose = pose if pose in poses.POSES else poses.DEFAULT_POSE
-    body = _stage_body(json.dumps(cfg, sort_keys=True), bg_alt, pose, pattern, halo, backdrop)
+    body = _stage_body(
+        json.dumps(cfg, sort_keys=True), bg_alt, pose, pattern, halo, backdrop, badge
+    )
     ns = "" if inline else ' xmlns="http://www.w3.org/2000/svg"'
     if decorative:
         crisp = "" if inline else ' shape-rendering="crispEdges"'

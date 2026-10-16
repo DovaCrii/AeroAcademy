@@ -7,7 +7,7 @@ de la configuración ya limpia y de la pose.
 
 from .. import engine
 from ..parts import body, poses
-from . import HD, OFFSET, SCALE, STAGE, up2
+from . import HD, OFFSET, SCALE, STAGE, sprite, up2
 from .detail import detail_pass
 from .hands import POSE_HANDS
 
@@ -69,7 +69,20 @@ def _apply_pose(grid, patch):
                         grid[Y][X] = ch
 
 
-def compose_layers(cfg, pose=poses.DEFAULT_POSE):
+# Insignia en el avatar: parche de 4×4 en la manga izquierda (sobre la ropa) y adhesivo de 4×4 en el casco de obra.
+# Los dibuja el motor con la clave `6` (el color de la rareza): ninguna pieza usa esa clave.
+SLEEVE_PATCH = sprite((10, 45), ["6666", "6WW6", "6WW6", "6666"])
+HELMET_STICKER = sprite((39, 9), ["KKKK", "K66K", "K66K", "KKKK"])
+STICKER_HATS = {"hardhat", "hardhat_lamp"}
+
+
+def _paint_badges(grid, cfg):
+    _paint_sprite(grid, SLEEVE_PATCH, only_on={"O", "o", "A", "a"})  # solo sobre la ropa (todos sus tonos)
+    if cfg["headwear"] in STICKER_HATS:
+        _paint_sprite(grid, HELMET_STICKER)
+
+
+def compose_layers(cfg, pose=poses.DEFAULT_POSE, badge=None):
     """Las capas sin el pase de acabado (la figura ×2 o con piezas HD, ya en el escenario)."""
     grid = blank()
     hair_art, hat_art = engine.HAIR[cfg["hair"]], engine.HEADWEAR[cfg["headwear"]]
@@ -106,10 +119,12 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE):
         clip_face=True,
     )
     _layer(grid, "pin", cfg["pin"], engine.PINS[cfg["pin"]])
+    if badge:
+        _paint_badges(grid, cfg)
     _layer(grid, "prop", cfg["prop"], engine.PROPS[cfg["prop"]])
     return grid
 
 
-def compose_hd(cfg, pose=poses.DEFAULT_POSE):
+def compose_hd(cfg, pose=poses.DEFAULT_POSE, badge=None):
     """Matriz 80×80 de claves de color ('.' = transparente): capas + acabado."""
-    return detail_pass(compose_layers(cfg, pose))
+    return detail_pass(compose_layers(cfg, pose, badge))

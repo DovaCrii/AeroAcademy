@@ -83,8 +83,12 @@ SECTIONS = [
     {
         "slug": "fondo-marco",
         "title": "Fondo y marco",
-        "fields": [("background", "Fondo"), ("frame", "Marco")],
-        "summary": [("background", "{}"), ("frame", "marco {}")],
+        "fields": [
+            ("background", "Fondo"),
+            ("frame", "Marco"),
+            ("show_badges", "Insignias en mi avatar"),
+        ],
+        "summary": [("background", "{}"), ("frame", "marco {}"), ("show_badges", "insignias {}")],
     },
 ]
 SECTION_SLUGS = tuple(sec["slug"] for sec in SECTIONS)
@@ -122,6 +126,8 @@ TILE_VIEWS = {
     "background": ("zone:bg", 48),
 }
 CHIP_VIEW = ("head", 32)  # chip de carrera: la cabeza a 2×
+# Opciones sin dibujo ni color: se eligen por su texto.
+TEXT_CATEGORIES = {"show_badges"}
 INT_KEYS = {key for key, allowed in engine.CHOICES.items() if isinstance(allowed, range)}
 # Lo que trae el look de una carrera: si la persona no tocó nada de esto, al cambiar de carrera se viste con su look.
 LOOK_KEYS = tuple(next(iter(careers.CAREERS.values()))["look"])
@@ -235,6 +241,7 @@ def svg_sized(
     halo=True,
     backdrop=True,
     pose=None,
+    badge=None,
 ):
     """SVG de una vista con `size` px de ancho; cada celda mide un número entero de píxeles.
 
@@ -261,8 +268,27 @@ def svg_sized(
         inline=True,
         backdrop=backdrop,
         pose=pose or POSE_DEFAULT,
+        badge=badge,
     )
     return svg.replace("<svg ", f'<svg width="{width}" height="{height}" ', 1)
+
+
+def avatar_badge(person, cfg):
+    """Rareza de la insignia más alta que el avatar de `person` muestra (parche de manga y adhesivo del casco).
+
+    Solo cuenta lo que ya es público en la vitrina de su hoja (insignias ganadas y no retiradas) y solo si la persona no
+    lo ocultó (`show_badges`). Al dibujo llega la rareza, nunca el nombre de la insignia ni nada de credenciales.
+    """
+    if not cfg["show_badges"]:
+        return None
+    from .models import PersonBadge
+
+    earned = set(
+        PersonBadge.objects.filter(person=person, badge__retired=False).values_list(
+            "badge__rarity", flat=True
+        )
+    )
+    return next((rarity for rarity in engine.BADGE_ORDER if rarity in earned), None)
 
 
 def auto_background(person, cfg=None):
@@ -315,7 +341,14 @@ def preview_context(cfg, person, pose=None) -> dict:
     """Todo lo que pinta la vista previa (la página y el fragmento en vivo)."""
     level = game.level_info(person)["level"]
     pose = valid_pose(pose)
-    big = svg_sized(cfg, 240, title=f"Avatar de {person.name}", view="stage", pose=pose)
+    big = svg_sized(
+        cfg,
+        240,
+        title=f"Avatar de {person.name}",
+        view="stage",
+        pose=pose,
+        badge=avatar_badge(person, cfg),
+    )
     return {
         "big": framed(big, cfg, level=level, large=True),
         "head": svg_sized(cfg, 32, view="head", decorative=True),
@@ -553,6 +586,7 @@ def editor_sections(cfg, person, open_slug=None):
                     "current": current,
                     "options": options,
                     "tiles": key in TILE_CATEGORIES,
+                    "text": key in TEXT_CATEGORIES,
                     "has_rec": bool(recommended),
                 }
             )

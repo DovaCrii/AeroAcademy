@@ -108,7 +108,7 @@ HD_OPTIONS = {
     "headwear": "headwear", "hair": "hair", "outfit": "outfit", "neckwear": "neckwear", "pin": "pin",
     "prop": "prop",
 }  # fmt: skip
-HD_ENGINE_KEYS = set("12345")  # solo las pone el motor
+HD_ENGINE_KEYS = set("123456")  # solo las pone el motor
 
 
 def _check_sprite(errors, where, art, category, allowed_keys):

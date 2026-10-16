@@ -99,6 +99,7 @@ def _render_sheet(request, person):
         title=f"Avatar de {person.name}",
         view="stage",
         bg_alt=services.auto_background(person, cfg),
+        badge=services.avatar_badge(person, cfg),
     )
     ctx["avatar_big"] = services.framed(svg, cfg, level=ctx["info"]["level"], large=True)
     if ctx[

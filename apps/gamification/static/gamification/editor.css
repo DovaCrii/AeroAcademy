@@ -83,6 +83,9 @@
 .av-opt .sw{width:24px;height:24px;border:1px solid var(--ink);border-radius:var(--r-sm);display:block}
 .av-opt input:checked + .sw{box-shadow:0 0 0 2px var(--sheet),0 0 0 4px var(--level)}
 .av-opt .swl{font-size:12px;margin-left:6px}
+.av-opt .pill{display:block;padding:6px 12px;border:2px solid var(--hair);border-radius:var(--r-pill);font:600 13px var(--font);background:var(--sheet-2);min-height:32px}
+.av-opt input:checked + .pill{border-color:var(--level);box-shadow:0 0 0 2px var(--level)}
+.av-opt input:focus-visible + .pill{outline:3px solid var(--red);outline-offset:2px}
 .av-opt.locked{opacity:.55;cursor:not-allowed}
 .av-opt.locked input{cursor:not-allowed}
 .av-opt .lock{position:absolute;left:2px;bottom:2px;pointer-events:none}

@@ -20,5 +20,6 @@ def avatar(person, size=32, view="bust", frame=True):
         title=f"Avatar de {person.name}",
         view=view if view in {"stage", "full", "bust", "head"} else "bust",
         bg_alt=services.auto_background(person, cfg),
+        badge=services.avatar_badge(person, cfg) if view == "stage" else None,
     )
     return services.framed(svg, cfg) if frame else mark_safe(svg)  # noqa: S308
