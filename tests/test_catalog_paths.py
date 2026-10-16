@@ -368,7 +368,7 @@ def test_catalog_filters_by_route_and_search_matches_every_word(seeded, member_c
     bentley = {r.title for r in resource_queryset(path="bentley-learn")}
     assert bentley and all("Revit" not in t for t in bentley)
     html = member_client.get("/catalogo/?ruta=bentley-learn").content.decode()
-    assert 'class="cat-pill on"' in html and "En la ruta" in html
+    assert "Quitar el filtro" in html and "En la ruta" in html
     assert resource_queryset(q="openroads catálogo").exists()
     assert not resource_queryset(q="openroads zzzinexistente").exists()
 
@@ -394,8 +394,8 @@ def test_essentials_come_first_and_can_be_filtered(seeded, member_client):
     assert flags == sorted(flags, reverse=True) and last in ordered[: flags.count(True)]
     essentials = list(resource_queryset(essential=True))
     assert last in essentials and all("Esencial" in r.tags for r in essentials)
-    assert (
-        f"Solo esenciales · {len(essentials)}" in member_client.get("/catalogo/").content.decode()
+    assert f"Solo esenciales <small>({len(essentials)})</small>" in (
+        member_client.get("/catalogo/").content.decode()
     )
 
 

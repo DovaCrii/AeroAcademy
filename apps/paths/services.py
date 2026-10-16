@@ -11,12 +11,65 @@ def visible_paths(person):
     return qs if person.is_lead else qs.filter(is_published=True)
 
 
+AREA_ORDER = [
+    "arquitectura",
+    "civil-estructural",
+    "topografia",
+    "mecanica",
+    "captura-rpa",
+    "ia-datos",
+    "transversal",
+]
+OTHER_AREA = {"slug": "otras", "name": "Otras rutas"}
+
+
+def is_starter(path):
+    """Las rutas «101» son la puerta de entrada de cada disciplina."""
+    return path.slug.endswith("-101")
+
+
+def area_slug(path):
+    """Área de aprendizaje de una ruta: su disciplina principal; las rutas de IA y datos (que además son
+    «transversal» por orden) van en su área propia en vez de perderse en Transversal."""
+    from apps.core.services import main_discipline_slug
+    from apps.dgac.constants import ROUTE_SLUG as DGAC_ROUTE
+
+    if (
+        path.slug == DGAC_ROUTE
+    ):  # DGAC es una ruta de Captura·RPA aunque también sirva en Topografía
+        return "captura-rpa"
+    slug = main_discipline_slug(path)
+    if slug == "transversal" and any(d.slug == "ia-datos" for d in path.disciplines.all()):
+        return "ia-datos"
+    return slug
+
+
+def group_by_area(paths):
+    """Agrupa las rutas por su disciplina principal (cada una sale una sola vez), en el orden de `AREA_ORDER`.
+
+    Devuelve [{slug, name, paths}] solo con las áreas que tienen rutas; las rutas sin disciplina van en «Otras rutas».
+    Las rutas «101» van primero dentro de su área. Usa solo datos ya cargados (`disciplines` en prefetch)."""
+    paths = list(paths)
+    names, groups = {}, {}
+    for p in paths:
+        for d in p.disciplines.all():
+            names[d.slug] = d.name
+        groups.setdefault(area_slug(p) or OTHER_AREA["slug"], []).append(p)
+    rank = {slug: i for i, slug in enumerate(AREA_ORDER)}
+    out = []
+    for slug in sorted(groups, key=lambda s: (rank.get(s, len(rank)), s)):
+        items = sorted(groups[slug], key=lambda p: (not is_starter(p), p.vendor.name, p.title))
+        out.append({"slug": slug, "name": names.get(slug, OTHER_AREA["name"]), "paths": items})
+    return out
+
+
 def path_listing(person, *, vendor="", product="", discipline="", skill=""):
+    """Rutas visibles con sus filtros. Sin filtros salen todas (la empresa es un filtro secundario, no una pestaña)."""
     base = visible_paths(person)
     vendors = list(Vendor.objects.filter(paths__in=base).distinct())
-    selected = next((v for v in vendors if v.slug == vendor), vendors[0] if vendors else None)
+    selected = next((v for v in vendors if v.slug == vendor), None)
 
-    paths = base.filter(vendor=selected) if selected else base.none()
+    paths = base.filter(vendor=selected) if selected else base
     if product:
         paths = paths.filter(products__slug=product)
     if discipline:
@@ -29,7 +82,7 @@ def path_listing(person, *, vendor="", product="", discipline="", skill=""):
     paths = paths.distinct().prefetch_related("products", "disciplines")
 
     # Solo opciones que llevan a algo: un filtro sin rutas detrás es un camino sin nada.
-    of_vendor = base.filter(vendor=selected) if selected else base.none()
+    of_vendor = base.filter(vendor=selected) if selected else base
     return {
         "vendors": vendors,
         "vendor": selected,

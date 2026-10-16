@@ -24,7 +24,7 @@ def course_photo(request, slug, name):
 
 
 def index(request):
-    """Rutas: pestañas por vendor → productos → campañas, con filtros por disciplina y habilidad."""
+    """Rutas por área de aprendizaje (disciplina); la empresa, el producto y la habilidad son filtros secundarios."""
     p = request.GET
     ctx = services.path_listing(
         request.user,
@@ -33,8 +33,15 @@ def index(request):
         discipline=p.get("discipline", ""),
         skill=p.get("skill", ""),
     )
-    ctx["paths"] = services.attach_ctas(request.user, ctx["paths"])
+    paths = services.attach_ctas(request.user, ctx["paths"])
+    ctx["paths"] = paths
+    ctx["areas"] = services.group_by_area(paths)
     ctx["f"] = {k: p.get(k, "") for k in ("product", "discipline", "skill")}
+    ctx["filtered"] = bool(ctx["vendor"] or any(ctx["f"].values()))
+    if not ctx["filtered"]:
+        # «Empieza aquí» (las 101 sin empezar) y «Mis rutas» (en curso); con filtros solo se ve el resultado.
+        ctx["mine"] = [x for x in paths if 0 < x.pct < 100]
+        ctx["starters"] = [x for x in paths if services.is_starter(x) and x.pct == 0]
     return render(request, "paths/index.html", ctx)
 
 
