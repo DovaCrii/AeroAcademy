@@ -214,9 +214,7 @@ body.world-architecture.fl-iad{--acc:#9B8CFF;--fill:#9B8CFF}
   .pf-bg{display:none}
 }
 .lv-profile li:not(:first-child):not(:last-child) span{visibility:hidden}
-@media (max-width:860px){.ar-cover .lv-in{padding-top:230px}}
 
-.ar-cover .lv-in{padding-top:186px}
 
 /* ===== Panel de nivel: ritmo vertical, secciones numeradas y acordeones (sin JS) ===== */
 .ar-hero>*{min-width:0}

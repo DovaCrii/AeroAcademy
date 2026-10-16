@@ -153,6 +153,43 @@ def test_non_architecture_covers_do_not_show_architecture_words(site_world, memb
         assert word not in region, word
 
 
+@pytest.mark.parametrize(
+    "file", route_files(), ids=lambda f: f.parent.name if f.name == "ruta.json" else f.stem
+)
+def test_cover_h1_is_a_real_headline_and_follows_the_frame(site_world, member_client, file):
+    """El h1 no es un rótulo («Paso 1 de 5») y el recuadro va antes que él en el DOM (el CSS lo apila en el flujo)."""
+    page = member_client.get(f"/rutas/{load(file)['slug']}/").content.decode()
+    h1 = re.search(r"<h1>(.*?)</h1>", page[page.index('class="lv-cover') :], re.S).group(1)
+    text = html_lib.unescape(re.sub(r"<[^>]+>", " ", h1)).strip()
+    assert text and not re.match(r"(?i)^(paso|etapa|fase)\s+\d+\s+de\s+\d+", text), text
+    assert page.index('class="lv-frame"') < page.index('class="lv-in"')
+
+
+def test_cover_frame_is_in_flow_so_it_never_covers_the_headline():
+    """Regla de CSS: el recuadro no es absoluto (su alto varía) y los mundos no fijan un padding-top a mano."""
+    base = (Path(settings.BASE_DIR) / "apps/core/static/core/levantamiento.css").read_text(
+        encoding="utf-8"
+    )
+    frame = re.search(r"\.lv-frame\{([^}]*)\}", base).group(1)
+    assert "position:relative" in frame and "position:absolute" not in frame
+    assert re.search(r"\.lv-cover\{[^}]*flex-direction:column", base, re.S)
+    for world in ("aero", "architecture", "civil"):
+        css = (Path(settings.BASE_DIR) / f"apps/core/static/worlds/{world}.css").read_text(
+            encoding="utf-8"
+        )
+        assert not re.search(r"\.lv-in\{padding-top:\d+px", css), world
+
+
+def test_cover_headline_rules():
+    from apps.progress.services import cover_headline
+
+    assert cover_headline("IA 101 · IA en el trabajo", "Paso 1 de 5") == "IA en el trabajo"
+    assert cover_headline("Python y datos 101", "Datos") == "Python y datos 101"
+    assert cover_headline("Ruta AutoCAD · la base", "AutoCAD") == "AutoCAD"
+    assert cover_headline("Ruta Revit", "Levantamiento Digital") == "Levantamiento Digital"
+    assert cover_headline("Solo título", "") == "Solo título"
+
+
 def test_building_keeps_its_architecture_vocabulary(site_world, member_client):
     region = figure_region(member_client.get("/rutas/forma-revit/").content.decode())
     assert "COTA ±0,00" in region and "+3,50" in region and "Lámina" in region

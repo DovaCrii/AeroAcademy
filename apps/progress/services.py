@@ -5,6 +5,7 @@ Regla (docs/MODELO_DATOS.md): avance de un nivel = (misiones marcadas + pregunta
 """
 
 import math
+import re
 from collections import defaultdict
 
 from django.urls import reverse
@@ -262,6 +263,21 @@ def _waypoints(chapters, marks, me_id):
     return {"width": width, "height": height, "points": points, "segments": segments}
 
 
+_STEP_LABEL = re.compile(r"^(paso|etapa|fase)\s+\d+\s+de\s+\d+$", re.IGNORECASE)
+
+
+def cover_headline(title, program_tail):
+    """Titular (h1) de la portada: el último tramo de `program`, salvo que sea un rótulo («Paso 1 de 5») o una palabra
+    suelta que el título ya contiene; entonces, el final del título de la ruta (`IA 101 · IA en el trabajo`)."""
+    tail = (program_tail or "").strip()
+    title_tail = title.split("·")[-1].strip() or title
+    if not tail or _STEP_LABEL.match(tail):
+        return title_tail
+    if len(tail) < 9 and len(title_tail) > len(tail) and tail.lower() in title_tail.lower():
+        return title_tail
+    return tail
+
+
 def _stations(chapters, marks, me_id):
     """Estaciones de las figuras: un nivel cada una, con el avance real y las personas del equipo que están ahí."""
     out = []
@@ -441,6 +457,7 @@ def world_context(person, path, level_code=None, step=None):
     intro = next((e.data for e in extras if e.kind == PathExtra.Kind.INTRO), {})
     flow = [e.data for e in extras if e.kind == PathExtra.Kind.FLOW]
     program = [part.strip() for part in path.program.split("·")]
+    headline = cover_headline(path.title, program[-1])
     steps = (
         step_context(
             path,
@@ -466,7 +483,7 @@ def world_context(person, path, level_code=None, step=None):
             pct=total_pct,
         ),
         "program_code": program[0] if len(program) > 1 else "",
-        "program_title": program[-1] or path.title,
+        "program_title": headline,
         "intro": intro,
         "flow": flow,
         "chapters": chapters,

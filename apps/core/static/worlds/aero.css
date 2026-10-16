@@ -131,5 +131,3 @@ body.world-aero{--ao-cyan:#4CC6FF;--ao-night:#06142A;--ao-night-2:#0B2440;--ao-l
   .ao-flight .nm{font-size:15px}
 }
 
-.ao-cover .lv-in{padding-top:186px}
-@media (max-width:860px){.ao-cover .lv-in{padding-top:300px}}
