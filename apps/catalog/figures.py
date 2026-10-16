@@ -60,7 +60,15 @@ BASE_LABELS = {
 
 STACK_TEMPLATE = "worlds/figures/stack.html"
 # Figuras ya dibujadas; el resto usa la pila de capas con su propio vocabulario (se agregan de a dos, ver MUNDOS).
-DRAWN = {"building", "building-lod", "road-profile", "flight-plan", "stack"}
+DRAWN = {
+    "building",
+    "building-lod",
+    "road-profile",
+    "flight-plan",
+    "stack",
+    "pipeline-ai",
+    "data-flow",
+}
 
 
 @dataclass(frozen=True)
@@ -248,7 +256,7 @@ FIGURES = {
             "pipeline-ai",
             software.IAD,
             _labels(
-                kicker="IA y datos",
+                kicker="Inteligencia artificial",
                 scale="VENTANA · TOKENS",
                 sheet_label="Pipeline",
                 sheet="P-101",
@@ -271,7 +279,7 @@ FIGURES = {
             "data-flow",
             software.IAD,
             _labels(
-                kicker="Datos y análisis",
+                kicker="Análisis de datos",
                 scale="DATASET · PANEL",
                 sheet_label="Notebook",
                 sheet="N-101",

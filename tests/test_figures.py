@@ -16,6 +16,7 @@ from apps.paths.models import LearningPath
 
 pytestmark = pytest.mark.django_db
 
+KIT_FIGURES = {k for k in figures.DRAWN if k not in ("building", "building-lod", "flight-plan")}
 LEGACY = (
     "building",
     "road-profile",
@@ -121,6 +122,15 @@ def test_route_page_labels_belong_to_its_figure(site_world, member_client, file)
     assert response.status_code == 200
     assert response.context["fig"]["key"] == data["figure"]
     region = figure_region(response.content.decode())
+    if data["figure"] in KIT_FIGURES and not (
+        data["figure"] == "road-profile" and data["kind"] != "structured"
+    ):
+        # Cada figura del kit enlaza a cada nivel con los ganchos estables (?nivel=<code>#panel, data-fid).
+        for level in data["levels"]:
+            if data["kind"] == "structured" or level.get("external_courses"):
+                assert f"?nivel={level['code']}#panel" in region, (data["slug"], level["code"])
+        if data["figure"] != "road-profile":  # el perfil de Civil 3D conserva los ganchos floor-*
+            assert 'data-fid="st-' in region and "data-enhance" in region
     for text in _own_texts(data):
         region = region.replace(text, " ").replace(html_lib.escape(text), " ")
     region = re.sub(r"<[^>]+>", " ", region).lower()  # solo el texto visible

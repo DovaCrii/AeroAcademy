@@ -18,11 +18,11 @@
 .fg-st.on .fg-slab{fill:color-mix(in srgb,var(--fg-acc) 10%,var(--fg-paper))}
 .fg-st.done .fg-fill{fill:color-mix(in srgb,var(--fg-ok) 55%,transparent)}
 .fg-st.done .fg-box{stroke:var(--fg-ok)}
-.fg-code{font:700 12px var(--font-mono);fill:var(--fg-soft)!important}
-.fg-name{font-size:13px;font-weight:650}
-.fg-pct{font:700 12px var(--font-mono);fill:var(--fg-soft)!important}
+.fg-code{font:700 13px var(--font-mono);fill:var(--fg-soft)!important}
+.fg-name{font-size:14.5px;font-weight:650}
+.fg-pct{font:700 13px var(--font-mono);fill:var(--fg-soft)!important}
 .fg-st.done .fg-pct{fill:var(--fg-ok)!important}
-.fg-tag{font:600 11px var(--font-mono);letter-spacing:.08em;fill:var(--fg-soft)!important}
+.fg-tag{font:600 12px var(--font-mono);letter-spacing:.08em;fill:var(--fg-soft)!important}
 
 /* marcas del equipo */
 .fg-mark circle{fill:var(--level,var(--fg-acc));stroke:var(--fg-paper);stroke-width:1.5}
@@ -32,10 +32,31 @@
 
 /* rótulos sobre el dibujo (cintas, carriles, encabezados) */
 .fg-chip rect{fill:var(--fg-paper);stroke:var(--fg-line);stroke-width:1.2}
-.fg-chip text{font:700 11px var(--font-mono);letter-spacing:.08em}
+.fg-chip text{font:700 12px var(--font-mono);letter-spacing:.08em}
 .fg-arrow{stroke:var(--fg-soft);stroke-width:1.5;fill:none}
 .fg-arrowhead{fill:var(--fg-soft)}
 .fg-guide{stroke:var(--fg-hair);stroke-width:1;stroke-dasharray:4 4;fill:none}
+
+/* pipeline-ai: ventana de contexto con celdas (tokens) y medidor */
+.fg-window{fill:none;stroke:var(--fg-line);stroke-width:1.5;stroke-dasharray:6 4}
+.fg-cell{fill:var(--fg-hair);stroke:none}
+.fg-cell.on{fill:var(--fg-acc)}
+.fg-st.done .fg-cell.on{fill:var(--fg-ok)}
+.fg-meter{fill:var(--fg-paper);stroke:var(--fg-line);stroke-width:1.5}
+.fg-meter-fill{fill:var(--fg-acc)}
+.fg-hit{fill:transparent;stroke:none}
+
+/* data-flow: cilindros que se llenan y tuberías entre etapas */
+.fg-liquid{fill:color-mix(in srgb,var(--fg-acc) 55%,transparent);stroke:none}
+.fg-liquid.top{fill:color-mix(in srgb,var(--fg-acc) 70%,var(--fg-paper))}
+.fg-st.done .fg-liquid{fill:color-mix(in srgb,var(--fg-ok) 55%,transparent)}
+.fg-st.done .fg-liquid.top{fill:color-mix(in srgb,var(--fg-ok) 70%,var(--fg-paper))}
+.fg-cyl .fg-box{fill:none}
+.fg-pipeline{stroke:var(--fg-soft);stroke-width:2;stroke-dasharray:8 5}
+@media (prefers-reduced-motion:no-preference){
+  .fg-pipeline{animation:fg-dash 1.4s linear infinite}
+  @keyframes fg-dash{to{stroke-dashoffset:-26}}
+}
 
 @media (prefers-reduced-motion:no-preference){
   .fg-st .fg-box{transition:stroke .15s}
