@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Sin acceso{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'core/errors.css' %}">{% endblock %}
+{% block content %}
+<section class="sheet err">
+  <div class="sheet-in err-in">
+    <p class="cap">Error 403</p>
+    <h1>No tienes acceso a esta página</h1>
+    <p class="lead">Tu cuenta no tiene permiso para esto. Si crees que es un error, habla con el administrador del equipo.</p>
+    <div class="err-actions">
+      <a class="btn" href="{% url 'core:home' %}">Inicio</a>
+      <a class="btn ghost" href="{% url 'paths:index' %}">Rutas</a>
+      <a class="btn ghost" href="{% url 'catalog:resources' %}">Catálogo</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

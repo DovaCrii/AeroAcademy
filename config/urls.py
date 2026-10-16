@@ -20,3 +20,6 @@ urlpatterns = [
     path("", include("apps.catalog.urls")),
     path("", include("apps.core.urls")),
 ]
+
+handler404 = "apps.core.views.not_found"
+handler403 = "apps.core.views.forbidden"

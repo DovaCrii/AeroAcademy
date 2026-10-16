@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Página no encontrada{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'core/errors.css' %}">{% endblock %}
+{% block content %}
+<section class="sheet err">
+  <div class="sheet-in err-in">
+    <p class="cap">Error 404</p>
+    <h1>Esta página no existe o ya no está disponible</h1>
+    <p class="lead">Puede que el enlace esté escrito de otra manera, que haya cambiado de lugar o que no tengas acceso. Desde aquí puedes seguir por otro camino.</p>
+    <div class="err-actions">
+      <a class="btn ghost" href="{% url 'core:home' %}" data-back>Volver</a>
+      <a class="btn" href="{% url 'core:home' %}">Inicio</a>
+      <a class="btn ghost" href="{% url 'paths:index' %}">Rutas</a>
+      <a class="btn ghost" href="{% url 'catalog:resources' %}">Catálogo</a>
+    </div>
+    <form class="err-search" method="get" role="search" action="{% url 'assistant:help_index' %}">
+      <label for="err-q">Buscar en la ayuda</label>
+      <input id="err-q" type="search" name="q" maxlength="100" placeholder="Ej.: certificado, XP, foro…" autocomplete="off">
+      <button class="btn" type="submit">Buscar</button>
+    </form>
+  </div>
+</section>
+<script>
+/* «Volver» usa el historial si hay uno; sin JS el botón lleva a Inicio. */
+(function(){var b=document.querySelector("[data-back]");if(!b)return;
+  b.addEventListener("click",function(e){if(history.length>1){e.preventDefault();history.back();}});})();
+</script>
+{% endblock %}
