@@ -106,6 +106,13 @@ BACKGROUNDS = [
     ("Cercha", "#2A2F3A"),
     ("Mapa SIG", "#123B3A"),
     ("Franja de seguridad", "#1A1A1A"),
+    # Claros (se agregan al final: los índices guardados no cambian). Ver backgrounds.py.
+    ("Papel cuadriculado", "#FAF8F3"),
+    ("Plano claro", "#F1F6FC"),
+    ("Papel kraft", "#E9DCC0"),
+    ("Cielo de faena", "#CFE6F7"),
+    ("Hormigón", "#D9D9D4"),
+    ("Arena de terreno", "#EBD9B4"),
 ]
 
 # Colores fijos que no cambian con la configuración.
