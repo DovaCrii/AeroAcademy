@@ -29,6 +29,29 @@ Después de editar `/etc/centro/env`: `sudo systemctl restart centro`.
 
 Entra por la URL de la tailnet con el correo que pusiste en `BOOTSTRAP_ADMINS`. Quedas como administradora y aprobada. Las demás personas entran como **pendientes** y las apruebas en **Moderación**.
 
+## Cómo dar de alta cuentas
+
+Hay tres formas de que una persona tenga cuenta. En la app, **Equipo → Personas** (`/equipo/personas/`, solo admin y solo por la tailnet) trae estos mismos pasos en una caja. Los comandos se corren en la VM con `sudo aeroacademy <comando>`; todos dejan constancia en la bitácora de **Moderación** (como «consola», sin el enlace ni su secreto).
+
+1. **Agrega o aprueba el correo.**
+   - `sudo aeroacademy aprobar <correo> [--rol member|lead|admin]` aprueba a la persona (y la crea si aún no entró). Sin correo, lista quién espera aprobación.
+   - Varias a la vez: `sudo aeroacademy importar_equipo equipo.csv --dry-run` y, si está bien, sin `--dry-run`. En la app: **Equipo → Agregar personas**.
+2. **Genera el enlace.**
+   - **Personal** (un uso, vence en 7 días, para una persona ya aprobada): `sudo aeroacademy enlace_registro <correo>`, o el botón **Generar enlace de registro** de su fila. Sirve también para restablecer una contraseña olvidada: no hay correo automático, el enlace nuevo invalida el anterior.
+   - **Del equipo** (uno para todos): `sudo aeroacademy enlace_equipo --dias 14` (7, 14 o 30) y `sudo aeroacademy enlace_equipo --revocar`. Generar otro revoca el anterior. Quien no esté en la lista queda **pendiente** hasta que la apruebes.
+3. **Mándalo por un canal privado.** El enlace se muestra una sola vez; la base guarda solo su huella.
+4. **La persona lo abre y crea su contraseña**, o entra directo si usa Tailscale con su correo del equipo (en ese caso no necesita contraseña ni enlace).
+
+**Si el enlace vence o se pierde:** quien lo abre ve «Este enlace ya no sirve…» (código 400, el mismo mensaje para enlaces vencidos, usados, manipulados o reemplazados). Genera otro con el mismo comando.
+
+**Respuesta del enlace del equipo:** si el correo ya tiene cuenta, es de un responsable o admin, o está suspendido, la persona ve el mismo mensaje genérico (no se revela qué cuentas existen). Si ya tiene cuenta, entra por `/entrar/`; si olvidó la contraseña, pide un enlace personal.
+
+**Cuenta propia:** con sesión por contraseña, el menú del avatar trae **Mi cuenta** (con cambio de contraseña) y **Salir**. Quien entra por Tailscale no tiene contraseña que cambiar ni «Salir».
+
+## Revisar enlaces
+
+`sudo aeroacademy revisar_enlaces` recorre el sitio como admin (solo GET) y lista los enlaces internos rotos; con `--externos` revisa también las URLs de los recursos y de `seed/`. Escribe un CSV en `private/` (ignorado por git). Los «bloqueado» (403 o 429, p. ej. Autodesk) y los «sin_respuesta» (timeout) hay que confirmarlos en un navegador; solo «roto» (404 o 410) es un enlace caído. No lo corre el CI.
+
 ## Respaldos
 
 `deploy/backup.sh` guarda cada día, en `/var/backups/centro`:
