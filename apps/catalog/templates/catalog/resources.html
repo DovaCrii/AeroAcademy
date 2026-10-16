@@ -18,53 +18,61 @@
 <section class="cat-sec cat-sec-filter" aria-label="Buscar y filtrar">
 <h2 class="cat-sh"><span>// 01</span> Buscar y filtrar</h2>
 <form class="cat-search" method="get" action="{% url 'catalog:resources' %}" role="search">
-  {% if f.path %}<input type="hidden" name="ruta" value="{{ f.path }}">{% endif %}
-  {% if f.kind %}<input type="hidden" name="kind" value="{{ f.kind }}">{% endif %}
+  {% if f.software %}<input type="hidden" name="software" value="{{ f.software }}">{% endif %}
   <label class="cat-q"><span class="sr-only">Buscar en el catálogo</span>
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
     <input type="search" name="q" value="{{ f.q }}" placeholder="Busca por software, tema o habilidad: «Revit familias», «OpenRoads corredor»" autocomplete="off">
   </label>
   <button class="btn primary" type="submit">Buscar</button>
 
-  <details class="cat-more"{% if f.platform or f.free %} open{% endif %}>
+  <div class="cat-main-filters">
+    <label>Disciplina
+      <select name="discipline">
+        <option value="">Todas</option>
+        {% for d in disciplines %}<option value="{{ d.slug }}"{% if d.slug == f.discipline %} selected{% endif %}>{{ d.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Tipo
+      <select name="kind">
+        {% for value, label, n in kinds %}<option value="{{ value }}"{% if value == f.kind %} selected{% endif %}>{% if value %}{{ label }} ({{ n }}){% else %}Todos los tipos{% endif %}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" name="esencial" value="1"{% if f.essential %} checked{% endif %}> Solo esenciales <small>({{ essential_count }})</small></label>
+  </div>
+
+  <details class="cat-more"{% if f.path or f.platform or f.free or f.cert or f.general %} open{% endif %}>
     <summary>Más filtros</summary>
     <div class="cat-more-in">
+      <label>Ruta
+        <select name="ruta">
+          <option value="">Todas las rutas</option>
+          {% for g in route_groups %}<optgroup label="{{ g.name }}">{% for p in g.paths %}<option value="{{ p.slug }}"{% if p.slug == f.path %} selected{% endif %}>{{ p.title }}</option>{% endfor %}</optgroup>{% endfor %}
+        </select>
+      </label>
       <label>Plataforma
         <select name="platform">
           <option value="">Todas</option>
           {% for p in platforms %}<option value="{{ p.slug }}"{% if p.slug == f.platform %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
         </select>
       </label>
+      <label class="check"><input type="checkbox" name="cert" value="1"{% if f.cert %} checked{% endif %}> Con certificado ({{ cert_count }})</label>
+      <label class="check"><input type="checkbox" name="general" value="1"{% if f.general %} checked{% endif %}> Conocimiento general</label>
       <label class="check"><input type="checkbox" name="free" value="1"{% if f.free %} checked{% endif %}> Gratuito</label>
-      <label class="check"><input type="checkbox" name="cert" value="1"{% if f.cert %} checked{% endif %}> Entrega certificado (suma XP)</label>
-      <label class="check"><input type="checkbox" name="esencial" value="1"{% if f.essential %} checked{% endif %}> Solo esenciales</label>
-      <button class="btn" type="submit">Aplicar</button>
     </div>
   </details>
 </form>
 
-<nav class="cat-routes" aria-label="Filtrar por ruta">
-  <span class="cat-label">Ruta</span>
-  <a class="cat-pill{% if not f.path %} on{% endif %}" href="?{{ route_base }}">Todas</a>
-  {% for p in paths %}<a class="cat-pill{% if p.slug == f.path %} on{% endif %}" href="?{% if route_base %}{{ route_base }}&amp;{% endif %}ruta={{ p.slug }}">{{ p.title }}</a>{% endfor %}
-</nav>
-
-<nav class="cat-tabs" aria-label="Filtrar por tipo">
-  {% for value, label, n in kinds %}<a class="cat-tab{% if value == f.kind %} on{% endif %}" href="?{% if kind_base %}{{ kind_base }}{% if value %}&amp;{% endif %}{% endif %}{% if value %}kind={{ value }}{% endif %}">{{ label }}{% if value %} <small>{{ n }}</small>{% endif %}</a>{% endfor %}
-</nav>
-
+{% if chips %}
+<ul class="cat-chips" aria-label="Filtros activos">
+  {% for c in chips %}<li><a class="chip on" href="{% url 'catalog:resources' %}{% if c.query %}?{{ c.query }}{% endif %}" title="Quitar este filtro" aria-label="Quitar el filtro {{ c.label }}">{{ c.label }} <span aria-hidden="true">&times;</span></a></li>{% endfor %}
+  <li><a class="cat-clear" href="{% url 'catalog:resources' %}">Limpiar todo</a></li>
+</ul>
+{% endif %}
 </section>
 
 <div class="cat-bar">
-  <p class="cat-count"><b>{{ page.paginator.count }}</b> resultado{{ page.paginator.count|pluralize }}{% if f.q %} para «{{ f.q }}»{% endif %}</p>
-  <p class="cat-quick">
-    <a class="chip ess{% if f.essential %} on{% endif %}" href="?esencial={% if f.essential %}0{% else %}1{% endif %}{% if f.path %}&amp;ruta={{ f.path }}{% endif %}">Solo esenciales · {{ essential_count }}</a>
-    <a class="chip gen{% if f.general %} on{% endif %}" href="?general={% if f.general %}0{% else %}1{% endif %}">Conocimiento general</a>
-    <a class="chip cert{% if f.cert %} on{% endif %}" href="?cert={% if f.cert %}0{% else %}1{% endif %}{% if f.path %}&amp;ruta={{ f.path }}{% endif %}">Con certificado · {{ cert_count }}</a>
-    {% if filtered %}<a class="cat-clear" href="{% url 'catalog:resources' %}">Limpiar filtros</a>{% endif %}
-  </p>
+  <p class="cat-count" role="status"><b>{{ page.paginator.count }}</b> resultado{{ page.paginator.count|pluralize }}{% if f.q %} para «{{ f.q }}»{% endif %}</p>
 </div>
-
 {% if show_rows %}
 <section class="cat-sec cat-sec-rows" aria-label="Recursos por software">
   <h2 class="cat-sh"><span>// 02</span> Por software</h2>
@@ -135,3 +143,4 @@
   <span><span class="chip cert">Certificado</span> entrega constancia</span>
 </aside>
 {% endblock %}
+
