@@ -35,7 +35,6 @@ def form_data(**extra):
     return {
         "headline": "Modeladora BIM",
         "bio": "Me gusta modelar.",
-        "character_class": "architect",
         "show_game_view": "on",
         **extra,
     }
@@ -52,7 +51,7 @@ def test_only_the_owner_edits_and_the_route_takes_no_id(client_for, member, lead
     assert client_for(member.login).post("/perfil/5/editar/", form_data()).status_code == 404
 
 
-def test_saving_stores_class_links_and_view(client_for, member):
+def test_saving_stores_links_and_view(client_for, member):
     client_for(member.login).post(
         "/perfil/editar/",
         form_data(
@@ -60,7 +59,7 @@ def test_saving_stores_class_links_and_view(client_for, member):
         ),
     )
     member.refresh_from_db()
-    assert member.character_class == "architect" and member.show_game_view is True
+    assert member.show_game_view is True
     assert member.links == {
         "linkedin": "https://www.linkedin.com/in/ana",
         "credly": "https://www.credly.com/users/ana",
@@ -100,11 +99,24 @@ def test_a_chosen_title_shows_in_the_sheet(client_for, member):
     assert "Dibujante de Grilla" in client_for(member.login).get("/perfil/").content.decode()
 
 
-def test_class_change_updates_the_avatar_class(client_for, member):
+def test_sheet_form_has_no_class_field(client_for, member):
+    """La carrera se elige solo en el editor de avatar (un lugar por dato); los datos guardados no cambian."""
+    from apps.gamification.forms import SheetForm
+
+    assert "character_class" not in SheetForm(person=member).fields
     client = client_for(member.login)
     client.post("/perfil/avatar/", {"class": "pilot"})
     client.post("/perfil/editar/", form_data(character_class="cartographer"))
     member.refresh_from_db()
+    assert member.character_class == "pilot" and member.avatar_config["class"] == "pilot"
+    html = client.get("/perfil/editar/").content.decode()
+    assert 'name="character_class"' not in html and "seccion=carrera" in html
+
+
+def test_the_career_is_changed_in_the_avatar_editor(client_for, member):
+    client_for(member.login).post("/perfil/avatar/", {"class": "cartographer"})
+    member.refresh_from_db()
+    assert member.character_class == "cartographer"
     assert member.avatar_config["class"] == "cartographer"
 
 
@@ -255,3 +267,72 @@ def test_sheet_page_is_small_on_queries(client_for, member, lead, django_assert_
         65
     ):  # incluye «Próximo logro» (avance de las rutas generales)
         assert client_for(member.login).get("/perfil/").status_code == 200
+
+
+# --- un lugar por dato y desplegables --------------------------------------------------------------------------------
+
+
+def _main(html):
+    import re
+
+    main = re.search(r"<main.*?</main>", html, re.S).group(0)
+    return re.sub(r'<form class="cheer".*?</form>', "", main, flags=re.S)  # aviso pasajero
+
+
+def test_sheet_each_fact_once(client_for, member):
+    game.award(member, "x:1", "manual", 600)
+    member.selected_title = Title.objects.get(slug="dibujante-de-grilla")
+    member.character_class = "cartographer"
+    member.save()
+    main = _main(client_for(member.login).get("/perfil/").content.decode())
+    level = game.level_info(member)["level"]
+    assert main.count(f"NV {level}") == 1
+    assert main.count("faltan") == 1
+    assert main.count("Dibujante de Grilla") == 1
+    assert main.count('class="next-goal"') <= 1
+    assert main.count("Geomensor/a") == 1  # el oficio, una vez (ya no hay etiqueta duplicada)
+
+
+def test_sheet_sections_are_details_by_view(client_for, member):
+    import re
+
+    client = client_for(member.login)
+
+    def opened(view):
+        html = _main(client.get(f"/perfil/?vista={view}").content.decode())
+        return {
+            re.search(r'id="(s-\w+)"', tag).group(1)
+            for tag in re.findall(r'<details class="card fold[^>]*>', html)
+            if " open" in tag
+        }
+
+    assert opened("juego") == {"s-attrs", "s-badges"}
+    assert opened("compacta") == set()
+    assert opened("pro") == {"s-skills", "s-creds"}
+
+
+def test_sheet_sections_keep_their_order(client_for, member):
+    html = _main(client_for(member.login).get("/perfil/").content.decode())
+    ids = ["s-attrs", "s-badges", "s-skills", "s-creds", "s-line"]
+    positions = [html.index(f'id="{i}"') for i in ids]
+    assert positions == sorted(positions)
+
+
+def test_sheet_career_line_links_only_the_owner(client_for, member, make_person):
+    member.character_class = "cartographer"
+    member.save()
+    other = make_person("otra@example.com")
+    other.character_class = "pilot"
+    other.save()
+    mine = client_for(member.login).get("/perfil/").content.decode()
+    theirs = client_for(member.login).get(f"/personas/{other.pk}/").content.decode()
+    assert "Geomensor/a" in mine and "Cambiar oficio" in mine
+    assert "Piloto RPA" in theirs and "Cambiar oficio" not in theirs
+    assert 'class="next-goal"' not in theirs
+
+
+def test_home_shows_level_once(client_for, member):
+    main = _main(client_for(member.login).get("/").content.decode())
+    level = game.level_info(member)["level"]
+    assert main.count(f"NV {level}") == 1
+    assert 'class="w-lvl"' not in main

@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 
 from django import forms
 
-from apps.accounts.models import CharacterClass, SheetView
+from apps.accounts.models import SheetView
 
 from . import game
 from .models import Title
@@ -14,9 +14,6 @@ class SheetForm(forms.Form):
     headline = forms.CharField(label="Titular profesional", max_length=90, required=False)
     bio = forms.CharField(
         label="Sobre mí", max_length=600, required=False, widget=forms.Textarea(attrs={"rows": 4})
-    )
-    character_class = forms.ChoiceField(
-        label="Clase", choices=[("", "Sin clase")] + list(CharacterClass.choices), required=False
     )
     selected_title = forms.ModelChoiceField(
         label="Título que muestro",
@@ -44,7 +41,6 @@ class SheetForm(forms.Form):
         return {
             "headline": person.headline,
             "bio": person.bio,
-            "character_class": person.character_class,
             "selected_title": person.selected_title_id,
             "linkedin": person.links.get("linkedin", ""),
             "credly": person.links.get("credly", ""),

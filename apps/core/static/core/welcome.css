@@ -155,8 +155,6 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-mbar{height:8px;border:0;border-radius:var(--r-pill);background:var(--sheet-2);box-shadow:inset 0 0 0 1px var(--hair);position:relative;overflow:hidden;margin:8px 0 6px}
 .w-mbar i{position:absolute;inset:0 auto 0 0;border-radius:var(--r-pill);background:linear-gradient(90deg,var(--scan),var(--amber))}
 .w-quest small{font-family:var(--font-mono);font-size:11px;color:var(--ink-2)}
-.w-lvl{margin:14px 0 0;font-size:.8125rem;color:var(--ink-2)}
-.w-lvl b{font-family:"Press Start 2P",ui-monospace,monospace;font-size:10px;padding:3px 8px;border-radius:var(--r-pill);background:var(--amber);color:var(--on-amber)}
 .w-mission{color:#fff;border-color:transparent;box-shadow:var(--shadow-2);padding:28px 30px;
   background:var(--grain) 0 0/160px,radial-gradient(110% 100% at 100% 0%,rgba(30,140,255,.42),transparent 60%),linear-gradient(160deg,#0B2D57,var(--night) 85%);background-blend-mode:overlay,normal,normal}
 .w-mission .w-h3{color:var(--amber)}
@@ -164,7 +162,7 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-mission .w-mtitle a{color:#fff}
 .w-mission .w-mdetail{color:#CFE0F5;max-width:var(--measure)}
 .w-mission .w-mbar{background:rgba(255,255,255,.14);box-shadow:none}
-.w-mission small,.w-mission .w-lvl{color:#BFD2EA}
+.w-mission small{color:#BFD2EA}
 .w-board{background:var(--surface-2);box-shadow:none;border-style:dashed;border-color:var(--line)}
 .w-board ul{list-style:none;margin:0 0 8px;padding:0;font-size:.84375rem}
 .w-board li{padding:6px 0;border-bottom:1px dashed var(--hair)}
@@ -344,7 +342,7 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-mission{color:#1F2430;background:var(--f-civ);border:1.5px solid #1F2430;box-shadow:6px 6px 0 rgba(31,36,48,.9);transform:rotate(-.5deg)}
 .w-mission .w-h3{color:#1F2430}
 .w-mission .w-mtitle a{color:#1F2430}
-.w-mission .w-mdetail,.w-mission small,.w-mission .w-lvl{color:#1F2430}
+.w-mission .w-mdetail,.w-mission small{color:#1F2430}
 .w-mission .w-mbar{background:rgba(31,36,48,.16)}
 .w-mission .w-mbar i{background:#1F2430}
 .w-board{background:color-mix(in srgb,var(--f-arq) 16%,var(--sheet));border:1.5px dashed var(--ink)}

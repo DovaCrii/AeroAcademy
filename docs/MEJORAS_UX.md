@@ -453,6 +453,9 @@ Estado de cada ruta hoy (de la auditoría):
 
 ### P1-10 · Avatar y hoja: menos invasivo y una figura legible
 
+> **Ampliado en [`AVATAR_REDISENO.md`](AVATAR_REDISENO.md)** (editor en 6 secciones, escenario 40×40, halo y equipo
+> por disciplina, hoja con un lugar por dato y PR 1–7). Ese documento manda sobre esta sección y sobre el PR G.
+
 - **Archivos.**
   - `apps/gamification/views.py`, `templates/gamification/sheet.html`, `avatar_editor.html`, `_preview.html`,
     `_next_goal.html`.
