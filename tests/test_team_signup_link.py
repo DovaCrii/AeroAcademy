@@ -1,6 +1,7 @@
 """Enlace de inscripción del equipo (D35): un solo enlace para todos, solo el admin lo genera, vence y se revoca."""
 
 import logging
+import re
 from datetime import timedelta
 from io import StringIO
 
@@ -288,7 +289,7 @@ def test_existing_password_does_not_log_in_nor_change_password(link, make_person
     c = anon()
     r = c.post(url_of(link.token), data("tiene@empresa.cl"))
     html = r.content.decode()
-    assert r.status_code == 200 and "Ese correo ya tiene cuenta" in html and "/entrar/" in html
+    assert r.status_code == 200 and "Recibimos tu inscripción" in html and "/entrar/" in html
     assert session_pid(c) is None
     assert Person.objects.get(pk=person.pk).password == old_hash
     assert TeamSignupLink.objects.get().uses == 0
@@ -322,7 +323,7 @@ def test_privileged_accounts_cannot_be_claimed_with_the_team_link(link, make_per
     person.refresh_from_db()
     assert r.status_code == 200 and session_pid(c) is None
     assert not person.has_usable_password()
-    assert "enlace personal" in r.content.decode()
+    assert "Recibimos tu inscripción" in r.content.decode()
 
 
 def test_bootstrap_admin_login_cannot_be_claimed(link, settings):
@@ -481,3 +482,19 @@ def test_command_default_days_and_validation():
 
 def test_command_revoke_without_active_link_is_harmless():
     assert "No hay" in run("--revocar")
+
+
+def test_team_signup_same_response_for_existing_and_lead(link, make_person):
+    """D35: la respuesta no distingue entre correo con cuenta, responsable, admin o suspendida."""
+    existing = make_person("tiene2@empresa.cl")
+    existing.set_password("Otra-clave-vieja-882!")
+    existing.save()
+    make_person("lidx@empresa.cl", role="lead")
+    make_person("admx@empresa.cl", role="admin")
+    make_person("susx@empresa.cl", status="suspended")
+    bodies = set()
+    for email in ("tiene2@empresa.cl", "lidx@empresa.cl", "admx@empresa.cl", "susx@empresa.cl"):
+        r = anon().post(url_of(link.token), data(email))
+        assert r.status_code == 200
+        bodies.add(re.sub(r'value="[A-Za-z0-9]{40,}"', "", r.content.decode()))
+    assert len(bodies) == 1

@@ -9,15 +9,9 @@
     {% if kind == "pending" %}
     <h1>Listo, un administrador aprobará tu acceso</h1>
     <p class="pub-lead">Tu cuenta quedó creada con tu contraseña. Cuando un administrador la apruebe, entra con tu correo y tu contraseña. Hasta entonces no puedes entrar.</p>
-    {% elif kind == "has_account" %}
-    <h1>Ese correo ya tiene cuenta</h1>
-    <p class="pub-lead">Entra con tu contraseña. Si la olvidaste, pídele al administrador un enlace nuevo.</p>
-    {% elif kind == "personal_link" %}
-    <h1>Usa tu enlace personal</h1>
-    <p class="pub-lead">Este correo no se inscribe con el enlace del equipo: pide a un administrador tu enlace personal.</p>
     {% else %}
-    <h1>No se pudo completar la inscripción</h1>
-    <p class="pub-lead">Habla con el administrador del equipo.</p>
+    <h1>Recibimos tu inscripción</h1>
+    <p class="pub-lead">Si el correo es válido, ya quedó registrado o un administrador te contactará. Si ya tienes cuenta, entra con tu contraseña. Si la olvidaste, pídele al administrador un enlace nuevo.</p>
     {% endif %}
     <p><a class="btn pub-btn" href="{% url 'accounts:login' %}">Ir a entrar</a></p>
   </div>
