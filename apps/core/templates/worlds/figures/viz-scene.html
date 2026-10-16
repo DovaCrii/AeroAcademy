@@ -1,0 +1,28 @@
+{# Escena y render: cada toma es un cuadro; lo ya renderizado crece de izquierda a derecha con el avance y el resto queda en alambre. #}
+<svg class="fg fg-scene" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y renderizaste {{ fg.done }}.</title>
+  <defs>
+    <pattern id="fg-wire" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" class="fg-wire-line"/></pattern>
+    {% for s in fg.items %}<clipPath id="fg-clip{{ s.idx }}"><rect x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.rw }}" height="{{ s.fh }}"/></clipPath>{% endfor %}
+  </defs>
+  {% include "worlds/figures/_chips.html" %}
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-shot{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-slab" x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.fw }}" height="{{ s.fh }}"/>
+      <rect x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.fw }}" height="{{ s.fh }}" fill="url(#fg-wire)"/>
+      <g clip-path="url(#fg-clip{{ s.idx }})">
+        <rect class="fg-sky" x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.fw }}" height="{{ s.fh }}"/>
+        <circle class="fg-sun" cx="{{ s.sun_x }}" cy="{{ s.sun_y }}" r="8"/>
+        <path class="fg-hills" d="{{ s.ground }}"/>
+      </g>
+      <rect class="fg-box" x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.fw }}" height="{{ s.fh }}"/>
+      {% if s.current %}<g class="fg-cam" aria-hidden="true"><rect x="{{ s.cam_x }}" y="{{ s.cam_y }}" width="16" height="10" rx="2"/><circle cx="{{ s.cam_x|add:'8' }}" cy="{{ s.cam_y|add:'5' }}" r="2.6"/></g>{% endif %}
+      <text class="fg-code" x="{{ s.cx }}" y="{{ s.ty_code }}" text-anchor="middle">{{ s.code|upper }}</text>
+      <text class="fg-name" x="{{ s.cx }}" y="{{ s.ty_name }}" text-anchor="middle"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="{{ s.cx }}" y="{{ s.ty_pct }}" text-anchor="middle">{{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

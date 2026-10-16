@@ -332,7 +332,65 @@ def _lanes(items, labels, pct):
     return {"w": W, "h": max(170, top + max(count) * pitch + 8), "heads": heads}
 
 
+def _frames(items, labels, pct):
+    """Escena y render: cada toma es un cuadro con cámara, luz y horizonte; la parte ya renderizada crece de izquierda
+    a derecha con el avance y el resto queda en alambre."""
+    n = len(items)
+    per_row, cells = _grid(n, 4, 176)
+    top, pitch, fw, fh = 56, 156, 120, 76
+    for s, (_col, row, cx) in zip(items, cells, strict=True):
+        x0, y0 = cx - fw // 2, top + row * pitch
+        s.update(
+            cx=cx,
+            x0=x0,
+            y0=y0,
+            fw=fw,
+            fh=fh,
+            rw=round(fw * s["pct"] / 100),
+            sun_x=x0 + 92,
+            sun_y=y0 + 22,
+            ground=f"M{x0} {y0 + 52}L{x0 + 30} {y0 + 40}L{x0 + 60} {y0 + 50}L{x0 + 95} {y0 + 36}L{x0 + fw} {y0 + 48}V{y0 + fh}H{x0}Z",
+            cam_x=x0 + fw - 22,
+            cam_y=y0 - 16,
+            label=clip(s["alias"] or s["short"], 18),
+            ty_code=y0 + 96,
+            ty_name=y0 + 112,
+            ty_pct=y0 + 128,
+        )
+        _marks(s, cx - 22, y0 + 146)
+    rows = (n + per_row - 1) // per_row
+    return {"w": W, "h": top + rows * pitch + 4, "chips": _chips(labels, 90, w=110, gap=40)}
+
+
+def _iso_stack(items, labels, pct):
+    """Modelo por disciplinas: losas en isométrico, apiladas y separadas (vista explosionada); cada una se rellena con
+    el avance de su modelo y se alinean por ejes para la coordinación."""
+    n = len(items)
+    pitch, top = 40, 48
+    for i, s in enumerate(items):
+        y = top + (n - 1 - i) * pitch
+        fill_w = round(300 * s["pct"] / 100)
+        s.update(
+            y=y,
+            top_face=f"110,{y + 22} 410,{y + 22} 470,{y} 170,{y}",
+            fill_face=f"110,{y + 22} {110 + fill_w},{y + 22} {170 + fill_w},{y} 170,{y}",
+            edge_y=y + 22,
+            label=clip(s["alias"] or s["short"], 20),
+            ty_name=y + 12,
+            ty_meta=y + 28,
+        )
+        _marks(s, 690, y + 14, 2)
+    return {
+        "w": W,
+        "h": top + n * pitch + 24,
+        "guide_top": top + 22,
+        "guide_bot": top + (n - 1) * pitch + 30,
+    }
+
+
 LAYOUTS = {
+    "frames": _frames,
+    "iso-stack": _iso_stack,
     "iso": _iso,
     "lanes": _lanes,
     "stack": _stack,

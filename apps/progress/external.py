@@ -156,6 +156,12 @@ def _stations(chapters):
                     alias=stake_label(course["obj"].resource.title, 40),
                 )
             )
+    names = [s["alias"] for s in out]
+    for s in out:
+        if (
+            names.count(s["alias"]) > 1
+        ):  # dos cursos con el mismo comienzo: más palabras para distinguirlos
+            s["alias"] = stake_label(s["short"], 40, 4)
     return out
 
 
@@ -166,13 +172,13 @@ MARKER_RISE = (
 )
 
 
-def stake_label(title, limit):
-    """Rótulo corto de una estaca: las 2 primeras palabras con contenido del título del curso (nunca la *key*)."""
+def stake_label(title, limit, count=2):
+    """Rótulo corto de una estaca: las `count` primeras palabras con contenido del título del curso (nunca la *key*)."""
     words = [
         w for w in str(title).split() if w.strip("-–—·:.") and not w.isdigit()
     ]  # sin «14 -» de numeración
     useful = [w for w in words if w.lower().strip(".,:;") not in _FILLER] or words
-    text = " ".join(useful[:2])
+    text = " ".join(useful[:count])
     return text if len(text) <= limit else text[: max(limit - 1, 1)].rstrip() + "…"
 
 

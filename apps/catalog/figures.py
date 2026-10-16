@@ -73,6 +73,8 @@ DRAWN = {
     "capture-twin",
     "plant-iso",
     "doc-flow",
+    "viz-scene",
+    "building-model",
 }
 
 

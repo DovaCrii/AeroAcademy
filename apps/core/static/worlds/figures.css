@@ -97,6 +97,18 @@
 .fg-doc.lane2 .fg-bar{fill:var(--fg-ok)}
 .fg-doc.lane0 .fg-slab{fill:color-mix(in srgb,var(--fg-hair) 30%,var(--fg-paper))}
 
+/* viz-scene: tomas con alambre y render */
+.fg-wire-line{fill:none;stroke:var(--fg-hair);stroke-width:1}
+.fg-sky{fill:color-mix(in srgb,var(--fg-acc) 24%,var(--fg-paper))}
+.fg-sun{fill:var(--fg-warn)}
+.fg-hills{fill:color-mix(in srgb,var(--fg-ok) 60%,var(--fg-paper))}
+.fg-cam rect,.fg-cam circle{fill:var(--fg-paper);stroke:var(--fg-acc);stroke-width:2}
+
+/* building-model: losas isométricas */
+.fg-edge{fill:color-mix(in srgb,var(--fg-ink) 25%,var(--fg-paper));stroke:var(--fg-line);stroke-width:1}
+.fg-slabiso.on .fg-box{stroke:var(--fg-acc);stroke-width:3}
+.fg-slabiso .fg-box{stroke-linejoin:round}
+
 @media (prefers-reduced-motion:no-preference){
   .fg-st .fg-box{transition:stroke .15s}
 }
