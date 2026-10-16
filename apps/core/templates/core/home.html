@@ -200,6 +200,8 @@
     <p class="w-ov-cta"><a class="btn" href="{% url 'paths:index' %}">Ver mis rutas</a><a class="btn ghost" href="{% url 'credentials:mine' %}">Mis certificados</a></p>
   </div>
 </section>
+{% include "community/partials/team_talk.html" with tt_lead="Participa: comparte ideas, propone mejoras y sigue lo que se está haciendo." %}
+
 <section class="w-team" id="equipo" style="background-image:url('{% static 'core/img/equipo.jpg' %}')">
   <div class="w-team-in">
     <span class="kicker">Equipo · Proceso</span>

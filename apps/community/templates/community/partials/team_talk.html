@@ -1,0 +1,17 @@
+{% load core_extras %}{% if team_talk %}<section class="team-talk" id="conversaciones" aria-labelledby="tt-h">
+  <h2 id="tt-h">Conversaciones del equipo</h2>
+  <p class="sub">{{ tt_lead|default:"Para ideas, propuestas y el avance de lo que hacemos juntos." }}</p>
+  <ul class="tt-cards">
+    {% for c in team_talk %}
+    <li class="tt-card">
+      <a class="tt-main" href="{% url 'community:forum' %}?categoria={{ c.slug }}">
+        {% doodle c.doodle class="dd tt-ico" %}
+        <b>{{ c.name }}</b>
+        <span>{{ c.description }}</span>
+        <em>{{ c.count }} hilo{{ c.count|pluralize }}</em>
+      </a>
+      {% if c.slug == "seguimiento" %}<a class="tt-sec" href="{% url 'knowledge:improvements' %}">Ver las mejoras en curso</a>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>{% endif %}
