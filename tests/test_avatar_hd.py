@@ -145,12 +145,18 @@ def test_hd_sprites_use_the_palette_and_never_the_engine_keys():
     palette = hd_render.palette_hd(engine.clean_config({}))
     for category, art in hd.HD.items():
         for option, sprite in art.items():
-            for part in sprite.values() if "rows" not in sprite else [sprite]:
-                for line in part["rows"]:
-                    assert set(line) <= set(palette) | {"."} and not set(line) & set("1234"), (
-                        category,
-                        option,
-                    )
+            parts = sprite if isinstance(sprite, list) else [sprite]
+            for part in parts:
+                if "rows" not in part:  # pelo y gorros: {"front": …, "back": …}
+                    subparts = [p for p in part.values() if p]
+                else:
+                    subparts = [part]
+                for sub in subparts:
+                    for line in sub["rows"]:
+                        assert set(line) <= set(palette) | {"."} and not set(line) & set("1234"), (
+                            category,
+                            option,
+                        )
 
 
 def test_sprite_helper_validates_its_space():

@@ -136,8 +136,13 @@ def main(argv):
         slugs = careers or list(engine.CLASSES)
         tiles = []
         for background in (None, 18):  # oscuro (el de su look) y papel
-            for slug in slugs:
+            for entry in slugs:
+                slug, _, prop = entry.partition(
+                    ":"
+                )  # «carrera:herramienta» cambia la herramienta del look
                 look = engine.apply_career({}, slug)
+                if prop:
+                    look["prop"] = prop
                 look.update(cfg)
                 if background is not None and "background" not in cfg:
                     look["background"] = background

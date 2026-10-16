@@ -158,11 +158,12 @@ def validate_hd(categories=None):
             if option not in options:
                 errors.append(f"hd/{category}: «{option}» no es una opción del catálogo")
                 continue
-            sprites = (
-                {"front": art["front"], "back": art["back"]}
-                if hd.CATEGORIES[category]
-                else {"": art}
-            )
+            if hd.CATEGORIES[category]:
+                sprites = {"front": art["front"], "back": art["back"]}
+            elif isinstance(art, list):  # equipo en varias zonas (el control y el dron)
+                sprites = {str(i): piece for i, piece in enumerate(art)}
+            else:
+                sprites = {"": art}
             for part, sprite in sprites.items():
                 where = f"hd/{category}/{option}" + (f"/{part}" if part else "")
                 if sprite is None:

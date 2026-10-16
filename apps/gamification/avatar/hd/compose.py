@@ -49,8 +49,10 @@ def _layer(grid, category, option, rows, *, part=None, only_on=None, clip_face=F
     art = HD[category].get(option)
     if art is not None:
         art = art[part] if part else art
-        if art:
-            _paint_sprite(grid, art, only_on, clip_face)
+        pieces = art if isinstance(art, list) else [art]  # el equipo grande puede ser varias piezas
+        for piece in pieces:
+            if piece:
+                _paint_sprite(grid, piece, only_on, clip_face)
         return
     _paint_rows(grid, up2(rows), only_on)
 

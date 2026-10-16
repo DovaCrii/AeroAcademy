@@ -89,8 +89,6 @@ def up2(rows):
     return out
 
 
-from . import (  # noqa: E402,F401  (registra las piezas HD; va al final por el registro `HD`)
-    face,
-    facial_hair,
-    glasses,
-)
+# Registran las piezas HD al importarse; van al final porque necesitan el registro HD ya definido.
+from ..parts import gear  # noqa: E402,F401
+from . import face, facial_hair, glasses  # noqa: E402,F401
