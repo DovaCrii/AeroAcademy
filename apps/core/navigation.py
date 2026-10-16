@@ -1,7 +1,7 @@
 """Navegación principal de la cabecera: UN solo lugar define qué va en la barra y qué va en «Más».
 
-Para mover una sección (por ejemplo Certificados) basta con cambiar de tupla; la plantilla, el menú
-hamburguesa y las pruebas leen estas listas. Producto: docs/DECISIONES.md (Certificados en «Más»).
+Para mover una sección basta con cambiar de tupla; la plantilla, el menú
+hamburguesa y las pruebas leen estas listas. Criterio de producto: docs/DECISIONES.md (D37).
 """
 
 from dataclasses import dataclass
@@ -19,18 +19,18 @@ class NavItem:
     lead_only: bool = False
 
 
-# Cinco principales: nunca se cortan ni se envuelven (ver base.css).
+# Seis principales (destinos del propósito de la plataforma): nunca se cortan ni se envuelven (ver base.css).
 MAIN_NAV = (
     NavItem("Inicio", "core:home", "core", only=("home",)),
     NavItem("Rutas", "paths:index", "paths"),
     NavItem("Catálogo", "catalog:resources", "catalog"),
+    NavItem("Certificados", "credentials:mine", "credentials"),
     NavItem("Foro", "community:forum", "community", exclude=("moderation",)),
     NavItem("Equipo", "team:board", "team"),
 )
 
 # Secundarias: viven en el menú «Más» (y en la hamburguesa bajo 1024 px).
 MORE_NAV = (
-    NavItem("Certificados", "credentials:mine", "credentials"),
     NavItem("Documentos", "library:index", "library"),
     NavItem("Conocimiento", "knowledge:index", "knowledge"),
     NavItem("Gremio", "gamification:directory", "gamification", only=("directory",)),

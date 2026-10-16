@@ -8,8 +8,8 @@ from django.conf import settings
 
 from apps.core.navigation import MAIN_NAV, MORE_NAV
 
-MAIN_HREFS = ["/", "/rutas/", "/catalogo/", "/foro/", "/equipo/"]
-MORE_LABELS = ["Certificados", "Documentos", "Conocimiento", "Gremio", "DGAC", "Ayuda"]
+MAIN_HREFS = ["/", "/rutas/", "/catalogo/", "/certificados/", "/foro/", "/equipo/"]
+MORE_LABELS = ["Documentos", "Conocimiento", "Gremio", "DGAC", "Ayuda"]
 CORE_CSS = Path(settings.BASE_DIR) / "apps/core/static/core"
 
 
@@ -61,10 +61,17 @@ def nav_groups(html):
     return p.groups
 
 
-def test_header_has_five_primary_links_and_more(member_client):
+def test_header_has_six_primary_links_and_more(member_client):
     g = nav_groups(member_client.get("/rutas/").content.decode())
     assert [h for _, h in g["nav-main"]] == MAIN_HREFS
-    assert [t for t, _ in g["nav-main"]] == ["Inicio", "Rutas", "Catálogo", "Foro", "Equipo"]
+    assert [t for t, _ in g["nav-main"]] == [
+        "Inicio",
+        "Rutas",
+        "Catálogo",
+        "Certificados",
+        "Foro",
+        "Equipo",
+    ]
     html = member_client.get("/rutas/").content.decode()
     assert '<details class="nav-more">' in html
 
@@ -73,7 +80,7 @@ def test_more_menu_contains_secondary_sections(member_client, client_for, lead):
     g = nav_groups(member_client.get("/").content.decode())
     assert [t for t, _ in g["nav-more"]] == MORE_LABELS
     assert len(g["nav-more"]) <= 7
-    assert "/certificados/" not in [h for _, h in g["nav-main"]]
+    assert "/certificados/" not in [h for _, h in g["nav-more"]]
     assert "Moderación" not in [t for t, _ in g["nav-more"]]
     lead_nav = nav_groups(client_for(lead.login).get("/").content.decode())
     assert [t for t, _ in lead_nav["nav-more"]] == [*MORE_LABELS, "Moderación"]
@@ -96,8 +103,8 @@ def test_current_section_is_marked_and_more_is_highlighted(member_client):
 
 def test_main_nav_is_defined_in_one_place():
     labels = [i.label for i in MAIN_NAV]
-    assert labels == ["Inicio", "Rutas", "Catálogo", "Foro", "Equipo"]
-    assert "Certificados" in [i.label for i in MORE_NAV]
+    assert labels == ["Inicio", "Rutas", "Catálogo", "Certificados", "Foro", "Equipo"]
+    assert "Certificados" not in [i.label for i in MORE_NAV]
 
 
 def test_user_menu_has_my_certificates_and_theme(member_client):
@@ -133,7 +140,7 @@ def test_header_css_has_no_horizontal_scroll_and_burger():
     css = (CORE_CSS / "base.css").read_text(encoding="utf-8")
     nav_main = re.search(r"\.nav-main\{[^}]*\}", css).group(0)
     assert "overflow-x" not in nav_main and "mask" not in nav_main
-    assert "max-width:1023px" in css and ".nav-burger{display:block}" in css
+    assert "max-width:1100px" in css and ".nav-burger{display:block}" in css
 
 
 def test_tokens_define_elevation_and_discipline_accents():

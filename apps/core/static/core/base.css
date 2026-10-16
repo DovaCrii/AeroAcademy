@@ -24,8 +24,8 @@ body{line-height:var(--lh-body);letter-spacing:.002em}
 .skip:focus{left:8px;top:8px}
 
 /* ── cabecera ─────────────────────────────────────────────────────────────
-   Una sola fila: marca · navegación (5 principales + «Más») · campana · persona (anillo de XP, tema y salir dentro).
-   Bajo 1024 px la navegación pasa a la hamburguesa «Menú» (details, sin JS). Nada se corta ni se envuelve. */
+   Una sola fila: marca · navegación (6 principales + «Más») · campana · persona (anillo de XP, tema y salir dentro).
+   Bajo 1100 px la navegación pasa a la hamburguesa «Menú» (details, sin JS). Nada se corta ni se envuelve. */
 .top{position:sticky;top:0;z-index:30;box-shadow:var(--elev-2);background:var(--header-bg);-webkit-backdrop-filter:saturate(1.4) blur(12px);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--hair);padding-top:env(safe-area-inset-top,0px)}
 .top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--scan) 18%,var(--amber) 50%,var(--scan) 82%,transparent);opacity:.9;pointer-events:none}
 .top .wrap{position:relative;max-width:1440px;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;column-gap:6px;min-height:60px}
@@ -120,7 +120,7 @@ code,kbd,samp,pre{font-family:var(--font-mono);font-size:.92em}
 .waiting{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
 .teo-px{image-rendering:pixelated;width:96px;height:96px}
 
-@media (max-width:1023px){
+@media (max-width:1100px){
   /* Hamburguesa: los principales y «Más» pasan a un solo menú; la cabecera sigue en una fila. */
   .top .nav-main,.top .nav-more{display:none}
   .top .nav-burger{display:block}

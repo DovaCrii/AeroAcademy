@@ -31,7 +31,7 @@
       {% include "core/partials/mark.html" with cls="mark" %}
       <span class="brandtxt"><span class="cap">{{ BRAND_PLATFORM }}</span><span class="badge101"><span class="bt">Levantamiento Digital</span><b>101</b></span></span>
     </a>
-    {# Cinco principales + «Más» (details: funciona sin JS). Bajo 1024 px todo pasa a la hamburguesa «Menú». Las listas viven en apps/core/navigation.py. #}
+    {# Seis principales + «Más» (details: funciona sin JS). Bajo 1100 px todo pasa a la hamburguesa «Menú». Las listas viven en apps/core/navigation.py. #}
     <nav class="nav" aria-label="Secciones">{% block nav %}<div class="nav-main">{% for i in nav_main %}<a href="{{ i.url }}"{% if i.current %} aria-current="page"{% endif %}>{{ i.label }}</a>{% endfor %}</div><details class="nav-more"><summary{% if nav_more_on %} class="on"{% endif %}>Más</summary><div class="nav-pop">{% for i in nav_more %}<a href="{{ i.url }}"{% if i.current %} aria-current="page"{% endif %}>{{ i.label }}</a>{% endfor %}</div></details><details class="nav-burger"><summary>Menú</summary><div class="nav-pop">{% for i in nav_main %}<a href="{{ i.url }}"{% if i.current %} aria-current="page"{% endif %}>{{ i.label }}</a>{% endfor %}<hr>{% for i in nav_more %}<a href="{{ i.url }}"{% if i.current %} aria-current="page"{% endif %}>{{ i.label }}</a>{% endfor %}</div></details>{% endblock %}</nav>
     {# Huecos: campana y nivel (el nivel va como anillo de XP en el chip de la persona). #}
     <div class="cell slot" data-slot="bell">{% block slot_bell %}{% include "core/partials/bell.html" %}{% endblock %}</div>
