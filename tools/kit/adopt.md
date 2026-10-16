@@ -22,7 +22,9 @@ Pensado para AeroConvert, AeroControl, AeroBim y los que vengan (AeroLink, Aerop
    «Cómo trabajamos» sin borrar nada.
 6. **`.claude/settings.json`.** Desde `settings.json.tpl`; si existe, fusionar `permissions.allow` y `permissions.deny`.
    Ojo: `Read(./.env.*)` también bloquea `.env.example`; si el agente debe leerlo, quita esa línea y deja `.env` y las demás.
-7. **Skills.** Copiar `skills/*` a `.claude/skills/` los que no existan (no duplicar equivalentes).
+7. **Skills y agentes.** Copiar `skills/*` a `.claude/skills/` y `agents/*` a `.claude/agents/` los que no existan (no
+   duplicar equivalentes; si ya hay uno parecido, se alinea con `orquestar`). Revisar que cada agente tenga `model:`
+   (opus para `disenador` y `revisor`, haiku para `verificador`).
 8. **Privacidad.** Copiar `privacy_scan.py` a `tools/` (o `tools/kit/`), correrlo; los hallazgos reales se corrigen, los falsos positivos
    (dominios ficticios, datos de prueba) van a `.privacy-scan.json`. Agregar `ci-privacy-step.yml` al CI.
    Confirmar que `.gitignore` incluye `private/`, `.env`, `.env.*` y `!.env.example`.

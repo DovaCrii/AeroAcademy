@@ -25,8 +25,11 @@ Regla de fondo: **el agente construye, sube, abre el PR, espera el CI en verde y
    - título: `Bloque <n> · <tema>`;
    - cuerpo: qué cambia, criterios de aceptación con su prueba, cómo probarlo y lo pendiente;
    - sin etiquetas ni revisores automáticos que no se hayan pedido.
-6. Comprueba el CI del PR (`gh pr checks`) y corrige si falla.
-7. Informa en el chat: enlace del PR, resultado del CI y qué decide la persona (fusionar, pedir cambios).
+6. Publica y cierra con la skill `cerrar-pendientes`: espera la corrida real del CI, corrige si falla y, en verde,
+   fusiona con merge commit (de abajo hacia arriba si están apilados).
+7. Informa en el chat: enlace del PR, resultado del CI, qué se fusionó, si hay que desplegar y qué decide la persona.
+
+Quién hace cada fase (Opus diseña y revisa, Sonnet implementa, Haiku verifica): skill `orquestar`.
 
 ## Fusiones
 
@@ -34,7 +37,9 @@ La regla completa está en **`docs/FUSIONES.md`**: fusiona el agente con el CI e
 
 ## Qué NO hace sin que se lo pidan
 
-- Fusionar PR, cerrar issues, borrar ramas remotas o publicar *releases*.
+- Fusionar con el CI en rojo o saltado, con *squash* o *rebase*, o PR de otra persona o sesión.
+- Cerrar issues o PR sin fusionar, borrar ramas remotas o publicar *releases*.
+- Desplegar o tocar producción (eso lo hace la persona).
 - Subir secretos (`NIM_API_KEY`, `SECRET_KEY`, `.env`), bases de datos ni certificados reales.
 - Cambiar la visibilidad del repositorio, sus *settings* o las reglas de protección de `main`.
 

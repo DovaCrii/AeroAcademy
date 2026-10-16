@@ -53,7 +53,8 @@ Si ya hay una sección equivalente, se deja la existente. Copia solo lo que falt
 - Pruebas y lint en verde, también en el CI del PR.
 - Documentación actualizada ({{DOC_PLAN}}).
 - Revisión de privacidad en verde (`python tools/kit/privacy_scan.py`).
-- Rama subida y PR abierto con resumen en español (qué cambia, cómo probarlo, qué queda).
+- Diff revisado (agente `revisor`).
+- PR con resumen en español (qué cambia, cómo probarlo, qué queda), CI en verde y fusionado con merge commit (skill `cerrar-pendientes`).
 
 ## Flujo con GitHub
 
@@ -66,4 +67,6 @@ Si ya hay una sección equivalente, se deja la existente. Copia solo lo que falt
 
 ## Skills y subagentes (si el proyecto los usa)
 
-Tabla de `.claude/skills/` y `.claude/agents/`, y la política de modelos (Opus orquesta, Sonnet construye, Haiku verifica).
+Tabla de `.claude/skills/` y `.claude/agents/` (con su `model`), y el método de la skill `orquestar`: Entender →
+Diseñar (Opus 5.5 medio) → Implementar (Sonnet 5.5 medio) → Verificar (Haiku 5.5 medio) → Revisar (Opus 5.5 medio) →
+Publicar y cerrar (`cerrar-pendientes`). Se pregunta a la persona ante seguridad, privacidad o decisiones de producto.

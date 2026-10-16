@@ -191,7 +191,7 @@ Reglas de la plantilla:
 - [ ] **Público o privado:** lo que identifica clientes, proyectos, precios o procedimientos internos **no entra al repo**
   (carpeta `private/`, fuera de git, instalada solo en la VM). Revisar con búsqueda de texto antes de subir.
 - [ ] **Tema oscuro y claro**, y legible a 375 px; texto de cada diapositiva ≤ 70 caracteres por línea.
-- [ ] **Enlaces verificados** (el agente `verificador-enlaces`); marcar `verify_url` solo si falta confirmar.
+- [ ] **Enlaces verificados** (el agente `verificador` con `revisar_enlaces --externos`); marcar `verify_url` solo si falta confirmar.
 - [ ] **Quiz:** keys estables, una sola respuesta correcta, explicación, sin datos personales.
 - [ ] **Nala (la asistente; el código conserva el nombre `teo`)** solo recibe contenido público: nada privado va al índice de búsqueda ni a ninguna API externa.
 - [ ] Correr `seed_catalog --dry-run`, `pytest` y `ruff`; recorrer la ruta en el navegador.
