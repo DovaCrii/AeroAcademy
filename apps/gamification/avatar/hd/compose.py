@@ -9,6 +9,7 @@ from .. import engine
 from ..parts import body, poses
 from . import HD, OFFSET, SCALE, STAGE, up2
 from .detail import detail_pass
+from .hands import POSE_HANDS
 
 OX, OY = OFFSET
 # Ventana de la cara en el escenario: ni el pelo ni un gorro dibujan aquí.
@@ -80,6 +81,8 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE):
     _paint_rows(grid, up2(body.BASE))
     _paint_rows(grid, up2(body.BODY_PATCH[cfg["body"]]))
     _apply_pose(grid, poses.POSES.get(pose, {}))
+    if pose in POSE_HANDS:
+        _paint_sprite(grid, POSE_HANDS[pose])  # la mano de la pose, ya en HD
     _paint_rows(grid, up2(body.LEGWEAR[cfg["legwear"]]))
     _layer(grid, "outfit", cfg["outfit"], engine.OUTFITS[cfg["outfit"]], only_on={"O"})
     _layer(grid, "neckwear", cfg["neckwear"], engine.NECKWEAR[cfg["neckwear"]])

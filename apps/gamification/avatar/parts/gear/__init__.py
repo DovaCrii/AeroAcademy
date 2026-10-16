@@ -15,6 +15,7 @@ Contrato para quien dibuje equipo (docs/AVATAR_RESOLUCION.md, § 3):
 """
 
 from ... import hd
+from ...hd.hands import GRIP
 
 
 class Canvas:
@@ -79,7 +80,7 @@ class Canvas:
 
     def hand(self, x=60, y=62):
         """La mano derecha que sujeta la herramienta (4×4; en HD-7 se redibuja por pose)."""
-        self.paste(x, y, [".KK.", "KSSK", "KSSK", ".KK."])
+        self.paste(x, y, GRIP)
 
     def sprite(self, box=None):
         """Sprite recortado a la caja de lo dibujado (o a `box = (x0, y0, x1, y1)`)."""
