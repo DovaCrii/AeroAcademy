@@ -68,6 +68,9 @@ DRAWN = {
     "stack",
     "pipeline-ai",
     "data-flow",
+    "survey-profile",
+    "survey-gis",
+    "capture-twin",
 }
 
 

@@ -58,6 +58,29 @@
   @keyframes fg-dash{to{stroke-dashoffset:-26}}
 }
 
+/* survey-profile: perfil, PR (triángulos) y datum */
+.fg-earth{fill:color-mix(in srgb,var(--fg-acc) 14%,transparent);stroke:none}
+.fg-axis{stroke:var(--fg-soft);stroke-width:1.2}
+.fg-datum{stroke:var(--fg-ink);stroke-width:1.5;stroke-dasharray:10 4 2 4}
+.fg-profile{stroke:var(--fg-soft);stroke-width:2;stroke-dasharray:6 5}
+.fg-profile.done{stroke:var(--fg-acc);stroke-width:3.5;stroke-dasharray:none}
+.fg-drop{stroke:var(--fg-hair);stroke-width:1;stroke-dasharray:3 4}
+.fg-tri{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:1.8;stroke-linejoin:round}
+.fg-pr.part .fg-tri{fill:color-mix(in srgb,var(--fg-acc) 45%,var(--fg-paper))}
+.fg-pr.done .fg-tri{fill:var(--fg-ok);stroke:var(--fg-ink)}
+.fg-pr.on .fg-tri{stroke:var(--fg-acc);stroke-width:3}
+
+/* capture-twin: nube de puntos, malla y sensor */
+.fg-dot{fill:var(--fg-hair)}
+.fg-dot.on{fill:var(--fg-acc)}
+.fg-tile.done .fg-dot.on{fill:var(--fg-ok)}
+.fg-mesh{fill:none;stroke:var(--fg-ok);stroke-width:1;opacity:.7}
+.fg-sensor{fill:var(--fg-warn)}
+.fg-sensor-ring{fill:none;stroke:var(--fg-warn);stroke-width:1.5;opacity:.6}
+@media (prefers-reduced-motion:no-preference){
+  .fg-sensor-ring{animation:fg-ping 2.2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes fg-ping{from{transform:scale(.5);opacity:.9}to{transform:scale(1.4);opacity:0}}
+}
 @media (prefers-reduced-motion:no-preference){
   .fg-st .fg-box{transition:stroke .15s}
 }

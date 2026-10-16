@@ -1,0 +1,24 @@
+{# Perfil topográfico: puntos de referencia (PR) sobre el terreno, con su caída al datum. El tramo firme es lo levantado. #}
+<svg class="fg fg-survey" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y levantaste {{ fg.done }}.</title>
+  <polygon class="fg-earth" points="{{ fg.ground }}"/>
+  <line class="fg-axis" x1="36" y1="80" x2="36" y2="{{ fg.datum }}"/>
+  {% for t in fg.ticks %}<line class="fg-axis" x1="36" y1="{{ t }}" x2="44" y2="{{ t }}"/>{% endfor %}
+  <text class="fg-tag" x="20" y="171" text-anchor="middle" transform="rotate(-90 20 171)">{{ fig.labels.axis }}</text>
+  <line class="fg-datum" x1="36" y1="{{ fg.datum }}" x2="740" y2="{{ fg.datum }}"/>
+  <text class="fg-tag" x="740" y="{{ fg.datum|add:'18' }}" text-anchor="end">{{ fig.labels.base }}</text>
+  {% for seg in fg.segments %}<line class="fg-profile{% if seg.done %} done{% endif %}" x1="{{ seg.x1 }}" y1="{{ seg.y1 }}" x2="{{ seg.x2 }}" y2="{{ seg.y2 }}"/>{% endfor %}
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-pr{% if s.current %} on{% endif %}{% if s.complete %} done{% elif s.started %} part{% endif %}">
+      <line class="fg-drop" x1="{{ s.x }}" y1="{{ s.drop_y }}" x2="{{ s.x }}" y2="{{ fg.datum }}"/>
+      <line class="fg-drop" x1="{{ s.x }}" y1="{{ s.lead_y1 }}" x2="{{ s.x }}" y2="{{ s.lead_y2 }}"/>
+      <polygon class="fg-tri fg-box" points="{{ s.tri }}"/>
+      <text class="fg-name" x="{{ s.x }}" y="{{ s.ty_name }}" text-anchor="middle"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="{{ s.x }}" y="{{ s.ty_pct }}" text-anchor="middle">{{ s.pct }} %</text>
+      <text class="fg-code" x="{{ s.x }}" y="{{ fg.datum|add:'18' }}" text-anchor="middle">{{ s.code|upper }}</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

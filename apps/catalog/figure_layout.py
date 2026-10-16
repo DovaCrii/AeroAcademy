@@ -8,6 +8,8 @@ Una *estación* es la unidad que dibuja la figura: un nivel en las rutas estruct
 (varias solo tienen un capítulo). Su forma común (`station`) la arman `progress.services` y `progress.external`.
 """
 
+import math
+
 W = 760  # ancho común del lienzo (viewBox 0 0 760 H)
 
 
@@ -17,11 +19,13 @@ def clip(text, limit):
     return text if len(text) <= limit else text[: max(limit - 1, 1)].rstrip() + "…"
 
 
-def station(code, name, pct, complete, *, fid, say, noun, marks=(), extra=0):
-    """Estación de una figura. `say` es el estado dicho en palabras para el `aria-label`."""
+def station(code, name, pct, complete, *, fid, say, noun, marks=(), extra=0, alias=""):
+    """Estación de una figura. `say` es el estado dicho en palabras para el `aria-label`; `alias`, el nombre corto
+    del rótulo (el completo va en `<title>` y en el `aria-label`)."""
     return {
         "code": code,
         "short": name,
+        "alias": alias,
         "pct": pct,
         "complete": complete,
         "fid": fid,
@@ -42,17 +46,27 @@ def layout(kind, stations, *, current_code=None, labels=None, pct=0):
     fn = LAYOUTS.get(kind)
     if fn is None:
         return None
-    items = [{**s, "idx": i, "current": s["code"] == current_code} for i, s in enumerate(stations)]
+    items, seen = [], False
+    for i, s in enumerate(stations):
+        # En rutas externas varias estaciones comparten capítulo: solo la primera marca «estás aquí».
+        here = s["code"] == current_code and not seen
+        seen = seen or here
+        items.append({**s, "idx": i, "current": here})
     out = fn(items, labels or {}, pct)
     done = sum(1 for s in items if s["complete"])
     return {"items": items, "total": len(items), "done": done, "pct": pct, **out}
 
 
-def _marks(s, mx, my):
-    """Ancla de las marcas del equipo: (mx, my) es el centro de la primera; las siguientes van 22 px a la derecha."""
+def _marks(s, mx, my, limit=3):
+    """Ancla de las marcas del equipo: (mx, my) es el centro de la primera; las siguientes van 22 px a la derecha.
+
+    Con un `limit` menor se muestran menos iniciales y el resto se suma a «+n» (figuras apretadas).
+    """
     s["mx"], s["my"] = mx, my
-    s["marks"] = [{**m, "dx": 22 * k} for k, m in enumerate(s["marks"])]
-    s["more_dx"] = 22 * len(s["marks"])
+    shown = s["marks"][:limit]
+    s["extra"] += len(s["marks"]) - len(shown)
+    s["marks"] = [{**m, "dx": 22 * k} for k, m in enumerate(shown)]
+    s["more_dx"] = 22 * len(shown)
 
 
 def _stack(items, labels, pct):
@@ -64,7 +78,7 @@ def _stack(items, labels, pct):
         s.update(
             y=y,
             mid=y + 22,
-            label=clip(s["short"], 34),
+            label=clip(s["alias"] or s["short"], 34),
             fill_w=round(380 * s["pct"] / 100),
         )
         _marks(s, 560, y + 18)
@@ -94,9 +108,10 @@ def _chips(labels, x0, y=8, w=100, h=26, gap=34):
     return out
 
 
-def _grid(n, per_row, pitch_x):
-    """Centros (columna, fila, x) de una grilla centrada: `per_row` estaciones por fila."""
-    per_row = max(1, min(n, per_row))
+def _grid(n, max_per_row, pitch_x):
+    """Centros (columna, fila, x) de una grilla centrada y equilibrada (6 estaciones: 3 + 3, no 5 + 1)."""
+    rows = max(1, -(-n // max_per_row))
+    per_row = max(1, -(-n // rows))
     x0 = (W - per_row * pitch_x) // 2 + pitch_x // 2
     return per_row, [(i % per_row, i // per_row, x0 + (i % per_row) * pitch_x) for i in range(n)]
 
@@ -112,7 +127,7 @@ def _pipeline(items, labels, pct):
         s.update(
             y=y,
             mid=y + band_h // 2,
-            label=clip(s["short"], 20),
+            label=clip(s["alias"] or s["short"], 20),
             fill_w=round(450 * s["pct"] / 100),
             cells=[{"x": 412 + k * 16, "on": k < lit} for k in range(10)],
         )
@@ -153,7 +168,7 @@ def _cylinders(items, labels, pct):
             y_bot=y0 + ry + body_h,
             fill_y=y0 + ry + body_h - fill_h,
             fill_h=fill_h,
-            label=clip(s["short"], 18),
+            label=clip(s["alias"] or s["short"], 18),
             ty_code=y0 + 84,
             ty_name=y0 + 100,
             ty_pct=y0 + 116,
@@ -171,4 +186,89 @@ def _cylinders(items, labels, pct):
     }
 
 
-LAYOUTS = {"stack": _stack, "pipeline": _pipeline, "cylinders": _cylinders}
+def _survey(items, labels, pct):
+    """Perfil topográfico: una estación por punto de referencia (PR) sobre el terreno, con su caída al datum.
+
+    El tramo entre dos PR es trazo firme cuando el primero está levantado y punteado si falta. Los rótulos se alternan
+    en dos alturas para que quepan aun con 13 puntos.
+    """
+    n = len(items)
+    left, right, datum = 70, 690, 262
+    step = (right - left) / (n - 1) if n > 1 else 0
+    chars = max(8, min(18, int((2 * step - 12) / 7.8))) if n > 1 else 18
+    for i, s in enumerate(items):
+        x = round(left + step * i) if n > 1 else W // 2
+        y = round(150 + 34 * math.sin(i * 1.3) + 12 * math.cos(i * 2.9))
+        s.update(
+            x=x,
+            y=y,
+            tri=f"{x},{y - 14} {x - 10},{y + 4} {x + 10},{y + 4}",
+            label=clip(s["alias"] or s["short"], chars),
+            ty_name=38
+            + (i % 2) * 26,  # dos filas fijas de rótulos, con un trazo hasta el triángulo
+            lead_y1=44 + (i % 2) * 26,
+            lead_y2=y - 17,
+            ty_pct=y + 24,
+            drop_y=y + 5,
+        )
+        _marks(s, x - 11, y + 46, 3 if step >= 66 else 1)
+    segments = [
+        {"x1": a["x"], "y1": a["y"], "x2": b["x"], "y2": b["y"], "done": a["complete"]}
+        for a, b in zip(items, items[1:], strict=False)
+    ]
+    ground = " ".join(f"{s['x']},{s['y']}" for s in items)
+    return {
+        "w": W,
+        "h": 316,
+        "datum": datum,
+        "segments": segments,
+        "ground": f"{items[0]['x']},{datum} {ground} {items[-1]['x']},{datum}" if items else "",
+        "ticks": [100, 140, 180, 220],
+    }
+
+
+def _tiles(items, labels, pct):
+    """Del escaneo al gemelo: cada fase es un recuadro de 5 × 5 puntos que se encienden con el avance (nube); al
+    completarla se le traza la malla y se enciende el sensor."""
+    n = len(items)
+    per_row, cells = _grid(n, 5, 152)
+    top, pitch, side = 56, 168, 84
+    for s, (_col, row, cx) in zip(items, cells, strict=True):
+        y0 = top + row * pitch
+        lit = -(-25 * s["pct"] // 100)
+        dots = [
+            {"x": cx - 28 + c * 14, "y": y0 + 14 + r * 14, "on": r * 5 + c < lit}
+            for r in range(5)
+            for c in range(5)
+        ]
+        mesh = " ".join(
+            [f"M{cx - 28} {y0 + 14 + k * 14}H{cx + 28}" for k in range(5)]
+            + [f"M{cx - 28 + k * 14} {y0 + 14}V{y0 + 70}" for k in range(5)]
+            + [f"M{cx - 28 + k * 14} {y0 + 14}l14 14" for k in range(4)]
+        )
+        s.update(
+            cx=cx,
+            y0=y0,
+            x0=cx - side // 2,
+            side=side,
+            dots=dots,
+            mesh=mesh if s["complete"] else "",
+            sensor_x=cx + side // 2 - 10,
+            sensor_y=y0 + 10,
+            label=clip(s["alias"] or s["short"], 18),
+            ty_code=y0 + 106,
+            ty_name=y0 + 122,
+            ty_pct=y0 + 138,
+        )
+        _marks(s, cx - 22, y0 + 156)
+    rows = (n + per_row - 1) // per_row
+    return {"w": W, "h": top + rows * pitch, "chips": _chips(labels, 74, w=100, gap=28)}
+
+
+LAYOUTS = {
+    "stack": _stack,
+    "pipeline": _pipeline,
+    "cylinders": _cylinders,
+    "survey": _survey,
+    "tiles": _tiles,
+}

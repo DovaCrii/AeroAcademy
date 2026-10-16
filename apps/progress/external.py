@@ -153,6 +153,7 @@ def _stations(chapters):
                     fid=course["obj"].key,
                     say=_STATE_SAY.get(state, "por hacer"),
                     noun="Curso",
+                    alias=stake_label(course["obj"].resource.title, 40),
                 )
             )
     return out
@@ -167,7 +168,9 @@ MARKER_RISE = (
 
 def stake_label(title, limit):
     """Rótulo corto de una estaca: las 2 primeras palabras con contenido del título del curso (nunca la *key*)."""
-    words = [w for w in str(title).split() if w]
+    words = [
+        w for w in str(title).split() if w.strip("-–—·:.") and not w.isdigit()
+    ]  # sin «14 -» de numeración
     useful = [w for w in words if w.lower().strip(".,:;") not in _FILLER] or words
     text = " ".join(useful[:2])
     return text if len(text) <= limit else text[: max(limit - 1, 1)].rstrip() + "…"

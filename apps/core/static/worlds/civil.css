@@ -34,6 +34,7 @@ body.world-civil{--sign:#FFC21A;--asphalt:#2B2F36;--slope:#3E8E4E;--relic:#8B5CF
 .cv-stake.rejected path{fill:var(--red);stroke:var(--ink)}
 .cv-stake.relic text{fill:var(--relic);font-weight:700}
 .cv-you{fill:var(--sign);stroke:var(--ink);stroke-width:2}
+.cv-sheet .fg{max-width:820px;margin:0 auto}
 .cv-you-l{stroke:var(--ink);stroke-width:1.2}
 .cv-you-t{font-size:9px;font-weight:800;fill:#14171C!important}
 .cv-sep{stroke:var(--ink);stroke-width:1}
