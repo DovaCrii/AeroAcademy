@@ -11,9 +11,20 @@
 </div>
 
 {% if is_admin %}
+<section class="mod-sec how-to" aria-labelledby="how-h">
+  <h2 id="how-h">Cómo dar de alta a una persona</h2>
+  <ol class="how-steps">
+    <li><b>Agrega el correo</b> en <a href="{% url 'team:people_add' %}">Agregar personas</a> o aprueba a quien ya pidió acceso (abajo, en su fila).</li>
+    <li><b>Genera el enlace:</b> el <em>enlace personal</em> en la fila de la persona (un uso, vence en 7 días) o el <em>enlace del equipo</em> aquí abajo.</li>
+    <li><b>Mándalo por un canal privado</b> (chat o correo directo). Se muestra una sola vez: cópialo al generarlo.</li>
+    <li><b>La persona crea su contraseña</b> al abrir el enlace, o entra directo si usa <span class="term">Tailscale</span> con su correo del equipo.</li>
+  </ol>
+  <p class="muted">Si el enlace venció o se perdió, genera otro: el anterior deja de servir. Más detalle en <code>docs/OPERACION.md</code>.</p>
+</section>
+
 <section class="mod-sec" aria-labelledby="tl-h">
   <h2 id="tl-h">Enlace de inscripción del equipo</h2>
-  <p class="muted">Un solo enlace para todos: lo mandas y cada persona se inscribe con su correo y su contraseña. Quien no esté en la lista queda pendiente hasta que la apruebes. Solo funciona dentro de la tailnet.</p>
+  <p class="muted">Un solo enlace para todos: lo mandas y cada persona se inscribe con su correo y su contraseña. Quien no esté en la lista queda pendiente hasta que la apruebes. El enlace abre la inscripción en <b>{{ academy_url }}</b>.</p>
   {% if team_link_url %}
   <p><b>Cópialo ahora: no se vuelve a mostrar.</b> Si lo pierdes, genera otro (el anterior deja de servir).</p>
   <input id="tl-in" class="copy-box" type="text" value="{{ team_link_url }}" readonly>
@@ -48,7 +59,7 @@
 
 <section class="mod-sec" aria-labelledby="inv-h">
   <h2 id="inv-h">Texto de invitación</h2>
-  <p class="muted">Cópialo y envíalo por correo o chat. No lleva claves; quien tiene su correo de Tailscale entra directo en <b>{{ academy_url }}</b>.{% if is_admin %} Para quien no, genera su enlace de registro en la fila (<b>Copiar enlace de registro</b>): trae contraseña propia.{% endif %} Cada fila de abajo trae el mismo texto con su nombre y correo.</p>
+  <p class="muted">Cópialo y envíalo por correo o chat. No lleva claves; quien tiene su correo de Tailscale entra directo en <b>{{ academy_url }}</b>.{% if is_admin %} Para quien no, genera su enlace de registro en la fila (<b>Generar enlace de registro</b>): trae contraseña propia.{% endif %} Cada fila de abajo trae el mismo texto con su nombre y correo.</p>
   <textarea id="inv-generic" class="copy-box" rows="11" readonly>{{ invitation }}</textarea>
   <p><button class="btn" type="button" data-copy="inv-generic">Copiar texto</button></p>
 </section>
@@ -92,7 +103,7 @@
           </details>
           {% if is_admin %}{% if row.can_link %}
           <form method="post" action="{% url 'team:person_signup_link' row.person.pk %}">{% csrf_token %}
-            <button class="btn" type="submit" title="Genera un enlace nuevo de un solo uso (7 días); el anterior deja de servir">Copiar enlace de registro</button>
+            <button class="btn" type="submit" title="Genera un enlace nuevo de un solo uso (7 días); el anterior deja de servir">Generar enlace de registro</button>
           </form>
           {% else %}<small class="muted">Aprueba a la persona para invitarla con contraseña.</small>{% endif %}{% endif %}</td>
       </tr>

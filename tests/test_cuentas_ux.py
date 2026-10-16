@@ -193,3 +193,17 @@ def test_account_pages_are_constant_in_queries(member, django_assert_max_num_que
     client.get("/cuenta/")
     with django_assert_max_num_queries(25):
         assert client.get("/cuenta/").status_code == 200
+
+
+# --- Equipo → Personas: paso a paso ------------------------------------------------------------------------------
+
+
+def test_people_page_has_step_by_step_for_admin_only(client_for, admin_person, lead, member):
+    html = client_for(admin_person.login).get("/equipo/personas/").content.decode()
+    assert "Cómo dar de alta a una persona" in html
+    assert html.count("<li><b>") >= 4
+    assert "Generar enlace de registro" in html
+    assert "Copiar enlace de registro" not in html
+    assert "Solo funciona dentro de la tailnet" not in html
+    lead_html = client_for(lead.login).get("/equipo/personas/").content.decode()
+    assert "Cómo dar de alta a una persona" not in lead_html
