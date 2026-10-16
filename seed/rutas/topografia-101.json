@@ -12,6 +12,7 @@
     "transversal"
   ],
   "world": "survey",
+  "figure": "survey-profile",
   "description": "Curso general para entender la topografía sin ser topógrafo: coordenadas, geodesia, equipos clásicos, GNSS, escáneres y drones, fotogrametría paso a paso, modelos de elevación, escaneo 3D, vuelo seguro, productos y aplicaciones. Con esquemas, misiones prácticas y quiz con casos reales de Chile.",
   "intro": {
     "title": "De la huincha al gemelo digital",

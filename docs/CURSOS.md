@@ -141,7 +141,7 @@ con la clave `slides` (presentación, ver esquema abajo), `guide`, `quiz` y `ima
 {
   "slug": "mi-curso-101", "title": "Mi curso 101 · Subtítulo", "program": "Curso interno · …",
   "platform": "interna", "kind": "structured", "vendor": "aeroacademy",
-  "products": [], "disciplines": ["transversal", "topografia"], "world": "survey",
+  "products": [], "disciplines": ["transversal", "topografia"], "world": "survey", "figure": "survey-profile",
   "description": "…", "intro": {…}, "flow": […], "glossary": […], "certification_goals": […],
   "levels": [{
     "code": "n0", "order": 0, "short": "Para qué sirve", "title": "1 · …", "estimated_hours": "2 h",
@@ -175,6 +175,11 @@ Navegación: `/rutas/<slug>/?nivel=<code>&paso=<portada|1..N|guia|practica|quiz|
 `slides` se ve como portada + guía + práctica + preguntas.
 
 Reglas de la plantilla:
+- **`figure`** (opcional, validado por `seed_catalog`): la figura y el vocabulario de la ruta (`pipeline-ai`, `data-flow`,
+  `survey-profile`, `capture-twin`, `plant-iso`, `doc-flow`, `viz-scene`, `building-model`, `drafting-sheet`, `building`,
+  `road-profile`, `flight-plan`…; tabla en `MUNDOS.md`). Se lee al dibujar la ruta, sin migración. Sin campo se usa la
+  de su disciplina. Una ruta fuera de arquitectura no debe mostrar «COTA», «Lámina» ni «Dibujo y modelado»
+  (`tests/test_figures.py` lo vigila).
 - Las **keys** (`nX-tY`, `nX-qY`) y los `code` de nivel son estables y solo se agregan al final: de ellas dependen XP,
   insignias y diploma. Las diapositivas son solo presentación y no los cambian.
 - Cada nivel: 6–10 diapositivas (concepto → cómo funciona → ejemplo chileno o de terreno → errores típicos → resumen),

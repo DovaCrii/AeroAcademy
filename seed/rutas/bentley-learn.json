@@ -16,6 +16,7 @@
     "civil-estructural"
   ],
   "world": "civil",
+  "figure": "road-profile",
   "allow_free_courses": true,
   "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. Esta ruta reúne MicroStation (base transversal de todo Bentley) y la línea de infraestructura civil: OpenRoads y OpenBridge. El resto de la suite tiene su propia ruta: OpenBuildings, OpenPlant, ProjectWise, iTwin y LumenRT.",
   "levels": [

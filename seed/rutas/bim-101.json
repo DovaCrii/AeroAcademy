@@ -12,6 +12,7 @@
     "arquitectura"
   ],
   "world": "architecture",
+  "figure": "building-lod",
   "description": "Curso general para entender BIM como proceso y no solo como 3D: madurez y dimensiones, roles y entregables, ISO 19650 y CDE, IFC y BCF, datos geoespaciales en el modelo, coordinación, as-built, gemelo digital, ciclo de vida y un caso de intervención en una instalación existente. Con esquemas, misiones y quiz con casos.",
   "intro": {
     "title": "Del plano al activo digital",

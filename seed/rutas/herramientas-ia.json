@@ -15,6 +15,7 @@
     "ia-datos"
   ],
   "world": "architecture",
+  "figure": "pipeline-ai",
   "levels": [
     {
       "code": "n0",

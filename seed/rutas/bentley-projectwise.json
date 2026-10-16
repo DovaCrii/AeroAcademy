@@ -13,6 +13,7 @@
     "transversal"
   ],
   "world": "civil",
+  "figure": "doc-flow",
   "allow_free_courses": false,
   "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. ProjectWise como entorno común de datos (CDE): transversal a todas las disciplinas.",
   "levels": [

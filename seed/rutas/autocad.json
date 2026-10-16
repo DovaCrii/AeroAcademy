@@ -13,6 +13,7 @@
     "transversal"
   ],
   "world": "mechanical",
+  "figure": "drafting-sheet",
   "levels": [
     {
       "code": "n0",

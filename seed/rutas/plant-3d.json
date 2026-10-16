@@ -13,6 +13,7 @@
     "mecanica"
   ],
   "world": "mechanical",
+  "figure": "plant-iso",
   "levels": [
     {
       "code": "n0",

@@ -11,6 +11,7 @@
   "topografia"
  ],
  "world": "aero",
+ "figure": "flight-plan",
  "description": "Ruta sintética para las pruebas.",
  "levels": [
   {

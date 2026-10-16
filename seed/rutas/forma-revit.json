@@ -16,6 +16,7 @@
     "mecanica"
   ],
   "world": "architecture",
+  "figure": "building",
   "levels": [
     {
       "code": "n0",

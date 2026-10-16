@@ -14,6 +14,7 @@
     "civil-estructural"
   ],
   "world": "civil",
+  "figure": "building-model",
   "allow_free_courses": false,
   "description": "Los cursos están en learning.bentley.com (gratuitos, en inglés; requieren cuenta Bentley). Cada curso terminado se registra aquí con su certificado. Las acreditaciones 'Bentley Accredited …' terminan con una evaluación o con la entrega de un proyecto y valen una Reliquia. Modelado BIM de edificios en OpenBuildings Designer para Arquitectura y Civil-Estructural.",
   "levels": [

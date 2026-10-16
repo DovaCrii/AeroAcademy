@@ -19,6 +19,7 @@
     "topografia"
   ],
   "world": "architecture",
+  "figure": "survey-gis",
   "levels": [
     {
       "code": "n0",
