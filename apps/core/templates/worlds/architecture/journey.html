@@ -15,7 +15,7 @@
       <rect class="ar-box" x="120" y="{{ f.y }}" width="400" height="52"/>
       <text class="ar-elev" x="106" y="{{ f.mid }}" text-anchor="end">{{ f.elev }}</text>
       <text class="ar-code" x="136" y="{{ f.mid }}">{{ f.code|upper }}</text>
-      <text class="ar-name" x="178" y="{{ f.mid }}">{{ f.short }}</text>
+      <text class="ar-name" x="178" y="{{ f.mid }}"><title>{{ f.short }}</title>{{ f.label }}</text>
       <text class="ar-pct" x="508" y="{{ f.mid }}" text-anchor="end">{{ f.pct }} %</text>
       {% for m in f.marks %}
       <g class="ar-mark{% if m.me %} me{% endif %}"><title>{{ m.name }}</title><circle cx="{{ m.x }}" cy="{{ f.mid|add:'-4' }}" r="13"/><text x="{{ m.x }}" y="{{ f.mid }}" text-anchor="middle">{{ m.initials }}</text></g>

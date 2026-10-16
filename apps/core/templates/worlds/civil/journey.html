@@ -9,9 +9,11 @@
   <g class="cv-stake {{ s.state }}{% if s.relic %} relic{% endif %}" transform="translate({{ s.x }} {{ s.y }})">
     <title>{{ s.title }}: {% if s.state == "verified" %}verificado{% elif s.state == "pending" %}en revisión{% elif s.state == "rejected" %}rechazado{% else %}por hacer{% endif %}</title>
     <line x1="0" y1="-8" x2="0" y2="24"/><path d="M0 -8 h16 l-4 5 l4 5 h-16z"/>
-    <text x="0" y="-14" text-anchor="middle">{{ s.key }}</text>
+    <text x="0" y="-14" text-anchor="middle">{{ s.label }}</text>
   </g>
   {% endfor %}
+  {# «TÚ» flota sobre la estaca con un trazo fino: ni la estaca ni su rótulo quedan tapados. #}
+  <line x1="{{ journey.marker_x }}" y1="{{ journey.marker_y1 }}" x2="{{ journey.marker_x }}" y2="{{ journey.marker_y2 }}" class="cv-you-l"/>
   <circle cx="{{ journey.marker_x }}" cy="{{ journey.marker_y }}" r="11" class="cv-you"/><text x="{{ journey.marker_x }}" y="{{ journey.marker_ty }}" text-anchor="middle" class="cv-you-t">TÚ</text>
 
   <line x1="16" y1="170" x2="984" y2="170" class="cv-sep"/>

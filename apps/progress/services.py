@@ -131,8 +131,11 @@ def _team_marks(path, chapters):
     return by_level, len(last)
 
 
-def _floors(chapters, marks, me_id):
-    """Geometría del corte del edificio: un piso por nivel, el 0 abajo."""
+FLOOR_LABEL_MAX = 38  # el nombre ocupa de x = 178 a ~460; el porcentaje empieza en 508
+
+
+def _floors(chapters, marks, me_id, step=None):
+    """Geometría del corte del edificio: un piso por nivel, el 0 abajo. `step(i)` da el rótulo de la cota del piso."""
     n = len(chapters)
     floor_h, top = 56, 64
     ground = top + n * floor_h + 4
@@ -144,12 +147,13 @@ def _floors(chapters, marks, me_id):
             {
                 "code": ch["level"].code,
                 "short": ch["level"].short,
+                "label": clip(ch["level"].short, FLOOR_LABEL_MAX),
                 "pct": ch["pct"],
                 "complete": ch["complete"],
                 "y": y,
                 "mid": y + 31,
                 "fill_w": round(400 * ch["pct"] / 100),
-                "elev": f"+{i * 3.5:.2f}".replace(".", ","),
+                "elev": step(i) if step else f"+{i * 3.5:.2f}".replace(".", ","),
                 "marks": [
                     {
                         "x": 564 + k * 30,
@@ -166,46 +170,101 @@ def _floors(chapters, marks, me_id):
     return {"floors": floors, "ground": ground, "height": ground + 44, "top": top}
 
 
+def clip(text, limit):
+    """Texto recortado con «…» para que una etiqueta no se salga de su caja (el nombre completo va en `title`)."""
+    text = " ".join(str(text).split())
+    return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
+
+
+# Cajas aproximadas del plan de vuelo (viewBox 760 × 330): el dron va al lado opuesto de la etiqueta.
+DRONE_HALF = (13, 9)  # media anchura y media altura del dron
+LABEL_CHAR_W, LABEL_H = 7, 14  # una letra ≈ 7 px; una línea de rótulo ≈ 14 px
+WP_LABEL_MAX = 16
+
+
+def label_box(p):
+    """Caja (x0, y0, x1, y1) que ocupan el nombre y el porcentaje de un waypoint."""
+    w = max(len(p["label"]), 6) * LABEL_CHAR_W / 2
+    if p["above"]:
+        y0, y1 = p["y"] - 46 - LABEL_H, p["y"] - 32
+    else:
+        y0, y1 = p["y"] + 42 - LABEL_H, p["y"] + 56
+    return (p["x"] - w, y0, p["x"] + w, y1)
+
+
+def drone_box(p):
+    """Caja (x0, y0, x1, y1) del dron de un waypoint (solo hay dron en el waypoint `here`)."""
+    cx, cy = p["x"] + p["drone_dx"], p["y"] + p["drone_dy"]
+    return (cx - DRONE_HALF[0], cy - DRONE_HALF[1], cx + DRONE_HALF[0], cy + DRONE_HALF[1])
+
+
+def boxes_overlap(a, b):
+    return a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
+
+
+def _drone_offset(p, points, width, height):
+    """Desplazamiento (dx, dy) del dron: al lado opuesto de su etiqueta y sin tapar la de ningún vecino.
+
+    Prueba primero ese lado sin moverse y luego corrido en x (±30, ±45); el primer hueco que cabe en el dibujo gana.
+    """
+    opposite = 34 if p["above"] else -30
+    labels = [label_box(q) for q in points]
+    for dx in (0, 30, -30, 45, -45):
+        box = drone_box({**p, "drone_dx": dx, "drone_dy": opposite})
+        inside = box[0] >= 0 and box[2] <= width and box[1] >= 0 and box[3] <= height
+        if inside and not any(boxes_overlap(box, lb) for lb in labels):
+            return dx, opposite
+    return 0, opposite
+
+
 def _waypoints(chapters, marks, me_id):
     """Plan de vuelo del mundo `aero`: un waypoint por nivel sobre una ruta que sube; el dron espera en el primero
     sin completar. Cada waypoint lleva su anillo de avance (circunferencia r = 18 → 113,1)."""
     n = len(chapters)
-    width, left, right, base, top = 760, 70, 690, 262, 72
+    width, height, left, right, base, top = 760, 330, 70, 690, 262, 72
     points = []
     here = next((i for i, ch in enumerate(chapters) if not ch["complete"]), None)
+    # Con muchos waypoints, el rótulo se acorta para no invadir el hueco del dron en el lado opuesto.
+    spacing = (right - left) / max(n - 1, 1)
+    label_max = max(6, min(WP_LABEL_MAX, int(2 * (spacing - DRONE_HALF[0] - 2) / LABEL_CHAR_W)))
     for i, ch in enumerate(chapters):
         t = i / (n - 1) if n > 1 else 0.5
         x = round(left + (right - left) * t)
         y = round(base - (base - top) * t + 22 * math.sin(i * 1.7))
         people = marks.get(ch["level"].id, [])
-        points.append(
-            {
-                "code": ch["level"].code,
-                "short": ch["level"].short,
-                "pct": ch["pct"],
-                "complete": ch["complete"],
-                "x": x,
-                "y": y,
-                "above": i % 2 == 0,
-                "ring": round(113.1 * ch["pct"] / 100, 1),
-                "here": i == here,
-                "marks": [
-                    {
-                        "dx": 24 + k * 22,
-                        "initials": initials(p),
-                        "name": p.name,
-                        "me": p.pk == me_id,
-                    }
-                    for k, p in enumerate(people[:3])
-                ],
-                "extra": max(0, len(people) - 3),
-            }
-        )
+        point = {
+            "code": ch["level"].code,
+            "short": ch["level"].short,
+            "label": clip(ch["level"].short, label_max),
+            "pct": ch["pct"],
+            "complete": ch["complete"],
+            "x": x,
+            "y": y,
+            "above": i % 2 == 0,
+            "ring": round(113.1 * ch["pct"] / 100, 1),
+            "here": i == here,
+            "drone_dx": 0,
+            "drone_dy": 0,
+            "marks": [
+                {
+                    "dx": 24 + k * 22,
+                    "initials": initials(p),
+                    "name": p.name,
+                    "me": p.pk == me_id,
+                }
+                for k, p in enumerate(people[:3])
+            ],
+            "extra": max(0, len(people) - 3),
+        }
+        points.append(point)
+    for point in points:
+        if point["here"]:
+            point["drone_dx"], point["drone_dy"] = _drone_offset(point, points, width, height)
     segments = [
         {"x1": a["x"], "y1": a["y"], "x2": b["x"], "y2": b["y"], "done": chapters[i]["complete"]}
         for i, (a, b) in enumerate(zip(points, points[1:], strict=False))
     ]
-    return {"width": width, "height": 330, "points": points, "segments": segments}
+    return {"width": width, "height": height, "points": points, "segments": segments}
 
 
 def _diploma_link(person, path):

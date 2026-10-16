@@ -116,10 +116,28 @@ def external_context(person, path, level_code=None):
     }
 
 
+_FILLER = {"a", "an", "the", "to", "of", "and", "for", "with", "in", "on", "intro", "introduction"}
+STAKE_CHAR_W = 6.2  # una letra del rótulo de la estaca (10 px) ≈ 6 px
+MARKER_RISE = (
+    44  # «TÚ» queda 44 px sobre el eje: por encima de la estaca y de su rótulo (que ocupa -24…-14)
+)
+
+
+def stake_label(title, limit):
+    """Rótulo corto de una estaca: las 2 primeras palabras con contenido del título del curso (nunca la *key*)."""
+    words = [w for w in str(title).split() if w]
+    useful = [w for w in words if w.lower().strip(".,:;") not in _FILLER] or words
+    text = " ".join(useful[:2])
+    return text if len(text) <= limit else text[: max(limit - 1, 1)].rstrip() + "…"
+
+
 def _journey(all_courses, relics):
     """Planta-perfil: una estaca por curso sobre el eje y un pilar del puente por reliquia."""
     n = len(all_courses)
     step = (WIDTH - 140) / max(n - 1, 1)
+    chars = max(
+        4, int(min(step, 160) * 0.9 / STAKE_CHAR_W)
+    )  # el rótulo cabe en el hueco entre estacas
     stakes, last_verified_x = [], 40
     for i, item in enumerate(all_courses):
         x = 70 + i * step if n > 1 else 500
@@ -128,6 +146,7 @@ def _journey(all_courses, relics):
                 "x": _n(x),
                 "y": _n(axis_y(x)),
                 "key": item["obj"].key,
+                "label": stake_label(item["obj"].resource.title, chars),
                 "title": item["obj"].resource.title,
                 "state": item["state"],
                 "relic": item["obj"].reward == ExternalCourse.Reward.RELIC,
@@ -164,6 +183,8 @@ def _journey(all_courses, relics):
         "piers": piers,
         "deck": {"x": low, "width": high - low, "y": DECK_Y},
         "marker_x": _n(last_verified_x),
-        "marker_y": _n(axis_y(last_verified_x)),
-        "marker_ty": _n(axis_y(last_verified_x) + 4),
+        "marker_y": _n(axis_y(last_verified_x) - MARKER_RISE),
+        "marker_ty": _n(axis_y(last_verified_x) - MARKER_RISE + 3),
+        "marker_y1": _n(axis_y(last_verified_x) - MARKER_RISE + 11),
+        "marker_y2": _n(axis_y(last_verified_x) - 26),
     }
