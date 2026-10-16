@@ -192,3 +192,56 @@ def test_home_route_cards_unique(site_world, client_for):
 def test_home_lists_other_disciplines_of_a_route_once(site_world, client_for):
     html = home_html(client_for, site_world["member"])
     assert "También sirven aquí:" in html
+
+
+# --- migas y siguiente paso ----------------------------------------------------------------------------------------
+
+
+def test_breadcrumbs_on_route_and_notes(site_world, client_for):
+    admin = site_world["admin"]
+    c = client_for(admin.login)
+    html = c.get("/rutas/topografia-101/?nivel=n1").content.decode()
+    crumbs = re.search(r'<nav class="crumbs".*?</nav>', html, flags=re.S).group(0)
+    assert 'href="/"' in crumbs and 'href="/rutas/"' in crumbs and "Topografía" in crumbs
+    assert 'href="/rutas/topografia-101/"' in crumbs and "Nivel N1" in crumbs
+    notes = c.get("/rutas/topografia-101/notas/").content.decode()
+    crumbs = re.search(r'<nav class="crumbs".*?</nav>', notes, flags=re.S).group(0)
+    assert "Notas" in crumbs and 'href="/rutas/topografia-101/"' in crumbs
+    for slug in ("civil-3d", "dgac-rpas"):
+        page = c.get(f"/rutas/{slug}/").content.decode()
+        assert 'class="crumbs"' in page
+
+
+def test_every_level_within_3_clicks_from_home(site_world, client_for):
+    """Portada → ruta (≤ 2 clics) → nivel (≤ 3 clics): cada ruta visible se enlaza desde la portada y cada nivel
+    desde la página de su ruta."""
+    c = client_for(site_world["admin"].login)
+    home_hrefs = set(re.findall(r'href="([^"]+)"', c.get("/").content.decode()))
+    for path in LearningPath.objects.all():
+        assert any(h.startswith(f"/rutas/{path.slug}/") for h in home_hrefs), path.slug  # 1 clic
+        page = c.get(f"/rutas/{path.slug}/").content.decode()
+        for code in path.levels.values_list("code", flat=True):
+            assert f"nivel={code}" in page, (path.slug, code)  # 2 clics
+
+
+def test_level_panel_says_what_comes_next(site_world, client_for):
+    member = site_world["member"]
+    path = structured("bim-101")
+    page = (
+        client_for(member.login).get(f"/rutas/{path.slug}/?nivel=n0&paso=practica").content.decode()
+    )
+    assert re.search(r"Siguiente: [^<→]+ →", page)
+
+
+def test_last_step_of_last_level_offers_the_diploma(site_world, client_for):
+    member = site_world["member"]
+    path = structured("bim-101")
+    codes = list(path.levels.order_by("order").values_list("code", flat=True))
+    for code in codes:
+        do_level(member, path, code)
+    page = (
+        client_for(member.login)
+        .get(f"/rutas/{path.slug}/?nivel={codes[-1]}&paso=notas")
+        .content.decode()
+    )
+    assert "Ver diploma ✦" in page

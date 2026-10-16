@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load static %}
+{% load static catalog_extras %}
 
 {% block title %}{{ path.title }}{% endblock %}
 {% block extra_head %}
@@ -11,7 +11,7 @@
 {% block body_attrs %} class="world-civil"{% endblock %}
 
 {% block content %}
-{% include "worlds/civil/cover.html" %}
+{% route_crumbs path current.level %}{% include "worlds/civil/cover.html" %}
 <div id="path-app">
   {% include "worlds/civil/_app.html" %}
 </div>

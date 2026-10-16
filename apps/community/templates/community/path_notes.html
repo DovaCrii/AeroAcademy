@@ -1,10 +1,11 @@
 {% extends "core/base.html" %}
-{% load static %}
+{% load static catalog_extras %}
 
 {% block title %}Notas · {{ path.title }}{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="{% static 'community/notes.css' %}">{% endblock %}
 
 {% block content %}
+{% route_crumbs path here="Notas" %}
 <div class="page-head">
   <h1>Notas del equipo</h1>
   <p><a href="{% url 'paths:detail' path.slug %}">{{ path.title }}</a> · lo que funciona, lo que no, recomendaciones y preguntas.</p>

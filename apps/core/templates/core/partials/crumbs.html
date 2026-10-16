@@ -1,0 +1,8 @@
+<nav class="crumbs" aria-label="Migas de pan"><ol>
+  <li><a href="{% url 'core:home' %}">Inicio</a></li>
+  <li><a href="{% url 'paths:index' %}">Rutas</a></li>
+  {% if discipline %}<li><span>{{ discipline }}</span></li>{% endif %}
+  <li>{% if level or here %}<a href="{% url 'paths:detail' path.slug %}">{{ path.title }}</a>{% else %}<span aria-current="page">{{ path.title }}</span>{% endif %}</li>
+  {% if level %}<li><span aria-current="page">Nivel {{ level.code|upper }}</span></li>{% endif %}
+  {% if here %}<li><span aria-current="page">{{ here }}</span></li>{% endif %}
+</ol></nav>

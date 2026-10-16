@@ -54,6 +54,19 @@ def route_card(path, variant=""):
     }
 
 
+@register.inclusion_tag("core/partials/crumbs.html")
+def route_crumbs(path, level=None, here=""):
+    """Migas: Inicio › Rutas › Disciplina › Ruta › Nivel N (o `here`, p. ej. «Notas»)."""
+    key = software.discipline_key(path)
+    has = software.DISCIPLINE_SLUG_BY_KEY.get(key) in {d.slug for d in path.disciplines.all()}
+    return {
+        "path": path,
+        "discipline": software.DISCIPLINE_LABEL.get(key, "") if has else "",
+        "level": level,
+        "here": here,
+    }
+
+
 @register.simple_tag
 def vendor_family(path):
     """Familia visual del fabricante de una ruta: autodesk, bentley o internal."""

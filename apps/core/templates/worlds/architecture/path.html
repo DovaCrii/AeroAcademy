@@ -13,7 +13,7 @@
 {% block body_attrs %}{% route_flavour path as fl %} class="world-architecture fl-{{ fl.key }}"{% endblock %}
 
 {% block content %}
-{% include "worlds/architecture/cover.html" %}
+{% route_crumbs path current.level %}{% include "worlds/architecture/cover.html" %}
 <div id="path-app" data-enhance-root>
   {% include "worlds/architecture/_app.html" %}
 </div>

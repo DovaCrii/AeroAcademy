@@ -164,3 +164,10 @@ input[type=checkbox],input[type=radio]{accent-color:var(--amber)}
 .hiw-steps li{padding:10px 12px;border:1.5px dashed var(--line);border-radius:12px}
 .hiw-steps b{display:block;font-size:13.5px}
 .hiw-steps small{display:block;margin-top:2px;color:var(--ink-2);font-size:12.5px;line-height:1.4}
+.crumbs{margin:10px 0 0;font-size:13px}
+.crumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:2px 0}
+.crumbs li{display:inline-flex;align-items:center;color:var(--ink-2)}
+.crumbs li+li::before{content:"›";margin:0 8px;color:var(--line)}
+.crumbs a{color:var(--level);font-weight:600}
+.crumbs [aria-current]{color:var(--ink);font-weight:700}
+.step-next{margin:8px 0 0;font-size:13px;color:var(--ink-2)}

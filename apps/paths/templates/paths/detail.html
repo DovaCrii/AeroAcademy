@@ -1,9 +1,10 @@
 {% extends "core/base.html" %}
-{% load core_extras %}
+{% load core_extras catalog_extras %}
 
 {% block title %}{{ path.title }}{% endblock %}
 
 {% block content %}
+{% route_crumbs path %}
 <div class="page-head">
   <span class="cap">{{ path.vendor.name }} · {{ path.program }}</span>
   <h1>{{ path.title }}</h1>
