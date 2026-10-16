@@ -75,3 +75,94 @@ def path_detail(path):
             }
         )
     return result
+
+
+# --- llamada a la acción por ruta ----------------------------------------------------------------------------------
+
+
+def _pending_level_codes(person, path_ids):
+    """pk de ruta → código del primer nivel pendiente. Mismo criterio que `progress.services.world_context`:
+    un nivel está completo si tiene misiones o preguntas y todas están hechas; uno sin nada cuenta como pendiente.
+    Cuatro consultas fijas, sin importar cuántas rutas."""
+    from apps.progress.models import MilestoneCheck, QuizAnswer
+
+    from .models import Level, Milestone, QuizQuestion
+
+    levels = {}
+    for pid, lid, code in (
+        Level.objects.filter(path__in=path_ids)
+        .order_by("order", "id")
+        .values_list("path_id", "id", "code")
+    ):
+        levels.setdefault(pid, []).append((lid, code))
+    checked = set(
+        MilestoneCheck.objects.filter(person=person, milestone__path__in=path_ids).values_list(
+            "milestone_id", flat=True
+        )
+    )
+    answers = dict(
+        QuizAnswer.objects.filter(person=person, question__path__in=path_ids).values_list(
+            "question_id", "selected_index"
+        )
+    )
+    todo, total = {}, {}  # nivel → pendientes / total
+    for mid, lid in Milestone.objects.filter(path__in=path_ids, retired=False).values_list(
+        "id", "level_id"
+    ):
+        total[lid] = total.get(lid, 0) + 1
+        todo[lid] = todo.get(lid, 0) + (mid not in checked)
+    for qid, lid, right in QuizQuestion.objects.filter(
+        path__in=path_ids, retired=False
+    ).values_list("id", "level_id", "answer_index"):
+        total[lid] = total.get(lid, 0) + 1
+        todo[lid] = todo.get(lid, 0) + (answers.get(qid) != right)
+    out = {}
+    for pid, items in levels.items():
+        pending = next((code for lid, code in items if not total.get(lid) or todo.get(lid)), None)
+        out[pid] = pending or items[0][1]
+    return out
+
+
+def route_ctas(person, paths, pcts=None):
+    """pk de ruta → {state, label, url, pct}: el único botón primario de la tarjeta de una ruta.
+
+    - 0 %: «Empezar la ruta →» al primer nivel; 1 a 99 %: «Continuar · N % →» al primer nivel pendiente;
+    - 100 %: «Ver diploma ✦» si la ruta emite diploma (si no, «Repasar la ruta →»);
+    - ruta de cursos externos: «Registrar mi primer curso →» mientras no haya ninguno.
+    Las consultas son fijas: no crecen con el número de rutas.
+    """
+    from django.urls import reverse
+
+    from apps.diplomas import services as diplomas
+    from apps.gamification import game
+
+    paths = list(paths)
+    if not paths:
+        return {}
+    pcts = pcts if pcts is not None else game.path_percents(person, paths)
+    codes = _pending_level_codes(person, [p.pk for p in paths])
+    out = {}
+    for p in paths:
+        pct = pcts.get(p.pk, 0)
+        base = reverse("paths:detail", args=[p.slug])
+        external = p.kind == LearningPath.Kind.EXTERNAL_TRACK
+        code = codes.get(p.pk)
+        nivel = f"?nivel={code}#panel" if code and not external else "#panel"
+        if pct >= 100:
+            if diplomas.has_diploma(p):
+                state, label, url = "done", "Ver diploma ✦", diplomas.url_for(p)
+            else:
+                state, label, url = "done", "Repasar la ruta →", base
+        elif pct > 0:
+            state, label, url = "continue", f"Continuar · {pct} % →", base + nivel
+        elif external:
+            state, label, url = "start", "Registrar mi primer curso →", base
+        else:
+            state, label, url = "start", "Empezar la ruta →", base + nivel
+        out[p.pk] = {"state": state, "label": label, "url": url, "pct": pct}
+    return out
+
+
+def cta_for(person, path):
+    """Llamada a la acción de una sola ruta (ver `route_ctas`)."""
+    return route_ctas(person, [path])[path.pk]
