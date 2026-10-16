@@ -1,0 +1,7 @@
+{# Botón único «Empezar / Continuar / Ver diploma» de la portada de un mundo (sirve a los tres mundos). #}
+<p class="world-start">
+  {% if stats.pct >= 100 and diploma_url %}<a class="btn primary route-cta" href="{{ diploma_url }}">Ver diploma ✦</a>
+  {% elif stats.pct > 0 %}<a class="btn primary route-cta" href="?nivel={{ current.level.code }}#panel">Continuar · {{ stats.pct }} % →</a>
+  {% else %}<a class="btn primary route-cta" href="?nivel={{ current.level.code }}#panel">Empezar la ruta →</a>{% endif %}
+</p>
+{% include "core/partials/how_it_works.html" %}

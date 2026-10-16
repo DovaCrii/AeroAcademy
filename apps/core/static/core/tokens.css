@@ -51,14 +51,21 @@
   --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:40px; --sp-5:64px; --sp-6:clamp(72px,9vw,128px);
 
   /* elevación: superficies en capas (fondo < hoja < hoja elevada < flotante) */
-  --elev-1:var(--sheet);
-  --elev-2:#FFF7DF;
+  /* Superficies en capas: 0 fondo, 1 tarjeta, 2 resaltada. Elevación (sombras): 1 tarjeta, 2 hover y barras pegajosas, 3 popovers. */
+  --surface-0:var(--bg);
+  --surface-1:var(--sheet);
+  --surface-2:#FFF7DF;
+  --elev-1:0 0 0 1px var(--hair),0 1px 2px rgba(31,36,48,.06),0 4px 12px rgba(31,36,48,.06);
+  --elev-2:0 0 0 1px var(--hair),0 2px 6px rgba(31,36,48,.08),0 12px 28px rgba(31,36,48,.12);
+  --elev-3:0 0 0 1px var(--hair),var(--shadow-3);
   --surface-tint:linear-gradient(160deg,var(--sheet),var(--sheet));
   --shadow-3:0 4px 10px rgba(31,36,48,.08),0 24px 50px rgba(31,36,48,.16);
   --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 
   /* acento por disciplina (texto AA sobre papel; en oscuro se aclaran) */
   --d-arq:#0B7FAE; --d-civ:#946500; --d-top:#4A7A00; --d-mec:#C92A37; --d-cap:#0F8579; --d-doc:#B4470F; --d-kno:#6B3FD1;
+  /* acento por disciplina: los colores de los círculos de la portada (borde superior o pestaña de la tarjeta) */
+  --disc-arq:#4CC9F0; --disc-civ:#FFC93C; --disc-top:#8AC926; --disc-mec:#E63946; --disc-cap:#2EC4B6; --disc-iad:#A78BFA; --disc-tra:#9A978C;
   --f-arq:#4CC9F0; --f-civ:#FFC93C; --f-top:#8AC926; --f-mec:#E63946; --f-cap:#2EC4B6;
   color-scheme:light;
 }
@@ -78,7 +85,10 @@
     --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
     --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB; --d-doc:#FFA66B; --d-kno:#C4B5FD;
   --btn:#F3F6FB; --on-btn:#061325;
-    --elev-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
+    --surface-1:#102B4E; --surface-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
+    --elev-1:0 0 0 1px #24446F,0 2px 6px rgba(0,0,0,.4),0 8px 20px rgba(0,0,0,.3);
+    --elev-2:0 0 0 1px #2F5688,0 4px 10px rgba(0,0,0,.45),0 16px 32px rgba(0,0,0,.4);
+    --elev-3:0 0 0 1px #2F5688,var(--shadow-3);
     --surface-tint:linear-gradient(160deg,color-mix(in srgb,var(--sheet) 86%,#1E8CFF),var(--sheet) 60%);
     --shadow-3:0 4px 12px rgba(0,0,0,.45),0 30px 64px rgba(0,0,0,.55);
     color-scheme:dark;
@@ -99,7 +109,10 @@
   --rarity-common:#9FB0C2; --rarity-epic:#A78BFA; --rarity-legendary:#FFC21A;
   --d-arq:#6FD3F5; --d-civ:#FFD25E; --d-top:#B4E34D; --d-mec:#FF7F88; --d-cap:#54D9CB; --d-doc:#FFA66B; --d-kno:#C4B5FD;
   --btn:#F3F6FB; --on-btn:#061325;
-  --elev-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
+  --surface-1:#102B4E; --surface-2:color-mix(in srgb,var(--sheet) 82%,#1E8CFF 18%);
+  --elev-1:0 0 0 1px #24446F,0 2px 6px rgba(0,0,0,.4),0 8px 20px rgba(0,0,0,.3);
+  --elev-2:0 0 0 1px #2F5688,0 4px 10px rgba(0,0,0,.45),0 16px 32px rgba(0,0,0,.4);
+  --elev-3:0 0 0 1px #2F5688,var(--shadow-3);
   --surface-tint:linear-gradient(160deg,color-mix(in srgb,var(--sheet) 86%,#1E8CFF),var(--sheet) 60%);
   --shadow-3:0 4px 12px rgba(0,0,0,.45),0 30px 64px rgba(0,0,0,.55);
   color-scheme:dark;

@@ -8,6 +8,7 @@
   <p>Una campaña por empresa de software. Elige la empresa, el producto y, si quieres, filtra por disciplina o habilidad.</p>
   <p><a class="btn ghost" href="{% url 'paths:map' %}">Ver el mapa de metro de las rutas →</a></p>
 </div>
+{% include "core/partials/how_it_works.html" %}
 
 {% if vendors %}
 <nav class="tabs" aria-label="Empresas de software">
@@ -42,20 +43,7 @@
 
 <div class="cards">
   {% for p in paths %}
-  <article class="card">
-    {% route_icon_src p as ico %}{% if ico %}<img class="route-ico" src="{% static ico %}" alt="" width="48" height="48" loading="lazy">{% endif %}
-    <span class="sub">{{ p.program|default:p.vendor.name }}</span>
-    <h3><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a></h3>
-    <div class="chips">
-      <span class="chip off">{{ p.get_kind_display }}</span>
-      {% for pr in p.products.all %}<span class="chip">{{ pr.name }}</span>{% endfor %}
-    </div>
-    <p>{{ p.description|truncatechars:160 }}</p>
-    <div class="foot-row">
-      <span class="chips">{% for d in p.disciplines.all %}<span class="chip">{{ d.name }}</span>{% endfor %}</span>
-      {% if not p.is_published %}<span class="chip warn">Sin publicar</span>{% endif %}
-    </div>
-  </article>
+  {% route_card p %}
   {% empty %}
   <p class="empty">No hay rutas con esos filtros.</p>
   {% endfor %}

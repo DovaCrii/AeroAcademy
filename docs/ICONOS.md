@@ -2,13 +2,13 @@
 
 Cada ruta tiene un icono propio, **sin repetir** (`apps/catalog/software.py::ROUTE_ICON`, archivos
 `apps/core/static/core/img/software/ruta-<slug>.svg`). La prueba `test_every_route_has_its_own_unique_icon_file`
-exige que toda ruta de `seed/rutas/` tenga uno y que no haya dos iguales.
+exige que **toda ruta visible** (las de `seed/rutas/`, la de DGAC `dgac-rpas` y cualquier slug de `LearningPath` en la BD) tenga uno y que no haya dos iguales (por nombre y por bytes).
 
 ## Estado actual
 
-Los 22 iconos `ruta-*.svg` viven en `apps/core/static/core/img/software/`.
+Los 23 iconos `ruta-*.svg` viven en `apps/core/static/core/img/software/`.
 
-- **13 son pictogramas originales** (baldosa con degradado y pictograma blanco), sin logotipos de nadie.
+- **14 son pictogramas originales** (entre ellos `ruta-dgac-rpas.svg`: un dron sobre un plan de vuelo con waypoints) (baldosa con degradado y pictograma blanco), sin logotipos de nadie.
 - **9 son logotipos oficiales** (6 de Simple Icons, tabla siguiente, y 3 de Autodesk, más abajo) de la ruta que trata ese producto: baldosa blanca (se ve igual en modo oscuro) con la forma
   del logo sin deformar (solo escala y posición) y su color de marca. El SVG original, sin tocar, está en
   `img/software/oficial/`.

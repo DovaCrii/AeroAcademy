@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import render
 
-from apps.gamification import game
+from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
 from . import services, software
@@ -23,8 +23,6 @@ KIND_GROUPS = [
 
 
 GENERAL_PREVIEW = 6  # tarjetas de la sección «Conocimiento general» en la portada del catálogo
-# garabato de la ruta según su mundo (img/doodles); «conocimiento» si el mundo no tiene uno propio
-GENERAL_DOODLES = {"survey": "topografia", "architecture": "arquitectura", "civil": "civil"}
 
 
 def _general_section(request, f, show_rows):
@@ -40,10 +38,9 @@ def _general_section(request, f, show_rows):
     total = linked.count()
     if not paths and not total:
         return None
-    pcts = game.path_percents(request.user, paths) if paths else {}
-    for p in paths:
-        p.pct = pcts.get(p.pk, 0)
-        p.doodle = GENERAL_DOODLES.get(p.world, "conocimiento")
+    paths = (
+        path_services.attach_ctas(request.user, paths) if paths else []
+    )  # avance y botón: consultas fijas
     items = []
     if show_rows and total:
         items = list(linked[:GENERAL_PREVIEW])

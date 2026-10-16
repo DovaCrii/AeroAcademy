@@ -379,7 +379,8 @@ def test_catalog_section_lists_routes_and_tagged_resources(member_client, routes
     assert html.index("conocimiento-general") < html.index("// 01")  # arriba de todo
     assert "?general=1" in html
     section = html.split('id="conocimiento-general"')[1].split("</section>")[0]
-    assert section.count('class="dd"') >= 2  # garabato de cada ruta
+    assert section.count("data-route-card") >= 2  # tarjeta única de cada ruta, con icono y botón
+    assert section.count('class="btn primary route-cta"') == section.count("data-route-card")
 
 
 def test_catalog_general_filter_shows_only_tagged_resources(member_client, routes):
@@ -411,7 +412,7 @@ def test_catalog_shows_my_progress_in_each_route(member, member_client, routes):
     assert "Empezar la ruta" in member_client.get("/catalogo/").content.decode()
     do_level(member, topo, "n0")
     html = member_client.get("/catalogo/").content.decode()
-    assert "completado" in html and 'aria-valuenow="' in html
+    assert "Continuar ·" in html and 'aria-valuenow="' in html
 
 
 def test_catalog_queries_do_not_grow_with_general_content(member_client, routes):
@@ -438,7 +439,8 @@ def test_general_stylesheet_uses_the_transversal_accent_and_theme_tokens():
     css = (SEED.parent / "apps/catalog/static/catalog/catalog.css").read_text(encoding="utf-8")
     block = css[css.index("Conocimiento general · transversal") :]
     assert "#8793A6" in block and "var(--ink)" in block and "var(--sheet)" in block
-    assert "prefers-reduced-motion" in block
+    comp = (SEED.parent / "apps/core/static/core/components.css").read_text(encoding="utf-8")
+    assert "prefers-reduced-motion" in comp  # el movimiento de la tarjeta se anula con `reduce`
 
 
 def test_catalog_lists_only_resources_still_linked_to_a_route(member_client, routes):

@@ -44,7 +44,7 @@
 
   <div class="sl-foot">
     {% if step_prev %}<a class="btn ghost sl-prev" href="{{ step_prev }}" data-enhance data-step data-fid="prev" rel="prev">← Anterior</a>{% else %}<span></span>{% endif %}
-    {% if step_next %}<a class="btn sl-next" href="{{ step_next }}" data-enhance data-step data-fid="next" rel="next">{% if step_next_is_level %}Siguiente nivel →{% else %}Siguiente →{% endif %}</a>{% endif %}
+    {% if step_next %}<a class="btn sl-next" href="{{ step_next }}" data-enhance data-step data-fid="next" rel="next">{% if step_next_is_level %}Siguiente nivel →{% else %}Siguiente: {{ step_next_label }} →{% endif %}</a>{% elif diploma_url and stats.pct >= 100 %}<a class="btn sl-next route-cta" href="{{ diploma_url }}">Ver diploma ✦</a>{% endif %}
   </div>
   <p class="sl-hint">Con el teclado: ← y → cambian de paso.</p>
 </div>

@@ -333,9 +333,15 @@ def test_catalog_queries_do_not_grow(seeded, member_client):
     assert len(after) == len(before)
 
 
-def test_every_route_has_its_own_unique_icon_file():
+def test_every_route_has_its_own_unique_icon_file(site_world):
+    """Todas las rutas visibles: las de seed/rutas, la de DGAC (fixture) y cualquier otra que haya en la BD."""
+    from apps.dgac.constants import ROUTE_SLUG
+
     root = Path(settings.BASE_DIR) / "apps" / "core" / "static"
     slugs = {json.loads(f.read_text(encoding="utf-8"))["slug"] for f in SEED.glob("*.json")}
+    slugs |= {ROUTE_SLUG} | set(LearningPath.objects.values_list("slug", flat=True))
+    assert ROUTE_SLUG in LearningPath.objects.values_list("slug", flat=True)
+    assert len(slugs) == 23
     assert slugs <= set(software.ROUTE_ICON), slugs - set(software.ROUTE_ICON)
     stems = [software.route_icon(s) for s in slugs]
     assert len(set(stems)) == len(stems)  # ninguna ruta repite icono

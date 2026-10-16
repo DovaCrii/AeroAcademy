@@ -30,6 +30,7 @@ DISCIPLINE_BY_SLUG = {
     "transversal": TRA,
     "ia-datos": IAD,
 }
+DISCIPLINE_SLUG_BY_KEY = {key: slug for slug, key in DISCIPLINE_BY_SLUG.items()}
 
 
 @dataclass(frozen=True)
@@ -147,7 +148,7 @@ ROUTE_ICON = {
         "bentley-learn", "bentley-itwin", "bentley-lumenrt", "bentley-openbuildings", "bentley-openplant",
         "bentley-projectwise", "bim-101", "topografia-101", "ia-101", "herramientas-ia", "vibe-coding",
         "agentes-ia", "claude-code-mcp", "python-datos-101", "data-science-aplicada", "datos-reportes",
-        "geospatial-data-science",
+        "geospatial-data-science", "dgac-rpas",
     )
 }  # fmt: skip
 

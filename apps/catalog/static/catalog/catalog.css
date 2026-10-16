@@ -256,24 +256,12 @@ a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
 .cat-gen .cat-sh span{color:var(--d-tra,#8793A6)}
 .cat-gen-lead{margin:0 0 14px;max-width:72ch;color:var(--ink-2)}
 .cat-gen-lead b{color:var(--ink)}
-.gen-routes{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
-.gen-route{display:flex;gap:14px;align-items:center;height:100%;box-sizing:border-box;padding:14px 16px;color:var(--ink);text-decoration:none;background:var(--sheet);
-  border:1.5px solid var(--ink);border-radius:16px 14px 18px 12px / 12px 18px 14px 16px;box-shadow:3px 3px 0 var(--d-tra,#8793A6);transition:transform .15s,box-shadow .15s}
-.gen-route:hover,.gen-route:focus-visible{transform:translate(-1px,-2px);box-shadow:5px 5px 0 var(--d-tra,#8793A6)}
-.gen-route:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-.gen-art{flex:none;width:84px;height:84px;display:grid;place-items:center;border-radius:12px;border:1.5px dashed var(--d-tra,#8793A6);background:color-mix(in srgb,var(--d-tra,#8793A6) 16%,var(--sheet))}
-.gen-art svg{width:72px;height:72px}
-.gen-body{min-width:0;display:grid;gap:5px}
-.gen-tag{font:600 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
-.gen-title{font-family:var(--font-display);font-size:19px;line-height:1.2}
-.gen-desc{font-size:13.5px;line-height:1.4;color:var(--ink-2)}
-.gen-bar{display:block;height:8px;border-radius:99px;border:1px solid var(--line);background:var(--sheet-2,var(--sheet));overflow:hidden}
-.gen-bar i{display:block;height:100%;background:var(--d-tra,#8793A6)}
-.gen-pct{font:600 12px var(--font-mono);letter-spacing:.04em;color:var(--ink)}
+.gen-routes{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.gen-routes>li{min-width:0;display:flex}
+.gen-routes .route-card{width:100%}
 .gen-cards{margin-top:4px}
 .cat-gen .cat-card{--acc:var(--d-tra,#8793A6)}
 .gen-more{margin:12px 0 0}
 .chip.gen{border-color:var(--d-tra,#8793A6)}
 .chip.gen.on{background:var(--d-tra,#8793A6);color:#10161f}
-@media (max-width:560px){.gen-art{width:64px;height:64px}.gen-art svg{width:54px;height:54px}.cat-gen{padding:14px 12px}}
-@media (prefers-reduced-motion:reduce){.gen-route{transition:none}.gen-route:hover{transform:none}}
+@media (max-width:560px){.cat-gen{padding:14px 12px}}
