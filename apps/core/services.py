@@ -11,6 +11,7 @@ from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
 from apps.gamification.models import Badge
 from apps.notifications import services as notifications
+from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
 from . import dashboard
@@ -128,9 +129,8 @@ def _featured():
 def home_context(person):
     """Todo lo que necesita la ventana de bienvenida."""
     paths = list(_visible_paths(person))
-    icons = _software_icons()
-    for p in paths:
-        p.icon = _path_icon(p, icons)  # ficha de software para las filas de la portada
+    pcts = game.path_percents(person, paths)  # consultas fijas, no una tanda por ruta
+    path_services.attach_ctas(person, paths, pcts)  # p.cta / p.pct para la tarjeta única
     disciplines = []
     for d in Discipline.objects.all():
         visual = DISCIPLINE_VISUALS.get(d.slug, {"icon": "i-arq", "img": "", "label": d.name})
@@ -150,7 +150,6 @@ def home_context(person):
         ]
     disciplines.sort(key=lambda d: d["slug"] != "transversal")  # la base de todo va primero
 
-    pcts = game.path_percents(person, paths)  # consultas fijas, no una tanda por ruta
     modules = [
         {**m, "url": reverse(m["url_name"]) if m["url_name"] else None, "live": bool(m["url_name"])}
         for m in MODULES

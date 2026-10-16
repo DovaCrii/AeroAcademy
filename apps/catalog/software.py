@@ -30,6 +30,7 @@ DISCIPLINE_BY_SLUG = {
     "transversal": TRA,
     "ia-datos": IAD,
 }
+DISCIPLINE_SLUG_BY_KEY = {key: slug for slug, key in DISCIPLINE_BY_SLUG.items()}
 
 
 @dataclass(frozen=True)

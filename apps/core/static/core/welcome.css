@@ -520,6 +520,10 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-rl a{color:var(--ink);font-weight:650;line-height:1.25;text-decoration:none;overflow-wrap:anywhere}
 .w-rl a:hover{color:var(--acc);text-decoration:underline}
 .w-rl small{display:block;margin-top:2px;font-family:var(--font-mono);font-size:11px;letter-spacing:.03em;color:var(--ink-2)}
+.w-rl li.w-rc{display:block;padding:0;border:0;background:none;box-shadow:none;transform:none}
+.w-rl li.w-rc:hover{transform:none;box-shadow:none}
+.w-rl .route-card{border:1.5px solid var(--ink);border-top-width:5px;border-top-color:var(--card-acc,var(--accf));height:100%}
+.w-rl .route-card .route-cta,.w-rl .route-card .route-cta:hover{color:var(--on-btn);text-decoration:none;font-weight:700}
 .w-rl-t{width:44px;height:44px;border-radius:10px;box-shadow:0 0 0 1.5px var(--ink);display:block}
 .w-rl-t-ph{display:grid;place-items:center;background:var(--sheet-2);font:700 13px var(--font-mono);color:var(--ink)}
 .w-rl li.w-rl-empty{grid-template-columns:minmax(0,1fr) auto;border-style:dashed;background:none;box-shadow:none}

@@ -82,3 +82,46 @@ def test_cta_queries_constant(seeded, member):
     with CaptureQueriesContext(connection) as many:
         path_services.route_ctas(member, paths)
     assert len(paths) > 5 and len(many) == len(few)
+
+
+# --- tarjeta única de ruta -----------------------------------------------------------------------------------------
+
+
+def cards(html):
+    return re.findall(r'<article class="card route-card.*?</article>', html, flags=re.S)
+
+
+@pytest.mark.parametrize(
+    "url",
+    ["/", "/rutas/", "/rutas/?vendor=aeroacademy", "/catalogo/", "/foro/"],
+    ids=["home", "rutas", "rutas-aeroacademy", "catalogo", "foro"],
+)
+def test_route_cards_have_icon_and_cta(site_world, client_for, url):
+    html = client_for(site_world["member"].login).get(url).content.decode()
+    found = cards(html)
+    assert found, url
+    for card in found:
+        assert re.search(r'<img class="route-ico" src="[^"]*ruta-[a-z0-9-]+\.svg"', card), card[
+            :200
+        ]
+        assert card.count('class="btn primary route-cta"') == 1
+        assert (
+            "Empezar la ruta" in card
+            or "Continuar" in card
+            or "Ver diploma" in card
+            or "Ver notas" in card
+            or "Registrar" in card
+            or "Repasar" in card
+        )
+
+
+def test_forum_notes_card_has_two_links(site_world, client_for):
+    html = client_for(site_world["member"].login).get("/foro/").content.decode()
+    card = next(c for c in cards(html) if "/notas/" in c)
+    assert "Ver notas →" in card and 'class="rc-sec"' in card and "Ir a la ruta" in card
+
+
+def test_route_card_escapes_text(site_world, client_for):
+    LearningPath.objects.filter(slug="topografia-101").update(title="<script>alert(1)</script>")
+    html = client_for(site_world["member"].login).get("/rutas/?vendor=aeroacademy").content.decode()
+    assert "<script>alert(1)</script>" not in html and "&lt;script&gt;" in html

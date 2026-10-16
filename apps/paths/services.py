@@ -163,6 +163,16 @@ def route_ctas(person, paths, pcts=None):
     return out
 
 
+def attach_ctas(person, paths, pcts=None):
+    """Pone `p.cta` (y `p.pct`) en cada ruta para la tarjeta única; devuelve la lista. Consultas fijas."""
+    paths = list(paths)
+    ctas = route_ctas(person, paths, pcts)
+    for p in paths:
+        p.cta = ctas[p.pk]
+        p.pct = p.cta["pct"]
+    return paths
+
+
 def cta_for(person, path):
     """Llamada a la acción de una sola ruta (ver `route_ctas`)."""
     return route_ctas(person, [path])[path.pk]

@@ -135,6 +135,20 @@ input[type=checkbox],input[type=radio]{accent-color:var(--amber)}
 .card .route-ico{float:right;margin:0 0 .4rem .6rem;width:48px;height:48px;border-radius:12px}
 
 
+/* Tarjeta única de ruta (core/partials/route_card.html): icono, título, disciplinas, avance y UN botón */
+.route-card{gap:10px}
+.route-card .rc-head{display:flex;align-items:center;gap:12px;min-width:0}
+.route-card .route-ico{float:none;margin:0;flex:none;width:48px;height:48px;border-radius:12px}
+.route-card .rc-ph{display:grid;place-items:center;background:var(--sheet-2);font:700 14px var(--font-mono);color:var(--ink);box-shadow:0 0 0 1.5px var(--hair)}
+.route-card .rc-title{min-width:0}
+.route-card h3 a{overflow-wrap:anywhere}
+.route-card .rc-bar{display:block;height:6px;border-radius:var(--r-pill);background:var(--sheet-2);box-shadow:inset 0 0 0 1px var(--hair);overflow:hidden}
+.route-card .rc-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--scan),var(--amber));border-radius:var(--r-pill)}
+.route-card .rc-actions{margin-top:auto;padding-top:4px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.route-card .rc-sec{font-size:13.5px;font-weight:600}
+.route-card .route-cta{color:var(--on-btn)}
+.route-card.rc-compact{padding:12px 14px;gap:8px}
+
 /* Acento por disciplina como pestaña superior de la tarjeta; sin movimiento si se pide reducirlo. */
 .card[data-disc=arquitectura]{--card-acc:var(--disc-arq)}.card[data-disc=civil-estructural]{--card-acc:var(--disc-civ)}.card[data-disc=topografia]{--card-acc:var(--disc-top)}.card[data-disc=mecanica]{--card-acc:var(--disc-mec)}.card[data-disc=captura-rpa]{--card-acc:var(--disc-cap)}.card[data-disc=ia-datos]{--card-acc:var(--disc-iad)}.card[data-disc=transversal]{--card-acc:var(--disc-tra)}
 @media (prefers-reduced-motion:reduce){.card:has(h3 a):hover{transform:none}}
