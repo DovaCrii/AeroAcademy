@@ -87,10 +87,10 @@ EYES = {
 # --- cejas: y 14..19 ------------------------------------------------------------------------------------------------
 
 BROWS = {
-    "normal": _pair(17, ["..HHHH..", ".HHHHHH."]),
-    "thick": _pair(15, ["..HHHH..", ".HHHHHH.", ".HHHHHH."]),
-    "thin": _pair(18, [".HHHHHH."]),
-    "raised": _pair(15, ["..HHHH..", ".H....H."]),
+    "normal": _pair(16, ["..hHHH..", ".HHHHHH.", ".HHHHHH."]),
+    "thick": _pair(15, ["..hHHHH.", ".HHHHHHH", ".HHHHHHH", ".HHHHHH."]),
+    "thin": _pair(17, [".HHHHHH.", "..HHHH.."]),
+    "raised": _pair(14, ["..hHHH..", ".HHHHHH.", ".HH..HH.", ".H....H."]),
 }
 
 # --- boca: x 26..37 · y 28..33 --------------------------------------------------------------------------------------
