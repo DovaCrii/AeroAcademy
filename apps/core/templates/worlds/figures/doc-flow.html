@@ -1,0 +1,22 @@
+{# Flujo documental: WIP → Compartido → Publicado. Cada documento está en el carril de su avance. #}
+<svg class="fg fg-docs" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y publicaste {{ fg.done }}.</title>
+  {% for h in fg.heads %}
+  <g class="fg-chip" aria-hidden="true"><rect x="{{ h.x }}" y="8" width="{{ h.w }}" height="28" rx="4"/><text x="{{ h.cx }}" y="22" text-anchor="middle" dominant-baseline="central">{{ h.text|upper }}</text></g>
+  {% if h.arrow %}<path class="fg-arrowhead" d="M{{ h.a2 }} 22 l-7 -4 v8z" aria-hidden="true"/>{% endif %}
+  {% endfor %}
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-doc lane{{ s.lane }}{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-slab" x="{{ s.x }}" y="{{ s.y }}" width="{{ s.w }}" height="54" rx="5"/>
+      <rect class="fg-box" x="{{ s.x }}" y="{{ s.y }}" width="{{ s.w }}" height="54" rx="5"/>
+      <path class="fg-page" d="{{ s.page }}"/><path class="fg-page" d="{{ s.fold }}"/>
+      <text class="fg-name" x="{{ s.x|add:'44' }}" y="{{ s.y|add:'21' }}"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="{{ s.x|add:'44' }}" y="{{ s.y|add:'38' }}">{{ s.code|upper }} · {{ s.pct }} %</text>
+      <rect class="fg-bar-bg" x="{{ s.x|add:'10' }}" y="{{ s.y|add:'47' }}" width="206" height="3" rx="1.5"/>
+      <rect class="fg-bar" x="{{ s.x|add:'10' }}" y="{{ s.y|add:'47' }}" width="{{ s.bar_w }}" height="3" rx="1.5"/>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

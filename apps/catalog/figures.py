@@ -71,6 +71,8 @@ DRAWN = {
     "survey-profile",
     "survey-gis",
     "capture-twin",
+    "plant-iso",
+    "doc-flow",
 }
 
 

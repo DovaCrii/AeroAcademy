@@ -265,7 +265,76 @@ def _tiles(items, labels, pct):
     return {"w": W, "h": top + rows * pitch, "chips": _chips(labels, 74, w=100, gap=28)}
 
 
+def _iso(items, labels, pct):
+    """Isométrico de tuberías: la línea sube y baja a 30°; cada tramo es una válvula (bowtie) que se abre al completarlo.
+    El tramo de tubería hacia la válvula siguiente se pinta cuando la anterior está lista (fluye)."""
+    n = len(items)
+    spacing = min(110, 620 // max(n - 1, 1)) if n > 1 else 0
+    dy = round(spacing * 0.577)
+    x_start = (W - spacing * (n - 1)) // 2
+    chars = max(8, min(18, int((2 * spacing - 12) / 7.8))) if n > 1 else 18
+    low = 214
+    for i, s in enumerate(items):
+        x = x_start + spacing * i
+        up = i % 2 == 1
+        y = low - dy if up else low
+        s.update(
+            x=x,
+            y=y,
+            valve=f"M{x - 10} {y - 8}L{x + 10} {y + 8}V{y - 8}L{x - 10} {y + 8}Z",
+            wheel=f"M{x - 6} {y - 20}H{x + 6}M{x} {y - 8}V{y - 20}",
+            label=clip(s["alias"] or s["short"], chars),
+            ty_name=y - 40 if up else y + 40,
+            ty_meta=y - 26 if up else y + 56,
+        )
+        _marks(s, x - 11, y + 28 if up else y + 76, 3 if spacing >= 66 else 1)
+    pipes = [
+        {"x1": a["x"], "y1": a["y"], "x2": b["x"], "y2": b["y"], "done": a["complete"]}
+        for a, b in zip(items, items[1:], strict=False)
+    ]
+    return {"w": W, "h": 310, "pipes": pipes, "chips": _chips(labels, 296, w=80, gap=40)}
+
+
+def _lanes(items, labels, pct):
+    """Flujo de documentos: tres carriles (WIP, Compartido, Publicado); cada documento está en el carril de su avance:
+    sin empezar → WIP, en curso → Compartido, completo → Publicado."""
+    names = list(labels.get("lanes", ("WIP", "Compartido", "Publicado")))
+    lane_w, gap, top, pitch = 226, 20, 50, 62
+    count = [0] * len(names)
+    for s in items:
+        lane = 2 if s["complete"] else 1 if s["started"] else 0
+        x = 20 + lane * (lane_w + gap)
+        y = top + count[lane] * pitch
+        count[lane] += 1
+        s.update(
+            lane=lane,
+            x=x,
+            y=y,
+            w=lane_w,
+            bar_w=round((lane_w - 20) * s["pct"] / 100),
+            label=clip(s["alias"] or s["short"], 22),
+            page=f"M{x + 12} {y + 12}h12l6 6v18h-18z",
+            fold=f"M{x + 24} {y + 12}v6h6",
+        )
+        _marks(s, x + lane_w - 46, y + 24, 2)
+    heads = [
+        {
+            "x": 20 + k * (lane_w + gap),
+            "w": lane_w,
+            "text": text,
+            "cx": 20 + k * (lane_w + gap) + lane_w // 2,
+            "a1": 20 + k * (lane_w + gap) + lane_w + 3,
+            "a2": 20 + k * (lane_w + gap) + lane_w + gap - 3,
+            "arrow": k < len(names) - 1,
+        }
+        for k, text in enumerate(names)
+    ]
+    return {"w": W, "h": max(170, top + max(count) * pitch + 8), "heads": heads}
+
+
 LAYOUTS = {
+    "iso": _iso,
+    "lanes": _lanes,
     "stack": _stack,
     "pipeline": _pipeline,
     "cylinders": _cylinders,
