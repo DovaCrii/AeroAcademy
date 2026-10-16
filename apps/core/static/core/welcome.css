@@ -664,5 +664,8 @@ body.welcome main.wrap{padding-bottom:20px;counter-reset:wsec}
 .w-start-strip .route-cta{color:var(--on-btn);flex:none}
 .w-also{margin:2px 2px 0;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
 .w-also a{color:var(--acc);font-weight:600}
-.w-also{margin:2px 2px 0;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
-.w-also a{color:var(--acc);font-weight:600}
+
+/* El doodle del héroe tiene su propia franja: termina donde empiezan los círculos de disciplina (sin superposición) */
+.w-hero{--hero-pad:clamp(72px,6vw,92px)}
+.w-hero-doodle{bottom:var(--hero-pad);max-height:calc(100% - var(--hero-pad) - 20px);max-width:min(40vw,340px);width:auto;height:auto}
+@media (max-width:760px){.w-hero{--hero-pad:78px}.w-hero-doodle{max-width:46vw}}
