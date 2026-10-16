@@ -7,9 +7,9 @@
 .av-card{--accent:var(--amber);position:relative;border-radius:var(--r);overflow:hidden;background:var(--sheet-2);color:var(--ink);padding:12px 14px 14px;text-align:center;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--accent)}
 .av-card::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--grid-major) 1px,transparent 1px),linear-gradient(90deg,var(--grid-major) 1px,transparent 1px);background-size:16px 16px;pointer-events:none}
 .av-card > *{position:relative}
-.av-big{display:grid;place-items:center;padding:4px 0 8px}
-.av-big svg,.av-head svg{display:block;image-rendering:pixelated;max-width:100%;height:auto}
-.av-big svg{border-radius:6px;box-shadow:0 0 0 2px var(--ink),3px 3px 0 2px var(--accent)}
+.av-big{display:grid;place-items:center}
+.av-big{padding:8px 0 12px}
+.av-big svg,.av-head svg{display:block;image-rendering:pixelated}
 .av-idle{display:inline-block;transform-origin:50% 100%}
 .av-disc{margin:0;font:600 10.5px/1.3 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--amber-ink)}
 .av-name{margin:4px 0 0;font:800 20px/1.15 var(--font-display)}
@@ -20,6 +20,8 @@
 .av-head .px{line-height:0}
 .av-note{margin:0;font-size:13px;color:var(--ink-2);border-left:3px solid var(--amber);padding-left:8px}
 .av-note[hidden]{display:none}
+.av-warn{margin:0;font-size:13px;color:var(--ink);border-left:3px solid var(--red);padding-left:8px}
+.av-wear{font-size:13px;color:var(--ink-2)}.av-wear summary{cursor:pointer;font-weight:600;color:var(--level);min-height:28px;display:flex;align-items:center}.av-wear ul{margin:4px 0 0;padding-left:18px}
 
 /* --- acciones: Guardar manda, Cancelar acompaña, el resto son enlaces --- */
 .av-bar{display:flex;gap:8px}
@@ -30,7 +32,6 @@
 
 /* Animación de reposo: un respiro de 2 px a pasos, como un sprite. Solo si la persona no pidió menos movimiento. */
 @media (prefers-reduced-motion:no-preference){
-  .av-card{transform:rotate(-1deg)}
   .av-idle{animation:av-idle 1.6s steps(2,jump-none) infinite}
   @keyframes av-idle{0%{transform:translateY(0)}50%{transform:translateY(-3px)}100%{transform:translateY(0)}}
   .av-dice:hover .die,.av-dice:focus-visible .die{animation:av-roll .6s steps(6) 1}
@@ -64,7 +65,9 @@
 .av-opt{position:relative;cursor:pointer;display:inline-flex;align-items:center}
 .av-opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%;height:100%}
 .av-opt .tile{display:block;border:2px solid var(--hair);border-radius:var(--r-sm);background:var(--sheet-2);line-height:0;padding:1px}
-.av-opt .tile .px svg{display:block;image-rendering:pixelated;border-radius:3px}
+.av-opt .tile svg,.av-chip .px svg,.av-head svg{shape-rendering:crispEdges}
+.av-opt .tile svg{display:block;image-rendering:pixelated;border-radius:3px;background:var(--tile-bg,#0f2a4d)}
+.av-chip .px svg{background:var(--tile-bg,#0f2a4d)}
 .av-opt:hover .tile{border-color:var(--ink-2)}
 .av-opt input:checked + .tile{border-color:var(--level);box-shadow:0 0 0 2px var(--level)}
 .av-opt input:focus-visible + .tile,.av-opt input:focus-visible + .sw,.av-opt input:focus-visible + .chip{outline:3px solid var(--red);outline-offset:2px}
@@ -75,8 +78,8 @@
 .av-opt.locked{opacity:.55;cursor:not-allowed}
 .av-opt.locked input{cursor:not-allowed}
 .av-opt .lock{position:absolute;left:2px;bottom:2px;pointer-events:none}
-.av-opt .av-tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);z-index:6;background:var(--ink);color:var(--sheet);font:600 12px/1.25 var(--font);padding:5px 8px;border-radius:6px;width:max-content;max-width:190px;text-align:center;pointer-events:none;opacity:0;visibility:hidden}
-.av-opt:hover .av-tip,.av-opt:focus-within .av-tip{opacity:1;visibility:visible}
+.av-opt[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);z-index:6;background:var(--ink);color:var(--sheet);font:600 12px/1.25 var(--font);padding:5px 8px;border-radius:6px;width:max-content;max-width:190px;text-align:center;pointer-events:none;opacity:0;visibility:hidden}
+.av-opt:hover::after,.av-opt:focus-within::after{opacity:1;visibility:visible}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* --- carreras: chips de una línea, agrupados por disciplina --- */
@@ -108,7 +111,8 @@
   .av-preview{order:0;position:sticky;top:var(--top-h,64px);z-index:12;background:var(--sheet);border:1px solid var(--hair);border-radius:var(--r);padding:8px 10px;box-shadow:var(--shadow-1);display:flex;align-items:center;gap:12px}
   .av-preview .av-card{flex:1;min-width:0;display:flex;align-items:center;gap:12px;text-align:left;padding:8px 10px;box-shadow:3px 3px 0 var(--accent);transform:none}
   .av-big{padding:0;flex:none}
-  .av-big svg{width:72px;height:72px;box-shadow:0 0 0 2px var(--ink)}
+  .av-big .av-frame svg{width:64px;height:64px}
+  .av-big .av-plate{display:none}
   .av-name{font-size:16px}
   .av-bonus{justify-content:flex-start;margin-top:6px}
   .av-head{display:none}

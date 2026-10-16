@@ -60,15 +60,14 @@ def test_compose_is_a_32x32_matrix_and_every_key_has_a_color():
 def test_render_is_a_safe_pixel_svg():
     svg = av.render_svg(av.default_config("ana@example.com"), title='Ana <b>"x"</b>')
     assert svg.startswith("<svg") and svg.endswith("</svg>")
-    assert 'shape-rendering="crispEdges"' in svg and 'viewBox="-2 -2 36 36"' in svg
+    assert 'shape-rendering="crispEdges"' in svg and 'viewBox="0 0 32 32"' in svg
     assert "<b>" not in svg and "&lt;b&gt;" in svg and "&quot;x&quot;" in svg
     assert "<script" not in svg and "javascript:" not in svg
     assert re.findall(r"<(\w+)", svg).count("path") >= 8  # un path por color
 
 
 def test_bust_view_crops_head_and_shoulders():
-    assert 'viewBox="2 0 28 28"' in av.render_svg({}, view="bust")
-    assert 'viewBox="4 2 24 24"' in av.render_svg({}, view="bust", frame=False)
+    assert 'viewBox="4 2 24 24"' in av.render_svg({}, view="bust")
 
 
 def test_runs_are_merged_so_the_svg_stays_small():
@@ -79,7 +78,7 @@ def test_runs_are_merged_so_the_svg_stays_small():
         "facial_hair": "full_beard",
         "outfit": "hoodie",
     }
-    assert len(av.render_svg(cfg)) < 5000
+    assert len(av.render_svg(cfg)) < 6500  # con el halo de 1 px
 
 
 def test_render_is_deterministic():
@@ -87,9 +86,11 @@ def test_render_is_deterministic():
     assert av.render_svg(cfg) == av.render_svg(dict(cfg))
 
 
-def test_frame_uses_the_rarity_variable_with_a_fallback():
-    assert "var(--rarity-legendary,#E0A800)" in av.render_svg({"frame": "legendary"})
-    assert "var(--rarity" not in av.render_svg({"frame": "legendary"}, frame=False)
+def test_svg_has_no_frame_rects():
+    """El marco de rareza sale del SVG: lo pinta el contenedor HTML (`av-frame`)."""
+    svg = av.render_svg({"frame": "legendary"})
+    assert "var(--rarity" not in svg and svg == av.render_svg({"frame": "common"})
+    assert av.render_svg({"frame": "legendary"}, frame=True) == svg  # `frame` se ignora
 
 
 @pytest.mark.parametrize("bad", [None, {}, {"hair": None}, {"class": "mago"}])

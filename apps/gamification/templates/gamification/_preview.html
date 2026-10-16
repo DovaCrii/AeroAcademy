@@ -1,9 +1,16 @@
 <div class="av-card" style="--accent:{{ card.accent }}">
-  <div class="av-big"><span class="av-idle">{{ big|safe }}</span></div>
+  <div class="av-big"><span class="av-idle">{{ big }}</span></div>
   <div class="av-who">
     <p class="av-disc">{{ card.discipline }}</p>
     <p class="av-name">{{ card.name }}</p>
     <ul class="av-bonus" aria-label="Bonos de la carrera">{% for b in card.bonus %}<li title="{{ b.name }}"><b>{{ b.code }}</b> +{{ b.value }}</li>{% endfor %}</ul>
   </div>
 </div>
-<figure class="av-head"><span class="px">{{ bust|safe }}</span><figcaption>Así se ve en la cabecera</figcaption></figure>
+{% if low_contrast %}<p class="av-warn" role="status">La ropa se pierde con este fondo: prueba otro color o un fondo distinto.</p>{% endif %}
+<figure class="av-head"><span class="px">{{ head|safe }}</span><figcaption>Así se ve en la cabecera</figcaption></figure>
+{% if wearing %}
+<details class="av-wear">
+  <summary>Lo que lleva</summary>
+  <ul>{% for item in wearing %}<li>{{ item }}</li>{% endfor %}</ul>
+</details>
+{% endif %}

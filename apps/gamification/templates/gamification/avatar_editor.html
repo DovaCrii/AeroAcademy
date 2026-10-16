@@ -14,7 +14,7 @@
   <p>Elige tu carrera en el gremio y arma tu figurita: cada carrera trae su ropa, su herramienta y su fondo, y todo se puede cambiar cuando se quiera. Algunas piezas se desbloquean con insignias.</p>
 </div>
 
-<form class="av-editor" id="avForm" method="post" action="{% url 'gamification:avatar_editor' %}" data-enhance-root data-live-url="{% url 'gamification:avatar_preview' %}" data-live-target="#preview">
+<form class="av-editor" id="avForm" method="post" action="{% url 'gamification:avatar_editor' %}" data-enhance-root data-live-url="{% url 'gamification:avatar_preview' %}" data-live-target="#preview" style="--tile-bg:{{ tile_bg }}">
   {% csrf_token %}
   <input type="hidden" name="seccion" id="avSeccion" value="{{ open_slug }}">
   <div class="av-stage">
@@ -36,7 +36,7 @@
     </p>
   </div>
 
-  <div class="av-sections">
+  <div class="av-sections">{% spaceless %}
     {% for section in sections %}
     <details class="av-sec" name="av-sec" data-slug="{{ section.slug }}" data-sum="{{ section.sum_spec }}"{% if section.open %} open{% endif %}>
       <summary>
@@ -89,6 +89,6 @@
       </div>
     </details>
     {% endfor %}
-  </div>
+  {% endspaceless %}</div>
 </form>
 {% endblock %}

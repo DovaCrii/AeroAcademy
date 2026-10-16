@@ -6,14 +6,19 @@ con la carrera elegida.
 """
 
 import json
+import logging
 import secrets
 from functools import lru_cache
 from pathlib import Path
 
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from . import avatar, game, sheet
 from .avatar import careers, engine
+from .avatar import views as avatar_views
+
+logger = logging.getLogger(__name__)
 
 # Secciones del editor (acordeón): slug, título, grupos «clave → título» y cómo se resume la elección actual.
 # Cada clave de `engine.CHOICES` tiene su propio <fieldset>; nada del catálogo se quita.
@@ -96,10 +101,24 @@ TILE_CATEGORIES = {
     "pin",
     "background",
 }
-# Estas se ven mejor con el cuerpo entero (herramientas, piernas y fondos no caben en el busto).
-FULL_VIEW = {"legwear", "prop", "background"}
-# Miniaturas con escala entera: el busto (24 celdas) a 2× y el cuerpo entero (32 celdas) a 2×.
-TILE_BUST, TILE_FULL = 48, 64
+# Miniatura de cada categoría: (vista, ancho en px). Cada ancho es un múltiplo entero del ancho de la vista, y los
+# recortes por zona (ojos, boca, torso, piernas) dejan el HTML liviano: una zona de ojos son 120 celdas, no 1024.
+TILE_VIEWS = {
+    "body": ("bust", 48),
+    "eyes": ("zone:eyes", 48),
+    "brows": ("zone:eyes", 48),
+    "glasses": ("zone:glasses", 60),
+    "mouth": ("zone:mouth", 48),
+    "hair": ("top", 48),
+    "headwear": ("top", 48),
+    "facial_hair": ("head", 48),
+    "neckwear": ("zone:neck", 48),
+    "outfit": ("zone:torso", 48),
+    "pin": ("zone:pin", 48),
+    "legwear": ("zone:legs", 48),
+    "background": ("zone:bg", 48),
+}
+CHIP_VIEW = ("head", 32)  # chip de carrera: la cabeza a 2×
 INT_KEYS = {key for key, allowed in engine.CHOICES.items() if isinstance(allowed, range)}
 # Lo que trae el look de una carrera: si la persona no tocó nada de esto, al cambiar de carrera se viste con su look.
 LOOK_KEYS = tuple(next(iter(careers.CAREERS.values()))["look"])
@@ -199,9 +218,65 @@ def random_config(person) -> dict:
     return avatar.surprise(secrets.token_hex(6), person_config(person)["class"], **gates(person))
 
 
-def svg_sized(cfg, size, *, title="Avatar", view="full", frame=True):
-    svg = avatar.render_svg(cfg, title=title, view=view, frame=frame)
-    return svg.replace("<svg ", f'<svg width="{size}" height="{size}" ', 1)
+def svg_sized(
+    cfg,
+    size,
+    *,
+    title="Avatar",
+    view="full",
+    frame=None,
+    layers="figure",
+    decorative=False,
+    bg_alt=None,
+    pattern=True,
+    halo=True,
+    backdrop=True,
+):
+    """SVG de una vista con `size` px de ancho; cada celda mide un número entero de píxeles.
+
+    Un tamaño que no es múltiplo del ancho de la vista es un error de la plantilla: en DEBUG lanza `ValueError`; en
+    producción se redondea hacia abajo al múltiplo válido y se deja un aviso (sin datos personales).
+    """
+    width = size
+    if not avatar_views.valid_width(view, size):
+        if settings.DEBUG:
+            raise ValueError(f"tamaño {size} no es múltiplo entero de la vista {view!r}")
+        logger.warning("Avatar: tamaño %s no es entero para la vista %s", size, view)
+        width = avatar_views.snap_width(view, size)
+    _x, _y, cells_w, cells_h = avatar_views.box(view)
+    height = width * cells_h // cells_w
+    svg = avatar.render_svg(
+        cfg,
+        title=title,
+        view=view,
+        layers=layers,
+        decorative=decorative,
+        bg_alt=bg_alt,
+        pattern=pattern,
+        halo=halo,
+        inline=True,
+        backdrop=backdrop,
+    )
+    return svg.replace("<svg ", f'<svg width="{width}" height="{height}" ', 1)
+
+
+def auto_background(person, cfg=None):
+    """Fondo claro para quien aún no guardó su avatar: el SVG lleva el oscuro y el claro y el tema decide."""
+    if person.avatar_config:
+        return None  # lo que se eligió se respeta
+    cfg = cfg or person_config(person)
+    return careers.light_background(cfg["class"])
+
+
+def framed(svg, cfg, *, level=None, large=False):
+    """Contenedor HTML con el marco de rareza (y la placa «NV n»): el marco vive fuera del SVG."""
+    plate = (
+        f'<span class="av-plate" data-nv="{int(level)}" aria-hidden="true"></span>' if level else ""
+    )
+    size = " av-frame--lg" if large else ""
+    return mark_safe(  # noqa: S308 (el SVG sale del catálogo y `frame` es una clave validada)
+        f'<span class="av-frame av-frame--{cfg["frame"]}{size}">{svg}{plate}</span>'
+    )
 
 
 def career_card(cfg) -> dict:
@@ -228,11 +303,46 @@ def _bonus(data):
 
 def preview_context(cfg, person) -> dict:
     """Todo lo que pinta la vista previa (la página y el fragmento en vivo)."""
+    level = game.level_info(person)["level"]
+    big = svg_sized(cfg, 192, title=f"Avatar de {person.name}", view="full")
     return {
-        "big": svg_sized(cfg, 180, title=f"Avatar de {person.name}", view="full"),
-        "bust": svg_sized(cfg, 32, view="bust"),
+        "big": framed(big, cfg, level=level, large=True),
+        "head": svg_sized(cfg, 32, view="head", decorative=True),
         "card": career_card(cfg),
+        "low_contrast": not engine.outfit_stands_out(cfg),
+        "wearing": wearing(cfg, person),
     }
+
+
+def wearing(cfg, person) -> list:
+    """«Lo que lleva»: de dónde viene cada pieza que el avatar trae puesta (insignia, nivel u oficio).
+
+    Solo la ve la persona dueña del avatar. `cfg` ya viene limpio con lo desbloqueado, así que solo salen piezas
+    ganadas; nunca entra nada de credenciales.
+    """
+    labels = {
+        key: {o["id"]: o["label"] for o in options}
+        for key, options in avatar.catalog().items()
+        if isinstance(options, list)
+    }
+
+    def name(key):
+        label = labels[key].get(cfg[key], cfg[key])
+        return f"Marco {label.lower()}" if key == "frame" else label
+
+    items = []
+    for key, pieces in engine.UNLOCKS.items():
+        need = pieces.get(cfg[key])
+        if need:
+            items.append(f"{name(key)} · insignia «{badge_name(need)}»")
+    for key, pieces in engine.LEVEL_UNLOCKS.items():
+        level = pieces.get(cfg[key])
+        if level:
+            items.append(f"{name(key)} · NV {level}")
+    look = careers.CAREERS[cfg["class"]]["look"]
+    if cfg["prop"] != "none" and cfg["prop"] == look["prop"]:
+        items.append(f"{name('prop')} · de tu oficio")
+    return items
 
 
 def _recommended(key, cfg_class):
@@ -252,6 +362,40 @@ def _tip(item) -> str:
     if item["locked"]:
         return f"{item['label']}: se desbloquea con «{item['need']}»"
     return item["label"] + (" (recomendado para tu carrera)" if item["rec"] else "")
+
+
+def _prop_view(prop_id):
+    """Recorte justo de una herramienta (su caja más 1 celda) y ancho entero a la mayor escala que cabe en 64 px."""
+    rows = engine.PROPS[prop_id]
+    cells = [(x, y) for y, line in rows.items() for x, ch in enumerate(line) if ch != "."]
+    if not cells:
+        return (20, 12, 8, 8), 24
+    x0, x1 = min(x for x, _ in cells), max(x for x, _ in cells)
+    y0, y1 = min(y for _, y in cells), max(y for _, y in cells)
+    x0, y0 = max(0, x0 - 1), max(0, y0 - 1)
+    w, h = min(32, x1 + 2) - x0, min(32, y1 + 2) - y0
+    scale = max(1, min(4, 64 // max(w, h)))
+    return (x0, y0, w, h), w * scale
+
+
+def _tile_svg(cfg, key, opt, gate):
+    """Miniatura de una opción: solo la zona que cambia (ojos, torso…), la herramienta sola o la muestra del fondo."""
+    look = _tile_cfg(cfg, key, opt["id"], gate)
+    if key == "prop":
+        view, width = _prop_view(opt["id"])
+        return svg_sized(look, width, view=view, layers="prop", decorative=True, pattern=False)
+    view, width = TILE_VIEWS[key]
+    layers = "none" if key == "background" else "figure"
+    return svg_sized(
+        look,
+        width,
+        view=view,
+        layers=layers,
+        decorative=True,
+        pattern=key == "background",
+        halo=False,
+        backdrop=key == "background",
+    )
 
 
 def _tile_cfg(cfg, key, option_id, gate):
@@ -274,7 +418,15 @@ def _career_clusters(cfg, gate):
                     "label": data["name"],
                     "accent": data["accent"],
                     "selected": cfg["class"] == career,
-                    "svg": svg_sized(look, TILE_BUST, title=data["name"], view="bust", frame=False),
+                    "svg": svg_sized(
+                        look,
+                        CHIP_VIEW[1],
+                        view=CHIP_VIEW[0],
+                        decorative=True,
+                        pattern=False,
+                        halo=False,
+                        backdrop=False,
+                    ),
                     "look": json.dumps({k: look[k] for k in LOOK_KEYS}),
                 }
             )
@@ -376,14 +528,7 @@ def editor_sections(cfg, person, open_slug=None):
                 }
                 item["tip"] = _tip(item)
                 if key in TILE_CATEGORIES:
-                    full = key in FULL_VIEW
-                    item["svg"] = svg_sized(
-                        _tile_cfg(cfg, key, opt["id"], gate),
-                        TILE_FULL if full else TILE_BUST,
-                        title=opt["label"],
-                        view="full" if full else "bust",
-                        frame=False,
-                    )
+                    item["svg"] = _tile_svg(cfg, key, opt, gate)
                 options.append(item)
             if recommended:
                 options.sort(key=lambda o: not o["rec"])  # estable: lo recomendado primero

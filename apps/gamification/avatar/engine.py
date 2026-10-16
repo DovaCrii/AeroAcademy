@@ -8,8 +8,9 @@ Todo sale del catálogo: nada que escriba la persona entra al SVG.
 
 import hashlib
 import random
+import re
 
-from . import backgrounds, careers, palettes
+from . import backgrounds, careers, palettes, views
 from .art import GRID
 from .parts import body, face, facial_hair, glasses, hair, headwear, outfits, props
 
@@ -341,46 +342,148 @@ def background_for(cfg):
     return palettes.BACKGROUNDS[cfg["background"]][1]
 
 
-def render_svg(config=None, *, title="Avatar", frame=True, view="full"):
-    """SVG pixel-art. `view="bust"` recorta cabeza y hombros (para tamaños pequeños)."""
+# Halo exterior de 1 px (docs/AVATAR_REDISENO.md § d.2): crema sobre fondos oscuros y tinta sobre claros, así la
+# silueta nunca se funde con el fondo (contraste ≥ 3:1 con cualquiera de los 24 fondos).
+HALO_LIGHT, HALO_DARK = "#F4EBD8", "#1B1F27"
+
+
+def halo_color(background_hex):
+    """El halo (crema o tinta) que más contrasta con el fondo."""
+    if contrast(HALO_LIGHT, background_hex) >= contrast(HALO_DARK, background_hex):
+        return HALO_LIGHT
+    return HALO_DARK
+
+
+def halo_cells(grid):
+    """Celdas vacías con una celda de la figura al lado (4 vecinos): el contorno exterior de 1 px."""
+    size = len(grid)
+    cells = []
+    for y in range(size):
+        for x in range(size):
+            if grid[y][x] != ".":
+                continue
+            for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                if 0 <= nx < size and 0 <= ny < size and grid[ny][nx] != ".":
+                    cells.append((x, y))
+                    break
+    return cells
+
+
+def _prop_grid(cfg):
+    grid = [["."] * GRID for _ in range(GRID)]
+    _paint(grid, PROPS[cfg["prop"]])
+    return grid
+
+
+def _runs(cells_by_row, x0, x1):
+    """Rectángulos «M x y h ancho v alto h-ancho z» de un conjunto de celdas por fila.
+
+    Primero se juntan las celdas contiguas de cada fila en tramos y luego los tramos iguales de filas consecutivas en
+    un solo rectángulo más alto: las zonas lisas (piel, pelo, fondo) pesan una fracción.
+    """
+    spans = {}
+    for y in sorted(cells_by_row):
+        xs = sorted(x for x in cells_by_row[y] if x0 <= x < x1)
+        i = 0
+        while i < len(xs):
+            run = 1
+            while i + run < len(xs) and xs[i + run] == xs[i] + run:
+                run += 1
+            spans.setdefault((xs[i], run), []).append(y)
+            i += run
+    segments = []
+    for (x, run), ys in spans.items():
+        i = 0
+        while i < len(ys):
+            rows = 1
+            while i + rows < len(ys) and ys[i + rows] == ys[i] + rows:
+                rows += 1
+            segments.append(f"M{x} {ys[i]}h{run}v{rows}h-{run}z")
+            i += rows
+    return "".join(
+        sorted(segments, key=lambda seg: [int(n) for n in re.findall(r"\d+", seg)[:2][::-1]])
+    )
+
+
+def _backdrop(index, halo, x0, y0, w, h, pattern=True, rect=True):
+    """Fondo (color y dibujo) y halo de un fondo dado, ya recortados a la vista."""
+    color = palettes.BACKGROUNDS[index][1]
+    out = [f'<rect x="{x0}" y="{y0}" width="{w}" height="{h}" fill="{color}"/>'] if rect else []
+    for ink, d in backgrounds.pattern_paths(index, x0, y0, x0 + w, y0 + h) if pattern else ():
+        out.append(f'<path fill="{ink}" d="{d}"/>')
+    rows = {}
+    for x, y in halo:
+        if x0 <= x < x0 + w and y0 <= y < y0 + h:
+            rows.setdefault(y, []).append(x)
+    if rows:
+        out.append(f'<path fill="{halo_color(color)}" d="{_runs(rows, x0, x0 + w)}"/>')
+    return "".join(out)
+
+
+def render_svg(
+    config=None,
+    *,
+    title="Avatar",
+    view="full",
+    frame=None,
+    layers="figure",
+    decorative=False,
+    bg_alt=None,
+    pattern=True,
+    halo=True,
+    inline=False,
+    backdrop=True,
+):
+    """SVG pixel-art de una vista (`views.VIEWS` o un recorte `(x, y, ancho, alto)`).
+
+    El marco de rareza y el nivel ya no van dentro del SVG: los pinta el contenedor HTML (`av-frame`), así el dibujo
+    es función pura de la configuración y cada celda mide un número entero de píxeles. `frame` se acepta y se ignora
+    por compatibilidad.
+
+    `layers`: «figure» (todo), «prop» (solo la herramienta, para su miniatura) o «none» (solo el fondo).
+    `bg_alt`: índice de un segundo fondo; el SVG lleva los dos y el CSS muestra uno según el tema (gente nueva).
+    `decorative`: sin título ni rol (las miniaturas tienen su nombre en el texto de la opción).
+    `pattern`: `False` deja el fondo liso (las miniaturas de piezas no necesitan el dibujo y pesan menos).
+    `inline`: sin `xmlns` (el HTML no lo necesita; un archivo .svg suelto sí). Con `decorative`, además deja
+    `shape-rendering` al CSS de la página.
+    `backdrop`: `False` no pinta el rectángulo del fondo (la miniatura lo pone con CSS, `--tile-bg`).
+    `halo`: `False` quita el contorno de 1 px (las miniaturas de piezas no lo necesitan). Los recortes de zona
+    (`zone:*`) tampoco lo llevan: son una muestra de la pieza, no una silueta.
+    """
     cfg = clean_config(config)
-    grid, palette = compose(cfg), palette_for(cfg)
-    pad = 2 if frame else 0
-    x0, y0, w, h = (0, 0, GRID, GRID) if view == "full" else (4, 2, 24, 24)
-    vx, vy, vw, vh = x0 - pad, y0 - pad, w + 2 * pad, h + 2 * pad
-    parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vx} {vy} {vw} {vh}" '
-        f'shape-rendering="crispEdges" role="img" aria-label="{_esc(title)}">',
-        f"<title>{_esc(title)}</title>",
-        f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" fill="{background_for(cfg)}"/>',
-    ]
-    for color, d in backgrounds.pattern_paths(cfg["background"]):
-        parts.append(f'<path fill="{color}" d="{d}"/>')
+    x0, y0, w, h = views.box(view)
+    if layers == "prop":
+        grid = _prop_grid(cfg)
+    elif layers == "none":
+        grid = [["."] * GRID for _ in range(GRID)]
+    else:
+        grid = compose(cfg)
+    outline = halo_cells(grid) if halo and not str(view).startswith("zone:") else []
+    palette = palette_for(cfg)
+    ns = "" if inline else ' xmlns="http://www.w3.org/2000/svg"'
+    if decorative:
+        crisp = "" if inline else ' shape-rendering="crispEdges"'
+        head = f'<svg{ns} viewBox="{x0} {y0} {w} {h}"{crisp} aria-hidden="true">'
+    else:
+        head = (
+            f'<svg{ns} viewBox="{x0} {y0} {w} {h}" shape-rendering="crispEdges" '
+            f'role="img" aria-label="{_esc(title)}"><title>{_esc(title)}</title>'
+        )
+    parts = [head]
+    dark = _backdrop(cfg["background"], outline, x0, y0, w, h, pattern, backdrop)
+    if bg_alt is None or bg_alt == cfg["background"]:
+        parts.append(dark)
+    else:
+        light = _backdrop(bg_alt, outline, x0, y0, w, h, pattern, backdrop)
+        parts.append(f'<g class="av-bg-dark">{dark}</g><g class="av-bg-light">{light}</g>')
     # Un solo <path> por color: cada tramo horizontal es "M x y h largo v1 h-largo z".
     by_color = {}
-    for y, row in enumerate(grid):
-        x = 0
-        while x < GRID:
-            ch = row[x]
-            if ch == ".":
-                x += 1
-                continue
-            run = 1
-            while x + run < GRID and row[x + run] == ch:
-                run += 1
-            by_color.setdefault(palette[ch], []).append(f"M{x} {y}h{run}v1h-{run}z")
-            x += run
-    for color, segments in by_color.items():
-        parts.append(f'<path fill="{color}" d="{"".join(segments)}"/>')
-    if frame:
-        color, var = palettes.FRAMES[cfg["frame"]]
-        fill = f"var({var},{color})"
-        parts += [
-            f'<rect x="{vx}" y="{vy}" width="{vw}" height="1" fill="{fill}"/>',
-            f'<rect x="{vx}" y="{vy + vh - 1}" width="{vw}" height="1" fill="{fill}"/>',
-            f'<rect x="{vx}" y="{vy}" width="1" height="{vh}" fill="{fill}"/>',
-            f'<rect x="{vx + vw - 1}" y="{vy}" width="1" height="{vh}" fill="{fill}"/>',
-        ]
+    for y in range(y0, y0 + h):
+        for x, ch in enumerate(grid[y]):
+            if ch != "." and x0 <= x < x0 + w:
+                by_color.setdefault(palette[ch], {}).setdefault(y, []).append(x)
+    for color, rows in by_color.items():
+        parts.append(f'<path fill="{color}" d="{_runs(rows, x0, x0 + w)}"/>')
     parts.append("</svg>")
     return "".join(parts)
 
