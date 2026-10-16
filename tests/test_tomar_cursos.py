@@ -151,3 +151,44 @@ def test_world_button_continues_where_the_person_left(site_world, client_for):
     do_level(member, path, codes[0])
     html = client_for(member.login).get(f"/rutas/{path.slug}/").content.decode()
     assert re.search(r"Continuar · \d+ % →", html)
+
+
+# --- portada: continuar, empieza aquí, rutas sin repetir -----------------------------------------------------------
+
+
+def home_html(client_for, person):
+    return client_for(person.login).get("/").content.decode()
+
+
+def start_block(html):
+    return html[html.index('id="empezar"') :].split("</section>")[0]
+
+
+def test_home_start_here_101(site_world, client_for):
+    block = start_block(home_html(client_for, site_world["member"]))
+    assert "Empieza aquí" in block and "Continuar donde quedaste" not in block
+    assert re.search(r'href="/rutas/[a-z0-9-]+-101/\?nivel=[^"]+#panel"', block)
+    assert "Empezar la ruta →" in block
+
+
+def test_home_continue_block(site_world, client_for):
+    member = site_world["member"]
+    path = structured("bim-101")
+    codes = list(path.levels.order_by("order").values_list("code", flat=True))
+    do_level(member, path, codes[0])
+    html = home_html(client_for, member)
+    block = start_block(html)
+    assert "Continuar donde quedaste" in block and "Empieza aquí" not in block
+    assert f"/rutas/bim-101/?nivel={codes[1]}#panel" in block and "Continuar ·" in block
+    assert 'href="#empezar"' in html  # el botón primario del héroe lleva al bloque
+
+
+def test_home_route_cards_unique(site_world, client_for):
+    html = home_html(client_for, site_world["member"])
+    slugs = re.findall(r'<article class="card route-card[^>]*data-slug="([^"]+)"', html)
+    assert slugs and len(slugs) == len(set(slugs))
+
+
+def test_home_lists_other_disciplines_of_a_route_once(site_world, client_for):
+    html = home_html(client_for, site_world["member"])
+    assert "También sirven aquí:" in html

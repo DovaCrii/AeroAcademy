@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.catalog.models import Discipline, Platform, Product, Resource
-from apps.catalog.software import PRODUCT_TILE, route_icon
+from apps.catalog.software import DISCIPLINE_SLUG_BY_KEY, PRODUCT_TILE, discipline_key, route_icon
 from apps.credentials.models import WARNING_DAYS, Credential
 from apps.gamification import game
 from apps.gamification.models import Badge
@@ -126,11 +126,54 @@ def _featured():
     return groups
 
 
+def main_discipline_slug(path):
+    """Disciplina principal de una ruta: la de `software.discipline_key` si la ruta la tiene; si no, su primera."""
+    own = sorted(path.disciplines.all(), key=lambda d: d.order)
+    wanted = DISCIPLINE_SLUG_BY_KEY.get(discipline_key(path), "")
+    if any(d.slug == wanted for d in own):
+        return wanted
+    return own[0].slug if own else ""
+
+
+def _start_block(person, paths):
+    """Primer bloque bajo el héroe: «Continuar donde quedaste» (la ruta con avance tocada más recientemente) o,
+    sin avance, «Empieza aquí» (la ruta 101 de su disciplina). Dos consultas fijas más las disciplinas de la persona."""
+    from apps.progress.models import MilestoneCheck, QuizAnswer
+
+    doing = [p for p in paths if 0 < p.pct < 100]
+    if doing:
+        ids = [p.pk for p in doing]
+        last = {}
+        for pid, when in MilestoneCheck.objects.filter(
+            person=person, milestone__path__in=ids
+        ).values_list("milestone__path_id", "checked_at"):
+            last[pid] = max(last.get(pid, when), when)
+        for pid, when in QuizAnswer.objects.filter(
+            person=person, question__path__in=ids
+        ).values_list("question__path_id", "answered_at"):
+            last[pid] = max(last.get(pid, when), when)
+        best = max(
+            doing,
+            key=lambda p: (p.pk in last, last[p.pk].timestamp() if p.pk in last else 0, p.pct),
+        )
+        return {"kind": "continue", "path": best}
+    mine = {d.pk for d in person.disciplines.all()}
+    starters = [p for p in paths if p.slug.endswith("-101") and p.pct == 0]
+    starters.sort(key=lambda p: not ({d.pk for d in p.disciplines.all()} & mine))
+    if starters:
+        return {"kind": "start", "path": starters[0]}
+    todo = [p for p in paths if p.pct == 0]
+    return {"kind": "start", "path": todo[0]} if todo else None
+
+
 def home_context(person):
     """Todo lo que necesita la ventana de bienvenida."""
     paths = list(_visible_paths(person))
     pcts = game.path_percents(person, paths)  # consultas fijas, no una tanda por ruta
     path_services.attach_ctas(person, paths, pcts)  # p.cta / p.pct para la tarjeta única
+    main = {
+        p.pk: main_discipline_slug(p) for p in paths
+    }  # cada ruta se muestra una vez, en su disciplina principal
     disciplines = []
     for d in Discipline.objects.all():
         visual = DISCIPLINE_VISUALS.get(d.slug, {"icon": "i-arq", "img": "", "label": d.name})
@@ -140,7 +183,8 @@ def home_context(person):
                 "label": visual["label"],
                 "icon": visual["icon"],
                 "img": visual["img"],
-                "paths": [p for p in paths if d in p.disciplines.all()],
+                "paths": [p for p in paths if main[p.pk] == d.slug],
+                "also": [p for p in paths if main[p.pk] != d.slug and d in p.disciplines.all()],
             }
         )
     if not disciplines:  # sin semillas todavía: se muestran las cuatro disciplinas base
@@ -166,6 +210,7 @@ def home_context(person):
         "suite": SUITE_AERO,
         "sponsor_text": SPONSOR_TEXT,
         "first_path": paths[0] if paths else None,
+        "start_block": _start_block(person, paths),
         "announcements": notifications.active_announcements(),
         "mission": dashboard.suggested_mission(person, pcts),
         "board": dashboard.guild_board(person),
