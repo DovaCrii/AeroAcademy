@@ -1,43 +1,46 @@
 ---
 name: nueva-ruta
-description: Crea o valida un JSON de ruta de aprendizaje en seed/rutas/ de AeroAcademy (structured o external_track) con vendor, productos, disciplinas, mundo y keys estables. Usar al agregar una ruta nueva (Autodesk, Bentley, Trimble, Esri…), sumar cursos o niveles, o revisar una ruta existente.
+description: Crea, amplía o valida una ruta de aprendizaje de AeroAcademy (seed/rutas/<slug>.json, structured o external_track) - cabecera, niveles, diapositivas (slides con diagram y fotos priv:), quiz, keys estables, icono único (ROUTE_ICON), mundo/figura, categoría del foro y enlaces verificados. Usar al agregar una ruta (Autodesk, Bentley, Trimble, Esri, cursos propios), sumar cursos o niveles, o revisar una existente.
 ---
 
 # Nueva ruta (o cambio de ruta)
 
-Referencias de formato:
-- `seed/rutas/forma-revit.json`: `structured`, mundo `architecture`.
-- `seed/rutas/bentley-learn.json`: `external_track`, mundo `civil`.
+Reparto (`orquestar`): **Opus 5.5 medio** decide alcance, nivelación y fuentes y revisa el JSON; **Sonnet 5.5 medio**
+(`curador-semillas`) lo escribe; **Haiku 5.5 medio** (`verificador`) valida enlaces y corre las comprobaciones.
 
-Taxonomía en `docs/TAXONOMIA.md`.
+Manda el código: esquema vigente en `apps/catalog/guides.py` y `seed/rutas/topografia-101.json`; plantilla, tabla de
+campos y checklist de autoría en `docs/CURSOS.md` §5; taxonomía en `docs/TAXONOMIA.md`. Ejemplos:
+`forma-revit.json` (`structured`), `bentley-learn.json` (`external_track`).
 
 ## Pasos
 
-1. **Preguntar o deducir:**
-   - vendor y productos (deben existir en `seed/vendors.json`; si no, agregarlos al final);
-   - disciplinas;
-   - tipo de ruta;
-   - mundo (por defecto, el `default_world` de la disciplina principal);
-   - plataforma (`seed/plataformas.json`).
-2. **Cabecera obligatoria:** `slug`, `title`, `program`, `platform`, `kind`, `vendor`, `products[]`, `disciplines[]`, `world`, `description`.
-3. **Niveles (capítulos):**
-   - Campos: `code`, `order`, `short`, `title`, `estimated_hours`, `audience`, `goal`, `resources[]`.
-   - En `structured`: `milestones[]` (`nX-tY`), `quiz[]` (`nX-qY`) y `mastery_signals[]`.
-   - En `external_track`: `external_courses[]` (`<code>-cY`) con `title`, `kind`, `url`, `duration_text`, `reward` (`trophy` | `relic`), `is_required` y `skills[]`. Opcionales: `contains[]`, `disciplines[]` y `verify_url`.
-   - Un capítulo final de **Cursos libres** si `allow_free_courses`.
-   - En el mundo `civil`, los títulos de capítulo llevan progresiva (`km 0+000 · …`).
-4. **URLs:**
-   - Abrir cada URL en el navegador y confirmar que el título coincide.
-   - Si solo se llega al catálogo, poner esa URL con `"verify_url": true`.
-   - Nunca inventar URLs ni nombres de cursos.
-5. **Keys estables (D7):**
-   - Si la ruta ya existe, **no renumerar**: agregar al final.
-   - Si se quita un elemento, se marca `"retired": true`; no se borra.
-6. **Términos de software** en inglés, tal como aparecen en pantalla; en el texto, marcarlos con `*término*`.
-7. **Validar:**
+1. **Decidir (Opus):** vendor y productos (`seed/vendors.json`; si faltan, al final), disciplinas, `kind`, plataforma
+   (`seed/plataformas.json`), `world` (`architecture`, `civil`, `survey`, `mechanical`, `aero`; por defecto el de la
+   disciplina) y, cuando exista el campo, `figure` (`docs/MEJORAS_UX.md` P1-9). Mundo inexistente: skill `nuevo-mundo`.
+2. **Cabecera:** `slug`, `title`, `program`, `platform`, `kind`, `vendor`, `products[]`, `disciplines[]`, `world`, `description`.
+3. **Niveles:** `code`, `order`, `short`, `title`, `estimated_hours`, `audience`, `goal`, `resources[]`.
+   - `structured`: `milestones[]` (`nX-tY`), `quiz[]` (`nX-qY`, ≥ 4–6 de escenario, respuesta en posición variada,
+     `explanation` siempre), `mastery_signals[]`, `guide` y `slides[]` (6–10: concepto → cómo funciona → ejemplo de
+     terreno → errores → resumen; `title`, `body`, `points`, `image`, `callout`, `terms`, `diagram`).
+   - `diagram`: `nodes` ≤ 12 (`id` `[a-z0-9_-]`, `x`/`y` en % de 16:9), `edges` ≤ 16 (`flow: true` anima), `steps`
+     opcionales. Debe leerse sin JS.
+   - `image`: `core/img/…svg` propio o `priv:<archivo>` en `private/cursos/<slug>/fotos/` (nunca en git; skill
+     `revision-privacidad`). Sin la foto instalada, la diapositiva muestra solo texto.
+   - `external_track`: `external_courses[]` (`<code>-cY`) con `title`, `kind`, `url`, `duration_text`, `reward`
+     (`trophy` | `relic`), `is_required`, `skills[]`; opcionales `contains[]`, `disciplines[]`, `verify_url`.
+   - Capítulo final **Cursos libres** si `allow_free_courses`. En `civil`, títulos con progresiva (`km 0+000 · …`).
+4. **Keys estables (D7):** `code`, `nX-tY`, `nX-qY` solo se agregan al final; lo que sale lleva `"retired": true`.
+5. **Texto:** palabras propias, sin copiar; términos de software en inglés como en pantalla, marcados `*término*`;
+   cursos generales sin marcas; líneas de diapositiva ≤ 70 caracteres.
+6. **URLs:** abrir cada una y confirmar el título. Solo el catálogo: esa URL con `"verify_url": true`. Nunca inventar.
+7. **Icono único:** `apps/core/static/core/img/software/ruta-<slug>.svg` propio, el slug en `ROUTE_ICON`
+   (`apps/catalog/software.py`) y la fila en `docs/ICONOS.md` (encargo a `artista-pixel` si hace falta dibujarlo).
+8. **Foro:** si la ruta abre un tema nuevo, su categoría al final de `seed/foro.json` (slugs estables).
+9. **Validar (Haiku):**
    ```bash
    python -m json.tool seed/rutas/<slug>.json > NUL
-   uv run python manage.py seed_catalog --dry-run   # valida rutas, insignias, títulos y foro; usar una base migrada
+   uv run python manage.py seed_catalog --dry-run      # base migrada nueva
+   uv run pytest -q tests/test_slides.py tests/test_software_guides.py tests/test_catalog_paths.py tests/test_seed_game.py
+   uv run python manage.py revisar_enlaces --solo-externos
    ```
-   Revisar además: keys únicas por ruta; productos, disciplinas y plataforma existentes; `world` válido (`architecture`, `civil`, `survey`, `mechanical`, `aero`).
-8. **Si el mundo aún no existe**, avisar y sugerir la skill `nuevo-mundo`.
+   Luego recorrer la ruta en el navegador: escritorio y 375 px, claro y oscuro, y sin JS.

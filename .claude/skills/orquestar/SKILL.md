@@ -1,46 +1,53 @@
 ---
 name: orquestar
-description: Cómo repartir una ronda de trabajo de AeroAcademy entre subagentes - qué modelo usa cada uno (Opus orquesta, Sonnet construye, Haiku verifica y busca), en qué orden y con qué reglas, para no gastar tokens de más. Usar cuando una petición tenga varias partes independientes o mucho trabajo mecánico.
+description: Método único de trabajo de AeroAcademy - fases (Entender, Diseñar, Implementar, Verificar, Revisar, Publicar y cerrar), qué modelo y esfuerzo hace cada una (Opus 5.5 medio diseña y revisa, Sonnet 5.5 medio implementa, Haiku 5.5 medio verifica) y cuándo preguntar a la persona. Usar en toda ronda con más de un paso o más de un agente.
 ---
 
-# Orquestar una ronda (Opus + Sonnet + Haiku)
+# Orquestar una ronda
 
-Decisión del dueño (2026-10-09): **Opus es el orquestador principal**; los subagentes se reparten por modelo según lo que
-requiera la tarea, para optimizar tokens y tiempo.
+Fuente única del método (decisión del dueño, 2026-10-16). Las demás skills dicen **qué** hacer en su tema; esta dice
+**quién** y **en qué orden**. Opus organiza, Sonnet construye, Haiku comprueba.
 
 ## Quién hace qué
 
-| Modelo | Rol | Agentes (`.claude/agents/`) | Ejemplos |
-|---|---|---|---|
-| **Opus** (sesión principal) | Orquesta: entiende el pedido, decide, reparte, revisa, integra, prueba en el navegador, abre y fusiona el PR | — | Planificar la ronda, resolver dudas con la persona, revisar lo entregado |
-| **Sonnet** | Construye | `bloque-dev`, `artista-pixel`, `curador-semillas`, `revisor-bloque` | Código y migraciones, diseño y CSS, sprites, rutas y cursos, revisión independiente |
-| **Haiku** | Mecánico y de lectura | `verificador-enlaces`, `explorador` | Buscar dónde está algo, inventarios, revisar enlaces, resumir salidas de pruebas o logs |
+| Modelo (esfuerzo) | Rol | Agentes (`.claude/agents/`) |
+|---|---|---|
+| **Opus 5.5 medio** | Sesión principal: entiende, diseña, decide, reparte, **revisa diffs** e integra | `disenador`, `revisor-bloque` |
+| **Sonnet 5.5 medio** | Implementa: código, pruebas, migraciones, CSS, semillas, sprites, arreglos de CI | `bloque-dev`, `curador-semillas`, `artista-pixel` |
+| **Haiku 5.5 medio** | Mecánico: inventarios, búsquedas, enlaces, vigilar el CI, resumir logs y pruebas | `verificador` |
 
-Al lanzar con la herramienta Agent, pasa siempre `model` explícito (`"sonnet"` o `"haiku"`), aunque el agente lo traiga en
-su definición: si el tipo no está disponible y se usa `general-purpose`, sin `model` heredaría Opus.
+Al lanzar con `Agent`, pasa siempre `model` explícito (`"opus"`, `"sonnet"` o `"haiku"`): si el tipo no está registrado y
+se usa `general-purpose`, sin `model` heredaría el de la sesión. En ese caso, dile que lea primero su `.claude/agents/<nombre>.md`.
 
-## Orden de una ronda
+## Fases
 
-1. **Entender (Opus).** Separar el pedido en partes independientes. Lo que dependa de una decisión de la persona se pregunta
-   antes (p. ej. datos internos en un repositorio público).
-2. **Explorar (Haiku, opcional).** `explorador` ubica archivos y dueños antes de repartir.
-3. **Repartir (Sonnet, en paralelo y en segundo plano).** Un agente por parte, con **dueños de archivos sin cruce**: el
-   prompt dice qué archivos edita y cuáles no toca. Sin `git` en los subagentes.
-4. **Ajustar en marcha (Opus).** Pedidos nuevos de la persona se mandan al agente dueño con SendMessage; no se lanza otro
-   agente sobre los mismos archivos.
-5. **Integrar (Opus).** Leer el informe, mirar el diff, correr `tools/preflight.py`, revisar en el navegador (escritorio y
-   375 px, claro y oscuro).
-6. **Verificar (Haiku).** `verificador-enlaces` al final de toda ronda que tocó rutas, catálogo o plantillas.
-7. **Publicar (Opus).** Rama, PR, CI en verde, fusión con merge commit (`docs/FUSIONES.md`), comandos para la VM.
-   Ojo: `gh pr checks --watch` termina al instante con «no checks reported» si el CI aún no arrancó; espera a que
-   aparezca el check (o vigila la corrida con `gh run watch <id> --exit-status`) antes de fusionar.
-8. **Revisión visual en claro y oscuro.** El dueño usa el sitio en **modo oscuro**: toda pantalla nueva se revisa en los
-   dos temas antes de publicar.
+1. **Entender (Opus).** Separar el pedido en partes independientes; lectura base de `AGENTS.md` y solo los docs del tema.
+   Inventario previo con `verificador` (o el agente `Explore`) si hay que ubicar muchos archivos.
+2. **Diseñar (Opus · `disenador` si es grande).** Plan corto: archivos, criterios de aceptación con su prueba, riesgos,
+   reparto con **dueños de archivos sin cruce** y qué verifica Haiku. Cambios grandes: plan en `docs/` y visto bueno.
+3. **Implementar (Sonnet, en paralelo y en segundo plano).** Un agente por parte, cada uno en su rama o `git worktree`.
+   Prompt autosuficiente: contexto, archivos que edita y cuáles no, criterios, cómo verificar, qué reportar. Commits
+   locales; sin `push` ni PR. Pedidos nuevos al agente dueño con `SendMessage`, no a uno nuevo sobre los mismos archivos.
+4. **Verificar (Haiku · `verificador`).** Lo que corre el CI (ver skill `bloque`), `python tools/kit/privacy_scan.py`,
+   `revisar_enlaces` si se tocaron rutas, catálogo o plantillas. Reporta; no corrige.
+5. **Revisar (Opus · `revisor-bloque`).** Lee el diff completo: criterios contra pruebas, seguridad y privacidad
+   (`AGENTS.md` «Reglas que salieron de las revisiones»), funciona **sin JS**, escritorio y 375 px, **claro y oscuro** (el
+   dueño usa oscuro). Lo bloqueante vuelve a la fase 3 al mismo implementador.
+6. **Publicar y cerrar (Opus · skill `cerrar-pendientes`).** Skill `revision-privacidad`, push, PR con la plantilla, CI en
+   verde y fusión con merge commit. La persona despliega.
+
+Ronda chica (un archivo, un arreglo): Opus puede hacer 2–5 solo, pero no se salta la verificación ni la revisión del diff.
+
+## Cuándo preguntar a la persona (y detener esa parte)
+
+- Seguridad, privacidad, datos de clientes o personales en un repositorio público.
+- Una decisión de producto o una pregunta abierta de `docs/DECISIONES.md`.
+- Dependencias nuevas, cambios de despliegue o producción, borrar ramas remotas, cerrar PR ajenos.
+
+Lo demás ambiguo se anota como pregunta abierta y se sigue con la propuesta por defecto.
 
 ## Ahorro de tokens
 
-- No dupliques: si un agente ya busca algo, no lo busques en paralelo.
-- Prompts autosuficientes y cortos: contexto, archivos dueños, criterios de aceptación, cómo verificar, qué reportar.
-- Pide informes concisos (archivos, decisiones, pruebas); los detalles se leen del diff.
-- Si un agente arrancó con el modelo equivocado y lleva poco, detenlo y relánzalo con el correcto; descarta sus cambios a
-  medias para partir limpio.
+- Una búsqueda la hace un solo agente; no la repitas en paralelo.
+- Informes cortos (archivos, decisiones, pruebas, pendientes); el detalle se lee del diff.
+- Agente con el modelo equivocado y poco avance: detenlo, descarta lo hecho a medias y relánzalo con el correcto.

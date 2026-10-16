@@ -4,7 +4,7 @@ Complementa `docs/FLUJO_GITHUB.md`. **El agente construye, abre el PR, espera el
 
 ## Reglas
 
-1. **Quién:** el agente, con el CI en verde (o la persona dueña del repositorio, si lo prefiere).
+1. **Quién:** el agente (Opus, skill `cerrar-pendientes`), con el CI en verde (o la persona dueña del repositorio, si lo prefiere).
 2. **Orden:** de abajo hacia arriba en la cadena apilada. El PR #1 (`bloque-0-base`) apunta a `main`; cada PR siguiente apunta a la rama del anterior.
 3. **Método:** siempre **merge commit** (`gh pr merge N --merge`). **Nunca** *squash* ni *rebase*: reescriben los commits de los que depende el PR de arriba y lo dejan con conflictos.
 4. **No borrar la rama** al fusionar (`--delete-branch` apagado) hasta haber fusionado todos los de arriba.
@@ -13,7 +13,7 @@ Complementa `docs/FLUJO_GITHUB.md`. **El agente construye, abre el PR, espera el
    - no tiene conflictos;
    - se reapuntó a `main` (el script lo hace);
    - se leyó su cuerpo («lo pendiente» y los avisos).
-6. **El PR de correcciones de revisión va al final** (#21 hoy), porque corrige código de los bloques de abajo.
+6. **El PR de correcciones de revisión va al final**, porque corrige código de los bloques de abajo.
 7. **Si un PR falla o genera conflictos:** se detiene toda la cadena; se corrige en la rama de ese PR y se vuelve a empezar desde él. Nunca se fuerza.
 8. **`main` siempre despliega:** después de la última fusión, `main` debe pasar `python tools/preflight.py` (ver `docs/PRODUCCION.md`).
 9. **Prohibido para el agente** (sin pedido explícito de la persona): `push --force`, borrar ramas remotas, cambiar la protección de `main`, publicar *releases*. Aun con el pedido de fusionar, el agente **nunca** fuerza ni salta el CI.

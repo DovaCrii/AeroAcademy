@@ -1,55 +1,51 @@
 ---
 name: nuevo-mundo
-description: Diseña e implementa el mundo visual de una especialidad en AeroAcademy (civil, survey, mechanical, aero…) siguiendo la gramática del mundo Arquitectura y el contrato de docs/MUNDOS.md. Usar cuando una ruta necesita un mundo que no existe o se quiere rediseñar uno.
+description: Diseña e implementa el mundo visual de una especialidad de AeroAcademy (survey, mechanical u otra; hoy existen architecture, civil y aero) o una figura temática de ruta, con la gramática y el contrato de docs/MUNDOS.md, funcionando sin JS y en claro y oscuro. Usar cuando una ruta necesita un mundo o una figura que no existe, o al rediseñar uno.
 ---
 
-# Nuevo mundo
+# Nuevo mundo (o figura temática)
 
-Leer primero:
-- `docs/MUNDOS.md`: gramática común, los cinco mundos y el contrato técnico.
-- **El mundo ya implementado:** `apps/core/templates/worlds/architecture/` y `apps/core/static/worlds/architecture.css`
-  (Bloque 3). Es la plantilla real a copiar; el prototipo viejo (`legacy/`) solo es referencia visual.
-- `apps/progress/services.py` → `world_context()`: el contexto común que reciben todos los mundos.
+Reparto (`orquestar`): **Opus 5.5 medio** (`disenador`) fija la metáfora, las 8 piezas y el plan, y revisa el
+resultado; **Sonnet 5.5 medio** (`bloque-dev`, `artista-pixel` para el atuendo de Nala) implementa; **Haiku 5.5 medio**
+(`verificador`) corre pruebas y enlaces.
 
-## Contrato (lo que `paths:detail` espera)
+Leer: `docs/MUNDOS.md` (gramática y contrato), un mundo ya hecho (`apps/core/templates/worlds/architecture/` +
+`apps/core/static/worlds/architecture.css`; `legacy/` solo como referencia visual), `world_context()` en
+`apps/progress/services.py`. Figuras por ruta: `docs/MEJORAS_UX.md` P1-9.
 
-`paths:detail` usa el mundo si existe `worlds/<world>/path.html`; si no, cae a la vista genérica.
-Con la cabecera `X-Partial` renderiza `worlds/<world>/_app.html` (solo el fragmento).
+## Contrato
+
+`paths:detail` usa `worlds/<world>/path.html` si existe (si no, la vista genérica); con `X-Partial` devuelve `_app.html`.
 
 | Archivo | Qué es |
 |---|---|
-| `worlds/<world>/path.html` | Página completa: carga el CSS/JS del mundo, la portada y `<div id="path-app" data-enhance-root>` con `_app.html` |
-| `worlds/<world>/_app.html` | Todo lo que cambia al marcar o responder: recorrido, navegador y panel |
-| `worlds/<world>/cover.html`, `journey.html`, `browser.html`, `_panel.html` | Las piezas de la gramática |
-| `static/worlds/<world>.css` | Tokens y piel del mundo (claro y oscuro) |
-| `static/worlds/<world>-cover.js` | Opcional: animación de la portada (respeta `prefers-reduced-motion`) |
+| `worlds/<world>/path.html` | Página: CSS/JS del mundo, portada y `<div id="path-app" data-enhance-root>` con `_app.html` |
+| `worlds/<world>/_app.html` | Lo que cambia al marcar o responder: recorrido, navegador y panel |
+| `cover.html`, `journey.html`, `browser.html`, `_panel.html` | Piezas de la gramática |
+| `static/worlds/<world>.css` | Tokens y piel (claro y oscuro) |
+| `static/worlds/<world>-cover.js` | Opcional; respeta `prefers-reduced-motion` |
 
-Contexto recibido: `path`, `chapters` (cada uno con `level`, `milestones`, `quiz`, `pct`, `done`, `total`,
-`complete`), `current`, `prev_code`, `next_code`, `building` (geometría del recorrido, hoy la del edificio),
-`stats`, `goals`, `goal`, `intro`, `flow`, `program_code`, `program_title`.
-Las acciones (`progress:toggle_milestone`, `answer_quiz`, `set_goal`) son comunes: los formularios llevan
-`data-enhance` y `data-fid` (para devolver el foco tras actualizar).
+Contexto: `path`, `chapters` (`level`, `milestones`, `quiz`, `pct`, `done`, `total`, `complete`), `current`,
+`prev_code`, `next_code`, `building`, `stats`, `goals`, `goal`, `intro`, `flow`, `program_code`, `program_title`.
+Acciones comunes (`progress:toggle_milestone`, `answer_quiz`, `set_goal`): formularios con `data-enhance` y `data-fid`.
 
 ## Pasos
 
-1. **Metáfora:** tomar la de MUNDOS.md o proponer una que salga de la herramienta real. Prueba: alguien del
-   oficio reconoce cada pieza sin explicación. Escribir una línea por cada una de las 8 piezas antes de codificar.
-2. **Datos del recorrido:** si el mundo necesita otra geometría (progresivas, curvas de nivel, waypoints),
-   agregar un `_<recorrido>()` en `progress/services.py` junto a `_floors()` y exponerlo en `world_context()`;
-   no calcular avance en la plantilla.
-3. **Plantillas y CSS** según la tabla. Clases con prefijo del mundo (`ar-` en Arquitectura) para no chocar.
-4. **Recorrido en SVG inline**, con estados por clases CSS (`on`, `done`) y enlaces `?nivel=<code>` para que
-   funcione sin JS.
-5. **Notas del equipo:** cerrar `_panel.html` con `{% load community_tags %}` y `{% level_notes path current.level.code %}`, y darle a las notas la forma del oficio en `apps/community/static/community/notes.css` (`.world-<world> .note`: nube de revisión en Arquitectura, estaca anotada en Civil).
-6. **Teo:** su atuendo para el mundo con la skill `sprite-8bit` (sprites en `apps/core/static/game/teo/`).
-7. **Pruebas** (ver `tests/test_progress.py` y `tests/test_notes.py`): la página renderiza todas las piezas; porcentajes; lectura sin
-   JS; respuesta parcial; texto escapado; el equipo aparece en el recorrido.
-8. **Comprobar en el navegador:** escritorio y 390 px, claro y oscuro, sin desborde; interacción real
-   (marcar un hito actualiza sin recargar).
+1. **Metáfora (Opus):** una línea por cada una de las 8 piezas; alguien del oficio la reconoce sin explicación.
+2. **Datos:** otra geometría va en un `_<recorrido>()` de `progress/services.py` expuesto en `world_context()`; nada de
+   cálculo en la plantilla.
+3. **Plantillas y CSS** con prefijo de clase propio (`ar-` en Arquitectura). Recorrido en SVG inline, estados por clase
+   (`on`, `done`) y enlaces `?nivel=<code>`: **todo funciona sin JS**.
+4. **Notas del equipo:** `_panel.html` cierra con `{% load community_tags %}` y `{% level_notes path current.level.code %}`;
+   forma del oficio en `apps/community/static/community/notes.css` (`.world-<world> .note`).
+5. **Nala:** su atuendo del mundo con la skill `sprite-8bit` (`apps/core/static/game/teo/teo-<world>.svg`).
+6. **Pruebas** (`tests/test_progress.py`, `tests/test_notes.py`): todas las piezas, porcentajes, lectura sin JS,
+   respuesta parcial, texto escapado, el equipo en el recorrido.
+7. **Navegador:** escritorio y 375 px, claro y oscuro, sin desborde; marcar un hito actualiza sin recargar.
 
 ## Reglas
 
-- Solo SVG y CSS, sin librerías ni imágenes pesadas. Las fotos propias van en `static/worlds/<world>/`.
-- La capa de juego (XP, insignias, cabecera) **no** se cambia por mundo.
-- Los términos de software van en inglés con el filtro `terms` (`*término*` → `.term`), que escapa el HTML.
+- Solo SVG y CSS, sin librerías ni imágenes pesadas; fotos propias en `static/worlds/<world>/` (nada de clientes).
+- La capa de juego (XP, insignias, cabecera) no cambia por mundo.
+- Términos de software con el filtro `terms` (`*término*` → `.term`, escapa HTML).
 - Un mundo no implementado no rompe nada: la ruta usa la vista genérica.
