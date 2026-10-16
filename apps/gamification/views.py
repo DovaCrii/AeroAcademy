@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
@@ -12,12 +13,14 @@ from .forms import SheetForm
 
 
 def _page(request, cfg, *, unsaved=False):
+    open_slug = services.resolve_section(request.GET.get("seccion"), request.user)
     return render(
         request,
         "gamification/avatar_editor.html",
         {
             "cfg": cfg,
-            "sections": services.editor_sections(cfg, request.user),
+            "sections": services.editor_sections(cfg, request.user, open_slug),
+            "open_slug": open_slug,
             **services.preview_context(cfg, request.user),
             "unsaved": unsaved,
         },
@@ -30,7 +33,12 @@ def avatar_editor(request):
     if request.method == "POST":
         services.save_config(request.user, request.POST)
         messages.success(request, "Tu avatar quedó guardado.")
-        return redirect("gamification:avatar_editor")
+        section = request.POST.get("seccion", "")
+        target = reverse("gamification:avatar_editor")
+        # Se vuelve a la sección que estaba abierta (el campo oculto seccion solo vale si está en la lista cerrada).
+        return redirect(
+            f"{target}?seccion={section}" if section in services.SECTION_SLUGS else target
+        )
     if request.GET.get("azar"):
         return _page(request, services.random_config(request.user), unsaved=True)
     if request.GET.get("restablecer"):
@@ -70,13 +78,18 @@ def seen(request):
     return redirect(target)
 
 
+# Qué desplegables empiezan abiertos en cada vista de la hoja (las tres vistas solo cambian esto y la vitrina).
+OPEN_SECTIONS = {"juego": ("attrs", "badges"), "compacta": (), "pro": ("skills", "creds")}
+
+
 def _render_sheet(request, person):
     stored = {"game": "juego", "compact": "compacta", "pro": "pro"}.get(person.sheet_view)
     view = request.GET.get("vista") or stored or ("juego" if person.show_game_view else "pro")
     ctx = sheet_data.build(person, request.user)
     ctx["view"] = view if view in {"pro", "compacta"} else "juego"
+    ctx["open_sections"] = OPEN_SECTIONS[ctx["view"]]
     ctx["avatar_big"] = services.svg_sized(
-        services.person_config(person), 160, title=f"Avatar de {person.name}", view="full"
+        services.person_config(person), 144, title=f"Avatar de {person.name}", view="full"
     )
     return render(request, "gamification/sheet.html", ctx)
 
@@ -103,14 +116,9 @@ def edit_sheet(request):
             person.sheet_view = data["sheet_view"]
             person.show_game_view = data["sheet_view"] == "game"
         person.links = {k: data[k] for k in ("linkedin", "credly") if data[k]}
-        if data["character_class"] != person.character_class:
-            person.character_class = data["character_class"]
-            if person.avatar_config and data["character_class"]:
-                person.avatar_config = {**person.avatar_config, "class": data["character_class"]}
         person.save(
             update_fields=[
-                "headline", "bio", "selected_title", "show_game_view", "sheet_view", "links",
-                "character_class", "avatar_config", "updated_at",
+                "headline", "bio", "selected_title", "show_game_view", "sheet_view", "links", "updated_at",
             ]
         )  # fmt: skip
         sheet_data.sync_profile(person)

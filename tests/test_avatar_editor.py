@@ -1,7 +1,10 @@
+import re
+
 import pytest
 from django.test import Client
 
 from apps.gamification import avatar, services
+from apps.gamification.avatar import careers
 
 pytestmark = pytest.mark.django_db
 
@@ -20,7 +23,7 @@ def test_editor_lists_every_category_with_the_current_choice_checked(member_clie
     cfg = services.person_config(member)
     assert f'name="hair" value="{cfg["hair"]}" checked' in html
     assert "Hombre" in html and "Mujer" in html and "Neutro" in html
-    assert "<svg" in html and "Guardar avatar" in html
+    assert "<svg" in html and ">Guardar<" in html
 
 
 def test_editor_shows_a_mini_preview_for_every_style_option(member_client):
@@ -131,7 +134,7 @@ def test_live_preview_is_a_fragment_and_does_not_save(client_for, member):
     )
     html = response.content.decode()
     assert response.status_code == 200 and "<html" not in html
-    assert html.count("<svg") == 4  # grande, mediano, pequeño y busto
+    assert html.count("<svg") == 2  # la figura y la cabecera
     assert f"Avatar de {member.name}" in html
     member.refresh_from_db()
     assert member.avatar_config == {}
@@ -236,3 +239,139 @@ def test_non_dict_avatar_config_is_tolerated(client_for, member):
     member.avatar_config = ["no", "es", "un", "dict"]
     member.save()
     assert client_for(member.login).get(EDITOR).status_code == 200
+
+
+# --- estructura del editor: acordeón, resumen y acciones -------------------------------------------------------------
+
+
+def _details(html):
+    return re.findall(r'<details class="av-sec"[^>]*>', html)
+
+
+def test_every_option_is_reachable(member_client):
+    """Nada se quitó del catálogo: cada valor de cada clave sigue siendo un radio del HTML."""
+    html = member_client.get(EDITOR).content.decode()
+    for key, allowed in avatar.engine.CHOICES.items():
+        for value in allowed:
+            assert f'name="{key}" value="{value}"' in html, (key, value)
+
+
+def test_editor_has_six_sections_one_open(member_client):
+    html = member_client.get(EDITOR).content.decode()
+    sections = _details(html)
+    assert [re.search(r'data-slug="([^"]+)"', tag).group(1) for tag in sections] == list(
+        services.SECTION_SLUGS
+    )
+    assert all('name="av-sec"' in tag for tag in sections)
+    assert sum(" open" in tag for tag in sections) == 1
+
+
+def test_editor_opens_the_requested_section(client_for, member):
+    client = client_for(member.login)
+
+    def opened(**query):
+        html = client.get(EDITOR, query).content.decode()
+        return [
+            re.search(r'data-slug="([^"]+)"', t).group(1) for t in _details(html) if " open" in t
+        ]
+
+    assert opened() == ["carrera"]  # nunca guardó: empieza por la carrera
+    assert opened(seccion="pelo") == ["pelo"]
+    assert opened(seccion="<script>") == ["carrera"]  # lista cerrada
+    post(client, hair="bun")
+    assert opened() == ["cuerpo-cara"]
+    assert opened(seccion="ropa") == ["ropa"]
+
+
+def test_saving_returns_to_the_open_section_only_if_it_is_valid(client_for, member):
+    client = client_for(member.login)
+    assert post(client, hair="bun", seccion="ropa").url == f"{EDITOR}?seccion=ropa"
+    assert post(client, hair="bun", seccion="//evil.com").url == EDITOR
+    assert post(client, hair="bun").url == EDITOR
+
+
+def test_dice_and_reset_keep_the_open_section(member_client):
+    html = member_client.get(EDITOR, {"seccion": "ropa"}).content.decode()
+    assert "?azar=1&amp;seccion=ropa" in html and "?restablecer=1&amp;seccion=ropa" in html
+    assert 'name="seccion" id="avSeccion" value="ropa"' in html
+
+
+def test_cancel_links_to_the_sheet_and_does_not_save(client_for, member):
+    client = client_for(member.login)
+    html = client.get(EDITOR).content.decode()
+    assert re.search(r'<a class="btn ghost" href="/perfil/">Cancelar</a>', html)
+    assert "Guardar avatar" not in html and ">Guardar<" in html
+    client.get("/perfil/")
+    member.refresh_from_db()
+    assert member.avatar_config == {}
+
+
+def test_editor_works_without_js(client_for, member):
+    """Todos los radios están en el HTML aunque la sección esté cerrada: el envío no depende de JS."""
+    client = client_for(member.login)
+    html = client.get(EDITOR, {"seccion": "pelo"}).content.decode()
+    form = html[html.index('<form class="av-editor"') :]
+    fields = {}
+    for tag in re.findall(r"<input[^>]*>", form):
+        kind = re.search(r'type="(\w+)"', tag).group(1)
+        if kind != "hidden":
+            assert " hidden" not in tag and "display:none" not in tag, tag
+        if kind == "radio" and " checked" in tag and " disabled" not in tag:
+            fields[re.search(r'name="(\w+)"', tag).group(1)] = re.search(
+                r'value="([^"]*)"', tag
+            ).group(1)
+    assert set(fields) == set(avatar.engine.CHOICES)  # una elección marcada por cada clave
+    assert post(client, **fields).status_code == 302
+    member.refresh_from_db()
+    assert member.avatar_config["hair"] == fields["hair"]
+    assert member.avatar_config["class"] == fields["class"]
+
+
+def test_summary_shows_the_current_choice(client_for, member):
+    client = client_for(member.login)
+    post(client, hair="mohawk", hair_color="3", facial_hair="beard")
+    member.refresh_from_db()
+    cfg = services.person_config(member)
+    section = next(s for s in services.SECTIONS if s["slug"] == "pelo")
+    summary = services.section_summary(cfg, section)
+    assert "Mohicano" in summary and ", " in summary
+    html = client.get(EDITOR).content.decode()
+    assert f'<span class="av-sum">{summary}</span>' in html
+    assert '<span class="av-sum">' in html and html.count('<span class="av-sum">') == 6
+
+
+def test_every_group_shows_the_chosen_name_in_its_legend(client_for, member):
+    client = client_for(member.login)
+    post(client, hair="mohawk")
+    html = client.get(EDITOR).content.decode()
+    assert 'Peinado: <b class="av-cur">Mohicano</b>' in html
+
+
+def test_career_info_lists_motto_and_bonuses_for_every_career(member_client):
+    html = member_client.get(EDITOR).content.decode()
+    assert "¿Qué trae cada carrera?" in html and "Lema del oficio" in html
+    for data in careers.CAREERS.values():
+        assert data["name"] in html and data["title"] in html
+
+
+def test_recommendation_is_a_dot_with_one_note_per_section(member_client):
+    html = member_client.get(EDITOR).content.decode()
+    assert "★" not in html and "= recomendado para tu carrera" not in html
+    assert html.count("recomendado por tu carrera</p>") >= 3
+    assert 'class="rec-dot"' in html
+
+
+def test_options_have_an_accessible_name_and_a_tooltip(member_client):
+    html = member_client.get(EDITOR).content.decode()
+    assert (
+        '<span class="vh">Mohicano' in html
+        and '<span class="av-tip" aria-hidden="true">Mohicano' in html
+    )
+    assert '<span class="vh">Casco de obra: se desbloquea con «Primer Trofeo»' in html
+
+
+def test_editor_html_stays_light(member_client):
+    # Tope provisional con las miniaturas de figura entera o busto; el PR de escala lo baja a 120 KB con recortes por zona.
+    html = member_client.get(EDITOR).content.decode()
+    assert html.count("<svg") <= 170  # sin una figura entera por carrera
+    assert len(html.encode()) <= 720_000, len(html.encode())
