@@ -80,4 +80,4 @@ Respeta `prefers-reduced-motion` (imagen fija, con la línea de escaneo detenida
   - tener modo claro y oscuro;
   - respetar `prefers-reduced-motion`;
   - usar solo SVG y CSS, sin librerías.
-- Se crea con la skill `nuevo-mundo`, que además genera el atuendo de Teo para ese mundo.
+- Se crea con la skill `nuevo-mundo`, que además genera el atuendo de Nala para ese mundo.
