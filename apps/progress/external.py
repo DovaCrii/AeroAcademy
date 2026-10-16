@@ -165,7 +165,22 @@ def _stations(chapters):
     return out
 
 
-_FILLER = {"a", "an", "the", "to", "of", "and", "for", "with", "in", "on", "intro", "introduction"}
+_FILLER = {
+    "a",
+    "an",
+    "the",
+    "to",
+    "of",
+    "and",
+    "for",
+    "with",
+    "in",
+    "on",
+    "intro",
+    "introduction",
+    "bentley",
+    "accredited",
+}
 STAKE_CHAR_W = 6.2  # una letra del rótulo de la estaca (10 px) ≈ 6 px
 MARKER_RISE = (
     44  # «TÚ» queda 44 px sobre el eje: por encima de la estaca y de su rótulo (que ocupa -24…-14)
