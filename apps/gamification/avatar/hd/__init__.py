@@ -26,6 +26,7 @@ CATEGORIES = {
     "eyes": False,
     "brows": False,
     "mouth": False,
+    "nose": False,
     "glasses": False,
     "facial_hair": False,
     "headwear": True,
@@ -43,6 +44,7 @@ ZONES = {
     "eyes": (20, 18, 43, 29),
     "brows": (20, 14, 43, 21),
     "mouth": (22, 26, 41, 35),
+    "nose": (28, 22, 35, 27),
     "glasses": (12, 14, 51, 29),
     "facial_hair": (18, 20, 45, 39),
     "headwear": (6, 0, 57, 29),
@@ -62,6 +64,21 @@ def sprite(at, rows, space="figure"):
     return {"at": tuple(at), "rows": list(rows), "space": space}
 
 
+def mirror(x0, top, rows, bridge=None):
+    """Un par simétrico: `rows` es la mitad izquierda desde la columna `x0`; la derecha es su espejo respecto del centro
+    de la figura (x 31,5). Lo que queda entre las dos mitades se rellena con `bridge` (`{fila: clave}`), por ejemplo el
+    puente de unos lentes; si no, queda transparente."""
+    width = len(rows[0])
+    assert all(len(row) == width for row in rows), rows
+    gap = GRID_HD - 2 * x0 - 2 * width
+    assert gap >= 0, "la mitad izquierda cruza el centro"
+    bridge = bridge or {}
+    return sprite(
+        (x0, top),
+        [row + bridge.get(i, ".") * gap + row[::-1] for i, row in enumerate(rows)],
+    )
+
+
 def up2(rows):
     """Una pieza de la grilla de 32 (`{y: "32 caracteres"}`) escalada ×2 a la grilla de 64."""
     out = {}
@@ -70,3 +87,10 @@ def up2(rows):
         for dy in range(SCALE):
             out[y * SCALE + dy] = wide
     return out
+
+
+from . import (  # noqa: E402,F401  (registra las piezas HD; va al final por el registro `HD`)
+    face,
+    facial_hair,
+    glasses,
+)

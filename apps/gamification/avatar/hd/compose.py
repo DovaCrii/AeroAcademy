@@ -82,7 +82,7 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE):
     _layer(grid, "outfit", cfg["outfit"], engine.OUTFITS[cfg["outfit"]], only_on={"O"})
     _layer(grid, "neckwear", cfg["neckwear"], engine.NECKWEAR[cfg["neckwear"]])
     _layer(grid, "facial_hair", cfg["facial_hair"], engine.FACIAL_HAIR[cfg["facial_hair"]])
-    _paint_rows(grid, up2(body.NOSE))
+    _layer(grid, "nose", "default", body.NOSE)
     _layer(grid, "mouth", cfg["mouth"], engine.MOUTHS[cfg["mouth"]])
     if not opaque:
         _layer(grid, "glasses", cfg["glasses"], engine.GLASSES[cfg["glasses"]])

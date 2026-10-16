@@ -122,6 +122,7 @@ def test_face_window_is_sacred_in_hd():
 def test_hd_ids_are_known_options():
     options = {
         "eyes": engine.EYES, "brows": engine.BROWS, "mouth": engine.MOUTHS, "glasses": engine.GLASSES,
+        "nose": {"default": None},
         "facial_hair": engine.FACIAL_HAIR, "headwear": engine.HEADWEAR, "hair": engine.HAIR,
         "outfit": engine.OUTFITS, "neckwear": engine.NECKWEAR, "pin": engine.PINS, "prop": engine.PROPS,
     }  # fmt: skip

@@ -153,7 +153,7 @@ def validate_hd(categories=None):
         if category not in hd.HD:
             errors.append(f"hd/{category}: categoría desconocida")
             continue
-        options = set(engine.CHOICES[HD_OPTIONS[category]])
+        options = {"default"} if category == "nose" else set(engine.CHOICES[HD_OPTIONS[category]])
         for option, art in hd.HD[category].items():
             if option not in options:
                 errors.append(f"hd/{category}: «{option}» no es una opción del catálogo")
