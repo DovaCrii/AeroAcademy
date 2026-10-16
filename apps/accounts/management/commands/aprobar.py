@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.accounts import services
 from apps.accounts.models import Person, PersonStatus
+from apps.community import moderation
 
 
 class Command(BaseCommand):
@@ -35,5 +36,6 @@ class Command(BaseCommand):
                 person, created = services.grant_access(login, rol)
             except ValueError as exc:
                 raise CommandError(str(exc)) from exc
+            moderation.log(None, "approve_person", person, f"{person.name} (consola)", rol)
             state = "creada y aprobada (aún no entra)" if created else "aprobada"
             self.stdout.write(self.style.SUCCESS(f"{person.login}: {state} · rol {person.role}"))

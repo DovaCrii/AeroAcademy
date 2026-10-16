@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.accounts import team_link
+from apps.community import moderation
 
 
 class Command(BaseCommand):
@@ -22,7 +23,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, dias, revocar, **options):
         if revocar:
+            current = team_link.active_link()
             count = team_link.revoke_active()
+            if current is not None:
+                moderation.log(
+                    None,
+                    "team_link_revoke",
+                    current,
+                    f"Enlace del equipo #{current.pk} revocado (consola)",
+                )
             self.stdout.write(
                 "Enlace del equipo revocado." if count else "No hay un enlace del equipo vigente."
             )
@@ -31,6 +40,9 @@ class Command(BaseCommand):
             record, token = team_link.create_link(None, dias)
         except ValueError as exc:
             raise CommandError(str(exc)) from exc
+        moderation.log(
+            None, "team_link", record, f"Enlace del equipo #{record.pk} por {dias} días (consola)"
+        )
         self.stdout.write(
             f"Enlace de inscripción del equipo (vence el {record.expires_at:%d/%m/%Y}, sirve para varias personas):"
         )

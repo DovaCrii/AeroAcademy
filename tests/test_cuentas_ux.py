@@ -207,3 +207,44 @@ def test_people_page_has_step_by_step_for_admin_only(client_for, admin_person, l
     assert "Solo funciona dentro de la tailnet" not in html
     lead_html = client_for(lead.login).get("/equipo/personas/").content.decode()
     assert "Cómo dar de alta a una persona" not in lead_html
+
+
+# --- bitácora de los comandos de alta ----------------------------------------------------------------------------
+
+
+def test_commands_log_to_moderation(member, make_person):
+    from io import StringIO
+
+    from django.core.management import call_command
+
+    from apps.community.models import ModerationLog
+
+    out = StringIO()
+    call_command("aprobar", "nueva@example.com", "--rol", "member", stdout=out)
+    call_command("enlace_registro", member.login, stdout=out)
+    call_command("enlace_equipo", "--dias", "7", stdout=out)
+    call_command("enlace_equipo", "--revocar", stdout=out)
+    entries = list(ModerationLog.objects.order_by("id").values_list("action", "actor", "summary"))
+    assert [e[0] for e in entries] == [
+        "approve_person",
+        "signup_link",
+        "team_link",
+        "team_link_revoke",
+    ]
+    assert all(e[1] is None and "(consola)" in e[2] for e in entries)
+    # nunca el enlace ni su secreto
+    printed = out.getvalue()
+    token = printed.split("/inscripcion/")[1].split()[0].rstrip("/")
+    secret_link = printed.split("/registro/")[1].split()[0].rstrip("/")
+    dump = " ".join(" ".join(map(str, e)) for e in entries)
+    assert token not in dump and secret_link not in dump and "http" not in dump
+
+
+@pytest.mark.parametrize("evil", ["//evil.com/x", "/\\evil.com", "https://evil.com/"])
+def test_next_rejects_evil(member, evil):
+    member.set_password(GOOD)
+    member.save(update_fields=["password"])
+    response = anon().post("/entrar/", {"email": member.login, "password": GOOD, "next": evil})
+    assert response.status_code == 302 and response.url == "/"
+    ok = anon().post("/entrar/", {"email": member.login, "password": GOOD, "next": "/rutas/"})
+    assert ok.url == "/rutas/"
