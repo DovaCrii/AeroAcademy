@@ -14,3 +14,5 @@ staticfiles/
 private/
 # Configuración de producción con claves (nunca se versiona)
 deploy/centro.env
+# Conexión a la VM (host y usuario reales): solo en tu computador
+deploy/vm.local.json
