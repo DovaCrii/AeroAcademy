@@ -91,6 +91,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.brand",
+                "apps.core.navigation.navigation",
                 "apps.gamification.context_processors.player",
                 "apps.notifications.context_processors.bell",
                 "apps.assistant.context_processors.teo",
