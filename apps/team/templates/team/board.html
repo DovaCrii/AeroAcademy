@@ -24,7 +24,7 @@
     <thead><tr><th>Persona</th>{% for p in table.paths %}<th><a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a></th>{% endfor %}</tr></thead>
     <tbody>
       {% for row in table.rows %}
-      <tr><th scope="row"><a href="{% url 'gamification:sheet' row.person.pk %}">{% avatar row.person 24 %} {{ row.person.name }}</a></th>
+      <tr><th scope="row"><a href="{% url 'gamification:sheet' row.person.pk %}">{% avatar row.person 24 "bust" False %} {{ row.person.name }}</a></th>
         {% for pct in row.cells %}<td><div class="meter" role="img" aria-label="{{ pct }} %"><i style="width:{{ pct }}%"></i></div><small>{{ pct }} %</small></td>{% endfor %}</tr>
       {% empty %}<tr><td colspan="9" class="muted">Aún no hay personas.</td></tr>{% endfor %}
     </tbody>

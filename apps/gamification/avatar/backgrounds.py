@@ -1,12 +1,11 @@
 """Fondos con dibujo por disciplina (pixel-art, mismo 32×32 que el avatar).
 
-Los 8 primeros fondos de `palettes.BACKGROUNDS` son lisos. Los demás llevan un dibujo generado por una función pura
+Los 8 primeros fondos de `palettes.BACKGROUNDS` son lisos; del 8 al 17 son oscuros con dibujo y del 18 al 23 son
+claros (se agregaron al final: los índices guardados no cambian). Los demás llevan un dibujo generado por una función pura
 `(x, y) -> 0 | 1 | 2` (nada, tinta 1, tinta 2) sobre el color base. Todo es determinista y sale del catálogo.
 """
 
 import math
-
-PAD = 2  # el marco deja 2 celdas a cada lado del 32×32
 
 
 def _hash(x, y):
@@ -122,6 +121,28 @@ def hazard(x, y):
     return 0
 
 
+def paper(x, y):
+    """Papel cuadriculado: una línea fina cada 8 celdas."""
+    return 1 if x % 8 == 0 or y % 8 == 0 else 0
+
+
+def cloud(x, y):
+    """Dos nubes planas con sombra: cuerpo blanco (1) y panza azulada (2)."""
+    for cx, cy, rx in ((8, 7, 6), (24, 14, 5)):
+        dx, dy = (x - cx) / rx, (y - cy) / 2.2
+        if dx * dx + dy * dy <= 1:
+            return 2 if y >= cy + 1 else 1
+    return 0
+
+
+def speckle(x, y):
+    """Hormigón: moteado fino determinista, con algún grano claro."""
+    h = _hash(x, y)
+    if h % 41 == 0:
+        return 2
+    return 1 if h % 11 == 0 else 0
+
+
 PATTERNS = {
     "blueprint": (blueprint, "#2D6EB5", "#7CC4FF"),
     "contour": (contour, "#2F5E43", "#C9A24A"),
@@ -133,6 +154,11 @@ PATTERNS = {
     "truss": (truss, "#4A5362", "#FFC21A"),
     "gis": (gis, "#1F6A66", "#4CC6FF"),
     "hazard": (hazard, "#FFC21A", "#FFC21A"),
+    "paper": (paper, "#ECE6DA", "#ECE6DA"),
+    "plan_light": (blueprint, "#C9DDF2", "#6FA8DC"),
+    "sky": (cloud, "#FFFFFF", "#B7D3EA"),
+    "speckle": (speckle, "#C4C4BC", "#EDEDE8"),
+    "sand": (contour, "#D8C595", "#C9AF78"),
 }
 
 # Índice de `palettes.BACKGROUNDS` → patrón. Los 8 primeros son lisos.
@@ -147,6 +173,12 @@ BY_INDEX = {
     15: "truss",
     16: "gis",
     17: "hazard",
+    18: "paper",
+    19: "plan_light",
+    # 20 (papel kraft) es liso
+    21: "sky",
+    22: "speckle",
+    23: "sand",
 }
 
 # Disciplina → fondos que le calzan (para agruparlos y recomendarlos).
@@ -158,24 +190,41 @@ BY_DISCIPLINE = {
     "captura": [12, 13, 4],
     "transversal": [17, 13, 14, 6, 7],
 }
+# Fondo claro que calza con cada disciplina: el de la gente nueva en tema claro y una opción más para cada carrera.
+LIGHT_BY_DISCIPLINE = {
+    "arquitectura": 19,
+    "civil": 22,
+    "topografia": 23,
+    "mecanica": 22,
+    "captura": 21,
+    "transversal": 18,
+}
 
 
-def pattern_paths(index, lo=-PAD, hi=32 + PAD):
-    """`[(color, d)]` con una ruta por tinta; vacío si el fondo es liso."""
+def pattern_paths(index, x0=0, y0=0, x1=32, y1=32, scale=1):
+    """`[(color, d)]` con una ruta por tinta dentro del recorte; vacío si el fondo es liso.
+
+    `scale` agranda el dibujo sin salir de la grilla: en el escenario HD (80 celdas) vale 2,5 y cada celda del dibujo de
+    32 ocupa 2 o 3 celdas, siempre enteras (el borde sigue nítido).
+    """
     name = BY_INDEX.get(index)
     if not name:
         return []
     fn, ink1, ink2 = PATTERNS[name]
+
+    def ink(x, y):
+        return fn(int(x / scale), int(y / scale))
+
     runs = {ink1: [], ink2: []}
-    for y in range(lo, hi):
-        x = lo
-        while x < hi:
-            v = fn(x, y)
+    for y in range(y0, y1):
+        x = x0
+        while x < x1:
+            v = ink(x, y)
             if not v:
                 x += 1
                 continue
             run = 1
-            while x + run < hi and fn(x + run, y) == v:
+            while x + run < x1 and ink(x + run, y) == v:
                 run += 1
             runs[ink1 if v == 1 else ink2].append(f"M{x} {y}h{run}v1h-{run}z")
             x += run

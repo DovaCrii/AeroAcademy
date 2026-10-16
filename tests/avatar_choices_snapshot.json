@@ -1,0 +1,269 @@
+{
+ "palettes": {
+  "SKINS": [
+   "Muy clara",
+   "Clara",
+   "Media clara",
+   "Trigueña",
+   "Morena",
+   "Canela",
+   "Oscura",
+   "Muy oscura"
+  ],
+  "HAIR_COLORS": [
+   "Negro",
+   "Castaño oscuro",
+   "Castaño",
+   "Cobrizo",
+   "Pelirrojo",
+   "Rubio",
+   "Platino",
+   "Canoso",
+   "Blanco",
+   "Azul",
+   "Rosa",
+   "Violeta"
+  ],
+  "EYE_COLORS": [
+   "Café",
+   "Azul",
+   "Verde",
+   "Avellana",
+   "Gris"
+  ],
+  "OUTFIT_COLORS": [
+   "Azul",
+   "Naranja",
+   "Verde",
+   "Gris",
+   "Cian",
+   "Rojo",
+   "Violeta",
+   "Negro",
+   "Blanco",
+   "Mostaza",
+   "Azul marino",
+   "Beige",
+   "Verde oliva",
+   "Burdeos",
+   "Amarillo hi-vis",
+   "Antracita",
+   "Turquesa"
+  ],
+  "PANTS_COLORS": [
+   "Azul marino",
+   "Negro",
+   "Caqui",
+   "Gris",
+   "Jean",
+   "Verde oliva",
+   "Antracita",
+   "Beige"
+  ],
+  "GLASSES_COLORS": [
+   "Negro",
+   "Dorado",
+   "Plateado",
+   "Rojo",
+   "Azul"
+  ],
+  "HEADWEAR_COLORS": [
+   "Amarillo",
+   "Azul",
+   "Rojo",
+   "Negro",
+   "Verde",
+   "Café",
+   "Blanco",
+   "Violeta",
+   "Naranja",
+   "Gris"
+  ],
+  "BACKGROUNDS": [
+   "Azul noche",
+   "Asfalto",
+   "Verde carta",
+   "Acero",
+   "Cielo",
+   "Ámbar oscuro",
+   "Violeta",
+   "Borgoña",
+   "Plano azul",
+   "Curvas de nivel",
+   "Perfil de camino",
+   "Engranajes",
+   "HUD de vuelo",
+   "Nube de puntos",
+   "Isométrico BIM",
+   "Cercha",
+   "Mapa SIG",
+   "Franja de seguridad"
+  ]
+ },
+ "choices": {
+  "class": [
+   "lev_lead",
+   "architect",
+   "bim_modeler",
+   "drafter",
+   "bim_coord",
+   "engineer",
+   "inspector",
+   "cartographer",
+   "gis",
+   "artificer",
+   "pilot",
+   "scanner",
+   "hse"
+  ],
+  "body": [
+   "masculine",
+   "feminine",
+   "neutral"
+  ],
+  "skin": 8,
+  "hair": [
+   "bald",
+   "buzz",
+   "short",
+   "side_part",
+   "quiff",
+   "curly",
+   "afro",
+   "long",
+   "wavy",
+   "ponytail",
+   "bun",
+   "bob",
+   "braids",
+   "mohawk",
+   "flat_top",
+   "pixie",
+   "undercut"
+  ],
+  "hair_color": 12,
+  "eyes": [
+   "dot",
+   "iris",
+   "happy",
+   "lashes",
+   "wink"
+  ],
+  "eye_color": 5,
+  "brows": [
+   "none",
+   "normal",
+   "thick",
+   "thin",
+   "raised"
+  ],
+  "mouth": [
+   "smile",
+   "neutral",
+   "grin",
+   "open",
+   "smirk",
+   "surprised"
+  ],
+  "facial_hair": [
+   "none",
+   "stubble",
+   "mustache",
+   "goatee",
+   "beard",
+   "full_beard",
+   "sideburns",
+   "handlebar"
+  ],
+  "glasses": [
+   "none",
+   "round",
+   "square",
+   "aviator",
+   "goggles",
+   "sunglasses",
+   "monocle",
+   "safety",
+   "fpv"
+  ],
+  "glasses_color": 5,
+  "headwear": [
+   "none",
+   "cap",
+   "beanie",
+   "hardhat",
+   "explorer",
+   "propeller",
+   "headphones",
+   "headband",
+   "beret",
+   "bucket",
+   "bump_cap",
+   "legionnaire",
+   "hardhat_lamp"
+  ],
+  "headwear_color": 10,
+  "outfit": [
+   "tshirt",
+   "hoodie",
+   "hivis_vest",
+   "field_vest",
+   "jacket",
+   "apron",
+   "labcoat",
+   "shirt_tie",
+   "flight_jacket",
+   "sweater",
+   "surveyor_jacket",
+   "blazer",
+   "overalls",
+   "bim_hoodie",
+   "hse_vest",
+   "polo",
+   "cardigan"
+  ],
+  "outfit_color": 17,
+  "neckwear": [
+   "none",
+   "lanyard",
+   "scarf",
+   "tie",
+   "bandana"
+  ],
+  "prop": [
+   "none",
+   "tablet",
+   "prism_pole",
+   "gnss_rover",
+   "drone_controller",
+   "scale_ruler",
+   "mug",
+   "plans_roll",
+   "wrench",
+   "clipboard",
+   "calculator",
+   "camera",
+   "laser_scanner"
+  ],
+  "pin": [
+   "none",
+   "compass",
+   "hardhat_pin",
+   "theodolite_pin"
+  ],
+  "legwear": [
+   "pants",
+   "shorts",
+   "skirt"
+  ],
+  "pants_color": 8,
+  "background": 18,
+  "frame": [
+   "common",
+   "bronze",
+   "rare",
+   "epic",
+   "legendary"
+  ]
+ }
+}

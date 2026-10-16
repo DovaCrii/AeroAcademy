@@ -10,6 +10,8 @@ Los slugs de las cinco clases originales se mantienen (`architect`, `engineer`, 
 solo cambió el nombre que se muestra. Los títulos de nivel de cada carrera viven en `seed/titulos.json`.
 """
 
+from . import backgrounds
+
 # (slug, nombre) en el orden en que el editor muestra los grupos.
 DISCIPLINES = [
     ("arquitectura", "Arquitectura"),
@@ -418,6 +420,19 @@ CAREERS = {
         "props": ["clipboard", "camera", "tablet", "mug"],
     },
 }
+
+
+def light_background(slug) -> int:
+    """Índice del fondo claro que calza con la disciplina de una carrera (gente nueva en tema claro)."""
+    return backgrounds.LIGHT_BY_DISCIPLINE[CAREERS[slug]["discipline"]]
+
+
+for _data in (
+    CAREERS.values()
+):  # un fondo claro afín más en la paleta de cada carrera (el look por defecto no cambia)
+    _light = backgrounds.LIGHT_BY_DISCIPLINE[_data["discipline"]]
+    if _light not in _data["palette"]["background"]:
+        _data["palette"]["background"] = [*_data["palette"]["background"], _light]
 
 SLUGS = tuple(CAREERS)
 LEGACY_SLUGS = ("architect", "engineer", "cartographer", "artificer", "pilot")

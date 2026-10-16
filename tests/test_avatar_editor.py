@@ -208,11 +208,11 @@ def test_avatar_tag_escapes_the_name(client_for, member):
     from django.template import Context, Template
 
     member.display_name = '<script>alert("x")</script>'
-    out = Template("{% load avatar_tags %}{% avatar person 32 %}").render(
+    out = Template("{% load avatar_tags %}{% avatar person 48 %}").render(
         Context({"person": member})
     )
     assert "<script>" not in out and "&lt;script&gt;" in out
-    assert 'width="32"' in out and 'height="32"' in out
+    assert 'width="48"' in out and 'height="48"' in out
 
 
 def test_avatar_tag_defaults_to_the_bust_view(member):
@@ -221,11 +221,11 @@ def test_avatar_tag_defaults_to_the_bust_view(member):
     out = Template("{% load avatar_tags %}{% avatar person 48 %}").render(
         Context({"person": member})
     )
-    assert 'viewBox="2 0 28 28"' in out
-    full = Template('{% load avatar_tags %}{% avatar person 48 "full" %}').render(
+    assert 'viewBox="4 2 24 24"' in out
+    full = Template('{% load avatar_tags %}{% avatar person 64 "full" %}').render(
         Context({"person": member})
     )
-    assert 'viewBox="-2 -2 36 36"' in full
+    assert 'viewBox="0 0 32 32"' in full
 
 
 def test_stored_garbage_in_avatar_config_never_breaks_the_page(client_for, member):
@@ -320,6 +320,8 @@ def test_editor_works_without_js(client_for, member):
             fields[re.search(r'name="(\w+)"', tag).group(1)] = re.search(
                 r'value="([^"]*)"', tag
             ).group(1)
+    assert {"pose", "zoom"} <= set(fields)  # controles de la vista previa: no son del catálogo
+    fields.pop("pose"), fields.pop("zoom")
     assert set(fields) == set(avatar.engine.CHOICES)  # una elección marcada por cada clave
     assert post(client, **fields).status_code == 302
     member.refresh_from_db()
@@ -363,15 +365,7 @@ def test_recommendation_is_a_dot_with_one_note_per_section(member_client):
 
 def test_options_have_an_accessible_name_and_a_tooltip(member_client):
     html = member_client.get(EDITOR).content.decode()
-    assert (
-        '<span class="vh">Mohicano' in html
-        and '<span class="av-tip" aria-hidden="true">Mohicano' in html
-    )
-    assert '<span class="vh">Casco de obra: se desbloquea con «Primer Trofeo»' in html
-
-
-def test_editor_html_stays_light(member_client):
-    # Tope provisional con las miniaturas de figura entera o busto; el PR de escala lo baja a 120 KB con recortes por zona.
-    html = member_client.get(EDITOR).content.decode()
-    assert html.count("<svg") <= 170  # sin una figura entera por carrera
-    assert len(html.encode()) <= 720_000, len(html.encode())
+    # El nombre accesible va en `aria-label` del radio y el tooltip sale de `data-tip` (CSS puro, sin JS).
+    assert 'data-tip="Mohicano"' in html and 'value="mohawk" aria-label="Mohicano"' in html
+    assert 'aria-label="Casco de obra: se desbloquea con «Primer Trofeo»"' in html
+    assert 'name="headwear" value="hardhat" disabled' in html

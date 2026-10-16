@@ -38,7 +38,7 @@
     {% if user.is_authenticated and user.is_approved %}
     <details class="cell usermenu">
       <summary class="userchip" aria-label="Menú de {{ user.name }}">
-        <span class="who"{% if player %} style="--pct:{{ player.pct }}"{% endif %}>{% avatar user 32 %}</span>
+        <span class="who"{% if player %} style="--pct:{{ player.pct }}"{% endif %}>{% avatar user 32 "head" False %}</span>
         <span class="slot" data-slot="player">{% block slot_player %}{% include "core/partials/player.html" %}{% endblock %}</span>
         <span class="txt"><span class="cap">{{ user.role }}</span><span class="uname">{{ user.name }}</span></span>
       </summary>

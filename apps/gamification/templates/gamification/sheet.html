@@ -17,7 +17,16 @@
 </div>
 
 <section class="hero" aria-label="{{ person.name }}">
-  <div class="hero-avatar">{{ avatar_big|safe }}</div>
+  <div class="hero-avatar">
+    {{ avatar_big }}
+    {% if wearing %}
+    <div class="wear" aria-label="Lo que lleva">
+      <p class="wear-t">Lo que lleva</p>
+      <ul>{% for item in wearing|slice:":3" %}<li>{{ item }}</li>{% endfor %}</ul>
+      {% if wearing|length > 3 %}<details><summary>ver todo ({{ wearing|length }})</summary><ul>{% for item in wearing|slice:"3:" %}<li>{{ item }}</li>{% endfor %}</ul></details>{% endif %}
+    </div>
+    {% endif %}
+  </div>
   <div class="hero-who">
     <h1>{{ person.name }}</h1>
     {% if career %}<p class="oficio"><b>{{ career.name }}</b> · {{ career.discipline }}{% if is_owner %} <a href="{% url 'gamification:avatar_editor' %}?seccion=carrera">Cambiar oficio</a>{% endif %}</p>

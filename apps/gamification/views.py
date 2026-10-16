@@ -9,6 +9,7 @@ from apps.accounts.models import Person, PersonStatus
 
 from . import game, services
 from . import sheet as sheet_data
+from .avatar import engine
 from .forms import SheetForm
 
 
@@ -21,7 +22,8 @@ def _page(request, cfg, *, unsaved=False):
             "cfg": cfg,
             "sections": services.editor_sections(cfg, request.user, open_slug),
             "open_slug": open_slug,
-            **services.preview_context(cfg, request.user),
+            "tile_bg": engine.background_for(cfg),
+            **services.preview_context(cfg, request.user, request.GET.get("pose")),
             "unsaved": unsaved,
         },
     )
@@ -57,7 +59,9 @@ def avatar_preview(request):
     """Vista previa en vivo: solo el fragmento; no guarda nada."""
     cfg = services.clean_from_form(request.user, request.GET)
     return render(
-        request, "gamification/_preview.html", services.preview_context(cfg, request.user)
+        request,
+        "gamification/_preview.html",
+        services.preview_context(cfg, request.user, request.GET.get("pose")),
     )
 
 
@@ -88,9 +92,19 @@ def _render_sheet(request, person):
     ctx = sheet_data.build(person, request.user)
     ctx["view"] = view if view in {"pro", "compacta"} else "juego"
     ctx["open_sections"] = OPEN_SECTIONS[ctx["view"]]
-    ctx["avatar_big"] = services.svg_sized(
-        services.person_config(person), 144, title=f"Avatar de {person.name}", view="full"
+    cfg = services.person_config(person)
+    svg = services.svg_sized(
+        cfg,
+        160,
+        title=f"Avatar de {person.name}",
+        view="stage",
+        bg_alt=services.auto_background(person, cfg),
     )
+    ctx["avatar_big"] = services.framed(svg, cfg, level=ctx["info"]["level"], large=True)
+    if ctx[
+        "is_owner"
+    ]:  # «Lo que lleva» dice de dónde viene cada pieza: solo la ve su dueña (decisión Q4)
+        ctx["wearing"] = services.wearing(cfg, person)
     return render(request, "gamification/sheet.html", ctx)
 
 

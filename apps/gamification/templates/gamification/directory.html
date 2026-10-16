@@ -13,7 +13,7 @@
   {% for p in people %}
   <li class="person-card">
     <a href="{% url 'gamification:sheet' p.pk %}">
-      {% avatar p 64 %}
+      {% avatar p 72 %}
       <b>{{ p.name }}</b>
       <span class="muted">{% if p.character_class %}{{ p.get_character_class_display }} · {% endif %}NV {{ p.level }}</span>
       {% if p.selected_title %}<span class="ttl">{{ p.selected_title.name }}</span>{% endif %}

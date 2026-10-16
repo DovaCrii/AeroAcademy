@@ -106,6 +106,13 @@ BACKGROUNDS = [
     ("Cercha", "#2A2F3A"),
     ("Mapa SIG", "#123B3A"),
     ("Franja de seguridad", "#1A1A1A"),
+    # Claros (se agregan al final: los índices guardados no cambian). Ver backgrounds.py.
+    ("Papel cuadriculado", "#FAF8F3"),
+    ("Plano claro", "#F1F6FC"),
+    ("Papel kraft", "#E9DCC0"),
+    ("Cielo de faena", "#CFE6F7"),
+    ("Hormigón", "#D9D9D4"),
+    ("Arena de terreno", "#EBD9B4"),
 ]
 
 # Colores fijos que no cambian con la configuración.
@@ -127,6 +134,12 @@ FIXED = {
     "G": "#13803C",
     "D": "#4A5663",
     "Q": "#FF5A00",
+    # Para piezas HD (equipo y detalle): línea interior fina, acero claro, pantalla, cono y su franja.
+    "k": "#2B2F36",
+    "I": "#C9D3DD",
+    "V": "#7FE3FF",
+    "X": "#FF7A1A",
+    "x": "#FFFFFF",
 }
 
 # Marco por rareza (docs/GAMIFICACION.md): color de respaldo y variable CSS.

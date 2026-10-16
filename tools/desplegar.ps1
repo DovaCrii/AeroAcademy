@@ -74,13 +74,17 @@ function Get-FolderSize([string]$Path) {
     return ('{0:N1} MB' -f ($bytes / 1MB))
 }
 
-$Remote = 'sudo aeroacademy actualizar'
-if ($Revertir) { $Remote = 'sudo aeroacademy revertir' }
-elseif ($SoloComprobar) { $Remote = 'sudo aeroacademy actualizar --solo-comprobar' }
+# Se llama al script del repositorio (no al atajo `aeroacademy actualizar`, que solo existe después de la primera
+# instalación con este flujo). Antes de actualizar se trae el código con `git pull --ff-only`, así el script que
+# corre ya es el de la versión nueva.
+$Remote = 'sudo bash ./deploy/actualizar.sh'
+$Pull = 'git pull --ff-only && '
+if ($Revertir) { $Remote = 'sudo bash ./deploy/actualizar.sh --revertir'; $Pull = '' }
+elseif ($SoloComprobar) { $Remote = 'sudo bash ./deploy/actualizar.sh --solo-comprobar'; $Pull = '' }
 if ($PublicFunnel -ne '' -and -not $Revertir -and -not $SoloComprobar) {
-    $Remote = "sudo PUBLIC_FUNNEL=$PublicFunnel aeroacademy actualizar"
+    $Remote = "sudo PUBLIC_FUNNEL=$PublicFunnel bash ./deploy/actualizar.sh"
 }
-$RemoteCmd = "cd ~/AeroAcademy && $Remote"
+$RemoteCmd = "cd ~/AeroAcademy && $Pull$Remote"
 
 if ($DryRun) { Write-Warn 'Modo DryRun: no se ejecuta nada.' }
 
