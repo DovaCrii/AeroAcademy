@@ -227,8 +227,8 @@ def test_preview_card_shows_career_name_and_title(member_client):
     html = member_client.get(
         "/perfil/avatar/vista/", {"class": "scanner", "outfit": "jacket"}
     ).content.decode()
-    assert "Especialista en Escaneo 3D" in html and "Domador de Láser" in html
-    assert html.count("<svg") == 4
+    assert "Especialista en Escaneo 3D" in html and "Domador de Láser" not in html
+    assert html.count("<svg") == 2
 
 
 def test_editor_works_without_js_and_offers_the_dice_and_reduced_motion(member_client):

@@ -15,27 +15,42 @@ from django.conf import settings
 from . import avatar, game, sheet
 from .avatar import careers, engine
 
-# categoría → (título en español, tipo de selector)
+# Secciones del editor (acordeón): slug, título, grupos «clave → título» y cómo se resume la elección actual.
+# Cada clave de `engine.CHOICES` tiene su propio <fieldset>; nada del catálogo se quita.
 SECTIONS = [
-    ("Tu carrera", [("class", "Elige tu carrera")]),
-    ("Quién eres", [("body", "Cuerpo")]),
-    (
-        "Cara",
-        [
+    {
+        "slug": "carrera",
+        "title": "Carrera",
+        "fields": [("class", "Elige tu carrera")],
+        "summary": [("class", "{}")],
+    },
+    {
+        "slug": "cuerpo-cara",
+        "title": "Cuerpo y cara",
+        "fields": [
+            ("body", "Cuerpo"),
             ("skin", "Tono de piel"),
             ("eyes", "Ojos"),
             ("eye_color", "Color de ojos"),
             ("brows", "Cejas"),
             ("mouth", "Boca"),
         ],
-    ),
-    (
-        "Pelo",
-        [("hair", "Peinado"), ("hair_color", "Color de pelo"), ("facial_hair", "Barba y bigote")],
-    ),
-    (
-        "Ropa de trabajo",
-        [
+        "summary": [("body", "{}"), ("skin", "piel {}"), ("eyes", "ojos {}")],
+    },
+    {
+        "slug": "pelo",
+        "title": "Pelo",
+        "fields": [
+            ("hair", "Peinado"),
+            ("hair_color", "Color de pelo"),
+            ("facial_hair", "Barba y bigote"),
+        ],
+        "summary": [("hair", "{}"), ("hair_color", "{}"), ("facial_hair", "{}")],
+    },
+    {
+        "slug": "ropa",
+        "title": "Ropa",
+        "fields": [
             ("outfit", "Ropa"),
             ("outfit_color", "Color de la ropa"),
             ("neckwear", "Cuello"),
@@ -43,19 +58,28 @@ SECTIONS = [
             ("legwear", "Parte de abajo"),
             ("pants_color", "Color del pantalón"),
         ],
-    ),
-    (
-        "Cabeza y herramientas",
-        [
+        "summary": [("outfit", "{}"), ("outfit_color", "{}")],
+    },
+    {
+        "slug": "casco-herramientas",
+        "title": "Casco y herramientas",
+        "fields": [
             ("headwear", "Casco, gorro o sombrero"),
             ("headwear_color", "Color del casco o gorro"),
             ("glasses", "Lentes"),
             ("glasses_color", "Color de lentes"),
             ("prop", "Herramienta en la mano"),
         ],
-    ),
-    ("Fondo y marco", [("background", "Fondo"), ("frame", "Marco")]),
+        "summary": [("headwear", "{}"), ("glasses", "{}"), ("prop", "{}")],
+    },
+    {
+        "slug": "fondo-marco",
+        "title": "Fondo y marco",
+        "fields": [("background", "Fondo"), ("frame", "Marco")],
+        "summary": [("background", "{}"), ("frame", "marco {}")],
+    },
 ]
+SECTION_SLUGS = tuple(sec["slug"] for sec in SECTIONS)
 TILE_CATEGORIES = {
     "body",
     "eyes",
@@ -74,6 +98,8 @@ TILE_CATEGORIES = {
 }
 # Estas se ven mejor con el cuerpo entero (herramientas, piernas y fondos no caben en el busto).
 FULL_VIEW = {"legwear", "prop", "background"}
+# Miniaturas con escala entera: el busto (24 celdas) a 2× y el cuerpo entero (32 celdas) a 2×.
+TILE_BUST, TILE_FULL = 48, 64
 INT_KEYS = {key for key, allowed in engine.CHOICES.items() if isinstance(allowed, range)}
 # Lo que trae el look de una carrera: si la persona no tocó nada de esto, al cambiar de carrera se viste con su look.
 LOOK_KEYS = tuple(next(iter(careers.CAREERS.values()))["look"])
@@ -203,9 +229,7 @@ def _bonus(data):
 def preview_context(cfg, person) -> dict:
     """Todo lo que pinta la vista previa (la página y el fragmento en vivo)."""
     return {
-        "big": svg_sized(cfg, 192, title=f"Avatar de {person.name}", view="full"),
-        "medium": svg_sized(cfg, 96, view="full"),
-        "small": svg_sized(cfg, 64, view="full"),
+        "big": svg_sized(cfg, 180, title=f"Avatar de {person.name}", view="full"),
         "bust": svg_sized(cfg, 32, view="bust"),
         "card": career_card(cfg),
     }
@@ -221,6 +245,15 @@ def _recommended(key, cfg_class):
     return tuple(data[group][sub] if sub else data[group])
 
 
+def _tip(item) -> str:
+    """Texto corto de la opción (tooltip y lectores de pantalla): su nombre y, si falta algo, qué la desbloquea."""
+    if item["need_level"]:
+        return f"{item['label']}: se desbloquea en NV {item['need_level']}"
+    if item["locked"]:
+        return f"{item['label']}: se desbloquea con «{item['need']}»"
+    return item["label"] + (" (recomendado para tu carrera)" if item["rec"] else "")
+
+
 def _tile_cfg(cfg, key, option_id, gate):
     if key == "class":
         return avatar.apply_career(cfg, option_id, **gate)
@@ -228,6 +261,7 @@ def _tile_cfg(cfg, key, option_id, gate):
 
 
 def _career_clusters(cfg, gate):
+    """Chips de carrera por disciplina: solo el busto con el look de la carrera y su nombre."""
     clusters = []
     for slug, label, members in careers.by_discipline():
         options = []
@@ -238,14 +272,9 @@ def _career_clusters(cfg, gate):
                 {
                     "id": career,
                     "label": data["name"],
-                    "title": data["title"],
-                    "tagline": data["tagline"],
                     "accent": data["accent"],
-                    "bonus": _bonus(data),
                     "selected": cfg["class"] == career,
-                    "locked": False,
-                    "need": "",
-                    "svg": svg_sized(look, 72, title=data["name"], view="full", frame=False),
+                    "svg": svg_sized(look, TILE_BUST, title=data["name"], view="bust", frame=False),
                     "look": json.dumps({k: look[k] for k in LOOK_KEYS}),
                 }
             )
@@ -254,26 +283,77 @@ def _career_clusters(cfg, gate):
     return clusters
 
 
-def editor_sections(cfg, person):
+def career_table(catalog) -> list:
+    """Tabla «¿Qué trae cada carrera?»: oficio, lema, ropa, herramienta, fondo y bonos."""
+    outfits = {o["id"]: o["label"] for o in catalog["outfit"]}
+    props = {o["id"]: o["label"] for o in catalog["prop"]}
+    backgrounds = {o["id"]: o["label"] for o in catalog["background"]}
+    rows = []
+    for _slug, label, members in careers.by_discipline():
+        for career in members:
+            data = careers.CAREERS[career]
+            look = data["look"]
+            rows.append(
+                {
+                    "id": career,
+                    "name": data["name"],
+                    "discipline": label,
+                    "title": data["title"],
+                    "tagline": data["tagline"],
+                    "outfit": outfits.get(look["outfit"], ""),
+                    "prop": props.get(look["prop"], ""),
+                    "background": backgrounds.get(look["background"], ""),
+                    "bonus": _bonus(data),
+                }
+            )
+    return rows
+
+
+def default_section(person) -> str:
+    """Sección que se abre sola: la carrera si la persona nunca guardó su avatar, si no «Cuerpo y cara»."""
+    return "cuerpo-cara" if person.avatar_config else "carrera"
+
+
+def resolve_section(raw, person) -> str:
+    """`?seccion=` solo vale si está en la lista cerrada; si no, la sección por defecto."""
+    return raw if raw in SECTION_SLUGS else default_section(person)
+
+
+def section_summary(cfg, section, catalog=None) -> str:
+    """La elección actual de una sección en texto («Jopo, Castaño, Sin barba»), para el <summary>."""
+    catalog = catalog or avatar.catalog()
+    parts = []
+    for key, template in section["summary"]:
+        label = {o["id"]: o["label"] for o in catalog[key]}.get(cfg[key])
+        if label:
+            parts.append(template.format(label))
+    return ", ".join(parts)
+
+
+def editor_sections(cfg, person, open_slug=None):
     """Secciones del editor; las de estilo llevan una miniatura que muestra la opción de verdad.
 
     Las miniaturas parten de la configuración actual, así que con otra carrera cambian la ropa, el gorro y el fondo
-    que se ven. Las opciones que la carrera recomienda salen primero y llevan una marca.
+    que se ven. Las opciones que la carrera recomienda salen primero y llevan una marca. Exactamente una sección
+    viene abierta (`open`).
     """
     catalog = avatar.catalog()
     gate = gates(person)
     have, level = gate["unlocked"], gate["level"]
+    open_slug = resolve_section(open_slug, person)
     sections = []
-    for title, fields in SECTIONS:
+    for number, section in enumerate(SECTIONS, start=1):
         groups = []
-        for key, label in fields:
+        for key, label in section["fields"]:
             if key == "class":
                 groups.append(
                     {
                         "key": key,
                         "label": label,
+                        "current": careers.CAREERS[cfg["class"]]["name"],
                         "options": [],
                         "clusters": _career_clusters(cfg, gate),
+                        "table": career_table(catalog),
                         "tiles": False,
                         "careers": True,
                     }
@@ -294,25 +374,40 @@ def editor_sections(cfg, person):
                     "need_level": need_level if need_level > level else 0,
                     "rec": opt["id"] in recommended,
                 }
+                item["tip"] = _tip(item)
                 if key in TILE_CATEGORIES:
+                    full = key in FULL_VIEW
                     item["svg"] = svg_sized(
                         _tile_cfg(cfg, key, opt["id"], gate),
-                        64 if key in FULL_VIEW else 56,
+                        TILE_FULL if full else TILE_BUST,
                         title=opt["label"],
-                        view="full" if key in FULL_VIEW else "bust",
+                        view="full" if full else "bust",
                         frame=False,
                     )
                 options.append(item)
             if recommended:
                 options.sort(key=lambda o: not o["rec"])  # estable: lo recomendado primero
+            current = next((o["label"] for o in options if o["selected"]), "")
             groups.append(
                 {
                     "key": key,
                     "label": label,
+                    "current": current,
                     "options": options,
                     "tiles": key in TILE_CATEGORIES,
                     "has_rec": bool(recommended),
                 }
             )
-        sections.append({"title": title, "groups": groups})
+        sections.append(
+            {
+                "slug": section["slug"],
+                "number": number,
+                "title": section["title"],
+                "summary": section_summary(cfg, section, catalog),
+                "sum_spec": json.dumps(section["summary"]),
+                "open": section["slug"] == open_slug,
+                "has_rec": any(g.get("has_rec") for g in groups),
+                "groups": groups,
+            }
+        )
     return sections
