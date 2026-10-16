@@ -31,6 +31,16 @@ FACE_X, FACE_Y = range(11, 21), range(10, 17)
 
 CLASSES = careers.SLUGS  # las carreras del gremio (el campo se llama `class` por compatibilidad)
 CLASS_LABELS = {slug: data["name"] for slug, data in careers.CAREERS.items()}
+# Color del parche de manga y del adhesivo del casco según la rareza de la insignia más alta (la leyenda de colores
+# es la de los marcos). Nada de nombres ni de credenciales entra al dibujo: solo la rareza.
+BADGE_COLORS = {
+    "common": "#8D9CAD",
+    "rare": "#1E8CFF",
+    "epic": "#8B5CF6",
+    "legendary": "#FFC21A",
+}
+BADGE_ORDER = ("legendary", "epic", "rare", "common")  # de mayor a menor rareza
+SHOW_BADGES_LABELS = {1: "Visibles", 0: "Ocultas"}
 FRAME_LABELS = {
     "common": "Común",
     "bronze": "Bronce",
@@ -92,6 +102,7 @@ DEFAULTS = {
     "pants_color": 0,
     "background": 0,
     "frame": "common",
+    "show_badges": 1,  # 1 = el avatar muestra su insignia de mayor rareza (parche y adhesivo); 0 = no
 }
 
 CHOICES = {  # clave de configuración → opciones válidas
@@ -118,6 +129,7 @@ CHOICES = {  # clave de configuración → opciones válidas
     "pants_color": range(len(palettes.PANTS_COLORS)),
     "background": range(len(palettes.BACKGROUNDS)),
     "frame": palettes.FRAMES,
+    "show_badges": range(2),
 }
 
 
@@ -434,6 +446,7 @@ def render_svg(
     inline=False,
     backdrop=True,
     pose="stand",
+    badge=None,
 ):
     """SVG pixel-art de una vista (`views.VIEWS` o un recorte `(x, y, ancho, alto)`).
 
@@ -443,6 +456,7 @@ def render_svg(
 
     `layers`: «figure» (todo), «prop» (solo la herramienta, para su miniatura) o «none» (solo el fondo).
     `bg_alt`: índice de un segundo fondo; el SVG lleva los dos y el CSS muestra uno según el tema (gente nueva).
+    `badge`: rareza de la insignia más alta que muestra el avatar (`BADGE_COLORS`); solo el escenario HD la dibuja.
     `decorative`: sin título ni rol (las miniaturas tienen su nombre en el texto de la opción).
     `pattern`: `False` deja el fondo liso (las miniaturas de piezas no necesitan el dibujo y pesan menos).
     `inline`: sin `xmlns` (el HTML no lo necesita; un archivo .svg suelto sí). Con `decorative`, además deja
@@ -465,6 +479,7 @@ def render_svg(
             halo=halo,
             inline=inline,
             backdrop=backdrop,
+            badge=badge if badge in BADGE_COLORS else None,
         )
     x0, y0, w, h = views.box(view)
     if layers == "prop":
@@ -558,6 +573,7 @@ def catalog():
             {"id": f, "label": FRAME_LABELS[f], "color": palettes.FRAMES[f][0]}
             for f in palettes.FRAMES
         ],
+        "show_badges": _options([1, 0], SHOW_BADGES_LABELS),
         "unlocks": UNLOCKS,
         "level_unlocks": LEVEL_UNLOCKS,
     }

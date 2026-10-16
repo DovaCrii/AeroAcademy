@@ -57,7 +57,7 @@ CAREERS = {
         "outfits": ["field_vest", "jacket", "shirt_tie", "surveyor_jacket", "polo"],
         "headwear": ["cap", "none", "beanie", "bump_cap"],
         "glasses": ["aviator", "round", "sunglasses", "none"],
-        "props": ["tablet", "laser_scanner", "clipboard", "mug"],
+        "props": ["tablet", "laser_scanner", "clipboard", "mug", "laptop_ai"],
     },
     "architect": {
         "name": "Arquitecto/a",
@@ -87,7 +87,7 @@ CAREERS = {
         "outfits": ["blazer", "shirt_tie", "cardigan", "sweater", "tshirt"],
         "headwear": ["none", "beret", "beanie", "bucket"],
         "glasses": ["round", "square", "none", "monocle"],
-        "props": ["plans_roll", "scale_ruler", "mug", "tablet"],
+        "props": ["plans_roll", "scale_ruler", "mug", "tablet", "laptop_bim"],
     },
     "bim_modeler": {
         "name": "Modelador/a BIM",
@@ -117,7 +117,7 @@ CAREERS = {
         "outfits": ["bim_hoodie", "hoodie", "tshirt", "sweater", "polo"],
         "headwear": ["none", "headphones", "beanie", "headband"],
         "glasses": ["square", "round", "none"],
-        "props": ["mug", "tablet", "scale_ruler"],
+        "props": ["mug", "tablet", "scale_ruler", "laptop_bim", "laptop_ai"],
     },
     "drafter": {
         "name": "Dibujante Proyectista",
@@ -177,7 +177,7 @@ CAREERS = {
         "outfits": ["polo", "shirt_tie", "blazer", "jacket", "cardigan"],
         "headwear": ["none", "cap", "headphones"],
         "glasses": ["square", "round", "aviator", "none"],
-        "props": ["clipboard", "tablet", "mug", "calculator"],
+        "props": ["clipboard", "tablet", "mug", "calculator", "laptop_bim"],
     },
     "engineer": {
         "name": "Ingeniero/a Civil-Estructural",
@@ -207,7 +207,7 @@ CAREERS = {
         "outfits": ["hivis_vest", "field_vest", "shirt_tie", "polo", "jacket"],
         "headwear": ["bump_cap", "hardhat", "cap", "none"],
         "glasses": ["safety", "square", "round", "none"],
-        "props": ["calculator", "clipboard", "tablet", "scale_ruler"],
+        "props": ["calculator", "clipboard", "tablet", "scale_ruler", "traffic_cone"],
     },
     "inspector": {
         "name": "Inspector/a de Terreno",
@@ -237,7 +237,7 @@ CAREERS = {
         "outfits": ["field_vest", "hivis_vest", "surveyor_jacket", "polo", "jacket"],
         "headwear": ["bump_cap", "hardhat", "cap", "legionnaire"],
         "glasses": ["safety", "sunglasses", "aviator", "none"],
-        "props": ["camera", "clipboard", "tablet", "calculator"],
+        "props": ["camera", "clipboard", "tablet", "calculator", "traffic_cone"],
     },
     "cartographer": {
         "name": "Geomensor/a",
@@ -267,7 +267,7 @@ CAREERS = {
         "outfits": ["surveyor_jacket", "field_vest", "hivis_vest", "jacket", "tshirt"],
         "headwear": ["legionnaire", "cap", "bucket", "bump_cap", "none"],
         "glasses": ["sunglasses", "aviator", "safety", "none"],
-        "props": ["prism_pole", "gnss_rover", "tablet", "camera"],
+        "props": ["prism_pole", "gnss_rover", "tablet", "camera", "total_station", "level_staff"],
     },
     "gis": {
         "name": "Especialista GIS",
@@ -297,7 +297,7 @@ CAREERS = {
         "outfits": ["sweater", "hoodie", "polo", "cardigan", "tshirt"],
         "headwear": ["none", "beanie", "headphones", "cap"],
         "glasses": ["square", "round", "aviator", "none"],
-        "props": ["tablet", "mug", "gnss_rover"],
+        "props": ["tablet", "mug", "gnss_rover", "level_staff", "laptop_ai"],
     },
     "artificer": {
         "name": "Ingeniero/a Mecánico/a",
@@ -327,7 +327,7 @@ CAREERS = {
         "outfits": ["overalls", "apron", "labcoat", "tshirt", "jacket"],
         "headwear": ["bump_cap", "none", "cap", "headband"],
         "glasses": ["safety", "goggles", "round", "none"],
-        "props": ["wrench", "calculator", "clipboard", "mug"],
+        "props": ["wrench", "calculator", "clipboard", "mug", "pipe_spool", "valve_wheel"],
     },
     "pilot": {
         "name": "Piloto RPA",
@@ -417,7 +417,7 @@ CAREERS = {
         "outfits": ["hse_vest", "hivis_vest", "polo", "field_vest", "jacket"],
         "headwear": ["bump_cap", "hardhat", "cap", "none"],
         "glasses": ["safety", "round", "none"],
-        "props": ["clipboard", "camera", "tablet", "mug"],
+        "props": ["clipboard", "camera", "tablet", "mug", "traffic_cone"],
     },
 }
 

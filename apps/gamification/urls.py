@@ -12,4 +12,5 @@ urlpatterns = [
     path("juego/visto/", views.seen, name="seen"),
     path("perfil/avatar/", views.avatar_editor, name="avatar_editor"),
     path("perfil/avatar/vista/", views.avatar_preview, name="avatar_preview"),
+    path("perfil/avatar/pieza/<slug:key>/<str:option>/", views.avatar_piece, name="avatar_piece"),
 ]

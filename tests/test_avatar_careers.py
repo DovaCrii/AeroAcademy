@@ -177,7 +177,11 @@ def test_career_thumbnails_show_each_careers_own_outfit(member, member_client):
     cfg = services.person_config(member)
     sections = services.editor_sections(cfg, member)
     group = next(g for s in sections for g in s["groups"] if g.get("careers"))
-    svgs = [o["svg"] for c in group["clusters"] for o in c["options"]]
+    svgs = [
+        services.piece_svg(services.decode_cfg(o["src"].split("c=")[1]), "class", o["id"])
+        for c in group["clusters"]
+        for o in c["options"]
+    ]
     assert len(svgs) == len(careers.CAREERS) and len(set(svgs)) == len(svgs)
 
 
@@ -200,7 +204,15 @@ def test_outfit_thumbnails_follow_the_selected_career(client_for, member):
         and not tiles(hse, "outfit")["flight_jacket"]["rec"]
     )
     assert tiles(hse, "outfit")["hse_vest"]["rec"]
-    assert tiles(pilot, "outfit")["blazer"]["svg"] != tiles(hse, "outfit")["blazer"]["svg"]
+    assert (
+        tiles(pilot, "outfit")["blazer"]["src"] != tiles(hse, "outfit")["blazer"]["src"]
+    )  # otro código
+
+    def piece(sections):
+        src = tiles(sections, "outfit")["blazer"]["src"]
+        return services.piece_svg(services.decode_cfg(src.split("c=")[1]), "outfit", "blazer")
+
+    assert piece(pilot) != piece(hse)  # la miniatura sigue a la carrera elegida
 
 
 def test_changing_career_without_touching_the_look_dresses_the_new_career(client_for, member):
