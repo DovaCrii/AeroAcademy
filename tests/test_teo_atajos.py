@@ -199,10 +199,11 @@ def test_the_widget_answers_inline_even_when_teo_sleeps(client_for, member):
     )
 
 
-def test_mobile_header_puts_the_navigation_on_its_own_row():
-    """Revisado a 375 px: con 10 secciones la cabecera desbordaba 24 px."""
+def test_mobile_header_collapses_the_navigation_into_the_burger():
+    """A 375 px la cabecera es una sola fila: la navegación vive en la hamburguesa «Menú» (sin segunda fila)."""
     from django.conf import settings
 
     css = (Path(settings.BASE_DIR) / "apps/core/static/core/base.css").read_text(encoding="utf-8")
+    assert "@media (max-width:1100px){" in css and ".top .nav-burger{display:block}" in css
     mobile = css.split("@media (max-width:640px){", 1)[1]
-    assert ".top .nav{grid-column:1/-1;grid-row:2" in mobile
+    assert "grid-row:2" not in mobile
