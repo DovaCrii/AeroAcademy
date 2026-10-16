@@ -98,3 +98,92 @@ def validate_all(categories=None):
     for category in categories or SPECS:
         errors += validate_category(category)
     return errors
+
+
+# --- piezas HD (`hd.HD`) -----------------------------------------------------------------------------------------
+
+# categoría de `hd.HD` → clave de `engine.CHOICES`
+HD_OPTIONS = {
+    "eyes": "eyes", "brows": "brows", "mouth": "mouth", "glasses": "glasses", "facial_hair": "facial_hair",
+    "headwear": "headwear", "hair": "hair", "outfit": "outfit", "neckwear": "neckwear", "pin": "pin",
+    "prop": "prop",
+}  # fmt: skip
+HD_ENGINE_KEYS = set("12345")  # solo las pone el motor
+
+
+def _check_sprite(errors, where, art, category, allowed_keys):
+    from .hd import MAX_COLORS, ZONES
+
+    if not isinstance(art, dict) or not {"at", "rows", "space"} <= set(art):
+        errors.append(f"{where}: debe ser un sprite() con at, rows y space")
+        return
+    rows, (ax, ay) = art["rows"], art["at"]
+    if not rows or not all(isinstance(line, str) for line in rows):
+        errors.append(f"{where}: rows debe ser una lista de textos")
+        return
+    if len({len(line) for line in rows}) != 1:
+        errors.append(f"{where}: todas las filas deben medir lo mismo")
+    used = {ch for line in rows for ch in line} - {"."}
+    if used & HD_ENGINE_KEYS:
+        errors.append(f"{where}: usa claves del motor {sorted(used & HD_ENGINE_KEYS)}")
+    if used - allowed_keys:
+        errors.append(f"{where}: claves fuera de la paleta {sorted(used - allowed_keys)}")
+    if len(used) > MAX_COLORS:
+        errors.append(f"{where}: usa {len(used)} colores (máximo {MAX_COLORS})")
+    expected_space = "stage" if category == "prop" else "figure"
+    if art["space"] != expected_space:
+        errors.append(f"{where}: el espacio debe ser {expected_space!r}")
+    x0, y0, x1, y1 = ZONES[category]
+    width, height = max(len(line) for line in rows), len(rows)
+    if not (x0 <= ax and y0 <= ay and ax + width - 1 <= x1 and ay + height - 1 <= y1):
+        errors.append(
+            f"{where}: la caja ({ax},{ay})+{width}×{height} sale de su zona {(x0, y0, x1, y1)}"
+        )
+
+
+def validate_hd(categories=None):
+    """Errores de las piezas HD registradas: ids conocidos, claves, caja, colores y ventana de la cara."""
+    from . import engine, hd
+    from .hd.compose import FACE_X, FACE_Y
+    from .hd.render import palette_hd
+
+    errors = []
+    allowed = set(palette_hd(engine.clean_config({}))) - HD_ENGINE_KEYS
+    for category in categories or list(hd.HD):
+        if category not in hd.HD:
+            errors.append(f"hd/{category}: categoría desconocida")
+            continue
+        options = set(engine.CHOICES[HD_OPTIONS[category]])
+        for option, art in hd.HD[category].items():
+            if option not in options:
+                errors.append(f"hd/{category}: «{option}» no es una opción del catálogo")
+                continue
+            sprites = (
+                {"front": art["front"], "back": art["back"]}
+                if hd.CATEGORIES[category]
+                else {"": art}
+            )
+            for part, sprite in sprites.items():
+                where = f"hd/{category}/{option}" + (f"/{part}" if part else "")
+                if sprite is None:
+                    continue
+                _check_sprite(errors, where, sprite, category, allowed)
+                if (
+                    category in {"prop", "headwear", "hair"}
+                    and isinstance(sprite, dict)
+                    and "rows" in sprite
+                ):
+                    ax, ay = sprite["at"]
+                    if sprite["space"] == "figure":
+                        ax, ay = ax + hd.OFFSET[0], ay + hd.OFFSET[1]
+                    clash = [
+                        (ax + i, ay + j)
+                        for j, line in enumerate(sprite["rows"])
+                        for i, ch in enumerate(line)
+                        if ch != "." and ax + i in FACE_X and ay + j in FACE_Y
+                    ]
+                    if clash and category == "prop":
+                        errors.append(
+                            f"{where}: dibuja sobre la ventana de la cara ({len(clash)} celdas)"
+                        )
+    return errors

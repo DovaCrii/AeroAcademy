@@ -37,6 +37,23 @@ CATEGORIES = {
 }
 HD = {category: {} for category in CATEGORIES}
 
+# Dónde puede dibujar cada categoría: `(x0, y0, x1, y1)` inclusivo, en el espacio de sus sprites (la figura de 64×64,
+# salvo `prop`, que vive en el escenario de 80×80). Son las cajas de la grilla de 32 ×2 con un margen de una celda.
+ZONES = {
+    "eyes": (20, 18, 43, 29),
+    "brows": (20, 14, 43, 21),
+    "mouth": (22, 26, 41, 35),
+    "glasses": (12, 14, 51, 29),
+    "facial_hair": (18, 20, 45, 39),
+    "headwear": (6, 0, 57, 29),
+    "hair": (2, 0, 61, 54),
+    "outfit": (8, 38, 55, 57),
+    "neckwear": (18, 34, 45, 53),
+    "pin": (36, 40, 47, 51),
+    "prop": (0, 0, 79, 79),
+}
+MAX_COLORS = 12  # por sprite (skill sprite-8bit)
+
 
 def sprite(at, rows, space="figure"):
     """Una pieza HD: filas de texto ancladas en `at` (`'.'` es transparente)."""
