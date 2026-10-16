@@ -52,3 +52,8 @@ body.pub{min-height:100vh;display:flex;flex-direction:column;background:
 .pub-account b{color:var(--pp-ink,var(--ink))}
 .pub-account:target{outline:2px solid var(--amber);outline-offset:6px;border-radius:6px}
 @media (max-width:640px){.pp-band .pp-doodle,.pp-band .pp-nala{display:none}.pub-nav{gap:6px 10px}.pub-how{font-size:12px}}
+
+/* Mi cuenta */
+.acct{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 20px;margin:14px 0 22px}
+.acct dt{margin:0 0 2px}
+.acct dd{margin:0;font-weight:600;overflow-wrap:anywhere}

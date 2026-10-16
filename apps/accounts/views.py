@@ -1,7 +1,7 @@
 import ipaddress
 from urllib.parse import unquote
 
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -10,7 +10,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST
 
 from . import ratelimit, services, team_link, totp, two_factor
-from .forms import SignupForm, TeamSignupForm
+from .forms import AccountPasswordChangeForm, SignupForm, TeamSignupForm
 from .models import PersonStatus
 
 LOGIN_ERROR = "Correo o contraseña incorrectos."
@@ -297,3 +297,50 @@ def _setup_context(person, ctx):
     else:
         ctx["recovery_left"] = two_factor.recovery_left(person)
     return ctx
+
+
+PASSWORD_CHANGE_MAX = 5  # intentos con la contraseña actual equivocada por persona y 15 minutos
+
+
+@never_cache
+def account(request):
+    """«Mi cuenta»: correo, puerta, rol y qué acciones de seguridad corresponden a esta sesión."""
+    person = request.user
+    return render(
+        request,
+        "accounts/account.html",
+        {
+            "person": person,
+            "door_public": getattr(request, "public_door", False),
+            "can_change_password": has_password_session(request),
+            "can_two_factor": not getattr(request, "public_door", False),
+            "two_factor_enrolled": two_factor.is_enrolled(person),
+        },
+    )
+
+
+@never_cache
+@require_http_methods(["GET", "POST"])
+def password_change(request):
+    """Cambio de contraseña. Solo con sesión por contraseña: quien entra por Tailscale no tiene contraseña que cambiar."""
+    if not has_password_session(request):
+        raise Http404("No encontrado.")
+    person = request.user
+    form = AccountPasswordChangeForm(person, request.POST or None)
+    if request.method == "POST":
+        if ratelimit.blocked("pwchange", str(person.pk), limit=PASSWORD_CHANGE_MAX):
+            return render(
+                request,
+                "accounts/password_change.html",
+                {"form": form, "wait": LOGIN_WAIT},
+                status=429,
+            )
+        if form.is_valid():
+            form.save()
+            auth.update_session_auth_hash(request, person)
+            ratelimit.clear("pwchange", str(person.pk))
+            messages.success(request, "Listo, cambiaste tu contraseña.")
+            return redirect("accounts:account")
+        if "old_password" in form.errors:
+            ratelimit.hit("pwchange", str(person.pk), window=services.LOGIN_WINDOW_SECONDS)
+    return render(request, "accounts/password_change.html", {"form": form})

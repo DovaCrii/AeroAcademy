@@ -3,7 +3,7 @@
 import pytest
 
 pytestmark = pytest.mark.django_db
-LOGOUT = 'aria-label="Salir"'
+LOGOUT = ">Salir</button>"
 
 
 def test_tailscale_session_does_not_show_logout(client_for, member):

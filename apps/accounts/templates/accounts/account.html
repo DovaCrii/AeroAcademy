@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Mi cuenta{% endblock %}
+
+{% block extra_head %}<link rel="stylesheet" href="{% static 'accounts/public.css' %}">{% endblock %}
+{% block content %}
+<section class="sheet">
+  <div class="sheet-in">
+    <h1>Mi cuenta</h1>
+    <p class="lead">Tus datos de acceso y las acciones de seguridad que corresponden a esta sesión.</p>
+    <dl class="acct">
+      <div><dt class="cap">Correo</dt><dd>{{ person.login }}</dd></div>
+      <div><dt class="cap">Nombre</dt><dd>{{ person.name }}</dd></div>
+      <div><dt class="cap">Rol</dt><dd>{{ person.role }}</dd></div>
+      <div><dt class="cap">Cómo entraste</dt><dd>{% if can_change_password %}Con correo y contraseña{% else %}Con tu identidad de <span class="term">Tailscale</span>{% endif %}{% if door_public %} · dirección pública{% else %} · red del equipo{% endif %}</dd></div>
+    </dl>
+
+    <h2>Contraseña</h2>
+    {% if can_change_password %}
+    <p>Puedes cambiarla cuando quieras: necesitas la actual. <a class="btn" href="{% url 'accounts:password_change' %}">Cambiar mi contraseña</a></p>
+    <p class="muted">¿Olvidaste tu contraseña? No hay correo automático: pídele al administrador un enlace nuevo.</p>
+    {% else %}
+    <p>Entraste con tu identidad de Tailscale, así que no tienes una contraseña que cambiar aquí. Tampoco hace falta «Salir»: al cerrar la sesión de Tailscale dejas de tener acceso.</p>
+    {% endif %}
+
+    {% if person.is_lead %}
+    <h2>Verificación en dos pasos</h2>
+    {% if can_two_factor %}
+    <p>{% if two_factor_enrolled %}Está activada.{% else %}Aún no la activas.{% endif %} Quien es responsable o administra el sitio la necesita para entrar por la dirección pública. <a href="{% url 'accounts:two_factor' %}">Ir a la verificación en dos pasos</a></p>
+    {% else %}
+    <p>{% if two_factor_enrolled %}Está activada.{% else %}Aún no la activas.{% endif %} Se activa y se cambia solo desde la red del equipo.</p>
+    {% endif %}
+    {% endif %}
+
+    <p>
+      <a href="{% url 'credentials:mine' %}">Mis certificados</a> ·
+      <a href="{% url 'gamification:my_sheet' %}">Mi hoja de personaje</a>
+    </p>
+    {% if password_session %}
+    <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn ghost" type="submit">Salir</button></form>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

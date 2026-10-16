@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
@@ -89,3 +90,15 @@ class SignupForm(forms.Form):
             except ValidationError as exc:
                 self.add_error("password1", exc)
         return data
+
+
+class AccountPasswordChangeForm(PasswordChangeForm):
+    """Cambio de contraseña de quien ya tiene sesión con contraseña: pide la actual y valida la nueva."""
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(user, *args, **kwargs)
+        self.fields["old_password"].label = "Contraseña actual"
+        self.fields["new_password1"].label = "Contraseña nueva"
+        self.fields["new_password2"].label = "Repite la contraseña nueva"
+        for name in self.fields:
+            self.fields[name].max_length = PASSWORD_MAX
