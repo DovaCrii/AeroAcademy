@@ -12,6 +12,8 @@ sudo ./deploy/install.sh mi-vm.tu-tailnet.ts.net
 
 El script es **idempotente**: sirve para instalar y para actualizar.
 
+**Para actualizar usa un solo comando** (con reversa automática): `sudo aeroacademy actualizar` en la VM, o `./tools/desplegar.ps1` desde tu computador. Hace `git pull --ff-only`, deja una instantánea del código (`/opt/aeroacademy.prev`) y un respaldo de SQLite (`/var/backups/centro/pre-actualizar-*.sqlite3`, los últimos 5), corre este instalador con tu entorno (`sudo PUBLIC_FUNNEL=1 aeroacademy actualizar` pasa el indicador del Funnel; sin indicarlo se conserva el estado actual), comprueba `/healthz` y, si falla, restaura el código (y la base solo si hubo migraciones). Opciones: `--solo-comprobar`, `--sin-pull`; `sudo aeroacademy revertir` vuelve atrás a mano. Detalle en `docs/PRODUCCION.md` §3.
+
 1. Instala dependencias y `uv`, crea el usuario de sistema `centro` y copia la aplicación a `/opt/aeroacademy`.
 2. La primera vez crea `/etc/centro/env` con una `SECRET_KEY` aleatoria (permisos 640). Ahí se completan:
    - `ALLOWED_HOSTS`: el nombre MagicDNS de la VM (el script lo rellena si lo pasas como argumento).

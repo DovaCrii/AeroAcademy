@@ -31,7 +31,9 @@ python tools/preflight.py        # debe terminar en «Todo en verde»
 `deploy/centro.env` (ignorado por git, **no se sube a GitHub**) ya tiene tu configuración. Revisa:
 `ALLOWED_HOSTS=aeroacademy.tailccd107.ts.net`, `PUBLIC_HTTPS_PORT=443`, `BOOTSTRAP_ADMINS=` (tu correo **de Tailscale**), `NIM_API_KEY=` (tu clave) y `SECRET_KEY=` vacía (el instalador genera una).
 
-## 1. En la VM, en bloques cortos (mira la salida de cada uno)
+## 1. Primera instalación en la VM, en bloques cortos (mira la salida de cada uno)
+
+> Solo para instalar por primera vez. Para **actualizar** usa §3 (un comando).
 
 **A. Código** (si ya clonaste, solo actualiza)
 ```bash
@@ -110,12 +112,48 @@ Muestra modelo, latencia y una respuesta de prueba, o explica el fallo (clave, l
 
 **La clave nunca va al repositorio.** Si se expuso (por ejemplo, pegada en un chat), créala de nuevo en build.nvidia.com, cámbiala en `deploy/centro.env` y vuelve a copiarlo y a correr el instalador (o edita `/etc/centro/env` y `sudo systemctl restart centro`), y revoca la vieja.
 
-## 3. Actualizar después
+## 3. Actualizar con un comando
 
-```bash
-cd ~/AeroAcademy && git pull && git log --oneline -1 && sudo ./deploy/install.sh
+Desde la **primera instalación** (§1) las actualizaciones son un solo comando, con reversa automática si algo falla.
+
+**Desde tu computador (Windows, PowerShell 7, en la carpeta del proyecto):**
+```powershell
+./tools/desplegar.ps1                  # git al día → copia private/ si existe → ssh -t … sudo aeroacademy actualizar
+./tools/desplegar.ps1 -DryRun          # muestra los comandos sin ejecutar nada
+./tools/desplegar.ps1 -SoloComprobar   # solo mira la salud del servicio
+./tools/desplegar.ps1 -Revertir        # vuelve a la versión anterior
+./tools/desplegar.ps1 -SinPrivados -Preflight -PublicFunnel 1
 ```
-Es idempotente: reinstala la configuración de `deploy/centro.env` conservando la `SECRET_KEY`, no toca los datos, migra, recoge estáticos, reinicia y reutiliza el nodo ya dado de alta (no vuelve a pedir el enlace).
+La conexión sale de `AEROACADEMY_VM_HOST` y `AEROACADEMY_VM_USER` o de `deploy/vm.local.json` (ignorado por git; modelo en `deploy/vm.local.json.ejemplo`: `{"host": "<IP-DE-LA-VM>", "user": "example"}`). El host y el usuario reales **no van al repositorio**. Al final recuerda recargar el navegador con **Ctrl+F5**.
+
+Para no escribir la contraseña de SSH cada vez, crea una llave (equivalente a `ssh-copy-id` en Windows); la contraseña de `sudo` se sigue pidiendo en la VM, es lo esperado:
+```powershell
+ssh-keygen -t ed25519
+Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub | ssh example@<IP-DE-LA-VM> "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+```
+
+**Directo en la VM** (la primera vez, o si prefieres hacerlo a mano):
+```bash
+cd ~/AeroAcademy
+sudo ./deploy/actualizar.sh        # la primera vez tras esta mejora; el instalador deja luego el atajo:
+sudo aeroacademy actualizar        # equivale a lo anterior (`actualizar` y `revertir` son palabras reservadas del atajo)
+sudo aeroacademy actualizar --solo-comprobar   # solo salud; no cambia nada
+sudo aeroacademy actualizar --sin-pull         # usa el árbol de trabajo tal como está
+sudo aeroacademy revertir          # vuelta manual a la versión anterior (equivale a actualizar.sh --revertir)
+```
+Cualquier otro `sudo aeroacademy <comando>` sigue siendo `manage.py <comando>`.
+
+**Qué hace `actualizar`** (idempotente; imprime cada paso como `==> …`):
+1. Precondiciones: root, repositorio sin cambios, `git fetch` y `git pull --ff-only`; muestra el commit actual, el nuevo y la lista de commits.
+2. Instantánea del código instalado en `/opt/aeroacademy.prev` (sin `.venv`, estáticos ni datos) y respaldo consistente de SQLite (`sqlite3 .backup`) en `/var/backups/centro/pre-actualizar-<fecha UTC>.sqlite3` (se guardan los últimos 5).
+3. Corre `deploy/install.sh` con **tu entorno**: `PUBLIC_FUNNEL`, `AEROACADEMY_PORT`, `AEROACADEMY_TS_AUTHKEY`… pasan tal cual (`sudo PUBLIC_FUNNEL=1 aeroacademy actualizar`, o `sudo -E aeroacademy actualizar` para llevar todo el entorno). Si la puerta pública (Funnel) ya está activa y no indicas `PUBLIC_FUNNEL`, se **conserva**; para apagarla, `PUBLIC_FUNNEL=0`.
+4. Salud: `systemctl is-active centro` y `http://127.0.0.1:8010/healthz` (más el 8011 si `centro-public` está activa), con varios reintentos y espera creciente.
+
+**Cómo decide la reversa.** Si el instalador o la salud fallan, restaura el **código** de la instantánea, reinicia y vuelve a comprobar. La **base de datos** solo se restaura si la actualización aplicó migraciones (compara el conteo de `django_migrations` antes y después): el código viejo no entiende una base migrada. Si no hubo migraciones, la base **no se toca**. Cuando restaura la base lo dice en grande: se pierde lo que se escribió en la academia entre el respaldo y la falla (minutos). Termina con código ≠ 0 y un resumen (qué falló, qué se restauró, `journalctl -u centro -n 200 --no-pager`). Códigos de salida: `1` falló y se restauró, `2` falló y la reversa también (intervención manual), `3` precondición no cumplida (no se cambió nada).
+
+`revertir` (manual) usa la última instantánea; si esa actualización migró, **pregunta** antes de restaurar la base, o usa `--con-base` / `--sin-base`. No se revierte lo que el instalador haya cambiado en systemd o en Tailscale (unidades, publicación).
+
+Límite: el script se probó con comandos simulados, no contra la VM real; la primera vez, mira la salida completa.
 
 ## 4. Datos del prototipo (opcional)
 
@@ -156,8 +194,7 @@ Acceso gratuito sin instalar Tailscale. Dos puertas sobre el mismo código y la 
 
 **Encender** (en la VM; `AEROACADEMY_PUBLISH=node` es el valor por defecto):
 ```bash
-cd ~/AeroAcademy && git pull
-PUBLIC_FUNNEL=1 sudo -E ./deploy/install.sh
+cd ~/AeroAcademy && sudo PUBLIC_FUNNEL=1 aeroacademy actualizar   # actualiza y enciende la puerta (equivale a git pull + PUBLIC_FUNNEL=1 sudo -E ./deploy/install.sh)
 ```
 El instalador: crea `centro-public.service`, fija `ACADEMY_URL` (los enlaces de invitación salen con la dirección pública), pasa `PUBLIC_HTTPS_PORT=8443`, y publica con `tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve --https=8443 …:8010` y `… funnel --bg --https=443 http://127.0.0.1:8011`. Es idempotente.
 
@@ -174,7 +211,8 @@ curl -sI https://aeroacademy.tailccd107.ts.net/bienvenida/ | grep -i strict-tran
 
 **Vuelta atrás (rollback):**
 ```bash
-PUBLIC_FUNNEL=0 sudo -E ./deploy/install.sh     # apaga centro-public, borra la config de Funnel del nodo propio y vuelve a servir la tailnet en el 443
+sudo PUBLIC_FUNNEL=0 aeroacademy actualizar     # (o PUBLIC_FUNNEL=0 sudo -E ./deploy/install.sh)
+# apaga centro-public, borra la config de Funnel del nodo propio y vuelve a servir la tailnet en el 443
 # A mano, si hiciera falta:
 sudo systemctl disable --now centro-public
 sudo tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve reset      # solo afecta al nodo propio
@@ -195,3 +233,4 @@ sudo tailscale --socket=/run/tailscale-aeroacademy/tailscaled.sock serve --bg --
 - [ ] `teo_probar` en verde (o Teo durmiendo a propósito).
 - [ ] Un respaldo a mano: `sudo -u centro /opt/aeroacademy/deploy/backup.sh`.
 - [ ] Probaste restaurarlo en una copia (una vez, antes de confiar en él).
+- [ ] Para actualizar después: `./tools/desplegar.ps1` (o `sudo aeroacademy actualizar`); sabes que `revertir` existe.
