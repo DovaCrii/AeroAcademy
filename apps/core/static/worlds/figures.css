@@ -1,0 +1,133 @@
+/* Kit de figuras (docs/MUNDOS.md · docs/MEJORAS_UX.md P1-9): lo común de todas las figuras SVG de ruta.
+   Usa solo las variables de la identidad (tinta, hoja, líneas, ok) y el acento del mundo (--acc en arquitectura,
+   --sign en civil): claro y oscuro salen solos. Todo se lee sin JS; el movimiento se apaga con prefers-reduced-motion. */
+.fg{--fg-acc:var(--acc,var(--sign,#E9A23B));--fg-ink:var(--ink);--fg-soft:var(--ink-2);--fg-line:var(--line);--fg-hair:var(--hair);
+  --fg-paper:var(--sheet);--fg-ok:var(--ok,#2E9E5B);--fg-warn:var(--pend,#D97706);
+  width:100%;height:auto;display:block;font-family:var(--font)}
+.fg text{fill:var(--fg-ink)}
+.fg a{cursor:pointer}
+.fg a:focus-visible{outline:none}
+.fg a:focus-visible .fg-st>.fg-box,.fg a:focus-visible .fg-focus{stroke:var(--fg-acc);stroke-width:3}
+.fg-mono{font-family:var(--font-mono);letter-spacing:.04em}
+
+/* estación: celda con su relleno de avance */
+.fg-slab{fill:var(--fg-paper)}
+.fg-fill{fill:color-mix(in srgb,var(--fg-acc) 46%,transparent)}
+.fg-box{fill:none;stroke:var(--fg-line);stroke-width:1.5}
+.fg-st:hover .fg-box,.fg-st.on .fg-box{stroke:var(--fg-acc);stroke-width:2.5}
+.fg-st.on .fg-slab{fill:color-mix(in srgb,var(--fg-acc) 10%,var(--fg-paper))}
+.fg-st.done .fg-fill{fill:color-mix(in srgb,var(--fg-ok) 55%,transparent)}
+.fg-st.done .fg-box{stroke:var(--fg-ok)}
+.fg-code{font:700 13px var(--font-mono);fill:var(--fg-soft)!important}
+.fg-name{font-size:14.5px;font-weight:650}
+.fg-pct{font:700 13px var(--font-mono);fill:var(--fg-soft)!important}
+.fg-st.done .fg-pct{fill:var(--fg-ok)!important}
+.fg-tag{font:600 12px var(--font-mono);letter-spacing:.08em;fill:var(--fg-soft)!important}
+
+/* marcas del equipo */
+.fg-mark circle{fill:var(--level,var(--fg-acc));stroke:var(--fg-paper);stroke-width:1.5}
+.fg-mark text{font-size:9.5px;font-weight:700;fill:#fff!important}
+.fg-mark.me circle{fill:var(--scan,var(--fg-warn))}
+.fg-more{font:700 11px var(--font-mono);fill:var(--fg-soft)!important}
+
+/* rótulos sobre el dibujo (cintas, carriles, encabezados) */
+.fg-chip rect{fill:var(--fg-paper);stroke:var(--fg-line);stroke-width:1.2}
+.fg-chip text{font:700 12px var(--font-mono);letter-spacing:.08em}
+.fg-arrow{stroke:var(--fg-soft);stroke-width:1.5;fill:none}
+.fg-arrowhead{fill:var(--fg-soft)}
+.fg-guide{stroke:var(--fg-hair);stroke-width:1;stroke-dasharray:4 4;fill:none}
+
+/* pipeline-ai: ventana de contexto con celdas (tokens) y medidor */
+.fg-window{fill:none;stroke:var(--fg-line);stroke-width:1.5;stroke-dasharray:6 4}
+.fg-cell{fill:var(--fg-hair);stroke:none}
+.fg-cell.on{fill:var(--fg-acc)}
+.fg-st.done .fg-cell.on{fill:var(--fg-ok)}
+.fg-meter{fill:var(--fg-paper);stroke:var(--fg-line);stroke-width:1.5}
+.fg-meter-fill{fill:var(--fg-acc)}
+.fg-hit{fill:transparent;stroke:none}
+
+/* data-flow: cilindros que se llenan y tuberías entre etapas */
+.fg-liquid{fill:color-mix(in srgb,var(--fg-acc) 55%,transparent);stroke:none}
+.fg-liquid.top{fill:color-mix(in srgb,var(--fg-acc) 70%,var(--fg-paper))}
+.fg-st.done .fg-liquid{fill:color-mix(in srgb,var(--fg-ok) 55%,transparent)}
+.fg-st.done .fg-liquid.top{fill:color-mix(in srgb,var(--fg-ok) 70%,var(--fg-paper))}
+.fg-cyl .fg-box{fill:none}
+.fg-pipeline{stroke:var(--fg-soft);stroke-width:2;stroke-dasharray:8 5}
+@media (prefers-reduced-motion:no-preference){
+  .fg-pipeline{animation:fg-dash 1.4s linear infinite}
+  @keyframes fg-dash{to{stroke-dashoffset:-26}}
+}
+
+/* survey-profile: perfil, PR (triángulos) y datum */
+.fg-earth{fill:color-mix(in srgb,var(--fg-acc) 14%,transparent);stroke:none}
+.fg-axis{stroke:var(--fg-soft);stroke-width:1.2}
+.fg-datum{stroke:var(--fg-ink);stroke-width:1.5;stroke-dasharray:10 4 2 4}
+.fg-profile{stroke:var(--fg-soft);stroke-width:2;stroke-dasharray:6 5}
+.fg-profile.done{stroke:var(--fg-acc);stroke-width:3.5;stroke-dasharray:none}
+.fg-drop{stroke:var(--fg-hair);stroke-width:1;stroke-dasharray:3 4}
+.fg-tri{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:1.8;stroke-linejoin:round}
+.fg-pr.part .fg-tri{fill:color-mix(in srgb,var(--fg-acc) 45%,var(--fg-paper))}
+.fg-pr.done .fg-tri{fill:var(--fg-ok);stroke:var(--fg-ink)}
+.fg-pr.on .fg-tri{stroke:var(--fg-acc);stroke-width:3}
+
+/* capture-twin: nube de puntos, malla y sensor */
+.fg-dot{fill:var(--fg-hair)}
+.fg-dot.on{fill:var(--fg-acc)}
+.fg-tile.done .fg-dot.on{fill:var(--fg-ok)}
+.fg-mesh{fill:none;stroke:var(--fg-ok);stroke-width:1;opacity:.7}
+.fg-sensor{fill:var(--fg-warn)}
+.fg-sensor-ring{fill:none;stroke:var(--fg-warn);stroke-width:1.5;opacity:.6}
+@media (prefers-reduced-motion:no-preference){
+  .fg-sensor-ring{animation:fg-ping 2.2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes fg-ping{from{transform:scale(.5);opacity:.9}to{transform:scale(1.4);opacity:0}}
+}
+/* plant-iso: tubería isométrica y válvulas */
+.fg-pipe-run{stroke:var(--fg-line);stroke-width:7;stroke-linecap:round}
+.fg-pipe-run.done{stroke:var(--fg-acc)}
+.fg-valve-body{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:1.8;stroke-linejoin:round}
+.fg-valve.part .fg-valve-body{fill:color-mix(in srgb,var(--fg-acc) 45%,var(--fg-paper))}
+.fg-valve.done .fg-valve-body{fill:var(--fg-ok)}
+.fg-valve.on .fg-valve-body{stroke:var(--fg-acc);stroke-width:3}
+.fg-wheel{fill:none;stroke:var(--fg-ink);stroke-width:1.8;stroke-linecap:round}
+
+/* doc-flow: carriles WIP → Compartido → Publicado */
+.fg-page{fill:none;stroke:var(--fg-soft);stroke-width:1.4;stroke-linejoin:round}
+.fg-bar-bg{fill:var(--fg-hair)}
+.fg-bar{fill:var(--fg-acc)}
+.fg-doc.lane2 .fg-bar{fill:var(--fg-ok)}
+.fg-doc.lane0 .fg-slab{fill:color-mix(in srgb,var(--fg-hair) 30%,var(--fg-paper))}
+
+/* viz-scene: tomas con alambre y render */
+.fg-wire-line{fill:none;stroke:var(--fg-hair);stroke-width:1}
+.fg-sky{fill:color-mix(in srgb,var(--fg-acc) 24%,var(--fg-paper))}
+.fg-sun{fill:var(--fg-warn)}
+.fg-hills{fill:color-mix(in srgb,var(--fg-ok) 60%,var(--fg-paper))}
+.fg-cam rect,.fg-cam circle{fill:var(--fg-paper);stroke:var(--fg-acc);stroke-width:2}
+
+/* building-model: losas isométricas */
+.fg-edge{fill:color-mix(in srgb,var(--fg-ink) 25%,var(--fg-paper));stroke:var(--fg-line);stroke-width:1}
+.fg-slabiso.on .fg-box{stroke:var(--fg-acc);stroke-width:3}
+.fg-slabiso .fg-box{stroke-linejoin:round}
+
+/* drafting-sheet: lámina con capas */
+.fg-frame{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:2}
+.fg-row{fill:transparent;stroke:none}
+.fg-layer:hover .fg-row,.fg-layer.on .fg-row{fill:color-mix(in srgb,var(--fg-acc) 12%,transparent)}
+.fg-layer.on .fg-row{stroke:var(--fg-acc);stroke-width:2}
+.fg-swatch{fill:var(--fg-acc)}
+.fg-layer.sh1 .fg-swatch{fill:var(--fg-warn)}
+.fg-layer.sh2 .fg-swatch{fill:var(--fg-ok)}
+.fg-layer.sh3 .fg-swatch{fill:var(--fg-soft)}
+.fg-todo{stroke:var(--fg-line);stroke-width:2;stroke-dasharray:8 6}
+.fg-draw{stroke:var(--fg-acc);stroke-width:4;stroke-linecap:round}
+.fg-layer.sh1 .fg-draw{stroke:var(--fg-warn)}
+.fg-layer.sh2 .fg-draw{stroke:var(--fg-ok)}
+.fg-layer.sh3 .fg-draw{stroke:var(--fg-soft)}
+.fg-block{fill:var(--fg-paper);stroke:var(--fg-ink);stroke-width:2}
+.fg-tblock rect,.fg-tblock line{fill:none;stroke:var(--fg-ink);stroke-width:1.5}
+.fg-tblock text{font:700 13px var(--font)}
+.fg-tblock text.fg-tag{font:600 10px var(--font-mono)}
+
+@media (prefers-reduced-motion:no-preference){
+  .fg-st .fg-box{transition:stroke .15s}
+}

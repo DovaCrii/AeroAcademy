@@ -1,6 +1,6 @@
 {# Corte del edificio: un piso por nivel (el 0 abajo), relleno según el avance y las personas del equipo en su piso. #}
 <svg class="ar-section" viewBox="0 0 760 {{ building.height }}" role="img" aria-labelledby="secT">
-  <title id="secT">Corte del edificio: {{ stats.levels_total }} niveles de aprendizaje. Tu avance es {{ stats.pct }} % y completaste {{ stats.levels_done }} niveles.</title>
+  <title id="secT">Corte del edificio: {{ stats.levels_total }} {{ fig.labels.items }} de aprendizaje. Tu avance es {{ stats.pct }} % y completaste {{ stats.levels_done }} niveles.</title>
   <defs>
     <pattern id="ar-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" class="hatch"/></pattern>
   </defs>
@@ -15,7 +15,7 @@
       <rect class="ar-box" x="120" y="{{ f.y }}" width="400" height="52"/>
       <text class="ar-elev" x="106" y="{{ f.mid }}" text-anchor="end">{{ f.elev }}</text>
       <text class="ar-code" x="136" y="{{ f.mid }}">{{ f.code|upper }}</text>
-      <text class="ar-name" x="178" y="{{ f.mid }}">{{ f.short }}</text>
+      <text class="ar-name" x="178" y="{{ f.mid }}"><title>{{ f.short }}</title>{{ f.label }}</text>
       <text class="ar-pct" x="508" y="{{ f.mid }}" text-anchor="end">{{ f.pct }} %</text>
       {% for m in f.marks %}
       <g class="ar-mark{% if m.me %} me{% endif %}"><title>{{ m.name }}</title><circle cx="{{ m.x }}" cy="{{ f.mid|add:'-4' }}" r="13"/><text x="{{ m.x }}" y="{{ f.mid }}" text-anchor="middle">{{ m.initials }}</text></g>
@@ -24,5 +24,5 @@
     </g>
   </a>
   {% endfor %}
-  <text class="ar-cota" x="20" y="{{ building.ground|add:'-8' }}">COTA ±0,00</text>
+  <text class="ar-cota" x="20" y="{{ building.ground|add:'-8' }}">{{ fig.labels.zero }}</text>
 </svg>

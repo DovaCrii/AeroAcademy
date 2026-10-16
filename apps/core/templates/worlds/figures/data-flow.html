@@ -1,0 +1,29 @@
+{# Flujo de datos: ingesta → limpieza → análisis → informe. Cada etapa es un cilindro (tabla) que se llena con el avance. #}
+<svg class="fg fg-flow" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">Flujo de datos: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  {% include "worlds/figures/_chips.html" %}
+  {% for s in fg.items %}{% if s.pipe %}
+  <line class="fg-pipeline" x1="{{ s.x1|add:'6' }}" y1="{{ s.pipe_y }}" x2="{{ s.x1|add:'80' }}" y2="{{ s.pipe_y }}"/>
+  <path class="fg-arrowhead" d="M{{ s.x1|add:'90' }} {{ s.pipe_y }} l-8 -5 v10z" aria-hidden="true"/>
+  {% endif %}{% endfor %}
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-cyl{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-hit" x="{{ s.cx|add:'-70' }}" y="{{ s.y0 }}" width="140" height="138"/>
+      <ellipse class="fg-slab" cx="{{ s.cx }}" cy="{{ s.y_bot }}" rx="{{ fg.rx }}" ry="{{ fg.ry }}"/>
+      <rect class="fg-slab" x="{{ s.x0 }}" y="{{ s.y_top }}" width="56" height="50"/>
+      {% if s.pct %}
+      <ellipse class="fg-liquid" cx="{{ s.cx }}" cy="{{ s.y_bot }}" rx="{{ fg.rx }}" ry="{{ fg.ry }}"/>
+      <rect class="fg-liquid" x="{{ s.x0 }}" y="{{ s.fill_y }}" width="56" height="{{ s.fill_h }}"/>
+      <ellipse class="fg-liquid top" cx="{{ s.cx }}" cy="{{ s.fill_y }}" rx="{{ fg.rx }}" ry="{{ fg.ry }}"/>
+      {% endif %}
+      <path class="fg-box" d="M{{ s.x0 }} {{ s.y_top }} V{{ s.y_bot }} A{{ fg.rx }} {{ fg.ry }} 0 0 0 {{ s.x1 }} {{ s.y_bot }} V{{ s.y_top }}"/>
+      <ellipse class="fg-box" cx="{{ s.cx }}" cy="{{ s.y_top }}" rx="{{ fg.rx }}" ry="{{ fg.ry }}"/>
+      <text class="fg-code" x="{{ s.cx }}" y="{{ s.ty_code }}" text-anchor="middle">{{ s.code|upper }}</text>
+      <text class="fg-name" x="{{ s.cx }}" y="{{ s.ty_name }}" text-anchor="middle"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="{{ s.cx }}" y="{{ s.ty_pct }}" text-anchor="middle">{{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

@@ -17,6 +17,7 @@
     "mecanica"
   ],
   "world": "civil",
+  "figure": "road-profile",
   "levels": [
     {
       "code": "n0",

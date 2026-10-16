@@ -54,6 +54,51 @@ HUD de vuelo.
 - **Nota del oficio:** marca de *waypoint* con texto.
 - **Paleta:** cian HUD `#4CC6FF`, ámbar de alerta y fondo noche.
 
+## Figuras por ruta (*figure kit*)
+
+El mundo da la piel (CSS, portada, navegador); la **figura** es la metáfora con que se dibuja el avance de cada ruta y
+trae su **vocabulario**. Así una ruta de IA no habla de cotas ni una de topografía de pisos.
+
+- **Dónde.** `apps/catalog/figures.py` (registro, rótulos y reglas), `apps/catalog/figure_layout.py` (geometría, sin
+  consultas, con coordenadas enteras) y `apps/core/templates/worlds/figures/<figura>.html` (un SVG por figura; estilos
+  comunes en `worlds/figures.css`). Los tres mundos incluyen `{% include fig.template %}` y leen `fig.labels.*`.
+- **Cómo se elige.** Clave `"figure"` en el JSON de la ruta (`seed/rutas/<slug>.json` o `private/cursos/<slug>/ruta.json`),
+  validada por `seed_catalog` y leída al dibujar (sin campo en la base ni migración). Sin ella, la figura por defecto de
+  la disciplina; si la figura no sirve para el tipo de ruta (`structured` / `external_track`), la pila `stack`.
+- **`fig.labels`.** `kicker` (línea de la portada), `scene`, `scale` (regla), `sheet_label` y `sheet` (pie de lámina),
+  `mark`, `content`, `unit_label`/`unit_value`, `figure_title`, `levels_title`, `levels_sub`, `browser`, `item`/`items`,
+  `done_label`, `zero` (solo el corte de edificio) y, para rutas externas, `ext_*` (lead, nombres de la cinta, leyenda).
+- **Estaciones.** Cada figura dibuja una *estación* por nivel (rutas estructuradas) o por curso (rutas externas: varias
+  tienen un solo capítulo). Cada estación enlaza a `?nivel=<code>#panel`, lleva `data-fid="st-<id>"` y se lee sin JS.
+- **Vocabulario vigilado.** `figures.FORBIDDEN` lista, por figura, las palabras de arquitectura que no debe mostrar
+  («cota», «lámina», «dibujo y modelado», «+3,50», «pilar», «estaca», «planta y perfil», «corte A-A»); la prueba
+  `tests/test_figures.py` renderiza la portada y la lámina de las 23 rutas y falla si aparece alguna.
+
+| Figura | Metáfora | Vocabulario | Rutas |
+|---|---|---|---|
+| `building` | corte del edificio por pisos | cota, nivel, lámina A-101 | `forma-revit`, `forma-coordinacion` |
+| `building-lod` | el mismo corte, con grados LOD en vez de cotas | LOD, nivel | `bim-101` |
+| `road-profile` | planta y perfil del corredor (estacas y pilares del puente en rutas externas) | estaca, corredor, km | `civil-3d`, `bentley-learn` |
+| `survey-profile` | perfil topográfico con puntos de referencia | PR, cota, datum | `topografia-101` |
+| `survey-gis` | el mismo perfil, como capas de un mapa | capa, CRS | `geospatial-data-science` |
+| `pipeline-ai` | datos → modelo → agente, en una ventana de contexto con celdas | capa, contexto, *tokens*, pipeline | `ia-101`, `agentes-ia`, `claude-code-mcp`, `vibe-coding`, `herramientas-ia` |
+| `data-flow` | ingesta → limpieza → análisis → informe, como cilindros que se llenan | dataset, etapa, informe | `python-datos-101`, `datos-reportes`, `data-science-aplicada` |
+| `capture-twin` | escaneo → nube de puntos → malla → gemelo con sensores | captura, nube, malla, iModel | `bentley-itwin` |
+| `plant-iso` | P&ID → isométrico de tuberías con válvulas | línea, tramo, válvula, isométrico | `plant-3d`, `bentley-openplant` |
+| `doc-flow` | documentos que pasan de WIP a compartido y publicado | versión, estado, *workflow* | `bentley-projectwise` |
+| `viz-scene` | escena con cámara, luz y render | escena, toma, cámara, render | `bentley-lumenrt` |
+| `building-model` | modelo apilado por disciplinas en isométrico | modelo, disciplina, coordinación | `bentley-openbuildings` |
+| `drafting-sheet` | lámina con capas, bloques y XREF | capa, bloque, lámina | `autocad` |
+| `flight-plan` | plan de vuelo con waypoints y dron | waypoint, ALT, BAT | `dgac-rpas` |
+| `stack` | pila de capas sin cotas (respaldo) | etapa, capa | cualquier ruta sin figura que no calce |
+
+**Marcadores.** El dron del plan de vuelo y «TÚ» del planta-perfil se dibujan en el lado opuesto de las etiquetas
+(`progress.services._drone_offset`, `progress.external.MARKER_RISE`); los rótulos se recortan para caber y llevan el
+nombre completo en `<title>`. Las estacas muestran las dos primeras palabras del curso, nunca su *key*.
+
+**Figura nueva.** Agregarla a `FIGURES` (rótulos y vocabulario), su geometría en `figure_layout.LAYOUTS`, su plantilla en
+`worlds/figures/`, y probarla con `tests/test_figures.py`. Seguir la gramática del mundo y la skill `nuevo-mundo`.
+
 ## Estilo "Levantamiento" (arte de presentación)
 
 Para todo lo que represente **levantamiento digital** (portadas de ruta, el mundo `aero`, presentaciones y capturas

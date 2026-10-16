@@ -1,0 +1,5 @@
+{# Cinta de pasos de la figura (fg.chips): cajas con su flecha. #}
+{% for c in fg.chips %}
+<g class="fg-chip" aria-hidden="true"><rect x="{{ c.x }}" y="{{ c.y }}" width="{{ c.w }}" height="{{ c.h }}" rx="4"/><text x="{{ c.cx }}" y="{{ c.cy }}" text-anchor="middle" dominant-baseline="central">{{ c.text }}</text></g>
+{% if c.arrow %}<line class="fg-arrow" x1="{{ c.a1 }}" y1="{{ c.cy }}" x2="{{ c.a2|add:'-4' }}" y2="{{ c.cy }}"/><path class="fg-arrowhead" d="M{{ c.a2 }} {{ c.cy }} l-7 -4 v8z"/>{% endif %}
+{% endfor %}

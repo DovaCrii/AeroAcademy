@@ -1,6 +1,6 @@
 from django import template
 
-from apps.catalog import guides, software
+from apps.catalog import figures, guides, software
 
 register = template.Library()
 
@@ -98,83 +98,12 @@ def card_meta(resource):
 
 
 @register.simple_tag
+def route_figure(path):
+    """Figura de la ruta (`apps/catalog/figures.py`): clave, plantilla y rótulos propios de su tema."""
+    return figures.for_path(path)
+
+
+@register.simple_tag
 def route_flavour(path):
-    """Variante visual de una ruta: acento de disciplina y textos de portada propios del oficio."""
-    key = software.discipline_key(path)
-    return {**FLAVOURS.get(key, FLAVOURS[software.ARQ]), "key": key}
-
-
-FLAVOURS = {
-    software.ARQ: {
-        "kicker": "Levantamiento digital",
-        "scene": "building",
-        "scale": "ESCALA 1:500",
-        "sheet": "A-101",
-        "mark": "A-201",
-        "content": "Corte A-A · avance personal y del equipo",
-        "photo": "arquitectura",
-        "levels_title": "Niveles",
-        "levels_sub": "Elige un nivel en el navegador de proyecto, como en Revit.",
-        "browser": "Project Browser · Levels",
-    },
-    software.CIV: {
-        "kicker": "Topografía y diseño vial",
-        "scene": "terrain",
-        "scale": "ESCALA 1:1000",
-        "sheet": "C-101",
-        "mark": "C-201",
-        "content": "Planta-perfil · avance por kilómetro",
-        "photo": "civil",
-        "levels_title": "Kilómetros",
-        "levels_sub": "Cada kilómetro es una etapa del camino: elígela en el Explorer, como en Civil 3D.",
-        "browser": "Explorer · Etapas",
-    },
-    software.TOP: {
-        "kicker": "Topografía",
-        "scene": "terrain",
-        "scale": "ESCALA 1:2000",
-        "sheet": "T-101",
-        "mark": "T-201",
-        "content": "Carta topográfica · avance por zona",
-        "photo": "topografia",
-        "levels_title": "Zonas",
-        "levels_sub": "Elige una zona del mapa para ver sus recursos y misiones.",
-        "browser": "Cartas · Zonas",
-    },
-    software.MEC: {
-        "kicker": "Plano de taller",
-        "scene": "building",
-        "scale": "ESCALA 1:1",
-        "sheet": "M-101",
-        "mark": "M-201",
-        "content": "Despiece · avance por pieza",
-        "photo": "mecanica",
-        "levels_title": "Piezas",
-        "levels_sub": "Elige una pieza del conjunto para ver sus recursos y misiones.",
-        "browser": "Árbol de montaje",
-    },
-    software.TRA: {
-        "kicker": "Herramienta transversal",
-        "scene": "building",
-        "scale": "ESCALA 1:100",
-        "sheet": "X-101",
-        "mark": "X-201",
-        "content": "Dibujo y modelado · avance por etapa",
-        "photo": "mecanica",
-        "levels_title": "Etapas",
-        "levels_sub": "Elige una etapa para ver sus recursos y misiones.",
-        "browser": "Explorador · Etapas",
-    },
-    software.CAP: {
-        "kicker": "Captura y levantamiento",
-        "scene": "terrain",
-        "scale": "ESCALA 1:500",
-        "sheet": "L-101",
-        "mark": "L-201",
-        "content": "Plan de vuelo · avance por misión",
-        "photo": "topografia",
-        "levels_title": "Misiones",
-        "levels_sub": "Elige una misión del plan de vuelo.",
-        "browser": "Plan de vuelo",
-    },
-}
+    """Acento de color de la ruta: el de su figura (los textos salen de `route_figure`, no de la disciplina)."""
+    return {"key": figures.for_path(path)["accent"]}

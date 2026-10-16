@@ -121,6 +121,7 @@ body.world-architecture.fl-top{--acc:#8AC926}
 body.world-architecture.fl-mec{--acc:#E63946}
 body.world-architecture.fl-cap{--acc:#2EC4B6}
 body.world-architecture.fl-tra{--acc:#8793A6;--fill:#8793A6}
+body.world-architecture.fl-iad{--acc:#9B8CFF;--fill:#9B8CFF}
 .ar-sn{margin:0 0 8px;font:600 12px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 .ar-sn span,.sn{font-family:var(--font-mono);letter-spacing:.08em;font-weight:600;color:color-mix(in srgb,var(--acc) 75%,var(--ink))}
 .ar-sn span{display:inline-block;margin-right:10px;vertical-align:middle;font-family:var(--font-display);font-weight:900;font-stretch:80%;font-size:34px;line-height:.9;letter-spacing:-.03em;transform:rotate(-3deg);text-shadow:2px 2px 0 color-mix(in srgb,var(--acc) 30%,transparent)}
@@ -138,6 +139,7 @@ body.world-architecture.fl-tra{--acc:#8793A6;--fill:#8793A6}
 .ar-band.fl-civ{background-image:linear-gradient(90deg,rgba(6,20,42,.94),rgba(6,20,42,.72) 60%,rgba(6,20,42,.5)),url("../core/img/civil.jpg")}
 .ar-band.fl-top,.ar-band.fl-cap{background-image:linear-gradient(90deg,rgba(6,20,42,.94),rgba(6,20,42,.72) 60%,rgba(6,20,42,.5)),url("../core/img/topografia.jpg")}
 .ar-band.fl-mec{background-image:linear-gradient(90deg,rgba(6,20,42,.94),rgba(6,20,42,.72) 60%,rgba(6,20,42,.5)),url("../core/img/mecanica.jpg")}
+.ar-band.fl-iad,.ar-band.fl-tra{background-image:linear-gradient(135deg,#06142A,#101B3D 60%,#1B1448)}
 .ar-band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--acc)}
 .ar-band-in{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;padding:22px 26px 24px}
 .ar-band .mark circle{fill:rgba(6,20,42,.6);stroke:var(--acc)}
@@ -212,9 +214,7 @@ body.world-architecture.fl-tra{--acc:#8793A6;--fill:#8793A6}
   .pf-bg{display:none}
 }
 .lv-profile li:not(:first-child):not(:last-child) span{visibility:hidden}
-@media (max-width:860px){.ar-cover .lv-in{padding-top:230px}}
 
-.ar-cover .lv-in{padding-top:186px}
 
 /* ===== Panel de nivel: ritmo vertical, secciones numeradas y acordeones (sin JS) ===== */
 .ar-hero>*{min-width:0}

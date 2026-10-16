@@ -1,0 +1,17 @@
+{# Isométrico de tuberías (P&ID → ISO): cada tramo es una válvula; la tubería fluye hasta la última completa. #}
+<svg class="fg fg-iso" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  {% include "worlds/figures/_chips.html" %}
+  {% for p in fg.pipes %}<line class="fg-pipe-run{% if p.done %} done{% endif %}" x1="{{ p.x1 }}" y1="{{ p.y1 }}" x2="{{ p.x2 }}" y2="{{ p.y2 }}"/>{% endfor %}
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-valve{% if s.current %} on{% endif %}{% if s.complete %} done{% elif s.started %} part{% endif %}">
+      <path class="fg-wheel" d="{{ s.wheel }}"/>
+      <path class="fg-valve-body fg-box" d="{{ s.valve }}"/>
+      <text class="fg-name" x="{{ s.x }}" y="{{ s.ty_name }}" text-anchor="middle"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="{{ s.x }}" y="{{ s.ty_meta }}" text-anchor="middle">{{ s.code|upper }} · {{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

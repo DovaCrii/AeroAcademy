@@ -1,0 +1,20 @@
+{# Del escaneo al gemelo: cada fase es un recuadro de puntos (nube) que se enciende con el avance; al completarla se le traza la malla y se activa su sensor. #}
+<svg class="fg fg-twin" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  {% include "worlds/figures/_chips.html" %}
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-tile{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-slab" x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.side }}" height="{{ s.side }}" rx="6"/>
+      {% for d in s.dots %}<circle class="fg-dot{% if d.on %} on{% endif %}" cx="{{ d.x }}" cy="{{ d.y }}" r="2.6"/>{% endfor %}
+      {% if s.mesh %}<path class="fg-mesh" d="{{ s.mesh }}"/>{% endif %}
+      <rect class="fg-box" x="{{ s.x0 }}" y="{{ s.y0 }}" width="{{ s.side }}" height="{{ s.side }}" rx="6"/>
+      {% if s.complete %}<circle class="fg-sensor-ring" cx="{{ s.sensor_x }}" cy="{{ s.sensor_y }}" r="8"/><circle class="fg-sensor" cx="{{ s.sensor_x }}" cy="{{ s.sensor_y }}" r="3.5"/>{% endif %}
+      <text class="fg-code" x="{{ s.cx }}" y="{{ s.ty_code }}" text-anchor="middle">{{ s.code|upper }}</text>
+      <text class="fg-name" x="{{ s.cx }}" y="{{ s.ty_name }}" text-anchor="middle"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="{{ s.cx }}" y="{{ s.ty_pct }}" text-anchor="middle">{{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

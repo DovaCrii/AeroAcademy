@@ -1,0 +1,20 @@
+{# Modelo por disciplinas: losas isométricas apiladas y separadas; cada una se rellena con el avance de su modelo. #}
+<svg class="fg fg-bmodel" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  <text class="fg-tag" x="110" y="24">COORDINACIÓN</text>
+  <line class="fg-guide" x1="110" y1="{{ fg.guide_top }}" x2="110" y2="{{ fg.guide_bot }}"/>
+  <line class="fg-guide" x1="410" y1="{{ fg.guide_top }}" x2="410" y2="{{ fg.guide_bot }}"/>
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st fg-slabiso{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-edge" x="110" y="{{ s.edge_y }}" width="300" height="8"/>
+      <polygon class="fg-slab" points="{{ s.top_face }}"/>
+      {% if s.pct %}<polygon class="fg-fill" points="{{ s.fill_face }}"/>{% endif %}
+      <polygon class="fg-box" points="{{ s.top_face }}"/>
+      <text class="fg-name" x="484" y="{{ s.ty_name }}"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="484" y="{{ s.ty_meta }}">{{ s.code|upper }} · {{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

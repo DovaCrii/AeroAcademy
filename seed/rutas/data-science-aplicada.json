@@ -15,6 +15,7 @@
     "ia-datos"
   ],
   "world": "architecture",
+  "figure": "data-flow",
   "levels": [
     {
       "code": "n0",

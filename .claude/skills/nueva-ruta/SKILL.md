@@ -16,8 +16,8 @@ campos y checklist de autoría en `docs/CURSOS.md` §5; taxonomía en `docs/TAXO
 
 1. **Decidir (Opus):** vendor y productos (`seed/vendors.json`; si faltan, al final), disciplinas, `kind`, plataforma
    (`seed/plataformas.json`), `world` (`architecture`, `civil`, `survey`, `mechanical`, `aero`; por defecto el de la
-   disciplina) y, cuando exista el campo, `figure` (`docs/MEJORAS_UX.md` P1-9). Mundo inexistente: skill `nuevo-mundo`.
-2. **Cabecera:** `slug`, `title`, `program`, `platform`, `kind`, `vendor`, `products[]`, `disciplines[]`, `world`, `description`.
+   disciplina) y `figure`: la metáfora y el vocabulario con que se dibuja el avance de la ruta (`apps/catalog/figures.py`,\n   tabla en `docs/MUNDOS.md`; sin campo se usa la de su disciplina). Que el tema de la ruta no muestre vocabulario ajeno:\n   fuera de `building`, ni «COTA», ni «Lámina», ni «Dibujo y modelado». Mundo o figura inexistente: skill `nuevo-mundo`.
+2. **Cabecera:** `slug`, `title`, `program`, `platform`, `kind`, `vendor`, `products[]`, `disciplines[]`, `world`, `figure`, `description`.
 3. **Niveles:** `code`, `order`, `short`, `title`, `estimated_hours`, `audience`, `goal`, `resources[]`.
    - `structured`: `milestones[]` (`nX-tY`), `quiz[]` (`nX-qY`, ≥ 4–6 de escenario, respuesta en posición variada,
      `explanation` siempre), `mastery_signals[]`, `guide` y `slides[]` (6–10: concepto → cómo funciona → ejemplo de
@@ -40,7 +40,7 @@ campos y checklist de autoría en `docs/CURSOS.md` §5; taxonomía en `docs/TAXO
    ```bash
    python -m json.tool seed/rutas/<slug>.json > NUL
    uv run python manage.py seed_catalog --dry-run      # base migrada nueva
-   uv run pytest -q tests/test_slides.py tests/test_software_guides.py tests/test_catalog_paths.py tests/test_seed_game.py
+   uv run pytest -q tests/test_slides.py tests/test_software_guides.py tests/test_catalog_paths.py tests/test_seed_game.py tests/test_figures.py
    uv run python manage.py revisar_enlaces --solo-externos
    ```
    Luego recorrer la ruta en el navegador: escritorio y 375 px, claro y oscuro, y sin JS.

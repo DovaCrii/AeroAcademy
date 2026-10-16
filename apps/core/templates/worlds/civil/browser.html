@@ -1,9 +1,9 @@
 {# Explorer · Corridors: la lista de capítulos con su avance verificado. #}
-<nav class="cv-browser" aria-label="Corredores">
-  <div class="bh">Explorer · Corridors</div>
+<nav class="cv-browser" aria-label="{{ fig.labels.ext_levels }}">
+  <div class="bh">{% if fig.key == "road-profile" %}Explorer · Corridors{% else %}{{ fig.labels.browser }}{% endif %}</div>
   {% for ch in chapters %}
   <a class="cv-cor{% if ch.complete %} done{% endif %}" href="{% url 'paths:detail' path.slug %}?nivel={{ ch.level.code }}#panel"{% if ch.level.code == current.level.code %} aria-current="page"{% endif %}>
-    <span class="st">{{ ch.km }}</span>
+    <span class="st">{% if fig.key == "road-profile" %}{{ ch.km }}{% else %}{{ ch.level.code|upper }}{% endif %}</span>
     <span class="nm">{{ ch.level.short }}</span>
     <span class="pc">{% if ch.total %}{{ ch.pct }} %{% else %}{{ ch.courses|length }}{% endif %}</span>
     <span class="bar"><i style="width:{{ ch.pct }}%"></i></span>

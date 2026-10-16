@@ -1,12 +1,12 @@
 {% load goal_tags core_extras catalog_extras %}{% route_flavour path as fl %}
 <div class="sheet ar-sheet fl-{{ fl.key }}" id="corte">
-  <p class="ar-sn"><span>// 01</span> Recorrido</p>
+  <p class="ar-sn"><span>// 01</span> {{ fig.labels.figure_title }}</p>
   <div class="sheet-in ar-hero">
     <div>
       <h2 class="ar-h2">{{ intro.title|default:path.title }}</h2>
       {% if intro.text %}<p class="lead">{{ intro.text }}</p>{% endif %}
       <div class="ar-meta">
-        <div><b>{{ stats.levels_done }}/{{ stats.levels_total }}</b><span>niveles completos</span></div>
+        <div><b>{{ stats.levels_done }}/{{ stats.levels_total }}</b><span>{{ fig.labels.done_label }}</span></div>
         <div><b>{{ stats.pct }} %</b><span>tu avance</span></div>
         <div><b>{{ stats.participants }}</b><span>personas en la ruta</span></div>
       </div>
@@ -27,23 +27,23 @@
       </form>
       {% endif %}
     </div>
-    {% if fl.key == "civ" %}{% include "worlds/architecture/journey_civil.html" %}{% else %}{% include "worlds/architecture/journey.html" %}{% endif %}
+    {% include fig.template %}
   </div>
   <div class="tb">
     <div><span class="cap">Proyecto</span><b>{{ path.program|default:path.title }}</b></div>
-    <div><span class="cap">Contenido</span><b>{{ fl.content }}</b></div>
-    <div><span class="cap">Escala</span><b>A tu ritmo</b></div>
-    <div><span class="cap">Lámina</span><b>{{ fl.sheet }}</b></div>
+    <div><span class="cap">Contenido</span><b>{{ fig.labels.content }}</b></div>
+    <div><span class="cap">{{ fig.labels.unit_label }}</span><b>{{ fig.labels.unit_value }}</b></div>
+    <div><span class="cap">{{ fig.labels.sheet_label }}</span><b>{{ fig.labels.sheet }}</b></div>
   </div>
 </div>
 
 <div class="ar-band fl-{{ fl.key }}" id="niveles">
   <div class="ar-band-in">
-    <svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">2</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">{{ fl.mark }}</text></svg>
+    <svg class="mark" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="20"/><line x1="3" y1="23" x2="43" y2="23"/><text x="23" y="16" text-anchor="middle" dominant-baseline="middle">2</text><text class="sm" x="23" y="31" text-anchor="middle" dominant-baseline="middle">{{ fig.labels.mark }}</text></svg>
     <div>
-      <p class="ar-sn"><span>// 02</span> {{ fl.levels_title }}</p>
-      <h2>{{ fl.levels_title }}</h2>
-      <p class="ar-sub">{{ fl.levels_sub }} Cada misión que marcas y cada pregunta que respondes queda guardada a tu nombre.</p>
+      <p class="ar-sn"><span>// 02</span> {{ fig.labels.levels_title }}</p>
+      <h2>{{ fig.labels.levels_title }}</h2>
+      <p class="ar-sub">{{ fig.labels.levels_sub }} Cada misión que marcas y cada pregunta que respondes queda guardada a tu nombre.</p>
     </div>
   </div>
 </div>

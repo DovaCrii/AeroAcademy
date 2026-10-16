@@ -1,0 +1,24 @@
+{# Pipeline de IA: datos → modelo → agente. Cada capa es una banda de la ventana de contexto; sus 10 celdas (tokens) se encienden con el avance. #}
+<svg class="fg fg-pipe" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">Pipeline: {{ fg.total }} {{ fig.labels.items }} en la ventana de contexto. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  {% include "worlds/figures/_chips.html" %}
+  <rect class="fg-window" x="140" y="60" width="470" height="{{ fg.window_h }}" rx="8"/>
+  <text class="fg-tag" x="152" y="52">{{ fig.labels.window }}</text>
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-slab" x="150" y="{{ s.y }}" width="450" height="{{ fg.band_h }}" rx="5"/>
+      <rect class="fg-fill" x="150" y="{{ s.y }}" width="{{ s.fill_w }}" height="{{ fg.band_h }}" rx="5"/>
+      <rect class="fg-box" x="150" y="{{ s.y }}" width="450" height="{{ fg.band_h }}" rx="5"/>
+      <text class="fg-code" x="162" y="{{ s.mid }}" dominant-baseline="central">{{ s.code|upper }}</text>
+      <text class="fg-name" x="196" y="{{ s.mid }}" dominant-baseline="central"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="402" y="{{ s.mid }}" text-anchor="end" dominant-baseline="central">{{ s.pct }} %</text>
+      {% for c in s.cells %}<rect class="fg-cell{% if c.on %} on{% endif %}" x="{{ c.x }}" y="{{ s.y|add:'14' }}" width="12" height="12" rx="2"/>{% endfor %}
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+  <text class="fg-tag" x="725" y="52" text-anchor="middle">AVANCE</text>
+  <rect class="fg-meter" x="{{ fg.meter.x }}" y="{{ fg.meter.y }}" width="{{ fg.meter.w }}" height="{{ fg.meter.h }}" rx="4"/>
+  <rect class="fg-meter-fill" x="{{ fg.meter.x }}" y="{{ fg.meter.fill_y }}" width="{{ fg.meter.w }}" height="{{ fg.meter.fill_h }}" rx="4"/>
+</svg>
