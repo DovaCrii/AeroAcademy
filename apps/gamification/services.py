@@ -17,8 +17,11 @@ from django.utils.safestring import mark_safe
 from . import avatar, game, sheet
 from .avatar import careers, engine
 from .avatar import views as avatar_views
+from .avatar.parts import poses
 
 logger = logging.getLogger(__name__)
+
+POSE_DEFAULT = poses.DEFAULT_POSE
 
 # Secciones del editor (acordeón): slug, título, grupos «clave → título» y cómo se resume la elección actual.
 # Cada clave de `engine.CHOICES` tiene su propio <fieldset>; nada del catálogo se quita.
@@ -231,6 +234,7 @@ def svg_sized(
     pattern=True,
     halo=True,
     backdrop=True,
+    pose=None,
 ):
     """SVG de una vista con `size` px de ancho; cada celda mide un número entero de píxeles.
 
@@ -256,6 +260,7 @@ def svg_sized(
         halo=halo,
         inline=True,
         backdrop=backdrop,
+        pose=pose or POSE_DEFAULT,
     )
     return svg.replace("<svg ", f'<svg width="{width}" height="{height}" ', 1)
 
@@ -301,16 +306,24 @@ def _bonus(data):
     ]
 
 
-def preview_context(cfg, person) -> dict:
+def valid_pose(raw) -> str:
+    """La pose de la vista previa (no se guarda): solo vale una de la lista cerrada."""
+    return raw if raw in poses.POSES else POSE_DEFAULT
+
+
+def preview_context(cfg, person, pose=None) -> dict:
     """Todo lo que pinta la vista previa (la página y el fragmento en vivo)."""
     level = game.level_info(person)["level"]
-    big = svg_sized(cfg, 192, title=f"Avatar de {person.name}", view="full")
+    pose = valid_pose(pose)
+    big = svg_sized(cfg, 240, title=f"Avatar de {person.name}", view="stage", pose=pose)
     return {
         "big": framed(big, cfg, level=level, large=True),
         "head": svg_sized(cfg, 32, view="head", decorative=True),
         "card": career_card(cfg),
         "low_contrast": not engine.outfit_stands_out(cfg),
         "wearing": wearing(cfg, person),
+        "pose": pose,
+        "poses": [{"id": key, "label": label} for key, label in poses.LABELS_POSES.items()],
     }
 
 

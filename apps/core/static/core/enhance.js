@@ -106,6 +106,7 @@
       // Por GET solo viaja lo que cambia el dibujo: nunca el token CSRF ni la sección abierta.
       query.delete("csrfmiddlewaretoken");
       query.delete("seccion");
+      query.delete("zoom");
       var target = document.querySelector(live.getAttribute("data-live-target") || "#preview");
       request(live.getAttribute("data-live-url") + "?" + query.toString(), { method: "GET" }, target, null, function () {});
     });

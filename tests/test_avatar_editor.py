@@ -320,6 +320,8 @@ def test_editor_works_without_js(client_for, member):
             fields[re.search(r'name="(\w+)"', tag).group(1)] = re.search(
                 r'value="([^"]*)"', tag
             ).group(1)
+    assert {"pose", "zoom"} <= set(fields)  # controles de la vista previa: no son del catálogo
+    fields.pop("pose"), fields.pop("zoom")
     assert set(fields) == set(avatar.engine.CHOICES)  # una elección marcada por cada clave
     assert post(client, **fields).status_code == 302
     member.refresh_from_db()

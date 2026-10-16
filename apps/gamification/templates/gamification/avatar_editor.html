@@ -18,6 +18,16 @@
   {% csrf_token %}
   <input type="hidden" name="seccion" id="avSeccion" value="{{ open_slug }}">
   <div class="av-stage">
+    <div class="av-tools">
+      <fieldset class="av-pose"><legend>Pose <small>(solo vista previa)</small></legend>
+        {% for p in poses %}<label><input type="radio" name="pose" value="{{ p.id }}"{% if p.id == pose %} checked{% endif %}> {{ p.label }}</label>{% endfor %}
+      </fieldset>
+      <fieldset class="av-zoom"><legend>Zoom</legend>
+        <label><input type="radio" name="zoom" id="zoom-1" value="1"> 1×</label>
+        <label><input type="radio" name="zoom" id="zoom-2" value="2"> 2×</label>
+        <label><input type="radio" name="zoom" id="zoom-3" value="3" checked> 3×</label>
+      </fieldset>
+    </div>
     <div class="av-preview" id="preview" role="region" aria-label="Vista previa" aria-live="polite">
       {% include "gamification/_preview.html" %}
     </div>

@@ -10,7 +10,7 @@ register = template.Library()
 def avatar(person, size=32, view="bust", frame=True):
     """Figurita de una persona. El SVG sale del catálogo: nada del usuario entra.
 
-    `size` debe ser un múltiplo entero del ancho de la vista (`head` 16, `bust` 24, `full` 32). Con `frame` el SVG va
+    `size` debe ser un múltiplo entero del ancho de la vista (`head` 16, `bust` 24, `full` 32, `stage` 80). Con `frame` el SVG va
     dentro de un contenedor con el marco de rareza; sin él es solo el SVG (cabecera, tablas).
     """
     cfg = services.person_config(person)
@@ -18,7 +18,7 @@ def avatar(person, size=32, view="bust", frame=True):
         cfg,
         size,
         title=f"Avatar de {person.name}",
-        view=view if view in {"full", "bust", "head"} else "bust",
+        view=view if view in {"stage", "full", "bust", "head"} else "bust",
         bg_alt=services.auto_background(person, cfg),
     )
     return services.framed(svg, cfg) if frame else mark_safe(svg)  # noqa: S308
