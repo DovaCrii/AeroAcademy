@@ -10,7 +10,7 @@
 .tabs a[aria-current="page"]{background:var(--sheet);color:var(--ink);box-shadow:var(--shadow-1),inset 0 -2px 0 var(--amber)}
 
 /* filtros y formularios */
-.filters{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:end;margin:0 0 18px;padding:12px 14px;background:color-mix(in srgb,var(--sheet) 70%,transparent);border:1px solid var(--hair);border-radius:var(--r-card)}
+.filters{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:end;margin:0 0 18px;padding:12px 14px;background:var(--surface-1);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--elev-1)}
 .filters>*{max-width:100%;min-width:0}
 .filters label{display:flex;flex-direction:column;gap:4px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
 .filters input[type=search],.filters select{width:100%}
@@ -48,8 +48,8 @@ input[type=checkbox],input[type=radio]{accent-color:var(--amber)}
 
 /* tarjetas */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
-.card{position:relative;background:var(--surface-tint),var(--sheet);border:1px solid var(--hair);border-radius:var(--r-card);padding:18px 20px;display:flex;flex-direction:column;gap:8px;min-width:0;box-shadow:var(--shadow-1);transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s var(--ease)}
-.card:has(h3 a):hover{transform:translateY(-2px);box-shadow:var(--shadow-2);border-color:color-mix(in srgb,var(--amber) 55%,var(--hair))}
+.card{position:relative;background:var(--surface-tint),var(--surface-1);border:1px solid var(--hair);border-top:3px solid var(--card-acc,var(--hair));border-radius:var(--r-card);padding:18px 20px;display:flex;flex-direction:column;gap:8px;min-width:0;box-shadow:var(--elev-1);transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s var(--ease)}
+.card:has(h3 a):hover{transform:translateY(-2px);box-shadow:var(--elev-2);border-color:color-mix(in srgb,var(--amber) 55%,var(--hair))}
 .card h3{margin:0}
 .card h3 a{color:var(--ink);text-decoration:none}
 .card h3 a:hover{text-decoration:underline;text-decoration-color:var(--amber)}
@@ -134,3 +134,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--amber)}
 /* Icono propio de cada ruta en /rutas/ */
 .card .route-ico{float:right;margin:0 0 .4rem .6rem;width:48px;height:48px;border-radius:12px}
 
+
+/* Acento por disciplina como pestaña superior de la tarjeta; sin movimiento si se pide reducirlo. */
+.card[data-disc=arquitectura]{--card-acc:var(--disc-arq)}.card[data-disc=civil-estructural]{--card-acc:var(--disc-civ)}.card[data-disc=topografia]{--card-acc:var(--disc-top)}.card[data-disc=mecanica]{--card-acc:var(--disc-mec)}.card[data-disc=captura-rpa]{--card-acc:var(--disc-cap)}.card[data-disc=ia-datos]{--card-acc:var(--disc-iad)}.card[data-disc=transversal]{--card-acc:var(--disc-tra)}
+@media (prefers-reduced-motion:reduce){.card:has(h3 a):hover{transform:none}}
