@@ -8,18 +8,7 @@
 {% block content %}
 {% include "core/partials/icons.html" %}
 
-<nav class="w-strip" aria-label="Accesos rápidos">
-  <div class="w-strip-in">
-    <a href="{% url 'paths:index' %}">Rutas</a>
-    <a href="{% url 'catalog:resources' %}">Catálogo</a>
-    <a href="{% url 'credentials:mine' %}">Certificaciones</a>
-    <a href="{% url 'dgac:home' %}">DGAC</a>
-    <a href="{% url 'community:forum' %}">Foro</a>
-    <a href="{% url 'team:board' %}">Equipo</a>
-    <a href="#avance">Mi avance</a>
-    <a href="{% url 'assistant:help_index' %}">Ayuda</a>
-  </div>
-</nav>
+
 
 
 
@@ -64,7 +53,7 @@
 {% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
 
 <nav class="w-jump" aria-label="En esta página">
-  <a href="#rutas">Rutas</a><a href="#mision">Mi misión</a><a href="#avance">Mi avance</a><a href="#equipo">Equipo</a><a href="#modulos">Módulos</a><a href="#destacados">Destacados</a><a href="#suite">Suite Aero</a>
+  <a href="#rutas">Tus rutas</a><a href="#mision">Tu misión</a><a href="#avance">Tu avance</a><a href="#modulos">Módulos</a><a href="#destacados">Destacados</a><a href="#suite">Suite Aero</a>
 </nav>
 
 <section id="rutas" class="w-sec w-sec-routes" aria-labelledby="rut-h">
