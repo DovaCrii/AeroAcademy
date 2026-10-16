@@ -17,6 +17,7 @@
   <div class="lv-in">
     <h1>{{ program_title }}</h1>
     <p class="lv-lead">{{ path.description }}</p>
+    {% if current %}{% include "core/partials/world_start.html" %}{% endif %}
     {% if flow %}
     <ol class="lv-flow">
       {% for step in flow %}

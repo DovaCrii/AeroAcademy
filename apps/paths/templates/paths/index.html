@@ -8,6 +8,7 @@
   <p>Una campaña por empresa de software. Elige la empresa, el producto y, si quieres, filtra por disciplina o habilidad.</p>
   <p><a class="btn ghost" href="{% url 'paths:map' %}">Ver el mapa de metro de las rutas →</a></p>
 </div>
+{% include "core/partials/how_it_works.html" %}
 
 {% if vendors %}
 <nav class="tabs" aria-label="Empresas de software">

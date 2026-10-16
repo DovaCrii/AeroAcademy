@@ -125,3 +125,29 @@ def test_route_card_escapes_text(site_world, client_for):
     LearningPath.objects.filter(slug="topografia-101").update(title="<script>alert(1)</script>")
     html = client_for(site_world["member"].login).get("/rutas/?vendor=aeroacademy").content.decode()
     assert "<script>alert(1)</script>" not in html and "&lt;script&gt;" in html
+
+
+# --- «Cómo funciona» y botón en cada mundo ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "slug", ["topografia-101", "civil-3d", "bentley-learn", "dgac-rpas", "ia-101"]
+)
+def test_every_world_cover_has_start_button_and_how_it_works(site_world, client_for, slug):
+    html = client_for(site_world["admin"].login).get(f"/rutas/{slug}/").content.decode()
+    cover = html[html.index('id="inicio"') :]
+    assert 'class="world-start"' in cover and "how-it-works" in cover
+    assert "Empezar la ruta →" in cover and "?nivel=" in cover
+
+
+def test_rutas_index_explains_how_it_works(member_client, seeded):
+    assert "how-it-works" in member_client.get("/rutas/").content.decode()
+
+
+def test_world_button_continues_where_the_person_left(site_world, client_for):
+    member = site_world["member"]
+    path = structured()
+    codes = list(path.levels.order_by("order").values_list("code", flat=True))
+    do_level(member, path, codes[0])
+    html = client_for(member.login).get(f"/rutas/{path.slug}/").content.decode()
+    assert re.search(r"Continuar · \d+ % →", html)
