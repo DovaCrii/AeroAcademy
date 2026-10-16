@@ -108,9 +108,9 @@ def test_prop_tile_shows_only_the_tool_cropped_to_it():
 
 def test_editor_html_size_bounded(member_client):
     html = member_client.get(EDITOR).content.decode()
-    # Meta de la adenda: 160 KB. Con 209 miniaturas en línea quedan ~200 KB (con las 7 herramientas nuevas); bajar de ahí pide miniaturas `<img>` cacheables.
-    assert len(html.encode()) <= 205_000, len(html.encode())
-    assert html.count("<svg") <= 170, html.count("<svg")
+    # Meta de la adenda: ≤ 160 KB y ≤ 110 <svg>. Las miniaturas son `<img>` cacheables (endpoint `avatar_piece`).
+    assert len(html.encode()) <= 160_000, len(html.encode())
+    assert html.count("<svg") <= 110, html.count("<svg")
 
 
 # --- silueta ----------------------------------------------------------------------------------------------------

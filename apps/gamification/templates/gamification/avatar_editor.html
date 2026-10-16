@@ -67,7 +67,7 @@
               {% for opt in cluster.options %}
               <label class="av-opt av-chip{% if opt.selected %} is-on{% endif %}" style="--accent:{{ opt.accent }}">
                 <input type="radio" name="class" value="{{ opt.id }}"{% if opt.selected %} checked{% endif %} data-look="{{ opt.look }}" data-label="{{ opt.label }}">
-                <span class="chip"><span class="px">{{ opt.svg|safe }}</span><b>{{ opt.label }}</b></span>
+                <span class="chip"><span class="px"><img src="{{ opt.src }}" width="{{ opt.w }}" height="{{ opt.h }}" alt="" loading="lazy" decoding="async"></span><b>{{ opt.label }}</b></span>
               </label>
               {% endfor %}
             </div>

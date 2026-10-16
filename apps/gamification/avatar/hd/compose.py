@@ -77,7 +77,9 @@ STICKER_HATS = {"hardhat", "hardhat_lamp"}
 
 
 def _paint_badges(grid, cfg):
-    _paint_sprite(grid, SLEEVE_PATCH, only_on={"O", "o", "A", "a"})  # solo sobre la ropa (todos sus tonos)
+    _paint_sprite(
+        grid, SLEEVE_PATCH, only_on={"O", "o", "A", "a"}
+    )  # solo sobre la ropa (todos sus tonos)
     if cfg["headwear"] in STICKER_HATS:
         _paint_sprite(grid, HELMET_STICKER)
 

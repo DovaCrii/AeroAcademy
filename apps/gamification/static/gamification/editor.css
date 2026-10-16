@@ -73,9 +73,9 @@
 .av-opt{position:relative;cursor:pointer;display:inline-flex;align-items:center}
 .av-opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%;height:100%}
 .av-opt .tile{display:block;border:2px solid var(--hair);border-radius:var(--r-sm);background:var(--sheet-2);line-height:0;padding:1px}
-.av-opt .tile svg,.av-chip .px svg,.av-head svg{shape-rendering:crispEdges}
-.av-opt .tile svg{display:block;image-rendering:pixelated;border-radius:3px;background:var(--tile-bg,#0f2a4d)}
-.av-chip .px svg{background:var(--tile-bg,#0f2a4d)}
+.av-head svg{shape-rendering:crispEdges}
+.av-opt .tile img{display:block;image-rendering:pixelated;border-radius:3px}
+.av-chip .px img{display:block;image-rendering:pixelated;border-radius:50%}
 .av-opt:hover .tile{border-color:var(--ink-2)}
 .av-opt input:checked + .tile{border-color:var(--level);box-shadow:0 0 0 2px var(--level)}
 .av-opt input:focus-visible + .tile,.av-opt input:focus-visible + .sw,.av-opt input:focus-visible + .chip{outline:3px solid var(--red);outline-offset:2px}

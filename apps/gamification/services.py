@@ -12,6 +12,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from django.conf import settings
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from . import avatar, game, sheet
@@ -242,6 +243,7 @@ def svg_sized(
     backdrop=True,
     pose=None,
     badge=None,
+    inline=True,
 ):
     """SVG de una vista con `size` px de ancho; cada celda mide un número entero de píxeles.
 
@@ -265,7 +267,7 @@ def svg_sized(
         bg_alt=bg_alt,
         pattern=pattern,
         halo=halo,
-        inline=True,
+        inline=inline,
         backdrop=backdrop,
         pose=pose or POSE_DEFAULT,
         badge=badge,
@@ -424,12 +426,47 @@ def _prop_view(prop_id):
     return (x0, y0, w, h), w * scale
 
 
-def _tile_svg(cfg, key, opt, gate):
-    """Miniatura de una opción: solo la zona que cambia (ojos, torso…), la herramienta sola o la muestra del fondo."""
-    look = _tile_cfg(cfg, key, opt["id"], gate)
+PIECE_KEYS = (
+    *TILE_VIEWS,
+    "prop",
+    "class",
+)  # categorías con miniatura (las carreras salen como chips)
+
+
+def piece_size(key, option_id):
+    """Ancho y alto en px de la miniatura de una opción (para las etiquetas `<img>`)."""
     if key == "prop":
-        view, width = _prop_view(opt["id"])
-        return svg_sized(look, width, view=view, layers="prop", decorative=True, pattern=False)
+        view, width = _prop_view(option_id)
+    elif key == "class":
+        view, width = CHIP_VIEW
+    else:
+        view, width = TILE_VIEWS[key]
+    _x, _y, cells_w, cells_h = avatar_views.box(view)
+    return width, width * cells_h // cells_w
+
+
+def piece_svg(cfg, key, option_id) -> str:
+    """Miniatura de una opción como archivo SVG suelto: solo la zona que cambia (ojos, torso…), la herramienta sola, la
+    cabeza de la carrera o la muestra del fondo. Es función pura de la configuración y de la opción (se guarda en caché
+    del navegador)."""
+    look = _tile_cfg(cfg, key, option_id, {})
+    if key == "prop":
+        view, width = _prop_view(option_id)
+        return svg_sized(
+            look,
+            width,
+            view=view,
+            layers="prop",
+            decorative=True,
+            pattern=False,
+            halo=False,
+            inline=False,
+        )
+    if key == "class":
+        view, width = CHIP_VIEW
+        return svg_sized(
+            look, width, view=view, decorative=True, pattern=False, halo=False, inline=False
+        )
     view, width = TILE_VIEWS[key]
     layers = "none" if key == "background" else "figure"
     return svg_sized(
@@ -440,8 +477,43 @@ def _tile_svg(cfg, key, opt, gate):
         decorative=True,
         pattern=key == "background",
         halo=False,
-        backdrop=key == "background",
+        inline=False,
     )
+
+
+# Código corto de una configuración para las URL de las miniaturas: un carácter (base 36) por clave de `CHOICES`, con el
+# índice del valor. Así cada `<img>` pesa ~100 bytes en lugar del SVG entero.
+_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz"
+
+
+def encode_cfg(cfg) -> str:
+    out = []
+    for key, allowed in engine.CHOICES.items():
+        values = list(allowed)
+        out.append(_ALPHABET[values.index(cfg[key])] if cfg[key] in values else "0")
+    return "".join(out)
+
+
+def decode_cfg(code) -> dict:
+    """Configuración de un código (lo que no se entiende queda en su valor por defecto)."""
+    cfg = {}
+    for key, char in zip(engine.CHOICES, str(code or ""), strict=False):
+        values = list(engine.CHOICES[key])
+        index = _ALPHABET.find(char)
+        if 0 <= index < len(values):
+            cfg[key] = values[index]
+    return avatar.clean_config(cfg)
+
+
+def piece_src(code, key, option_id) -> str:
+    return f"{reverse('gamification:avatar_piece', args=[key, option_id])}?c={code}"
+
+
+def piece_option(key, raw):
+    """El valor real de una opción a partir del texto de la URL (o `None` si no existe)."""
+    if key not in PIECE_KEYS:
+        return None
+    return next((v for v in engine.CHOICES[key] if str(v) == raw), None)
 
 
 def _tile_cfg(cfg, key, option_id, gate):
@@ -450,7 +522,7 @@ def _tile_cfg(cfg, key, option_id, gate):
     return {**cfg, key: option_id}
 
 
-def _career_clusters(cfg, gate):
+def _career_clusters(cfg, gate, code):
     """Chips de carrera por disciplina: solo el busto con el look de la carrera y su nombre."""
     clusters = []
     for slug, label, members in careers.by_discipline():
@@ -464,15 +536,9 @@ def _career_clusters(cfg, gate):
                     "label": data["name"],
                     "accent": data["accent"],
                     "selected": cfg["class"] == career,
-                    "svg": svg_sized(
-                        look,
-                        CHIP_VIEW[1],
-                        view=CHIP_VIEW[0],
-                        decorative=True,
-                        pattern=False,
-                        halo=False,
-                        backdrop=False,
-                    ),
+                    "src": piece_src(code, "class", career),
+                    "w": piece_size("class", career)[0],
+                    "h": piece_size("class", career)[1],
                     "look": json.dumps({k: look[k] for k in LOOK_KEYS}),
                 }
             )
@@ -539,6 +605,7 @@ def editor_sections(cfg, person, open_slug=None):
     gate = gates(person)
     have, level = gate["unlocked"], gate["level"]
     open_slug = resolve_section(open_slug, person)
+    code = encode_cfg(cfg)
     sections = []
     for number, section in enumerate(SECTIONS, start=1):
         groups = []
@@ -550,7 +617,7 @@ def editor_sections(cfg, person, open_slug=None):
                         "label": label,
                         "current": careers.CAREERS[cfg["class"]]["name"],
                         "options": [],
-                        "clusters": _career_clusters(cfg, gate),
+                        "clusters": _career_clusters(cfg, gate, code),
                         "table": career_table(catalog),
                         "tiles": False,
                         "careers": True,
@@ -574,7 +641,8 @@ def editor_sections(cfg, person, open_slug=None):
                 }
                 item["tip"] = _tip(item)
                 if key in TILE_CATEGORIES:
-                    item["svg"] = _tile_svg(cfg, key, opt, gate)
+                    item["src"] = piece_src(code, key, opt["id"])
+                    item["w"], item["h"] = piece_size(key, opt["id"])
                 options.append(item)
             if recommended:
                 options.sort(key=lambda o: not o["rec"])  # estable: lo recomendado primero
