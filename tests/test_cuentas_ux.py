@@ -111,6 +111,32 @@ def test_account_requires_login():
     assert response.status_code == 302 and response.url.startswith("/bienvenida/")
 
 
+# --- pantalla de espera -------------------------------------------------------------------------------------------
+
+
+def test_waiting_page_has_logout_for_password_session(make_person):
+    pending = make_person("pend@example.com")
+    client = password_client(pending)
+    pending.status = "pending"  # la persona entró aprobada y después quedó en espera
+    pending.save(update_fields=["status"])
+    html = client.get("/espera/").content.decode()
+    assert "Esperando aprobación" in html
+    assert "con tu correo y tu contraseña" in html
+    assert "Te avisamos en la campana" in html and "escríbele al administrador" in html
+    assert ">Salir</button>" in html
+    # «Salir» funciona estando en espera y cierra la sesión
+    response = client.post("/salir/")
+    assert response.status_code == 302 and response.url == "/bienvenida/"
+    assert client.get("/espera/").status_code == 302
+
+
+def test_waiting_page_for_tailscale_has_no_logout(client_for, make_person):
+    pending = make_person("pend2@example.com", status="pending")
+    html = client_for(pending.login).get("/espera/").content.decode()
+    assert "Tailscale" in html and "Te avisamos en la campana" in html
+    assert ">Salir</button>" not in html
+
+
 # --- cambio de contraseña ---------------------------------------------------------------------------------------
 
 

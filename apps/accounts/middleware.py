@@ -169,7 +169,10 @@ class ApprovalMiddleware:
                 return render(request, "accounts/suspended.html", status=403)
             if user.status == PersonStatus.PENDING:
                 waiting = reverse("accounts:waiting")
-                if request.path != waiting:
+                if request.path not in (
+                    waiting,
+                    reverse("accounts:logout"),
+                ):  # «Salir» sirve estando en espera
                     return redirect(waiting)
         return self.get_response(request)
 
