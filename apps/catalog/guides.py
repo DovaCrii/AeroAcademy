@@ -336,3 +336,9 @@ def images_for(path_slug, level_code):
             images = level.get("images") or []
             return [i for i in images if isinstance(i, str) and _IMAGE.match(i)][:3]
     return []
+
+
+def figure_name(path_slug):
+    """Figura declarada por la ruta (clave `figure` de su JSON) o "" (`apps/catalog/figures.py` decide si sirve)."""
+    value = _route_json(path_slug).get("figure")
+    return value if isinstance(value, str) else ""

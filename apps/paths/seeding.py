@@ -4,6 +4,7 @@ Reglas (D7): las `key` nunca se renumeran.
 Lo que desaparece del JSON no se borra: se marca `retired`.
 """
 
+from apps.catalog import figures
 from apps.catalog.models import Discipline, Platform, Product, Resource, Skill, Vendor, World
 from apps.catalog.seeding import SeedError, _dupes
 
@@ -52,6 +53,12 @@ def validate_route(data, name="ruta"):
         err(f"tipo inválido «{data['kind']}»")
     if data["world"] not in {w.value for w in World}:
         err(f"mundo inválido «{data['world']}»")
+    figure = data.get("figure")
+    if figure is not None:
+        if figure not in figures.FIGURES:
+            err(f"figura desconocida «{figure}» (ver apps/catalog/figures.py)")
+        elif not figures.valid_figure(figure, data["kind"]):
+            err(f"la figura «{figure}» no sirve para rutas de tipo «{data['kind']}»")
     if not Vendor.objects.filter(slug=data["vendor"]).exists():
         err(f"vendor desconocido «{data['vendor']}»")
     if not Platform.objects.filter(slug=data["platform"]).exists():

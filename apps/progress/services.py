@@ -11,7 +11,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import PersonStatus
-from apps.catalog import guides
+from apps.catalog import figure_layout, figures, guides
+from apps.catalog.figure_layout import clip
 from apps.gamification import game
 from apps.paths import services as path_services
 from apps.paths.models import PathExtra
@@ -170,12 +171,6 @@ def _floors(chapters, marks, me_id, step=None):
     return {"floors": floors, "ground": ground, "height": ground + 44, "top": top}
 
 
-def clip(text, limit):
-    """Texto recortado con «…» para que una etiqueta no se salga de su caja (el nombre completo va en `title`)."""
-    text = " ".join(str(text).split())
-    return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
-
-
 # Cajas aproximadas del plan de vuelo (viewBox 760 × 330): el dron va al lado opuesto de la etiqueta.
 DRONE_HALF = (13, 9)  # media anchura y media altura del dron
 LABEL_CHAR_W, LABEL_H = 7, 14  # una letra ≈ 7 px; una línea de rótulo ≈ 14 px
@@ -265,6 +260,30 @@ def _waypoints(chapters, marks, me_id):
         for i, (a, b) in enumerate(zip(points, points[1:], strict=False))
     ]
     return {"width": width, "height": height, "points": points, "segments": segments}
+
+
+def _stations(chapters, marks, me_id):
+    """Estaciones de las figuras: un nivel cada una, con el avance real y las personas del equipo que están ahí."""
+    out = []
+    for ch in chapters:
+        people = marks.get(ch["level"].id, [])
+        out.append(
+            figure_layout.station(
+                ch["level"].code,
+                ch["level"].short,
+                ch["pct"],
+                ch["complete"],
+                fid=ch["level"].code,
+                say=f"{ch['pct']} % completo",
+                noun="Nivel",
+                marks=[
+                    {"initials": initials(p), "name": p.name, "me": p.pk == me_id}
+                    for p in people[:3]
+                ],
+                extra=max(0, len(people) - 3),
+            )
+        )
+    return out
 
 
 def _diploma_link(person, path):
@@ -433,9 +452,19 @@ def world_context(person, path, level_code=None, step=None):
         if current
         else {}
     )
+    fig = figures.for_path(path)
+    total_pct = percent(total_done, total_items)
     return {
         **steps,
         "path": path,
+        "fig": fig,
+        "fg": figure_layout.layout(
+            fig["layout"],
+            _stations(chapters, marks, person.pk),
+            current_code=level_code,
+            labels=fig["labels"],
+            pct=total_pct,
+        ),
         "program_code": program[0] if len(program) > 1 else "",
         "program_title": program[-1] or path.title,
         "intro": intro,
@@ -444,13 +473,13 @@ def world_context(person, path, level_code=None, step=None):
         "current": current,
         "prev_code": codes[index - 1] if index > 0 else None,
         "next_code": codes[index + 1] if index + 1 < len(codes) else None,
-        "building": _floors(chapters, marks, person.pk),
+        "building": _floors(chapters, marks, person.pk, figures.step_label(fig["key"])),
         "flight": _waypoints(chapters, marks, person.pk),
         "stats": {
             "levels_done": sum(ch["complete"] for ch in chapters),
             "levels_total": len(chapters),
             "participants": participants,
-            "pct": percent(total_done, total_items),
+            "pct": total_pct,
             "milestones": total_milestones,
             "questions": total_questions,
         },

@@ -1,0 +1,2 @@
+{# Marcas del equipo: iniciales de quienes trabajaron por última vez en esta estación. Pide `s` (con mx, my, marks, extra). #}
+{% for m in s.marks %}<g class="fg-mark{% if m.me %} me{% endif %}"><title>{{ m.name }}</title><circle cx="{{ s.mx|add:m.dx }}" cy="{{ s.my }}" r="10"/><text x="{{ s.mx|add:m.dx }}" y="{{ s.my }}" text-anchor="middle" dominant-baseline="central">{{ m.initials }}</text></g>{% endfor %}{% if s.extra %}<text class="fg-more" x="{{ s.mx|add:s.more_dx }}" y="{{ s.my }}" dominant-baseline="central">+{{ s.extra }}</text>{% endif %}

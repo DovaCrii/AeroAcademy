@@ -1,0 +1,17 @@
+{# Pila de capas (figura genérica): una banda por estación, la primera abajo. Datos: fg (apps/catalog/figure_layout.py). #}
+<svg class="fg fg-stack" viewBox="0 0 {{ fg.w }} {{ fg.h }}" role="img" aria-labelledby="fgT">
+  <title id="fgT">{{ fig.labels.figure_title }}: {{ fg.total }} {{ fig.labels.items }}. Tu avance es {{ fg.pct }} % y completaste {{ fg.done }}.</title>
+  {% for s in fg.items %}
+  <a href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel" data-enhance data-fid="st-{{ s.fid }}" aria-label="{{ s.noun }} {{ s.code|upper }} {{ s.short }}: {{ s.say }}"{% if s.current %} aria-current="true"{% endif %}>
+    <g class="fg-st{% if s.current %} on{% endif %}{% if s.complete %} done{% endif %}">
+      <rect class="fg-slab" x="120" y="{{ s.y }}" width="380" height="40"/>
+      <rect class="fg-fill" x="120" y="{{ s.y }}" width="{{ s.fill_w }}" height="40"/>
+      <rect class="fg-box" x="120" y="{{ s.y }}" width="380" height="40"/>
+      <text class="fg-code" x="106" y="{{ s.mid }}" text-anchor="end" dominant-baseline="central">{{ s.code|upper }}</text>
+      <text class="fg-name" x="134" y="{{ s.mid }}" dominant-baseline="central"><title>{{ s.short }}</title>{{ s.label }}</text>
+      <text class="fg-pct" x="488" y="{{ s.mid }}" text-anchor="end" dominant-baseline="central">{{ s.pct }} %</text>
+      {% include "worlds/figures/_marks.html" %}
+    </g>
+  </a>
+  {% endfor %}
+</svg>

@@ -7,6 +7,7 @@ El avance sale de las credenciales verificadas: cada curso verificado es una est
 import math
 
 from apps.accounts.models import PersonStatus
+from apps.catalog import figure_layout, figures
 from apps.credentials import services as credential_services
 from apps.credentials.models import Credential
 from apps.paths import services as path_services
@@ -80,6 +81,8 @@ def external_context(person, path, level_code=None):
         level_code = (pending or chapters[0])["level"].code if chapters else None
     index = codes.index(level_code) if level_code else 0
 
+    fig = figures.for_path(path)
+    total_pct = percent(required_done, required_total)
     verified = [c for c in all_courses if c["state"] == Credential.Status.VERIFIED]
     pending_n = sum(c["state"] == Credential.Status.PENDING for c in all_courses)
     relics = [c for c in all_courses if c["obj"].reward == ExternalCourse.Reward.RELIC]
@@ -94,6 +97,14 @@ def external_context(person, path, level_code=None):
 
     return {
         "path": path,
+        "fig": fig,
+        "fg": figure_layout.layout(
+            fig["layout"],
+            _stations(chapters),
+            current_code=level_code,
+            labels=fig["labels"],
+            pct=total_pct,
+        ),
         "chapters": chapters,
         "current": chapters[index] if chapters else None,
         "prev_code": codes[index - 1] if index > 0 else None,
@@ -108,12 +119,43 @@ def external_context(person, path, level_code=None):
             "relics_verified": sum(c["state"] == Credential.Status.VERIFIED for c in relics),
             "chapters": len(chapters),
             "chapters_done": sum(ch["complete"] for ch in chapters),
-            "pct": percent(required_done, required_total),
+            "pct": total_pct,
             "participants": participants,
         },
         "products": path.products.all(),
         "disciplines": path.disciplines.all(),
     }
+
+
+_STATE_PCT = {Credential.Status.VERIFIED: 100, Credential.Status.PENDING: 50}
+_STATE_SAY = {
+    Credential.Status.VERIFIED: "verificado",
+    Credential.Status.PENDING: "en revisión",
+    Credential.Status.REJECTED: "rechazado",
+}
+
+
+def _stations(chapters):
+    """Estaciones de las figuras: un curso cada una (varias rutas externas tienen un solo capítulo), con su estado.
+
+    Verificado = 100 %, en revisión = 50 %. Cada estación enlaza al capítulo del curso.
+    """
+    out = []
+    for ch in chapters:
+        for course in ch["courses"]:
+            state = course["state"]
+            out.append(
+                figure_layout.station(
+                    ch["level"].code,
+                    course["obj"].resource.title,
+                    _STATE_PCT.get(state, 0),
+                    state == Credential.Status.VERIFIED,
+                    fid=course["obj"].key,
+                    say=_STATE_SAY.get(state, "por hacer"),
+                    noun="Curso",
+                )
+            )
+    return out
 
 
 _FILLER = {"a", "an", "the", "to", "of", "and", "for", "with", "in", "on", "intro", "introduction"}

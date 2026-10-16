@@ -1,0 +1,42 @@
+/* Kit de figuras (docs/MUNDOS.md · docs/MEJORAS_UX.md P1-9): lo común de todas las figuras SVG de ruta.
+   Usa solo las variables de la identidad (tinta, hoja, líneas, ok) y el acento del mundo (--acc en arquitectura,
+   --sign en civil): claro y oscuro salen solos. Todo se lee sin JS; el movimiento se apaga con prefers-reduced-motion. */
+.fg{--fg-acc:var(--acc,var(--sign,#E9A23B));--fg-ink:var(--ink);--fg-soft:var(--ink-2);--fg-line:var(--line);--fg-hair:var(--hair);
+  --fg-paper:var(--sheet);--fg-ok:var(--ok,#2E9E5B);--fg-warn:var(--pend,#D97706);
+  width:100%;height:auto;display:block;font-family:var(--font)}
+.fg text{fill:var(--fg-ink)}
+.fg a{cursor:pointer}
+.fg a:focus-visible{outline:none}
+.fg a:focus-visible .fg-st>.fg-box,.fg a:focus-visible .fg-focus{stroke:var(--fg-acc);stroke-width:3}
+.fg-mono{font-family:var(--font-mono);letter-spacing:.04em}
+
+/* estación: celda con su relleno de avance */
+.fg-slab{fill:var(--fg-paper)}
+.fg-fill{fill:color-mix(in srgb,var(--fg-acc) 46%,transparent)}
+.fg-box{fill:none;stroke:var(--fg-line);stroke-width:1.5}
+.fg-st:hover .fg-box,.fg-st.on .fg-box{stroke:var(--fg-acc);stroke-width:2.5}
+.fg-st.on .fg-slab{fill:color-mix(in srgb,var(--fg-acc) 10%,var(--fg-paper))}
+.fg-st.done .fg-fill{fill:color-mix(in srgb,var(--fg-ok) 55%,transparent)}
+.fg-st.done .fg-box{stroke:var(--fg-ok)}
+.fg-code{font:700 12px var(--font-mono);fill:var(--fg-soft)!important}
+.fg-name{font-size:13px;font-weight:650}
+.fg-pct{font:700 12px var(--font-mono);fill:var(--fg-soft)!important}
+.fg-st.done .fg-pct{fill:var(--fg-ok)!important}
+.fg-tag{font:600 11px var(--font-mono);letter-spacing:.08em;fill:var(--fg-soft)!important}
+
+/* marcas del equipo */
+.fg-mark circle{fill:var(--level,var(--fg-acc));stroke:var(--fg-paper);stroke-width:1.5}
+.fg-mark text{font-size:9.5px;font-weight:700;fill:#fff!important}
+.fg-mark.me circle{fill:var(--scan,var(--fg-warn))}
+.fg-more{font:700 11px var(--font-mono);fill:var(--fg-soft)!important}
+
+/* rótulos sobre el dibujo (cintas, carriles, encabezados) */
+.fg-chip rect{fill:var(--fg-paper);stroke:var(--fg-line);stroke-width:1.2}
+.fg-chip text{font:700 11px var(--font-mono);letter-spacing:.08em}
+.fg-arrow{stroke:var(--fg-soft);stroke-width:1.5;fill:none}
+.fg-arrowhead{fill:var(--fg-soft)}
+.fg-guide{stroke:var(--fg-hair);stroke-width:1;stroke-dasharray:4 4;fill:none}
+
+@media (prefers-reduced-motion:no-preference){
+  .fg-st .fg-box{transition:stroke .15s}
+}
