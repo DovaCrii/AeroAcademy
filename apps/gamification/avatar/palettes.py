@@ -134,6 +134,12 @@ FIXED = {
     "G": "#13803C",
     "D": "#4A5663",
     "Q": "#FF5A00",
+    # Para piezas HD (equipo y detalle): línea interior fina, acero claro, pantalla, cono y su franja.
+    "k": "#2B2F36",
+    "I": "#C9D3DD",
+    "V": "#7FE3FF",
+    "X": "#FF7A1A",
+    "x": "#FFFFFF",
 }
 
 # Marco por rareza (docs/GAMIFICACION.md): color de respaldo y variable CSS.

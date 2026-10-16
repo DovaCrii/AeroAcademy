@@ -433,6 +433,7 @@ def render_svg(
     halo=True,
     inline=False,
     backdrop=True,
+    pose="stand",
 ):
     """SVG pixel-art de una vista (`views.VIEWS` o un recorte `(x, y, ancho, alto)`).
 
@@ -451,6 +452,20 @@ def render_svg(
     (`zone:*`) tampoco lo llevan: son una muestra de la pieza, no una silueta.
     """
     cfg = clean_config(config)
+    if view == "stage":  # el escenario HD de 80×80 (ver `hd/`); los recortes de 32 siguen abajo
+        from .hd.render import render_stage
+
+        return render_stage(
+            cfg,
+            title=title,
+            pose=pose,
+            decorative=decorative,
+            bg_alt=bg_alt,
+            pattern=pattern,
+            halo=halo,
+            inline=inline,
+            backdrop=backdrop,
+        )
     x0, y0, w, h = views.box(view)
     if layers == "prop":
         grid = _prop_grid(cfg)
