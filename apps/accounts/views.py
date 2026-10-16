@@ -208,7 +208,8 @@ def team_signup(request, token):
     if result.kind == team_link.LOGGED_IN:
         _login(request, result.person)
         return redirect("core:home")
-    return _private(render(request, "accounts/team_signup_result.html", {"kind": result.kind}))
+    # Una sola respuesta para todos los casos (A12): ni el texto ni el código dependen de `result.kind`.
+    return _private(render(request, "accounts/team_signup_result.html"))
 
 
 def _private(response):

@@ -60,6 +60,7 @@ def index(request):
             "qs_nosort": nosort.urlencode(),
             "sorts": forum.SORTS,
             "qs": query.urlencode(),
+            "team_talk": forum.team_conversations(show_hidden=request.user.is_lead),
             "paths": path_services.visible_paths(request.user).prefetch_related(
                 "disciplines", "products"
             ),

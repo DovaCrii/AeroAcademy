@@ -114,7 +114,7 @@ def test_poll_options_validation(member):
     with pytest.raises(ValueError):
         idea(member, "\n".join(f"o{i}" for i in range(7)))
     with pytest.raises(ValueError):
-        thread(member, "general", poll_options="a\nb")  # solo Ideas y mejoras
+        thread(member, "general", poll_options="a\nb")  # solo Propuestas y mejoras
     assert idea(member, "A\na\nB").poll_options.count() == 2  # sin repetidas
 
 

@@ -171,3 +171,35 @@ input[type=checkbox],input[type=radio]{accent-color:var(--amber)}
 .crumbs a{color:var(--level);font-weight:600}
 .crumbs [aria-current]{color:var(--ink);font-weight:700}
 .step-next{margin:8px 0 0;font-size:13px;color:var(--ink-2)}
+
+/* /rutas/ por área de aprendizaje y filtros secundarios */
+.map-link{display:flex;align-items:center;gap:14px;max-width:760px;margin:0 0 14px;padding:12px 16px;background:var(--surface-1);border:1.5px solid var(--amber);border-radius:var(--r-card);box-shadow:var(--elev-1);color:var(--ink);text-decoration:none}
+.map-link:hover,.map-link:focus-visible{box-shadow:var(--elev-2)}
+.map-link>span:nth-child(2){flex:1;min-width:0}
+.map-link strong{display:block;font-size:15px}
+.map-link small{display:block;color:var(--ink-2);font-size:12.5px}
+.map-link-ico{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--amber);color:var(--on-amber);font-size:16px;flex:none}
+.map-link-go{font-weight:700;color:var(--level)}
+.area-sec{margin:22px 0 8px}
+.area-sec>h2{margin:0 0 4px}
+.area-sec>.sub{margin:0 0 10px}
+.area-nav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 10px}
+.area-nav a.chip{text-decoration:none;color:var(--ink)}
+.area-nav a.chip:hover,.area-nav a.chip:focus-visible{border-color:var(--amber)}
+.more-filters{margin:6px 0 14px}
+.more-filters>summary{cursor:pointer;font-weight:700;font-size:14px;padding:6px 0}
+.more-filters>.filters{margin-top:6px}
+
+/* Conversaciones del equipo (foro y portada) */
+.team-talk{margin:22px 0}
+.team-talk>h2{margin:0 0 4px}
+.team-talk>.sub{margin:0 0 10px}
+.tt-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px}
+.tt-card{display:flex;flex-direction:column;background:var(--surface-1);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--elev-1);overflow:hidden}
+.tt-card:hover,.tt-card:focus-within{box-shadow:var(--elev-2)}
+.tt-main{display:flex;flex-direction:column;gap:4px;padding:12px 14px;color:var(--ink);text-decoration:none;flex:1}
+.tt-main .tt-ico{width:44px;height:44px;margin-bottom:2px}
+.tt-main b{font-size:15px}
+.tt-main span{font-size:12.5px;line-height:1.4;color:var(--ink-2)}
+.tt-main em{margin-top:auto;padding-top:6px;font:600 11.5px var(--font-mono);font-style:normal;color:var(--level)}
+.tt-sec{padding:6px 14px 10px;font-size:12.5px;font-weight:600}
