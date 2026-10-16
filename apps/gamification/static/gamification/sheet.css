@@ -3,8 +3,9 @@
 .toggle a{padding:.35rem .8rem;text-decoration:none;font-weight:700;font-size:.85rem;color:inherit}
 .toggle a[aria-current]{background:#ffc21a;color:#0a0e13}
 .hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:1.25rem;align-items:center;padding:1.25rem;margin-bottom:1rem;background:#05111f;color:#fff;border:1px solid #000;position:relative}
-.hero-avatar{border:4px solid #8b5cf6;background:#0e3563;line-height:0}
-.hero-avatar svg{width:144px;height:144px;image-rendering:pixelated}
+.hero-avatar{display:flex;flex-direction:column;align-items:center;gap:.9rem;padding:4px}
+.hero .wear{font-size:.8rem;color:#d5e5f5;max-width:190px}.hero .wear-t{margin:0 0 .2rem;font:600 .7rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#ffc21a}
+.hero .wear ul{margin:0;padding-left:1rem}.hero .wear summary{cursor:pointer;color:#4cc6ff;margin-top:.2rem}
 .hero h1{margin:0;font-size:clamp(1.8rem,5vw,3rem);line-height:1}
 .hero .headline{margin:.3rem 0 .5rem;color:#d5e5f5}
 .hero .muted{color:#9fb0c2}

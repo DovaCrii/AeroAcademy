@@ -9,3 +9,17 @@
 .cheer-card.epic b{color:#8b5cf6}.cheer-card.rare b{color:#1e8cff}.cheer-card.legendary b{color:#c98f00}
 .px-img{image-rendering:pixelated}
 @media (prefers-reduced-motion:no-preference){.cheer{animation:cheer-in .35s ease-out}@keyframes cheer-in{from{transform:translateY(-6px);opacity:0}}}
+
+/* Avatar: el marco de rareza y la placa de nivel viven fuera del SVG (así el dibujo no cambia con el nivel y cada
+   celda mide un número entero de píxeles). */
+.av-frame{--fr:var(--rarity-common,#8d9cad);position:relative;display:inline-block;line-height:0;box-shadow:0 0 0 2px var(--fr)}
+.av-frame--bronze{--fr:var(--rarity-bronze,#b87333)}.av-frame--rare{--fr:var(--rarity-rare,#1e8cff)}
+.av-frame--epic{--fr:var(--rarity-epic,#8b5cf6)}.av-frame--legendary{--fr:var(--rarity-legendary,#e0a800)}
+.av-frame--lg{box-shadow:0 0 0 4px var(--fr)}
+.av-frame svg{display:block;image-rendering:pixelated}
+.av-plate{position:absolute;left:-4px;bottom:-4px;padding:3px 5px;background:#ffc21a;color:#0a0e13;border:2px solid #0a0e13;font:400 10px/1 "Press Start 2P",ui-monospace,monospace}
+.av-plate::after{content:"NV " attr(data-nv)}
+/* Quien aún no eligió fondo lleva dos (oscuro y claro) y el tema decide cuál se ve. El tema claro es el de base. */
+.av-bg-dark{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .av-bg-dark{display:inline}:root:not([data-theme="light"]) .av-bg-light{display:none}}
+:root[data-theme="dark"] .av-bg-dark{display:inline}:root[data-theme="dark"] .av-bg-light{display:none}

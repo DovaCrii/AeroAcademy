@@ -54,7 +54,7 @@
 
   // --- resumen de cada sección, nombre de lo elegido y aviso de cambios ---
   function labelOf(input) {
-    return input ? input.getAttribute("data-label") || "" : "";
+    return input ? input.getAttribute("data-label") || input.getAttribute("aria-label") || "" : "";
   }
   function refresh() {
     form.querySelectorAll("fieldset.av-group").forEach(function (fs) {
