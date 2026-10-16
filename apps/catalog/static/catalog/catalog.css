@@ -265,3 +265,13 @@ a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
 .chip.gen{border-color:var(--d-tra,#8793A6)}
 .chip.gen.on{background:var(--d-tra,#8793A6);color:#10161f}
 @media (max-width:560px){.cat-gen{padding:14px 12px}}
+
+/* filtros compactos: búsqueda + 3 filtros visibles, el resto en «Más filtros», chips removibles */
+.cat-main-filters{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end}
+.cat-main-filters label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-2)}
+.cat-main-filters label.check{flex-direction:row;align-items:center;gap:6px;color:var(--ink);min-height:36px}
+.cat-main-filters select{border-radius:10px;padding:7px 10px;min-width:180px;max-width:100%}
+.cat-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 10px;padding:0}
+.cat-chips .chip{text-decoration:none;color:var(--ink);border-color:var(--amber);background:color-mix(in srgb,var(--amber) 14%,transparent);padding:2px 10px}
+.cat-chips .chip:hover,.cat-chips .chip:focus-visible{background:color-mix(in srgb,var(--amber) 30%,transparent)}
+@media (max-width:640px){.cat-main-filters select{min-width:0;width:100%}.cat-main-filters label:not(.check){flex:1 1 100%}}

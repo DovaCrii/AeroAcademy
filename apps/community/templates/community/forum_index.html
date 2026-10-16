@@ -10,6 +10,8 @@
   <p>Preguntas con respuesta aceptada y conversaciones del equipo. <a class="btn primary" href="{% url 'community:thread_new' %}">Nuevo hilo</a></p>
 </div>
 
+{% include "community/partials/team_talk.html" %}
+
 <details class="rules"><summary>Normas del foro</summary>
   <ul><li>Respeto, y preguntar sin miedo.</li><li>Nada de datos personales ni de clientes en el foro.</li><li>Términos de software en inglés, como aparecen en pantalla.</li><li>Si te resolvieron la duda, marca la respuesta aceptada.</li></ul>
 </details>

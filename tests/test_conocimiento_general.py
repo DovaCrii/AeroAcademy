@@ -390,7 +390,7 @@ def test_catalog_general_filter_shows_only_tagged_resources(member_client, route
     html = member_client.get("/catalogo/?general=1").content.decode()
     assert "Solo general" in html and "Curso común" not in html
     assert 'id="conocimiento-general"' in html and "cat-grid" in html and "// 02" in html
-    assert "chip gen on" in html
+    assert "Quitar el filtro Conocimiento general" in html
     other = member_client.get("/catalogo/?q=curso").content.decode()
     assert 'id="conocimiento-general"' not in other  # con otro filtro la sección no estorba
 

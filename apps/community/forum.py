@@ -10,7 +10,7 @@ from apps.gamification.models import XPEvent
 from apps.notifications import services as notifications
 
 from . import moderation, opinions
-from .models import BODY_MAX, THREAD_TITLE_MAX, PollOption, Post, Reaction, Thread
+from .models import BODY_MAX, THREAD_TITLE_MAX, Category, PollOption, Post, Reaction, Thread
 
 ACCEPT_XP_KIND = "accepted_answer"
 DAILY_ACCEPTED_XP = 5  # respuestas aceptadas por día que dan XP (antitrampa, D13)
@@ -34,7 +34,7 @@ def _clean(text, limit, what):
 def create_thread(author, category, kind, title, body, disciplines=(), poll_options=""):
     options = opinions.parse_options(poll_options)
     if options and category.slug != opinions.POLL_CATEGORY:
-        raise ValueError("Las encuestas son solo para «Ideas y mejoras».")
+        raise ValueError("Las encuestas son solo para «Propuestas y mejoras».")
     title = _clean(title, THREAD_TITLE_MAX, "un título")
     body = _clean(body, BODY_MAX, "el detalle")
     if kind not in Thread.Kind.values:
@@ -191,6 +191,38 @@ def listing(
     if q:
         qs = qs.filter(Q(title__icontains=q) | Q(body__icontains=q)).distinct()
     return qs
+
+
+# «Conversaciones del equipo»: las cinco categorías de trabajo y el dibujo de su tarjeta (P1-3).
+TEAM_CATEGORIES = [
+    ("general", "foro"),
+    ("ideas", "hero-ideas"),
+    (opinions.POLL_CATEGORY, "doodle-sparks"),
+    ("implementacion", "doodle-arrows"),
+    ("seguimiento", "doodle-scribbles"),
+]
+
+
+def team_conversations(show_hidden=False):
+    """Tarjetas de «Conversaciones del equipo»: nombre, descripción y cuántos hilos tiene cada categoría.
+    Dos consultas fijas; lo oculto no cuenta (salvo para quien modera) y una categoría retirada no sale."""
+    slugs = [slug for slug, _ in TEAM_CATEGORIES]
+    cats = {c.slug: c for c in Category.objects.filter(slug__in=slugs, retired=False)}
+    threads = Thread.objects.filter(category__slug__in=slugs)
+    if not show_hidden:
+        threads = threads.filter(is_hidden=False)
+    counts = dict(threads.values_list("category__slug").annotate(n=Count("pk")))
+    return [
+        {
+            "slug": slug,
+            "name": cats[slug].name,
+            "description": cats[slug].description,
+            "count": counts.get(slug, 0),
+            "doodle": doodle,
+        }
+        for slug, doodle in TEAM_CATEGORIES
+        if slug in cats
+    ]
 
 
 def open_questions_count() -> int:

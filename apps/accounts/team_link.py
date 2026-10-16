@@ -10,6 +10,7 @@ import secrets
 from dataclasses import dataclass
 from datetime import timedelta
 
+from django.contrib.auth.hashers import make_password
 from django.core import signing
 from django.core.cache import cache
 from django.db import IntegrityError, transaction
@@ -145,6 +146,12 @@ def _is_privileged(person: Person | None, login: str) -> bool:
     )
 
 
+def _spend_hash(password: str) -> None:
+    """Hace el mismo trabajo de contraseña que una cuenta nueva, para que responder "ya existe" no sea más rápido
+    que crearla (A12: la respuesta no debe delatar por tiempo si el correo tenía cuenta)."""
+    make_password(password)
+
+
 @transaction.atomic
 def enroll(
     link: TeamSignupLink,
@@ -159,10 +166,13 @@ def enroll(
 
     if person is not None:
         if person.status == PersonStatus.SUSPENDED or not person.is_active:
+            _spend_hash(password)
             return Enrollment(REFUSED)
         if person.has_usable_password():
+            _spend_hash(password)
             return Enrollment(HAS_ACCOUNT)
     if _is_privileged(person, login):
+        _spend_hash(password)
         return Enrollment(PERSONAL_LINK)
 
     if person is None:
@@ -170,6 +180,7 @@ def enroll(
             with transaction.atomic():
                 person = Person.objects.create_user(login=login, password=password)
         except IntegrityError:  # otra inscripción creó el mismo correo entre tanto
+            _spend_hash(password)
             return Enrollment(HAS_ACCOUNT)
         services.set_role(person, "member")
         created = True

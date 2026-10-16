@@ -223,7 +223,8 @@ for unit in centro-backup.service centro-backup.timer centro-expiry.service cent
   install -m 644 "deploy/$unit" "/etc/systemd/system/$unit"
 done
 chmod 755 "$APP/deploy/backup.sh" "$APP/deploy/manage.sh"   # rsync ya los copió: aquí solo se les da permiso de ejecución
-ln -sf "$APP/deploy/manage.sh" /usr/local/bin/aeroacademy   # atajo: sudo aeroacademy <comando>  (aprobar, teo_probar…)
+ln -sf "$APP/deploy/manage.sh" /usr/local/bin/aeroacademy   # atajo: sudo aeroacademy <comando>  (aprobar, teo_probar…, actualizar, revertir)
+echo "$SRC" > "$ENV_DIR/repo"   # dónde está el repositorio: lo usa `sudo aeroacademy actualizar` (no es secreto)
 if [ "$FUNNEL" = 1 ]; then
   install -m 644 deploy/centro-public.service /etc/systemd/system/centro-public.service
   sed -i "s|127.0.0.1:8011|127.0.0.1:$PUBLIC_PORT|" /etc/systemd/system/centro-public.service

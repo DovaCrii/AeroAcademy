@@ -12,7 +12,7 @@
   <label>Categoría <select name="category" required><option value="">Elige…</option>{% for c in categories %}<option value="{{ c.slug }}"{% if v.category == c.slug %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></label>
   <label>Título <input name="title" maxlength="150" value="{{ v.title }}" required></label>
   <label>Detalle <textarea name="body" rows="8" maxlength="5000" required>{{ v.body }}</textarea></label>
-  <details class="poll-new"{% if v.poll_options %} open{% endif %}><summary>Agregar encuesta rápida (solo en «Ideas y mejoras»)</summary>
+  <details class="poll-new"{% if v.poll_options %} open{% endif %}><summary>Agregar encuesta rápida (solo en «Propuestas y mejoras»)</summary>
     <label>2 a 6 opciones, una por línea <textarea name="poll_options" rows="4" maxlength="600" placeholder="Sí, hagámoslo&#10;Mejor otra cosa&#10;Necesito más detalle">{{ v.poll_options }}</textarea></label>
   </details>
   <fieldset><legend>Disciplinas (opcional)</legend>
@@ -21,3 +21,4 @@
   <p><button class="btn primary" type="submit">Publicar</button> <a class="btn" href="{% url 'community:forum' %}">Cancelar</a></p>
 </form>
 {% endblock %}
+

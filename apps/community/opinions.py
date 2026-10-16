@@ -1,4 +1,4 @@
-"""Opinar en el foro: reacciones a hilos y mensajes, y encuestas rápidas en «Ideas y mejoras»."""
+"""Opinar en el foro: reacciones a hilos y mensajes, y encuestas rápidas en «Propuestas y mejoras»."""
 
 from django.db import transaction
 from django.db.models import Count, Q
@@ -208,11 +208,11 @@ def supports_poll(thread) -> bool:
 
 @transaction.atomic
 def add_poll(thread, by, options):
-    """Agrega la encuesta (una sola vez) a un hilo de «Ideas y mejoras». Quien lo abrió o un responsable."""
+    """Agrega la encuesta (una sola vez) a un hilo de «Propuestas y mejoras». Quien lo abrió o un responsable."""
     if by.pk != thread.author_id and not by.is_lead:
         raise PermissionError("Solo quien abrió el hilo o un responsable agrega la encuesta.")
     if not supports_poll(thread):
-        raise ValueError("Las encuestas son solo para «Ideas y mejoras».")
+        raise ValueError("Las encuestas son solo para «Propuestas y mejoras».")
     if thread.is_closed or thread.is_hidden:
         raise ValueError("El hilo no admite una encuesta nueva.")
     if thread.poll_options.exists():
