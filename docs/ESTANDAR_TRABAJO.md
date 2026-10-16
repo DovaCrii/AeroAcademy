@@ -16,25 +16,32 @@ Plantillas listas para copiar en `tools/kit/`; cómo adoptarlas en `tools/kit/ad
 
 ## 2. El ciclo
 
-**plan → bloque pequeño → pruebas → PR → CI → revisión y fusión humana**
+**Entender → Diseñar → Implementar → Verificar → Revisar → Publicar y cerrar** (skill `orquestar`)
 
 1. Plan en modo plan (sin editar): qué, dónde, cómo se prueba, qué queda fuera. Dudas = pregunta abierta, no decisión propia.
 2. Rama `bloque-<n>-<tema>` (o `fix-`/`docs-`) desde `main`.
 3. Pruebas primero cuando se pueda; commits chicos en español e imperativo.
-4. Lint y pruebas locales, revisión de privacidad (`tools/kit/privacy_scan.py`).
-5. `git push -u origin <rama>` y `gh pr create` con la plantilla; revisar `gh pr checks`. Un PR en rojo no está listo.
-6. Con el CI en verde, el agente fusiona (merge commit). Después, la persona despliega según `docs/PRODUCCION.md`, con rollback.
+4. Verificación mecánica: lint, pruebas, privacidad (`tools/kit/privacy_scan.py`), enlaces.
+5. Revisión del diff completo por Opus: criterios contra pruebas, seguridad, privacidad, sin JS, claro y oscuro.
+6. Publicar y cerrar (skill `cerrar-pendientes`): `git push`, `gh pr create` con la plantilla, esperar la corrida real
+   del CI y, en verde, fusionar con merge commit. La persona despliega según `docs/PRODUCCION.md`, con rollback.
 
-## 3. Política de modelos
+## 3. Política de modelos y esfuerzo
 
-| Modelo | Rol |
-|---|---|
-| **Opus** | Orquesta: entiende, decide, reparte, revisa, integra y publica el PR |
-| **Sonnet** | Construye: código, pruebas, documentos, revisión independiente |
-| **Haiku** | Revisa lo mecánico: búsquedas, inventarios, enlaces, resumen de logs |
+Decisión del dueño (2026-10-16): **Opus organiza, Sonnet construye, Haiku comprueba**, todos con esfuerzo **medio**.
+
+| Fase | Modelo (esfuerzo) | Agentes en AeroAcademy |
+|---|---|---|
+| Entender, Diseñar (plan, decisiones) | **Opus 5.5 medio** | sesión principal, `disenador` |
+| Implementar (código, pruebas, contenido, arreglos de CI) | **Sonnet 5.5 medio** | `bloque-dev`, `curador-semillas`, `artista-pixel` |
+| Verificar (inventarios, CI local, enlaces, vigilar el CI) | **Haiku 5.5 medio** | `verificador` |
+| Revisar el diff | **Opus 5.5 medio** | `revisor-bloque` |
+| Publicar y cerrar (PR, CI, fusión) | **Opus 5.5 medio** (Haiku vigila, Sonnet arregla) | skill `cerrar-pendientes` |
 
 Al lanzar un subagente se pasa `model` explícito. Cada subagente tiene dueños de archivos sin cruce (idealmente su propio
-`git worktree`), no hace `push` ni PR, y quien lo lanza verifica el resultado. Detalle en la skill `orquestar`.
+`git worktree`), no hace `push` ni PR, y quien lo lanza verifica y revisa el resultado. Se pregunta a la persona ante
+seguridad, privacidad, datos de clientes, decisiones de producto, dependencias nuevas o producción. Detalle en la skill
+`orquestar` (plantilla en `tools/kit/skills/orquestar/`).
 
 ## 4. Privacidad en repositorios públicos
 
@@ -54,7 +61,8 @@ Al lanzar un subagente se pasa `model` explícito. Cada subagente tiene dueños 
 - Pruebas, lint y formato en verde, también en el CI del PR.
 - Revisión de privacidad en verde.
 - Documentación y plan actualizados.
-- Rama subida y PR abierto con resumen en español (qué cambia, cómo probarlo, qué queda).
+- Diff revisado por Opus (criterios, seguridad, privacidad, sin JS, claro y oscuro).
+- PR con resumen en español (qué cambia, cómo probarlo, qué queda), CI en verde y fusionado con merge commit.
 - Despliegue solo cuando la persona lo decide, con plan de rollback.
 
 ## 6. Recuperación
@@ -81,7 +89,8 @@ Al lanzar un subagente se pasa `model` explícito. Cada subagente tiene dueños 
 - [ ] `AGENTS.md` con las secciones de `tools/kit/AGENTS.sections.md` (fusionar, nunca reemplazar)
 - [ ] `CLAUDE.md` que importa `@AGENTS.md` y resume cómo trabajamos
 - [ ] `.claude/settings.json` con `deny` de secretos
-- [ ] Skills `plan-y-bloque`, `revision-privacidad`, `orquestar`
+- [ ] Skills `orquestar`, `plan-y-bloque`, `revision-privacidad`, `cerrar-pendientes`
+- [ ] Agentes `disenador` y `revisor` (opus), `verificador` (haiku) de `tools/kit/agents/`
 - [ ] `privacy_scan.py` + paso en el CI + `.gitignore` con `private/` y `.env*`
 - [ ] Plantilla de PR y guía para compañeros
 - [ ] Cero cambios en archivos de despliegue o producción

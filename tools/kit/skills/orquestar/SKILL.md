@@ -1,33 +1,39 @@
 ---
 name: orquestar
-description: Reparte una ronda de trabajo de {{PROYECTO}} entre subagentes - Opus orquesta, Sonnet construye, Haiku verifica y busca - para no gastar tokens de más. Usar cuando una petición tenga varias partes independientes o mucho trabajo mecánico.
+description: Método único de trabajo de {{PROYECTO}} - fases (Entender, Diseñar, Implementar, Verificar, Revisar, Publicar y cerrar), qué modelo y esfuerzo hace cada una (Opus 5.5 medio diseña y revisa, Sonnet 5.5 medio implementa, Haiku 5.5 medio verifica) y cuándo preguntar a la persona. Usar en toda ronda con más de un paso o más de un agente.
 ---
 
 # Orquestar una ronda
 
-## Quién hace qué
+Fuente única del método de la suite Aero. Opus organiza, Sonnet construye, Haiku comprueba; todos con esfuerzo medio.
 
-| Modelo | Rol | Ejemplos |
+| Modelo (esfuerzo) | Rol | Agentes (`.claude/agents/`) |
 |---|---|---|
-| **Opus** (sesión principal) | Entiende el pedido, decide, reparte, revisa, integra y publica el PR | Planificar, resolver dudas con la persona, revisar lo entregado |
-| **Sonnet** | Construye | Código y pruebas, documentos, revisión independiente de un bloque |
-| **Haiku** | Mecánico y de lectura | Buscar dónde está algo, inventarios, revisar enlaces, resumir salidas de pruebas o logs |
+| **Opus 5.5 medio** | Sesión principal: entiende, diseña, decide, reparte, **revisa diffs**, integra y fusiona | `disenador`, `revisor` |
+| **Sonnet 5.5 medio** | Implementa: código, pruebas, documentos, arreglos de CI | `general-purpose` con `model: "sonnet"` |
+| **Haiku 5.5 medio** | Mecánico: inventarios, comprobaciones, enlaces, vigilar el CI, resumir logs | `verificador` |
 
-Al lanzar un subagente pasa siempre `model` explícito (`"sonnet"` o `"haiku"`); sin él podría heredar el modelo caro.
+Al lanzar con `Agent`, pasa siempre `model` explícito; sin él podría heredar el modelo de la sesión.
 
-## Orden
+## Fases
 
-1. **Entender (Opus).** Separar el pedido en partes independientes; lo que dependa de una decisión de la persona se pregunta antes.
-2. **Explorar (Haiku, opcional).** Ubicar archivos y dueños antes de repartir.
-3. **Repartir (Sonnet, en paralelo).** Un agente por parte, con **dueños de archivos sin cruce**: el prompt dice qué edita y
-   qué no toca. Si trabajan en el mismo repo, cada uno en su propio `git worktree`. Sin `git push` ni PR en los subagentes.
-4. **Integrar (Opus).** Leer el informe, mirar el diff, correr `{{COMANDO_PRUEBAS}}` y `{{COMANDO_LINT}}`.
-5. **Verificar (Haiku).** Enlaces, inventarios y revisión mecánica al final.
-6. **Publicar (Opus).** Rama, PR, CI en verde y fusión con merge commit. La persona despliega.
+1. **Entender (Opus).** Partes independientes; lectura mínima de `AGENTS.md` y del tema. Inventario con `verificador`.
+2. **Diseñar (Opus · `disenador` si es grande).** Plan corto: archivos, criterios con su prueba, riesgos, reparto con
+   **dueños de archivos sin cruce**, qué verifica Haiku. Cambios no triviales: visto bueno de la persona.
+3. **Implementar (Sonnet, en paralelo).** Un agente por parte, cada uno en su rama o `git worktree`; prompt
+   autosuficiente; commits locales; sin `push` ni PR.
+4. **Verificar (Haiku).** `{{COMANDO_PRUEBAS}}`, `{{COMANDO_LINT}}`, `{{COMANDO_FORMAT_CHECK}}`,
+   `python tools/kit/privacy_scan.py`. Reporta; no corrige.
+5. **Revisar (Opus · `revisor`).** Diff completo: criterios contra pruebas, seguridad, privacidad, interfaz. Lo bloqueante
+   vuelve al implementador.
+6. **Publicar y cerrar (Opus · skill `cerrar-pendientes`).** Skill `revision-privacidad`, PR, CI en verde, merge commit.
+   La persona despliega.
+
+## Cuándo preguntar a la persona
+
+Seguridad, privacidad o datos de clientes; decisiones de producto; dependencias nuevas; despliegue o producción
+({{ARCHIVOS_DE_DESPLIEGUE}}); borrar ramas remotas o cerrar PR ajenos. Lo demás ambiguo: pregunta abierta y propuesta por defecto.
 
 ## Ahorro de tokens
 
-- No dupliques búsquedas entre agentes.
-- Prompts autosuficientes y cortos: contexto, archivos dueños, criterios de aceptación, cómo verificar, qué reportar.
-- Informes concisos (archivos, decisiones, pruebas); los detalles se leen del diff.
-- Si un agente arrancó con el modelo equivocado y lleva poco, detenlo y relánzalo; descarta lo hecho a medias.
+Una búsqueda, un agente. Informes cortos; el detalle se lee del diff. Modelo equivocado con poco avance: detener y relanzar.

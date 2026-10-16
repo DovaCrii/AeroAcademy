@@ -1,23 +1,24 @@
 ---
 name: plan-y-bloque
-description: Trabaja un cambio de {{PROYECTO}} en bloques pequeños - plan corto, rama, pruebas, código, lint, PR listo. Usar al pedir una función nueva, un arreglo o "continúa con el siguiente bloque".
+description: Trabaja un cambio de {{PROYECTO}} en bloques pequeños - plan corto, rama, pruebas, código, lint y commits locales - y lo entrega a cerrar-pendientes para publicarlo. Usar al pedir una función nueva, un arreglo o "continúa con el siguiente bloque".
 ---
 
 # Plan y bloque
 
-Regla de fondo: **el agente construye, sube, espera el CI en verde y fusiona con merge commit; la persona despliega.**
+Reparto según la skill `orquestar`: **Opus 5.5 medio** planifica y revisa; **Sonnet 5.5 medio** implementa;
+**Haiku 5.5 medio** comprueba. Publicar y fusionar es la skill `cerrar-pendientes`.
 
-1. **Plan primero (sin editar).** Lee lo necesario y propone: objetivo, archivos que tocará, pruebas, riesgos y qué queda
-   fuera. Espera el visto bueno si el cambio no es trivial. Si falta información, anótala como pregunta abierta.
+1. **Plan (Opus, sin editar).** Objetivo, archivos, pruebas de cada criterio, riesgos y qué queda fuera. Visto bueno de
+   la persona si no es trivial; seguridad, privacidad o producto siempre se preguntan.
 2. **Rama.** `git switch -c {{PREFIJO_RAMA}}-<tema>` desde `main` (nunca trabajar sobre `main`).
-3. **Pruebas primero** cuando sea posible: escribe la prueba que falla y luego el código que la pasa.
-4. **Pasos pequeños.** Un cambio cohesivo por commit, en español e imperativo ("Agrega el filtro por fecha").
-   Tras cada paso corre `{{COMANDO_PRUEBAS}}`; si falla, arregla antes de seguir.
-5. **Calidad.** `{{COMANDO_LINT}}` y `{{COMANDO_FORMAT_CHECK}}` en verde.
-6. **Privacidad.** Revisa el diff con la skill `revision-privacidad` y corre `python tools/kit/privacy_scan.py`.
-7. **Documentación.** Actualiza el plan o los docs que cambien.
-8. **Entrega.** `git push -u origin <rama>` y `gh pr create` con la plantilla; revisa `gh pr checks`.
-   Informa: enlace del PR, resultado del CI y qué decide la persona.
+3. **Pruebas primero (Sonnet)** cuando se pueda; luego el código que las pasa.
+4. **Pasos pequeños.** Un cambio cohesivo por commit, en español e imperativo, ≤ 72 caracteres ("Agrega el filtro por
+   fecha"); sin Conventional Commits.
+5. **Verificar (Haiku).** `{{COMANDO_PRUEBAS}}`, `{{COMANDO_LINT}}`, `{{COMANDO_FORMAT_CHECK}}` y
+   `python tools/kit/privacy_scan.py` en verde.
+6. **Revisar (Opus).** Diff completo contra los criterios; lo bloqueante vuelve al paso 3.
+7. **Documentación.** Plan y docs que cambien.
+8. **Publicar.** Skill `cerrar-pendientes`: push, PR con la plantilla, CI en verde, merge commit. La persona despliega.
 
-Nunca: fusionar con el CI en rojo, `push --force` sobre `main`, subir secretos o datos reales, ni cambiar archivos de despliegue sin pedirlo.
-Plan de recuperación: si un paso sale mal, `git switch` a la rama anterior o `git restore` del archivo; no borrar ramas.
+Nunca: fusionar con el CI en rojo, `push --force` sobre `main`, subir secretos o datos reales, ni tocar despliegue sin pedido.
+Recuperación: `git restore` o `git switch` a la rama anterior; `git revert` si ya se fusionó; no borrar ramas.

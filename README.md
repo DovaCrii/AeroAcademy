@@ -136,8 +136,8 @@ En PowerShell: `$env:DEV_REMOTE_USER="tu@correo.cl"; $env:BOOTSTRAP_ADMINS="tu@c
 | [`seed/`](seed/) | Empresas, plataformas, habilidades, rutas, insignias y títulos en JSON |
 | [`design/`](design/) | Portada de referencia, conceptos de mundos y de la hoja de personaje, galería de avatares, sprites de Teo |
 | [`legacy/`](legacy/) | El prototipo de la ruta Forma + Revit (referencia del primer mundo) |
-| [`.claude/skills/`](.claude/skills/) | Skills del proyecto: `bloque`, `nueva-ruta`, `nuevo-mundo`, `nueva-insignia`, `sprite-8bit` |
-| [`.claude/agents/`](.claude/agents/) | Subagentes del proyecto: `bloque-dev`, `artista-pixel`, `curador-semillas`, `revisor-bloque` |
+| [`.claude/skills/`](.claude/skills/) | Skills del proyecto: `orquestar` (el método), `bloque`, `cerrar-pendientes`, `revision-privacidad`, `nueva-ruta`, `nuevo-mundo`, `nueva-insignia`, `sprite-8bit` |
+| [`.claude/agents/`](.claude/agents/) | Subagentes del proyecto: `disenador` y `revisor-bloque` (Opus), `bloque-dev`, `curador-semillas` y `artista-pixel` (Sonnet), `verificador` (Haiku) |
 | [`tools/`](tools/) | Validador de piezas de avatar, hojas de vista previa en PNG y mapa de coordenadas |
 
 ## Suite Aero
