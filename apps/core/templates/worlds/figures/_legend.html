@@ -1,0 +1,22 @@
+{# Leyenda de la figura (solo celular, ≤ 560 px): en lugar de los rótulos del SVG, una lista con cada estación. #}
+{# Uso: {% include "worlds/figures/_legend.html" with src="fg" %}; src = fg | floors | points | journey. #}
+{% if src == "journey" %}
+<ol class="fg-legend" aria-label="Estaciones de la figura">
+  {% for s in journey.stakes %}
+  <li><span class="fg-lg-row"><b class="fg-lg-code">{{ forloop.counter }}</b><span class="fg-lg-name">{{ s.title }}</span><span class="fg-lg-state">{% if s.state == "verified" %}verificado{% elif s.state == "pending" %}en revisión{% elif s.state == "rejected" %}rechazado{% else %}por hacer{% endif %}</span></span></li>
+  {% endfor %}
+  {% for p in journey.piers %}
+  <li><span class="fg-lg-row"><b class="fg-lg-code">P{{ p.n }}</b><span class="fg-lg-name">{{ p.title }}</span><span class="fg-lg-state">{% if p.state == "verified" %}pilar en pie{% elif p.state == "pending" %}en revisión{% else %}por levantar{% endif %}</span></span></li>
+  {% endfor %}
+</ol>
+{% else %}
+<ol class="fg-legend" aria-label="Estaciones de la figura">
+  {% if src == "floors" %}{% for s in building.floors %}
+  <li><a class="fg-lg-row" href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel"{% if s.code == current.level.code %} aria-current="true"{% endif %}><b class="fg-lg-code">{{ s.code|upper }}</b><span class="fg-lg-name">{{ s.short }}</span><span class="fg-lg-state">{% if s.complete %}hecho{% elif s.pct %}en curso · {{ s.pct }} %{% else %}por hacer{% endif %}</span></a></li>
+  {% endfor %}{% elif src == "points" %}{% for s in flight.points %}
+  <li><a class="fg-lg-row" href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel"{% if s.code == current.level.code %} aria-current="true"{% endif %}><b class="fg-lg-code">{{ s.code|upper }}</b><span class="fg-lg-name">{{ s.short }}</span><span class="fg-lg-state">{% if s.complete %}hecho{% elif s.pct %}en curso · {{ s.pct }} %{% else %}por hacer{% endif %}</span></a></li>
+  {% endfor %}{% else %}{% for s in fg.items %}
+  <li><a class="fg-lg-row" href="{% url 'paths:detail' path.slug %}?nivel={{ s.code }}#panel"{% if s.current %} aria-current="true"{% endif %}><b class="fg-lg-code">{{ s.code|upper }}</b><span class="fg-lg-name">{{ s.short }}</span><span class="fg-lg-state">{% if path.kind == "external_track" %}{{ s.say }}{% elif s.complete %}hecho{% elif s.pct %}en curso · {{ s.pct }} %{% else %}por hacer{% endif %}</span></a></li>
+  {% endfor %}{% endif %}
+</ol>
+{% endif %}
