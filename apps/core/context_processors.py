@@ -11,6 +11,7 @@ def brand(request):
         "BRAND_ACADEMY": settings.BRAND_ACADEMY,
         "SUITE_AERO": SUITE_AERO,
         "SPONSOR_TEXT": SPONSOR_TEXT,
+        "SHOW_SUITE_AERO": settings.SHOW_SUITE_AERO,
         # «Salir» solo tiene efecto en sesiones con contraseña: quien entra por Tailscale vuelve a entrar al instante.
         "password_session": bool(getattr(request, "user", None) and request.user.is_authenticated)
         and has_password_session(request),

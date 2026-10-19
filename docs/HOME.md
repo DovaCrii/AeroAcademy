@@ -12,3 +12,8 @@ Decisiones (sin quitar contenido ni rutas):
 5. **Números grandes** (contornos, rotación leve, sombra de color) en secciones, «Primeros pasos», proceso del equipo y pasos de portadas de curso (`.lv-flow .n`, `.ar-sn span`); el HTML («// 01») se conserva.
 
 Hooks conservados: `#rutas`, `#mision`, `#avance`, `#equipo`, `#modulos`, `#destacados`, `#suite`, `data-d`, `.w-mod-ill`, `.w-app-go`.
+
+## Suite Aero (oculta por ahora)
+
+El bloque «Suite Aero» de la portada (y su acceso en la barra de la página) está oculto por decisión del dueño (2026-10-19). Se vuelve a mostrar con la variable de entorno `SHOW_SUITE_AERO=1` (ajuste `SHOW_SUITE_AERO`). El texto de auspicio del pie del sitio se mantiene.
+
