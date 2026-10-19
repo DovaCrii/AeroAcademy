@@ -2,6 +2,7 @@
 
 import secrets
 
+from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 from django.utils.crypto import constant_time_compare, salted_hmac
@@ -17,7 +18,10 @@ _SALT = "accounts.totp.recovery.v1"
 
 
 def needs_second_factor(person: Person) -> bool:
-    """Quien puede moderar o administrar no entra por la puerta pública solo con contraseña."""
+    """Con PUBLIC_REQUIRE_SECOND_FACTOR, quien puede moderar o administrar no entra por la puerta pública solo con
+    contraseña. Apagado por defecto (D39)."""
+    if not settings.PUBLIC_REQUIRE_SECOND_FACTOR:
+        return False
     return person.is_staff or person.is_superuser or person.is_lead
 
 

@@ -188,11 +188,11 @@ Acceso gratuito sin instalar Tailscale. Dos puertas sobre el mismo código y la 
 | Dirección | `https://aeroacademy.tailccd107.ts.net:8443` | `https://aeroacademy.tailccd107.ts.net` |
 | Servicio | `centro.service` → `127.0.0.1:8010` | `centro-public.service` → `127.0.0.1:8011` |
 | Entrada | identidad de Tailscale (o contraseña) | **solo** enlace/contraseña; sin `/admin/` ni moderación |
-| Responsables y admins | sin cambios | **TOTP obligatorio** |
+| Responsables y admins | sin cambios | contraseña, como el resto (TOTP opcional con `PUBLIC_REQUIRE_SECOND_FACTOR=1`, D39) |
 
 **Antes de encender (una vez):**
 1. Consola de Tailscale → *Access controls*: el nodo `aeroacademy` necesita el atributo `funnel` (en `nodeAttrs`, p. ej. `{"target": ["tag:aeroacademy"], "attr": ["funnel"]}` o `autogroup:member` si el nodo es tuyo) y HTTPS Certificates activo.
-2. **Activa tu segundo factor por la tailnet**, antes de abrir la puerta: entra a `https://aeroacademy.tailccd107.ts.net:8443/seguridad/2fa/` (o por el 443 de siempre, mientras no la enciendas), agrega la clave en tu app de autenticación, escribe el código y **guarda los 8 códigos de recuperación**. Cada lead/admin debe hacerlo; sin eso queda bloqueado en la puerta pública (no pierde nada: puede entrar por la tailnet).
+2. **Segundo factor (solo si lo vuelves a exigir con `PUBLIC_REQUIRE_SECOND_FACTOR=1`; apagado por defecto, D39).** Activa tu segundo factor por la tailnet, antes de abrir la puerta: entra a `https://aeroacademy.tailccd107.ts.net:8443/seguridad/2fa/` (o por el 443 de siempre, mientras no la enciendas), agrega la clave en tu app de autenticación, escribe el código y **guarda los 8 códigos de recuperación**. Cada lead/admin debe hacerlo; sin eso queda bloqueado en la puerta pública (no pierde nada: puede entrar por la tailnet).
 
 **Encender** (en la VM; `AEROACADEMY_PUBLISH=node` es el valor por defecto):
 ```bash

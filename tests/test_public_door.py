@@ -30,6 +30,9 @@ def _clean_cache():
 @pytest.fixture
 def public(settings):
     settings.PUBLIC_DOOR = True
+    settings.PUBLIC_REQUIRE_SECOND_FACTOR = (
+        True  # D36: el endurecimiento completo; por defecto está apagado (D39)
+    )
     return settings
 
 
@@ -180,6 +183,21 @@ def test_admin_still_answers_on_the_tailnet_door(admin_person):
 
 
 # --- segundo factor ------------------------------------------------------------------------------------------
+
+
+def test_lead_and_admin_enter_with_the_password_alone_by_default(settings, lead, admin_person):
+    """D39: sin PUBLIC_REQUIRE_SECOND_FACTOR no hay pantalla de bloqueo ni código para lead y admin."""
+    settings.PUBLIC_DOOR = True
+    assert settings.PUBLIC_REQUIRE_SECOND_FACTOR is False
+    for person in (lead, admin_person):
+        with_password(person)
+        client = anon()
+        assert password_login(client, person).status_code == 302
+        assert client.get("/").status_code == 200
+        assert client.get("/rutas/").status_code == 200
+        assert (
+            client.get("/admin/").status_code == 404
+        )  # lo de administración sigue sin existir en internet
 
 
 def test_lead_without_totp_is_blocked_on_the_public_door(public, lead):
