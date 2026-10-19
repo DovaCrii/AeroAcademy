@@ -190,6 +190,19 @@
             "Certificate of completion",
             "Esencial"
           ]
+        },
+        {
+          "order": 1,
+          "title": "Point Cloud Essentials in MicroStation",
+          "url": "https://learning.bentley.com/learn/courses/5223/point-cloud-essentials-in-microstation",
+          "kind": "course",
+          "description": "Doce lecciones: vincular y convertir nubes de puntos, controlar su visualización, recortarlas, modelar sobre ellas y exportarlas con filtros (45 min).",
+          "duration_text": "45 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
         }
       ],
       "external_courses": [
@@ -232,6 +245,25 @@
             "Civil and Reality Modeling Integration",
             "Using Reality Models During Your Design Process",
             "Civil Visualization and Animation Using MicroStation and LumenRT"
+          ]
+        },
+        {
+          "key": "rea-c2",
+          "order": 2,
+          "title": "Point Cloud Essentials in MicroStation",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/5223/point-cloud-essentials-in-microstation",
+          "description": "Doce lecciones: vincular y convertir nubes de puntos, controlar su visualización, recortarlas, modelar sobre ellas y exportarlas con filtros (45 min).",
+          "duration_text": "45 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "nubes-de-puntos"
           ]
         }
       ]
