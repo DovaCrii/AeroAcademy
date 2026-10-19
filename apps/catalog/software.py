@@ -148,7 +148,7 @@ ROUTE_ICON = {
         "bentley-learn", "bentley-itwin", "bentley-lumenrt", "bentley-openbuildings", "bentley-openplant",
         "bentley-projectwise", "bim-101", "topografia-101", "ia-101", "herramientas-ia", "vibe-coding",
         "agentes-ia", "claude-code-mcp", "python-datos-101", "data-science-aplicada", "datos-reportes",
-        "geospatial-data-science", "dgac-rpas",
+        "geospatial-data-science", "dgac-rpas", "microstation-jej",
     )
 }  # fmt: skip
 
