@@ -139,6 +139,32 @@
             "Oficial",
             "Complementario"
           ]
+        },
+        {
+          "order": 7,
+          "title": "Answer Hour: Working with DWG files in MicroStation",
+          "url": "https://learning.bentley.com/learn/courses/1486/answer-hour-working-with-dwg-files-in-microstation",
+          "kind": "course",
+          "description": "Sesión de preguntas y respuestas con seis videos: qué es un DWG, cómo abrirlo, adjuntarlo como referencia y guardar a DWG evitando los problemas típicos (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 8,
+          "title": "Working in a DWG Workmode",
+          "url": "https://learning.bentley.com/learn/courses/151/working-in-a-dwg-workmode",
+          "kind": "course",
+          "description": "Cómo trabajar en el modo DWG de MicroStation, fijado por usuario y por *workset*: bloques, hojas de detalle, vistas guardadas e impresión. Nivel intermedio (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
         }
       ],
       "external_courses": [
@@ -284,6 +310,44 @@
           "skills": [
             "entregables"
           ]
+        },
+        {
+          "key": "ms-c7",
+          "order": 7,
+          "title": "Answer Hour: Working with DWG files in MicroStation",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/1486/answer-hour-working-with-dwg-files-in-microstation",
+          "description": "Sesión de preguntas y respuestas con seis videos: qué es un DWG, cómo abrirlo, adjuntarlo como referencia y guardar a DWG evitando los problemas típicos (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "entregables"
+          ]
+        },
+        {
+          "key": "ms-c8",
+          "order": 8,
+          "title": "Working in a DWG Workmode",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/151/working-in-a-dwg-workmode",
+          "description": "Cómo trabajar en el modo DWG de MicroStation, fijado por usuario y por *workset*: bloques, hojas de detalle, vistas guardadas e impresión. Nivel intermedio (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "entregables"
+          ]
         }
       ]
     },
@@ -324,6 +388,19 @@
           "kind": "course",
           "description": "Tres videos para mostrar el terreno con *Display Styles* y *Element Templates* y rotular curvas de nivel de forma permanente.",
           "duration_text": "16 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Using Terrain in MicroStation CONNECT Edition",
+          "url": "https://learning.bentley.com/learn/courses/140/using-terrain-in-microstation-connect-edition",
+          "kind": "course",
+          "description": "Versión CONNECT Edition del curso anterior, con el mismo tema pero nivel intermedio: un video largo y un cuaderno de práctica sobre las características calculadas y de origen del terreno. No lo reemplaza: es más profundo (1 h 2 min).",
+          "duration_text": "1 h 2 min",
           "tags": [
             "On Demand",
             "Oficial",
@@ -385,6 +462,25 @@
           "url": "https://learning.bentley.com/learn/courses/78/using-terrain-in-microstation",
           "description": "Tres videos para mostrar el terreno con *Display Styles* y *Element Templates* y rotular curvas de nivel de forma permanente.",
           "duration_text": "16 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "terreno"
+          ]
+        },
+        {
+          "key": "ord-c3",
+          "order": 3,
+          "title": "Using Terrain in MicroStation CONNECT Edition",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/140/using-terrain-in-microstation-connect-edition",
+          "description": "Versión CONNECT Edition del curso anterior, con el mismo tema pero nivel intermedio: un video largo y un cuaderno de práctica sobre las características calculadas y de origen del terreno. No lo reemplaza: es más profundo (1 h 2 min).",
+          "duration_text": "1 h 2 min",
           "tags": [
             "On Demand",
             "Oficial",
