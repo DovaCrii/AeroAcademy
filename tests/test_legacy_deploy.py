@@ -361,6 +361,28 @@ def test_no_secret_in_the_deploy_files():
     assert "NIM_API_KEY=\n" in install  # la clave queda vacía: la pone la persona
 
 
+def test_the_installer_loads_private_courses_after_the_seeds_and_the_courses_folder():
+    """Las clases internas de JEJ (private/cursos/<slug>/ruta.json) se cargan solas en cada instalación."""
+    install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
+    lines = [line for line in install.splitlines() if not line.strip().startswith("#")]
+    at = {
+        key: next(i for i, line in enumerate(lines) if key in line)
+        for key in (
+            'set_env PRIVATE_COURSES_DIR "$STATE/cursos"',
+            "run_manage seed_catalog",
+            "run_manage cargar_cursos_privados",
+            "run_manage reindex_assistant",
+        )
+    }
+    values = list(at.values())
+    assert values == sorted(
+        values
+    )  # carpeta y entorno, semillas, cursos privados y, al final, el índice
+    assert (
+        "run_manage cargar_cursos_privados || true" in install
+    )  # sin cursos privados no frena la instalación
+
+
 def test_the_installer_is_safe_for_a_shared_vm():
     """La VM también corre AeroControl (127.0.0.1:8000 y los puertos HTTPS con Funnel): no se les toca."""
     install = (DEPLOY / "install.sh").read_text(encoding="utf-8")
