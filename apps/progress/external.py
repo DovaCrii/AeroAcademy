@@ -187,14 +187,43 @@ MARKER_RISE = (
 )
 
 
-def stake_label(title, limit, count=2):
-    """Rótulo corto de una estaca: las `count` primeras palabras con contenido del título del curso (nunca la *key*)."""
+def _useful_words(title):
     words = [
         w for w in str(title).split() if w.strip("-–—·:.") and not w.isdigit()
     ]  # sin «14 -» de numeración
-    useful = [w for w in words if w.lower().strip(".,:;") not in _FILLER] or words
-    text = " ".join(useful[:count])
+    return [w for w in words if w.lower().strip(".,:;") not in _FILLER] or words
+
+
+def _clip(text, limit):
+    text = text.rstrip(",;:")
     return text if len(text) <= limit else text[: max(limit - 1, 1)].rstrip() + "…"
+
+
+def stake_label(title, limit, count=2):
+    """Rótulo corto de una estaca: las `count` primeras palabras con contenido del título del curso (nunca la *key*)."""
+    return _clip(" ".join(_useful_words(title)[:count]), limit)
+
+
+def distinct_stake_labels(titles, limit):
+    """Rótulos de estaca; cuando varios cursos comparten el comienzo (p. ej. «MicroStation …»), se quitan las palabras
+    iniciales comunes del grupo para que cada rótulo muestre lo que distingue al curso."""
+    first = [stake_label(t, limit) for t in titles]
+    out = list(first)
+    for label in dict.fromkeys(first):
+        idx = [i for i, v in enumerate(first) if v == label]
+        if len(idx) < 2:
+            continue
+        lists = [_useful_words(titles[i]) for i in idx]
+        while all(len(w) > 1 for w in lists) and len({w[0].lower() for w in lists}) == 1:
+            lists = [w[1:] for w in lists]
+        for i, words in zip(idx, lists, strict=True):
+            out[i] = _clip(" ".join(words[:2]), limit)
+        shortest = min(len(w) for w in lists)
+        if len({out[i] for i in idx}) < len(idx):  # uno es prefijo del otro: la cola lo distingue
+            for i, words in zip(idx, lists, strict=True):
+                if len(words) > shortest:
+                    out[i] = _clip(" ".join(words[shortest:][:2]), limit)
+    return out
 
 
 def _journey(all_courses, relics):
@@ -205,6 +234,7 @@ def _journey(all_courses, relics):
         4, int(min(step, 160) * 0.9 / STAKE_CHAR_W)
     )  # el rótulo cabe en el hueco entre estacas
     stakes, last_verified_x = [], 40
+    labels = distinct_stake_labels([c["obj"].resource.title for c in all_courses], chars)
     for i, item in enumerate(all_courses):
         x = 70 + i * step if n > 1 else 500
         stakes.append(
@@ -212,7 +242,7 @@ def _journey(all_courses, relics):
                 "x": _n(x),
                 "y": _n(axis_y(x)),
                 "key": item["obj"].key,
-                "label": stake_label(item["obj"].resource.title, chars),
+                "label": labels[i],
                 "title": item["obj"].resource.title,
                 "state": item["state"],
                 "relic": item["obj"].reward == ExternalCourse.Reward.RELIC,

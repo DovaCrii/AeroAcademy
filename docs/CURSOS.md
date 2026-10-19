@@ -201,6 +201,28 @@ Reglas de la plantilla:
 - [ ] **Nala (la asistente; el código conserva el nombre `teo`)** solo recibe contenido público: nada privado va al índice de búsqueda ni a ninguna API externa.
 - [ ] Correr `seed_catalog --dry-run`, `pytest` y `ruff`; recorrer la ruta en el navegador.
 
+### Sumar un curso o plan de Bentley Learn a una ruta existente
+
+Pasos mecánicos (rutas `external_track` `bentley-*`; no hace falta tocar código):
+
+1. **Abrir la URL** `learning.bentley.com/learn/courses/<id>/<slug>` (o `learning-plans/<id>/<slug>`), esperar a que cargue
+   (es una página dinámica) y anotar título tal como se muestra, duración, nivel, lecciones y «This content is free».
+   Las páginas del catálogo se ven sin iniciar sesión. Guardar la URL sin `/lessons`.
+2. **Elegir el nivel** de la ruta del producto: MicroStation (dibujo, AccuDraw, 3D, DWG, Python) → `bentley-learn`
+   nivel `ms`; terreno y OpenRoads → `ord`; captura y nubes de puntos → `bentley-itwin` nivel `rea`. Un curso vive en
+   **un** solo lugar: la clave de un recurso es (plataforma, título); si debe aparecer en dos rutas, mismo título.
+3. **Agregar al final** de `external_courses` del nivel (clave estable `<código>-cN` siguiente, `order` siguiente, `kind`
+   `course` o `learning_plan`, `url`, `description` en español y palabras propias, `duration_text`, `tags`
+   `["On Demand","Oficial","Complementario"]` (planes: `"Learning plan"`), `reward` `trophy`, `is_required` `false`, `skills`
+   de `seed/skills.json`, y `contains` solo en planes). Solo un `Esencial` por nivel.
+4. **Repetir la misma entrada** (sin `key`, `reward`, `is_required` ni `skills`) al final de `resources` del nivel: es la lista
+   «Dónde encontrar los cursos».
+5. `verify_url: true` solo si no se pudo abrir la página del curso.
+6. **Validar:** `python -m json.tool seed/rutas/<slug>.json`, `seed_catalog` en una base de prueba,
+   `pytest tests/test_catalog_paths.py tests/test_software_guides.py tests/test_figures.py tests/test_stake_labels.py`, `ruff`,
+   `python tools/kit/privacy_scan.py`. En el navegador (claro y oscuro, 1280 y 375 px) revisar la planta y perfil: cada estaca
+   lleva un rótulo corto y distinto (`distinct_stake_labels`).
+
 ### Roles
 
 | Rol | Hace | No hace |

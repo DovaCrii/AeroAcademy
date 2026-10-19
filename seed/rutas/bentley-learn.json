@@ -87,6 +87,84 @@
             "Certificate of completion",
             "Esencial"
           ]
+        },
+        {
+          "order": 3,
+          "title": "AccuDraw Minutes with MicroStation",
+          "url": "https://learning.bentley.com/learn/courses/43/accudraw-minutes-with-microstation",
+          "kind": "course",
+          "description": "Seis videos cortos sobre la brújula de *AccuDraw*: cómo rotarla y orientarla en 2D y 3D para dibujar sobre cualquier plano.",
+          "duration_text": "10 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 4,
+          "title": "MicroStation 3D Modeling, Rendering, and Animation",
+          "url": "https://learning.bentley.com/learn/learning-plans/154/microstation-3d-modeling-rendering-and-animation",
+          "kind": "learning_plan",
+          "description": "Tres cursos: herramientas 3D (*Everything 3D*), renderizado y animación; para pasar del modelo a imágenes y videos.",
+          "duration_text": "5 h · 3 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 5,
+          "title": "Introduction to the MicroStation Python Editor",
+          "url": "https://learning.bentley.com/learn/courses/3527/introduction-to-the-microstation-python-editor",
+          "kind": "course",
+          "description": "Cuatro videos de arranque con el *Python Editor* de MicroStation 2025: dónde está, cómo usar la ayuda y los ejemplos incluidos. Nivel intermedio.",
+          "duration_text": "20 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 6,
+          "title": "DWG Exporting from MicroStation CONNECT Edition",
+          "url": "https://learning.bentley.com/learn/courses/104/dwg-exporting-from-microstation-connect-edition",
+          "kind": "course",
+          "description": "Cómo preparar un DGN para entregarlo en DWG sin perder fidelidad: niveles, unidades, referencias, tipos de línea y reasignación de elementos (1 h 33 min).",
+          "duration_text": "1 h 33 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 7,
+          "title": "Answer Hour: Working with DWG files in MicroStation",
+          "url": "https://learning.bentley.com/learn/courses/1486/answer-hour-working-with-dwg-files-in-microstation",
+          "kind": "course",
+          "description": "Sesión de preguntas y respuestas con seis videos: qué es un DWG, cómo abrirlo, adjuntarlo como referencia y guardar a DWG evitando los problemas típicos (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 8,
+          "title": "Working in a DWG Workmode",
+          "url": "https://learning.bentley.com/learn/courses/151/working-in-a-dwg-workmode",
+          "kind": "course",
+          "description": "Cómo trabajar en el modo DWG de MicroStation, fijado por usuario y por *workset*: bloques, hojas de detalle, vistas guardadas e impresión. Nivel intermedio (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
         }
       ],
       "external_courses": [
@@ -153,6 +231,123 @@
           "skills": [
             "dibujo-2d"
           ]
+        },
+        {
+          "key": "ms-c3",
+          "order": 3,
+          "title": "AccuDraw Minutes with MicroStation",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/43/accudraw-minutes-with-microstation",
+          "description": "Seis videos cortos sobre la brújula de *AccuDraw*: cómo rotarla y orientarla en 2D y 3D para dibujar sobre cualquier plano.",
+          "duration_text": "10 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "dibujo-2d"
+          ]
+        },
+        {
+          "key": "ms-c4",
+          "order": 4,
+          "title": "MicroStation 3D Modeling, Rendering, and Animation",
+          "kind": "learning_plan",
+          "url": "https://learning.bentley.com/learn/learning-plans/154/microstation-3d-modeling-rendering-and-animation",
+          "description": "Tres cursos: herramientas 3D (*Everything 3D*), renderizado y animación; para pasar del modelo a imágenes y videos.",
+          "duration_text": "5 h · 3 cursos",
+          "tags": [
+            "Learning plan",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "modelado-3d"
+          ],
+          "contains": [
+            "MicroStation Everything 3D",
+            "MicroStation for Rendering",
+            "MicroStation for Animation"
+          ]
+        },
+        {
+          "key": "ms-c5",
+          "order": 5,
+          "title": "Introduction to the MicroStation Python Editor",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/3527/introduction-to-the-microstation-python-editor",
+          "description": "Cuatro videos de arranque con el *Python Editor* de MicroStation 2025: dónde está, cómo usar la ayuda y los ejemplos incluidos. Nivel intermedio.",
+          "duration_text": "20 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": []
+        },
+        {
+          "key": "ms-c6",
+          "order": 6,
+          "title": "DWG Exporting from MicroStation CONNECT Edition",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/104/dwg-exporting-from-microstation-connect-edition",
+          "description": "Cómo preparar un DGN para entregarlo en DWG sin perder fidelidad: niveles, unidades, referencias, tipos de línea y reasignación de elementos (1 h 33 min).",
+          "duration_text": "1 h 33 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "entregables"
+          ]
+        },
+        {
+          "key": "ms-c7",
+          "order": 7,
+          "title": "Answer Hour: Working with DWG files in MicroStation",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/1486/answer-hour-working-with-dwg-files-in-microstation",
+          "description": "Sesión de preguntas y respuestas con seis videos: qué es un DWG, cómo abrirlo, adjuntarlo como referencia y guardar a DWG evitando los problemas típicos (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "entregables"
+          ]
+        },
+        {
+          "key": "ms-c8",
+          "order": 8,
+          "title": "Working in a DWG Workmode",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/151/working-in-a-dwg-workmode",
+          "description": "Cómo trabajar en el modo DWG de MicroStation, fijado por usuario y por *workset*: bloques, hojas de detalle, vistas guardadas e impresión. Nivel intermedio (30 min).",
+          "duration_text": "30 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "entregables"
+          ]
         }
       ]
     },
@@ -184,6 +379,32 @@
           "tags": [
             "Catalog",
             "Oficial"
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Using Terrain in MicroStation",
+          "url": "https://learning.bentley.com/learn/courses/78/using-terrain-in-microstation",
+          "kind": "course",
+          "description": "Tres videos para mostrar el terreno con *Display Styles* y *Element Templates* y rotular curvas de nivel de forma permanente.",
+          "duration_text": "16 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Using Terrain in MicroStation CONNECT Edition",
+          "url": "https://learning.bentley.com/learn/courses/140/using-terrain-in-microstation-connect-edition",
+          "kind": "course",
+          "description": "Versión CONNECT Edition del curso anterior, con el mismo tema pero nivel intermedio: un video largo y un cuaderno de práctica sobre las características calculadas y de origen del terreno. No lo reemplaza: es más profundo (1 h 2 min).",
+          "duration_text": "1 h 2 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
           ]
         }
       ],
@@ -231,6 +452,44 @@
             "corredores-viales",
             "peraltes",
             "diseno-vial"
+          ]
+        },
+        {
+          "key": "ord-c2",
+          "order": 2,
+          "title": "Using Terrain in MicroStation",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/78/using-terrain-in-microstation",
+          "description": "Tres videos para mostrar el terreno con *Display Styles* y *Element Templates* y rotular curvas de nivel de forma permanente.",
+          "duration_text": "16 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "terreno"
+          ]
+        },
+        {
+          "key": "ord-c3",
+          "order": 3,
+          "title": "Using Terrain in MicroStation CONNECT Edition",
+          "kind": "course",
+          "url": "https://learning.bentley.com/learn/courses/140/using-terrain-in-microstation-connect-edition",
+          "description": "Versión CONNECT Edition del curso anterior, con el mismo tema pero nivel intermedio: un video largo y un cuaderno de práctica sobre las características calculadas y de origen del terreno. No lo reemplaza: es más profundo (1 h 2 min).",
+          "duration_text": "1 h 2 min",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ],
+          "reward": "trophy",
+          "is_required": false,
+          "skills": [
+            "terreno"
           ]
         }
       ]
