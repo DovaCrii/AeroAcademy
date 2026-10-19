@@ -84,15 +84,7 @@
 .cat-sh span{color:var(--amber-ink)}
 .cat-sh::after{content:"";flex:1;height:1px;background:var(--line);opacity:.5}
 
-/* 01 · filtros: campo de curvas de nivel */
-.cat-sec-filter{position:relative;margin:0 0 16px;padding:16px 18px 6px;border:1px solid var(--hair);border-radius:var(--r-card,16px);overflow:hidden;
-  background:var(--sheet-2)}
-.cat-sec-filter::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
-  background:repeating-radial-gradient(ellipse 120% 90% at 85% 120%,transparent 0 22px,color-mix(in srgb,var(--decor) 22%,transparent) 22px 23px)}
-.cat-sec-filter>*{position:relative}
-.cat-sec-filter .cat-routes{margin-bottom:6px}
-
-/* 02 · filas por software (estilo Bentley Learn, con nuestro acabado) */
+/* filas por software (vista por proveedor, estilo Bentley Learn) */
 .cat-sec-rows{margin-top:22px}
 .cat-row{position:relative;margin:0 0 26px;padding:16px 0 18px 14px;border-left:3px solid var(--acc,var(--amber));
   background:linear-gradient(90deg,color-mix(in srgb,var(--acc,var(--amber)) 8%,transparent),transparent 40%)}
@@ -118,17 +110,8 @@
 .cat-ctl button:disabled{opacity:.35;cursor:default}
 .cat-todo{text-align:center;margin:8px 0 0}
 
-/* tarjeta: banda superior con el mosaico del software, franja de nivel y cuerpo */
-.cat-card{padding:0;gap:0;overflow:hidden;border-left:1px solid var(--line)}
+/* tarjeta: cuerpo con relleno y franja de nivel */
 .cat-card.is-ess{border-left:1px solid var(--line);box-shadow:var(--shadow-1,none),inset 0 -3px 0 var(--acc,var(--amber))}
-.cat-thumb{position:relative;display:flex;align-items:center;gap:12px;min-height:84px;padding:14px 16px;color:#fff;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--acc,var(--d-arq)) 70%,#06142A) 0%,#06142A 100%)}
-.cat-thumb::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
-  background:repeating-radial-gradient(ellipse 90% 140% at 100% 100%,transparent 0 14px,rgba(255,255,255,.16) 14px 15px),
-  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/16px 16px}
-.cat-thumb>*{position:relative}
-.cat-prod{font:600 12px/1.25 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;min-width:0}
-.cat-lvl{position:absolute;right:0;top:0;padding:4px 10px 4px 12px;border-bottom-left-radius:10px;font:700 10.5px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:#10161f}
 .lvl-fundamental{background:#4ADE80}.lvl-intermedio{background:#F5A524}.lvl-avanzado{background:#FF6B5E}
 .cat-body{display:flex;flex-direction:column;gap:8px;padding:14px 16px 16px;flex:1;min-width:0}
 .cat-body .chips{margin-top:auto}
@@ -162,15 +145,10 @@
 .cat-head .cat-lead{color:var(--ink-2)}
 .cat-head h1{color:var(--ink);font-weight:800;font-style:normal}
 .cat-head-in{max-width:68ch}
-.cat-sec-filter{background:color-mix(in srgb,var(--d-top) 7%,var(--sheet));border:1.5px dashed var(--line);border-radius:16px 12px 18px 12px / 12px 18px 12px 16px}
 .cat-sh{background:url("../core/img/doodles/rutas.svg") right center/auto 34px no-repeat;padding-right:48px}
 .cat-row{border-left-width:5px;border-radius:0 14px 14px 0;background:linear-gradient(90deg,color-mix(in srgb,var(--acc,var(--amber)) 16%,transparent),transparent 45%)}
 .cat-card{border:1.5px solid var(--ink);border-radius:16px 14px 18px 12px / 12px 18px 14px 16px;box-shadow:3px 3px 0 color-mix(in srgb,var(--ink) 80%,transparent)}
 .cat-card:hover{transform:translate(-1px,-2px);box-shadow:5px 5px 0 var(--acc,var(--ink))}
-.cat-thumb{color:var(--ink);border-bottom:1.5px solid var(--ink);
-  background:linear-gradient(var(--grid-major) 1px,transparent 1px) 0 0/16px 16px,linear-gradient(90deg,var(--grid-major) 1px,transparent 1px) 0 0/16px 16px,color-mix(in srgb,var(--acc,var(--d-arq)) 38%,var(--sheet))}
-.cat-thumb::before{opacity:.35;background:repeating-radial-gradient(ellipse 90% 140% at 100% 100%,transparent 0 14px,color-mix(in srgb,var(--ink) 25%,transparent) 14px 15px)}
-.cat-lvl{border-left:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
 .sw-tile{box-shadow:none;border-radius:0}
 .cat-endcard a{border:2px dashed var(--ink-2);border-radius:16px 12px 18px 12px / 12px 18px 12px 16px}
 .cat-all{border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
@@ -209,17 +187,6 @@ a.vs-item:focus-visible{outline:2px solid var(--vs-a);outline-offset:2px}
 .vs-item b{font:700 13.5px/1.2 var(--font);min-height:2.4em;display:flex;align-items:center;justify-content:center}
 .vs-item small{font:11px var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2)}
 .vs-item.is-empty{opacity:.72}
-.vs-card.is-empty{opacity:1;background:#EDF1F9}
-
-/* vitrinas estilo «descargas»: tarjetas blancas con baldosa centrada y título */
-.vs-bentley .vs-shelf{margin:0 0 22px;padding:16px clamp(12px,2vw,20px) 4px;border:1px solid var(--hair);border-radius:16px;background:var(--sheet-2)}
-.vs-shelf h4{margin:0 0 12px;display:flex;align-items:center;gap:10px;font:700 12px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
-.vs-shelf h4::before{content:"";width:18px;height:4px;border-radius:2px;background:var(--vs-a)}
-.vs-cards{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:14px}
-.vs-card{padding:18px 10px 14px;background:#fff;color:#14213A;border-color:#D5DEEE;box-shadow:0 1px 2px rgba(10,40,95,.08)}
-.vs-card small{color:#51607A}
-.vs-card .sw-tile{width:72px;height:72px}
-a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
 
 /* filas: cabecera en rejilla (baldosa | título | acción) y tarjetas alineadas */
 .cat-row-h{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center}
@@ -229,24 +196,10 @@ a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
 .cat-meta{min-height:1.4em}
 
 /* miniaturas de tarjeta con el sello del fabricante */
-.vs-autodesk .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);
-  background:linear-gradient(135deg,#0B2A8A,#6A2CD8 70%,#C23BAA)}
-.vs-bentley .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);
-  background:linear-gradient(135deg,#0A55C9,#08285F)}
-.vs-internal .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);background:linear-gradient(135deg,#0F6E64,#0B3F63)}
-.vs-ia .cat-thumb{color:#fff;border-bottom-color:rgba(255,255,255,.35);background:linear-gradient(135deg,#4C1D95,#1E1B6E)}
-.vs-autodesk .cat-thumb::before,.vs-bentley .cat-thumb::before,.vs-internal .cat-thumb::before,.vs-ia .cat-thumb::before{opacity:.5;
-  background:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px) 0 0/16px 16px,linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px) 0 0/16px 16px}
-.vs .cat-prod{color:#fff}
 .vs .cat-row{border-left-color:var(--vs-a)}
 .vs .cat-row:nth-child(odd){background:linear-gradient(90deg,color-mix(in srgb,var(--vs-a) 12%,transparent),transparent 45%)}
 
 @media (max-width:640px){
-  .vs-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .vs-pack{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
-  .cat-row-h{grid-template-columns:44px minmax(0,1fr)}
-  .cat-row-h .sw-row-tile{width:44px;height:44px}
-  .cat-row-h .cat-all{grid-column:1/-1;justify-self:start}
 }
 
 /* ── Conocimiento general · transversal (grafito #8793A6): rutas 101 y recursos con la etiqueta ───────────── */
@@ -275,3 +228,90 @@ a.vs-card:hover{box-shadow:0 12px 24px -10px rgba(10,85,201,.55)}
 .cat-chips .chip{text-decoration:none;color:var(--ink);border-color:var(--amber);background:color-mix(in srgb,var(--amber) 14%,transparent);padding:2px 10px}
 .cat-chips .chip:hover,.cat-chips .chip:focus-visible{background:color-mix(in srgb,var(--amber) 30%,transparent)}
 @media (max-width:640px){.cat-main-filters select{min-width:0;width:100%}.cat-main-filters label:not(.check){flex:1 1 100%}}
+
+/* ===== jerarquía 2026-10 ===== */
+/* Cabecera con búsqueda y filtros dentro; mapa del catálogo; áreas cortas con «Para empezar»; tarjetas compactas. */
+[id]{scroll-margin-top:76px}
+
+/* cabecera: título, bajada de una línea y filtros (la ilustración solo desde 641 px) */
+.cat-head{margin:8px 0 16px;padding:16px clamp(14px,3vw,30px) 14px}
+.cat-head::after{display:none}
+.cat-head-in{max-width:none}
+.cat-head h1{font-size:clamp(26px,3.6vw,38px);margin:0 0 6px}
+.cat-head .cat-lead{max-width:68ch}
+.cat-head .cat-search{margin:12px 0 6px;max-width:880px;grid-template-columns:minmax(0,1fr) auto}
+.cat-head .cat-q input{padding:11px 16px 11px 44px}
+.cat-head .cat-search .btn.primary{padding:10px 20px;width:auto}
+.cat-head .cat-main-filters{gap:8px 14px}
+.cat-head .cat-more-in{background:var(--sheet)}
+.cat-head .cat-chips{margin:8px 0 0}
+.cat-crumbs{margin:0 0 12px}
+.cat-count{margin:0 0 12px;color:var(--ink-2)}
+.cat-count b{color:var(--ink)}
+
+/* mapa del catálogo: una tarjeta-ancla por área */
+.cat-map{margin:0 0 20px}
+.cat-map-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px}
+.cat-map-card{display:flex;align-items:center;gap:10px;min-height:44px;height:100%;box-sizing:border-box;padding:8px 10px;border:1.5px solid var(--ink);border-radius:14px 12px 16px 10px / 10px 16px 12px 14px;background:var(--sheet);color:var(--ink);text-decoration:none;box-shadow:2px 2px 0 color-mix(in srgb,var(--ink) 80%,transparent);transition:transform .2s var(--ease,ease),box-shadow .2s}
+.cat-map-card:hover,.cat-map-card:focus-visible{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--amber)}
+.cat-map-card .sw-tile{width:34px;height:34px;flex:none;border-radius:0}
+.cat-map-ico{flex:none;display:grid;place-items:center;width:34px;height:34px;border:1.5px dashed var(--d-tra,var(--ink-2));font:700 11px var(--font-mono);color:var(--ink-2)}
+.cat-map-txt{min-width:0;display:grid;gap:2px}
+.cat-map-txt b{font:700 14px/1.2 var(--font)}
+.cat-map-txt small{font:11px/1.3 var(--font-mono);letter-spacing:.03em;text-transform:uppercase;color:var(--ink-2)}
+
+/* áreas: banda compacta, chips de producto y «Para empezar» */
+.vs-short{margin:0 0 20px}
+.vs-short .vs-band{grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 12px;margin:0 0 10px;padding:12px 16px;border-radius:14px}
+.vs-short .vs-band>*{grid-column:1}
+.vs-short .vs-band .vs-all{grid-column:2;grid-row:1/4;align-self:center}
+.vs-short .vs-band h3{font-size:var(--fs-h3,22px);line-height:1.15;margin:2px 0 0}
+.vs-short .vs-sub{margin:2px 0 0;font-size:12px}
+.vs-all{color:inherit;border:1.5px solid currentColor;border-radius:999px;padding:6px 14px;font:600 12.5px var(--font-mono);letter-spacing:.04em;text-decoration:none;white-space:nowrap}
+.vs-all:hover,.vs-all:focus-visible{background:color-mix(in srgb,currentColor 20%,transparent)}
+.vs-chips{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.vs-chip{display:inline-flex;align-items:center;gap:6px;min-height:40px;box-sizing:border-box;padding:4px 12px 4px 7px;border:1px solid var(--line);border-radius:999px;background:var(--sheet);color:var(--ink);text-decoration:none;font:600 13px var(--font)}
+.vs-chip .sw-tile{width:22px;height:22px;border-radius:6px;box-shadow:none}
+.vs-chip small{font:11px var(--font-mono);color:var(--ink-2)}
+.vs-chip:hover,.vs-chip:focus-visible{border-color:var(--vs-a)}
+.vs-start{margin:0 0 8px;font:700 12px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.vs-starters{list-style:none;margin:0;padding:2px 2px 8px;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:thin}
+.vs-starters>li{flex:0 0 min(78vw,260px);scroll-snap-align:start;display:flex;min-width:0}
+.vs-starters>li>.cat-card{flex:1}
+.vs-back{margin:4px 0 0;font:12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase}
+.vs-back a{color:var(--ink-2)}
+.cat-gen .vs-back{margin-top:10px}
+@media (min-width:641px){
+  .vs-starters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;padding-bottom:6px}
+  .vs-starters>li{flex:none}
+}
+
+/* tarjetas: título primero (compacta) o meta con mosaico pequeño (completa); solo se marca «De pago» */
+.cat-card .cat-body{padding:12px 14px 14px;gap:6px}
+.cat-compact{padding:12px 14px;gap:6px;overflow:hidden}
+.cat-compact h3{font-size:15.5px;line-height:1.3}
+.cat-compact .cat-meta{min-height:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-compact .cat-in{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-in-more{font-family:var(--font-mono);font-size:11.5px}
+.lvl-dot{display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:50%;border:1px solid var(--ink)}
+.cat-prodline{display:flex;flex-wrap:nowrap;align-items:center;gap:0 6px;min-height:22px;white-space:nowrap;overflow:hidden}
+.cat-prodline .cat-prod{min-width:0;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
+.cat-prodline .sw-tiles{gap:0}
+.cat-prodline .cat-prod{font-weight:600;color:var(--ink)}
+.cat-full .cat-desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.chip.paid{border-color:var(--ink);color:var(--ink);font-weight:700}
+.sw-more{display:grid;place-items:center;width:52px;height:52px;border:1.5px dashed var(--ink-2);border-radius:12px;font:800 24px var(--font-display);color:var(--ink-2)}
+@media (max-width:640px){.sw-more{width:44px;height:44px}}
+
+/* filtros: rejilla de 2 × 2 en celular */
+.cat-more-in label{min-width:0;max-width:100%}
+.cat-more-in select{max-width:100%;box-sizing:border-box}
+.cat-main-filters label:not(.check){min-width:0}
+.cat-main-filters select{min-width:150px}
+@media (max-width:640px){
+  .cat-head::before{display:none}
+  .cat-head .cat-main-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;align-items:end}
+  .cat-head .cat-main-filters label:not(.check){flex:none}
+  .cat-head .cat-main-filters select{min-width:0;width:100%;box-sizing:border-box}
+  .cat-head .cat-search{grid-template-columns:minmax(0,1fr) auto}
+}

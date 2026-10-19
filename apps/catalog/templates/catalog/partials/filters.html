@@ -1,0 +1,50 @@
+<form class="cat-search" method="get" action="{% url 'catalog:resources' %}" role="search">
+  {% if f.software %}<input type="hidden" name="software" value="{{ f.software }}">{% endif %}
+  <label class="cat-q"><span class="sr-only">Buscar en el catálogo</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+    <input type="search" name="q" value="{{ f.q }}" placeholder="Busca software, tema o habilidad" autocomplete="off">
+  </label>
+  <button class="btn primary" type="submit">Buscar</button>
+
+  <div class="cat-main-filters">
+    <label>Proveedor
+      <select name="vendor">
+        <option value="">Todos</option>
+        {% for key, label, n in vendor_options %}<option value="{{ key }}"{% if key == f.vendor %} selected{% endif %}>{{ label }} ({{ n }})</option>{% endfor %}
+      </select>
+    </label>
+    <label>Disciplina
+      <select name="discipline">
+        <option value="">Todas</option>
+        {% for d in disciplines %}<option value="{{ d.slug }}"{% if d.slug == f.discipline %} selected{% endif %}>{{ d.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Tipo
+      <select name="kind">
+        {% for value, label, n in kinds %}<option value="{{ value }}"{% if value == f.kind %} selected{% endif %}>{% if value %}{{ label }} ({{ n }}){% else %}Todos los tipos{% endif %}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" name="esencial" value="1"{% if f.essential %} checked{% endif %}> Solo esenciales <small>({{ essential_count }})</small></label>
+  </div>
+
+  <details class="cat-more"{% if f.path or f.platform or f.free or f.cert or f.general %} open{% endif %}>
+    <summary>Más filtros</summary>
+    <div class="cat-more-in">
+      <label>Ruta
+        <select name="ruta">
+          <option value="">Todas las rutas</option>
+          {% for g in route_groups %}<optgroup label="{{ g.name }}">{% for p in g.paths %}<option value="{{ p.slug }}"{% if p.slug == f.path %} selected{% endif %}>{{ p.title }}</option>{% endfor %}</optgroup>{% endfor %}
+        </select>
+      </label>
+      <label>Plataforma
+        <select name="platform">
+          <option value="">Todas</option>
+          {% for p in platforms %}<option value="{{ p.slug }}"{% if p.slug == f.platform %} selected{% endif %}>{{ p.name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" name="cert" value="1"{% if f.cert %} checked{% endif %}> Con certificado ({{ cert_count }})</label>
+      <label class="check"><input type="checkbox" name="general" value="1"{% if f.general %} checked{% endif %}> Conocimiento general</label>
+      <label class="check"><input type="checkbox" name="free" value="1"{% if f.free %} checked{% endif %}> Gratuito</label>
+    </div>
+  </details>
+</form>

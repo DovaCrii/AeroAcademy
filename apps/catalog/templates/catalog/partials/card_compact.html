@@ -1,0 +1,10 @@
+{% load core_extras catalog_extras %}{% card_meta r as m %}
+<article class="cat-card cat-compact d-{{ m.disc }}{% if 'Esencial' in r.tags %} is-ess{% endif %}"{% if r.description %} title="{{ r.description|truncatechars:160 }}"{% endif %}>
+  <h3>{% if r.is_internal_url %}<a href="{{ r.url }}">{{ r.title }} (descargar PDF)</a>{% elif r.url %}<a class="ext" href="{{ r.url }}" target="_blank" rel="noopener" aria-label="{{ r.title }} (abre el sitio de {{ r.platform.name }}, en otra pestaña)">{{ r.title }}<span class="ext-ico" aria-hidden="true"> ↗</span></a>{% else %}{{ r.title }}{% endif %}</h3>
+  <p class="cat-meta"><span class="lvl-dot lvl-{{ m.level }}" aria-hidden="true"></span>{{ m.level_label }} · {{ m.kind_label }}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</p>
+  {% if r.in_paths %}<p class="cat-in">En la ruta <a href="{% url 'paths:detail' r.in_paths.0.slug %}">{{ r.in_paths.0.title }}</a>{% if r.in_paths|length > 1 %} <span class="cat-in-more">+{{ r.in_paths|length|add:"-1" }}</span>{% endif %}</p>{% endif %}
+  <div class="chips">
+    {% course_xp r %}
+    {% if m.paid %}<span class="chip paid">De pago</span>{% endif %}
+  </div>
+</article>

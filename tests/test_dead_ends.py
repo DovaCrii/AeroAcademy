@@ -22,7 +22,7 @@ def test_empty_knowledge_offers_to_write_or_clear_filters(member_client):
 
 def test_catalog_tiles_without_resources_are_links_not_dead_tiles(member_client):
     call_command("seed_catalog", verbosity=0)
-    html = member_client.get("/catalogo/").content.decode()
+    html = member_client.get("/catalogo/?vendor=autodesk").content.decode()
     empty = re.findall(r'<a class="vs-item[^"]*is-empty"[^>]*>', html)
     assert empty and all('href="/foro/nuevo/"' in tag for tag in empty)
     assert '<span class="vs-item' not in html  # ya no hay fichas sin enlace
