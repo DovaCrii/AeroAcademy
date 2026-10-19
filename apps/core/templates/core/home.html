@@ -64,7 +64,7 @@
 {% for a in announcements %}<aside class="announce" role="note"><b>{{ a.title }}</b>{{ a.body }}</aside>{% endfor %}
 
 <nav class="w-jump" aria-label="En esta página">
-  <a href="#rutas">Tus rutas</a><a href="#mision">Tu misión</a><a href="#avance">Tu avance</a><a href="#modulos">Módulos</a><a href="#destacados">Destacados</a><a href="#suite">Suite Aero</a>
+  <a href="#rutas">Tus rutas</a><a href="#mision">Tu misión</a><a href="#avance">Tu avance</a><a href="#modulos">Módulos</a><a href="#destacados">Destacados</a>{% if SHOW_SUITE_AERO %}<a href="#suite">Suite Aero</a>{% endif %}
 </nav>
 
 <section id="rutas" class="w-sec w-sec-routes" aria-labelledby="rut-h">
@@ -272,6 +272,8 @@
 </section>
 </details>
 
+{% comment %}Auspicio Suite Aero: oculto por ahora (SHOW_SUITE_AERO=1 lo vuelve a mostrar).{% endcomment %}
+{% if SHOW_SUITE_AERO %}
 <details class="w-fold" id="suite">
   <summary><span class="w-fold-t">Suite Aero</span><span class="w-fold-h">Auspicia la academia · aplicaciones del ecosistema</span></summary>
 <section class="w-suite decor-contour" aria-labelledby="suite-h">
@@ -297,6 +299,7 @@
 </section>
 
 </details>
+{% endif %}
 
 <section class="w-vals" id="valores" aria-label="Cómo trabajamos">
   {% for icon, text in values %}

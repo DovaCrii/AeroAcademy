@@ -71,7 +71,8 @@ def test_welcome_hides_unpublished_paths_from_members(member_client):
     assert "/rutas/bentley-learn/" not in home(member_client)
 
 
-def test_welcome_shows_suite_aero_sponsor(member_client):
+def test_welcome_shows_suite_aero_sponsor(member_client, settings):
+    settings.SHOW_SUITE_AERO = True
     html = home(member_client)
     assert "Auspicia" in html and "Suite Aero" in html
     assert "cuenta con el auspicio de Suite Aero" in html
@@ -79,14 +80,27 @@ def test_welcome_shows_suite_aero_sponsor(member_client):
         assert product["name"] in html
 
 
-def test_suite_aero_links_open_the_apps_and_never_the_code(member_client):
+def test_suite_aero_links_open_the_apps_and_never_the_code(member_client, settings):
     """Pedido del dueño: «quitar las rutas del código» — solo «Abrir …», ningún enlace a los repositorios."""
+    settings.SHOW_SUITE_AERO = True
     html = home(member_client)
     assert "github.com" not in html and "Código ↗" not in html
     for product in SUITE_AERO:
         if product.get("app_url"):
             assert f'href="{product["app_url"]}"' in html
     assert 'rel="noopener"' in html
+
+
+def test_suite_aero_block_is_hidden_by_default(member_client, settings):
+    """Pedido del dueño (2026-10-19): el bloque «Suite Aero» de la portada no es necesario ahora;
+    SHOW_SUITE_AERO lo vuelve a mostrar."""
+    assert settings.SHOW_SUITE_AERO is False
+    html = home(member_client)
+    assert 'id="suite"' not in html and 'href="#suite"' not in html
+    assert "Abrir AeroControl" not in html
+    settings.SHOW_SUITE_AERO = True
+    shown = home(member_client)
+    assert 'id="suite"' in shown and 'href="#suite"' in shown
 
 
 def test_welcome_assets_exist():
@@ -105,7 +119,8 @@ def test_pending_person_does_not_see_the_welcome(client_for, make_person):
     assert client_for(pending.login).get("/").status_code == 302
 
 
-def test_suite_apps_show_icon_and_whether_they_are_live_or_coming(member_client):
+def test_suite_apps_show_icon_and_whether_they_are_live_or_coming(member_client, settings):
+    settings.SHOW_SUITE_AERO = True
     html = member_client.get("/").content.decode().split('id="suite"')[1]
     for product in SUITE_AERO:
         assert f"core/img/suite/{product['logo']}.svg" in html
@@ -138,7 +153,8 @@ def test_module_cards_have_doodle_and_identity(member_client):
     assert html.count('class="w-mod-ill"') == len(MODULES)
 
 
-def test_active_suite_apps_link_to_their_live_page_and_soon_ones_do_not(member_client):
+def test_active_suite_apps_link_to_their_live_page_and_soon_ones_do_not(member_client, settings):
+    settings.SHOW_SUITE_AERO = True
     html = member_client.get("/").content.decode().split('id="suite"')[1]
     for product in SUITE_AERO:
         if product["status"] == "active":
