@@ -213,6 +213,7 @@ run_manage collectstatic --noinput >/dev/null
 run_manage migrate --noinput
 run_manage seed_catalog
 run_manage cargar_dgac || true   # ruta DGAC desde $STATE/dgac (si está)
+run_manage cargar_cursos_privados || true   # rutas privadas de JEJ desde $STATE/cursos/<slug>/ruta.json (si hay)
 run_manage puesta_en_marcha || true   # hilo de bienvenida (una vez) y lista de lo que falta
 run_manage reindex_assistant || true
 

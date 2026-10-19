@@ -126,6 +126,8 @@ Desde la **primera instalación** (§1) las actualizaciones son un solo comando,
 ```
 La conexión sale de `AEROACADEMY_VM_HOST` y `AEROACADEMY_VM_USER` o de `deploy/vm.local.json` (ignorado por git; modelo en `deploy/vm.local.json.ejemplo`: `{"host": "<IP-DE-LA-VM>", "user": "example"}`). El host y el usuario reales **no van al repositorio**. Al final recuerda recargar el navegador con **Ctrl+F5**.
 
+**Cursos privados de JEJ (clases internas).** Cada actualización los deja al día sin pasos manuales: `desplegar.ps1` copia `private/cursos/`, el instalador lo sincroniza con `/var/lib/centro/cursos` y corre `manage.py cargar_cursos_privados` justo después de `seed_catalog` (ver `docs/CURSOS.md`). Para sumar una clase semanal basta editar `private/cursos/<slug>/ruta.json` en tu computador y volver a correr `./tools/desplegar.ps1`. Si la carpeta no existe, el paso no hace nada.
+
 Para no escribir la contraseña de SSH cada vez, crea una llave (equivalente a `ssh-copy-id` en Windows); la contraseña de `sudo` se sigue pidiendo en la VM, es lo esperado:
 ```powershell
 ssh-keygen -t ed25519
