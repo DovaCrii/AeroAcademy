@@ -87,6 +87,19 @@
             "Oficial",
             "Complementario"
           ]
+        },
+        {
+          "order": 3,
+          "title": "Mastering Bentley Infrastructure Cloud: Streamline Project Collaboration & Design Review",
+          "url": "https://learning.bentley.com/learn/course/3251/mastering-bentley-infrastructure-cloud-streamline-project-collaboration-design-review",
+          "kind": "course",
+          "description": "1 hora práctica: documentos del proyecto (subir, organizar, check in/out), componentes compartidos, transmittals en Deliverables Management y revisión de diseño con issues.",
+          "duration_text": "1 h",
+          "tags": [
+            "On Demand",
+            "Oficial",
+            "Complementario"
+          ]
         }
       ],
       "external_courses": [
