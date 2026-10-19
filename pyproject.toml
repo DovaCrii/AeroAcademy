@@ -30,7 +30,7 @@ addopts = "-ra"
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = ["legacy", "design", "seed", "apps/*/migrations"]
+extend-exclude = ["legacy", "design", "seed", "apps/*/migrations", ".claude/skills/ui-ux-pro-max"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "DJ"]

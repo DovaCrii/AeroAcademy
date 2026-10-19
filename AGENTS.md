@@ -101,6 +101,7 @@ Skills en `.claude/skills/` (Claude Code las carga solo; en Codex, leer el `SKIL
 | `nuevo-mundo` | Al crear o rediseñar un mundo o una figura temática |
 | `nueva-insignia` | Al agregar insignias, títulos o desbloqueables |
 | `sprite-8bit` | Al dibujar insignias, a Nala, iconos o encargar piezas de avatar |
+| `diseno-ui` | Diseño visual y UX: qué skill externa usar y qué se verifica; ver `.claude/skills/VENDOR.md` |
 
 Subagentes en `.claude/agents/`, para trabajar en paralelo en **archivos distintos**:
 
