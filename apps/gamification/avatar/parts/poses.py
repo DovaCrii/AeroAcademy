@@ -7,10 +7,12 @@ aplica después del cuerpo y antes de la ropa, el cuello y todo lo demás.
 Contrato para quien dibuje una pose:
   · solo toca los brazos (x 2..7 o 24..29, y 8..27); la cara y el torso no se tocan;
   · usa las claves del cuerpo: `K` contorno, `S` piel, `O` ropa;
-  · el equipo de la mano derecha (carril x 23..31) no debe quedar cortado: las poses mueven el brazo izquierdo.
+  · el equipo de la mano derecha (carril x 23..31) no debe quedar cortado: las poses mueven el brazo izquierdo;
+  · una pose puede sumar una mano o antebrazo HD delante del torso (`hd/hands.py`, `POSE_FRONT`), siempre sin cruzar
+    la ventana de la cara ni pasar de la cintura.
 """
 
-LABELS_POSES = {"stand": "De pie", "wave": "Saluda"}
+LABELS_POSES = {"stand": "De pie", "wave": "Saluda", "work": "Trabajando"}
 
 POSES = {
     "stand": {},
@@ -33,5 +35,8 @@ POSES = {
         26: (4, "...K"),
         27: (4, "...K"),
     },
+    # El brazo izquierdo termina en el codo (la mano de «De pie» sale): el antebrazo y la mano cruzan el torso hacia el
+    # equipo de la derecha y los dibuja `hd/hands.py` (`POSE_FRONT`). El brazo derecho no se toca: sujeta el equipo.
+    "work": {26: (4, "KOOK")},
 }
 DEFAULT_POSE = "stand"

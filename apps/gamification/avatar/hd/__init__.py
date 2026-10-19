@@ -91,4 +91,4 @@ def up2(rows):
 
 # Registran las piezas HD al importarse; van al final porque necesitan el registro HD ya definido.
 from ..parts import gear  # noqa: E402,F401
-from . import face, facial_hair, glasses, hands, headwear, outfits, pins  # noqa: E402,F401
+from . import face, facial_hair, glasses, hair, hands, headwear, outfits, pins  # noqa: E402,F401

@@ -100,11 +100,13 @@ fuera del catálogo; el SVG se arma solo con piezas del catálogo (nada que escr
   acabado (luz arriba-izquierda, sombra abajo-derecha, esquinas redondeadas). `HD[categoría][id]` guarda piezas HD
   opcionales que reemplazan su capa ×2 (solo ids que ya existen; sin `1..4`, que pone el motor). Es función pura de la
   configuración y se guarda en caché por configuración.
-- **Poses** (`parts/poses.py`): `stand` y `wave`. Son solo de la vista previa: no se guardan.
+- **Poses** (`parts/poses.py`): `stand`, `wave` («Saluda») y `work` («Trabajando»: el antebrazo izquierdo cruza la cintura hacia el equipo). Son solo de la vista previa: no se guardan.
 - **Piezas HD** (`avatar/hd/`, una tanda por archivo; todas opcionales y con los ids de siempre): `face.py` (ojos 5×6,
   cejas, boca hasta 10×4, nariz), `glasses.py` y `facial_hair.py` (pares simétricos con `hd.mirror`), `headwear.py` (12
   gorros: la pieza de 32 ×2 más costuras, brillos y detalle de oficio; **nunca cambia la silueta**), `outfits.py` (detalle
-  de las 17 prendas sobre `O`: bolsillos, cierres, franjas, parches), `pins.py` (7×7), `hands.py` (agarre y saludo) y
+  de las 17 prendas sobre `O`: bolsillos, cierres, franjas, parches), `pins.py` (7×7), `hair.py` (los 16 peinados con
+  pelo, frente y atrás: mechones, brillo y sombra en los tres tonos del color elegido sobre la silueta ×2; **nunca
+  cambia la silueta**), `hands.py` (agarre, saludo y la mano de «Trabajando») y
   `parts/gear/` (equipo por disciplina en coordenadas del escenario: `survey`, `capture`, `build`, `plant`, `ai`; un
   equipo puede ser una lista de sprites, como el control y el dron). Contrato: contorno `K`, claves de la paleta (nunca
   `1..6`, que son del motor), ≤ 12 colores por sprite, dentro de su zona (`hd.ZONES`) y fuera de la ventana de la cara.
