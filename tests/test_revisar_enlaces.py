@@ -23,6 +23,38 @@ def test_classify_separates_404_from_blocks_and_timeouts():
     assert linkcheck.classify(200) == "ok"
 
 
+def test_bentley_learn_items_are_checked_through_their_api(monkeypatch):
+    seen = []
+
+    class Reply:
+        def __init__(self, body):
+            self.body = body
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def read(self, *args):
+            return self.body
+
+    def fake_urlopen(request, timeout=0):
+        seen.append(request.full_url)
+        if "/courses/1?" in request.full_url or "/lp/2?" in request.full_url:
+            return Reply(b'{"data": {"name": "Curso"}}')
+        raise linkcheck.urllib.error.HTTPError(request.full_url, 403, "Forbidden", {}, None)
+
+    monkeypatch.setattr(linkcheck.urllib.request, "urlopen", fake_urlopen)
+    base = "https://learning.bentley.com/learn/"
+    assert linkcheck.check_url(base + "courses/1/curso") == 200
+    assert linkcheck.check_url(base + "course/1/curso") == 200
+    assert linkcheck.check_url(base + "learning-plans/2/plan") == 200
+    assert linkcheck.check_url(base + "courses/99999999/no-existe") == 404
+    assert linkcheck.check_bentley_item(base + "learn") is None
+    assert all("/learn/v1/" in url for url in seen)
+
+
 def test_seed_urls_finds_urls_in_json(tmp_path):
     (tmp_path / "a.json").write_text(
         json.dumps({"x": [{"url": "https://ejemplo.test/a."}]}), encoding="utf-8"

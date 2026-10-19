@@ -4,6 +4,7 @@ La usan `manage.py revisar_enlaces` y `tests/test_enlaces.py`. Solo mira la ruta
 contenido de páginas ni datos de personas.
 """
 
+import json
 import re
 import urllib.error
 import urllib.request
@@ -128,8 +129,41 @@ def classify(status):
     return "sin_respuesta"
 
 
+BENTLEY_ITEM = re.compile(
+    r"^https://learning\.bentley\.com/learn/(?:courses?/(?P<course>\d+)|learning-plans/(?P<plan>\d+)"
+    r"|public/catalog/view/(?P<catalog>\d+))(?:/|$)"
+)
+BENTLEY_API = {
+    "course": "/learn/v1/courses/{}",
+    "plan": "/learn/v1/lp/{}",
+    "catalog": "/learn/v1/catalog/{}",
+}
+
+
+def check_bentley_item(url, timeout=15):
+    """Bentley Learn responde 200 a cualquier id (la página se arma con JS). La API pública que usa esa página sí
+    distingue: 200 con datos si el curso, plan o catálogo existe y 403/404 si no. Devuelve 200, 404 o None si la
+    URL no es de ese tipo (se revisa como cualquier otra)."""
+    match = BENTLEY_ITEM.match(url)
+    if not match:
+        return None
+    kind = next(k for k, v in match.groupdict().items() if v)
+    api = "https://learning.bentley.com" + BENTLEY_API[kind].format(match.group(kind)) + "?lang=en"
+    request = urllib.request.Request(api, headers={"User-Agent": BROWSER_UA})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310 (https fijo)
+            return 200 if json.load(response).get("data") else 404
+    except urllib.error.HTTPError as exc:
+        return 404 if exc.code in (403, 404) else exc.code
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+        return None
+
+
 def check_url(url, timeout=15):
     """Devuelve el código HTTP (HEAD y, si no sirve, GET) o el texto del fallo (timeout, DNS…)."""
+    bentley = check_bentley_item(url, timeout)
+    if bentley is not None:
+        return bentley
     last = None
     for method in ("HEAD", "GET"):
         request = urllib.request.Request(url, method=method, headers={"User-Agent": BROWSER_UA})

@@ -218,6 +218,19 @@ Una persona no autoriza su propio curso: autoría y revisión técnica van separ
 - No empezar un curso nuevo mientras haya uno sin evaluación final.
 - Revisar cada trimestre los cursos externos (vencen y cambian) y los enlaces.
 
+### Cómo comprobar que un curso externo existe y se abre de verdad
+
+Un 200 no basta: Bentley Learn devuelve 200 para cualquier id (la página se arma con JS) y Autodesk responde 403 a los
+scripts. `revisar_enlaces --solo-externos` resuelve cada caso así:
+
+| Origen | Cómo se confirma | Quién |
+|---|---|---|
+| Bentley Learn (cursos, planes, catálogos) | La API pública de la misma página (`/learn/v1/courses/<id>`, `/lp/<id>`, `/catalog/<id>`): 200 con datos si existe, 403/404 si no. Va incluido en el comando. | Automático |
+| Autodesk (`autodesk.com/learn/...`) | El comando los marca «bloqueado» (403). Se confirman con `fetch` desde una pestaña ya abierta en autodesk.com (un 404 real sí devuelve 404). | Navegador |
+| Resto | Código HTTP; los «bloqueado» o «sin_respuesta» se abren a mano. | Comando y persona |
+
+Sin inicio de sesión: si la API o la página pide cuenta, el curso no sirve para la ruta; se anota o se cambia por otro.
+
 ### Métricas (qué mirar)
 
 | Métrica | Pregunta que responde |
