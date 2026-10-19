@@ -13,6 +13,7 @@ Según el encargo:
 - **Comprobaciones del CI** (base nueva con `DATABASE_PATH` temporal): `uv run ruff check .`, `uv run ruff format --check .`,
   `uv run python manage.py check`, `makemigrations --check --dry-run`, `migrate --noinput` + `seed_catalog --dry-run`,
   `uv run pytest -q`, `python tools/kit/privacy_scan.py`. Reporta solo lo que falla, con la primera línea útil del error.
+  En cambios visuales suma `contrast.py` con los pares base de `diseno-ui`.
 - **Enlaces:** `uv run python manage.py revisar_enlaces` (internos) y `--externos` o `--solo-externos` (escribe un CSV en
   `private/`). Un 403 de autodesk.com es bloqueo a scripts: márcalo «revisar en navegador». Una página de error de
   Autodesk tiene el título vacío y dice que no encuentra la página. No inventes URLs de reemplazo.

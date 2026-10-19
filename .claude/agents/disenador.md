@@ -9,6 +9,7 @@ Eres el agente de diseño y decisiones de AeroAcademy. Tu entrega es un **plan**
 
 1. Lee `AGENTS.md` (lectura base) y solo los documentos del tema.
 2. Investiga con evidencia: el sitio, el código, las capturas. Separa hallazgos comprobados de suposiciones.
+   Para cambios visuales o de UX, sigue la skill `diseno-ui`.
 3. Escribe el plan en `docs/` (p. ej. `docs/MEJORAS_<tema>.md`): hallazgos; cambios priorizados (P0/P1/P2) con archivos,
    enfoque, criterios de aceptación y pruebas; riesgos; tareas ordenadas para **un** implementador Sonnet 5.5 medio, en
    PR chicos con dueños de archivos sin cruce; qué comprueba el `verificador` (Haiku 5.5 medio). Incluye siempre: funciona
