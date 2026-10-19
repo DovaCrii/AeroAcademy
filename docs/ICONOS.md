@@ -6,9 +6,9 @@ exige que **toda ruta visible** (las de `seed/rutas/`, la de DGAC `dgac-rpas` y 
 
 ## Estado actual
 
-Los 23 iconos `ruta-*.svg` viven en `apps/core/static/core/img/software/`.
+Los 24 iconos `ruta-*.svg` viven en `apps/core/static/core/img/software/`.
 
-- **14 son pictogramas originales** (entre ellos `ruta-dgac-rpas.svg`: un dron sobre un plan de vuelo con waypoints) (baldosa con degradado y pictograma blanco), sin logotipos de nadie.
+- **15 son pictogramas originales** (entre ellos `ruta-dgac-rpas.svg`: un dron sobre un plan de vuelo con waypoints) (baldosa con degradado y pictograma blanco), sin logotipos de nadie.
 - **9 son logotipos oficiales** (6 de Simple Icons, tabla siguiente, y 3 de Autodesk, más abajo) de la ruta que trata ese producto: baldosa blanca (se ve igual en modo oscuro) con la forma
   del logo sin deformar (solo escala y posición) y su color de marca. El SVG original, sin tocar, está en
   `img/software/oficial/`.
@@ -65,6 +65,7 @@ infografía: su pictograma (sol sobre edificios) es original en el mismo estilo.
 Archivos: `img/software/<producto>.svg` y `ruta-bentley-*.svg` (las rutas reutilizan el dibujo de su producto principal:
 learn = MicroStation). Uso nominativo: identifican el producto del curso; no implican respaldo de Bentley.
 - **MCP** (existe en Simple Icons) no se usó: la única ruta cercana, `agentes-ia`, trata de agentes en general.
+- `ruta-microstation-jej.svg` (ruta privada de clases internas de JEJ, que no está en `seed/`): pictograma original de dos líneas que se cruzan, una recortada con Trim, el snap de intersección y un cursor; no usa el logotipo de MicroStation. Su fila en `ROUTE_ICON` existe aunque la ruta solo se cargue donde está instalada la carpeta privada.
 - Rutas sin producto (BIM 101, Topografía 101, IA 101, Vibe coding, Agentes de IA): pictograma original.
 
 Cómo cambiar uno: poner el SVG en `img/software/ruta-<slug>.svg` (o apuntar `ROUTE_ICON`) y anotarlo en esta tabla.

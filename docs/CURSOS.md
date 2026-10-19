@@ -223,6 +223,24 @@ Pasos mecánicos (rutas `external_track` `bentley-*`; no hace falta tocar códig
    `python tools/kit/privacy_scan.py`. En el navegador (claro y oscuro, 1280 y 375 px) revisar la planta y perfil: cada estaca
    lleva un rótulo corto y distinto (`distinct_stake_labels`).
 
+### Cursos privados de JEJ (clases internas)
+
+Las clases internas de JEJ (por ejemplo, la serie de MicroStation) son material del equipo: **no entran a git**.
+
+- **Dónde viven.** `private/cursos/<slug>/ruta.json` (carpeta ignorada por git; en producción, la ruta de `PRIVATE_COURSES_DIR`)
+  con la misma estructura de una ruta de `seed/rutas/`. Las fotos van en `private/cursos/<slug>/fotos/` y se citan como
+  `priv:<archivo>`. Los PDF y demás material de las clases van en `private/cursos/<slug>/material/` y en la ruta se
+  mencionan solo como texto, sin URL (todavía no hay una vista que los sirva).
+- **Cómo se carga.** Con el catálogo ya sembrado: `uv run python manage.py cargar_cursos_privados` (`--dry-run` valida y no
+  guarda). Recorre `PRIVATE_COURSES_DIR/*/ruta.json`, exige que el `slug` coincida con el nombre de la carpeta, es
+  idempotente e ignora las carpetas sin `ruta.json` (por ejemplo, las que solo tienen `fotos/`).
+- **Una clase por semana = un nivel nuevo al final de `levels`.** Con un `code` nuevo (el número de la clase, p. ej. `ms03`),
+  un `order` mayor y las keys con su prefijo (`ms03-t0`, `ms03-q0`). Nunca se renumera ni se reordena lo publicado; si una
+  clase previa tiene que entrar antes, se le da un `order` menor sin cambiar los `code` de las demás.
+- **Qué nunca va a git:** el nombre del autor o de quien dicta la clase, el material (PDF, HTML de origen) y las fotos.
+  El nombre figura solo en el JSON privado. Antes de publicar: `git grep` del nombre y `python tools/kit/privacy_scan.py`.
+- La ruta usa la plataforma `interna`, así que emite diploma interno por el patrón de `INTERNAL_PLATFORMS`.
+
 ### Roles
 
 | Rol | Hace | No hace |
