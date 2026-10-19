@@ -23,6 +23,20 @@ def course_photo(request, slug, name):
     return private_files.file_response(path)
 
 
+@require_GET
+def course_material(request, slug, name):
+    """PDF privado de un curso, como adjunto: mismo control de visibilidad que las fotos (si no, 404)."""
+    if services.visible_paths(request.user).filter(slug=slug).first() is None:
+        raise Http404
+    path = guides.material_path(slug, name)
+    if path is None:
+        raise Http404
+    response = private_files.document_response(path)
+    if response is None:
+        raise Http404
+    return response
+
+
 def index(request):
     """Rutas por área de aprendizaje (disciplina); la empresa, el producto y la habilidad son filtros secundarios."""
     p = request.GET

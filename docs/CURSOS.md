@@ -229,8 +229,13 @@ Las clases internas de JEJ (por ejemplo, la serie de MicroStation) son material 
 
 - **Dónde viven.** `private/cursos/<slug>/ruta.json` (carpeta ignorada por git; en producción, la ruta de `PRIVATE_COURSES_DIR`)
   con la misma estructura de una ruta de `seed/rutas/`. Las fotos van en `private/cursos/<slug>/fotos/` y se citan como
-  `priv:<archivo>`. Los PDF y demás material de las clases van en `private/cursos/<slug>/material/` y en la ruta se
-  mencionan solo como texto, sin URL (todavía no hay una vista que los sirva).
+  `priv:<archivo>`. Los PDF de las clases van en `private/cursos/<slug>/material/`.
+- **PDF descargables.** Un recurso de un nivel puede declarar `"file": "<nombre>.pdf"` en lugar de `url` (si trae las dos,
+  manda `url`). Solo el nombre, sin carpetas ni `..`; la semilla da error si no es un `.pdf` válido. Al cargar la ruta, el
+  recurso guarda el enlace interno `/cursos/material/<slug>/<nombre>.pdf`, que se muestra como «Descargar PDF» (sin marca
+  de sitio externo). La vista lo entrega **como adjunto** (nunca en el visor del navegador) solo a quien ve la ruta (borrador
+  u oculta: 404) y solo si el archivo empieza con `%PDF-`. `fotos/` nunca sirve PDF ni `material/` imágenes. Un PDF cuya ruta
+  no está publicada no sale en `/catalogo/` ni en la búsqueda de Nala.
 - **Cómo se carga.** Con el catálogo ya sembrado: `uv run python manage.py cargar_cursos_privados` (`--dry-run` valida y no
   guarda). Recorre `PRIVATE_COURSES_DIR/*/ruta.json`, exige que el `slug` coincida con el nombre de la carpeta, es
   idempotente e ignora las carpetas sin `ruta.json` (por ejemplo, las que solo tienen `fotos/`).

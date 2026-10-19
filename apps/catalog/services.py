@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db.models import Case, IntegerField, Prefetch, Q, Value, When
 
+from apps.core.private_files import MATERIAL_URL_PREFIX
+
 from .models import Resource
 
 ESSENTIAL = "Esencial"
@@ -66,6 +68,15 @@ def published_paths_for(resource_ids):
     return out
 
 
+def published_material_ids():
+    """Subconsulta: recursos de PDF privado que usa alguna ruta publicada."""
+    from apps.paths.models import LevelResource
+
+    return LevelResource.objects.filter(
+        level__path__is_published=True, resource__url__startswith=MATERIAL_URL_PREFIX
+    ).values("resource_id")
+
+
 def resource_queryset(
     *, platform="", kind="", free=False, cert=False, q="", product="", path="", essential=False,
     general=False, discipline="", ids=None,
@@ -75,6 +86,8 @@ def resource_queryset(
     )
     # Solo lo que sigue en alguna ruta: lo quitado de una semilla queda en la base, pero ya no se ofrece.
     qs = qs.filter(Q(level_links__isnull=False) | Q(external_courses__retired=False))
+    # Un PDF privado de curso solo se ofrece mientras alguna ruta publicada lo use (su descarga da 404 en un borrador).
+    qs = qs.filter(~Q(url__startswith=MATERIAL_URL_PREFIX) | Q(pk__in=published_material_ids()))
     if ids is not None:
         qs = qs.filter(pk__in=ids)
     if platform:

@@ -25,7 +25,7 @@
         <li class="ao-r">
           {% sw_tiles lr.resource "md" 1 %}
           <div class="ao-rb">
-          <a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>
+          {% if lr.resource.is_internal_url %}<a href="{{ lr.resource.url }}">{{ lr.resource.title }} (descargar PDF)</a>{% else %}<a href="{{ lr.resource.url }}" target="_blank" rel="noopener">{{ lr.resource.title }}</a>{% endif %}
           {% if lr.note %}<div class="d">{{ lr.note|terms }}</div>{% endif %}
           </div>
         </li>
