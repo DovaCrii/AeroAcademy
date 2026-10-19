@@ -7,7 +7,7 @@
   </div>
   <div class="cat-body">
     <p class="cat-meta">{{ m.type }}{% if m.type != r.get_kind_display %} · {{ r.get_kind_display }}{% endif %}{% if r.duration_text %} · {{ r.duration_text }}{% endif %}</p>
-    <h3>{% if r.url %}<a class="ext" href="{{ r.url }}" target="_blank" rel="noopener" aria-label="{{ r.title }} (abre el sitio de {{ r.platform.name }}, en otra pestaña)">{{ r.title }}<span class="ext-ico" aria-hidden="true"> ↗</span></a>{% else %}{{ r.title }}{% endif %}</h3>
+    <h3>{% if r.is_internal_url %}<a href="{{ r.url }}">{{ r.title }} (descargar PDF)</a>{% elif r.url %}<a class="ext" href="{{ r.url }}" target="_blank" rel="noopener" aria-label="{{ r.title }} (abre el sitio de {{ r.platform.name }}, en otra pestaña)">{{ r.title }}<span class="ext-ico" aria-hidden="true"> ↗</span></a>{% else %}{{ r.title }}{% endif %}</h3>
     {% if r.description %}<p class="cat-desc">{{ r.description|truncatechars:130|terms }}</p>{% endif %}
     {% if r.in_paths %}<p class="cat-in">En la ruta {% for p in r.in_paths %}<a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
     <div class="chips">

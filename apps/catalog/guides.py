@@ -67,6 +67,13 @@ def photo_path(slug, name):
     return private_files.safe_file(Path(settings.PRIVATE_COURSES_DIR) / slug / "fotos", name)
 
 
+def material_path(slug, name):
+    """Ruta segura de un PDF privado del curso (`<PRIVATE_COURSES_DIR>/<slug>/material/<name>`), o None."""
+    if not isinstance(slug, str) or not _SLUG.match(slug):
+        return None
+    return private_files.safe_document(Path(settings.PRIVATE_COURSES_DIR) / slug / "material", name)
+
+
 def _text(value, limit):
     return value.strip()[:limit] if isinstance(value, str) else ""
 

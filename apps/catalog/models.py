@@ -159,3 +159,8 @@ class Resource(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def is_internal_url(self):
+        """Enlace de este sitio (p. ej. un PDF privado del curso): se descarga aquí, no abre otro sitio."""
+        return self.url.startswith("/") and not self.url.startswith("//")

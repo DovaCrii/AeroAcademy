@@ -7,6 +7,8 @@ Lo que desaparece del JSON no se borra: se marca `retired`.
 from apps.catalog import figures
 from apps.catalog.models import Discipline, Platform, Product, Resource, Skill, Vendor, World
 from apps.catalog.seeding import SeedError, _dupes
+from apps.core import private_files
+from apps.core.private_files import MATERIAL_URL_PREFIX
 
 from .models import (
     ExternalCourse,
@@ -86,6 +88,17 @@ def validate_route(data, name="ruta"):
             if not item.get("key"):
                 err(f"{label} sin clave")
 
+    for r in _all_level_resources(data):
+        if (
+            r.get("file")
+            and not r.get("url")
+            and not private_files.is_safe_document_name(r["file"])
+        ):
+            err(
+                f"recurso «{r.get('title')}»: «file» inválido «{r['file']}» "
+                "(solo el nombre de un .pdf, sin carpetas; va en private/cursos/<slug>/material/)"
+            )
+
     titles = {r["title"] for r in _all_level_resources(data)}
     for m in milestones:
         wanted = m.get("completed_by_resource")
@@ -118,14 +131,17 @@ def _kind_from_tags(tags):
     return "guide"
 
 
-def _upsert_resource(platform, item, *, certificate=False, official=None, kind=None):
+def _upsert_resource(platform, item, *, certificate=False, official=None, kind=None, slug=""):
     tags = item.get("tags", [])
+    url = item.get("url", "")
+    if not url and item.get("file") and slug:  # PDF privado del curso: enlace interno de descarga
+        url = f"{MATERIAL_URL_PREFIX}{slug}/{item['file']}"
     resource_kind = kind or item.get("kind") or _kind_from_tags(tags)
     resource, _ = Resource.objects.update_or_create(
         platform=platform,
         title=item["title"],
         defaults={
-            "url": item.get("url", ""),
+            "url": url,
             "kind": resource_kind,
             "description": item.get("description", ""),
             "duration_text": item.get("duration_text", ""),
@@ -181,7 +197,7 @@ def load_route(data, name="ruta"):
 
         kept = []
         for r_order, item in enumerate(level_data.get("resources", [])):
-            resource = _upsert_resource(platform, item)
+            resource = _upsert_resource(platform, item, slug=data["slug"])
             LevelResource.objects.update_or_create(
                 level=level,
                 resource=resource,

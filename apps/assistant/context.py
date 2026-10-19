@@ -6,7 +6,7 @@ borrado u oculto, ni datos de otras personas fuera del foro y las notas visibles
 """
 
 from apps.core import dashboard
-from apps.dgac.constants import PRIVATE_PATH_SLUGS
+from apps.core.private_files import private_route_slugs
 from apps.paths.models import LearningPath, Milestone
 from apps.progress.models import MilestoneCheck
 
@@ -38,7 +38,7 @@ def pending_titles(person):
     mission = dashboard.suggested_mission(person)
     if mission is None or not mission["path"].is_published:
         return []  # ni borradores ni rutas sin publicar viajan al proveedor
-    if mission["path"].slug in PRIVATE_PATH_SLUGS:
+    if mission["path"].slug in private_route_slugs():
         return []  # tampoco las rutas internas (sección DGAC): sus misiones son procedimientos de JEJ
     path = mission["path"]
     if path.kind == LearningPath.Kind.EXTERNAL_TRACK:

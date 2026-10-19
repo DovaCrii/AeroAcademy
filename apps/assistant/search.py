@@ -16,8 +16,9 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.catalog.models import Resource
+from apps.catalog.services import published_material_ids
 from apps.community.models import Note, Post, Thread
-from apps.dgac.constants import PRIVATE_PATH_SLUGS
+from apps.core.private_files import MATERIAL_URL_PREFIX, private_route_slugs
 from apps.knowledge.models import Article
 from apps.library.models import Document
 from apps.paths.models import LearningPath, PathExtra
@@ -45,7 +46,7 @@ def _help_rows():
 
 def _public_paths():
     """Rutas publicadas que se pueden indexar: las de contenido interno (sección DGAC) nunca van al índice."""
-    return LearningPath.objects.filter(is_published=True).exclude(slug__in=PRIVATE_PATH_SLUGS)
+    return LearningPath.objects.filter(is_published=True).exclude(slug__in=private_route_slugs())
 
 
 def _rows():
@@ -67,9 +68,13 @@ def _rows():
                     f"{d.get('meaning', '')} {d.get('location', '')}".strip(),
                     reverse("paths:detail", args=[p.slug]),
                 )
-    internal_resources = Resource.objects.filter(levels__path__slug__in=PRIVATE_PATH_SLUGS)
+    internal_resources = Resource.objects.filter(levels__path__slug__in=private_route_slugs())
+    unpublished_material = Resource.objects.filter(url__startswith=MATERIAL_URL_PREFIX).exclude(
+        pk__in=published_material_ids()
+    )
     for r in (
         Resource.objects.exclude(pk__in=internal_resources.values("pk"))
+        .exclude(pk__in=unpublished_material.values("pk"))
         .prefetch_related("skills", "products")
         .all()
     ):
@@ -79,7 +84,7 @@ def _rows():
         yield ("resource", f"resource:{r.pk}", r.title, body, url)
     visible_notes = (
         Note.objects.filter(is_deleted=False, is_hidden=False, path__is_published=True)
-        .exclude(path__slug__in=PRIVATE_PATH_SLUGS)
+        .exclude(path__slug__in=private_route_slugs())
         .exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
     )
     for n in visible_notes.select_related("path"):
@@ -163,14 +168,14 @@ def _still_visible(ref):
     if kind == "note":
         return (
             Note.objects.filter(pk=pk, is_deleted=False, is_hidden=False, path__is_published=True)
-            .exclude(path__slug__in=PRIVATE_PATH_SLUGS)
+            .exclude(path__slug__in=private_route_slugs())
             .exclude(Q(parent__is_deleted=True) | Q(parent__is_hidden=True))
             .exists()
         )
     if kind == "glossary":
         return (
             PathExtra.objects.filter(pk=pk, path__is_published=True)
-            .exclude(path__slug__in=PRIVATE_PATH_SLUGS)
+            .exclude(path__slug__in=private_route_slugs())
             .exists()
         )
     if kind == "thread":

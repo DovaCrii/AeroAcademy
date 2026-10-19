@@ -41,5 +41,5 @@
     </div>
     {% endif %}
   </div>
-  {% if essential %}<p class="gd-foot"><span>CURSO ESENCIAL</span> <a href="{{ essential.url }}" target="_blank" rel="noopener">{{ essential.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a></p>{% endif %}
+  {% if essential %}<p class="gd-foot"><span>CURSO ESENCIAL</span> {% if essential.is_internal_url %}<a href="{{ essential.url }}">{{ essential.title }}<span class="sr-only"> (descargar PDF)</span></a>{% else %}<a href="{{ essential.url }}" target="_blank" rel="noopener">{{ essential.title }}<span class="sr-only"> (se abre en otra pestaña)</span></a>{% endif %}</p>{% endif %}
 </section>{% endif %}
