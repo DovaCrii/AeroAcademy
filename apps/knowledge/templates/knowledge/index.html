@@ -19,7 +19,7 @@
   {% for a in page %}
   <li class="kn-item"><a class="title" href="{% url 'knowledge:detail' a.pk %}">{{ a.title }}</a>
     <span class="meta"><span class="chip">{{ a.get_kind_display }}</span>{% if not a.is_published %}<span class="chip warn">Borrador</span>{% endif %}{% for d in a.disciplines.all %}<span class="chip">{{ d.name }}</span>{% endfor %} · {{ a.author.name }} · {{ a.updated_at|date:"d/m/Y" }}</span></li>
-  {% empty %}<li class="muted">Todavía no hay artículos con estos filtros.</li>{% endfor %}
+  {% empty %}<li class="muted">{% if f.q or f.tipo or f.disciplina %}No hay artículos con estos filtros. <a href="{% url 'knowledge:index' %}">Quitar filtros</a> o <a href="{% url 'knowledge:new' %}">escribir uno</a>.{% else %}Todavía no hay artículos. <a href="{% url 'knowledge:new' %}">Escribe el primero</a>.{% endif %}</li>{% endfor %}
 </ul>
 {% if page.has_other_pages %}
 <nav class="pager" aria-label="Páginas">

@@ -91,7 +91,7 @@
     {% for group in tree %}
     <h3>{{ group.vendor }}</h3>
     <ul class="chips">{% for name, n in group.skills %}<li>{{ name }}{% if n > 1 %} <b>×{{ n }}</b>{% endif %}</li>{% endfor %}</ul>
-    {% empty %}<p class="muted">Aún no hay habilidades demostradas con credenciales verificadas.</p>{% endfor %}
+    {% empty %}<p class="muted">Aún no hay habilidades demostradas con credenciales verificadas.{% if is_owner %} <a href="{% url 'credentials:create' %}">Registra un certificado</a> para sumarlas.{% endif %}</p>{% endfor %}
   </details>
 
   <details class="card fold" id="s-creds"{% if "creds" in open_sections %} open{% endif %}>
@@ -106,7 +106,7 @@
     <summary><h2>Línea de tiempo</h2></summary>
     {% if timeline %}
     <ol class="timeline">{% for e in timeline %}<li><time datetime="{{ e.when|date:'c' }}">{{ e.when|date:"d/m/Y" }}</time> {{ e.text }}{% if e.detail %}: <b>{{ e.detail }}</b>{% endif %}{% if e.points %} <span class="pts">+{{ e.points }} XP</span>{% endif %}</li>{% endfor %}</ol>
-    {% else %}<p class="muted">Todavía no hay logros.</p>{% endif %}
+    {% else %}<p class="muted">Todavía no hay logros.{% if is_owner %} Completa una misión en <a href="{% url 'paths:index' %}">tus rutas</a> para empezar.{% endif %}</p>{% endif %}
   </details>
   {% endif %}
 </div>

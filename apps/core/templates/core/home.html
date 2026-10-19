@@ -132,7 +132,7 @@
     <h2 class="w-h3">Tablón del gremio <small>últimos {{ board.days }} días</small></h2>
     {% if board.items %}
     <ul>{% for it in board.items %}<li><time datetime="{{ it.when|date:'c' }}">{{ it.when|date:"d/m" }}</time> {{ it.text }}</li>{% endfor %}</ul>
-    {% else %}<p class="w-mdetail">Aún no hay logros esta semana. ¡Puedes abrir el tablón tú!</p>{% endif %}
+    {% else %}<p class="w-mdetail">Aún no hay logros esta semana. ¡Puedes abrir el tablón tú! Marca una misión en <a href="{% url 'paths:index' %}">tus rutas</a>.</p>{% endif %}
     <small>{{ board.weekly_xp }} XP ganados entre todos esta semana.</small>
   </div>
   <ul class="w-counters" aria-label="Pendientes">

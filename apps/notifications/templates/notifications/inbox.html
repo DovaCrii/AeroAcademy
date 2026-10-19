@@ -14,6 +14,6 @@
       <button class="notice-btn" type="submit"><b>{{ n.title }}</b>{% if n.body %}<span>{{ n.body }}</span>{% endif %}<time datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|date:"d/m/Y H:i" }}</time></button>
     </form>
   </li>
-  {% empty %}<li class="muted">No tienes avisos.</li>{% endfor %}
+  {% empty %}<li class="muted">No tienes avisos. Aquí llegan vencimientos, respuestas y logros. Mientras tanto, <a href="{% url 'paths:index' %}">sigue una ruta</a>.</li>{% endfor %}
 </ul>
 {% endblock %}
