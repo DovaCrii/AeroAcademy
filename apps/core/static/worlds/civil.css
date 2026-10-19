@@ -29,6 +29,9 @@ body.world-civil{--sign:#FFC21A;--asphalt:#2B2F36;--slope:#3E8E4E;--relic:#8B5CF
 .cv-stake line{stroke:var(--line);stroke-width:2}
 .cv-stake path{fill:var(--sheet);stroke:var(--line);stroke-width:1.2}
 .cv-stake text{font-size:10px;fill:var(--ink-2)}
+/* En el celular la figura (1000 de ancho) se reduce a ~0,3: los rótulos quedan en 3 px y no se leen. Se ocultan; el
+   resumen está en el aria-label y en las cifras de la portada, y cada estaca conserva su <title>. */
+@media (max-width:560px){.cv-svg text{display:none}}
 .cv-stake.verified line{stroke:var(--ink)} .cv-stake.verified path{fill:var(--ok);stroke:var(--ink)}
 .cv-stake.pending line{stroke:var(--ink)} .cv-stake.pending path{fill:var(--pend);stroke:var(--ink)}
 .cv-stake.rejected path{fill:var(--red);stroke:var(--ink)}
