@@ -147,6 +147,9 @@ TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
 # necesita un segundo factor (TOTP).
 PUBLIC_DOOR = os.environ.get("AEROACADEMY_DOOR", "").strip().lower() == "public"
 PUBLIC_BLOCKED_PREFIXES = ("/admin/", "/moderacion/", "/equipo/personas/", "/seguridad/")
+# Segundo factor (TOTP) para lead y admin en la puerta pública. Apagado por decisión de la dueña (2026-10-19):
+# entran con contraseña, como el resto. PUBLIC_REQUIRE_SECOND_FACTOR=1 en el entorno lo vuelve a exigir.
+PUBLIC_REQUIRE_SECOND_FACTOR = env_bool("PUBLIC_REQUIRE_SECOND_FACTOR", False)
 # Dirección pública (https://<nodo>.ts.net) para los enlaces de invitación cuando el Funnel está encendido.
 ACADEMY_URL = os.environ.get("ACADEMY_URL", "").strip()
 

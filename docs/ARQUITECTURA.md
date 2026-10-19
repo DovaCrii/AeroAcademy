@@ -42,7 +42,7 @@ Regla: las apps se comunican por `services.py`, no importando vistas entre sí.
 - **Puerta pública (D36).** `settings.PUBLIC_DOOR` lo fija el proceso (`AEROACADEMY_DOOR=public` en `centro-public.service`),
   nunca la petición. `PublicDoorMiddleware` (antes de la identidad) marca `request.public_door`, **borra**
   `Tailscale-User-*` y responde 404 en `/admin/`, `/moderacion/`, `/equipo/personas/`, `…/moderar…` y `/seguridad/`
-  (`PUBLIC_BLOCKED_PREFIXES`). Ahí solo vale la sesión por contraseña. `PublicSecondFactorMiddleware` exige TOTP
+  (`PUBLIC_BLOCKED_PREFIXES`). Ahí solo vale la sesión por contraseña. `PublicSecondFactorMiddleware` exige TOTP (solo con `PUBLIC_REQUIRE_SECOND_FACTOR=1`; apagado por defecto, D39)
   (`apps/accounts/totp.py`, RFC 6238 con la biblioteca estándar; `two_factor.py`; modelo `TotpDevice` con códigos de
   recuperación como HMAC) a lead, admin y `is_staff` en cada sesión: `/verificar/` pide el código; sin TOTP activado se
   muestra un bloqueo que remite a `/seguridad/2fa/` (solo por la tailnet). Cookies y CSRF propios, HSTS y `Secure` en
