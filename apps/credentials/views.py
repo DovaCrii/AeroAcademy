@@ -1,19 +1,20 @@
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_http_methods, require_POST
 
+from apps.accounts import ratelimit
 from apps.accounts.models import Person, PersonStatus
 from apps.catalog.models import Platform, Skill
 from apps.diplomas.services import diploma_url
 from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
-from . import expiry, export, files, services
+from . import expiry, export, files, reader, services
 from .forms import CredentialForm, RegisterCourseForm
 from .models import Credential
 
@@ -61,6 +62,41 @@ def create(request):
         "credentials/form.html",
         {"form": form, "title": "Nueva credencial", "editing": False},
     )
+
+
+READ_LIMIT = 30  # lecturas por persona y ventana
+READ_WINDOW = 600
+
+
+def _no_store(response):
+    response["Cache-Control"] = "no-store"
+    return response
+
+
+@require_POST
+def read_document(request):
+    """Lee el documento subido (en memoria, en este servidor) y propone campos para el formulario.
+
+    Sin efectos secundarios: no guarda el archivo ni el texto, no crea credenciales y no escribe en logs.
+    La respuesta lleva solo los campos propuestos y banderas, nunca el texto ni el nombre leído.
+    """
+    who = str(request.user.pk)
+    if ratelimit.blocked("credread", who, limit=READ_LIMIT):
+        return _no_store(
+            JsonResponse(
+                {"ok": False, "error": "Hiciste muchas lecturas seguidas: espera unos minutos."},
+                status=429,
+            )
+        )
+    ratelimit.hit("credread", who, window=READ_WINDOW)
+    upload = request.FILES.get("file")
+    if upload is None:
+        return _no_store(JsonResponse({"ok": False, "error": "Elige un archivo."}, status=400))
+    try:
+        files.validate_upload(upload)
+    except ValidationError as exc:
+        return _no_store(JsonResponse({"ok": False, "error": exc.messages[0]}, status=400))
+    return _no_store(JsonResponse(reader.read_document(upload, request.user)))
 
 
 def _initial_for(request):

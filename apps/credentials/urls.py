@@ -7,6 +7,7 @@ app_name = "credentials"
 urlpatterns = [
     path("certificados/", views.mine, name="mine"),
     path("certificados/nueva/", views.create, name="create"),
+    path("certificados/leer/", views.read_document, name="read"),
     path("certificados/equipo/", views.team, name="team"),
     path("certificados/vencimientos/", views.expirations, name="expirations"),
     path("certificados/exportar/", views.export_view, name="export"),

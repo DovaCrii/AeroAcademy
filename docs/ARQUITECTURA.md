@@ -81,6 +81,7 @@ Los documentos de `library` siguen la misma regla de descarga por vista con perm
   y entrega con `FileResponse` y `Content-Disposition: attachment`.
 - Validación: extensión y tipo real (firma del archivo) PDF/PNG/JPG, máx. 10 MB.
 - Miniatura opcional fuera del MVP.
+- Lectura automática (D40): `POST /certificados/leer/` extrae el texto del PDF en memoria, sin red ni almacenamiento; ver `docs/PRD.md`, «Certificados».
 
 ## Interfaz
 
@@ -95,7 +96,7 @@ Los documentos de `library` siguen la misma regla de descarga por vista con perm
 ## Dependencias permitidas
 
 `django`, `gunicorn`, `whitenoise` (solo estáticos, no media), `openpyxl` (exportación XLSX),
-`python-magic` o verificación manual de firmas, `httpx` (solo `assistant`, D16), `pytest`, `pytest-django`, `ruff`, `factory-boy`.
+`python-magic` o verificación manual de firmas, `httpx` (solo `assistant`, D16), `pytest`, `pytest-django`, `ruff`, `factory-boy`, `pypdf` (leer el texto de PDF de credenciales en local, D40).
 Markdown sanitizado (artículos, anuncios, respuestas de Teo): `markdown` + `nh3`, a justificar en DECISIONES en el bloque que lo use.
 
 ## Flujo de aprobación
