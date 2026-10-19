@@ -26,3 +26,4 @@
   {% endfor %}
   <text class="ar-cota" x="20" y="{{ building.ground|add:'-8' }}">{{ fig.labels.zero }}</text>
 </svg>
+{% include "worlds/figures/_legend.html" with src="floors" %}

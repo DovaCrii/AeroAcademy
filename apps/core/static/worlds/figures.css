@@ -131,3 +131,19 @@
 @media (prefers-reduced-motion:no-preference){
   .fg-st .fg-box{transition:stroke .15s}
 }
+
+/* Leyenda de la figura. En celular (≤ 560 px) la figura se reduce a ~0,3 y sus rótulos quedan en 3-5 px: se ocultan
+   y cada estación pasa a una lista bajo la figura (nombre completo, estado y enlace con blanco táctil de 44 px). */
+.fg-legend{display:none;list-style:none;margin:12px 0 0;padding:0;border:1px solid var(--hair);background:var(--sheet)}
+.fg-legend li+li{border-top:1px solid var(--hair)}
+.fg-lg-row{display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 12px;box-sizing:border-box;color:var(--ink);text-decoration:none}
+a.fg-lg-row:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+a.fg-lg-row:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.fg-lg-row[aria-current="true"]{box-shadow:inset 4px 0 0 var(--ink)}
+.fg-lg-code{flex:none;min-width:2.4em;font:700 13px var(--font-mono)}
+.fg-lg-name{flex:1;min-width:0;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.fg-lg-state{flex:none;font:600 12px var(--font-mono);color:var(--ink-2);text-align:right}
+@media (max-width:560px){
+  .fg-legend{display:block}
+  .fg text,.cv-svg text,.ar-section text,.ao-flight text{display:none}
+}
