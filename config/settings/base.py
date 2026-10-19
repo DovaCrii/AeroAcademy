@@ -198,7 +198,13 @@ PRIVATE_COURSES_DIR = Path(
 BRAND_PLATFORM = "AeroAcademy"
 BRAND_ACADEMY = "Academia LEV Digital 101"
 # Bloque «Suite Aero» de la portada: oculto por ahora; SHOW_SUITE_AERO=1 en el entorno lo vuelve a mostrar.
-SHOW_SUITE_AERO = os.environ.get("SHOW_SUITE_AERO", "").strip().lower() in ("1", "true", "yes", "si", "sí")
+SHOW_SUITE_AERO = os.environ.get("SHOW_SUITE_AERO", "").strip().lower() in (
+    "1",
+    "true",
+    "yes",
+    "si",
+    "sí",
+)
 
 # Teo (asistente). La clave va en `.env` o en /etc/centro/env; nunca en el repositorio.
 NIM_API_KEY = os.environ.get("NIM_API_KEY", "").strip()
