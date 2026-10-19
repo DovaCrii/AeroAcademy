@@ -749,7 +749,8 @@ def test_civil_world_renders_all_its_pieces(member_client):
     assert "cv-cover" in html and 'data-scene="terrain"' in html and "civil.css" in html
     assert "PLANTA · eje del corredor" in html and "PERFIL LONGITUDINAL" in html
     assert html.count('class="cv-cor') == 4  # Explorer · Corridors
-    assert html.count("cv-stake ") == 6 and html.count("cv-pier ") == 5
+    courses = ExternalCourse.objects.filter(path__slug=BENTLEY).count()
+    assert html.count("cv-stake ") == courses and html.count("cv-pier ") == 5
     assert "Explorer · Corridors" in html and "km 0+000" in html
 
 
@@ -757,7 +758,7 @@ def test_civil_cover_readouts_are_real_numbers(member_client):
     readouts = civil(member_client).split('class="lv-readouts"')[1].split("</div>")[0]
     for label, value in (
         ("Corredores", "4"),
-        ("Cursos", "6"),
+        ("Cursos", str(ExternalCourse.objects.filter(path__slug=BENTLEY).count())),
         ("Estacas verificadas", "0"),
         ("En revisión", "0"),
         ("Pilares", "0/5"),
