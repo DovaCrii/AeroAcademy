@@ -70,16 +70,17 @@ def test_user_menu_has_account_and_text_logout_for_password_session(member):
     assert 'aria-label="Salir"' not in html
 
 
-def test_tailscale_session_has_no_logout_in_menu(client_for, member):
+def test_tailscale_session_has_logout_in_menu(client_for, member):
     html = client_for(member.login).get("/").content.decode()
     assert 'href="/cuenta/">Mi cuenta' in html
-    assert ">Salir</button>" not in html
+    assert ">Salir</button>" in html
 
 
 def test_account_page_per_session_kind(client_for, member, lead):
     html = client_for(member.login).get("/cuenta/").content.decode()
     assert member.login in html
     assert "no tienes una contraseña que cambiar" in html
+    assert ">Salir</button>" in html and "Entrar con Tailscale" in html
     assert "/cuenta/contrasena/" not in html
     html = password_client(member).get("/cuenta/").content.decode()
     assert 'href="/cuenta/contrasena/"' in html
@@ -123,18 +124,18 @@ def test_waiting_page_has_logout_for_password_session(make_person):
     assert "Esperando aprobación" in html
     assert "con tu correo y tu contraseña" in html
     assert "Te avisamos en la campana" in html and "escríbele al administrador" in html
-    assert ">Salir</button>" in html
+    assert ">Salir</button>" in html and "Volver al inicio" in html
     # «Salir» funciona estando en espera y cierra la sesión
     response = client.post("/salir/")
     assert response.status_code == 302 and response.url == "/bienvenida/"
     assert client.get("/espera/").status_code == 302
 
 
-def test_waiting_page_for_tailscale_has_no_logout(client_for, make_person):
+def test_waiting_page_for_tailscale_has_logout(client_for, make_person):
     pending = make_person("pend2@example.com", status="pending")
     html = client_for(pending.login).get("/espera/").content.decode()
     assert "Tailscale" in html and "Te avisamos en la campana" in html
-    assert ">Salir</button>" not in html
+    assert ">Salir</button>" in html and "Volver al inicio" in html
 
 
 # --- cambio de contraseña ---------------------------------------------------------------------------------------

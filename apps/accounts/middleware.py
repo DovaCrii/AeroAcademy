@@ -20,6 +20,9 @@ LOGIN_HEADER = "HTTP_TAILSCALE_USER_LOGIN"
 NAME_HEADER = "HTTP_TAILSCALE_USER_NAME"
 PIC_HEADER = "HTTP_TAILSCALE_USER_PROFILE_PIC"
 HEALTH_PATH = "/healthz"
+# Bandera de sesión que deja `POST /salir/` en la tailnet: mientras esté puesta, el encabezado de Tailscale no
+# inicia sesión solo (D41). No da acceso a nada; solo `POST /entrar/tailscale/` la borra.
+TS_SIGNED_OUT = "ts_signed_out"
 TAILSCALE_BACKEND = "apps.accounts.backends.TailscaleBackend"
 # Páginas que puede ver quien aún no entró (bienvenida, entrar, salir, registro con enlace del admin).
 PUBLIC_PREFIXES = ("/bienvenida/", "/entrar/", "/salir/", "/registro/", "/inscripcion/")
@@ -72,6 +75,7 @@ class TailscaleRemoteUserMiddleware(RemoteUserMiddleware):
     - Con encabezado y sin sesión por contraseña: entra como siempre (crea a la persona `pending`).
     - Con sesión por contraseña: se conserva siempre. Un encabezado que identifica a otra persona NO la
       reemplaza (queda en el registro, sin correos). Sin encabezado, la sesión no se cierra.
+    - Tras «Salir» en la tailnet (bandera `ts_signed_out`) el encabezado se ignora hasta «Entrar con Tailscale».
     - Sin encabezado ni sesión: páginas públicas, o redirección a /bienvenida/. DEV_REMOTE_USER (DEBUG) simula el encabezado.
     """
 
@@ -98,6 +102,10 @@ class TailscaleRemoteUserMiddleware(RemoteUserMiddleware):
         header_login = request.META.get(LOGIN_HEADER, "").strip()
         if not header_login and settings.DEBUG:
             header_login = settings.DEV_REMOTE_USER
+
+        if not _has_password_session(request) and request.session.get(TS_SIGNED_OUT):
+            # Salió a propósito: el encabezado no la vuelve a iniciar sola (D41).
+            header_login = ""
 
         if _has_password_session(request):
             if header_login and services.normalize_login(header_login) != request.user.login:
@@ -165,7 +173,7 @@ class ApprovalMiddleware:
     def __call__(self, request):
         user = getattr(request, "user", None)
         if user is not None and user.is_authenticated:
-            if user.status == PersonStatus.SUSPENDED:
+            if user.status == PersonStatus.SUSPENDED and request.path != reverse("accounts:logout"):
                 return render(request, "accounts/suspended.html", status=403)
             if user.status == PersonStatus.PENDING:
                 waiting = reverse("accounts:waiting")

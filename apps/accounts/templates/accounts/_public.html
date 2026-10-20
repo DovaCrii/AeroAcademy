@@ -40,6 +40,7 @@
   <ul class="msgs" role="status">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>
   {% endif %}
   {% block content %}{% endblock %}
+  {% block exit %}{% include "accounts/_pub_exit.html" %}{% endblock %}
 </main>
 
 {% include "accounts/_landscape.html" %}

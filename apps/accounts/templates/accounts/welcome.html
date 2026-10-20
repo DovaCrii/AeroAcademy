@@ -4,8 +4,11 @@
 {% block kicker %}{{ BRAND_PLATFORM }} · academia interna{% endblock %}
 {% block form_title %}Entrar a la academia{% endblock %}
 
+{% block exit %}{% endblock %}
+
 {% block form_body %}
 {% include "accounts/_login_form.html" %}
+{% include "accounts/_ts_login.html" %}
 {% include "accounts/_how_account.html" %}
 {% endblock %}
 

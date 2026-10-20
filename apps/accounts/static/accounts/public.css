@@ -57,3 +57,11 @@ body.pub{min-height:100vh;display:flex;flex-direction:column;background:
 .acct{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 20px;margin:14px 0 22px}
 .acct dt{margin:0 0 2px}
 .acct dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+
+/* Salida de las páginas sin menú: volver al inicio y salir (blancos táctiles de 44 px) */
+.pub-exit{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0}
+.pub-exit form{margin:0}
+.pub-back{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 18px;text-decoration:none;box-sizing:border-box}
+.pub-main > .pub-exit{margin:16px 0 0}.pub-narrow + .pub-exit{max-width:460px;margin:16px auto 0}
+.pub-ts{margin-top:14px;padding-top:14px;border-top:2px dashed var(--pp-edge,var(--hair))}
+@media (max-width:480px){.pub-exit .pub-back,.pub-exit form{flex:1 1 100%}.pub-exit .pub-back{width:100%}}

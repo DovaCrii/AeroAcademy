@@ -1,13 +1,16 @@
 {% extends "core/base.html" %}
+{% load static %}
 
 {% block title %}Acceso suspendido{% endblock %}
 {% block nav %}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'accounts/public.css' %}">{% endblock %}
 
 {% block content %}
 <section class="sheet">
   <div class="sheet-in">
     <h1>Acceso suspendido</h1>
     <p class="lead">Tu acceso a {{ BRAND_ACADEMY }} está suspendido. Tus datos y certificados se conservan. Habla con el moderador del equipo si crees que es un error.</p>
+    <div class="pub-exit"><form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn ghost pub-back" type="submit">Salir</button></form></div>
   </div>
 </section>
 {% endblock %}

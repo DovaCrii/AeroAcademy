@@ -48,7 +48,7 @@
         <a href="{% url 'credentials:mine' %}">Mis certificados</a>
         <a href="{% url 'accounts:account' %}">Mi cuenta</a>
         <button class="um-theme" id="themeBtn" type="button">Cambiar tema (claro u oscuro)</button>
-        {% if password_session %}<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="um-logout" type="submit">Salir</button></form>{% endif %}
+        <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="um-logout" type="submit">Salir</button></form>
       </div>
     </details>
     {% else %}
