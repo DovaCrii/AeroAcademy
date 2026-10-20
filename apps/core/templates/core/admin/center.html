@@ -1,0 +1,107 @@
+{% extends "core/base.html" %}
+{% load static core_extras %}
+
+{% block title %}Centro de administración{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'core/admin.css' %}">{% endblock %}
+
+{% block content %}
+<div class="ac">
+<div class="page-head">
+  <h1>Centro de administración</h1>
+  <p>Las cuentas, el servidor y las herramientas del equipo, en un solo lugar.</p>
+  <p class="ac-meta"><span class="chip">Puerta de la tailnet</span><span class="chip">Datos al {{ now|date:"d/m H:i" }}</span></p>
+</div>
+
+<section aria-labelledby="ac-situ">
+  <h2 id="ac-situ">Situación</h2>
+  <ul class="ac-cards">
+    {% for c in cards %}
+    <li><a class="ac-card{% if c.warn %} warn{% endif %}" href="{{ c.url }}">
+      <span class="ac-n">{{ c.value }}</span>
+      <span class="ac-label">{{ c.label }}</span>
+      <span class="ac-hint-card"><span class="ac-state">{% if c.warn %}! Hay algo por hacer{% else %}✓ Al día{% endif %}</span><br>{{ c.hint }}</span>
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% if not is_admin %}<p class="ac-hint">Eres responsable: aquí ves tus colas (certificados por revisar y reportes de la comunidad). Las cuentas y el servidor son del admin.</p>{% endif %}
+</section>
+
+{% if is_admin %}
+<section id="cuentas" aria-labelledby="ac-acc">
+  <h2 id="ac-acc">Cuentas</h2>
+  <ul class="ac-chips">
+    {% for f in filters %}<li><a href="{% url 'core:admin_accounts' %}?estado={{ f.key }}">{{ f.label }} <b>{{ f.n }}</b></a></li>{% endfor %}
+    <li><a href="{% url 'core:admin_accounts' %}">Todas <b>{{ counts.total }}</b></a></li>
+  </ul>
+
+  <div class="sheet ac-sheet">
+    <h3>Pendientes de aprobar</h3>
+    {% for item in pending %}
+    <form class="ac-form" method="post" action="{% url 'core:admin_approve' item.person.pk %}" id="p{{ item.person.pk }}">{% csrf_token %}
+      <input type="hidden" name="back" value="centro"><input type="hidden" name="role" value="member">
+      <span><b>{{ item.person.name }}</b> <span class="muted">· pidió acceso {{ item.ago }}</span></span>
+      <button class="btn primary" type="submit">Aprobar como miembro</button>
+      <button class="btn" type="submit" formaction="{% url 'core:admin_reject' item.person.pk %}">Rechazar</button>
+    </form>
+    {% empty %}<p class="muted">Nada pendiente: nadie espera aprobación.</p>{% endfor %}
+    {% if pending_more %}<p class="ac-hint">Y {{ pending_more }} más en Cuentas.</p>{% endif %}
+    <p><a class="btn" href="{% url 'core:admin_accounts' %}">Ver todas las cuentas →</a></p>
+  </div>
+
+  <div class="sheet ac-sheet" id="enlace">
+    <h3>Enlace del equipo</h3>
+    <p class="muted">Un solo enlace para todos: cada persona se inscribe con su correo y su contraseña. Quien no esté en la lista queda pendiente hasta que la apruebes.</p>
+    {% if fresh_team_link %}
+    <p><b>Cópialo ahora: no se vuelve a mostrar.</b> Si lo pierdes, genera otro (el anterior deja de servir).</p>
+    <input class="ac-copy" type="text" value="{{ fresh_team_link }}" readonly aria-label="Enlace del equipo recién generado">
+    {% endif %}
+    {% if team_link %}
+    <p>Vigente hasta el <b>{{ team_link.expires_at|date:"d/m/Y H:i" }}</b> · {{ team_link.uses }} inscripci{{ team_link.uses|pluralize:"ón,ones" }}.</p>
+    {% else %}
+    <p class="muted">No hay un enlace vigente.</p>
+    {% endif %}
+    <form class="ac-form" method="post" action="{% url 'core:admin_team_link' %}">{% csrf_token %}
+      <label>Vigencia <select name="days">{% for d in team_link_days %}<option value="{{ d }}"{% if d == team_link_default %} selected{% endif %}>{{ d }} días</option>{% endfor %}</select></label>
+      <button class="btn primary" type="submit">{% if team_link %}Generar uno nuevo (revoca el actual){% else %}Generar enlace{% endif %}</button>
+    </form>
+    {% if team_link %}
+    <form class="ac-form" method="post" action="{% url 'core:admin_team_link_revoke' %}">{% csrf_token %}
+      <button class="btn" type="submit">Revocar el enlace vigente</button>
+    </form>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if is_admin %}
+<section id="servidor" aria-labelledby="ac-srv">
+  <h2 id="ac-srv">Servidor</h2>
+  <div class="sheet ac-sheet">
+    <ul class="ac-status">
+      {% for g in server.groups %}
+      <li><span class="ac-k">{{ g.label }}</span>
+        <span class="ac-v">{% for c in g.checks %}<span><span class="ac-st {{ c.state }}" aria-hidden="true">{{ c.symbol }}</span><span class="vh">{{ c.word }}: </span>{% if c.label %}<b>{{ c.label }}:</b> {% endif %}{{ c.text }}{% if c.note %}<small>{{ c.note }}</small>{% endif %}</span>{% endfor %}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{% for s in sections %}
+<section aria-labelledby="ac-s-{{ s.key }}">
+  <h2 id="ac-s-{{ s.key }}">{{ s.title }}</h2>
+  <div class="sheet ac-sheet">
+    <ul class="ac-links">
+      {% for l in s.links %}
+      <li><a href="{{ l.url }}"><span class="ac-ico">{% doodle l.icon %}</span><span class="ac-txt"><b>{{ l.title }}</b><span>{{ l.text }}</span></span><span class="ac-go" aria-hidden="true">→</span></a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endfor %}
+
+{% if is_admin %}
+<p class="ac-hint ac-foot"><a class="btn" href="{% url 'admin:index' %}">Administración técnica avanzada</a> Para casos que no estén aquí.</p>
+{% endif %}
+</div>
+{% endblock %}

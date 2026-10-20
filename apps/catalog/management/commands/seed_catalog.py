@@ -7,6 +7,7 @@ from django.db import transaction
 
 from apps.catalog.seeding import SeedError, load_catalog
 from apps.community.seeding import load_forum
+from apps.core.taskruns import record_run
 from apps.gamification.seeding import load_game
 from apps.paths.seeding import load_route
 
@@ -34,6 +35,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        with record_run("seed_catalog", enabled=not options["dry_run"]) as run:
+            self._seed(options, run)
+
+    def _seed(self, options, run):
         seed_dir = Path(options["seed_dir"])
         if not seed_dir.is_dir():
             raise CommandError(f"No existe la carpeta de semillas: {seed_dir}")
@@ -62,6 +67,7 @@ class Command(BaseCommand):
                 self.stderr.write(self.style.ERROR(f"✗ {error}"))
             raise CommandError(f"{len(exc.errors)} error(es) en las semillas.") from exc
 
+        run.summary = f"{len(paths)} rutas cargadas"
         prefix = "[dry-run] " if dry else ""
         self.stdout.write(self.style.SUCCESS(f"{prefix}Catálogo: {counts}"))
         self.stdout.write(self.style.SUCCESS(f"{prefix}Rutas: {', '.join(paths) or '—'}"))

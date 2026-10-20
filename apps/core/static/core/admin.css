@@ -1,0 +1,97 @@
+/* Centro de administración (D42). Solo tokens de tokens.css (claro y oscuro); blancos táctiles de 44 px; sin JS. */
+.ac{--ac-gap:16px}
+.ac h2{margin:var(--sp-4) 0 var(--sp-1);font-size:var(--fs-h4);line-height:var(--lh-head)}
+.ac h3{margin:0;font-size:1.05rem}
+.ac .muted,.ac .ac-hint{color:var(--ink-2)}
+.ac .ac-hint{font-size:var(--fs-small);margin:4px 0 0}
+.ac-foot{margin-top:var(--sp-4)}
+.ac-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+/* Situación: tarjetas-contador; cada una es un enlace a donde se resuelve */
+.ac-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:var(--ac-gap)}
+.ac-card{display:flex;flex-direction:column;gap:2px;min-height:44px;height:100%;padding:16px 18px;color:var(--ink);text-decoration:none;background:var(--surface-1);border:1px solid var(--hair);border-top:4px solid var(--ok);border-radius:var(--r-card);box-shadow:var(--elev-1)}
+.ac-card.warn{border-top-color:var(--amber)}
+.ac-card:hover,.ac-card:focus-visible{box-shadow:var(--elev-2)}
+.ac-n{font-family:var(--font-mono);font-size:2.2rem;font-weight:700;line-height:1.1}
+.ac-label{font-weight:700}
+.ac-hint-card{font-size:var(--fs-small);color:var(--ink-2)}
+.ac-card.warn .ac-hint-card{color:var(--amber-ink);font-weight:600}
+.ac-card .ac-state{font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--ok)}
+.ac-card.warn .ac-state{color:var(--amber-ink)}
+
+/* Hojas (secciones) */
+.ac-sheet{padding:20px 22px}
+.ac-sheet>h2:first-child{margin-top:0}
+.ac-chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:8px 0 0;padding:0}
+.ac-chips a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:var(--r-pill);color:var(--ink);text-decoration:none;background:var(--sheet);font-size:var(--fs-small)}
+.ac-chips a b{font-family:var(--font-mono);margin-left:6px}
+.ac-chips a[aria-current=true]{background:var(--amber);color:var(--on-amber);border-color:var(--amber)}
+
+/* Botones y campos */
+.ac .btn,.ac button.btn{min-height:44px;padding:8px 18px}
+.ac .btn.primary{background:var(--amber);color:var(--on-amber);border-color:var(--amber)}
+.ac select,.ac input[type=text],.ac input[type=search]{min-height:44px;padding:8px 12px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);color:var(--ink);max-width:100%}
+.ac label{display:inline-flex;align-items:center;gap:6px}
+.ac .ac-form{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0}
+.ac .ac-check{min-height:44px;padding-right:10px}
+.ac .ac-check input{width:20px;height:20px}
+.ac-copy{width:100%;min-height:44px;padding:8px 12px;font-family:var(--font-mono);font-size:.85rem;background:var(--sheet-2);color:var(--ink);border:1px dashed var(--line);border-radius:var(--r)}
+
+/* Filas de enlaces: garabato · título · explicación · flecha */
+.ac-links{list-style:none;margin:0;padding:0}
+.ac-links li+li{border-top:1px solid var(--hair)}
+.ac-links a{display:flex;align-items:center;gap:14px;min-height:56px;padding:10px 4px;color:var(--ink);text-decoration:none}
+.ac-links a:hover .ac-go,.ac-links a:focus-visible .ac-go{transform:translateX(4px)}
+.ac-ico{flex:none;width:40px;height:40px;color:var(--ink)}
+.ac-ico svg{width:100%;height:100%}
+.ac-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.ac-txt b{font-size:1rem}
+.ac-txt span{color:var(--ink-2);font-size:var(--fs-small)}
+.ac-go{flex:none;font-family:var(--font-mono);color:var(--amber-ink);transition:transform .15s var(--ease)}
+@media (prefers-reduced-motion:reduce){.ac-go{transition:none}}
+
+/* Servidor: filas «etiqueta · estado» con símbolo + texto */
+.ac-status{margin:0;padding:0;list-style:none;display:grid;gap:0}
+.ac-status li{display:grid;grid-template-columns:minmax(0,11rem) 1fr;gap:4px 14px;padding:10px 0;border-top:1px solid var(--hair)}
+.ac-status li:first-child{border-top:0}
+.ac-status dt,.ac-status .ac-k{font-weight:700}
+.ac-st{font-family:var(--font-mono);font-weight:700;margin-right:6px}
+.ac-st.ok{color:var(--ok)}
+.ac-st.warn{color:var(--amber-ink)}
+.ac-st.none{color:var(--ink-2)}
+.ac-v{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ac-v small{color:var(--ink-2)}
+@media (max-width:560px){.ac-status li{grid-template-columns:1fr}}
+
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Cuentas */
+.ac-people{list-style:none;margin:var(--sp-2) 0 0;padding:0;display:grid;gap:var(--ac-gap)}
+.ac-person{padding:16px 18px;background:var(--surface-1);border:1px solid var(--hair);border-left:4px solid var(--line);border-radius:var(--r-card);box-shadow:var(--elev-1)}
+.ac-person.k-pendiente{border-left-color:var(--amber)}
+.ac-person.k-suspendida{border-left-color:var(--red)}
+.ac-person.k-activa{border-left-color:var(--ok)}
+.ac-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ac-av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--amber);color:var(--on-amber)}
+.ac-id{flex:1;min-width:0}
+.ac-id small{display:block;color:var(--ink-2);font-family:var(--font-mono);overflow-wrap:anywhere}
+.ac-sentence{margin:10px 0 6px}
+.ac-tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0;padding:0;list-style:none}
+.ac-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:flex-start}
+.ac-actions form{display:flex;flex-direction:column;gap:6px}
+.ac-person details{margin-top:8px}
+.ac-person summary{min-height:44px;display:inline-flex;align-items:center;cursor:pointer;color:var(--ink);font-weight:600}
+.ac-disc{display:flex;flex-wrap:wrap;gap:0 12px;margin:6px 0}
+.ac-search{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.ac-search input[type=search]{flex:1 1 220px}
+.ac-person .ac-hint a{display:inline-flex;align-items:center;min-height:44px}
+.ac-pager{display:flex;gap:12px;align-items:center;margin-top:var(--sp-2)}
+.ac-empty{padding:18px 20px;color:var(--ink-2);border:1px dashed var(--line);border-radius:var(--r-card)}
+.ac .danger{color:var(--red);border-color:var(--red);background:var(--sheet)}
+
+/* Bitácora */
+.ac-log{list-style:none;margin:0;padding:0}
+.ac-log li{display:grid;grid-template-columns:8.5rem 1fr;gap:4px 14px;padding:10px 0;border-top:1px solid var(--hair)}
+.ac-log li:first-child{border-top:0}
+.ac-log time{font-family:var(--font-mono);font-size:var(--fs-small);color:var(--ink-2)}
+@media (max-width:560px){.ac-log li{grid-template-columns:1fr}}

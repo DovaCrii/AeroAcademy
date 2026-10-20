@@ -1040,7 +1040,8 @@ def test_query_counts_stay_flat(
 ):
     for i in range(6):
         make(make_person(f"p{i}@example.com"), title=f"Curso {i}")
-    with django_assert_max_num_queries(25):
+    # 25 + 2: la primera petición de la persona es su entrada y ahora deja constancia de la vía (LoginTrace, D42).
+    with django_assert_max_num_queries(27):
         assert client_for(lead.login).get("/certificados/equipo/").status_code == 200
     from apps.progress import external
 

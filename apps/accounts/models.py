@@ -176,6 +176,45 @@ class TotpDevice(TimeStampedModel):
         return f"TOTP de {self.person_id}"
 
 
+class LoginTrace(models.Model):
+    """Por dónde entró cada persona la última vez (D42): solo la fecha de la última entrada por cada vía.
+
+    Una fila por persona, aparte de `Person` (que no se toca). Se llena desde la señal `user_logged_in`, que se dispara
+    una vez por sesión. **No guarda IP, navegador ni nada que identifique el equipo**: solo qué vía y cuándo.
+    La sola fecha dice cómo entra la persona (Tailscale, contraseña dentro de la tailnet o puerta pública)."""
+
+    person = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="login_trace")
+    last_tailscale_at = models.DateTimeField("última entrada por Tailscale", null=True, blank=True)
+    last_password_at = models.DateTimeField("última entrada con contraseña", null=True, blank=True)
+    last_public_at = models.DateTimeField(
+        "última entrada por la puerta pública", null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name = "registro de entradas"
+        verbose_name_plural = "registros de entradas"
+
+    def __str__(self):
+        return f"Entradas de {self.person_id}"
+
+    VIA_TEXT = (
+        ("last_tailscale_at", "por Tailscale"),
+        ("last_password_at", "con contraseña"),
+        ("last_public_at", "desde internet (puerta pública)"),
+    )
+
+    def latest(self):
+        """(fecha, texto) de la vía más reciente, o None si aún no hay ninguna."""
+        found = [
+            (getattr(self, field), text) for field, text in self.VIA_TEXT if getattr(self, field)
+        ]
+        return max(found, key=lambda item: item[0]) if found else None
+
+    def via_text(self) -> str:
+        latest = self.latest()
+        return latest[1] if latest else ""
+
+
 class TeamSignupLink(TimeStampedModel):
     """Enlace de inscripción del equipo (D35): uno solo vigente para todos. Se guarda solo el hash del secreto; la URL
     (firmada) lleva el id y el secreto y se muestra una única vez al generarla."""

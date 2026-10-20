@@ -7,7 +7,7 @@
 {% block content %}
 <div class="page-head">
   <h1>Personas del equipo</h1>
-  <p>Invitación, aprobación y área de cada persona. {% if is_admin %}<a href="{% url 'team:people_add' %}">Agregar personas</a> · {% endif %}<a href="{% url 'team:board' %}">Tablero del equipo</a> · <a href="{% url 'community:moderation' %}">Moderación</a></p>
+  <p>Invitación, aprobación y área de cada persona. {% if is_admin %}<a href="{% url 'team:people_add' %}">Agregar personas</a> · {% endif %}<a href="{% url 'team:board' %}">Tablero del equipo</a> · <a href="{% url 'community:moderation' %}">Moderación</a> · <a href="{% url 'core:admin_center' %}">Centro de administración</a></p>
 </div>
 
 {% if is_admin %}
