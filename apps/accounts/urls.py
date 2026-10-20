@@ -9,6 +9,7 @@ urlpatterns = [
     path("bienvenida/", views.welcome, name="welcome"),
     path("entrar/", views.login, name="login"),
     path("salir/", views.logout, name="logout"),
+    path("entrar/tailscale/", views.tailscale_login, name="tailscale_login"),
     path("cuenta/", views.account, name="account"),
     path("cuenta/contrasena/", views.password_change, name="password_change"),
     path("verificar/", views.verify, name="verify"),

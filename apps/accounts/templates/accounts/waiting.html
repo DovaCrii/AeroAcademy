@@ -3,6 +3,7 @@
 
 {% block title %}Esperando aprobación{% endblock %}
 {% block nav %}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'accounts/public.css' %}">{% endblock %}
 
 {% block content %}
 <section class="sheet">
@@ -13,11 +14,10 @@
       <p class="lead">Hola, {{ user.name }}. {% if password_session %}Entraste a {{ BRAND_ACADEMY }} con tu correo y tu contraseña{% else %}Entraste a {{ BRAND_ACADEMY }} por la red del equipo (<span class="term">Tailscale</span>){% endif %}, pero un administrador todavía no aprueba tu acceso.</p>
       <p class="lead">Te avisamos en la campana cuando te aprueben. Si pasa más de un día, escríbele al administrador del equipo.</p>
       <p class="lead">Cuando lo haga, vas a ver las rutas, tu hoja de personaje y tu primera misión. Esta página se actualiza al recargar.</p>
-      {% if password_session %}
-      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn ghost" type="submit">Salir</button></form>
-      {% else %}
+      {% if not password_session %}
       <p class="lead">Si te inscribiste con el enlace del equipo y esta página es de otra cuenta, cuando te aprueben entra con tu correo y tu contraseña desde <a href="{% url 'accounts:login' %}">Entrar</a>.</p>
       {% endif %}
+      {% include "accounts/_exit_actions.html" %}
     </div>
   </div>
   <div class="tb">

@@ -21,7 +21,7 @@
     <p>Puedes cambiarla cuando quieras: necesitas la actual. <a class="btn" href="{% url 'accounts:password_change' %}">Cambiar mi contraseña</a></p>
     <p class="muted">¿Olvidaste tu contraseña? No hay correo automático: pídele al administrador un enlace nuevo.</p>
     {% else %}
-    <p>Entraste con tu identidad de Tailscale, así que no tienes una contraseña que cambiar aquí. Tampoco hace falta «Salir»: al cerrar la sesión de Tailscale dejas de tener acceso.</p>
+    <p>Entraste con tu identidad de Tailscale, así que no tienes una contraseña que cambiar aquí. «Salir» cierra tu sesión y no vuelve a entrar sola, así puedes probar otra cuenta; «Entrar con Tailscale», en la portada, te devuelve a la tuya.</p>
     {% endif %}
 
     {% if person.is_lead %}
@@ -37,9 +37,7 @@
       <a href="{% url 'credentials:mine' %}">Mis certificados</a> ·
       <a href="{% url 'gamification:my_sheet' %}">Mi hoja de personaje</a>
     </p>
-    {% if password_session %}
     <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn ghost" type="submit">Salir</button></form>
-    {% endif %}
   </div>
 </section>
 {% endblock %}
