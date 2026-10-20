@@ -55,6 +55,28 @@ Todo organizado por disciplina: Arquitectura, Civil-Estructural, Topografía y M
 - Como responsable, recibo en el tablero las credenciales que **vencen en 60 días** y las vencidas.
 - Como responsable, **exporto evidencia**: ZIP con los PDF + planilla XLSX (persona, credencial, emisor, ID, fechas, URL).
 
+#### Lectura automática del documento (D40)
+
+Al elegir el archivo en «Nueva credencial» (o al reemplazarlo al editar), la página lo envía a `POST /certificados/leer/`,
+que **lee el PDF en el servidor** y devuelve campos propuestos; la persona los revisa y guarda. Sin JavaScript el
+formulario se llena a mano como siempre.
+
+- **Local y sin rastro:** sin red, sin Nala ni IA, sin OCR en la nube; el archivo se procesa en memoria y se descarta. No
+  se guarda el archivo, el texto ni una credencial, y no se registra su contenido. La respuesta lleva solo los campos
+  propuestos y banderas (`no-store`), nunca el texto ni el nombre leído. Límite: 30 lecturas por persona cada 10 minutos.
+- **Qué rellena:** título, emisor, plataforma, tipo, ID, URL de verificación, fechas y, si el curso está en el catálogo,
+  el curso y sus habilidades. Solo campos vacíos (nunca pisa lo escrito); los rellenados llevan el chip «leído del
+  documento». Si el nombre del documento no parece el de la persona, avisa sin revelarlo (no bloquea).
+- **Qué reconoce:** Bentley Learn (Certificate of Accomplishment) y un analizador genérico (ID, fechas, vencimiento y
+  URL de verificación cuando aparecen con claridad). Un capítulo de un plan no se vincula al plan completo: solo se
+  avisa a qué plan pertenece. PNG y JPG no se leen (sin OCR local): se completan a mano.
+- **Cruce con el catálogo:** título normalizado (sin acentos ni puntuación), coincidencia exacta o muy parecida con los
+  mismos números; con varias o ninguna coincidencia clara no elige curso.
+- **Sumar un analizador (Autodesk, etc.):** en `apps/credentials/reader.py`, una función `analyze_<emisor>(texto)` que
+  devuelva un diccionario solo con lo que encuentre con claridad (`title`, `issuer`, `platform_slug`, `kind`,
+  `credential_id`, `verify_url`, `issued_on`, `expires_on`, `holder`), registrada en `ANALYZERS` antes del genérico, con
+  pruebas en `tests/test_credentials_reader.py` y texto sintético (nunca un certificado real).
+
 ### Documentos
 - Como miembro, busco documentos por disciplina, tipo (manual, guía, plano tipo, normativa, plantilla, familia) y etiqueta.
 - Como responsable, publico un documento y sus nuevas versiones; se ve siempre la versión vigente y el historial.
