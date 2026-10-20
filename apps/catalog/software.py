@@ -338,9 +338,15 @@ ROW_ORDER = [
 # Cada recurso pertenece a UNA área (el mapa del catálogo suma todos): su familia de mosaico o, si no tiene producto,
 # la deducida de su ruta. «general» es el conocimiento transversal (BIM y topografía base).
 GENERAL = "general"
-AREA_ORDER = (AUTODESK, BENTLEY, IA, INTERNAL, GENERAL)
+AREA_ORDER = (BENTLEY, AUTODESK, IA, INTERNAL, GENERAL)  # Bentley primero (D43)
 AREA_LABEL = {**FAMILY_LABEL, GENERAL: "Conocimiento general"}
-FAMILIES = (AUTODESK, BENTLEY, IA, INTERNAL)  # las que tienen filas por producto
+FAMILIES = (
+    BENTLEY,
+    AUTODESK,
+    IA,
+    INTERNAL,
+)  # las que tienen filas por producto, en el orden del mapa
+OFFICIAL = (BENTLEY, AUTODESK)  # plataformas oficiales (D43): llevan marca y seguimiento de avance
 # vendor (slug) de la ruta → área, para los recursos sin producto ni mosaico en su ruta
 PATH_VENDOR_AREA = {
     "autodesk": AUTODESK,
@@ -354,6 +360,7 @@ PATH_VENDOR_AREA = {
 FAMILY_DISCIPLINE = {AUTODESK: ARQ, BENTLEY: CIV, INTERNAL: TOP, IA: IAD, GENERAL: TRA}
 AREA_TILE = {IA: "ia"}  # mosaico genérico de las áreas cuyos recursos no traen producto
 STARTERS = 4  # tarjetas de «Para empezar» en cada área de la portada del catálogo
+OFFICIAL_STARTERS = 8  # en las áreas oficiales hay más información: el doble de tarjetas
 
 
 def area_for_resource(resource, paths_by_id, links, general_ids=frozenset()):
@@ -453,7 +460,8 @@ def vendor_sections(rows, preview=STARTERS):
     """Agrupa las filas por área: [{key, label, rows, pack, total, starters}].
 
     `pack` son todos los mosaicos de la familia (con su cantidad de recursos) y `starters` las tarjetas de
-    «Para empezar». Sin filas, no hay sección. Orden: Autodesk, Bentley, IA y Datos, Topografía.
+    «Para empezar» (hasta `OFFICIAL_STARTERS` en las áreas oficiales). Sin filas, no hay sección. Orden: Bentley,
+    Autodesk, IA y Datos, Topografía.
     """
     totals = {r["key"]: r["total"] for r in rows}
     sections = []
@@ -473,7 +481,10 @@ def vendor_sections(rows, preview=STARTERS):
                 "rows": fam_rows,
                 "pack": pack,
                 "products": [p for p in pack if p["total"]],
-                "starters": starters(fam_rows, preview),
+                "starters": starters(
+                    fam_rows, OFFICIAL_STARTERS if family in OFFICIAL else preview
+                ),
+                "official": family in OFFICIAL,
                 "total": sum(r["total"] for r in fam_rows),
             }
         )
@@ -510,6 +521,7 @@ def catalog_map(resources, areas):
                 "total": totals[area],
                 "products": products,
                 "anchor": "conocimiento-general" if area == GENERAL else f"vendor-{area}",
+                "official": area in OFFICIAL,
             }
         )
     return out

@@ -61,6 +61,9 @@ los datos (`test_catalog_queries_bounded`, `test_catalog_queries_do_not_grow`).
    `?q=`, `?todo=1` y similares suben de 26 a 33 consultas, fijas. Se podría bajar cacheando `essential_ids()` y `general_ids()` por petición.
 8. En la tarjeta compacta la meta va en una sola línea (con puntos suspensivos) para no pasar de 190 px; el detalle completo queda en el `title` y en la vista de lista.
 
+> **2026-10-20 · D43:** el orden de áreas de este plan (Autodesk primero) **cambió**: Bentley y Autodesk son las plataformas
+> oficiales, con Bentley primero, y llevan seguimiento de avance. Ver la sección 9 al final.
+
 ## 1. Pedido
 
 La dueña pidió lo siguiente (2026-10-19, con una captura de `/catalogo/` en ancho de celular):
@@ -490,3 +493,77 @@ Pruebas nuevas en `tests/test_catalogo_jerarquia.py`, creadas en el PR 1 y ampli
 - **Enlaces guardados a `#vendor-bentley`.** Siguen funcionando: el `id` se conserva en la portada.
 - **Muchas áreas en el futuro** (Trimble, Esri). El mapa crece una tarjeta por área. A partir de 8 áreas, revisar si se
   agrupan.
+
+## 9. Plataformas oficiales y avance (D43, 2026-10-20)
+
+Pedido de la dueña: «Dar prioridad al avance en Bentley: se ha decidido que son las plataformas oficiales, por lo que es bueno
+que muestre más información y seguimiento a esos temas». Decisiones: las plataformas oficiales son **Bentley y Autodesk, con
+Bentley primero**; el avance y la información extra se ven en el **catálogo** y en la **portada de inicio** (no en la hoja de
+personaje, por ahora). Rama `plataformas-oficiales-avance`, sin commit (cambios en el árbol, para revisar).
+
+### 9.1 Qué cambia
+
+- **Orden:** Bentley · Autodesk · IA y Datos · Topografía, GIS y captura · Conocimiento general, en el mapa, en las secciones de
+  área, en el filtro «Proveedor» y en `?vendor=` (`software.AREA_ORDER`, `FAMILIES`). Las anclas `#vendor-*` y los parámetros
+  `?vendor=`, `?software=` y demás no cambian.
+- **Marca:** «Plataforma oficial» (texto con borde de `--amber-ink`; sobre las bandas, `currentColor`) solo en Bentley y Autodesk:
+  tarjeta del mapa, banda del área y vista `?vendor=`. El mapa les da más ancho (2 por fila a 1280 px; una por fila a 375 px).
+- **Avance de quien mira** (`apps/catalog/official.py`, sin modelo nuevo y sin guardar nada), por plataforma:
+  «N de M cursos · P %», una barra `<progress>` con `aria-label` y texto de reserva, «Esenciales: x de y» (y los que están en
+  revisión), y **«Siguiente sugerido»** con enlace al curso y a su ruta.
+  - Criterio de «hecho» **igual al de `progress/external.py`**: credencial verificada = hecho; pendiente = en revisión; rechazada
+    o ninguna = por hacer (`credentials.services.states_by_resource`, solo las credenciales de la persona).
+  - «Siguiente sugerido»: el esencial por hacer más relevante (nivel más básico, luego oficial, luego título). Sin esenciales por
+    hacer, el siguiente por hacer; con todo hecho o en revisión, «Todo al día». Un curso en revisión no se sugiere; uno rechazado sí.
+  - Sin avance no hay ceros: «Aún no empiezas aquí · N cursos · M esenciales» y «Primer paso sugerido».
+- **Tarjetas de curso** de esas áreas (portada del catálogo, `?vendor=`, `?software=` y resultados): chip de estado («✓ Hecho»,
+  «En revisión», «Por hacer», con texto y símbolo; el color solo refuerza) y «Esencial». «Para empezar» muestra **8** tarjetas en
+  las áreas oficiales (4 en las demás). La meta ya trae nivel · tipo · duración y la ruta.
+- **Portada de inicio:** franja «Tus plataformas oficiales» (Bentley, luego Autodesk) bajo el bloque de bienvenida y «Empieza
+  aquí», con el mismo avance y un botón «Seguir con <curso>» (o «Empezar con <curso>» sin avance). No aparece si no hay catálogo.
+- **Privacidad:** todo sale de las credenciales de `request.user`; nunca se muestra el avance de otras personas.
+
+### 9.2 Archivos
+
+`apps/catalog/official.py` (nuevo), `software.py` (orden, `OFFICIAL`, `OFFICIAL_STARTERS`), `services.py`
+(`resource_queryset(with_skills, ordered)` y `published_path_links` con `UNION`), `views.py`, plantillas
+`partials/{official_panel,official_mark,card_state,map,area,card,card_compact}.html` y `resources.html`,
+`static/catalog/official.css` (nuevo; solo tokens; lo cargan el catálogo y la portada), `core/services.py` y `core/home.html`.
+Pruebas: `tests/test_plataformas_oficiales.py` (nuevo) y los ajustes de orden en `test_catalogo_jerarquia.py` y
+`test_software_guides.py`.
+
+### 9.3 Mediciones
+
+Semillero de 354 recursos y 22 rutas; persona de prueba con 4 verificadas, 2 en revisión y 1 rechazada de Bentley, y 6, 2 y 0 de
+Autodesk; alturas del DOM.
+
+| Medida | Antes | Después | Presupuesto |
+|---|---|---|---|
+| Catálogo a 375 px, alto | 4 116 | **4 564** (claro) · 4 467 (oscuro) | ≤ 6 500 |
+| Bentley empieza a 375 px | 1 348 (segundo) | **924** (primero) | ≤ 1 500 |
+| Mapa a 375 px (empieza · termina) | 481 · 775 | 481 · **904** | — |
+| Catálogo a 1280 px, alto | 2 668 | **3 418** | ≤ 4 500 |
+| Bentley empieza a 1280 px | 853 | **607** | — |
+| Tarjeta compacta a 375 px (máx.) | 173 | **173** | ≤ 190 |
+| HTML del catálogo | 39 KB | **48 KB** | ≤ 100 KB |
+| Consultas del catálogo | 44 | **44** | ≤ 55 |
+| Consultas de `?vendor=bentley` | 29 | **29** | — |
+| Consultas de la portada | 52 | **58** (+6) | ≤ +6 |
+| Tarjetas de recurso en el catálogo · imágenes | 14 · 26 | **22** · 26 | ≤ 24 · ≤ 60 |
+| Desborde horizontal a 375 px | no | **no** | — |
+
+Las consultas no crecen con los datos (`test_catalog_and_home_queries_do_not_grow_with_data`: más recursos, rutas y credenciales
+duplicadas). Para no pasar de +6 en la portada: `published_path_links` usa un `UNION` (1 consulta en vez de 2), el área de cada
+recurso se calcula sin la consulta de esenciales ni la de etiquetas (salen de los mismos recursos) y la portada no precarga las
+habilidades. Contraste (`contrast.py`, claro y oscuro): pares base y los usados por lo nuevo (`--amber-ink` y `--ok` sobre
+`--sheet`, `--level` sobre `--sheet-2`) en verde.
+
+### 9.4 Qué queda más débil
+
+- Bentley solo trae **6 esenciales de 51**: «Siguiente sugerido» salta pronto a cursos no esenciales (y hoy el primero es una
+  colección de acreditaciones). Marcar más esenciales es P2-3 (`curador-semillas`, `seed/rutas/bentley-*.json`).
+- «Siguiente sugerido» abre el sitio del fabricante en otra pestaña; el estado solo cambia cuando se sube y se verifica la credencial.
+- En las áreas oficiales a 375 px cada área mide 740 – 880 px (antes ≤ 703): el panel de avance suma unos 170 px.
+- Blancos táctiles: los nuevos, las bandas y los chips de producto miden ≥ 44 px; los enlaces dentro de las tarjetas (título,
+  «En la ruta», chip de XP) ya medían menos y no se tocaron.
+- La hoja de personaje no muestra este avance (decisión de la dueña, «por ahora»).

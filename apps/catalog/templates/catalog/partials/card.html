@@ -6,6 +6,7 @@
     {% if r.description %}<p class="cat-desc">{{ r.description|truncatechars:130|terms }}</p>{% endif %}
     {% if r.in_paths %}<p class="cat-in">En la ruta {% for p in r.in_paths %}<a href="{% url 'paths:detail' p.slug %}">{{ p.title }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
     <div class="chips">
+      {% if r.state %}{% include "catalog/partials/card_state.html" %}{% endif %}
       {% course_xp r %}
       {% if r.grants_completion_certificate %}<span class="chip cert">Certificado</span>{% endif %}
       {% if m.paid %}<span class="chip paid">De pago</span>{% endif %}

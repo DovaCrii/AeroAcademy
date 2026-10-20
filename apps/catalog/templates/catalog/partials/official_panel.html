@@ -1,0 +1,31 @@
+{# Tu avance en una plataforma oficial (solo el de quien mira). `p`: avance de apps/catalog/official.py; `cta`: botón en vez de enlace (portada). #}
+{% with n=p.next %}
+<div class="of-panel{% if cta %} of-panel-home{% endif %}">
+  {% if p.started %}
+  <div class="of-nums">
+    <p class="of-big"><b>{{ p.done }} de {{ p.total }}</b> cursos · {{ p.pct }} %</p>
+    <progress class="of-bar" max="{{ p.total }}" value="{{ p.done }}" aria-label="Tu avance en {{ p.label }}: {{ p.done }} de {{ p.total }} cursos, {{ p.pct }} por ciento">{{ p.pct }} %</progress>
+    <p class="of-sub">Esenciales: <b>{{ p.essential_done }} de {{ p.essential_total }}</b>{% if p.review %} · <b>{{ p.review }}</b> en revisión{% endif %}</p>
+  </div>
+  {% else %}
+  <div class="of-nums">
+    <p class="of-big">Aún no empiezas aquí</p>
+    <p class="of-sub">{{ p.total }} cursos · {{ p.essential_total }} esenciales</p>
+  </div>
+  {% endif %}
+  <div class="of-next">
+    {% if n %}{% with r=n.resource %}
+    <p class="of-next-k">{% if p.started %}Siguiente sugerido{% else %}Primer paso sugerido{% endif %}{% if n.essential %} · esencial{% endif %}</p>
+    {% if cta %}
+    <a class="btn primary of-go" href="{% if r.url %}{{ r.url }}{% elif n.path %}{% url 'paths:detail' n.path.slug %}{% else %}{% url 'catalog:resources' %}?q={{ r.title|urlencode }}{% endif %}"{% if r.url and not r.is_internal_url %} target="_blank" rel="noopener"{% endif %}>{% if p.started %}Seguir con{% else %}Empezar con{% endif %} {{ r.title|truncatechars:60 }}{% if r.url and not r.is_internal_url %}<span class="sr-only"> (se abre en otra pestaña)</span>{% endif %}</a>
+    {% else %}
+    <p class="of-next-t"><a href="{% if r.url %}{{ r.url }}{% elif n.path %}{% url 'paths:detail' n.path.slug %}{% else %}{% url 'catalog:resources' %}?q={{ r.title|urlencode }}{% endif %}"{% if r.url and not r.is_internal_url %} target="_blank" rel="noopener"{% endif %}>{{ r.title }}{% if r.url and not r.is_internal_url %}<span class="ext-ico" aria-hidden="true"> ↗</span><span class="sr-only"> (se abre en otra pestaña)</span>{% endif %}</a></p>
+    {% endif %}
+    {% if n.path %}<p class="of-sub">En la ruta <a href="{% url 'paths:detail' n.path.slug %}">{{ n.path.title }}</a></p>{% endif %}
+    {% endwith %}{% else %}
+    <p class="of-next-k">Todo al día</p>
+    <p class="of-sub">Lo que queda ya está hecho o en revisión.</p>
+    {% endif %}
+  </div>
+</div>
+{% endwith %}

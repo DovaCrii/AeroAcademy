@@ -5,6 +5,7 @@ from django.db.models import Count, F, Q
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.catalog import official
 from apps.catalog.models import Discipline, Platform, Product, Resource
 from apps.catalog.software import DISCIPLINE_SLUG_BY_KEY, PRODUCT_TILE, discipline_key, route_icon
 from apps.community import forum
@@ -212,6 +213,9 @@ def home_context(person):
         "sponsor_text": SPONSOR_TEXT,
         "first_path": paths[0] if paths else None,
         "start_block": _start_block(person, paths),
+        "official": official.home_summary(
+            person
+        ),  # Bentley y Autodesk: solo el avance de quien mira
         "announcements": notifications.active_announcements(),
         "mission": dashboard.suggested_mission(person, pcts),
         "board": dashboard.guild_board(person),

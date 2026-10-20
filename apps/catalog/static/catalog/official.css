@@ -1,0 +1,61 @@
+/* Plataformas oficiales (D43: Bentley y Autodesk, Bentley primero): marca, avance de quien mira y estado de cada curso.
+   Solo tokens de core/tokens.css. Lo usan el catálogo y la portada. */
+
+/* marca sobria: texto, no solo color */
+.of-mark{display:inline-block;width:fit-content;margin:2px 0;padding:1px 8px;border:1px solid var(--amber-ink);border-radius:var(--r-pill);color:var(--amber-ink);font:700 10px/16px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.vs-band .of-mark{color:inherit;border-color:currentColor;vertical-align:middle;margin:0 0 0 6px}
+
+/* barra fina de avance (<progress>): lleva su texto al lado, no depende del color */
+.of-bar{-webkit-appearance:none;appearance:none;display:block;width:100%;height:8px;margin:4px 0;border:1px solid var(--ink);border-radius:var(--r-pill);background:var(--sheet-2);color:var(--level);overflow:hidden}
+.of-bar::-webkit-progress-bar{background:var(--sheet-2)}
+.of-bar::-webkit-progress-value{background:var(--level);border-radius:var(--r-pill)}
+.of-bar::-moz-progress-bar{background:var(--level);border-radius:var(--r-pill)}
+
+/* mapa: las dos áreas oficiales van arriba y más anchas */
+.cat-map-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cat-map-list>li{grid-column:span 1;min-width:0}
+.cat-map-list>li.of,.cat-map-list>li:last-child{grid-column:1/-1}
+@media (min-width:641px){
+  .cat-map-list{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .cat-map-list>li,.cat-map-list>li:last-child{grid-column:span 4}
+  .cat-map-list>li.of{grid-column:span 6}
+}
+.cat-map-card.cat-map-bentley,.cat-map-card.cat-map-autodesk{border-width:2px}
+.cat-map-txt .of-line{text-transform:none;letter-spacing:0;font-size:12px;color:var(--ink)}
+.cat-map-txt .of-bar{margin:6px 0 2px}
+
+/* panel de avance bajo la banda del área */
+.of-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:8px 24px;margin:0 0 12px;padding:12px 16px;border:1.5px solid var(--ink);border-radius:14px;background:var(--sheet);color:var(--ink)}
+@media (min-width:721px){.of-panel{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.of-panel-home{grid-template-columns:minmax(0,1fr)}}
+.of-big{margin:0;font:500 15px/1.4 var(--font)}
+.of-big b{font:800 20px/1.2 var(--font-display)}
+.of-sub{margin:2px 0 0;font-size:13px;line-height:1.4;color:var(--ink-2)}
+.of-sub b{color:var(--ink)}
+.of-sub a{display:inline-block;padding:12px 0;min-height:20px;color:var(--ink)}
+.of-next-k{margin:0;font:700 11px/1.3 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.of-next-t{margin:0;font:700 15px/1.3 var(--font)}
+.of-next .of-sub{margin:0}
+.of-next-t a{display:inline-block;padding:12px 0;min-height:20px;color:var(--ink)}
+.of-go{display:block;box-sizing:border-box;width:100%;min-height:44px;margin:6px 0 0;padding:10px 16px;border-radius:var(--r);text-align:center;line-height:1.3;white-space:normal;text-decoration:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* portada: franja «Tus plataformas oficiales» (Bentley, luego Autodesk) */
+.w-off{margin:var(--sp-2) 0 var(--sp-3);scroll-margin-top:90px}
+.w-off .w-lead{margin:4px 0 12px}
+.w-off-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:721px){.w-off-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.w-off-card{display:flex;flex-direction:column;gap:8px;padding:12px 16px;border:1.5px solid var(--ink);border-radius:var(--r-card);background:var(--surface-1,var(--sheet));box-shadow:var(--elev-1)}
+.w-off-card h3{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;font:800 var(--fs-h4)/1.2 var(--font-display)}
+.w-off-card .of-panel{margin:0;padding:0;border:0;background:transparent;box-shadow:none}
+.w-off-all{margin:auto 0 0;font:12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase}
+.w-off-all a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink-2)}
+
+/* blancos táctiles de 44 px en las bandas y los chips de producto del catálogo */
+.vs-chip{min-height:44px}
+.vs-all{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box}
+
+/* estado de cada curso en las áreas oficiales: palabra + símbolo, el color solo refuerza */
+.chip.st{font-weight:700}
+.chip.st-done{border-color:var(--ok);color:var(--ok)}
+.chip.st-review{border-color:var(--level);color:var(--level)}
+.chip.st-todo{border-style:dashed;color:var(--ink-2)}

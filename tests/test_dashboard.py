@@ -177,8 +177,8 @@ def test_home_still_has_the_sponsor_and_modules(client_for, member):
 
 def test_home_query_count_is_bounded(client_for, member, django_assert_max_num_queries):
     with django_assert_max_num_queries(
-        62
-    ):  # primera visita (incluye el botón de cada ruta); no crece con las rutas
+        68
+    ):  # primera visita (incluye el botón de cada ruta y las 6 de «Tus plataformas oficiales», D43); no crece con las rutas
         assert client_for(member.login).get("/").status_code == 200
 
 

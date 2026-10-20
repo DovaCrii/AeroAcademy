@@ -2,7 +2,7 @@
 {% load static core_extras catalog_extras %}
 
 {% block title %}Catálogo de recursos{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'catalog/catalog.css' %}"><script src="{% static 'catalog/catalog.js' %}" defer></script>{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'catalog/catalog.css' %}"><link rel="stylesheet" href="{% static 'catalog/official.css' %}"><script src="{% static 'catalog/catalog.js' %}" defer></script>{% endblock %}
 
 {% block content %}
 <header class="cat-head">
@@ -33,10 +33,11 @@
 <section class="cat-sec cat-sec-rows" aria-label="Recursos de {{ sec.label }}">
   <section class="vs vs-{{ sec.key }}" id="vendor-{{ sec.key }}" aria-labelledby="vsh-{{ sec.key }}">
     <header class="vs-band">
-      <span class="vs-kick">// Proveedor</span>
+      <span class="vs-kick">// Proveedor{% if sec.official %} {% include "catalog/partials/official_mark.html" %}{% endif %}</span>
       <h3 id="vsh-{{ sec.key }}">{{ sec.label }}</h3>
       <p class="vs-sub"><b>{{ sec.rows|length }}</b> fila{{ sec.rows|length|pluralize }} · <b>{{ sec.total }}</b> recurso{{ sec.total|pluralize }}</p>
     </header>
+    {% if sec.official and sec.progress %}{% with p=sec.progress %}{% include "catalog/partials/official_panel.html" %}{% endwith %}{% endif %}
     {% if sec.products %}<ul class="vs-pack" aria-label="Productos de {{ sec.label }}">
       {% for p in sec.pack %}<li>{% include "catalog/partials/sw_pack_item.html" %}</li>{% endfor %}
     </ul>{% endif %}

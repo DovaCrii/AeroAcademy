@@ -13,6 +13,16 @@ Decisiones (sin quitar contenido ni rutas):
 
 Hooks conservados: `#rutas`, `#mision`, `#avance`, `#equipo`, `#modulos`, `#destacados`, `#suite`, `data-d`, `.w-mod-ill`, `.w-app-go`.
 
+## Tus plataformas oficiales (D43)
+
+Franja `#oficiales` justo bajo el bloque de bienvenida y «Empieza aquí» (antes de «Rutas por disciplina», sin cambiar lo que ya
+estaba arriba). Bentley y Autodesk son las plataformas oficiales de la academia (Bentley primero) y la franja muestra, por cada una
+y **solo para quien mira**: cursos hechos de cuántos y su porcentaje, una barra `<progress>` accesible, los esenciales hechos de los
+totales y un botón «Seguir con <siguiente curso sugerido>». Sin avance, en vez de ceros muestra el primer paso («Empezar con …»).
+«Hecho» es lo mismo que en las rutas externas: credencial verificada; en revisión = pendiente. No aparece sin catálogo.
+Código: `apps/catalog/official.py` (`home_summary`, 6 consultas fijas), plantilla `catalog/partials/official_panel.html` y CSS
+`catalog/official.css` (compartidos con el catálogo). Detalle y mediciones en `docs/MEJORAS_CATALOGO.md`, sección 9.
+
 ## Suite Aero (oculta por ahora)
 
 El bloque «Suite Aero» de la portada (y su acceso en la barra de la página) está oculto por decisión del dueño (2026-10-19). Se vuelve a mostrar con la variable de entorno `SHOW_SUITE_AERO=1` (ajuste `SHOW_SUITE_AERO`). El texto de auspicio del pie del sitio se mantiene.
