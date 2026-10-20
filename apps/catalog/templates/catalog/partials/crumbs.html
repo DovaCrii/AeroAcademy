@@ -1,0 +1,4 @@
+{% if crumbs %}<nav class="crumbs cat-crumbs" aria-label="Migas de pan"><ol>
+  <li><a href="{% url 'catalog:resources' %}">Catálogo</a></li>
+  {% for label, url in crumbs %}<li>{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span aria-current="page">{{ label }}</span>{% endif %}</li>{% endfor %}
+</ol></nav>{% endif %}

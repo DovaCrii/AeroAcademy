@@ -1,6 +1,6 @@
 {% load core_extras catalog_extras %}{% if general %}
 <section class="cat-sec cat-gen d-tra" id="conocimiento-general" aria-labelledby="gen-h">
-  <h2 class="cat-sh" id="gen-h"><span>// 00</span> Conocimiento general · transversal</h2>
+  <h2 class="cat-sh" id="gen-h"><span>{% if portada %}// 0{{ sections|length|add:2 }}{% else %}// 01{% endif %}</span> Conocimiento general · transversal</h2>
   <p class="cat-gen-lead">Cultura base de <b>BIM</b> y <b>topografía</b> para todo el equipo, sin importar la especialidad ni el software. Cada ruta suma logros y títulos para tu hoja de personaje.</p>
   {% if general.paths %}
   <ul class="gen-routes" aria-label="Rutas de conocimiento general">
@@ -9,11 +9,9 @@
     {% endfor %}
   </ul>
   {% endif %}
-  {% if general.items %}
-  <div class="cat-grid gen-cards">
-    {% for r in general.items %}{% include "catalog/partials/card.html" %}{% endfor %}
-  </div>
-  <p class="gen-more"><a class="cat-all" href="?general=1">{% if general.more %}Ver los {{ general.total }} recursos · +{{ general.more }}{% else %}Ver solo conocimiento general · {{ general.total }}{% endif %}</a></p>
+  {% if portada %}
+  {% if area_totals.general %}<p class="gen-more"><a class="cat-all" href="?vendor=general">Ver los {{ area_totals.general }} recurso{{ area_totals.general|pluralize }} →</a></p>{% endif %}
+  <p class="vs-back"><a href="#mapa">↑ Volver al mapa</a></p>
   {% elif f.general %}
   <p class="gen-more">{{ general.total }} recurso{{ general.total|pluralize }} con la etiqueta «Conocimiento general».</p>
   {% endif %}

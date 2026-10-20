@@ -117,14 +117,13 @@ def test_vendor_sections_split_rows_by_family(seeded):
     )
     sections = software.vendor_sections(software.group_by_software(resources))
     keys = [s["key"] for s in sections]
-    order = [software.AUTODESK, software.BENTLEY, software.INTERNAL, software.IA]
-    assert keys == sorted(keys, key=order.index)
+    assert keys == sorted(keys, key=software.FAMILIES.index)  # Autodesk · Bentley · IA · Topografía
     assert "autodesk" in keys and "bentley" in keys
     bentley = next(s for s in sections if s["key"] == "bentley")
     assert all(r["tile"].family == "bentley" for r in bentley["rows"])
-    assert [title for title, _ in bentley["shelves"]] == ["Destacados", "Nuevos", "Más usados"]
+    assert "shelves" not in bentley and len(bentley["starters"]) == 4  # sin vitrinas repetidas
     autodesk = next(s for s in sections if s["key"] == "autodesk")
-    assert autodesk["shelves"] == [] and len(autodesk["pack"]) == 10
+    assert len(autodesk["pack"]) == 10 and len(autodesk["products"]) == 8
 
 
 def test_transversal_discipline_and_new_products_map():
@@ -300,13 +299,14 @@ def test_program_text_comes_from_the_path(seeded, member_client):
 # ---- catálogo -----------------------------------------------------------------------------------------------
 
 
-def test_catalog_shows_rows_per_software_then_grid_when_filtered(seeded, member_client):
+def test_catalog_shows_map_and_short_areas_then_rows_per_vendor_then_grid(seeded, member_client):
     html = member_client.get("/catalogo/").content.decode()
-    assert 'class="cat-row d-arq"' in html and 'id="sw-civil3d"' in html
-    assert "data-rail" in html and "cat-lvl lvl-" in html
-    assert 'class="vs vs-autodesk"' in html and 'class="vs vs-bentley"' in html
-    assert "vs-pack" in html and "Destacados" in html and "Más usados" in html
-    assert "// 02" in html
+    assert 'class="vs vs-autodesk vs-short"' in html and 'class="vs vs-bentley vs-short"' in html
+    assert 'class="cat-row' not in html and "Destacados" not in html  # el detalle vive en ?vendor=
+    assert "// 02" in html and "Para empezar" in html
+    rows = member_client.get("/catalogo/?vendor=autodesk").content.decode()
+    assert 'class="cat-row d-arq"' in rows and 'id="sw-civil3d"' in rows
+    assert "data-rail" in rows and "vs-pack" in rows and "lvl-dot lvl-" in rows
     grid = member_client.get("/catalogo/?software=civil3d").content.decode()
     assert "cat-grid" in grid and 'class="cat-row' not in grid
     assert "Civil 3D" in grid

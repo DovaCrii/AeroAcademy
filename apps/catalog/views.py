@@ -1,3 +1,5 @@
+from collections import Counter
+
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import render
@@ -22,37 +24,26 @@ KIND_GROUPS = [
 ]
 
 
-GENERAL_PREVIEW = 6  # tarjetas de la sección «Conocimiento general» en la portada del catálogo
+PAGE_SIZE = 24  # resultados por página
+PRODUCT_PAGE_SIZE = 48  # la vista de un producto (`?software=`): el mayor (27) cabe entero
 
 
 def _general_section(request, f, show_rows):
-    """Sección «Conocimiento general · transversal»: las rutas generales y, sin filtros, sus recursos.
+    """Sección «Conocimiento general · transversal»: las rutas generales y cuántos recursos tienen la etiqueta.
 
-    Número fijo de consultas (rutas, etiquetas, recursos, rutas de cada recurso, avance): no crece con los datos.
-    Devuelve None si no hay nada que mostrar o si el filtro activo es otro.
+    Número fijo de consultas (rutas, etiquetas, recursos, avance): no crece con los datos. Las tarjetas de recurso
+    viven en `?general=1`. Devuelve None si no hay nada que mostrar o si el filtro activo es otro.
     """
     if not (show_rows or f["general"]):
         return None
     paths = services.general_paths()
-    linked = services.resource_queryset(general=True)  # solo los que siguen en una ruta
-    total = linked.count()
+    total = services.resource_queryset(general=True).count()  # solo los que siguen en una ruta
     if not paths and not total:
         return None
     paths = (
         path_services.attach_ctas(request.user, paths) if paths else []
     )  # avance y botón: consultas fijas
-    items = []
-    if show_rows and total:
-        items = list(linked[:GENERAL_PREVIEW])
-        in_paths = services.published_paths_for([r.pk for r in items])
-        for r in items:
-            r.in_paths = in_paths.get(r.pk, [])
-    return {
-        "paths": paths,
-        "items": items,
-        "total": total,
-        "more": max(0, total - len(items)),
-    }
+    return {"paths": paths, "total": total}
 
 
 def resources(request):
@@ -71,7 +62,10 @@ def resources(request):
     discipline = discipline if discipline in {d.slug for d in disciplines} else ""
     path = params.get("ruta", "")
     path = path if path in {p.slug for p in paths} else ""
+    vendor = params.get("vendor", "")
+    vendor = vendor if vendor in software.AREA_LABEL else ""
     f = {
+        "vendor": vendor,
         "platform": params.get("platform", ""),
         "kind": kind,
         "free": params.get("free") == "1",
@@ -85,9 +79,24 @@ def resources(request):
     software_slug = params.get("software", "")
     software_slug = software_slug if software_slug in software.TILES else ""
     f["software"] = software_slug
+    others = any(v for k, v in f.items() if k != "vendor")
+    only_vendor = vendor in software.FAMILIES and not others
+    filtered = any(f.values())
+    plain = params.get("todo") != "1" and "page" not in params
+    show_rows = (not filtered or only_vendor) and plain
+    portada = show_rows and not vendor  # el mapa y la vitrina por área
+    # La lista completa (con sus productos precargados) se lee una sola vez: da el área de cada recurso (para el
+    # filtro «Proveedor» y sus conteos), la vista por producto y la portada. Consultas fijas, no crecen con los datos.
+    every = list(services.resource_queryset())
+    areas = software.areas_of(
+        every, paths, services.published_path_links(), set(services.general_ids())
+    )
     ids = None
     if software_slug:
-        ids = software.resource_ids_for_software(services.resource_queryset(), software_slug)
+        ids = software.resource_ids_for_software(every, software_slug)
+    if vendor:
+        in_area = {pk for pk, area in areas.items() if area == vendor}
+        ids = list(in_area) if ids is None else [pk for pk in ids if pk in in_area]
     qs = services.resource_queryset(
         ids=ids,
         platform=f["platform"],
@@ -100,19 +109,26 @@ def resources(request):
         general=f["general"],
         discipline=discipline,
     )
-    filtered = any(v for v in f.values())
-    rows = []
-    show_rows = not filtered and params.get("todo") != "1" and "page" not in params
-    if show_rows:  # sin filtros: filas por producto, como el home de Bentley Learn
-        every = list(qs)
-        rows = software.group_by_software(every)
-        cards = [r for row in rows for r in row["items"]]
+    rows, sections, area_map = [], [], []
+    if show_rows:  # sin filtros (o solo un proveedor): filas por producto
+        scoped = [r for r in every if areas.get(r.pk) == vendor] if vendor else every
+        rows = software.group_by_software(scoped, areas=areas)
+        sections = software.vendor_sections(rows)
+        cards = (
+            [r for row in rows for r in row["items"]]
+            if vendor
+            else [r for sec in sections for r in sec["starters"]]
+        )
         in_paths = services.published_paths_for([r.pk for r in cards])
         for r in cards:
             r.in_paths = in_paths.get(r.pk, [])
-    general = _general_section(request, f, show_rows)
-    page = Paginator(qs, 24).get_page(params.get("page"))
+    general = _general_section(request, f, portada)
+    if portada:
+        area_map = software.catalog_map(every, areas)
+    page = None
     if not show_rows:
+        size = PRODUCT_PAGE_SIZE if software_slug else PAGE_SIZE
+        page = Paginator(qs, size).get_page(params.get("page"))
         in_paths = services.published_paths_for([r.pk for r in page])
         for r in page:
             r.in_paths = in_paths.get(r.pk, [])
@@ -127,6 +143,7 @@ def resources(request):
     kind_label = dict(KIND_GROUPS).get(kind, "")
     software_tile = software.TILES.get(software_slug)
     labels = {
+        "vendor": software.AREA_LABEL.get(vendor, ""),
         "q": f"«{f['q']}»",
         "discipline": next((d.name for d in disciplines if d.slug == discipline), ""),
         "kind": kind_label,
@@ -139,6 +156,7 @@ def resources(request):
         "software": software_tile.name if software_tile else "",
     }
     active = {
+        "vendor": vendor,
         "q": f["q"],
         "discipline": discipline,
         "kind": kind,
@@ -159,6 +177,19 @@ def resources(request):
             rest.pop(drop, None)
         chips.append({"key": key, "label": labels[key], "query": rest.urlencode()})
     groups = path_services.group_by_area(paths)
+    crumbs = []
+    if software_tile:
+        crumbs = [
+            (software.FAMILY_LABEL[software_tile.family], f"?vendor={software_tile.family}"),
+            (software_tile.name, ""),
+        ]
+    elif only_vendor:
+        crumbs = [(software.AREA_LABEL[vendor], "")]
+    counted = Counter(areas.values())
+    area_totals = {key: counted.get(key, 0) for key in software.AREA_ORDER}
+    vendor_options = [
+        (key, software.AREA_LABEL[key], area_totals[key]) for key in software.AREA_ORDER
+    ]
     return render(
         request,
         "catalog/resources.html",
@@ -178,9 +209,15 @@ def resources(request):
             "f": f,
             "filtered": filtered,
             "show_rows": show_rows,
+            "portada": portada,
+            "vendor_view": show_rows and bool(vendor),
             "general": general,
             "rows": rows,
-            "sections": software.vendor_sections(rows),
+            "sections": sections,
+            "area_map": area_map,
+            "area_totals": area_totals,
+            "crumbs": crumbs,
+            "vendor_options": vendor_options,
             "software_tile": software_tile,
             "querystring": query.urlencode(),
         },

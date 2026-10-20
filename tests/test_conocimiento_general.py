@@ -372,13 +372,13 @@ def test_catalog_section_lists_routes_and_tagged_resources(member_client, routes
     assert 'id="conocimiento-general"' in html and "Conocimiento general · transversal" in html
     assert 'class="cat-sec cat-gen d-tra"' in html
     assert "/rutas/topografia-101/" in html and "/rutas/bim-101/" in html
-    assert (
-        "Geodesy tutorial" in html
-        and "Otro curso" not in html.split('id="conocimiento-general"')[1].split("</section>")[0]
-    )
-    assert html.index("conocimiento-general") < html.index("// 01")  # arriba de todo
-    assert "?general=1" in html
     section = html.split('id="conocimiento-general"')[1].split("</section>")[0]
+    assert "Geodesy tutorial" not in section  # las tarjetas de recurso viven en ?vendor=general
+    assert html.index('id="mapa"') < html.index(
+        'id="conocimiento-general"'
+    )  # ya no va arriba de todo
+    assert "?vendor=general" in section and 'href="#conocimiento-general"' in html  # mapa y enlace
+    assert "Geodesy tutorial" in member_client.get("/catalogo/?vendor=general").content.decode()
     assert section.count("data-route-card") >= 2  # tarjeta única de cada ruta, con icono y botón
     assert section.count('class="btn primary route-cta"') == section.count("data-route-card")
 
@@ -390,6 +390,7 @@ def test_catalog_general_filter_shows_only_tagged_resources(member_client, route
     html = member_client.get("/catalogo/?general=1").content.decode()
     assert "Solo general" in html and "Curso común" not in html
     assert 'id="conocimiento-general"' in html and "cat-grid" in html and "// 02" in html
+    assert 'id="mapa"' not in html  # con un filtro no hay mapa
     assert "Quitar el filtro Conocimiento general" in html
     other = member_client.get("/catalogo/?q=curso").content.decode()
     assert 'id="conocimiento-general"' not in other  # con otro filtro la sección no estorba

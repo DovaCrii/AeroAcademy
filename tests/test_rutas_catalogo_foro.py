@@ -146,9 +146,14 @@ def test_catalog_filters_compact(seeded, member_client):
     bar = html.split('<form class="cat-search"')[1].split("</form>")[0]
     main = bar.split('<div class="cat-main-filters">')[1].split("<details")[0]
     assert (
-        main.count("<select") == 2 and main.count('type="checkbox"') == 1
-    )  # Disciplina, Tipo y Solo esenciales
-    assert 'name="discipline"' in main and 'name="kind"' in main and 'name="esencial"' in main
+        main.count("<select") == 3 and main.count('type="checkbox"') == 1
+    )  # Proveedor, Disciplina, Tipo y Solo esenciales
+    assert (
+        'name="vendor"' in main
+        and 'name="discipline"' in main
+        and 'name="kind"' in main
+        and 'name="esencial"' in main
+    )
     more = bar.split("<details")[1]
     for name in ("ruta", "platform", "cert", "general", "free"):  # lo demás sigue alcanzable
         assert f'name="{name}"' in more, name

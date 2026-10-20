@@ -1,0 +1,12 @@
+{% load static %}<nav class="cat-map" id="mapa" aria-label="Mapa del catálogo">
+  <h2 class="cat-sh"><span>// 01</span> Mapa del catálogo</h2>
+  <ul class="cat-map-list">
+    {% for a in area_map %}
+    <li><a class="cat-map-card cat-map-{{ a.key }}" href="#{{ a.anchor }}">
+      {% if a.tile %}<img class="sw-tile" src="{% static a.tile.static_path %}" alt="" width="34" height="34" loading="lazy">{% else %}<span class="cat-map-ico" aria-hidden="true">101</span>{% endif %}
+      <span class="cat-map-txt"><b>{{ a.label }}</b>
+        <small>{{ a.total }} recurso{{ a.total|pluralize }}{% if a.products %} · {{ a.products|length }} producto{{ a.products|length|pluralize }}{% elif a.key == "general" and general %} · {{ general.paths|length }} ruta{{ general.paths|length|pluralize }}{% endif %}</small></span>
+    </a></li>
+    {% endfor %}
+  </ul>
+</nav>

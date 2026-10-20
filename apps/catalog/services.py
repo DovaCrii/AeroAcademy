@@ -68,6 +68,25 @@ def published_paths_for(resource_ids):
     return out
 
 
+def published_path_links():
+    """{recurso: [id de las rutas publicadas que lo usan]}: dos consultas fijas, sin importar cuántos recursos hay."""
+    from apps.paths.models import ExternalCourse, LevelResource
+
+    out = {}
+    pairs = list(
+        LevelResource.objects.filter(level__path__is_published=True).values_list(
+            "resource_id", "level__path_id"
+        )
+    ) + list(
+        ExternalCourse.objects.filter(path__is_published=True).values_list("resource_id", "path_id")
+    )
+    for rid, pid in pairs:
+        bucket = out.setdefault(rid, [])
+        if pid not in bucket:
+            bucket.append(pid)
+    return out
+
+
 def published_material_ids():
     """Subconsulta: recursos de PDF privado que usa alguna ruta publicada."""
     from apps.paths.models import LevelResource

@@ -94,6 +94,8 @@ def card_meta(resource):
         "level": key,
         "level_label": label,
         "type": software.type_label(resource),
+        "kind_label": resource.get_kind_display(),  # «Curso», «Examen»…: el tipo, sin repetirlo
+        "paid": not resource.is_free,  # solo se marca lo de pago: «gratuito» es lo normal
     }
 
 

@@ -334,47 +334,131 @@ ROW_ORDER = [
     "ia", "terminal", "git", "claude-code", "mcp", "agentes", "python", "qgis", "gee", "powerbi", "sql",
 ]  # fmt: skip
 
-# Vitrinas de cada fabricante (estilo «descargas de software»): destacados y novedades curados;
-# «más usados» sale de cuántos recursos tiene cada producto.
-FEATURED = {BENTLEY: ["microstation", "openroads", "openbridge", "openbuildings"]}
-NEWEST = {BENTLEY: ["itwin", "itwin-capture", "openflows", "lumenrt"]}
+# ---- áreas del catálogo ----------------------------------------------------------------------------------------
+# Cada recurso pertenece a UNA área (el mapa del catálogo suma todos): su familia de mosaico o, si no tiene producto,
+# la deducida de su ruta. «general» es el conocimiento transversal (BIM y topografía base).
+GENERAL = "general"
+AREA_ORDER = (AUTODESK, BENTLEY, IA, INTERNAL, GENERAL)
+AREA_LABEL = {**FAMILY_LABEL, GENERAL: "Conocimiento general"}
+FAMILIES = (AUTODESK, BENTLEY, IA, INTERNAL)  # las que tienen filas por producto
+# vendor (slug) de la ruta → área, para los recursos sin producto ni mosaico en su ruta
+PATH_VENDOR_AREA = {
+    "autodesk": AUTODESK,
+    "bentley": BENTLEY,
+    "anthropic": IA,
+    "kaggle": IA,
+    "microsoft": IA,
+    "open-source": IA,
+    "aeroacademy": INTERNAL,
+}
+FAMILY_DISCIPLINE = {AUTODESK: ARQ, BENTLEY: CIV, INTERNAL: TOP, IA: IAD, GENERAL: TRA}
+AREA_TILE = {IA: "ia"}  # mosaico genérico de las áreas cuyos recursos no traen producto
+STARTERS = 4  # tarjetas de «Para empezar» en cada área de la portada del catálogo
 
 
-def group_by_software(resources, per_row=8):
-    """[{tile, items, total}] en el orden de ROW_ORDER; el recurso va en la fila de su primer mosaico.
+def area_for_resource(resource, paths_by_id, links, general_ids=frozenset()):
+    """Área de un recurso: la familia de su primer mosaico; si no tiene, la de su ruta; si no, general; si no, el vendor.
 
-    Los recursos sin mosaico quedan fuera (siguen en el listado completo).
+    `paths_by_id` son las rutas publicadas (con `vendor` y `products` precargados), `links` {recurso: [id de ruta]}
+    y `general_ids` los recursos con la etiqueta «Conocimiento general». No hace consultas. Último recurso: la
+    familia interna, para que ningún recurso quede sin área.
     """
-    buckets = {}
+    tiles = software_for_resource(resource, 1)
+    if tiles:
+        return tiles[0].family
+    paths = sorted(
+        (paths_by_id[i] for i in links.get(resource.pk, ()) if i in paths_by_id),
+        key=lambda p: p.title,
+    )
+    for path in paths:
+        by_path = software_for_path(path, 1)
+        if by_path:
+            return by_path[0].family
+    if resource.pk in general_ids:
+        return GENERAL
+    for path in paths:
+        area = PATH_VENDOR_AREA.get(getattr(getattr(path, "vendor", None), "slug", ""))
+        if area:
+            return area
+    return INTERNAL
+
+
+def areas_of(resources, paths, links, general_ids=frozenset()):
+    """{pk del recurso: área}."""
+    by_id = {p.pk: p for p in paths}
+    return {r.pk: area_for_resource(r, by_id, links, general_ids) for r in resources}
+
+
+def _row(key, name, discipline, family, items, per_row, tile=None):
+    return {
+        "tile": tile,
+        "key": key,
+        "name": name,
+        "discipline": discipline,
+        "family": family,
+        "items": items[:per_row],
+        "total": len(items),
+        "more": max(0, len(items) - per_row),
+    }
+
+
+def group_by_software(resources, per_row=8, areas=None):
+    """[{tile, key, name, items, total, more}] en el orden de ROW_ORDER; el recurso va en la fila de su primer mosaico.
+
+    Sin `areas` (pk → área), los recursos sin mosaico quedan fuera (siguen en el listado completo). Con `areas`, los
+    que no tienen producto pero sí familia se juntan en la fila «Más de <área>» (clave `more-<familia>`, sin mosaico)
+    al final de su área; el conocimiento general no lleva filas.
+    """
+    buckets, more = {}, {}
     for r in resources:
         tiles = software_for_resource(r, 1)
         if tiles:
             buckets.setdefault(tiles[0].slug, []).append(r)
+        elif areas and areas.get(r.pk) in FAMILIES:
+            more.setdefault(areas[r.pk], []).append(r)
     rows = []
     for slug in ROW_ORDER:
         items = buckets.get(slug)
         if items:
+            t = TILES[slug]
+            rows.append(_row(slug, t.name, t.discipline, t.family, items, per_row, tile=t))
+    for family in FAMILIES:
+        if family in more:
             rows.append(
-                {
-                    "tile": TILES[slug],
-                    "items": items[:per_row],
-                    "total": len(items),
-                    "more": max(0, len(items) - per_row),
-                }
+                _row(
+                    f"more-{family}",
+                    f"Más de {FAMILY_LABEL[family]}",
+                    FAMILY_DISCIPLINE[family],
+                    family,
+                    more[family],
+                    per_row,
+                )
             )
     return rows
 
 
-def vendor_sections(rows):
-    """Agrupa las filas por fabricante: [{key, label, rows, pack, shelves}].
+def starters(rows, limit=STARTERS):
+    """Hasta `limit` recursos para empezar: uno por producto, en rondas (el orden de cada fila ya trae lo
+    esencial primero, luego lo oficial)."""
+    out, rank = [], 0
+    while len(out) < limit and any(len(r["items"]) > rank for r in rows):
+        for row in rows:
+            if len(out) < limit and len(row["items"]) > rank:
+                out.append(row["items"][rank])
+        rank += 1
+    return out
 
-    `pack` son todos los mosaicos de la familia (con su cantidad de recursos) y `shelves` las vitrinas
-    «Destacados / Nuevos / Más usados» (solo Bentley, como su página de descargas). Sin filas, no hay sección.
+
+def vendor_sections(rows, preview=STARTERS):
+    """Agrupa las filas por área: [{key, label, rows, pack, total, starters}].
+
+    `pack` son todos los mosaicos de la familia (con su cantidad de recursos) y `starters` las tarjetas de
+    «Para empezar». Sin filas, no hay sección. Orden: Autodesk, Bentley, IA y Datos, Topografía.
     """
-    totals = {r["tile"].slug: r["total"] for r in rows}
+    totals = {r["key"]: r["total"] for r in rows}
     sections = []
-    for family in (AUTODESK, BENTLEY, INTERNAL, IA):
-        fam_rows = [r for r in rows if r["tile"].family == family]
+    for family in FAMILIES:
+        fam_rows = [r for r in rows if r["family"] == family]
         if not fam_rows:
             continue
         pack = [
@@ -382,26 +466,53 @@ def vendor_sections(rows):
             for s in ROW_ORDER
             if TILES[s].family == family
         ]
-        shelves = []
-        if family in FEATURED:
-            used = sorted(pack, key=lambda p: -p["total"])
-            by_slug = {p["tile"].slug: p for p in pack}
-            shelves = [
-                ("Destacados", [by_slug[s] for s in FEATURED[family]]),
-                ("Nuevos", [by_slug[s] for s in NEWEST[family]]),
-                ("Más usados", [p for p in used if p["total"]][:4]),
-            ]
         sections.append(
             {
                 "key": family,
                 "label": FAMILY_LABEL[family],
                 "rows": fam_rows,
                 "pack": pack,
-                "shelves": shelves,
+                "products": [p for p in pack if p["total"]],
+                "starters": starters(fam_rows, preview),
                 "total": sum(r["total"] for r in fam_rows),
             }
         )
     return sections
+
+
+def catalog_map(resources, areas):
+    """Mapa del catálogo: [{key, label, total, products: [{tile, total}], anchor}] de las 5 áreas, en su orden.
+
+    `total` cuenta TODOS los recursos del área (la suma es el catálogo completo); `products` solo los productos
+    que tienen recursos, en el orden de ROW_ORDER.
+    """
+    totals = dict.fromkeys(AREA_ORDER, 0)
+    by_tile = {}
+    for r in resources:
+        area = areas.get(r.pk)
+        if area in totals:
+            totals[area] += 1
+        tiles = software_for_resource(r, 1)
+        if tiles:
+            by_tile[tiles[0].slug] = by_tile.get(tiles[0].slug, 0) + 1
+    out = []
+    for area in AREA_ORDER:
+        products = [
+            {"tile": TILES[s], "total": by_tile[s]}
+            for s in ROW_ORDER
+            if s in by_tile and TILES[s].family == area
+        ]
+        out.append(
+            {
+                "key": area,
+                "label": AREA_LABEL[area],
+                "tile": products[0]["tile"] if products else TILES.get(AREA_TILE.get(area, "")),
+                "total": totals[area],
+                "products": products,
+                "anchor": "conocimiento-general" if area == GENERAL else f"vendor-{area}",
+            }
+        )
+    return out
 
 
 def vendor_key(path):
