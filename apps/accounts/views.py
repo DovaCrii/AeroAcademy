@@ -3,7 +3,7 @@ from urllib.parse import unquote
 
 from django.contrib import auth, messages
 from django.db import transaction
-from django.http import Http404
+from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 
 from . import ratelimit, services, team_link, totp, two_factor
 from .forms import AccountPasswordChangeForm, SignupForm, TeamSignupForm
+from .middleware import TS_SIGNED_OUT
 from .models import PersonStatus
 
 LOGIN_ERROR = "Correo o contraseña incorrectos."
@@ -73,6 +74,10 @@ def _login_context(request, **extra):
     return {
         "next": _next_of(request),
         "via_tailscale": request.user.is_authenticated and not has_password_session(request),
+        # Tras «Salir» en la tailnet: ofrece volver a entrar con la identidad de Tailscale (D41).
+        "can_tailscale_login": not getattr(request, "public_door", False)
+        and not request.user.is_authenticated
+        and bool(request.session.get(TS_SIGNED_OUT)),
         **extra,
     }
 
@@ -119,8 +124,25 @@ def login(request):
 
 @require_POST
 def logout(request):
+    """Cierra la sesión (con contraseña o por Tailscale). En la tailnet deja la bandera `ts_signed_out`, que solo
+    desactiva el ingreso automático con el encabezado; `next` (solo ruta local) devuelve a la misma página."""
+    nxt = _next_of(request)
     auth.logout(request)
-    return redirect("accounts:welcome")
+    if not getattr(request, "public_door", False):
+        request.session[TS_SIGNED_OUT] = True
+    return redirect(nxt or "accounts:welcome")
+
+
+@never_cache
+def tailscale_login(request):
+    """«Entrar con Tailscale»: borra la bandera y la siguiente petición vuelve a entrar con la identidad.
+    Solo POST con CSRF; en la puerta pública no existe."""
+    if getattr(request, "public_door", False):
+        raise Http404("No encontrado.")
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+    request.session.pop(TS_SIGNED_OUT, None)
+    return redirect(_next_of(request) or "core:home")
 
 
 @never_cache
@@ -177,6 +199,12 @@ def team_signup(request, token):
     link = team_link.resolve(token)
     if link is None:
         return _private(render(request, "accounts/team_signup_invalid.html", status=400))
+    if (
+        request.user.is_authenticated
+    ):  # ya hay sesión: primero se sale, después se inscribe a otra persona
+        return _private(
+            render(request, "accounts/team_signup_signed_in.html", {"return_to": request.path})
+        )
     if request.method == "GET":
         return _private(
             render(request, "accounts/team_signup.html", {"form": TeamSignupForm(), "link": link})

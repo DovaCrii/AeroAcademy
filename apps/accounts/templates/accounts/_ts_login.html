@@ -1,0 +1,9 @@
+{# Tras «Salir» en la tailnet: volver a entrar con la identidad de Tailscale. POST con CSRF; no se muestra en la puerta pública. #}
+{% if can_tailscale_login %}
+<form class="pub-form pub-ts" method="post" action="{% url 'accounts:tailscale_login' %}">
+  {% csrf_token %}
+  {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+  <p class="pub-hint">Saliste de tu sesión. Para volver como tú, sin contraseña:</p>
+  <button class="btn ghost pub-btn" type="submit">Entrar con Tailscale</button>
+</form>
+{% endif %}

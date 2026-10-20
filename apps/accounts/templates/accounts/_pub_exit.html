@@ -1,0 +1,5 @@
+{# Salida de las páginas sin menú: ninguna termina sin camino. Sin sesión vuelve a la bienvenida; con sesión, a la portada y ofrece «Salir». #}
+<nav class="pub-exit" aria-label="Volver">
+  <a class="btn ghost pub-back" href="{% if user.is_authenticated %}{% url 'core:home' %}{% else %}{% url 'accounts:welcome' %}{% endif %}">← Volver al inicio</a>
+  {% if user.is_authenticated %}<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn ghost pub-back" type="submit">Salir</button></form>{% endif %}
+</nav>

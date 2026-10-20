@@ -1,0 +1,18 @@
+{% extends "accounts/_public.html" %}
+
+{% block title %}Ya iniciaste sesión{% endblock %}
+
+{% block content %}
+<section class="pub-narrow">
+  <div class="pub-card sheet">
+    <p class="cap">{{ BRAND_PLATFORM }} · inscripción del equipo</p>
+    <h1>Ya iniciaste sesión</h1>
+    <p class="pub-lead">Ya iniciaste sesión como <b>{{ user.login }}</b>. Para inscribir a otra persona, sal primero.</p>
+    <form method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ return_to }}">
+      <button class="btn pub-btn" type="submit">Salir y continuar</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
