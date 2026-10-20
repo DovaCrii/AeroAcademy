@@ -9,6 +9,7 @@ from django.test.utils import override_settings
 
 from apps.accounts.models import Person
 from apps.core import linkcheck
+from apps.core.taskruns import record_run
 
 
 class Command(BaseCommand):
@@ -35,6 +36,10 @@ class Command(BaseCommand):
         parser.add_argument("--salida", default="", help="Carpeta del CSV (por defecto private/).")
 
     def handle(self, *args, **options):
+        with record_run("revisar_enlaces") as run:
+            self._check(options, run)
+
+    def _check(self, options, run):
         out = Path(options["salida"] or settings.BASE_DIR / "private")
         out.mkdir(parents=True, exist_ok=True)
         stamp = date.today().isoformat()
@@ -44,6 +49,7 @@ class Command(BaseCommand):
             path = out / f"enlaces_internos_{stamp}.csv"
             self._write(path, ["codigo_url_origen"], [[b] for b in broken])
             self.stdout.write(f"Internos rotos: {len(broken)} (CSV: {path})")
+            run.summary = f"{len(broken)} enlaces internos rotos"
             for line in broken[:50]:
                 self.stdout.write(self.style.ERROR(f"  {line}"))
         if options["externos"] or options["solo_externos"]:
@@ -56,6 +62,9 @@ class Command(BaseCommand):
             for row in rows:
                 counts[row[3]] = counts.get(row[3], 0) + 1
             self.stdout.write(f"Externos (CSV: {path}): {counts}")
+            run.summary = (
+                f"{run.summary} · " if run.summary else ""
+            ) + f"{len(rows)} externos revisados, {counts.get('roto', 0)} rotos"
             for url, origin, _code, kind in rows:
                 if kind == "roto":
                     self.stdout.write(self.style.ERROR(f"  404 real: {url}  ({origin})"))

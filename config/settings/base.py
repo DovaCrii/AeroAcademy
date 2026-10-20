@@ -146,7 +146,14 @@ TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
 # Tailscale-User-Login se descarta, no existe /admin/ ni las herramientas de moderación y quien es lead o admin
 # necesita un segundo factor (TOTP).
 PUBLIC_DOOR = os.environ.get("AEROACADEMY_DOOR", "").strip().lower() == "public"
-PUBLIC_BLOCKED_PREFIXES = ("/admin/", "/moderacion/", "/equipo/personas/", "/seguridad/")
+# El Centro de administración (D42) tampoco sale a internet, como la moderación.
+PUBLIC_BLOCKED_PREFIXES = (
+    "/admin/",
+    "/administracion/",
+    "/moderacion/",
+    "/equipo/personas/",
+    "/seguridad/",
+)
 # Segundo factor (TOTP) para lead y admin en la puerta pública. Apagado por decisión de la dueña (2026-10-19):
 # entran con contraseña, como el resto. PUBLIC_REQUIRE_SECOND_FACTOR=1 en el entorno lo vuelve a exigir.
 PUBLIC_REQUIRE_SECOND_FACTOR = env_bool("PUBLIC_REQUIRE_SECOND_FACTOR", False)
@@ -196,6 +203,15 @@ DGAC_DATA_DIR = Path(os.environ.get("DGAC_DATA_DIR", str(BASE_DIR / "private" / 
 PRIVATE_COURSES_DIR = Path(
     os.environ.get("PRIVATE_COURSES_DIR", str(BASE_DIR / "private" / "cursos"))
 )
+
+# Centro de administración (D42): lo que la app puede LEER del servidor, siempre con valor por defecto y de solo lectura
+# (el servicio corre con ProtectSystem=strict). Nada de esto se muestra como ruta: solo nombres de archivo y fechas.
+# Respaldos diarios de deploy/backup.sh; archivo de versión que escribe deploy/install.sh; y el puerto local de la
+# puerta pública (el mismo AEROACADEMY_PUBLIC_PORT del instalador) para comprobar que ese servicio responde.
+BACKUP_DIR = Path(os.environ.get("BACKUP_DIR", "/var/backups/centro"))
+VERSION_FILE = Path(os.environ.get("VERSION_FILE", str(BASE_DIR / ".deployed-version")))
+PREV_INFO_FILE = Path(os.environ.get("PREV_INFO_FILE", f"{BASE_DIR}.prev.info"))
+PUBLIC_DOOR_PORT = int(os.environ.get("AEROACADEMY_PUBLIC_PORT", "8011"))
 
 # Marca (docs/VISION.md)
 BRAND_PLATFORM = "AeroAcademy"

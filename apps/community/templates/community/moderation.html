@@ -5,7 +5,7 @@
 {% block extra_head %}<link rel="stylesheet" href="{% static 'community/forum.css' %}">{% endblock %}
 
 {% block content %}
-<div class="page-head"><h1>Moderación</h1><p>Personas por aprobar, certificados, reportes, anuncios y la bitácora de acciones.</p></div>
+<div class="page-head"><h1>Moderación</h1><p>Personas por aprobar, certificados, reportes, anuncios y la bitácora de acciones. <a href="{% url 'core:admin_center' %}">Ir al Centro de administración</a></p></div>
 
 <section class="mod-sec" aria-labelledby="m-people">
   <h2 id="m-people">Personas por aprobar <small>({{ pending|length }})</small></h2>

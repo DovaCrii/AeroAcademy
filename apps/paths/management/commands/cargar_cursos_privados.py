@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from apps.catalog.seeding import SeedError
+from apps.core.taskruns import record_run
 from apps.paths.seeding import load_route
 
 
@@ -22,7 +23,12 @@ class Command(BaseCommand):
         parser.add_argument("--dry-run", action="store_true", help="Valida y simula; no guarda.")
 
     def handle(self, *args, **options):
+        with record_run("cargar_cursos_privados", enabled=not options["dry_run"]) as run:
+            self._load(options, run)
+
+    def _load(self, options, run):
         root = settings.PRIVATE_COURSES_DIR
+        run.summary = "Carpeta no instalada"
         if not root.is_dir():
             self.stdout.write(
                 self.style.WARNING(
@@ -74,6 +80,7 @@ class Command(BaseCommand):
                 )
             )
             loaded += 1
+        run.summary = f"{loaded} rutas cargadas · {errors} con errores"
         if errors:
             raise CommandError(f"{errors} ruta(s) privada(s) con errores; {loaded} sin errores.")
         if not loaded:

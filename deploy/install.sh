@@ -87,6 +87,16 @@ rsync -a --delete \
   --exclude "db.sqlite3*" --exclude "media" --exclude ".env" --exclude "deploy/centro.env" --exclude "private" \
   "$SRC"/ "$APP"/
 
+echo "==> Versión instalada"
+# Deja constancia de qué se instaló (commit corto, etiqueta si hay y fecha UTC) para que el Centro de administración la
+# muestre. Sin rutas ni secretos, y tolerante a fallos: si git no está o no puede leer el repositorio, el instalador sigue.
+{
+  echo "commit=$(git -c safe.directory="$SRC" -C "$SRC" rev-parse --short=8 HEAD 2>/dev/null || true)"
+  echo "tag=$(git -c safe.directory="$SRC" -C "$SRC" describe --tags --abbrev=0 2>/dev/null || true)"
+  echo "deployed_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+} > "$APP/.deployed-version" 2>/dev/null || true
+chmod 644 "$APP/.deployed-version" 2>/dev/null || true
+
 echo "==> Configuración en $ENV_FILE"
 umask 077   # el archivo nace sin permisos para otros: lleva la SECRET_KEY y la clave de Teo
 OLD_SECRET=""

@@ -1,0 +1,123 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Cuentas · Centro de administración{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'core/admin.css' %}">{% endblock %}
+
+{% block content %}
+<div class="ac">
+<div class="page-head">
+  <p class="cap"><a href="{% url 'core:admin_center' %}">← Centro de administración</a></p>
+  <h1>Cuentas</h1>
+  <p>Quién está pendiente, activa, suspendida o sin rol, y cómo entra cada persona. Los correos solo se ven en esta página.</p>
+</div>
+
+{% for link in fresh_links %}
+<section class="sheet ac-sheet" aria-labelledby="fl-{{ forloop.counter }}">
+  <h2 id="fl-{{ forloop.counter }}">Enlace de registro de {{ link.name }}</h2>
+  <p class="muted">De un solo uso y vence en 7 días. Se muestra esta vez: cópialo y mándalo por un canal privado. Si lo pierdes, genera otro (el anterior deja de servir).</p>
+  <input class="ac-copy" type="text" value="{{ link.url }}" readonly aria-label="Enlace de registro de {{ link.name }}">
+</section>
+{% endfor %}
+
+<nav aria-label="Filtrar por estado">
+  <ul class="ac-chips">
+    <li><a href="{% url 'core:admin_accounts' %}"{% if not state %} aria-current="true"{% endif %}>Todas <b>{{ counts.total }}</b></a></li>
+    {% for f in filters %}<li><a href="?estado={{ f.key }}"{% if state == f.key %} aria-current="true"{% endif %}>{{ f.label }} <b>{{ f.n }}</b></a></li>{% endfor %}
+  </ul>
+</nav>
+
+<form class="ac-search" method="get" role="search" action="{% url 'core:admin_accounts' %}">
+  {% if state %}<input type="hidden" name="estado" value="{{ state }}">{% endif %}
+  <label for="ac-q" class="cap">Buscar por nombre o correo</label>
+  <input id="ac-q" type="search" name="q" value="{{ q }}" maxlength="100" autocomplete="off">
+  <button class="btn" type="submit">Buscar</button>
+</form>
+
+{% if rows %}
+<ul class="ac-people">
+  {% for r in rows %}
+  <li class="ac-person k-{{ r.key }}" id="p{{ r.person.pk }}">
+    <div class="ac-head">
+      <span class="ac-av" aria-hidden="true">{{ r.person.name|slice:":1"|upper }}</span>
+      <div class="ac-id">
+        <h3>{{ r.person.name }}</h3>
+        <small>{{ r.person.login }}</small>
+      </div>
+      <span class="chip">{{ r.role_label }}</span>
+    </div>
+    <p class="ac-sentence">{{ r.sentence }}</p>
+    {% if r.chips %}<ul class="ac-tags">{% for text, kind in r.chips %}<li class="chip{% if kind == 'ok' %} ok{% elif kind == 'pend' %} pend{% endif %}">{{ text }}</li>{% endfor %}</ul>{% endif %}
+
+    {% if r.can_approve %}
+    <form method="post" action="{% url 'core:admin_approve' r.person.pk %}">{% csrf_token %}
+      <input type="hidden" name="back" value="cuentas">
+      <div class="ac-actions">
+        <label>Rol <select name="role"><option value="member">Miembro</option><option value="lead">Responsable</option></select></label>
+      </div>
+      <fieldset class="ac-disc"><legend class="cap">Disciplinas</legend>
+        {% for d in disciplines %}<label class="ac-check"><input type="checkbox" name="disciplines" value="{{ d.slug }}"> {{ d.name }}</label>{% endfor %}
+      </fieldset>
+      <div class="ac-actions">
+        <button class="btn primary" type="submit">Aprobar</button>
+        <button class="btn" type="submit" formaction="{% url 'core:admin_reject' r.person.pk %}">Rechazar</button>
+      </div>
+      <p class="ac-hint">Rechazar deja a la persona sin acceso; no borra nada.</p>
+    </form>
+    {% endif %}
+
+    <div class="ac-actions">
+      {% if r.can_reactivate %}
+      <form method="post" action="{% url 'core:admin_reactivate' r.person.pk %}">{% csrf_token %}
+        <input type="hidden" name="back" value="cuentas">
+        <button class="btn primary" type="submit">Reactivar</button>
+        <p class="ac-hint">Le devuelve el acceso con el rol que tenía.</p>
+      </form>
+      {% endif %}
+      {% if r.can_suspend %}
+      <form method="post" action="{% url 'core:admin_suspend' r.person.pk %}">{% csrf_token %}
+        <input type="hidden" name="back" value="cuentas">
+        <button class="btn danger" type="submit">Suspender</button>
+        <p class="ac-hint">Quita el acceso de inmediato. Sus datos y certificados se conservan.</p>
+      </form>
+      {% endif %}
+      {% if r.can_link %}
+      <form method="post" action="{% url 'core:admin_link' r.person.pk %}">{% csrf_token %}
+        <input type="hidden" name="back" value="cuentas">
+        <button class="btn" type="submit">Enlace personal</button>
+        <p class="ac-hint">Para crear o cambiar su contraseña. Un uso, 7 días; el anterior deja de servir.</p>
+      </form>
+      {% endif %}
+    </div>
+
+    {% if r.can_role %}
+    <details>
+      <summary>Cambiar rol</summary>
+      <form class="ac-form" method="post" action="{% url 'core:admin_role' r.person.pk %}">{% csrf_token %}
+        <input type="hidden" name="back" value="cuentas">
+        <label>Rol <select name="role">
+          <option value="member"{% if r.role == "member" %} selected{% endif %}>Miembro</option>
+          <option value="lead"{% if r.role == "lead" %} selected{% endif %}>Responsable</option>
+          <option value="admin"{% if r.role == "admin" %} selected{% endif %}>Admin</option></select></label>
+        <button class="btn" type="submit">Guardar rol</button>
+      </form>
+      <p class="ac-hint">Un admin ve todo y administra cuentas; un responsable modera y revisa certificados.</p>
+    </details>
+    {% endif %}
+    {% if r.person.status == "approved" %}<p class="ac-hint"><a href="{% url 'team:people' %}#p{{ r.person.pk }}">Área, cargo y texto de invitación</a></p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="ac-empty">{% if state or q %}Ninguna cuenta coincide con ese filtro.{% else %}Todavía no hay cuentas.{% endif %}</p>
+{% endif %}
+
+{% if page.has_other_pages %}
+<nav class="ac-pager" aria-label="Páginas">
+  {% if page.has_previous %}<a class="btn" href="?pagina={{ page.previous_page_number }}{% if state %}&amp;estado={{ state }}{% endif %}{% if q %}&amp;q={{ q|urlencode }}{% endif %}">← Anterior</a>{% endif %}
+  <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a class="btn" href="?pagina={{ page.next_page_number }}{% if state %}&amp;estado={{ state }}{% endif %}{% if q %}&amp;q={{ q|urlencode }}{% endif %}">Siguiente →</a>{% endif %}
+</nav>
+{% endif %}
+</div>
+{% endblock %}

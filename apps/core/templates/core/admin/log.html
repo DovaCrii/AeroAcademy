@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Bitácora · Centro de administración{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'core/admin.css' %}">{% endblock %}
+
+{% block content %}
+<div class="ac">
+<div class="page-head">
+  <p class="cap"><a href="{% url 'core:admin_center' %}">← Centro de administración</a></p>
+  <h1>Bitácora</h1>
+  <p>Quién hizo qué en moderación y cuentas. Es solo para leer: nada de lo que se ve aquí se puede cambiar.</p>
+</div>
+
+<form class="ac-search" method="get" action="{% url 'core:admin_log' %}">
+  <label for="ac-act" class="cap">Filtrar por acción</label>
+  <select id="ac-act" name="accion">
+    <option value="">Todas</option>
+    {% for key, label in actions %}<option value="{{ key }}"{% if key == action %} selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Filtrar</button>
+</form>
+
+{% if rows %}
+<div class="sheet ac-sheet">
+  <ul class="ac-log">
+    {% for r in rows %}
+    <li>
+      <time datetime="{{ r.entry.created_at|date:'c' }}">{{ r.entry.created_at|date:"d/m/Y H:i" }}</time>
+      <span><b>{{ r.actor }}</b> · {{ r.label }}{% if r.entry.summary %} · {{ r.entry.summary }}{% endif %}{% if r.entry.reason %}<br><small class="muted">Motivo: {{ r.entry.reason }}</small>{% endif %}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% else %}
+<p class="ac-empty">{% if action %}Ninguna acción de ese tipo todavía.{% else %}Aún no hay acciones registradas.{% endif %}</p>
+{% endif %}
+
+{% if page.has_other_pages %}
+<nav class="ac-pager" aria-label="Páginas">
+  {% if page.has_previous %}<a class="btn" href="?pagina={{ page.previous_page_number }}{% if action %}&amp;accion={{ action }}{% endif %}">← Más nuevas</a>{% endif %}
+  <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a class="btn" href="?pagina={{ page.next_page_number }}{% if action %}&amp;accion={{ action }}{% endif %}">Más antiguas →</a>{% endif %}
+</nav>
+{% endif %}
+</div>
+{% endblock %}

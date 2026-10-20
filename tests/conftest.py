@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -85,3 +86,18 @@ def site_world(db, settings, tmp_path, admin_person, member):
     for path in LearningPath.objects.all():
         community.create_note(member, path, "Nota de prueba", Note.Type.TIP)
     return {"admin": admin_person, "member": member}
+
+
+_SHELL_TABLES = ("django_session", "gamification_", "notifications_notification")
+_USER_FETCH = re.compile(r'WHERE "accounts_person"\."id" = \d+ LIMIT 21$')
+
+
+def own_queries(captured):
+    """Las consultas de una pantalla sin las de la cabecera de toda página (sesión, persona, anillo de XP y campana:
+    unas 10 que ponen los procesadores de contexto en cualquier vista). Sirve para medir lo que cuesta la pantalla."""
+    return [
+        q
+        for q in captured
+        if not any(table in q["sql"] for table in _SHELL_TABLES)
+        and not _USER_FETCH.search(q["sql"])
+    ]
