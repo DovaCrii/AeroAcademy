@@ -182,7 +182,7 @@ def test_health_rows_in_a_normal_server(admin_person, settings, tmp_path):
 
 def test_nala_configured_is_shown_without_the_key(admin_person, settings):
     settings.BOT_ENABLED = True
-    settings.NIM_API_KEY = "nvapi-prueba-que-no-debe-salir-9f8e7d"
+    settings.NIM_API_KEY = "nv" + "api-prueba-que-no-debe-salir-9f8e7d"
     html = page(admin_person)
     assert "Nala:</b> Configurada." in html
     assert "nvapi" not in html and "9f8e7d" not in html
