@@ -109,11 +109,11 @@ Coordenadas en la figura 64 (el escenario agrega 8 a x y 12 a y). Medidas a 2× 
 | Lentes | 2 lentes 7×5 + puente 2×1 | 4×3 | Tipo (redondos, seguridad, sol, FPV) por forma y brillo | HD |
 | Barba | banda 20×8 (y 28..35) | 10×4 | Tipo por textura (2 tonos) sin tapar la boca | HD |
 | Gorro / casco | 30×14 (x 17..46 · y 2..15) + visera | 15×7 | Casco de obra con ala y **adhesivo de insignia 4×4**; gorra, legionario, hélice, audífonos | HD (`hd/headwear.py`) |
-| Pelo | 32×30 | 16×15 | Volumen y color | ×2 + pase (HD en fase 2 si el dueño lo pide) |
+| Pelo | 32×30 | 16×15 | Volumen, mechones, flequillo, brillo y sombra en los tres tonos del color elegido | HD (`hd/hair.py`, **hecho**: fase 2, textura sobre la silueta ×2) |
 | Torso / ropa | 32×16 (x 16..47 · y 40..55) | 16×8 | Por disciplina: franjas reflectantes 2 px, bolsillos 4×4, cierre, solapa, logo de chaleco | HD como **detalle sobre `O`** (no cambia silueta) |
 | Pin de nivel | **6×6** (x 38..43 · y 42..47) | 4×4 | Brújula, casquito, teodolito (NV 5, NV 10) | HD (`hd/badges.py`) |
 | Parche de manga | **5×5** en la manga (x 10..14 · y 44..48) | — | Color de la insignia de mayor rareza ganada | Procedural |
-| Manos | 4×4 c/u, según pose | 2×1 | Que tomen la herramienta | HD (`hd/hands.py`) |
+| Manos | 4×4 c/u, según pose | 2×1 | Que tomen la herramienta; poses `wave` y `work` | HD (`hd/hands.py`) |
 | Piernas y botas | 16×6 + 16×2 | 8×3 + 8×1 | Pantalón, short, falda | ×2 + pase |
 | Carril derecho (equipo) | 24×76 (escenario x 56..79) | 8×32 | **Herramienta de mano ≥ 12×12** (tablet, laptop, calculadora, taza, llave); **alta ≥ 4×60** (jalón, mira, rover); prisma ≥ 10×9 | HD (`parts/gear/`) |
 | Aire | 24×12 (y 0..11) | — | Dron ≥ 22×9 | HD |
@@ -151,22 +151,23 @@ español; `uv run pytest` y `ruff` en cada paso; `revision-privacidad` antes de 
   `test_choices_are_append_only` (instantánea ordenada de cada lista de `CHOICES`: solo se agrega al final),
   `test_hd_render_budget` (< 16 KB por SVG, < 20 ms).
 
-### HD-2 a HD-7 · Arte por tandas (`artista-pixel`, una tanda por PR, ≤ 5 piezas por commit)
+### HD-2 a HD-8 · Arte por tandas (`artista-pixel`, una tanda por PR, ≤ 5 piezas por commit)
 
-| Tanda | Archivo | Piezas (caja máx. en celdas HD) | Px aprox. |
-|---|---|---|---|
-| HD-2 Cara | `hd/face.py` | ojos ×5 (2 de 4×4), cejas ×5 (5×2), boca ×6 (10×4), nariz ×1 (2×2) | ≈ 350 |
-| HD-3 Lentes y barba | `hd/glasses.py`, `hd/facial_hair.py` | lentes ×8 + `none` (20×6), barba ×7 + `none` (20×8) | ≈ 1 400 |
-| HD-4 Equipo topografía y captura | `parts/gear/survey.py`, `parts/gear/capture.py` (coords del escenario 80) | jalón, rover GNSS, estación total, mira; control + dron, escáner en trípode, cámara | ≈ 2 200 |
-| HD-5 Equipo obra, BIM, IA y planta | `parts/gear/build.py`, `ai.py`, `plant.py` | tablet, laptop BIM, rollo de planos, escalímetro, tablilla, calculadora, cono, taza; laptop IA; llave, cañería, volante | ≈ 2 600 |
-| HD-6 Gorros | `hd/headwear.py` | 12 gorros + `none` (30×14 frente, atrás si aplica) con ranura de adhesivo | ≈ 3 000 |
-| HD-7 Ropa, pines, manos | `hd/outfits.py`, `hd/badges.py`, `hd/hands.py` | detalle de 17 ropas sobre `O` (32×16); 3 pines (6×6); manos por pose (4×4) | ≈ 3 500 |
+| Tanda | Archivo | Piezas (caja máx. en celdas HD) | Px aprox. | Estado |
+|---|---|---|---|---|
+| HD-2 Cara | `hd/face.py` | ojos ×5 (2 de 4×4), cejas ×5 (5×2), boca ×6 (10×4), nariz ×1 (2×2) | ≈ 350 | hecho |
+| HD-3 Lentes y barba | `hd/glasses.py`, `hd/facial_hair.py` | lentes ×8 + `none` (20×6), barba ×7 + `none` (20×8) | ≈ 1 400 | hecho |
+| HD-4 Equipo topografía y captura | `parts/gear/survey.py`, `parts/gear/capture.py` (coords del escenario 80) | jalón, rover GNSS, estación total, mira; control + dron, escáner en trípode, cámara | ≈ 2 200 | hecho |
+| HD-5 Equipo obra, BIM, IA y planta | `parts/gear/build.py`, `ai.py`, `plant.py` | tablet, laptop BIM, rollo de planos, escalímetro, tablilla, calculadora, cono, taza; laptop IA; llave, cañería, volante | ≈ 2 600 | hecho |
+| HD-6 Gorros | `hd/headwear.py` | 12 gorros + `none` (30×14 frente, atrás si aplica) con ranura de adhesivo | ≈ 3 000 | hecho |
+| HD-7 Ropa, pines, manos | `hd/outfits.py`, `hd/badges.py`, `hd/hands.py` | detalle de 17 ropas sobre `O` (32×16); 3 pines (6×6); manos por pose (4×4) | ≈ 3 500 | hecho |
+| HD-8 Pelo y pose «Trabajando» | `hd/hair.py`, `hd/hands.py` (`POSE_FRONT`), `parts/poses.py` | 16 peinados (frente y atrás, hasta 60×55) con mechones, brillo y sombra; pose `work` (antebrazo y mano, 29×7) | ≈ 6 500 (texturas generadas) + 200 | **hecho** (2026-10-19) |
 
 Contrato para cada artista: sprite con ancla en su zona, contorno `K`, interior `k`, ≤ 3 tonos por zona, claves de la
 paleta (sin `1..5`), «se reconoce sin leer el nombre» a 160 px sobre `#0F2A4D` y `#FAF8F3`; misma silueta que la pieza
 32 (prueba de paridad). Validar con `validate_part.py hd:<cat>` y `preview_avatar.py --hd --sheet <cat> scale=3`.
 
-**Sigue procedural:** escalado ×2 de pelo, cuello, cuerpo y parte de abajo; contorno, luz, sombra, halo y suelo;
+**Sigue procedural:** escalado ×2 de cuello, cuerpo y parte de abajo (el pelo ya tiene versión HD, ver § 6); contorno, luz, sombra, halo y suelo;
 parche de manga (color de rareza); adhesivo del casco (color de la insignia); fondos (dibujo de `backgrounds.py` ×2.5
 en el escenario, con máscara de halo).
 
@@ -212,8 +213,38 @@ Para quien implementa G hoy: G1–G4 siguen tal cual; **no empezar G5/G6 en 40×
 | # | Pregunta | Tipo | Recomendación |
 |---|---|---|---|
 | R1 | ¿Se aprueba la opción C (figura grande 64 en escenario 80; tamaños chicos siguen en 32)? | Producto | Sí |
-| R2 | ¿El pelo también se redibuja en HD (fase 2, 17 peinados × 2 capas ≈ 4 sesiones)? | Producto | Solo si tras HD-7 se sigue viendo «en bloques» |
+| R2 | ¿El pelo también se redibuja en HD (fase 2, 17 peinados × 2 capas ≈ 4 sesiones)? | Producto | **Hecho (2026-10-19, HD-8):** la dueña lo pidió; ver § 6 |
 | R3 | ¿El avatar muestra insignias (adhesivo del casco, parche de manga)? Las ven todas las personas aprobadas | Privacidad | Sí, solo insignias que ya son públicas en la vitrina; nada de credenciales. Agregar al final la clave `show_badges` (sí por defecto) para quien prefiera ocultarlas |
 | R4 | ¿El nivel va dentro del dibujo (estrellas en el casco) o solo en la placa «NV n»? | Producto | Solo placa: el SVG sigue siendo función de la configuración |
 | R5 | ¿La herramienta de la carrera aparece siempre aunque se elija «Sin herramienta»? | Producto | No; la carrera la propone por defecto y la persona decide |
 | R6 | ¿Se acepta que todos los avatares guardados se vean distintos en las vistas grandes (la configuración no cambia)? | Producto | Sí, igual que Q1 de AVATAR_REDISENO |
+
+---
+
+## 6. Pelo HD y pose «Trabajando» (HD-8, hecho 2026-10-19)
+
+**Pelo** (`avatar/hd/hair.py`, 16 peinados con pelo; «Calvo» no dibuja nada). Cada peinado, frente y atrás, parte de su
+pieza de 32 ×2 y recibe una **textura generada** (función pura de la celda, sin azar: determinista) en lugar de dibujarse
+celda a celda:
+
+- **mechones** que siguen el sentido del peinado: radiales desde la coronilla o la raya (corto, raya al costado, melena
+  corta, pixie…), verticales y ondulados (largo, ondulado), paralelos (jopo, cola, undercut), espiga en las trenzas,
+  espiral en el moño, rizos en celdas redondas (rizado, afro) y puntos en lo rapado (rapado, costados del mohicano y
+  del undercut); cada mechón tiene ancho y luz propios;
+- **brillo** en una franja arriba a la izquierda (misma luz que el pase de acabado), **sombra** de las puntas y bajo el
+  flequillo, y borde de luz arriba y a la izquierda;
+- solo los tres tonos del color elegido (`H`, `h`, `j`) y el contorno `K`; **nunca** se toca un contorno ni se llena
+  una celda vacía: la silueta es exactamente la de 32 ×2, así la auditoría de choques de `audit.py` vale también para la
+  figura grande (la prueba compara cada combinación pelo × gorro × lentes × barba contra la versión sin pelo HD);
+- con gorro, el pelo HD también se recorta por encima de la copa (`compose_hd` pasa la fila de la copa a la capa).
+
+Las líneas de textura se mueven de a 2, 4 o 6 filas para que `_runs` las junte: **peso medio del SVG del escenario
+10,0 → 10,4 KB (+4 %, 300 avatares al azar)**; por peinado, 4,6–7,2 KB sin gorro (antes 4,5–5,8). No se duplica.
+
+**Pose `work`** («Trabajando», `parts/poses.py` + `hd/hands.py`): el brazo izquierdo se dobla en el codo y un antebrazo con
+manga y una mano abierta cruza la cintura hacia el equipo de la derecha (`POSE_FRONT`, se pinta después de la ropa y del
+cuello, por debajo del pecho: no toca la cara ni el pin). El brazo derecho y el equipo no se tocan. Solo vista previa:
+no se guarda y la pose por defecto sigue siendo `stand`. El selector del editor la ofrece junto a las otras dos
+(recorre `LABELS_POSES`; sin JS funciona igual, con `<input type="radio">`).
+
+Pruebas: `tests/test_avatar_hd_hair.py`.

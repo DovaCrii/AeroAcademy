@@ -9,7 +9,7 @@ from .. import engine
 from ..parts import body, poses
 from . import HD, OFFSET, SCALE, STAGE, sprite, up2
 from .detail import detail_pass
-from .hands import POSE_HANDS
+from .hands import POSE_FRONT, POSE_HANDS
 
 OX, OY = OFFSET
 # Ventana de la cara en el escenario: ni el pelo ni un gorro dibujan aquí.
@@ -34,26 +34,30 @@ def _paint_rows(grid, rows, only_on=None):
                 _put(grid, x + OX, y + OY, ch, only_on)
 
 
-def _paint_sprite(grid, art, only_on=None, clip_face=False):
+def _paint_sprite(grid, art, only_on=None, clip_face=False, min_y=None):
+    """`min_y` (fila del escenario) recorta lo que queda por encima: el pelo no asoma sobre la copa de un gorro."""
     x0, y0 = art["at"]
     if art["space"] == "figure":
         x0, y0 = x0 + OX, y0 + OY
     for j, line in enumerate(art["rows"]):
+        if min_y is not None and y0 + j < min_y:
+            continue
         for i, ch in enumerate(line):
             if ch == "." or (clip_face and x0 + i in FACE_X and y0 + j in FACE_Y):
                 continue
             _put(grid, x0 + i, y0 + j, ch, only_on)
 
 
-def _layer(grid, category, option, rows, *, part=None, only_on=None, clip_face=False):
+def _layer(grid, category, option, rows, *, part=None, only_on=None, clip_face=False, top=None):
     """Pinta la versión HD de la opción si existe y, si no, la pieza de 32 ×2."""
     art = HD[category].get(option)
     if art is not None:
         art = art[part] if part else art
         pieces = art if isinstance(art, list) else [art]  # el equipo grande puede ser varias piezas
+        min_y = None if top is None else OY + top * SCALE  # fila `top` de la grilla de 32, ×2
         for piece in pieces:
             if piece:
-                _paint_sprite(grid, piece, only_on, clip_face)
+                _paint_sprite(grid, piece, only_on, clip_face, min_y)
         return
     _paint_rows(grid, up2(rows), only_on)
 
@@ -92,7 +96,7 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE, badge=None):
     top = engine._hat_top(hat_art)
     opaque = cfg["glasses"] in engine.OPAQUE_GLASSES
 
-    _layer(grid, "hair", cfg["hair"], engine._above(hair_art["back"], top), part="back")
+    _layer(grid, "hair", cfg["hair"], engine._above(hair_art["back"], top), part="back", top=top)
     _layer(grid, "headwear", cfg["headwear"], hat_art["back"], part="back")
     _paint_rows(grid, up2(body.BASE))
     _paint_rows(grid, up2(body.BODY_PATCH[cfg["body"]]))
@@ -102,6 +106,8 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE, badge=None):
     _paint_rows(grid, up2(body.LEGWEAR[cfg["legwear"]]))
     _layer(grid, "outfit", cfg["outfit"], engine.OUTFITS[cfg["outfit"]], only_on={"O"})
     _layer(grid, "neckwear", cfg["neckwear"], engine.NECKWEAR[cfg["neckwear"]])
+    if pose in POSE_FRONT:
+        _paint_sprite(grid, POSE_FRONT[pose])  # antebrazo y mano de la pose, delante de la ropa
     _layer(grid, "facial_hair", cfg["facial_hair"], engine.FACIAL_HAIR[cfg["facial_hair"]])
     _layer(grid, "nose", "default", body.NOSE)
     _layer(grid, "mouth", cfg["mouth"], engine.MOUTHS[cfg["mouth"]])
@@ -112,7 +118,7 @@ def compose_layers(cfg, pose=poses.DEFAULT_POSE, badge=None):
     if opaque:
         _layer(grid, "glasses", cfg["glasses"], engine.GLASSES[cfg["glasses"]])
     front = engine._off_face(engine._above(hair_art["front"], top))
-    _layer(grid, "hair", cfg["hair"], front, part="front", clip_face=True)
+    _layer(grid, "hair", cfg["hair"], front, part="front", clip_face=True, top=top)
     _layer(
         grid,
         "headwear",
