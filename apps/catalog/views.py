@@ -4,10 +4,11 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import render
 
+from apps.credentials import services as credential_services
 from apps.paths import services as path_services
 from apps.paths.models import LearningPath
 
-from . import services, software
+from . import official, services, software
 from .models import Discipline, Platform, Resource
 
 # Cómo se agrupan los tipos para filtrar rápido (pestañas del catálogo).
@@ -88,9 +89,11 @@ def resources(request):
     # La lista completa (con sus productos precargados) se lee una sola vez: da el área de cada recurso (para el
     # filtro «Proveedor» y sus conteos), la vista por producto y la portada. Consultas fijas, no crecen con los datos.
     every = list(services.resource_queryset())
-    areas = software.areas_of(
-        every, paths, services.published_path_links(), set(services.general_ids())
-    )
+    links = services.published_path_links()
+    areas = software.areas_of(every, paths, links, set(services.general_ids()))
+    # Avance de QUIEN MIRA en las plataformas oficiales (una consulta: sus credenciales); nunca el de otras personas.
+    states = credential_services.states_by_resource(request.user)
+    progress = official.progress(every, areas, states, paths, links)
     ids = None
     if software_slug:
         ids = software.resource_ids_for_software(every, software_slug)
@@ -114,6 +117,8 @@ def resources(request):
         scoped = [r for r in every if areas.get(r.pk) == vendor] if vendor else every
         rows = software.group_by_software(scoped, areas=areas)
         sections = software.vendor_sections(rows)
+        for sec in sections:
+            sec["progress"] = progress.get(sec["key"])
         cards = (
             [r for row in rows for r in row["items"]]
             if vendor
@@ -122,9 +127,12 @@ def resources(request):
         in_paths = services.published_paths_for([r.pk for r in cards])
         for r in cards:
             r.in_paths = in_paths.get(r.pk, [])
+        official.mark_cards(cards, areas, states)
     general = _general_section(request, f, portada)
     if portada:
         area_map = software.catalog_map(every, areas)
+        for a in area_map:
+            a["progress"] = progress.get(a["key"])
     page = None
     if not show_rows:
         size = PRODUCT_PAGE_SIZE if software_slug else PAGE_SIZE
@@ -132,6 +140,7 @@ def resources(request):
         in_paths = services.published_paths_for([r.pk for r in page])
         for r in page:
             r.in_paths = in_paths.get(r.pk, [])
+        official.mark_cards(page, areas, states)
 
     platforms = list(Platform.objects.filter(resources__isnull=False).distinct())
     counts = dict(Resource.objects.values_list("kind").annotate(n=Count("pk")))

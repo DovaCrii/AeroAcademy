@@ -1,10 +1,11 @@
 {% load static %}<section class="vs vs-{{ sec.key }} vs-short" id="vendor-{{ sec.key }}" aria-labelledby="vsh-{{ sec.key }}">
   <header class="vs-band">
-    <span class="vs-kick">// 0{{ forloop.counter|add:1 }}</span>
+    <span class="vs-kick">// 0{{ forloop.counter|add:1 }}{% if sec.official %} {% include "catalog/partials/official_mark.html" %}{% endif %}</span>
     <h3 id="vsh-{{ sec.key }}">{{ sec.label }}</h3>
     <p class="vs-sub"><b>{{ sec.total }}</b> recurso{{ sec.total|pluralize }}{% if sec.products %} · <b>{{ sec.products|length }}</b> producto{{ sec.products|length|pluralize }}{% endif %}</p>
     <a class="vs-all" href="?vendor={{ sec.key }}">Ver todo<span class="sr-only"> {{ sec.label }}</span> <span aria-hidden="true">→</span></a>
   </header>
+  {% if sec.official and sec.progress %}{% with p=sec.progress %}{% include "catalog/partials/official_panel.html" %}{% endwith %}{% endif %}
   {% if sec.products %}<ul class="vs-chips" aria-label="Productos de {{ sec.label }}">
     {% for row in sec.rows %}{% if row.tile %}<li><a class="vs-chip" href="?software={{ row.tile.slug }}"><img class="sw-tile" src="{% static row.tile.static_path %}" alt="" width="22" height="22" loading="lazy"><span>{{ row.name }}</span> <small>{{ row.total }}</small></a></li>{% endif %}{% endfor %}
   </ul>{% endif %}

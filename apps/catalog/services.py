@@ -69,18 +69,21 @@ def published_paths_for(resource_ids):
 
 
 def published_path_links():
-    """{recurso: [id de las rutas publicadas que lo usan]}: dos consultas fijas, sin importar cuántos recursos hay."""
+    """{recurso: [id de las rutas publicadas que lo usan]}: una consulta fija (UNION), sin importar cuántos recursos hay."""
     from apps.paths.models import ExternalCourse, LevelResource
 
     out = {}
-    pairs = list(
-        LevelResource.objects.filter(level__path__is_published=True).values_list(
-            "resource_id", "level__path_id"
+    pairs = (
+        LevelResource.objects.filter(level__path__is_published=True)
+        .order_by()
+        .values_list("resource_id", "level__path_id")
+        .union(
+            ExternalCourse.objects.filter(path__is_published=True)
+            .order_by()
+            .values_list("resource_id", "path_id")
         )
-    ) + list(
-        ExternalCourse.objects.filter(path__is_published=True).values_list("resource_id", "path_id")
     )
-    for rid, pid in pairs:
+    for rid, pid in sorted(pairs):
         bucket = out.setdefault(rid, [])
         if pid not in bucket:
             bucket.append(pid)
@@ -98,10 +101,10 @@ def published_material_ids():
 
 def resource_queryset(
     *, platform="", kind="", free=False, cert=False, q="", product="", path="", essential=False,
-    general=False, discipline="", ids=None,
+    general=False, discipline="", ids=None, with_skills=True, ordered=True,
 ):  # fmt: skip
     qs = Resource.objects.select_related("platform__vendor").prefetch_related(
-        Prefetch("skills"), "products"
+        *([Prefetch("skills")] if with_skills else []), "products"
     )
     # Solo lo que sigue en alguna ruta: lo quitado de una semilla queda en la base, pero ya no se ofrece.
     qs = qs.filter(Q(level_links__isnull=False) | Q(external_courses__retired=False))
@@ -136,7 +139,7 @@ def resource_queryset(
             Q(level_links__level__path__slug=path, level_links__level__path__is_published=True)
             | Q(external_courses__path__slug=path, external_courses__path__is_published=True)
         )
-    ess_ids = essential_ids()
+    ess_ids = essential_ids() if (essential or ordered) else ()
     if essential:
         qs = qs.filter(pk__in=ess_ids)
     if general:
@@ -151,6 +154,8 @@ def resource_queryset(
                 | Q(products__name__icontains=word)
                 | Q(platform__name__icontains=word)
             )
+    if not ordered:  # quien llama ordena por su cuenta (portada: sin la consulta de esenciales)
+        return qs.distinct()
     # Primero lo esencial, luego lo oficial; dentro, por título.
     qs = qs.annotate(
         _essential=Case(

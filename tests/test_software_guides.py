@@ -117,11 +117,15 @@ def test_vendor_sections_split_rows_by_family(seeded):
     )
     sections = software.vendor_sections(software.group_by_software(resources))
     keys = [s["key"] for s in sections]
-    assert keys == sorted(keys, key=software.FAMILIES.index)  # Autodesk · Bentley · IA · Topografía
+    assert keys == sorted(
+        keys, key=software.FAMILIES.index
+    )  # Bentley · Autodesk · IA · Topografía (D43)
     assert "autodesk" in keys and "bentley" in keys
     bentley = next(s for s in sections if s["key"] == "bentley")
     assert all(r["tile"].family == "bentley" for r in bentley["rows"])
-    assert "shelves" not in bentley and len(bentley["starters"]) == 4  # sin vitrinas repetidas
+    assert (
+        "shelves" not in bentley and len(bentley["starters"]) == 8
+    )  # sin vitrinas repetidas; área oficial: 8
     autodesk = next(s for s in sections if s["key"] == "autodesk")
     assert len(autodesk["pack"]) == 10 and len(autodesk["products"]) == 8
 

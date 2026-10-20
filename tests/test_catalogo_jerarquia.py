@@ -56,8 +56,9 @@ def test_catalog_map_totals_match_queryset(seeded):
     every, areas = area_data()
     area_map = software.catalog_map(every, areas)
     assert [a["key"] for a in area_map] == [
-        "autodesk", "bentley", "ia", "internal", "general",
-    ]  # fmt: skip
+        "bentley", "autodesk", "ia", "internal", "general",
+    ]  # fmt: skip  # D43: Bentley y Autodesk son las plataformas oficiales, Bentley primero
+    assert [a["official"] for a in area_map] == [True, True, False, False, False]
     assert sum(a["total"] for a in area_map) == services.resource_queryset().count()
     by_key = {a["key"]: a for a in area_map}
     assert by_key["ia"]["total"] >= 139  # antes invisible: sus recursos no traen producto
@@ -85,13 +86,14 @@ def test_starters_one_per_product_round_robin(seeded):
     rows = software.group_by_software(every, areas=areas)
     sections = software.vendor_sections(rows)
     bentley = next(s for s in sections if s["key"] == "bentley")
-    assert len(bentley["starters"]) == 4
-    first = [r["items"][0] for r in bentley["rows"][:4]]
-    assert bentley["starters"] == first  # uno por producto, no 4 de MicroStation
-    assert len({software.software_for_resource(r, 1)[0].slug for r in bentley["starters"]}) == 4
+    assert len(bentley["starters"]) == 8  # área oficial: el doble de «Para empezar»
+    first = [r["items"][0] for r in bentley["rows"][:8]]
+    assert bentley["starters"] == first  # uno por producto, no 8 de MicroStation
+    assert len({software.software_for_resource(r, 1)[0].slug for r in bentley["starters"]}) == 8
     ia = next(s for s in sections if s["key"] == "ia")
     assert len(ia["starters"]) == 4  # una sola fila: las rondas siguientes la completan
-    assert [s["key"] for s in sections] == ["autodesk", "bentley", "ia", "internal"]
+    assert [s["key"] for s in sections] == ["bentley", "autodesk", "ia", "internal"]
+    assert [s["official"] for s in sections] == [True, True, False, False]
     assert not hasattr(software, "FEATURED") and "shelves" not in bentley
 
 
@@ -177,7 +179,7 @@ def test_catalog_queries_bounded(seeded, member_client):
 
     counts()  # calienta cachés
     before = counts()
-    assert before[0] <= 45  # el techo de antes de la reforma
+    assert before[0] <= 55  # techo con el seguimiento de las plataformas oficiales (D43); hoy 44
     extra_platform = Platform.objects.get(slug="autodesk-learning")
     path = LearningPath.objects.get(slug="ia-101")
     level = path.levels.first()
@@ -227,7 +229,9 @@ def test_area_links_to_vendor_view(seeded, member_client):
     assert 'href="?vendor=general"' in html
     assert 'class="cat-row' not in html and "vs-pack" not in html  # el detalle vive en ?vendor=
     area = html.split('id="vendor-bentley"')[1].split("</section>")[0]
-    assert "Para empezar" in area and area.count("<article") == 4
+    assert "Para empezar" in area and area.count("<article") == 8  # oficial: 8
+    general = html.split('id="vendor-ia"')[1].split("</section>")[0]
+    assert general.count("<article") == 4  # las demás áreas siguen con 4
 
 
 def test_vendor_view_has_breadcrumb(seeded, member_client):
@@ -249,7 +253,7 @@ def test_search_form_is_first_form(seeded, member_client):
 def test_catalog_card_count_bounded(seeded, member_client):
     html = page(member_client, "/catalogo/")
     assert html.count('<article class="cat-card') <= 24
-    assert html.count("<img") <= 60 and len(html.encode()) <= 80 * 1024
+    assert html.count("<img") <= 60 and len(html.encode()) <= 100 * 1024
     assert html.count("cat-count") == 0  # «N resultados» solo con filtros
     assert "cat-count" in page(member_client, "/catalogo/?kind=exam")
 
@@ -275,7 +279,7 @@ def test_compact_card_order(seeded, member_client):
     card = first_compact(page(member_client, "/catalogo/?vendor=bentley"))
     assert card.index("<h3") < card.index('class="cat-meta"') < card.index('class="chips"')
     assert "cat-thumb" not in card and "cat-desc" not in card  # sin banda ni descripción
-    assert card.count('class="chip') <= 3
+    assert card.count('class="chip') <= 4  # estado (áreas oficiales), esencial, XP y de pago
 
 
 def test_no_free_chip_and_paid_chip(seeded, member_client):

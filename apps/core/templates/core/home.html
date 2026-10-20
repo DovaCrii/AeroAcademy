@@ -2,7 +2,7 @@
 {% load static avatar_tags core_extras catalog_extras %}
 
 {% block title %}Bienvenida{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'core/welcome.css' %}">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'core/welcome.css' %}"><link rel="stylesheet" href="{% static 'catalog/official.css' %}">{% endblock %}
 {% block body_attrs %} class="welcome"{% endblock %}
 
 {% block content %}
@@ -58,6 +58,22 @@
   <p class="w-lead">{% if start_block.kind == "continue" %}Tu última ruta con avance: sigue en el primer nivel pendiente.{% else %}Aún no tienes avance. Esta ruta 101 es el mejor primer paso para tu disciplina.{% endif %}</p>
   {% with sp=start_block.path %}{% route_icon_src sp as sico %}
   <div class="w-start-strip">{% if sico %}<img class="route-ico" src="{% static sico %}" alt="" width="48" height="48">{% endif %}<div><b><a href="{% url 'paths:detail' sp.slug %}">{{ sp.title }}</a></b><small>{{ sp.vendor.name }}{% if sp.pct %} · {{ sp.pct }} % completado{% endif %}</small></div><a class="btn primary route-cta" href="{{ sp.cta.url }}">{{ sp.cta.label }}</a></div>{% endwith %}
+</section>
+{% endif %}
+
+{% if official %}
+<section class="w-off" id="oficiales" aria-labelledby="off-h">
+  <h2 id="off-h" class="w-h3">Tus plataformas oficiales</h2>
+  <p class="w-lead">Bentley y Autodesk son las plataformas oficiales de la academia. Aquí ves solo tu avance.</p>
+  <ul class="w-off-list">
+    {% for p in official %}
+    <li class="w-off-card">
+      <h3>{{ p.label }} {% include "catalog/partials/official_mark.html" %}</h3>
+      {% include "catalog/partials/official_panel.html" with cta=True %}
+      <p class="w-off-all"><a href="{% url 'catalog:resources' %}?vendor={{ p.key }}">Ver el catálogo de {{ p.label }} →</a></p>
+    </li>
+    {% endfor %}
+  </ul>
 </section>
 {% endif %}
 

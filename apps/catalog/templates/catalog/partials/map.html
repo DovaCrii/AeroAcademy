@@ -2,10 +2,12 @@
   <h2 class="cat-sh"><span>// 01</span> Mapa del catálogo</h2>
   <ul class="cat-map-list">
     {% for a in area_map %}
-    <li><a class="cat-map-card cat-map-{{ a.key }}" href="#{{ a.anchor }}">
+    <li{% if a.official %} class="of"{% endif %}><a class="cat-map-card cat-map-{{ a.key }}" href="#{{ a.anchor }}">
       {% if a.tile %}<img class="sw-tile" src="{% static a.tile.static_path %}" alt="" width="34" height="34" loading="lazy">{% else %}<span class="cat-map-ico" aria-hidden="true">101</span>{% endif %}
-      <span class="cat-map-txt"><b>{{ a.label }}</b>
-        <small>{{ a.total }} recurso{{ a.total|pluralize }}{% if a.products %} · {{ a.products|length }} producto{{ a.products|length|pluralize }}{% elif a.key == "general" and general %} · {{ general.paths|length }} ruta{{ general.paths|length|pluralize }}{% endif %}</small></span>
+      <span class="cat-map-txt"><b>{{ a.label }}</b>{% if a.official %}{% include "catalog/partials/official_mark.html" %}{% endif %}
+        <small>{{ a.total }} recurso{{ a.total|pluralize }}{% if a.products %} · {{ a.products|length }} producto{{ a.products|length|pluralize }}{% elif a.key == "general" and general %} · {{ general.paths|length }} ruta{{ general.paths|length|pluralize }}{% endif %}</small>
+        {% with p=a.progress %}{% if p %}{% if p.started %}<progress class="of-bar" max="{{ p.total }}" value="{{ p.done }}" aria-label="Tu avance en {{ p.label }}: {{ p.done }} de {{ p.total }} cursos">{{ p.pct }} %</progress>
+        <small class="of-line"><b>{{ p.done }} de {{ p.total }}</b> cursos · {{ p.pct }} %</small>{% else %}<small class="of-line">Empieza por lo esencial</small>{% endif %}{% endif %}{% endwith %}</span>
     </a></li>
     {% endfor %}
   </ul>
